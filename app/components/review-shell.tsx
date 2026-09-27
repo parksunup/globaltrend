@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { kindLabels, sampleItems, statusLabels, type ReviewItem, type ReviewKind, type ReviewStatus } from "../sample-data";
+import { kindLabels, statusLabels, type ReviewItem, type ReviewKind, type ReviewStatus } from "../sample-data";
 
 const kinds: ReviewKind[] = ["sources", "laws", "criteria"];
 const statuses: Array<ReviewStatus | "all"> = ["all", "unreviewed", "in_review", "approved", "published"];
@@ -10,13 +10,13 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell() {
+export default function ReviewShell({ initialItems, dataSource }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample" }) {
   const [kind, setKind] = useState<ReviewKind>("sources");
   const [status, setStatus] = useState<ReviewStatus | "all">("all");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState("edpb");
 
-  const items = useMemo(() => sampleItems.filter((item) => {
+  const items = useMemo(() => initialItems.filter((item) => {
     const matchesKind = item.kind === kind;
     const matchesStatus = status === "all" || item.status === status;
     const haystack = [item.title, item.subtitle, item.description, ...item.metadata].join(" ").toLowerCase();
@@ -29,7 +29,7 @@ export default function ReviewShell() {
     setKind(nextKind);
     setStatus("all");
     setQuery("");
-    const first = sampleItems.find((item) => item.kind === nextKind);
+    const first = initialItems.find((item) => item.kind === nextKind);
     setSelectedId(first?.id ?? "");
   }
 
@@ -38,12 +38,12 @@ export default function ReviewShell() {
       <aside className="sidebar">
         <div className="brand-mark">GT</div>
         <div className="brand-copy"><strong>GlobalTrend</strong><span>검토 보드</span></div>
-        <div className="preview-pill">PREVIEW · 샘플 데이터</div>
+        <div className="preview-pill">{dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
         <nav className="nav-list" aria-label="자료 유형">
           {kinds.map((itemKind) => (
             <button className={"nav-item " + (kind === itemKind ? "active" : "")} key={itemKind} onClick={() => selectKind(itemKind)}>
               <span>{kindLabels[itemKind]}</span>
-              <em>{sampleItems.filter((item) => item.kind === itemKind).length}</em>
+              <em>{initialItems.filter((item) => item.kind === itemKind).length}</em>
             </button>
           ))}
         </nav>
