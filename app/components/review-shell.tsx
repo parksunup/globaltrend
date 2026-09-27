@@ -50,6 +50,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
         <div className="sidebar-foot">
           <span className="dot" /> 실제 공개 전 검수 전용
           <a className="guide-link" href="/guide">팀 가이드</a>
+          <a className="guide-link" href={teamMode ? "/" : "/team"}>{teamMode ? "공개 보드" : "팀 검수 로그인"}</a>
         </div>
       </aside>
 
