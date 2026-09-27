@@ -39,7 +39,7 @@ GlobalTrend는 해외 개인정보 보호 동향과 개인정보 보호 법제�
 - 17개 비교 기준에 해당하는 조항 후보를 찾습니다.
 - 조항 번호·원문·번역·요약·공식 링크를 정리합니다.
 - 확인하지 못한 내용은 추정하지 않고 `검토 필요`로 표시합니다.
-- 결과를 `data/legal/` 아래의 CSV·JSON·Markdown 파일로 제출합니다.
+- 결과를 `data/legal/` 아래에 **사람이 읽는 Markdown 파일과 기계가 읽는 CSV·JSON 파일을 함께** 제출합니다. Markdown을 먼저 읽고, CSV·JSON은 값이 빠지지 않았는지 확인할 때 사용합니다.
 
 ### 팀원 B — 동향 담당
 
@@ -50,11 +50,21 @@ GlobalTrend는 해외 개인정보 보호 동향과 개인정보 보호 법제�
 - 중복 자료와 단순 공지를 구분합니다.
 - 수집 실패나 본문 누락 사례를 기록합니다.
 - 주간 동향 자료에 사용할 샘플과 편집 기준을 작성합니다.
-- 결과를 `data/trends/` 아래의 JSON·Markdown 파일로 제출합니다.
+- 결과를 `data/trends/` 아래에 **사람이 읽는 Markdown 파일과 기계가 읽는 JSON 파일을 함께** 제출합니다. 원문 링크와 확인 메모는 Markdown에서도 바로 읽을 수 있어야 합니다.
 
 두 팀원은 서로의 브랜치와 폴더를 수정하지 않습니다. 서로 기다리지 않고 독립적으로 작업할 수 있도록 하는 것이 원칙입니다.
 
 ## 3. Codex 시작하기
+
+### 결과 파일 형식의 원칙
+
+팀원은 CSV·JSON만 제출하지 않습니다. 모든 조사 결과는 아래의 **3종 세트**로 제출합니다.
+
+1. **사람이 읽는 Markdown**: 표와 쉬운 설명입니다. 리더와 팀원은 이 파일을 먼저 읽습니다.
+2. **사이트가 읽는 CSV 또는 JSON**: 웹사이트와 수집기가 사용할 구조화된 데이터입니다.
+3. **검토 메모**: 확인한 공식 링크, 선택·제외 이유, `검토 필요` 항목을 적습니다.
+
+Markdown 표의 한 행 또는 한 셀은 CSV·JSON의 한 행 또는 한 항목과 대응해야 합니다. 둘의 내용이 다르면 구조화된 파일을 먼저 고치고, PR 설명에 차이를 적습니다. 사람이 읽을 파일이 없으면 작업이 끝난 것으로 보지 않습니다.
 
 ### 3.1 팀원이 자기 계정으로 저장소를 열기 — Windows 기준
 
@@ -146,7 +156,12 @@ Codex가 문서를 읽은 뒤에는 요약이 맞는지 확인합니다. 문서�
 한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA에 대해
 공식 법령명, 관할권, 공식 원문 URL, 현행 판본 또는 기준일, 확인 메모를 조사하세요.
 
-결과는 data/legal/instruments.csv로 작성하세요.
+결과는 다음 두 파일로 작성하세요.
+- 사람이 읽을 수 있는 표: `data/legal/instruments.md`
+- 사이트가 읽을 데이터: `data/legal/instruments.csv`
+
+Markdown에는 법제별 공식 명칭, 관할권, 원문 링크, 기준일, 확인 상태를 표로 쓰고,
+각 행 아래에 확인 메모를 짧게 적으세요. CSV의 열과 Markdown 표의 행이 서로 대응해야 합니다.
 공식 출처로 확인하지 못한 값은 추정하지 말고 검토 필요로 표시하세요.
 앱 코드와 Supabase 파일은 수정하지 마세요.
 ```
@@ -163,7 +178,13 @@ summary_ko, evidence_status, review_note
 
 정확한 조항을 확인하지 못한 경우 article_reference를 비워 두고 evidence_status를
 검토 필요로 표시하세요. 법률 내용을 추정하거나 새 기준을 만들지 마세요.
-결과는 data/legal/criteria-mapping.csv에 작성하세요.
+결과는 다음 두 파일로 작성하세요.
+- 사람이 읽을 수 있는 비교표: `data/legal/criteria-mapping.md`
+- 사이트가 읽을 데이터: `data/legal/criteria-mapping.csv`
+
+Markdown 표의 세로 행은 비교 기준, 가로 열은 관할권으로 구성하세요. 각 셀에는 조항 번호,
+한국어 요약, 공식 링크, 검수 상태를 적고, 근거가 부족한 셀은 `검토 필요`라고 표시하세요.
+CSV의 각 행은 Markdown 표의 한 셀과 대응해야 합니다.
 ```
 
 ### 프롬프트 3: 번역 검토
@@ -185,9 +206,12 @@ summary_ko, evidence_status, review_note
 각 출처에 대해 시작 URL, 자료 유형, 제목 위치, 게시일 위치, 본문 위치,
 상세 페이지 링크 규칙, 수집 시 주의점을 정리하세요.
 
-결과는 data/trends/source-configs/edpb.json,
-data/trends/source-configs/oecd.json,
-data/trends/source-configs/curia.json으로 작성하세요.
+결과는 출처별로 다음 두 파일씩 작성하세요.
+- 사람이 읽는 설명: `data/trends/source-configs/edpb.md`, `oecd.md`, `curia.md`
+- 수집기가 읽는 설정: `data/trends/source-configs/edpb.json`, `oecd.json`, `curia.json`
+
+Markdown에는 시작 URL, 어떤 자료를 모으는지, 실제 확인한 제목·게시일·본문 위치,
+실패하거나 주의할 사례를 쉬운 말로 설명하세요. JSON은 그 설명을 자동 수집 설정으로 옮긴 것입니다.
 페이지에서 실제로 확인한 정보만 사용하고, 사이트 구조를 추정하지 마세요.
 ```
 
@@ -202,7 +226,13 @@ published_at, url, topic_tags, short_summary_ko,
 relevance_status, duplicate_check, review_note
 
 원문 URL과 게시일을 확인할 수 없는 자료는 제외하거나 검토 필요로 표시하세요.
-결과는 data/trends/fixtures/ 아래 JSON 파일로 저장하고, 선택 기준을 review-notes.md에 적으세요.
+결과는 다음처럼 저장하세요.
+- 출처별 원자료: `data/trends/fixtures/edpb.json`, `oecd.json`, `curia.json`
+- 사람이 읽는 출처별 검토표: `data/trends/fixtures/edpb.md`, `oecd.md`, `curia.md`
+- 세 출처를 고른 이유와 중복·누락 메모: `data/trends/fixtures/review-notes.md`
+
+Markdown 검토표에는 제목, 기관, 국가, 게시일, 원문 링크, 한국어 요약, 검토 상태를 표로 쓰세요.
+JSON의 각 항목은 Markdown 검토표의 한 행과 대응해야 합니다.
 ```
 
 ### 프롬프트 3: 주간 자료 초안 기준
