@@ -56,18 +56,38 @@ GlobalTrend는 해외 개인정보 보호 동향과 개인정보 보호 법제�
 
 ## 3. Codex 시작하기
 
-### 3.1 팀원이 자기 계정으로 GitHub 연결하기
+### 3.1 팀원이 자기 계정으로 저장소를 열기 — Windows 기준
 
-Codex 앱에 들어갈 때는 각자 자신의 ChatGPT 계정으로 로그인합니다. GitHub 연결 메뉴의 이름과 위치는 Codex 버전에 따라 다를 수 있으므로, 아래의 버튼명을 반드시 찾으라는 뜻으로 읽지 않습니다.
+**먼저 두 계정을 구분합니다.** GitHub에는 팀원 **본인의 GitHub 계정**으로, Codex가 있는 ChatGPT 데스크톱 앱에는 팀원 **본인의 ChatGPT 계정**으로 로그인합니다. 두 계정이 같은 이메일일 필요는 없습니다. 이 작업을 위해 사용자님의 계정이나 암호를 공유하지 않습니다.
 
-1. 사용자님이 GitHub 저장소의 **Settings → Collaborators**에서 팀원의 GitHub 아이디를 초대합니다.
-2. 팀원은 자신의 GitHub 계정으로 초대 이메일 또는 알림을 열고 초대를 수락합니다.
-3. 팀원은 Codex 데스크톱 앱을 열고 **자기 ChatGPT/Codex 계정**으로 로그인합니다. 사용자님의 Codex 계정을 함께 쓰지 않습니다.
-4. Codex에서 새 작업을 열고, 저장소·프로젝트·환경을 선택하는 메뉴를 찾습니다. 그 메뉴에서 GitHub 연결 또는 저장소 추가를 선택합니다. 화면에 **Connect to GitHub**라는 이름이 보일 수도 있지만, 다른 이름으로 표시될 수도 있습니다.
-5. GitHub 연결 화면이 열리면 팀원 본인의 GitHub 계정으로 로그인하고 ChatGPT/Codex GitHub 앱의 접근을 승인합니다.
-6. 저장소 선택 화면에서 접근을 허용할 저장소를 고릅니다. `parksunup/globaltrend`가 보이면 선택하고 저장합니다.
-7. 이제 Codex 작업 화면에서 저장소 또는 환경 선택 메뉴를 열고 `parksunup/globaltrend`를 선택합니다. 파일 목록에 `README.md`, `architecture.md`, `app` 폴더가 보이면 제대로 연결된 것입니다.
-8. `main`을 기준으로 자기 작업 브랜치를 만듭니다.
+Codex 데스크톱의 로컬 프로젝트는 **컴퓨터의 폴더**를 엽니다. 따라서 GitHub 저장소를 먼저 컴퓨터로 복제한 다음, 그 폴더를 Codex에서 선택합니다. 아래는 실제 메뉴 이름을 확인할 수 있는 [GitHub Desktop 공식 안내](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop)와 [ChatGPT Windows 앱 공식 안내](https://learn.chatgpt.com/docs/windows/windows-app)에 따른 순서입니다.
+
+**① 리더가 GitHub에서 초대하기**
+
+1. 리더가 브라우저에서 [`parksunup/globaltrend`](https://github.com/parksunup/globaltrend)를 엽니다.
+2. **Settings → Collaborators → Add people**로 들어가 팀원 본인의 GitHub 사용자 이름을 입력하고 초대합니다. 메뉴에 **Access** 묶음이 보이면 그 아래의 **Collaborators**를 선택합니다.
+3. 팀원은 자신의 GitHub 계정으로 로그인해 초대 이메일이나 GitHub 알림의 **View invitation / Accept invitation**을 눌러 수락합니다. 수락 전에는 저장소에 직접 변경 사항을 올릴 수 없습니다. [GitHub의 초대 안내](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/repository-access-and-collaboration/inviting-collaborators-to-a-personal-repository)
+
+**② 팀원이 GitHub Desktop에서 저장소를 컴퓨터로 복제하기**
+
+1. [GitHub Desktop](https://desktop.github.com/)을 설치하고 실행합니다. 처음 실행 시 **Sign in to GitHub.com**을 눌러 **팀원 본인의 GitHub 계정**으로 로그인합니다.
+2. GitHub Desktop 상단 메뉴에서 **File → Clone repository…**를 누릅니다.
+3. **URL** 탭을 선택하고 **Repository URL or GitHub username and repository** 입력칸에 `https://github.com/parksunup/globaltrend`를 붙여 넣습니다. 자기 계정의 저장소 목록에 이 저장소가 안 보여도 URL로 지정할 수 있습니다.
+4. **Local path**의 **Choose…**를 눌러 저장할 위치를 고릅니다. 예를 들어 문서 폴더를 선택하면 그 안에 `globaltrend` 폴더가 생깁니다. 표시된 경로를 기억해 둡니다.
+5. **Clone**을 누릅니다. 완료되면 GitHub Desktop에 `globaltrend` 저장소가 표시됩니다. **Repository → Show in Explorer**로 폴더를 열어 `README.md`, `architecture.md`, `app` 폴더가 있는지 확인합니다.
+
+브라우저에서 저장소 페이지를 열었다면 녹색 **Code → Open with GitHub Desktop → Choose… → Clone** 경로도 사용할 수 있습니다. [GitHub의 브라우저 복제 안내](https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-a-repository-from-github-to-github-desktop)
+
+**③ Codex에서 방금 복제한 폴더 열기**
+
+1. ChatGPT 데스크톱 앱을 열고 **팀원 본인의 ChatGPT 계정**으로 로그인합니다. 앱 상단의 **ChatGPT** 선택 메뉴에서 **Codex**를 고릅니다.
+2. Codex에서 **Add new project**를 누르거나 Windows 단축키 **Ctrl+O**를 누릅니다.
+3. 파일 선택 창에서 ②에서 기억해 둔 **`globaltrend` 폴더 자체**를 선택합니다. `README.md` 파일 하나를 선택하는 것이 아닙니다.
+4. 왼쪽 프로젝트 목록에 `globaltrend`가 나타나면 그 프로젝트를 열어 새 작업을 시작합니다. 첫 작업에서 아래 3.2의 문서 읽기 프롬프트를 사용합니다. [Codex 로컬 프로젝트 안내](https://learn.chatgpt.com/docs/projects)
+
+**④ 작업용 브랜치 만들기**
+
+GitHub Desktop에서 `globaltrend`를 선택한 뒤 **Current branch → New branch**를 누르고, `main`을 기준으로 본인 작업 이름을 입력합니다. **Create branch**를 누른 다음 이 브랜치에서 작업합니다. Codex 작업을 시작할 때도 현재 프로젝트와 브랜치가 맞는지 확인합니다. `main`에는 직접 작업하지 않습니다.
 
 브랜치 이름은 작업 내용을 알아볼 수 있게 작성합니다.
 
@@ -78,11 +98,11 @@ feat/trend-source-contracts
 feat/trend-sample-fixtures
 ```
 
-**권한을 꼭 구분하세요:** 공개 저장소라서 누구나 보고 내려받을 수 있지만, Collaborator가 아니면 이 저장소에 직접 push할 수 없습니다. Collaborator가 아닌 사람은 자기 fork에서 작업한 뒤 PR을 보내는 방식으로 참여할 수 있습니다.
+**저장소가 안 보일 때:** GitHub Desktop의 저장소 목록에 나타나지 않아도 **URL** 탭에 위 주소를 직접 넣으면 됩니다. Clone이 실패하면 GitHub Desktop에 로그인한 GitHub 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다. 공개 저장소라 누구나 읽고 복제할 수 있지만, Collaborator가 아니면 직접 push할 수 없습니다.
 
-**연결 메뉴나 저장소가 안 보일 때:** GitHub 초대를 먼저 수락했는지 확인합니다. Codex에 GitHub 연결 메뉴가 전혀 보이지 않으면 사용자님이 확인하지 않은 버튼을 계속 찾지 말고, Codex 도움말의 GitHub 연결 방법을 열거나 팀 리더에게 화면을 공유해 메뉴 이름을 확인합니다. 저장소가 보이지 않으면 GitHub 앱의 repository access 설정에서 `parksunup/globaltrend` 접근을 허용했는지도 확인합니다.
+**Codex에서 폴더가 안 보일 때:** GitHub 계정 연결 메뉴를 찾지 말고, GitHub Desktop의 **Repository → Show in Explorer**로 실제 폴더 위치를 확인한 뒤 Codex의 **Add new project / Ctrl+O**에서 그 폴더를 선택합니다. Codex의 GitHub 플러그인 연결과 로컬 폴더 열기는 별개의 단계입니다. 이 안내의 기본 작업에는 플러그인이 필요하지 않습니다.
 
-**주의:** 새 저장소를 만들거나 파일을 다른 저장소로 복사하지 않습니다. 반드시 기존 `parksunup/globaltrend`를 연결해야 합니다.
+**주의:** **Create a new repository**나 **Fork**를 선택하지 않습니다. 팀원은 기존 `parksunup/globaltrend`를 **Clone**하고 자기 브랜치에서 작업합니다.
 
 ### 3.2 먼저 읽게 할 문서
 
@@ -200,7 +220,7 @@ README.md와 제공된 주간 동향 자료 양식을 참고해 주간 자료 �
 
 작업을 시작할 때는 본인 브랜치에서 작업합니다. `main`에 직접 push하지 않습니다.
 
-1. Codex에서 작업 브랜치를 만듭니다.
+1. GitHub Desktop에서 `main`을 기준으로 본인 작업 브랜치를 만듭니다.
 2. Codex에게 필요한 파일을 작성하게 합니다.
 3. 변경 파일과 원문 URL을 확인합니다.
 4. Codex에게 TypeScript 검사 또는 해당 작업의 검증 명령을 실행하게 합니다.
@@ -232,12 +252,13 @@ main 브랜치에는 직접 merge하지 마세요.
 
 ## 8. 작업을 시작하는 순서
 
-1. PR #7이 merge되었는지 확인합니다.
-2. 이 문서와 `architecture.md`, `README.md`를 읽습니다.
-3. 법제 담당자는 `feat/legal-corpus-foundation` 브랜치를 만듭니다.
-4. 동향 담당자는 `feat/trend-source-contracts` 브랜치를 만듭니다.
-5. 각자 첫 번째 프롬프트를 Codex에 입력합니다.
-6. 결과 파일과 PR을 제출합니다.
-7. 사용자님은 Preview와 근거 자료를 확인합니다.
+1. 리더에게 GitHub Collaborator 초대를 받고 수락합니다.
+2. GitHub Desktop에서 기존 저장소를 Clone하고, Codex에서 그 폴더를 엽니다.
+3. 이 문서와 `architecture.md`, `README.md`를 읽습니다.
+4. 법제 담당자는 `feat/legal-corpus-foundation` 브랜치를 만듭니다.
+5. 동향 담당자는 `feat/trend-source-contracts` 브랜치를 만듭니다.
+6. 각자 첫 번째 프롬프트를 Codex에 입력합니다.
+7. 결과 파일과 PR을 제출합니다.
+8. 사용자님은 Preview와 근거 자료를 확인합니다.
 
 두 팀원은 서로의 작업이 끝나기를 기다릴 필요가 없습니다. 사용자님이 결과물을 검토한 뒤 나중에 Supabase와 웹 화면에 통합합니다.

@@ -1,5 +1,5 @@
 const steps = [
-  ["1", "Codex에서 저장소 열기", "Codex 데스크톱 앱을 열고 GitHub의 parksunup/globaltrend 저장소를 프로젝트로 추가합니다."],
+  ["1", "GitHub 저장소를 컴퓨터로 가져오기", "본인 GitHub 계정으로 초대를 수락하고 GitHub Desktop에서 parksunup/globaltrend를 Clone합니다."],
   ["2", "문서 먼저 읽히기", "README.md와 architecture.md는 이 프로젝트가 무엇을 만드는지 설명합니다. 작업 전에 Codex에게 먼저 읽게 합니다."],
   ["3", "내 역할의 작업 시키기", "법제 담당은 법제 자료를, 동향 담당은 공식 출처 자료를 맡습니다. 아래 프롬프트를 복사해 사용합니다."],
   ["4", "결과를 확인하고 PR 만들기", "Codex의 결과를 확인하고, 공식 링크와 검토할 부분을 확인한 뒤 PR을 올립니다. main에는 직접 올리지 않습니다."],
@@ -22,7 +22,38 @@ export default function GuidePage() {
 
       <section><h2 className="guide-section-title">처음 시작할 때 할 일</h2><div className="guide-steps">{steps.map(([number, title, text]) => <div className="guide-step" key={number}><b>{number}</b><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
 
-      <section className="guide-card"><h2>1. 팀원이 자기 계정으로 GitHub 연결하기</h2><p>Codex 앱에 들어갈 때는 각자 자신의 ChatGPT 계정으로 로그인합니다. GitHub 연결 메뉴의 이름과 위치는 Codex 버전에 따라 다를 수 있으므로, 아래의 버튼명을 반드시 찾으라는 뜻으로 읽지 않습니다.</p><ol><li>사용자님이 GitHub 저장소의 <strong>Settings → Collaborators</strong>에서 팀원의 GitHub 아이디를 초대합니다.</li><li>팀원은 자신의 GitHub 계정으로 초대 이메일 또는 알림을 열고 초대를 수락합니다.</li><li>팀원은 Codex 데스크톱 앱을 열고 <strong>자기 ChatGPT/Codex 계정</strong>으로 로그인합니다. 사용자님의 Codex 계정을 함께 쓰지 않습니다.</li><li>Codex에서 새 작업을 열고, 저장소·프로젝트·환경을 선택하는 메뉴를 찾습니다. 그 메뉴에서 GitHub 연결 또는 저장소 추가를 선택합니다. 화면에 <strong>Connect to GitHub</strong>라는 이름이 보일 수도 있지만, 다른 이름으로 표시될 수도 있습니다.</li><li>GitHub 연결 화면이 열리면 팀원 본인의 GitHub 계정으로 로그인하고 ChatGPT/Codex GitHub 앱의 접근을 승인합니다.</li><li>저장소 선택 화면에서 접근을 허용할 저장소를 고릅니다. <code>parksunup/globaltrend</code>가 보이면 선택하고 저장합니다.</li><li>Codex 작업 화면에서 <code>parksunup/globaltrend</code>를 선택합니다. 파일 목록에 <code>README.md</code>, <code>architecture.md</code>, <code>app</code> 폴더가 보이면 제대로 연결된 것입니다.</li><li><code>main</code>을 기준으로 자기 작업 브랜치를 만듭니다. 예: <code>feat/legal-corpus-foundation</code></li></ol><p><strong>권한을 꼭 구분하세요.</strong> 공개 저장소라서 누구나 보고 내려받을 수 있지만, Collaborator가 아니면 이 저장소에 직접 push할 수 없습니다. Collaborator가 아닌 사람은 자기 fork에서 작업한 뒤 PR을 보내는 방식으로 참여할 수 있습니다.</p><p><strong>연결 메뉴나 저장소가 안 보일 때:</strong> GitHub 초대를 먼저 수락했는지 확인합니다. Codex에 GitHub 연결 메뉴가 전혀 보이지 않으면 사용자님이 확인하지 않은 버튼을 계속 찾지 말고, Codex 도움말의 GitHub 연결 방법을 열거나 팀 리더에게 화면을 공유해 메뉴 이름을 확인합니다. 저장소가 보이지 않으면 GitHub 앱의 repository access 설정에서 <code>parksunup/globaltrend</code> 접근을 허용했는지도 확인합니다.</p></section>
+      <section className="guide-card">
+        <h2>1. 팀원이 자기 계정으로 저장소 열기 · Windows</h2>
+        <p><strong>계정은 두 개입니다.</strong> GitHub에는 팀원 본인의 GitHub 계정으로, Codex가 있는 ChatGPT 데스크톱 앱에는 본인의 ChatGPT 계정으로 로그인합니다. 리더의 계정을 함께 쓰지 않습니다.</p>
+        <p>Codex의 로컬 프로젝트는 컴퓨터의 폴더를 엽니다. 먼저 GitHub Desktop으로 저장소를 컴퓨터에 복제하고, 그 폴더를 Codex에서 선택하세요.</p>
+        <h3>① 리더가 초대하고, 팀원이 수락합니다</h3>
+        <ol>
+          <li>리더가 <a href="https://github.com/parksunup/globaltrend">parksunup/globaltrend</a>에서 <strong>Settings → Collaborators → Add people</strong>로 들어가 팀원의 GitHub 사용자 이름을 초대합니다. <strong>Access</strong> 묶음이 보이면 그 아래 <strong>Collaborators</strong>를 선택합니다.</li>
+          <li>팀원은 본인의 GitHub 계정으로 로그인해 초대 이메일 또는 알림의 <strong>View invitation / Accept invitation</strong>을 눌러 수락합니다.</li>
+        </ol>
+        <h3>② GitHub Desktop에서 저장소를 Clone합니다</h3>
+        <ol>
+          <li><a href="https://desktop.github.com/">GitHub Desktop</a>을 설치하고 실행합니다. <strong>Sign in to GitHub.com</strong>으로 본인 계정에 로그인합니다.</li>
+          <li>상단 메뉴 <strong>File → Clone repository…</strong>를 누릅니다.</li>
+          <li><strong>URL</strong> 탭을 누르고 주소 칸에 <code>https://github.com/parksunup/globaltrend</code>를 붙여 넣습니다. 자기 계정의 저장소 목록에 안 보여도 URL로 지정할 수 있습니다.</li>
+          <li><strong>Local path → Choose…</strong>에서 컴퓨터에 저장할 위치를 고른 뒤 <strong>Clone</strong>을 누릅니다. 표시된 경로를 기억합니다.</li>
+          <li><strong>Repository → Show in Explorer</strong>로 폴더를 열어 <code>README.md</code>, <code>architecture.md</code>, <code>app</code> 폴더가 있는지 확인합니다.</li>
+        </ol>
+        <p>브라우저의 저장소 페이지에서 녹색 <strong>Code → Open with GitHub Desktop → Choose… → Clone</strong>으로 진행해도 됩니다.</p>
+        <h3>③ Codex에서 그 폴더를 엽니다</h3>
+        <ol>
+          <li>ChatGPT 데스크톱 앱에 본인의 ChatGPT 계정으로 로그인하고, 상단 <strong>ChatGPT</strong> 선택 메뉴에서 <strong>Codex</strong>를 고릅니다.</li>
+          <li><strong>Add new project</strong>를 누르거나 <strong>Ctrl+O</strong>를 누릅니다.</li>
+          <li>파일 선택 창에서 방금 Clone한 <strong>globaltrend 폴더 자체</strong>를 선택합니다. <code>README.md</code> 파일 하나를 선택하지 않습니다.</li>
+          <li>왼쪽 프로젝트 목록의 <strong>globaltrend</strong>를 열고 새 작업을 시작합니다. 아래 2번의 프롬프트로 문서를 먼저 읽힙니다.</li>
+        </ol>
+        <h3>④ 자기 브랜치를 만듭니다</h3>
+        <p>GitHub Desktop에서 <strong>Current branch → New branch</strong>를 눌러 <code>main</code> 기준의 본인 작업 브랜치를 만듭니다. 이름 예: <code>feat/legal-corpus-foundation</code>. <strong>Create branch</strong>를 누른 뒤 Codex에서 작업합니다. <code>main</code>에는 직접 작업하지 않습니다.</p>
+        <p><strong>저장소가 안 보인다면:</strong> GitHub Desktop의 <strong>URL</strong> 탭에 위 주소를 직접 넣으세요. Clone이 실패하면 GitHub Desktop 로그인 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다.</p>
+        <p><strong>Codex에서 폴더가 안 보인다면:</strong> GitHub Desktop의 <strong>Repository → Show in Explorer</strong>에서 실제 위치를 확인한 뒤 <strong>Add new project / Ctrl+O</strong>로 그 폴더를 고릅니다. 이 절차에는 Codex GitHub 플러그인 연결이 필요하지 않습니다.</p>
+        <p><strong>주의:</strong> <strong>Create a new repository</strong>나 <strong>Fork</strong>를 선택하지 않습니다. 기존 저장소를 <strong>Clone</strong>합니다.</p>
+        <p>화면 메뉴 참고: <a href="https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop">GitHub Desktop 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/windows/windows-app">ChatGPT Windows 앱 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/projects">Codex 로컬 프로젝트 안내</a></p>
+      </section>
 
       <section className="guide-card"><h2>2. Codex에게 문서를 먼저 읽히기</h2><p>새 작업을 시작할 때 아래 내용을 그대로 붙여 넣습니다.</p><pre>{readFirst}</pre><p>Codex가 요약한 내용을 읽고 프로젝트 목적과 작업 범위를 제대로 이해했는지 확인합니다. 바로 코드를 수정하게 하지 않습니다.</p></section>
 
