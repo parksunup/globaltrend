@@ -49,6 +49,7 @@ export default function ReviewShell({ initialItems, dataSource }: { initialItems
         </nav>
         <div className="sidebar-foot">
           <span className="dot" /> 실제 공개 전 검수 전용
+          <a className="guide-link" href="/guide">팀 가이드</a>
         </div>
       </aside>
 
