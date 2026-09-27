@@ -10,7 +10,7 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell({ initialItems, dataSource }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample" }) {
+export default function ReviewShell({ initialItems, dataSource, teamMode = false }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean }) {
   const [kind, setKind] = useState<ReviewKind>("sources");
   const [status, setStatus] = useState<ReviewStatus | "all">("all");
   const [query, setQuery] = useState("");
@@ -38,7 +38,7 @@ export default function ReviewShell({ initialItems, dataSource }: { initialItems
       <aside className="sidebar">
         <div className="brand-mark">GT</div>
         <div className="brand-copy"><strong>GlobalTrend</strong><span>검토 보드</span></div>
-        <div className="preview-pill">{dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
+        <div className="preview-pill">{teamMode ? "TEAM · 검수 전용" : dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
         <nav className="nav-list" aria-label="자료 유형">
           {kinds.map((itemKind) => (
             <button className={"nav-item " + (kind === itemKind ? "active" : "")} key={itemKind} onClick={() => selectKind(itemKind)}>
@@ -55,7 +55,7 @@ export default function ReviewShell({ initialItems, dataSource }: { initialItems
       <section className="content">
         <header className="topbar">
           <div><p className="eyebrow">WORKSPACE / REVIEW</p><h1>{kindLabels[kind]}</h1></div>
-          <div className="topbar-note"><span className="lock">◈</span> 팀 검수 단계 <b>읽기 전용</b></div>
+          <div className="topbar-note"><span className="lock">◈</span> {teamMode ? "팀 검수 단계" : "공개 전 단계"} <b>{teamMode ? "로그인됨" : "읽기 전용"}</b></div>
         </header>
         <div className="toolbar">
           <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="항목명, 설명, 국가로 검색" /></label>
