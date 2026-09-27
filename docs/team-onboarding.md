@@ -56,17 +56,17 @@ GlobalTrend는 해외 개인정보 보호 동향과 개인정보 보호 법제�
 
 ## 3. Codex 시작하기
 
-### 3.1 팀원이 자기 계정으로 GitHub 저장소 사용하기
+### 3.1 팀원이 자기 계정으로 GitHub 연결하기
 
-이 저장소는 공개 저장소이므로 팀원도 각자 자기 GitHub 계정으로 볼 수 있습니다. 다만 파일을 올리고 브랜치를 push하려면 저장소 소유자인 사용자님이 팀원을 Collaborator로 초대해야 합니다.
+Codex 앱에 들어갈 때는 각자 자신의 ChatGPT 계정으로 로그인합니다. GitHub 로그인은 Codex 안에서 별도로 연결합니다.
 
 1. 사용자님이 GitHub 저장소의 **Settings → Collaborators**에서 팀원의 GitHub 아이디를 초대합니다.
 2. 팀원은 자신의 GitHub 계정으로 초대 이메일 또는 알림을 열고 초대를 수락합니다.
-3. 팀원은 Codex 데스크톱 앱을 열고 **자기 GitHub 계정**으로 로그인합니다. 사용자님의 계정을 함께 쓰지 않습니다.
-4. 왼쪽 사이드바에서 **Projects** 또는 **프로젝트**를 찾고, **+**, **Add project**, **프로젝트 추가** 중 보이는 버튼을 누릅니다.
-5. **GitHub 저장소 연결** 또는 **Clone repository**를 선택한 뒤 `parksunup/globaltrend`를 검색합니다.
-6. 저장소가 목록에 나오면 선택하고, 컴퓨터에 저장할 폴더를 정합니다. 목록에 안 나오면 <https://github.com/parksunup/globaltrend> 주소를 직접 열어 접근 가능한지 확인한 뒤 저장소 URL을 붙여 넣거나 Clone을 선택합니다.
-7. 프로젝트를 연 뒤 파일 목록에 `README.md`, `architecture.md`, `app` 폴더가 보이는지 확인합니다.
+3. 팀원은 Codex 데스크톱 앱을 열고 **자기 ChatGPT/Codex 계정**으로 로그인합니다. 사용자님의 Codex 계정을 함께 쓰지 않습니다.
+4. 새 작업 화면의 메시지 입력창 주변에서 **Connect to GitHub** 또는 **GitHub 연결** 버튼을 찾습니다. 이 버튼은 Projects 메뉴가 아니라 작업을 입력하는 화면 안에 있을 수 있습니다.
+5. **Connect to GitHub**를 누르면 GitHub 페이지가 열립니다. 팀원 본인의 GitHub 계정으로 로그인하고, ChatGPT/Codex GitHub 앱의 접근을 승인합니다.
+6. 저장소 선택 화면에서 접근을 허용할 저장소를 고릅니다. `parksunup/globaltrend`가 보이면 선택하고 저장합니다.
+7. 이제 Codex 작업 화면에서 저장소 또는 환경 선택 메뉴를 열고 `parksunup/globaltrend`를 선택합니다. 파일 목록에 `README.md`, `architecture.md`, `app` 폴더가 보이면 제대로 연결된 것입니다.
 8. `main`을 기준으로 자기 작업 브랜치를 만듭니다.
 
 브랜치 이름은 작업 내용을 알아볼 수 있게 작성합니다.
@@ -80,7 +80,7 @@ feat/trend-sample-fixtures
 
 **권한을 꼭 구분하세요:** 공개 저장소라서 누구나 보고 내려받을 수 있지만, Collaborator가 아니면 이 저장소에 직접 push할 수 없습니다. Collaborator가 아닌 사람은 자기 fork에서 작업한 뒤 PR을 보내는 방식으로 참여할 수 있습니다.
 
-**Codex 목록에 안 보일 때:** Codex를 사용자님의 계정으로 로그인할 필요는 없습니다. 팀원 본인의 GitHub 계정으로 다시 연결하고, GitHub 초대가 수락되었는지 확인합니다. 그래도 목록에 안 나오면 저장소 URL로 직접 Clone합니다.
+**GitHub 연결 버튼이나 저장소가 안 보일 때:** GitHub 초대를 먼저 수락했는지 확인하고, Codex의 GitHub 연결 화면에서 저장소 접근 권한을 `parksunup/globaltrend`에 허용했는지 확인합니다. 저장소가 새로 만들어졌다면 GitHub 앱의 repository access 설정에서 이 저장소를 추가로 허용해야 할 수 있습니다.
 
 **주의:** 새 저장소를 만들거나 파일을 다른 저장소로 복사하지 않습니다. 반드시 기존 `parksunup/globaltrend`를 연결해야 합니다.
 
