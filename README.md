@@ -19,6 +19,7 @@ npm run dev
 | --- | --- |
 | [architecture.md](./architecture.md) | 제품 범위, 수집·검색 파이프라인, 법제 비교 UX, 데이터 모델, 권한, 배포, 개발 단계 |
 | [README.md](./README.md) | 프로젝트 소개, 현재 상태, 팀 참여 및 재현 가능한 개발 환경의 준비 기준 |
+| [docs/team-onboarding.md](./docs/team-onboarding.md) | 비개발자 팀원을 위한 역할, Codex 사용법, GitHub·PR 작업 순서 |
 
 문서 기준일은 2026-09-27입니다. 확정 요구사항과 제안·미정 사항은 architecture.md에서 구분합니다.
 
