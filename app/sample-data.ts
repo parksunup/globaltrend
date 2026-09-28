@@ -1,4 +1,4 @@
-export type ReviewStatus = "unreviewed" | "in_review" | "approved" | "published";
+export type ReviewStatus = "unreviewed" | "in_review" | "approved" | "rejected" | "published";
 export type ReviewKind = "sources" | "laws" | "criteria";
 
 export type ReviewItem = {
@@ -11,6 +11,8 @@ export type ReviewItem = {
   url?: string;
   metadata: string[];
   note: string;
+  reviewNote?: string;
+  reviewedAt?: string;
 };
 
 export const kindLabels: Record<ReviewKind, string> = {
@@ -24,6 +26,7 @@ export const statusLabels: Record<ReviewStatus | "all", string> = {
   unreviewed: "검수 전",
   in_review: "검수 중",
   approved: "승인",
+  rejected: "반려",
   published: "공개"
 };
 
