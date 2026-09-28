@@ -1,0 +1,2 @@
+record_id,jurisdiction_code,short_name,official_name,official_url,version_label,effective_date,korean_translation_status,korean_translation_source_url,reuse_status,review_status
+example-law,REVIEW,검토 필요,검토 필요,https://example.invalid/official,검토 필요,,unreviewed,,unreviewed,unreviewed

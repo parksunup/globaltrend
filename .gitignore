@@ -2,3 +2,5 @@ node_modules/
 .next/
 tsconfig.tsbuildinfo
 .env.local
+.superpowers/
+.pnpm-store/

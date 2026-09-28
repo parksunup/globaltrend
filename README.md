@@ -81,13 +81,17 @@ flowchart LR
 
 ## 팀원이 지금 참여하는 방법
 
-1. architecture.md를 읽고 요구사항과 잠정 가정을 확인합니다.
-2. 동향 담당은 EDPB·OECD·CURIA 출처와 샘플을, 법제 담당은 공식 판본과 번역 출처를 정리합니다. [팀 온보딩 가이드](./docs/team-onboarding.md)의 프롬프트를 따릅니다.
-3. [globaltrend 저장소](https://github.com/parksunup/globaltrend)의 이슈에서 담당 범위와 완료 조건을 정하고 각자 작업 브랜치를 만듭니다.
-4. 첫 개발은 수동 등록/공식 출처 3곳에서 시작해 검수·발행까지 한 번 완주하는 범위로 잡습니다.
-5. 동향 수집·검색 개발과 법제 자료 준비는 병행할 수 있습니다. 법제 담당은 공식 판본 확정 → 법률별 한국어 번역 전문 완성 → 17개 기준의 조항별 요약표 순서로 진행하고, 이후 동향의 조문 인용을 연결합니다.
+1. 프로젝트 리드가 `data/`의 공용 양식과 자동 검사를 `main`에 먼저 반영합니다.
+2. 법제 담당은 최신 `main`에서 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts` 브랜치를 만듭니다.
+3. architecture.md와 [팀 온보딩 가이드](./docs/team-onboarding.md)를 읽고, 자기 폴더의 `*.template.*` 파일을 실제 결과 파일명으로 복사합니다.
+4. 동향 담당은 EDPB·OECD·CURIA 출처와 샘플을, 법제 담당은 공식 판본과 번역 출처를 정리합니다. 모르는 내용은 추정하지 않고 `검토 필요`로 표시합니다.
+5. `pnpm validate:data`를 실행하고 [globaltrend 저장소](https://github.com/parksunup/globaltrend)의 Pull Request로 결과를 제출합니다.
+6. 프로젝트 리드가 Markdown 보고서, 공식 근거와 자동 검사 결과를 확인한 뒤 `main`에 반영합니다.
+7. 첫 개발은 승인된 조사 결과를 바탕으로 수동 등록/공식 출처 3곳에서 시작해 검수·발행까지 한 번 완주하는 범위로 잡습니다.
 
-모든 변경은 GitHub Pull Request 단위로 관리합니다. 작업 브랜치에서 PR을 만들면 연결된 Vercel Preview로 화면을 확인할 수 있습니다. GitHub Actions 자동 검증은 아직 저장소에 설정되지 않았으므로 PR마다 실행한 검증 결과를 적고, 자동 검증을 추가할 때는 `.github/workflows/`에 설정을 기록합니다. 동료 리뷰와 필요한 법제·번역 검수를 거쳐 승인된 PR만 `main`에 merge하며, merge 후 Supabase migration·워커·Vercel 운영 배포를 순서대로 진행합니다. `main` 직접 push와 승인 없는 merge는 사용하지 않습니다.
+공용 양식은 [data/README.md](./data/README.md)에서 시작합니다. 법제 담당과 동향 담당은 서로의 브랜치나 폴더를 수정하지 않으며, 초기 조사 작업에서 앱 화면·Supabase·인증·환경변수를 변경하지 않습니다. 수집기와 법제 import는 담당자의 첫 조사 결과를 받은 뒤 프로젝트 리드 또는 개발 담당이 구현합니다.
+
+모든 변경은 GitHub Pull Request 단위로 관리합니다. 작업 브랜치에서 PR을 만들면 연결된 Vercel Preview로 화면을 확인할 수 있습니다. GitHub Actions는 테스트·팀 데이터 검사·타입 검사·웹 빌드를 자동으로 실행합니다. migration 재생과 RLS 자동 검증은 아직 추가되지 않았으므로 DB·권한 변경 PR에는 실행한 수동 검증 결과도 적습니다. 동료 리뷰와 필요한 법제·번역 검수를 거쳐 승인된 PR만 `main`에 merge하며, merge 후 Supabase migration·워커·Vercel 운영 배포를 순서대로 진행합니다. `main` 직접 push와 승인 없는 merge는 사용하지 않습니다.
 
 법제 범위는 **한국 개인정보 보호법, 일본 APPI, 중국 PIPL, EU GDPR, 영국 UK GDPR, 미국 캘리포니아 CCPA, 싱가포르 PDPA**로 확정되었습니다. 영국은 UK GDPR과 Data Protection Act 2018 등 보완 법령을 연결해 관리합니다. 비교 기준은 한국·일본 비교표의 17개 행을 기본으로 사용합니다. 현행 조문과 판본은 별도로 검증합니다. 주간 자료는 팀원이 작업 브랜치에 추가한 기준 자료의 표지·목차·항목 본문 구조를 웹 템플릿의 기준으로 삼습니다.
 
@@ -116,7 +120,7 @@ flowchart LR
 6. 예제 동향 검색 → 팀 계정 검수 → 예제 주간호 발행 → 예제 조문 확인 흐름을 실행합니다.
 7. 관련 검증을 통과시킨 뒤 작업 브랜치에서 PR을 만듭니다.
 
-현재는 웹 실행 명령, 패키지 잠금 파일, Supabase 초기 migration과 seed가 있습니다. 다만 `.env.example`, 로컬 Supabase 시작·초기화 명령, 합성 데이터로 실행하는 전체 흐름, Edge Functions, 자동 검증은 아직 없습니다. 해당 기능을 추가하는 PR은 **실제 실행 명령**, Windows 및 팀의 지원 OS 안내, 예상 결과, 오류 해결법을 이 문서에 함께 추가해야 합니다.
+현재는 웹 실행 명령, 패키지 잠금 파일, `.env.example`, Supabase 초기 migration과 seed, 팀 조사 자료 자동 검증과 기본 GitHub Actions가 있습니다. 다만 로컬 Supabase 시작·초기화 명령, 합성 데이터로 실행하는 전체 흐름, Edge Functions, migration 재생·RLS 자동 검증은 아직 없습니다. 해당 기능을 추가하는 PR은 **실제 실행 명령**, Windows 및 팀의 지원 OS 안내, 예상 결과, 오류 해결법을 이 문서에 함께 추가해야 합니다.
 
 ### 환경변수 계약안
 
@@ -164,8 +168,8 @@ flowchart LR
 │   └── e2e/                   # 핵심 사용자 흐름
 ├── docs/                       # 팀 온보딩·설계 검토·작업 계획
 ├── .agents/skills/             # (예정) Codex 초안 생성·검수 작업 지침
-├── .github/                    # (예정) CI·PR 템플릿·소유자 설정
-├── .env.example                # (예정) 환경변수 이름과 설명
+├── .github/                    # 현재 Issue·PR 양식과 기본 CI, 소유자 설정은 예정
+├── .env.example                # 환경변수 이름과 설명
 └── LICENSE                     # (예정) 소유자가 라이선스 선택 후 추가
 ```
 
