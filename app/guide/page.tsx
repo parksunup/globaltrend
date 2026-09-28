@@ -5,7 +5,7 @@ const steps = [
   ["4", "결과를 확인하고 PR 만들기", "Codex의 결과를 확인하고, 공식 링크와 검토할 부분을 확인한 뒤 PR을 올립니다. main에는 직접 올리지 않습니다."],
 ];
 
-const readFirst = `이 저장소의 README.md, architecture.md, docs/team-onboarding.md를 먼저 읽고\n프로젝트 목적, 공개 범위, 현재 구현 상태, 제 역할을 쉬운 말로 설명해 주세요.\n아직 파일은 수정하지 말고, 제가 이해한 내용이 맞는지 확인할 수 있게 요약해 주세요.`;
+const readFirst = `제 역할은 [프로젝트 리드 / 법제 담당 / 동향 담당 중 하나]입니다.\n이 저장소의 README.md, architecture.md, docs/team-onboarding.md를 먼저 읽고\n프로젝트 목적, 공개 범위, 현재 구현 상태, 제 역할을 쉬운 말로 설명해 주세요.\n아직 파일은 수정하지 말고, 제가 이해한 내용이 맞는지 확인할 수 있게 요약해 주세요.\n역할이 비어 있거나 불분명하면 문서만 보고 추정하지 말고 먼저 질문해 주세요.`;
 const legalPrompt = `법제 담당입니다. README.md, architecture.md와 온보딩 문서를 먼저 읽으세요.\n한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 캘리포니아 CCPA, 싱가포르 PDPA의\n공식 법령명, 관할권, 원문 URL, 확인한 판본·시행일, 기존 한국어 번역의 유무와 출처를 조사하세요.\nUK GDPR에 연결되는 영국의 보완 법령도 메모하되 새 비교 기준은 만들지 마세요.\n\n사람이 읽는 data/legal/instruments.md와 대응하는 data/legal/instruments.csv를 만드세요.\n원문과 번역의 이용·재배포 조건을 확인한 내용은 data/legal/review-notes.md에 적으세요.\n확인하지 못한 값은 추정하지 말고 검토 필요로 표시하세요.\n앱 코드, Supabase, 인증, 환경변수는 수정하지 마세요.`;
 const legalTranslationPrompt = `법제 담당의 둘째 작업입니다. 공식 판본을 확정한 법률 하나를 선택하세요.\n처음에는 일본 APPI로 시작하고, 이후 다른 해외법에도 같은 작업을 반복합니다.\n선택한 법률의 조문 전체를 빠짐없이 한국어로 번역해 한 문서로 완성하세요.\n길면 여러 작업으로 나누되 각 작업이 끝날 때 같은 문서에 이어 쓰고,\n마지막에 원문 목차와 조·항·호·부칙의 수와 순서를 대조해 누락을 확인하세요.\n\n결과는 법률별 한국어 번역 전문 한 파일입니다. 예: data/legal/translations/appi.md.\n제목에 법률명·관할권·공식 원문 URL·판본·시행일·번역 상태를 적고,\n본문에는 원문의 편·장·절·조·항·호 구조와 조항 번호를 유지하세요.\n원문에 없는 해석을 덧붙이지 말고, 애매한 용어와 번역 결정은 별도 검토 메모에 남기세요.\n각 조항에 연결할 수 있는 appi.json과 누락·검수 상태 목록도 작성하세요.\n검토 메모에는 원문과 번역문의 조·항·호·부칙 수, 빠진 항목, 확인 방법을 표로 적으세요.\n미완료 문서를 '전문'이나 검수 완료로 표시하지 마세요. 모든 번역은 사람 검수 전 초안입니다.\n공개 저장소에 본문을 올릴 수 있는 조건이 불확실하면 본문은 커밋하지 말고\n판본·진행률·공개 보류 이유를 검토 메모에 남겨 리더에게 전달하세요.`;
 const legalMappingPrompt = `법제 담당의 셋째 작업입니다. 먼저 완성된 법률별 한국어 번역 문서를 읽으세요.\n그 다음 팀원이 작업 브랜치에 추가한 한국·일본 비교표의 17개 기준을 세로 행으로, 7개 법제를 가로 열로 둔\n조항별 분류·요약표를 작성하세요. 비교표 파일을 읽지 못했다면 작업을 멈추고 필요한 파일명을 먼저 보고하세요.\n각 셀에는 관련 조항 번호, 한국어 핵심 요약, 주요 예외, 번역 문서의 해당 조항 링크,\n공식 원문 URL, 검수 상태를 넣으세요. 여러 조항이 관련되면 모두 연결하세요.\n\ndata/legal/criteria-mapping.md와 각 셀에 대응하는 criteria-mapping.csv를 만드세요.\n우선 한국 PIPA와 일본 APPI부터 채우고, 나머지 법률은 번역 전문이 완성될 때마다 추가하세요.\n아직 조사하지 않은 셀은 '미검토'로 두고 근거 없이 '규정 없음'이라고 쓰지 마세요.\n번역 초안은 검수 완료 번역으로 표시하지 마세요. 앱 코드와 Supabase는 수정하지 마세요.`;
@@ -21,7 +21,7 @@ export default function GuidePage() {
       <h1>GlobalTrend 팀 온보딩 가이드</h1>
       <p className="guide-lead">이 프로젝트는 해외 개인정보 보호 동향과 법제를 한국어로 조사하고 비교하는 웹사이트입니다. 코딩을 잘 몰라도 참여할 수 있습니다. Codex에게 작업을 시키고, 결과를 확인하고, PR로 제출하는 방식으로 진행합니다.</p>
 
-      <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. 팀원이 확인하고 승인한 자료만 일반 사용자에게 공개합니다.</p><div className="guide-note"><strong>결과 파일은 3종 세트로 만듭니다.</strong><br />사람이 읽는 <code>.md</code> 요약표 + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 확인하지 못한 내용을 적는 검토 메모입니다. 팀원은 Markdown을 먼저 보고, 기계용 파일은 표의 내용과 서로 맞는지 확인합니다.</div></section>
+      <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. 팀원이 확인하고 승인한 자료만 일반 사용자에게 공개합니다.</p><div className="guide-note"><strong>현재는 P1 기반 구현 단계입니다.</strong><br />공개 검토 보드, Supabase 초기 스키마·RLS·seed, <code>/team</code> 로그인 및 읽기 화면이 있습니다. 승인·반려·검수 메모 저장, 자동 수집, Codex 초안 자동화, 검색과 발행은 아직 연결되지 않았습니다.</div><div className="guide-note"><strong>결과 파일은 3종 세트로 만듭니다.</strong><br />사람이 읽는 <code>.md</code> 요약표 + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 확인하지 못한 내용을 적는 검토 메모입니다. 팀원은 Markdown을 먼저 보고, 기계용 파일은 표의 내용과 서로 맞는지 확인합니다.</div></section>
 
       <section><h2 className="guide-section-title">처음 시작할 때 할 일</h2><div className="guide-steps">{steps.map(([number, title, text]) => <div className="guide-step" key={number}><b>{number}</b><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
 
@@ -58,7 +58,7 @@ export default function GuidePage() {
         <p>화면 메뉴 참고: <a href="https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop">GitHub Desktop 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/windows/windows-app">ChatGPT Windows 앱 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/projects">Codex 로컬 프로젝트 안내</a></p>
       </section>
 
-      <section className="guide-card"><h2>2. Codex에게 문서를 먼저 읽히기</h2><p>새 작업을 시작할 때 아래 내용을 그대로 붙여 넣습니다.</p><pre>{readFirst}</pre><p>Codex가 요약한 내용을 읽고 프로젝트 목적과 작업 범위를 제대로 이해했는지 확인합니다. 바로 코드를 수정하게 하지 않습니다.</p></section>
+      <section className="guide-card"><h2>2. Codex에게 문서를 먼저 읽히기</h2><p>새 작업을 시작할 때 아래 내용을 붙여 넣고, 첫 줄의 대괄호를 자신의 실제 역할 하나로 바꿉니다. 역할명은 고정된 책임 범위이며 현재 대화 상대가 자동으로 프로젝트 리드가 되는 것은 아닙니다.</p><pre>{readFirst}</pre><p>Codex가 요약한 내용을 읽고 프로젝트 목적과 작업 범위를 제대로 이해했는지 확인합니다. 바로 코드를 수정하게 하지 않습니다.</p></section>
 
       <div className="guide-columns">
         <section className="guide-card">
@@ -83,11 +83,11 @@ export default function GuidePage() {
         </section>
       </div>
 
-      <section className="guide-card"><h2>4. 결과를 PR로 제출하기</h2><p>Codex가 파일을 만들면 먼저 변경 내용을 확인합니다. 공식 URL이 있는지, 추정한 내용이 섞이지 않았는지, 지정된 폴더 밖의 파일을 수정하지 않았는지 확인합니다.</p><pre>{prPrompt}</pre><p>PR이 올라오면 사용자님이 파일과 Vercel Preview를 확인한 뒤 main에 merge합니다. 팀원은 main에 직접 push하거나 merge하지 않습니다.</p></section>
+      <section className="guide-card"><h2>4. 결과를 PR로 제출하기</h2><p>Codex가 파일을 만들면 먼저 변경 내용을 확인합니다. 공식 URL이 있는지, 추정한 내용이 섞이지 않았는지, 지정된 폴더 밖의 파일을 수정하지 않았는지 확인합니다.</p><pre>{prPrompt}</pre><p>PR이 올라오면 프로젝트 리드가 파일과 Vercel Preview를 확인한 뒤 main에 merge합니다. 팀원은 main에 직접 push하거나 merge하지 않습니다.</p></section>
 
-      <section className="guide-card"><h2>사용자님이 PR에서 확인할 것</h2><ul><li>요청한 결과 파일이 실제로 들어 있는가</li><li>법률별 번역 전문이 원문 조·항·호·부칙과 빠짐없이 대응하는가</li><li>17개 기준표의 조항 링크가 해당 법률 전문과 공식 판본을 가리키는가</li><li><strong>Markdown 표를 먼저 읽고 내용을 이해할 수 있는가</strong></li><li>Markdown 표와 CSV·JSON의 행·항목 수가 서로 맞는가</li><li>공식 원문 URL을 직접 열 수 있는가</li><li>확인하지 못한 내용이 `검토 필요`로 표시되어 있는가</li><li>앱 코드·Supabase·환경변수를 불필요하게 수정하지 않았는가</li><li>PR에 검증 방법과 남은 문제가 적혀 있는가</li><li>기존 자료를 삭제하거나 덮어쓰지 않았는가</li></ul></section>
+      <section className="guide-card"><h2>프로젝트 리드가 PR에서 확인할 것</h2><ul><li>요청한 결과 파일이 실제로 들어 있는가</li><li>법률별 번역 전문이 원문 조·항·호·부칙과 빠짐없이 대응하는가</li><li>17개 기준표의 조항 링크가 해당 법률 전문과 공식 판본을 가리키는가</li><li><strong>Markdown 표를 먼저 읽고 내용을 이해할 수 있는가</strong></li><li>Markdown 표와 CSV·JSON의 행·항목 수가 서로 맞는가</li><li>공식 원문 URL을 직접 열 수 있는가</li><li>확인하지 못한 내용이 `검토 필요`로 표시되어 있는가</li><li>앱 코드·Supabase·환경변수를 불필요하게 수정하지 않았는가</li><li>PR에 검증 방법과 남은 문제가 적혀 있는가</li><li>기존 자료를 삭제하거나 덮어쓰지 않았는가</li></ul></section>
 
-      <section className="guide-card"><h2>팀의 기본 원칙</h2><p>법제 담당과 동향 담당은 서로의 작업을 기다릴 필요가 없습니다. 각자 정해진 폴더의 결과물을 만들고 PR을 제출합니다. 사용자님이 결과물을 검토한 뒤 나중에 웹사이트와 Supabase에 연결합니다.</p><p>모르는 부분은 임의로 채우지 말고 `검토 필요`라고 적습니다. Codex가 만든 결과도 최종 법률 판단이나 공개 승인을 대신하지 않습니다.</p></section>
+      <section className="guide-card"><h2>팀의 기본 원칙</h2><p>법제 담당과 동향 담당은 서로의 작업을 기다릴 필요가 없습니다. 각자 정해진 폴더의 결과물을 만들고 PR을 제출합니다. 프로젝트 리드가 결과물을 검토한 뒤 나중에 웹사이트와 Supabase에 연결합니다.</p><p>모르는 부분은 임의로 채우지 말고 `검토 필요`라고 적습니다. Codex가 만든 결과도 최종 법률 판단이나 공개 승인을 대신하지 않습니다.</p></section>
       <a className="guide-back" href="/">검토 보드로 돌아가기 ↗</a>
     </div>
   </main>;
