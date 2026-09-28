@@ -112,18 +112,18 @@ Codex 데스크톱의 로컬 프로젝트는 **컴퓨터의 폴더**를 엽니�
 3. 파일 선택 창에서 ②에서 기억해 둔 **`globaltrend` 폴더 자체**를 선택합니다. `README.md` 파일 하나를 선택하는 것이 아닙니다.
 4. 왼쪽 프로젝트 목록에 `globaltrend`가 나타나면 그 프로젝트를 열어 새 작업을 시작합니다. 첫 작업에서 아래 3.2의 문서 읽기 프롬프트를 사용합니다. [Codex 로컬 프로젝트 안내](https://learn.chatgpt.com/docs/projects)
 
-**④ 작업용 브랜치 만들기**
+**④ 배정된 작업 브랜치로 전환하기**
 
-리드가 공용 양식을 `main`에 반영했다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 `globaltrend`를 선택하고 **Fetch origin → Pull origin**으로 최신 `main`을 받은 다음 **Current branch → New branch**를 누릅니다. **Create branch**를 누른 뒤 자기 브랜치에서 작업합니다. `main`에는 직접 작업하지 않습니다.
+리드가 공용 양식을 `main`에 반영하고 담당자 브랜치를 만들었다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 `globaltrend`를 선택하고 **Fetch origin**을 눌러 원격 브랜치 목록을 갱신합니다. 그다음 **Current branch**에서 자기 브랜치를 선택해 전환합니다. **New branch**나 **Create branch**는 누르지 않습니다. `main`에는 직접 작업하지 않습니다.
 
-브랜치 이름은 작업 내용을 알아볼 수 있게 작성합니다.
+처음 배정된 브랜치는 다음과 같습니다.
 
 ```text
 feat/legal-corpus-foundation
 feat/trend-source-contracts
 ```
 
-법제 담당은 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts`를 사용합니다. 첫 조사 PR이 병합된 뒤 후속 작업은 별도 브랜치를 만듭니다.
+법제 담당은 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts`를 사용합니다. 목록에 보이지 않으면 **Fetch origin**을 다시 누르고, 그래도 보이지 않으면 새로 만들지 말고 리드에게 확인합니다. 첫 조사 PR이 병합된 뒤 후속 작업용 브랜치는 리드가 별도로 정해 안내합니다.
 
 **저장소가 안 보일 때:** GitHub Desktop의 저장소 목록에 나타나지 않아도 **URL** 탭에 위 주소를 직접 넣으면 됩니다. Clone이 실패하면 GitHub Desktop에 로그인한 GitHub 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다. 공개 저장소라 누구나 읽고 복제할 수 있지만, Collaborator가 아니면 직접 push할 수 없습니다.
 
@@ -274,7 +274,7 @@ data/trends/weekly-sample.md와 대응하는 weekly-sample.json을 작성하고
 
 작업을 시작할 때는 본인 브랜치에서 작업합니다. `main`에 직접 push하지 않습니다.
 
-1. GitHub Desktop에서 `main`을 기준으로 본인 작업 브랜치를 만듭니다.
+1. GitHub Desktop에서 **Fetch origin**을 누른 뒤 리드가 배정한 본인 작업 브랜치로 전환합니다.
 2. Codex에게 필요한 파일을 작성하게 합니다.
 3. 변경 파일과 원문 URL을 확인합니다.
 4. Codex에게 TypeScript 검사 또는 해당 작업의 검증 명령을 실행하게 합니다.
@@ -312,8 +312,8 @@ main 브랜치에는 직접 merge하지 마세요.
 2. 팀원은 리더에게 GitHub Collaborator 초대를 받고 수락합니다.
 3. GitHub Desktop에서 기존 저장소를 Clone하고, Codex에서 그 폴더를 엽니다.
 4. 이 문서와 `architecture.md`, `README.md`, `data/README.md`를 읽습니다.
-5. 법제 담당자는 최신 `main`에서 `feat/legal-corpus-foundation` 브랜치를 만듭니다.
-6. 동향 담당자는 최신 `main`에서 `feat/trend-source-contracts` 브랜치를 만듭니다.
+5. 법제 담당자는 미리 만들어진 `feat/legal-corpus-foundation` 브랜치로 전환합니다.
+6. 동향 담당자는 미리 만들어진 `feat/trend-source-contracts` 브랜치로 전환합니다.
 7. 자기 폴더의 빈 양식을 복사하고 첫 번째 프롬프트를 Codex에 입력합니다.
 8. `pnpm validate:data`를 통과한 결과 파일을 PR로 제출합니다.
 9. 프로젝트 리드는 Markdown, 공식 근거, 검토 필요 항목과 자동 검사 결과를 확인합니다.

@@ -1,6 +1,6 @@
 const steps = [
   ["1", "GitHub 저장소를 컴퓨터로 가져오기", "본인 GitHub 계정으로 초대를 수락하고 GitHub Desktop에서 parksunup/globaltrend를 Clone합니다."],
-  ["2", "리드가 만든 양식 받기", "리드가 공용 양식을 main에 반영한 뒤 최신 main을 받습니다. 법제 담당과 동향 담당은 각자 안내된 브랜치를 만듭니다."],
+  ["2", "리드가 만든 양식 받기", "Fetch origin으로 목록을 갱신한 뒤 리드가 미리 만든 담당자 브랜치로 전환합니다. 같은 이름의 브랜치를 새로 만들지 않습니다."],
   ["3", "빈 양식에 조사 결과 적기", "법제 담당은 data/legal, 동향 담당은 data/trends의 빈 양식을 복사해 작성합니다. 모르는 내용은 검토 필요로 남깁니다."],
   ["4", "검사하고 PR 만들기", "pnpm validate:data를 실행하고 공식 링크와 검토할 부분을 확인한 뒤 PR을 올립니다. main에는 직접 올리지 않습니다."],
 ];
@@ -50,9 +50,9 @@ export default function GuidePage() {
           <li>파일 선택 창에서 방금 Clone한 <strong>globaltrend 폴더 자체</strong>를 선택합니다. <code>README.md</code> 파일 하나를 선택하지 않습니다.</li>
           <li>왼쪽 프로젝트 목록의 <strong>globaltrend</strong>를 열고 새 작업을 시작합니다. 아래 2번의 프롬프트로 문서를 먼저 읽힙니다.</li>
         </ol>
-        <h3>④ 최신 main에서 자기 브랜치를 만듭니다</h3>
-        <p>리드가 공용 양식을 <code>main</code>에 반영했다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 <strong>Fetch origin → Pull origin</strong>으로 최신 <code>main</code>을 받은 다음 <strong>Current branch → New branch</strong>를 누릅니다.</p>
-        <p>법제 담당은 <code>feat/legal-corpus-foundation</code>, 동향 담당은 <code>feat/trend-source-contracts</code>를 만듭니다. <strong>Create branch</strong>를 누른 뒤 자기 브랜치에서만 작업합니다.</p>
+        <h3>④ 리드가 만든 담당자 브랜치로 전환합니다</h3>
+        <p>리드가 공용 양식을 <code>main</code>에 반영하고 담당자 브랜치를 만들었다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 <strong>Fetch origin</strong>을 눌러 원격 브랜치 목록을 갱신한 다음 <strong>Current branch</strong>에서 자기 브랜치를 선택합니다.</p>
+        <p>법제 담당은 <code>feat/legal-corpus-foundation</code>, 동향 담당은 <code>feat/trend-source-contracts</code>를 사용합니다. <strong>New branch</strong>나 <strong>Create branch</strong>는 누르지 않습니다. 브랜치가 보이지 않으면 새로 만들지 말고 리드에게 확인합니다.</p>
         <p><strong>저장소가 안 보인다면:</strong> GitHub Desktop의 <strong>URL</strong> 탭에 위 주소를 직접 넣으세요. Clone이 실패하면 GitHub Desktop 로그인 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다.</p>
         <p><strong>Codex에서 폴더가 안 보인다면:</strong> GitHub Desktop의 <strong>Repository → Show in Explorer</strong>에서 실제 위치를 확인한 뒤 <strong>Add new project / Ctrl+O</strong>로 그 폴더를 고릅니다. 이 절차에는 Codex GitHub 플러그인 연결이 필요하지 않습니다.</p>
         <p><strong>주의:</strong> <strong>Create a new repository</strong>나 <strong>Fork</strong>를 선택하지 않습니다. 기존 저장소를 <strong>Clone</strong>합니다.</p>

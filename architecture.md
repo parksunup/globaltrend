@@ -509,7 +509,7 @@ erDiagram
 ### 10.1 저장소 운영
 
 - 공개 GitHub 저장소 하나에서 시작하고, 모든 변경은 짧은 작업 브랜치 → Pull Request → 자동 검증·동료 검토 → 승인 → `main` 병합 흐름을 사용합니다. `main` 직접 push와 승인 없는 병합은 금지합니다.
-- 프로젝트 리드가 공용 조사 양식과 자동 검사를 `main`에 먼저 반영합니다. 그 다음 법제 담당은 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts`를 최신 `main`에서 만듭니다.
+- 프로젝트 리드가 공용 조사 양식과 자동 검사를 `main`에 먼저 반영하고, 최신 `main`에서 법제 담당용 `feat/legal-corpus-foundation`과 동향 담당용 `feat/trend-source-contracts` 브랜치를 미리 만듭니다. 담당자는 지정된 브랜치로 전환해 사용하며 같은 이름의 브랜치를 새로 만들지 않습니다.
 - 담당자 결과는 `data/legal/`과 `data/trends/`에 사람이 읽는 Markdown, 사이트가 읽는 CSV·JSON, 근거와 불확실성을 적은 검토 메모로 제출합니다. `pnpm validate:data`가 파일 세트·필수 필드·ID·URL·상태값을 검사합니다.
 - 동향 담당은 수집 규칙과 검증 표본을, 법제 담당은 공식 판본·번역 출처·이용조건을 조사합니다. 수집기, 데이터 import, 앱과 Supabase 통합은 승인된 조사 결과를 받은 뒤 프로젝트 리드 또는 개발 담당이 구현합니다.
 - 이슈는 화면/기능뿐 아니라 데이터 계약·커넥터·검수 정책 단위로 나눕니다. 각 이슈에 완료 조건과 담당자를 둡니다.
