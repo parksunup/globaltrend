@@ -81,11 +81,15 @@ flowchart LR
 
 ## 팀원이 지금 참여하는 방법
 
-1. architecture.md를 읽고 요구사항과 잠정 가정을 확인합니다.
-2. 동향 담당은 EDPB·OECD·CURIA 출처와 샘플을, 법제 담당은 공식 판본과 번역 출처를 정리합니다. [팀 온보딩 가이드](./docs/team-onboarding.md)의 프롬프트를 따릅니다.
-3. [globaltrend 저장소](https://github.com/parksunup/globaltrend)의 이슈에서 담당 범위와 완료 조건을 정하고 각자 작업 브랜치를 만듭니다.
-4. 첫 개발은 수동 등록/공식 출처 3곳에서 시작해 검수·발행까지 한 번 완주하는 범위로 잡습니다.
-5. 동향 수집·검색 개발과 법제 자료 준비는 병행할 수 있습니다. 법제 담당은 공식 판본 확정 → 법률별 한국어 번역 전문 완성 → 17개 기준의 조항별 요약표 순서로 진행하고, 이후 동향의 조문 인용을 연결합니다.
+1. 프로젝트 리드가 `data/`의 공용 양식과 자동 검사를 `main`에 먼저 반영합니다.
+2. 법제 담당은 최신 `main`에서 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts` 브랜치를 만듭니다.
+3. architecture.md와 [팀 온보딩 가이드](./docs/team-onboarding.md)를 읽고, 자기 폴더의 `*.template.*` 파일을 실제 결과 파일명으로 복사합니다.
+4. 동향 담당은 EDPB·OECD·CURIA 출처와 샘플을, 법제 담당은 공식 판본과 번역 출처를 정리합니다. 모르는 내용은 추정하지 않고 `검토 필요`로 표시합니다.
+5. `pnpm validate:data`를 실행하고 [globaltrend 저장소](https://github.com/parksunup/globaltrend)의 Pull Request로 결과를 제출합니다.
+6. 프로젝트 리드가 Markdown 보고서, 공식 근거와 자동 검사 결과를 확인한 뒤 `main`에 반영합니다.
+7. 첫 개발은 승인된 조사 결과를 바탕으로 수동 등록/공식 출처 3곳에서 시작해 검수·발행까지 한 번 완주하는 범위로 잡습니다.
+
+공용 양식은 [data/README.md](./data/README.md)에서 시작합니다. 법제 담당과 동향 담당은 서로의 브랜치나 폴더를 수정하지 않으며, 초기 조사 작업에서 앱 화면·Supabase·인증·환경변수를 변경하지 않습니다. 수집기와 법제 import는 담당자의 첫 조사 결과를 받은 뒤 프로젝트 리드 또는 개발 담당이 구현합니다.
 
 모든 변경은 GitHub Pull Request 단위로 관리합니다. 작업 브랜치에서 PR을 만들면 연결된 Vercel Preview로 화면을 확인할 수 있습니다. GitHub Actions 자동 검증은 아직 저장소에 설정되지 않았으므로 PR마다 실행한 검증 결과를 적고, 자동 검증을 추가할 때는 `.github/workflows/`에 설정을 기록합니다. 동료 리뷰와 필요한 법제·번역 검수를 거쳐 승인된 PR만 `main`에 merge하며, merge 후 Supabase migration·워커·Vercel 운영 배포를 순서대로 진행합니다. `main` 직접 push와 승인 없는 merge는 사용하지 않습니다.
 

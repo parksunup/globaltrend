@@ -75,6 +75,14 @@ GlobalTrend는 해외 개인정보 보호 동향과 개인정보 보호 법제�
 
 Markdown 표의 한 행 또는 한 셀은 CSV·JSON의 한 행 또는 한 항목과 대응해야 합니다. 둘의 내용이 다르면 구조화된 파일을 먼저 고치고, PR 설명에 차이를 적습니다. 사람이 읽을 파일이 없으면 작업이 끝난 것으로 보지 않습니다.
 
+프로젝트 리드가 먼저 `data/`의 빈 양식과 자동 검사를 `main`에 반영합니다. 담당자는 최신 `main`을 받은 뒤 자기 폴더의 `*.template.*` 파일을 안내된 실제 결과 파일명으로 복사하여 작성합니다. 제출 전에는 다음 명령을 실행합니다.
+
+```bash
+pnpm validate:data
+```
+
+이 검사는 빠진 파일, 필수 값, 중복 ID, 잘못된 URL과 상태값을 찾습니다. 법률 내용이나 이용조건이 맞는지는 자동으로 판단하지 않으므로 프로젝트 리드와 검수자가 공식 근거를 직접 확인합니다.
+
 ### 3.1 팀원이 자기 계정으로 저장소를 열기 — Windows 기준
 
 **먼저 두 계정을 구분합니다.** GitHub에는 팀원 **본인의 GitHub 계정**으로, Codex가 있는 ChatGPT 데스크톱 앱에는 팀원 **본인의 ChatGPT 계정**으로 로그인합니다. 두 계정이 같은 이메일일 필요는 없습니다. 이 작업을 위해 프로젝트 리드의 계정이나 암호를 공유하지 않습니다.
@@ -106,16 +114,16 @@ Codex 데스크톱의 로컬 프로젝트는 **컴퓨터의 폴더**를 엽니�
 
 **④ 작업용 브랜치 만들기**
 
-GitHub Desktop에서 `globaltrend`를 선택한 뒤 **Current branch → New branch**를 누르고, `main`을 기준으로 본인 작업 이름을 입력합니다. **Create branch**를 누른 다음 이 브랜치에서 작업합니다. Codex 작업을 시작할 때도 현재 프로젝트와 브랜치가 맞는지 확인합니다. `main`에는 직접 작업하지 않습니다.
+리드가 공용 양식을 `main`에 반영했다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 `globaltrend`를 선택하고 **Fetch origin → Pull origin**으로 최신 `main`을 받은 다음 **Current branch → New branch**를 누릅니다. **Create branch**를 누른 뒤 자기 브랜치에서 작업합니다. `main`에는 직접 작업하지 않습니다.
 
 브랜치 이름은 작업 내용을 알아볼 수 있게 작성합니다.
 
 ```text
 feat/legal-corpus-foundation
-feat/legal-criteria-mapping
 feat/trend-source-contracts
-feat/trend-sample-fixtures
 ```
+
+법제 담당은 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts`를 사용합니다. 첫 조사 PR이 병합된 뒤 후속 작업은 별도 브랜치를 만듭니다.
 
 **저장소가 안 보일 때:** GitHub Desktop의 저장소 목록에 나타나지 않아도 **URL** 탭에 위 주소를 직접 넣으면 됩니다. Clone이 실패하면 GitHub Desktop에 로그인한 GitHub 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다. 공개 저장소라 누구나 읽고 복제할 수 있지만, Collaborator가 아니면 직접 push할 수 없습니다.
 
@@ -300,13 +308,14 @@ main 브랜치에는 직접 merge하지 마세요.
 
 ## 8. 작업을 시작하는 순서
 
-1. 리더에게 GitHub Collaborator 초대를 받고 수락합니다.
-2. GitHub Desktop에서 기존 저장소를 Clone하고, Codex에서 그 폴더를 엽니다.
-3. 이 문서와 `architecture.md`, `README.md`를 읽습니다.
-4. 법제 담당자는 `feat/legal-corpus-foundation` 브랜치를 만듭니다.
-5. 동향 담당자는 `feat/trend-source-contracts` 브랜치를 만듭니다.
-6. 각자 첫 번째 프롬프트를 Codex에 입력합니다.
-7. 결과 파일과 PR을 제출합니다.
-8. 프로젝트 리드는 Preview와 근거 자료를 확인합니다.
+1. 프로젝트 리드가 공용 양식과 자동 검사를 `main`에 반영합니다.
+2. 팀원은 리더에게 GitHub Collaborator 초대를 받고 수락합니다.
+3. GitHub Desktop에서 기존 저장소를 Clone하고, Codex에서 그 폴더를 엽니다.
+4. 이 문서와 `architecture.md`, `README.md`, `data/README.md`를 읽습니다.
+5. 법제 담당자는 최신 `main`에서 `feat/legal-corpus-foundation` 브랜치를 만듭니다.
+6. 동향 담당자는 최신 `main`에서 `feat/trend-source-contracts` 브랜치를 만듭니다.
+7. 자기 폴더의 빈 양식을 복사하고 첫 번째 프롬프트를 Codex에 입력합니다.
+8. `pnpm validate:data`를 통과한 결과 파일을 PR로 제출합니다.
+9. 프로젝트 리드는 Markdown, 공식 근거, 검토 필요 항목과 자동 검사 결과를 확인합니다.
 
 두 팀원은 서로의 작업이 끝나기를 기다릴 필요가 없습니다. 프로젝트 리드가 결과물을 검토한 뒤 나중에 Supabase와 웹 화면에 통합합니다.
