@@ -25,3 +25,23 @@ jobs:
       - run: pnpm validate:data
       - run: pnpm typecheck
       - run: pnpm build
+
+  database:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: supabase/setup-cli@v3
+        with:
+          version: 2.118.0
+      - name: Start local database and replay migrations
+        run: |
+          supabase db start
+          supabase db reset --local
+      - name: Test seed data and row-level security
+        run: supabase test db --local
+      - name: Stop local database
+        if: always()
+        run: supabase stop --no-backup
