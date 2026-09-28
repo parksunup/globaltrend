@@ -132,9 +132,11 @@ pnpm supabase:verify
 pnpm supabase:stop
 ```
 
-- `supabase:start`: 로컬 Supabase와 Studio를 시작하고 migration·개발 seed를 적용합니다.
-- `supabase:verify`: 로컬 DB를 비운 뒤 migration·seed를 처음부터 다시 적용하고 `supabase/tests/`의 pgTAP 검사를 실행합니다. **로컬 DB의 데이터는 삭제되므로 운영 프로젝트에 연결해서 실행하지 않습니다.**
-- `supabase:stop`: 로컬 컨테이너와 로컬 데이터를 정리합니다.
+- `supabase:start`: 로컬 Supabase와 Studio를 시작합니다. 같은 컴퓨터에서는 이전 로컬 데이터를 이어서 사용하고, 새 환경에서는 migration·개발 seed로 DB를 재현합니다.
+- `supabase:verify`: 검사용 로컬 DB를 비운 뒤 migration·seed를 처음부터 다시 적용하고 `supabase/tests/`의 pgTAP 검사를 실행합니다. **로컬 DB의 데이터는 삭제되므로 보존할 로컬 작업이 있을 때는 실행하지 않으며, 운영 프로젝트에 연결해서도 실행하지 않습니다.**
+- `supabase:stop`: 로컬 데이터를 보존한 채 컨테이너를 종료합니다. 다음 `supabase:start`에서 이어서 사용합니다.
+
+운영·Preview Supabase는 로컬 Docker DB와 별개입니다. 컴퓨터를 바꾸거나 로컬 Docker 데이터가 사라져도 운영 DB를 다시 만드는 것이 아니라, 새 로컬 DB만 Git에 저장된 migration과 개발 seed로 재현합니다. 실제 조사 결과와 운영 데이터는 migration이나 공개 저장소의 seed에 넣지 않습니다.
 
 검사는 초기 출처 3곳, 법제 7개, 비교 기준 17개가 재현되는지 확인합니다. 또한 비로그인 사용자는 미공개 법제·기준을 읽을 수 없고, reviewer는 읽기만, editor는 수정할 수 있는지 검사합니다. GitHub Actions도 PR마다 같은 migration 재생과 RLS 검사를 실행하며 운영 Supabase 비밀값은 사용하지 않습니다.
 

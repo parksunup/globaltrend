@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit",
     "validate:data": "node scripts/validate-team-data.mjs",
     "supabase:start": "supabase start",
-    "supabase:stop": "supabase stop --no-backup",
+    "supabase:stop": "supabase stop",
     "supabase:reset": "supabase db reset --local",
     "supabase:test": "supabase test db --local",
     "supabase:verify": "supabase db reset --local && supabase test db --local"
