@@ -1,0 +1,4 @@
+-- Development-only seed entrypoint.
+-- Stable catalog rows are inserted idempotently by
+-- migrations/20260927140000_p1_seed_sources_criteria.sql.
+-- Add only synthetic local test data here. Never copy production data.
