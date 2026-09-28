@@ -82,7 +82,7 @@ flowchart LR
 ## 팀원이 지금 참여하는 방법
 
 1. 프로젝트 리드가 `data/`의 공용 양식과 자동 검사를 `main`에 먼저 반영합니다.
-2. 법제 담당은 최신 `main`에서 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts` 브랜치를 만듭니다.
+2. 법제 담당은 미리 만들어진 `feat/legal-corpus-foundation`, 동향 담당은 `feat/trend-source-contracts` 브랜치로 전환합니다. 같은 이름의 브랜치를 새로 만들지 않습니다.
 3. architecture.md와 [팀 온보딩 가이드](./docs/team-onboarding.md)를 읽고, 자기 폴더의 `*.template.*` 파일을 실제 결과 파일명으로 복사합니다.
 4. 동향 담당은 EDPB·OECD·CURIA 출처와 샘플을, 법제 담당은 공식 판본과 번역 출처를 정리합니다. 모르는 내용은 추정하지 않고 `검토 필요`로 표시합니다.
 5. `pnpm validate:data`를 실행하고 [globaltrend 저장소](https://github.com/parksunup/globaltrend)의 Pull Request로 결과를 제출합니다.
