@@ -56,6 +56,11 @@ function isHttps(value) {
   }
 }
 
+function containsRecordId(markdown, recordId) {
+  const escaped = recordId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^A-Za-z0-9_-])${escaped}([^A-Za-z0-9_-]|$)`, "m").test(markdown);
+}
+
 export async function validateLegalData(rootDir) {
   const errors = [];
   const directory = path.join(rootDir, "data", "legal");
@@ -94,6 +99,7 @@ export async function validateLegalData(rootDir) {
   if (rows.length === 0) return [...errors, "instruments.csv에 헤더가 없습니다."];
 
   const header = rows[0];
+  const markdown = presence[0] ? await readFile(files.markdown, "utf8") : "";
   const missingColumns = requiredColumns.filter((column) => !header.includes(column));
   if (missingColumns.length > 0) errors.push(`instruments.csv 필수 열이 없습니다: ${missingColumns.join(", ")}`);
 
@@ -107,6 +113,7 @@ export async function validateLegalData(rootDir) {
     if (values.record_id) {
       if (seen.has(values.record_id)) errors.push(`instruments.csv에 중복 record_id가 있습니다: ${values.record_id}`);
       seen.add(values.record_id);
+      if (presence[0] && !containsRecordId(markdown, values.record_id)) errors.push(`법제 Markdown에 CSV record_id가 없습니다: ${values.record_id}`);
     }
     if (values.official_url && !isHttps(values.official_url)) errors.push(`instruments.csv ${line}행 official_url은 https:// 주소여야 합니다.`);
     if (values.korean_translation_source_url && !isHttps(values.korean_translation_source_url)) errors.push(`instruments.csv ${line}행 korean_translation_source_url은 https:// 주소여야 합니다.`);
@@ -136,7 +143,9 @@ export async function validateTrendData(rootDir) {
 
   for (const fileName of jsonFiles) {
     const baseName = fileName.slice(0, -5);
-    if (!(await exists(path.join(configDirectory, `${baseName}.md`)))) errors.push(`동향 JSON ${fileName}에 대응하는 ${baseName}.md 파일이 필요합니다.`);
+    const markdownPath = path.join(configDirectory, `${baseName}.md`);
+    const markdownExists = await exists(markdownPath);
+    if (!markdownExists) errors.push(`동향 JSON ${fileName}에 대응하는 ${baseName}.md 파일이 필요합니다.`);
     let data;
     try {
       data = JSON.parse(await readFile(path.join(configDirectory, fileName), "utf8"));
@@ -151,6 +160,10 @@ export async function validateTrendData(rootDir) {
     if (data.record_id) {
       if (seen.has(data.record_id)) errors.push(`동향 JSON에 중복 record_id가 있습니다: ${data.record_id}`);
       seen.add(data.record_id);
+      if (markdownExists) {
+        const markdown = await readFile(markdownPath, "utf8");
+        if (!containsRecordId(markdown, data.record_id)) errors.push(`${baseName}.md Markdown에 JSON record_id가 없습니다: ${data.record_id}`);
+      }
     }
     if (data.start_url && !isHttps(data.start_url)) errors.push(`${fileName}의 start_url은 https:// 주소여야 합니다.`);
     for (const sampleUrl of Array.isArray(data.sample_urls) ? data.sample_urls : []) {

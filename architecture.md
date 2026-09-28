@@ -531,7 +531,7 @@ erDiagram
 ### 10.3 PR에서 운영까지의 배포 흐름
 
 1. 작업 브랜치에서 구현하고 PR을 엽니다.
-2. GitHub Actions가 lint·타입·빌드·관련 테스트·migration 재생·RLS 검증을 수행합니다.
+2. GitHub Actions가 현재 관련 테스트·팀 데이터 검사·타입 검사·웹 빌드를 수행합니다. lint·migration 재생·RLS 검증은 해당 기반을 추가하는 후속 PR에서 연결합니다.
 3. Vercel이 PR Preview를 만들고, 리뷰어가 화면과 핵심 흐름을 확인합니다. [Vercel GitHub 연동](https://vercel.com/docs/git/vercel-for-github)
 4. 코드 리뷰와 필요한 법제·번역·콘텐츠 검수를 완료한 뒤 PR을 승인합니다.
 5. `main`에 merge하면 검증된 commit SHA를 기준으로 운영 배포를 시작합니다. 호환 가능한 DB migration을 먼저 적용하고 확인합니다.

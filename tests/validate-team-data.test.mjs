@@ -114,6 +114,17 @@ test("법제 CSV의 중복 ID, HTTP URL과 잘못된 상태를 거부한다", as
   assert.ok(errors.some((error) => error.includes("review_status")));
 });
 
+test("법제 Markdown에 CSV의 record_id가 없으면 실패한다", async () => {
+  const root = await workspace();
+  await put(root, "data/legal/instruments.md", "# 법제 목록\n\n| ID | 법률 |\n| --- | --- |\n| other-law | 다른 법률 |\n");
+  await put(root, "data/legal/review-notes.md", "# 검토 메모\n");
+  await put(root, "data/legal/instruments.csv", `${legalHeader}\n${validLegalRow}\n`);
+
+  const errors = await validateLegalData(root);
+
+  assert.ok(errors.some((error) => error.includes("jp-appi") && error.includes("Markdown")));
+});
+
 test("동향 JSON의 Markdown 짝과 공통 검토 메모가 빠지면 실패한다", async () => {
   const root = await workspace();
   await put(root, "data/trends/source-configs/edpb.json", JSON.stringify(validTrend));
@@ -153,4 +164,15 @@ test("동향 JSON 사이에서 중복 ID를 거부한다", async () => {
   const errors = await validateTrendData(root);
 
   assert.ok(errors.some((error) => error.includes("중복 record_id")));
+});
+
+test("동향 Markdown에 JSON의 record_id가 없으면 실패한다", async () => {
+  const root = await workspace();
+  await put(root, "data/trends/review-notes.md", "# 검토 메모\n");
+  await put(root, "data/trends/source-configs/edpb.md", "# EDPB\n\n- ID: `other-source`\n");
+  await put(root, "data/trends/source-configs/edpb.json", JSON.stringify(validTrend));
+
+  const errors = await validateTrendData(root);
+
+  assert.ok(errors.some((error) => error.includes("edpb-news") && error.includes("Markdown")));
 });
