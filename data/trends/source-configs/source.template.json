@@ -1,0 +1,16 @@
+{
+  "record_id": "example-source",
+  "organization": "검토 필요",
+  "start_url": "https://example.invalid/source",
+  "document_types": ["검토 필요"],
+  "collection_method": "검토 필요",
+  "field_locations": {
+    "title": "검토 필요",
+    "published_at": "검토 필요",
+    "content": "검토 필요"
+  },
+  "exclude_rules": [],
+  "terms_status": "unreviewed",
+  "sample_urls": [],
+  "review_status": "unreviewed"
+}
