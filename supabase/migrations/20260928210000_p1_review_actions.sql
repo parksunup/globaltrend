@@ -79,12 +79,11 @@ begin
     raise invalid_parameter_value using message = 'A rejection note is required';
   end if;
 
-  if not case p_entity_type
-    when 'sources' then exists (select 1 from public.sources where id = p_entity_id)
-    when 'laws' then exists (select 1 from public.legal_instruments where id = p_entity_id)
-    when 'criteria' then exists (select 1 from public.criteria where id = p_entity_id)
-    else false
-  end then
+  if not (
+    (p_entity_type = 'sources' and exists (select 1 from public.sources where id = p_entity_id))
+    or (p_entity_type = 'laws' and exists (select 1 from public.legal_instruments where id = p_entity_id))
+    or (p_entity_type = 'criteria' and exists (select 1 from public.criteria where id = p_entity_id))
+  ) then
     raise invalid_parameter_value using message = 'Review target does not exist';
   end if;
 
