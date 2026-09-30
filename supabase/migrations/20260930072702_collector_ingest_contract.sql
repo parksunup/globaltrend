@@ -60,6 +60,7 @@ language plpgsql
 security definer
 set search_path = pg_catalog, public
 as $$
+#variable_conflict use_column
 declare
   v_item public.source_items;
   v_revision_id uuid;
