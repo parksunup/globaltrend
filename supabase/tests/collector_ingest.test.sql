@@ -115,7 +115,7 @@ select lives_ok(
 select results_eq(
   $$select (select count(*) from public.source_item_revisions where source_item_id = (select id from public.source_items where canonical_url = 'https://example.test/privacy/item-1'))::bigint,
           (select count(*) from public.draft_jobs where source_item_id = (select id from public.source_items where canonical_url = 'https://example.test/privacy/item-1'))::bigint$$,
-  array[2::bigint, 2::bigint],
+  $$values (2::bigint, 2::bigint)$$,
   'changed content keeps both revisions and queues a second job'
 );
 
