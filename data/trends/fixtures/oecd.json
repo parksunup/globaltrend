@@ -1,0 +1,109 @@
+{
+  "source_id": "oecd",
+  "checked_at": "2026-10-06T14:54:33+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 2,
+  "counting_unit": "one_event_per_record; related documents are not separate samples",
+  "items": [
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "oecd-neurodata-governance",
+      "original_title": "Neurodata governance",
+      "organization": [
+        "Organisation for Economic Co-operation and Development"
+      ],
+      "jurisdictions": [
+        "international:OECD"
+      ],
+      "source_published_date": "2026-10-06",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.oecd.org/en/publications/neurodata-governance_0ba61a20-en.html",
+      "document_type": "policy_paper",
+      "korean_title": "신경데이터 거버넌스: 혁신기업의 사례와 정책 과제",
+      "summary_ko": "OECD는 신경기술이 다루는 민감한 데이터의 수집·변환·이용 과정을 정책과 기업 관행에 비추어 분석했다. 초록은 중첩된 정책체계에 따른 준수 부담과 감독 공백 가능성을 설명하고, 사람 중심의 근거 기반 거버넌스 접근을 강조한다.",
+      "evidence": [
+        {
+          "url": "https://www.oecd.org/en/publications/neurodata-governance_0ba61a20-en.html",
+          "location": "공식 발간물 상세 페이지의 Abstract 문단; h1 제목; 상단 time의 표시 게시일"
+        }
+      ],
+      "topic_tags": [
+        "신경데이터",
+        "민감정보",
+        "데이터거버넌스"
+      ],
+      "event_id": "oecd-neurodata-governance",
+      "related_documents": [
+        {
+          "official_url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2026/10/neurodata-governance_6cdd38fc/0ba61a20-en.pdf",
+          "relationship": "full_report_pdf",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "초록만 직접 확인하여 요약했습니다. 보고서 전문의 세부 내용·법적 효과를 추론하지 않았습니다.",
+        "국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.",
+        "게시일 불일치: 화면 6 October 2026, time[datetime] 2026-10-05. 원문 게시일은 화면의 2026-10-06을 기록하되 공식 확인 전 검수 필요. 시간·시간대는 추정하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "date_observations": {
+        "displayed_date": "6 October 2026",
+        "html_datetime": "2026-10-05",
+        "requires_review": true
+      }
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "oecd-pet-ai-sharing",
+      "original_title": "Sharing trustworthy AI models with privacy‑enhancing technologies",
+      "organization": [
+        "Organisation for Economic Co-operation and Development"
+      ],
+      "jurisdictions": [
+        "international:OECD"
+      ],
+      "source_published_date": "2025-06-17",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html",
+      "document_type": "policy_paper",
+      "korean_title": "개인정보 보호 강화 기술을 활용한 신뢰할 수 있는 AI 모델 공유",
+      "summary_ko": "OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다. 입력 데이터의 기밀성·최소 이용을 통한 성능 개선과 AI 모델의 기밀 공동 개발·공유를 구분하고, 효용·효율·사용성 간 균형이 여전히 과제라고 밝혔다.",
+      "evidence": [
+        {
+          "url": "https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html",
+          "location": "공식 발간물 상세 페이지의 Abstract 문단; h1 제목; 상단 time의 표시 게시일"
+        }
+      ],
+      "topic_tags": [
+        "PETs",
+        "개인정보보호강화기술",
+        "AI모델공유"
+      ],
+      "event_id": "oecd-pet-ai-sharing",
+      "related_documents": [
+        {
+          "official_url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_5df6fd05/a266160b-en.pdf",
+          "relationship": "full_report_pdf",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "초록만 직접 확인하여 요약했습니다. 보고서 전문의 세부 내용·법적 효과를 추론하지 않았습니다.",
+        "국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.",
+        "2025년 자료를 수집 방식·편집 형식 확인을 위한 표본으로 선정했습니다. 최신 주간호나 최근 90일 자료라고 표시하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "date_observations": {
+        "displayed_date": "17 June 2025",
+        "html_datetime": "2025-06-16",
+        "requires_review": false
+      }
+    }
+  ]
+}
