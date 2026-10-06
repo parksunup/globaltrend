@@ -1,0 +1,94 @@
+{
+  "record_id": "edpb",
+  "organization": "European Data Protection Board (EDPB)",
+  "start_url": "https://www.edpb.europa.eu/news_en",
+  "document_types": [
+    "뉴스",
+    "의사결정·의견",
+    "가이드라인",
+    "보도자료"
+  ],
+  "collection_method": "검토 필요: 이번 실행에서 확인된 수집 방법은 없습니다. 공식 API → RSS/Atom → HTML → 허용된 PDF 순으로 접근 방법을 검증할 예정입니다.",
+  "field_locations": {
+    "title": "검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다.",
+    "published_at": "검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. 원문 게시일·수정일·사건일을 구분하고 수집일로 대체하지 않습니다.",
+    "content": "검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다.",
+    "official_url": "검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. 목록의 상세 링크, 리디렉션 최종 URL 및 공식 원문/PDF 링크를 대조해야 합니다."
+  },
+  "exclude_rules": [
+    "개인정보 보호와 직접 관련 없는 자료는 제외합니다.",
+    "채용·입찰·행사 일정 등 단순 공지는 내용 확인 후 제외합니다.",
+    "메뉴·푸터·쿠키 안내는 본문으로 저장하지 않습니다.",
+    "같은 문서의 완전 중복은 재등록하지 않습니다. 같은 사건의 후속 문서·정정은 별도 문서로 연결합니다.",
+    "빈 본문·게시일 불명·접근 실패는 조용히 제외하지 않고 검토 대기 상태로 기록합니다.",
+    "로그인·유료벽·접근 제한을 우회하지 않으며, 이용조건 미확정 자료의 전문은 공개 저장소에 넣지 않습니다."
+  ],
+  "terms_status": "unreviewed",
+  "sample_urls": [],
+  "review_status": "blocked",
+  "checked_at": "2026-10-06T14:33:38+09:00",
+  "verification": {
+    "status": "blocked",
+    "start_url_basis": "architecture.md §4.2.1 및 README.md의 초기 출처 범위",
+    "document_types_basis": "architecture.md §4.2.1의 예정 범위이며, 이번 공식 페이지 실사로 확인한 목록이 아닙니다.",
+    "exclusion_rules_status": "설계·편집 기준 제안. 사이트별 실제 자료에 대한 적용 검증은 미실시.",
+    "listing_page_checked": false,
+    "detail_page_checked": false,
+    "detail_url": null,
+    "selectors": {
+      "title": null,
+      "published_at": null,
+      "content": null,
+      "official_url": null
+    }
+  },
+  "discovery": {
+    "rss": {
+      "status": "unreviewed",
+      "url": null,
+      "note": "architecture.md §4.2에는 RSS 링크를 과거 확인했으나 피드 본문 조회가 실패했다고 적혀 있습니다. 이번 조사에서 RSS 링크·피드 URL·응답은 확인하지 못했습니다."
+    },
+    "api": {
+      "status": "unreviewed",
+      "documentation_url": null,
+      "endpoint": null,
+      "note": "공식 API 안내·인증·이용조건을 확인하지 못했습니다. 제공되지 않는다고 결론내리지 않습니다."
+    }
+  },
+  "inclusion_scope": "감독기구 결정·정책·집행에 직접 관련된 자료를 우선 검토합니다.",
+  "access_failures": [
+    {
+      "url": "https://www.edpb.europa.eu/news_en",
+      "stage": "https_proxy_connect",
+      "origin_http_status": null,
+      "observed_error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "response_body_available": false,
+      "diagnosis": "클라우드 HTTPS 프록시의 CONNECT 단계에서 거부되었습니다. 공식 서버의 HTTP 상태·차단·페이지 유무는 판단할 수 없습니다."
+    }
+  ],
+  "content_missing_cases": {
+    "status": "unreviewed",
+    "note": "본문 응답이 없으므로 본문 누락 여부 자체를 검사하지 못했습니다."
+  },
+  "terms_checks": {
+    "status": "unreviewed",
+    "robots_checked": false,
+    "policy_url": null,
+    "permissions": {
+      "collection": "검토 필요",
+      "storage": "검토 필요",
+      "codex_processing": "검토 필요",
+      "translation": "검토 필요",
+      "public_excerpt": "검토 필요",
+      "file_redistribution": "검토 필요"
+    },
+    "note": "robots.txt 허용과 이용·재배포 허가는 별개입니다. 페이지 접근 가능 여부도 허가를 뜻하지 않습니다."
+  },
+  "next_checks": [
+    "네트워크 허용 도메인의 런타임 적용 후 공식 시작 페이지를 다시 요청합니다.",
+    "실제 목록에서 개인정보 보호 관련 상세 페이지 URL을 선택하고 최종 URL·자료 유형·원문 식별자를 확인합니다.",
+    "제목·게시일·본문·공식 원문 링크의 실제 DOM 또는 PDF 근거와 검증한 선택자만 기록합니다.",
+    "공식 RSS/API 안내를 찾아 링크 존재와 실제 응답·본문 포함 여부를 각각 검증합니다.",
+    "이용조건·robots.txt·재배포 조건 및 페이지 순회·요청 간격을 확인합니다."
+  ]
+}
