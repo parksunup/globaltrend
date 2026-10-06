@@ -25,13 +25,13 @@
     "status": "partial_draft",
     "human_review_status": "not_started",
     "complete": false,
-    "translated_main_articles": 58,
+    "translated_main_articles": 105,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 31.35,
+    "main_article_coverage_percent": 56.76,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
-    "next_main_article": "59"
+    "next_main_article": "106"
   },
   "coverage": {
     "source_counts": {
@@ -49,277 +49,17 @@
       "AppdxTable": 2
     },
     "draft_counts": {
-      "Chapter": 4,
-      "Article": 58,
-      "Paragraph": 153,
-      "Item": 98,
-      "Section": 10,
-      "Subitem1": 2
+      "Chapter": 5,
+      "Article": 105,
+      "Paragraph": 263,
+      "Item": 179,
+      "Section": 14,
+      "Subitem1": 16,
+      "Subsection": 4
     },
     "main_articles": 185,
     "supplementary_articles": 65,
     "missing_node_ids": [
-      "main-a59",
-      "main-a59-p1",
-      "main-c5",
-      "main-c5-s1",
-      "main-a60",
-      "main-a60-p1",
-      "main-a60-p2",
-      "main-a60-p2-i1",
-      "main-a60-p2-i2",
-      "main-a60-p3",
-      "main-a60-p3-i1",
-      "main-a60-p3-i2",
-      "main-a60-p3-i2-si11",
-      "main-a60-p3-i2-si12",
-      "main-a60-p3-i3",
-      "main-a60-p4",
-      "main-a60-p4-i1",
-      "main-a60-p4-i2",
-      "main-a60-p5",
-      "main-c5-s2",
-      "main-a61",
-      "main-a61-p1",
-      "main-a61-p2",
-      "main-a61-p3",
-      "main-a62",
-      "main-a62-p1",
-      "main-a62-p1-i1",
-      "main-a62-p1-i2",
-      "main-a62-p1-i3",
-      "main-a62-p1-i4",
-      "main-a63",
-      "main-a63-p1",
-      "main-a64",
-      "main-a64-p1",
-      "main-a65",
-      "main-a65-p1",
-      "main-a66",
-      "main-a66-p1",
-      "main-a66-p2",
-      "main-a66-p2-i1",
-      "main-a66-p2-i2",
-      "main-a66-p2-i3",
-      "main-a66-p2-i4",
-      "main-a66-p2-i5",
-      "main-a67",
-      "main-a67-p1",
-      "main-a68",
-      "main-a68-p1",
-      "main-a68-p2",
-      "main-a68-p2-i1",
-      "main-a68-p2-i2",
-      "main-a69",
-      "main-a69-p1",
-      "main-a69-p2",
-      "main-a69-p2-i1",
-      "main-a69-p2-i2",
-      "main-a69-p2-i3",
-      "main-a69-p2-i4",
-      "main-a69-p3",
-      "main-a69-p4",
-      "main-a70",
-      "main-a70-p1",
-      "main-a71",
-      "main-a71-p1",
-      "main-a71-p2",
-      "main-a71-p3",
-      "main-a72",
-      "main-a72-p1",
-      "main-a73",
-      "main-a73-p1",
-      "main-a73-p2",
-      "main-a73-p3",
-      "main-a73-p4",
-      "main-a73-p5",
-      "main-c5-s3",
-      "main-a74",
-      "main-a74-p1",
-      "main-a74-p1-i1",
-      "main-a74-p1-i2",
-      "main-a74-p1-i3",
-      "main-a74-p1-i4",
-      "main-a74-p1-i5",
-      "main-a74-p1-i6",
-      "main-a74-p1-i7",
-      "main-a74-p1-i8",
-      "main-a74-p1-i9",
-      "main-a74-p1-i10",
-      "main-a74-p1-i11",
-      "main-a74-p2",
-      "main-a74-p2-i1",
-      "main-a74-p2-i2",
-      "main-a74-p2-i3",
-      "main-a74-p2-i4",
-      "main-a74-p2-i5",
-      "main-a74-p2-i6",
-      "main-a74-p2-i7",
-      "main-a74-p2-i8",
-      "main-a74-p2-i9",
-      "main-a74-p2-i10",
-      "main-a74-p2-i11",
-      "main-a74-p3",
-      "main-a75",
-      "main-a75-p1",
-      "main-a75-p2",
-      "main-a75-p2-i1",
-      "main-a75-p2-i2",
-      "main-a75-p2-i3",
-      "main-a75-p3",
-      "main-a75-p4",
-      "main-a75-p5",
-      "main-c5-s4",
-      "main-c5-s4-ss1",
-      "main-a76",
-      "main-a76-p1",
-      "main-a76-p2",
-      "main-a77",
-      "main-a77-p1",
-      "main-a77-p1-i1",
-      "main-a77-p1-i2",
-      "main-a77-p2",
-      "main-a77-p3",
-      "main-a78",
-      "main-a78-p1",
-      "main-a78-p1-i1",
-      "main-a78-p1-i2",
-      "main-a78-p1-i2-si11",
-      "main-a78-p1-i2-si12",
-      "main-a78-p1-i2-si13",
-      "main-a78-p1-i3",
-      "main-a78-p1-i3-si11",
-      "main-a78-p1-i3-si12",
-      "main-a78-p1-i4",
-      "main-a78-p1-i5",
-      "main-a78-p1-i6",
-      "main-a78-p1-i7",
-      "main-a78-p1-i7-si11",
-      "main-a78-p1-i7-si12",
-      "main-a78-p1-i7-si13",
-      "main-a78-p1-i7-si14",
-      "main-a78-p1-i7-si15",
-      "main-a78-p1-i7-si16",
-      "main-a78-p1-i7-si17",
-      "main-a78-p2",
-      "main-a79",
-      "main-a79-p1",
-      "main-a79-p2",
-      "main-a80",
-      "main-a80-p1",
-      "main-a81",
-      "main-a81-p1",
-      "main-a82",
-      "main-a82-p1",
-      "main-a82-p2",
-      "main-a83",
-      "main-a83-p1",
-      "main-a83-p2",
-      "main-a84",
-      "main-a84-p1",
-      "main-a84-p1-i1",
-      "main-a84-p1-i2",
-      "main-a85",
-      "main-a85-p1",
-      "main-a85-p2",
-      "main-a85-p3",
-      "main-a86",
-      "main-a86-p1",
-      "main-a86-p2",
-      "main-a86-p2-i1",
-      "main-a86-p2-i2",
-      "main-a86-p3",
-      "main-a87",
-      "main-a87-p1",
-      "main-a87-p2",
-      "main-a87-p3",
-      "main-a87-p4",
-      "main-a88",
-      "main-a88-p1",
-      "main-a88-p2",
-      "main-a89",
-      "main-a89-p1",
-      "main-a89-p2",
-      "main-a89-p3",
-      "main-a89-p4",
-      "main-a89-p5",
-      "main-a89-p6",
-      "main-a89-p7",
-      "main-a89-p8",
-      "main-a89-p9",
-      "main-c5-s4-ss2",
-      "main-a90",
-      "main-a90-p1",
-      "main-a90-p1-i1",
-      "main-a90-p1-i2",
-      "main-a90-p2",
-      "main-a90-p3",
-      "main-a91",
-      "main-a91-p1",
-      "main-a91-p1-i1",
-      "main-a91-p1-i2",
-      "main-a91-p1-i3",
-      "main-a91-p2",
-      "main-a91-p3",
-      "main-a92",
-      "main-a92-p1",
-      "main-a93",
-      "main-a93-p1",
-      "main-a93-p2",
-      "main-a94",
-      "main-a94-p1",
-      "main-a94-p2",
-      "main-a95",
-      "main-a95-p1",
-      "main-a95-p1-i1",
-      "main-a95-p1-i2",
-      "main-a96",
-      "main-a96-p1",
-      "main-a96-p2",
-      "main-a96-p3",
-      "main-a97",
-      "main-a97-p1",
-      "main-c5-s4-ss3",
-      "main-a98",
-      "main-a98-p1",
-      "main-a98-p1-i1",
-      "main-a98-p1-i2",
-      "main-a98-p2",
-      "main-a98-p3",
-      "main-a99",
-      "main-a99-p1",
-      "main-a99-p1-i1",
-      "main-a99-p1-i2",
-      "main-a99-p1-i3",
-      "main-a99-p2",
-      "main-a99-p3",
-      "main-a100",
-      "main-a100-p1",
-      "main-a101",
-      "main-a101-p1",
-      "main-a101-p2",
-      "main-a102",
-      "main-a102-p1",
-      "main-a102-p2",
-      "main-a103",
-      "main-a103-p1",
-      "main-a103-p1-i1",
-      "main-a103-p1-i2",
-      "main-c5-s4-ss4",
-      "main-a104",
-      "main-a104-p1",
-      "main-a104-p2",
-      "main-a105",
-      "main-a105-p1",
-      "main-a105-p1-i1",
-      "main-a105-p1-i2",
-      "main-a105-p1-i3",
-      "main-a105-p1-i4",
-      "main-a105-p2",
-      "main-a105-p2-i1",
-      "main-a105-p2-i2",
-      "main-a105-p2-i3",
-      "main-a105-p3",
       "main-a106",
       "main-a106-p1",
       "main-a106-p2",
@@ -1054,7 +794,405 @@
     ],
     "translated_prefix_order_verified": true,
     "full_order_verified": false,
-    "semantic_completeness_verified": false
+    "semantic_completeness_verified": false,
+    "heading_groups": [
+      {
+        "node_id": "main-c1",
+        "tag": "Chapter",
+        "first_article": "1",
+        "last_article": "3",
+        "total_articles": 3,
+        "drafted_articles": 3,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c2",
+        "tag": "Chapter",
+        "first_article": "4",
+        "last_article": "6",
+        "total_articles": 3,
+        "drafted_articles": 3,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c3",
+        "tag": "Chapter",
+        "first_article": "7",
+        "last_article": "15",
+        "total_articles": 9,
+        "drafted_articles": 9,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c3-s1",
+        "tag": "Section",
+        "first_article": "7",
+        "last_article": "7",
+        "total_articles": 1,
+        "drafted_articles": 1,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c3-s2",
+        "tag": "Section",
+        "first_article": "8",
+        "last_article": "11",
+        "total_articles": 4,
+        "drafted_articles": 4,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c3-s3",
+        "tag": "Section",
+        "first_article": "12",
+        "last_article": "14",
+        "total_articles": 3,
+        "drafted_articles": 3,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c3-s4",
+        "tag": "Section",
+        "first_article": "15",
+        "last_article": "15",
+        "total_articles": 1,
+        "drafted_articles": 1,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4",
+        "tag": "Chapter",
+        "first_article": "16",
+        "last_article": "59",
+        "total_articles": 44,
+        "drafted_articles": 44,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s1",
+        "tag": "Section",
+        "first_article": "16",
+        "last_article": "16",
+        "total_articles": 1,
+        "drafted_articles": 1,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s2",
+        "tag": "Section",
+        "first_article": "17",
+        "last_article": "40",
+        "total_articles": 24,
+        "drafted_articles": 24,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s3",
+        "tag": "Section",
+        "first_article": "41",
+        "last_article": "42",
+        "total_articles": 2,
+        "drafted_articles": 2,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s4",
+        "tag": "Section",
+        "first_article": "43",
+        "last_article": "46",
+        "total_articles": 4,
+        "drafted_articles": 4,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s5",
+        "tag": "Section",
+        "first_article": "47",
+        "last_article": "56",
+        "total_articles": 10,
+        "drafted_articles": 10,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c4-s6",
+        "tag": "Section",
+        "first_article": "57",
+        "last_article": "59",
+        "total_articles": 3,
+        "drafted_articles": 3,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5",
+        "tag": "Chapter",
+        "first_article": "60",
+        "last_article": "129",
+        "total_articles": 70,
+        "drafted_articles": 46,
+        "heading_translated": true,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s1",
+        "tag": "Section",
+        "first_article": "60",
+        "last_article": "60",
+        "total_articles": 1,
+        "drafted_articles": 1,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s2",
+        "tag": "Section",
+        "first_article": "61",
+        "last_article": "73",
+        "total_articles": 13,
+        "drafted_articles": 13,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s3",
+        "tag": "Section",
+        "first_article": "74",
+        "last_article": "75",
+        "total_articles": 2,
+        "drafted_articles": 2,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4",
+        "tag": "Section",
+        "first_article": "76",
+        "last_article": "108",
+        "total_articles": 33,
+        "drafted_articles": 30,
+        "heading_translated": true,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4-ss1",
+        "tag": "Subsection",
+        "first_article": "76",
+        "last_article": "89",
+        "total_articles": 14,
+        "drafted_articles": 14,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4-ss2",
+        "tag": "Subsection",
+        "first_article": "90",
+        "last_article": "97",
+        "total_articles": 8,
+        "drafted_articles": 8,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4-ss3",
+        "tag": "Subsection",
+        "first_article": "98",
+        "last_article": "103",
+        "total_articles": 6,
+        "drafted_articles": 6,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4-ss4",
+        "tag": "Subsection",
+        "first_article": "104",
+        "last_article": "107",
+        "total_articles": 4,
+        "drafted_articles": 2,
+        "heading_translated": true,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s4-ss5",
+        "tag": "Subsection",
+        "first_article": "108",
+        "last_article": "108",
+        "total_articles": 1,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s5",
+        "tag": "Section",
+        "first_article": "109",
+        "last_article": "123",
+        "total_articles": 15,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c5-s6",
+        "tag": "Section",
+        "first_article": "124",
+        "last_article": "129",
+        "total_articles": 6,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6",
+        "tag": "Chapter",
+        "first_article": "130",
+        "last_article": "170",
+        "total_articles": 41,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s1",
+        "tag": "Section",
+        "first_article": "130",
+        "last_article": "145",
+        "total_articles": 16,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s2",
+        "tag": "Section",
+        "first_article": "146",
+        "last_article": "160",
+        "total_articles": 15,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s2-ss1",
+        "tag": "Subsection",
+        "first_article": "146",
+        "last_article": "152",
+        "total_articles": 7,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s2-ss2",
+        "tag": "Subsection",
+        "first_article": "153",
+        "last_article": "155",
+        "total_articles": 3,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s2-ss3",
+        "tag": "Subsection",
+        "first_article": "156",
+        "last_article": "160",
+        "total_articles": 5,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s3",
+        "tag": "Section",
+        "first_article": "161",
+        "last_article": "164",
+        "total_articles": 4,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c6-s4",
+        "tag": "Section",
+        "first_article": "165",
+        "last_article": "170",
+        "total_articles": 6,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c7",
+        "tag": "Chapter",
+        "first_article": "171",
+        "last_article": "175",
+        "total_articles": 5,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      },
+      {
+        "node_id": "main-c8",
+        "tag": "Chapter",
+        "first_article": "176",
+        "last_article": "185",
+        "total_articles": 10,
+        "drafted_articles": 0,
+        "heading_translated": false,
+        "all_nodes_drafted": false,
+        "human_review_status": "not_started"
+      }
+    ]
   },
   "provisions": [
     {
@@ -5756,10 +5894,11 @@
       "source_order": 325,
       "original_label": "第五十九条",
       "source_sha256": "e3c6ac9b16995cf7827c2ec899e1d41fbc55bfc789ab762bf251a984cefcf6c6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a59",
+      "korean_title": "제59조 (학술연구기관 등의 책무)"
     },
     {
       "node_id": "main-a59-p1",
@@ -5770,10 +5909,11 @@
       "source_order": 326,
       "original_label": "",
       "source_sha256": "b2692f54eec28f53e307c6b605bdd78da3bd01d975bfea23166f2ba3b21dbc88",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자인 학술연구기관 등은 학술연구목적으로 수행하는 개인정보의 취급에 대하여 이 법률의 규정을 준수하는 동시에 그 적정성을 확보하기 위하여 필요한 조치를 스스로 취하고 그 조치의 내용을 공표하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a59-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5",
@@ -5784,10 +5924,11 @@
       "source_order": 327,
       "original_label": "第五章　行政機関等の義務等",
       "source_sha256": "6433fdbe1e314fb0f4c86686f68ca406f554b089e063f746be9963854faac4e9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5",
+      "korean_title": "제5장 행정기관 등의 의무 등"
     },
     {
       "node_id": "main-c5-s1",
@@ -5798,10 +5939,11 @@
       "source_order": 328,
       "original_label": "第一節　総則",
       "source_sha256": "912ae8c3ea67f756e00ea915124347c982bf56de10d178a2e88be40da9364f3f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s1",
+      "korean_title": "제1절 총칙"
     },
     {
       "node_id": "main-a60",
@@ -5812,10 +5954,11 @@
       "source_order": 329,
       "original_label": "第六十条",
       "source_sha256": "05ea2c971c163cff3052985e5ea3dc931c36724147bc678d4f85c80a19335d98",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a60",
+      "korean_title": "제60조 (정의)"
     },
     {
       "node_id": "main-a60-p1",
@@ -5826,10 +5969,11 @@
       "source_order": 330,
       "original_label": "",
       "source_sha256": "327b51e7177b09f225044d6ead0b612d1bc549ee527940acde552ae3ee207900",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 장 및 제8장에서 “보유개인정보”란 행정기관 등의 직원(독립행정법인 등 및 지방독립행정법인의 경우에는 그 임원을 포함한다. 이하 이 장 및 제8장에서 같다)이 직무상 작성하거나 취득한 개인정보로서 해당 행정기관 등의 직원이 조직적으로 이용하는 것으로 해당 행정기관 등이 보유하고 있는 것을 말한다. 다만, 행정문서(행정기관이 보유하는 정보의 공개에 관한 법률[헤이세이 11년 법률 제42호. 이하 이 장에서 “행정기관정보공개법”이라 한다] 제2조 제2항에 규정된 행정문서를 말한다), 법인문서(독립행정법인 등이 보유하는 정보의 공개에 관한 법률[헤이세이 13년 법률 제140호. 이하 이 장에서 “독립행정법인등정보공개법”이라 한다] 제2조 제2항에 규정된 법인문서[같은 항 제4호에 열거된 것을 포함한다]를 말한다) 또는 지방공공단체등행정문서(지방공공단체의 기관 또는 지방독립행정법인의 직원이 직무상 작성하거나 취득한 문서, 도화 및 전자적·자기적 기록으로서 해당 지방공공단체의 기관 또는 지방독립행정법인의 직원이 조직적으로 사용하는 것으로 해당 지방공공단체의 기관 또는 지방독립행정법인이 보유하고 있는 것[행정기관정보공개법 제2조 제2항 각 호에 열거된 것에 상당하는 것으로 정령으로 정하는 것을 제외한다]을 말한다)(이하 이 장에서 “행정문서 등”이라 한다)에 기록되어 있는 것으로 한정한다.",
+      "markdown_anchor": "main-a60-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p2",
@@ -5840,10 +5984,11 @@
       "source_order": 331,
       "original_label": "２",
       "source_sha256": "6d1529371b59db1c45b44084770d6c2c26bf39090ef2dd588e417739186641b0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 장 및 제8장에서 “개인정보파일”이란 보유개인정보를 포함한 정보의 집합물로서 다음에 열거된 것을 말한다.",
+      "markdown_anchor": "main-a60-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p2-i1",
@@ -5854,10 +5999,11 @@
       "source_order": 332,
       "original_label": "一",
       "source_sha256": "53ef0734f58bb93c29ac62ce066321965340d7aabe60cbf8374ad64e06e8b24a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "일정한 사무의 목적을 달성하기 위하여 특정 보유개인정보를 전자계산기를 사용하여 검색할 수 있도록 체계적으로 구성한 것.",
+      "markdown_anchor": "main-a60-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p2-i2",
@@ -5868,10 +6014,11 @@
       "source_order": 333,
       "original_label": "二",
       "source_sha256": "94ec8c116edf6a46279618aaffce6e6df6492e026a948e4be8c0eb7cc262a4f7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전호에 열거된 것 외에 일정한 사무의 목적을 달성하기 위하여 성명, 생년월일 및 그 밖의 기술 등으로 특정 보유개인정보를 쉽게 검색할 수 있도록 체계적으로 구성한 것.",
+      "markdown_anchor": "main-a60-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p3",
@@ -5882,10 +6029,11 @@
       "source_order": 334,
       "original_label": "３",
       "source_sha256": "6e21b56e26a26bf9e72014395db8332072030385a1c1bc89e7acc5422c8d95f8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 장에서 “행정기관등익명가공정보”란 다음 각 호의 모두에 해당하는 개인정보파일을 구성하는 보유개인정보의 전부 또는 일부(이들의 일부에 행정기관정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다. 이하 이 항에서 같다], 독립행정법인등정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다] 또는 지방공공단체의 정보공개조례[지방공공단체의 기관 또는 지방독립행정법인이 보유하는 정보의 공개를 청구하는 주민 등의 권리를 정하는 지방공공단체의 조례를 말한다. 이하 이 장에서 같다]에 규정된 비공개정보[행정기관정보공개법 제5조에 규정된 비공개정보에 상당하는 것을 말한다]가 포함되어 있을 때에는 이들 비공개정보에 해당하는 부분을 제외한다)를 가공하여 얻는 익명가공정보를 말한다.",
+      "markdown_anchor": "main-a60-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p3-i1",
@@ -5896,10 +6044,11 @@
       "source_order": 335,
       "original_label": "一",
       "source_sha256": "ae801e5a4e821db17003d2dfe3da8955860b2aa406d0378d4dc783c89e01c1bd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제75조 제2항 각 호의 어느 하나에 해당하는 것 또는 같은 조 제3항의 규정에 따라 같은 조 제1항에 규정된 개인정보파일부에 등재하지 않기로 한 것이 아닐 것.",
+      "markdown_anchor": "main-a60-p3-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p3-i2",
@@ -5910,10 +6059,11 @@
       "source_order": 336,
       "original_label": "二",
       "source_sha256": "fa777525fd7503f10e069a581de4182143647411a6fe9585a26747fc5bab38d5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관정보공개법 제3조에 규정된 행정기관의 장, 독립행정법인등정보공개법 제2조 제1항에 규정된 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 해당 개인정보파일을 구성하는 보유개인정보가 기록되어 있는 행정문서 등의 공개 청구(행정기관정보공개법 제3조, 독립행정법인등정보공개법 제3조 또는 정보공개조례의 규정에 따른 공개 청구를 말한다)가 있었다고 가정하면 이들이 다음의 어느 하나를 하게 되는 것일 것.",
+      "markdown_anchor": "main-a60-p3-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p3-i2-si11",
@@ -5924,10 +6074,12 @@
       "source_order": 337,
       "original_label": "イ",
       "source_sha256": "50abc8c7af42db6396c292bfe1f1f2ee3d2b299d98515cae6bb7384c20df0183",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 행정문서 등에 기록되어 있는 보유개인정보의 전부 또는 일부를 공개한다는 결정을 하는 것.",
+      "markdown_anchor": "main-a60-p3-i2-si11",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "가(イ)목"
     },
     {
       "node_id": "main-a60-p3-i2-si12",
@@ -5938,10 +6090,12 @@
       "source_order": 338,
       "original_label": "ロ",
       "source_sha256": "db37f75981fad33260213400a44b59c6b3d8c0c93d7f41e30594daf05e3c74c2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관정보공개법 제13조 제1항이나 제2항, 독립행정법인등정보공개법 제14조 제1항이나 제2항 또는 정보공개조례(행정기관정보공개법 제13조 제1항 또는 제2항의 규정에 상당하는 규정을 두고 있는 것으로 한정한다)의 규정에 따라 의견서를 제출할 기회를 부여하는 것.",
+      "markdown_anchor": "main-a60-p3-i2-si12",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "나(ロ)목"
     },
     {
       "node_id": "main-a60-p3-i3",
@@ -5952,10 +6106,11 @@
       "source_order": 339,
       "original_label": "三",
       "source_sha256": "5117ddcb794d721994ef81ab5af7aacb3074d467117065cd7003caa3dc333868",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등의 사무 및 사업의 적정하고 원활한 운영에 지장이 없는 범위 내에서 제116조 제1항의 기준에 따라 해당 개인정보파일을 구성하는 보유개인정보를 가공하여 익명가공정보를 작성할 수 있는 것일 것.",
+      "markdown_anchor": "main-a60-p3-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p4",
@@ -5966,10 +6121,11 @@
       "source_order": 340,
       "original_label": "４",
       "source_sha256": "bf58f25cd4ab5ae1bc6b20a5f23dfa73eda709ad5a735f34f3dcd42bc513f83d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 장에서 “행정기관등익명가공정보파일”이란 행정기관등익명가공정보를 포함한 정보의 집합물로서 다음에 열거된 것을 말한다.",
+      "markdown_anchor": "main-a60-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p4-i1",
@@ -5980,10 +6136,11 @@
       "source_order": 341,
       "original_label": "一",
       "source_sha256": "3115655122878c282580aa37ce8b869cf45e5d67b9a574d6d9d990103630f11c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "특정 행정기관등익명가공정보를 전자계산기를 사용하여 검색할 수 있도록 체계적으로 구성한 것.",
+      "markdown_anchor": "main-a60-p4-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p4-i2",
@@ -5994,10 +6151,11 @@
       "source_order": 342,
       "original_label": "二",
       "source_sha256": "676be846b47695857350ecc51f7edc5390a62e905de3f8eeb7b7666006ec43c5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전호에 열거된 것 외에 특정 행정기관등익명가공정보를 쉽게 검색할 수 있도록 체계적으로 구성한 것으로 정령으로 정하는 것.",
+      "markdown_anchor": "main-a60-p4-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a60-p5",
@@ -6008,10 +6166,11 @@
       "source_order": 343,
       "original_label": "５",
       "source_sha256": "ea31e46ccaf9316bf4fd4714ece85552d68ca6713278f5b169cb3f57eac9016a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 장에서 “조례상 배려가 필요한 개인정보”란 지방공공단체의 기관 또는 지방독립행정법인이 보유하는 개인정보(배려가 필요한 개인정보를 제외한다) 중 지역의 특성 및 그 밖의 사정에 따라 본인에 대한 부당한 차별, 편견 또는 그 밖의 불이익이 발생하지 않도록 그 취급에 특별한 배려가 필요한 것으로 지방공공단체가 조례로 정하는 기술 등이 포함된 개인정보를 말한다.",
+      "markdown_anchor": "main-a60-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s2",
@@ -6022,10 +6181,11 @@
       "source_order": 344,
       "original_label": "第二節　行政機関等における個人情報等の取扱い",
       "source_sha256": "b9bb9e58a70f240fe44e7711d2b2e0a93e6e5dc87d713137c435b2e9e28dbbcf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s2",
+      "korean_title": "제2절 행정기관 등의 개인정보 등 취급"
     },
     {
       "node_id": "main-a61",
@@ -6036,10 +6196,11 @@
       "source_order": 345,
       "original_label": "第六十一条",
       "source_sha256": "bfbefe3fa595d9836775d5e2d9ad0d32b54cdb3af99408d4a5c3730ca51fc37e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a61",
+      "korean_title": "제61조 (개인정보 보유의 제한 등)"
     },
     {
       "node_id": "main-a61-p1",
@@ -6050,10 +6211,11 @@
       "source_order": 346,
       "original_label": "",
       "source_sha256": "65a996500fb84f35261f1ce0fcb12095ac59ce77cbc0cf5a14883cc886c585aa",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 개인정보를 보유할 때 법령(조례를 포함한다. 제66조 제2항 제3호 및 제4호, 제69조 제2항 제2호 및 제3호와 제4절에서 같다)으로 정하는 소관 사무 또는 업무를 수행하기 위하여 필요한 경우로 한정하고 그 이용목적을 가능한 한 특정하여야 한다.",
+      "markdown_anchor": "main-a61-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a61-p2",
@@ -6064,10 +6226,11 @@
       "source_order": 347,
       "original_label": "２",
       "source_sha256": "ef94c023236eb2707808da85a4763b7d33b628e4890dc2ff230582cfc9d5ad7e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 전항의 규정에 따라 특정된 이용목적의 달성에 필요한 범위를 넘어 개인정보를 보유하여서는 아니 된다.",
+      "markdown_anchor": "main-a61-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a61-p3",
@@ -6078,10 +6241,11 @@
       "source_order": 348,
       "original_label": "３",
       "source_sha256": "466595fd72d023a7bda2e9f1d39ac70adf5b008188bfc8fdbb864f2acc73facc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 이용목적을 변경할 경우 변경 전의 이용목적과 상당한 관련성이 있다고 합리적으로 인정되는 범위를 넘어 변경하여서는 아니 된다.",
+      "markdown_anchor": "main-a61-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a62",
@@ -6092,10 +6256,11 @@
       "source_order": 349,
       "original_label": "第六十二条",
       "source_sha256": "63e6e0e9c516ca93ec2bf95394523985f01ff82609e06ea86acd32c4c3b92413",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a62",
+      "korean_title": "제62조 (이용목적의 명시)"
     },
     {
       "node_id": "main-a62-p1",
@@ -6106,10 +6271,11 @@
       "source_order": 350,
       "original_label": "",
       "source_sha256": "9549411fbdb47ba8d54319061527a3cb053bead0df4a400198093f8cea2c9c82",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 본인으로부터 직접 서면(전자적·자기적 기록을 포함한다)에 기록된 해당 본인의 개인정보를 취득하는 때에는 다음에 열거된 경우를 제외하고 미리 본인에게 그 이용목적을 명시하여야 한다.",
+      "markdown_anchor": "main-a62-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a62-p1-i1",
@@ -6120,10 +6286,11 @@
       "source_order": 351,
       "original_label": "一",
       "source_sha256": "c21e8b0274784c6e8ac18b43aae15d48dba279773a6f63c3b0ea8c94e81d1ebf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사람의 생명, 신체 또는 재산의 보호를 위하여 긴급히 필요한 때.",
+      "markdown_anchor": "main-a62-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a62-p1-i2",
@@ -6134,10 +6301,11 @@
       "source_order": 352,
       "original_label": "二",
       "source_sha256": "c51a172946b87b84d042d381fe7dff4c484ee2a6f5989ab4418ae334b609f2c3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용목적을 본인에게 명시함으로써 본인 또는 제3자의 생명, 신체, 재산 또는 그 밖의 권리이익을 해칠 우려가 있는 때.",
+      "markdown_anchor": "main-a62-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a62-p1-i3",
@@ -6148,10 +6316,11 @@
       "source_order": 353,
       "original_label": "三",
       "source_sha256": "5d213a19b754202adf5ab4758b94b1a7cfe90c3ae64b457b08a1c6e28c899afc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용목적을 본인에게 명시함으로써 국가기관, 독립행정법인 등, 지방공공단체 또는 지방독립행정법인이 수행하는 사무 또는 사업의 적정한 수행에 지장을 줄 우려가 있는 때.",
+      "markdown_anchor": "main-a62-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a62-p1-i4",
@@ -6162,10 +6331,11 @@
       "source_order": 354,
       "original_label": "四",
       "source_sha256": "a3437347facb1ae7f1679814a3ce5095b2744d9f469d15fb0145e08357bb56a3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "취득 상황으로 보아 이용목적이 명백하다고 인정되는 때.",
+      "markdown_anchor": "main-a62-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a63",
@@ -6176,10 +6346,11 @@
       "source_order": 355,
       "original_label": "第六十三条",
       "source_sha256": "9087f6a3bd8ca914c9eee8c3c5f3d3aa042f189964786f2ae7c799c750ce73d6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a63",
+      "korean_title": "제63조 (부적정한 이용의 금지)"
     },
     {
       "node_id": "main-a63-p1",
@@ -6190,10 +6361,11 @@
       "source_order": 356,
       "original_label": "",
       "source_sha256": "8e9ff3f2ec3f2a4388d932b1a68b95821fdd87e06d95f97767f3e60c84dd8d14",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장(제2조 제8항 제4호 및 제5호의 정령으로 정하는 기관의 경우에는 그 기관마다 정령으로 정하는 자를 말한다. 이하 이 장 및 제174조에서 같다), 지방공공단체의 기관, 독립행정법인 등 및 지방독립행정법인(이하 이 장 및 다음 장에서 “행정기관의 장 등”이라 한다)은 위법하거나 부당한 행위를 조장하거나 유발할 우려가 있는 방법으로 개인정보를 이용하여서는 아니 된다.",
+      "markdown_anchor": "main-a63-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a64",
@@ -6204,10 +6376,11 @@
       "source_order": 357,
       "original_label": "第六十四条",
       "source_sha256": "0a0d7c160f98a8875a0bc9e2682670eab6aa6d76724ad81fe44bff004fb5db51",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a64",
+      "korean_title": "제64조 (적정한 취득)"
     },
     {
       "node_id": "main-a64-p1",
@@ -6218,10 +6391,11 @@
       "source_order": 358,
       "original_label": "",
       "source_sha256": "098afd723cedb9d2e9b9dd0ca5a8fa55e2f117925d93f20204d546a5259d2671",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 거짓 및 그 밖의 부정한 수단으로 개인정보를 취득하여서는 아니 된다.",
+      "markdown_anchor": "main-a64-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a65",
@@ -6232,10 +6406,11 @@
       "source_order": 359,
       "original_label": "第六十五条",
       "source_sha256": "1105d40ba0ea03e3d7fcc486b3fd5763af943f426572ab4360d78b751a78e5a9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a65",
+      "korean_title": "제65조 (정확성의 확보)"
     },
     {
       "node_id": "main-a65-p1",
@@ -6246,10 +6421,11 @@
       "source_order": 360,
       "original_label": "",
       "source_sha256": "8be3d66618bb3833132f284cae5cc75eccbff138f49543e7deb59727f94e0f3e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용목적의 달성에 필요한 범위 내에서 보유개인정보가 과거 또는 현재의 사실과 일치하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a65-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66",
@@ -6260,10 +6436,11 @@
       "source_order": 361,
       "original_label": "第六十六条",
       "source_sha256": "010685ca29536e6f989ebd450f3d8a773633fc5212c2fe697d257dc1ccfecf60",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a66",
+      "korean_title": "제66조 (안전관리조치)"
     },
     {
       "node_id": "main-a66-p1",
@@ -6274,10 +6451,11 @@
       "source_order": 362,
       "original_label": "",
       "source_sha256": "3f05ec352c600481710c7f9d463e191884cf51b7636ed0ec72cb5797a66961b5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 보유개인정보의 유출, 멸실 또는 훼손의 방지 및 그 밖의 보유개인정보의 안전관리를 위하여 필요하고 적절한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a66-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2",
@@ -6288,10 +6466,11 @@
       "source_order": 363,
       "original_label": "２",
       "source_sha256": "d30e11ecaee067a98a7f6fcc950fec8e1c82b4b845cf72f6eb4c56ca010d4980",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정은 다음 각 호에 열거된 자가 해당 각 호에서 정하는 업무를 수행하는 경우의 개인정보 취급에 관하여 준용한다.",
+      "markdown_anchor": "main-a66-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2-i1",
@@ -6302,10 +6481,11 @@
       "source_order": 364,
       "original_label": "一",
       "source_sha256": "b86b34fdde74cd839a10e0c27d4e442c7b86749aebd4688d9a2fd4f014bbd488",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등으로부터 개인정보 취급을 위탁받은 자: 해당 위탁받은 업무.",
+      "markdown_anchor": "main-a66-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2-i2",
@@ -6316,10 +6496,11 @@
       "source_order": 365,
       "original_label": "二",
       "source_sha256": "89486fa7198c5ae7fa673ba226edb680590bf7f15298e3b71deb66071625a2fc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지정관리자(지방자치법[쇼와 22년 법률 제67호] 제244조의2 제3항에 규정된 지정관리자를 말한다): 공공시설(같은 법 제244조 제1항에 규정된 공공시설을 말한다)의 관리 업무.",
+      "markdown_anchor": "main-a66-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2-i3",
@@ -6330,10 +6511,11 @@
       "source_order": 366,
       "original_label": "三",
       "source_sha256": "35a3b34e2adc9a72a135abd0f33f92b4f327bb53ec95c2cf3eae86c1ed862671",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제58조 제1항 각 호에 열거된 자: 법령에 따라 수행하는 업무로서 정령으로 정하는 것.",
+      "markdown_anchor": "main-a66-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2-i4",
@@ -6344,10 +6526,11 @@
       "source_order": 367,
       "original_label": "四",
       "source_sha256": "06464cd5ca27f0cc78b19fe6c071860169b12542b717cad82f7c78079dbd09d1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제58조 제2항 각 호에 열거된 자: 같은 항 각 호에서 정하는 업무 중 법령에 따라 수행하는 업무로서 정령으로 정하는 것.",
+      "markdown_anchor": "main-a66-p2-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a66-p2-i5",
@@ -6358,10 +6541,11 @@
       "source_order": 368,
       "original_label": "五",
       "source_sha256": "517ab6f72e238a58ee1a43f6c6dbc8a8550ebe3903c995ac83cc5c13e3aa8bfc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 호에 열거된 자로부터 해당 각 호에서 정하는 업무의 위탁(둘 이상의 단계에 걸친 위탁을 포함한다)을 받은 자: 해당 위탁받은 업무.",
+      "markdown_anchor": "main-a66-p2-i5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a67",
@@ -6372,10 +6556,11 @@
       "source_order": 369,
       "original_label": "第六十七条",
       "source_sha256": "53483bcb1d4d7e44cbc33d62b98af499b9b63e747389f0d3746bc169c87b67d9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a67",
+      "korean_title": "제67조 (종사자의 의무)"
     },
     {
       "node_id": "main-a67-p1",
@@ -6386,10 +6571,11 @@
       "source_order": 370,
       "original_label": "",
       "source_sha256": "814d426680514bd9a06f67fac3a3f8e0515ab03d0c2e3984d8ae6128c2ac51cc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보 취급에 종사하는 행정기관 등의 직원 또는 직원이었던 자, 전조 제2항 각 호에서 정하는 업무에 종사하고 있거나 종사하였던 자 또는 행정기관 등에서 개인정보 취급에 종사하고 있는 파견근로자(근로자파견사업의 적정한 운영의 확보 및 파견근로자의 보호 등에 관한 법률[쇼와 60년 법률 제88호] 제2조 제2호에 규정된 파견근로자를 말한다. 이하 이 장 및 제176조에서 같다)나 종사하였던 파견근로자는 그 업무에 관하여 알게 된 개인정보의 내용을 함부로 타인에게 알리거나 부당한 목적으로 이용하여서는 아니 된다.",
+      "markdown_anchor": "main-a67-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a68",
@@ -6400,10 +6586,11 @@
       "source_order": 371,
       "original_label": "第六十八条",
       "source_sha256": "525e1e8a67666848d4fdaf86a01a9ec6ebb28fbe768288a87981e3e849b95bca",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a68",
+      "korean_title": "제68조 (유출 등의 보고 등)"
     },
     {
       "node_id": "main-a68-p1",
@@ -6414,10 +6601,11 @@
       "source_order": 372,
       "original_label": "",
       "source_sha256": "05d6c064dbb9a4daf092cf26f682e45d3ebadae696762bf24745e82ce405808b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 보유개인정보의 유출, 멸실, 훼손 및 그 밖의 보유개인정보의 안전 확보에 관한 사태로서 개인의 권리이익을 해칠 우려가 큰 것으로 개인정보보호위원회 규칙으로 정하는 사태가 발생한 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 사태가 발생하였다는 사실을 개인정보보호위원회에 보고하여야 한다.",
+      "markdown_anchor": "main-a68-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a68-p2",
@@ -6428,10 +6616,11 @@
       "source_order": 373,
       "original_label": "２",
       "source_sha256": "625c7c3dc6b11398814a91adbb88415491ec393a809fce48f21749e2f8640d98",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항에 규정된 경우 행정기관의 장 등은 본인에게 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 사태가 발생하였다는 사실을 통지하여야 한다. 다만, 다음 각 호의 어느 하나에 해당하는 때에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a68-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a68-p2-i1",
@@ -6442,10 +6631,11 @@
       "source_order": 374,
       "original_label": "一",
       "source_sha256": "75981a2ad9f0d51628a5950dfd4ea6b7e8284ca0f0165eefb871d527c13fc24d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "본인에 대한 통지가 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때.",
+      "markdown_anchor": "main-a68-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a68-p2-i2",
@@ -6456,10 +6646,11 @@
       "source_order": 375,
       "original_label": "二",
       "source_sha256": "474da853d1afb346dff8840e86a95a1d99df063968ef70304ccbd6647cd44d40",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 보유개인정보에 제78조 제1항 각 호에 열거된 정보 중 어느 하나가 포함되어 있는 때.",
+      "markdown_anchor": "main-a68-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69",
@@ -6470,10 +6661,11 @@
       "source_order": 376,
       "original_label": "第六十九条",
       "source_sha256": "ac7172f1a4be5b272b14939f1e36b2099054a407dd326939c5d6bdf7c0836574",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a69",
+      "korean_title": "제69조 (이용 및 제공의 제한)"
     },
     {
       "node_id": "main-a69-p1",
@@ -6484,10 +6676,11 @@
       "source_order": 377,
       "original_label": "",
       "source_sha256": "a4767059a8c2dca242d536deb1a6997106610b4d261c16b2ec4e38dc32a60ee3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 법령에 근거하는 경우를 제외하고 이용목적 외의 목적을 위하여 보유개인정보를 스스로 이용하거나 제공하여서는 아니 된다.",
+      "markdown_anchor": "main-a69-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p2",
@@ -6498,10 +6691,11 @@
       "source_order": 378,
       "original_label": "２",
       "source_sha256": "8ba9f6386b5dad2d0a7c00c05b38599df56a52c7300a94f640e2b87fc92fb86e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 다음 각 호의 어느 하나에 해당한다고 인정하는 때에는 이용목적 외의 목적을 위하여 보유개인정보를 스스로 이용하거나 제공할 수 있다. 다만, 보유개인정보를 이용목적 외의 목적을 위하여 스스로 이용하거나 제공함으로써 본인 또는 제3자의 권리이익을 부당하게 침해할 우려가 있다고 인정되는 때에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a69-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p2-i1",
@@ -6512,10 +6706,11 @@
       "source_order": 379,
       "original_label": "一",
       "source_sha256": "2020bd3df1aeb5cf3e7afe990e0d0934fbc3666ee1ffe4238c66f75fd4464cd9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "본인의 동의가 있거나 본인에게 제공하는 때.",
+      "markdown_anchor": "main-a69-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p2-i2",
@@ -6526,10 +6721,11 @@
       "source_order": 380,
       "original_label": "二",
       "source_sha256": "1cc4a151568575f2569291785220ba03af67d3a0fd79b7fcc15871727b85c628",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등이 법령으로 정하는 소관 사무 또는 업무를 수행하는 데 필요한 한도에서 보유개인정보를 내부에서 이용하는 경우로서 해당 보유개인정보를 이용하는 데 상당한 이유가 있는 때.",
+      "markdown_anchor": "main-a69-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p2-i3",
@@ -6540,10 +6736,11 @@
       "source_order": 381,
       "original_label": "三",
       "source_sha256": "cfc4cf1d6e373648d8cc0d03288d06466f86b6cde92ee96e485122a145b21446",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다른 행정기관, 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 보유개인정보를 제공하는 경우에 보유개인정보를 제공받는 자가 법령으로 정하는 사무 또는 업무를 수행하는 데 필요한 한도에서 제공에 관한 개인정보를 이용하고 해당 개인정보를 이용하는 데 상당한 이유가 있는 때.",
+      "markdown_anchor": "main-a69-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p2-i4",
@@ -6554,10 +6751,11 @@
       "source_order": 382,
       "original_label": "四",
       "source_sha256": "8519c777584c986444b3147a89d27d88937dae36e7468f48d63363e86464842b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 세 호에 열거된 경우 외에 오로지 통계의 작성 또는 학술연구의 목적을 위하여 보유개인정보를 제공하는 때, 본인 외의 자에게 제공하는 것이 명백히 본인의 이익이 되는 때 또는 그 밖에 보유개인정보를 제공하는 데 특별한 이유가 있는 때.",
+      "markdown_anchor": "main-a69-p2-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p3",
@@ -6568,10 +6766,11 @@
       "source_order": 383,
       "original_label": "３",
       "source_sha256": "d97d35749799ca574081151d077d50671faa95b7a2d1954cce9a495e5599c2f3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정은 보유개인정보의 이용 또는 제공을 제한하는 다른 법령 규정의 적용을 방해하는 것이 아니다.",
+      "markdown_anchor": "main-a69-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a69-p4",
@@ -6582,10 +6781,11 @@
       "source_order": 384,
       "original_label": "４",
       "source_sha256": "a3ce4e66ac2f0a7ca37baf9bdb4ffa5b84ea723e61a66ca618f802ece821aacb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 개인의 권리이익을 보호하기 위하여 특히 필요하다고 인정하는 때에는 보유개인정보를 이용목적 외의 목적으로 행정기관 등 내부에서 이용하는 것을 특정 부서나 기관 또는 직원으로 한정하여야 한다.",
+      "markdown_anchor": "main-a69-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a70",
@@ -6596,10 +6796,11 @@
       "source_order": 385,
       "original_label": "第七十条",
       "source_sha256": "ed09896a32480e2c7d06b372674824e8f153437d076036d2b3d5dab5ce12e555",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a70",
+      "korean_title": "제70조 (보유개인정보를 제공받는 자에 대한 조치 요구)"
     },
     {
       "node_id": "main-a70-p1",
@@ -6610,10 +6811,11 @@
       "source_order": 386,
       "original_label": "",
       "source_sha256": "f47c64d0168532f6a7a7beca551773561e305041d68e775da29bcd5a513e40c8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용목적을 위하여 또는 전조 제2항 제3호나 제4호의 규정에 따라 보유개인정보를 제공하는 경우에 필요하다고 인정하는 때에는 보유개인정보를 제공받는 자에게 제공에 관한 개인정보의 이용 목적이나 방법의 제한 또는 그 밖의 필요한 제한을 부가하거나 그 유출 방지 및 그 밖의 개인정보의 적절한 관리를 위하여 필요한 조치를 취하도록 요구하여야 한다.",
+      "markdown_anchor": "main-a70-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a71",
@@ -6624,10 +6826,11 @@
       "source_order": 387,
       "original_label": "第七十一条",
       "source_sha256": "420117ae926904eb9ee1f7dff85692d787807744eaf39acce017f949a4532602",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a71",
+      "korean_title": "제71조 (외국에 있는 제3자에 대한 제공의 제한)"
     },
     {
       "node_id": "main-a71-p1",
@@ -6638,10 +6841,11 @@
       "source_order": 388,
       "original_label": "",
       "source_sha256": "47ff404f66f7547fc24e7af164a31e9a83fb84de713beb3bb238a5c9d2a04707",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 외국(일본 영역 밖에 있는 국가 또는 지역을 말한다. 이하 이 조에서 같다)(개인의 권리이익을 보호하는 데 있어 일본과 동등한 수준에 있다고 인정되는 개인정보 보호 제도를 가진 외국으로서 개인정보보호위원회 규칙으로 정하는 것을 제외한다. 이하 이 조에서 같다)에 있는 제3자(제16조 제3항에 규정된 개인데이터의 취급에 대하여 전장의 제2절 규정에 따라 같은 조 제2항에 규정된 개인정보취급사업자가 취하여야 하는 조치에 상당하는 조치[제3항에서 “상당조치”라 한다]를 계속적으로 취하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 적합한 체제를 정비하고 있는 자를 제외한다. 이하 이 항 및 다음 항에서 같다)에게 이용목적 외의 목적을 위하여 보유개인정보를 제공하는 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 미리 외국에 있는 제3자에 대한 제공을 인정한다는 본인의 동의를 받아야 한다.",
+      "markdown_anchor": "main-a71-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a71-p2",
@@ -6652,10 +6856,11 @@
       "source_order": 389,
       "original_label": "２",
       "source_sha256": "41aefcb79b40130c40e3779d414db432aaee575b8696256035ed86cc6da07384",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 전항의 규정에 따라 본인의 동의를 받으려는 경우에는 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 해당 외국의 개인정보 보호 제도, 해당 제3자가 취하는 개인정보 보호 조치 및 그 밖에 해당 본인에게 참고가 되어야 할 정보를 해당 본인에게 제공하여야 한다.",
+      "markdown_anchor": "main-a71-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a71-p3",
@@ -6666,10 +6871,11 @@
       "source_order": 390,
       "original_label": "３",
       "source_sha256": "2f2447b41af4449237e370f12877de8fa386b47ecda75fdbd06d54ead9fb3c49",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 보유개인정보를 외국에 있는 제3자(제1항에 규정된 체제를 정비하고 있는 자로 한정한다)에게 이용목적 외의 목적을 위하여 제공한 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 제3자에 의한 상당조치의 계속적인 실시를 확보하기 위하여 필요한 조치를 취하는 동시에 본인의 요구에 따라 해당 필요한 조치에 관한 정보를 해당 본인에게 제공하여야 한다.",
+      "markdown_anchor": "main-a71-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a72",
@@ -6680,10 +6886,11 @@
       "source_order": 391,
       "original_label": "第七十二条",
       "source_sha256": "6dbf9553090c7d56676b94226bc166e6366996c4d372e29c0cc1232c61838295",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a72",
+      "korean_title": "제72조 (개인관련정보를 제공받는 자에 대한 조치 요구)"
     },
     {
       "node_id": "main-a72-p1",
@@ -6694,10 +6901,11 @@
       "source_order": 392,
       "original_label": "",
       "source_sha256": "381d188e7c0617b7754990f61501f03182142d8e787b157cf6cb2d3bf07df47e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 제3자에게 개인관련정보를 제공하는 경우(해당 제3자가 해당 개인관련정보를 개인정보로 취득할 것으로 예상되는 경우로 한정한다)에 필요하다고 인정하는 때에는 해당 제3자에게 제공에 관한 개인관련정보의 이용 목적이나 방법의 제한 또는 그 밖의 필요한 제한을 부가하거나 그 유출 방지 및 그 밖의 개인관련정보의 적절한 관리를 위하여 필요한 조치를 취하도록 요구하여야 한다.",
+      "markdown_anchor": "main-a72-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a73",
@@ -6708,10 +6916,11 @@
       "source_order": 393,
       "original_label": "第七十三条",
       "source_sha256": "fefd1cca9673a66a1f7f0dc25e4195075e04565218f0d59c80fd8d40e04e28ba",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a73",
+      "korean_title": "제73조 (가명가공정보의 취급에 관한 의무)"
     },
     {
       "node_id": "main-a73-p1",
@@ -6722,10 +6931,11 @@
       "source_order": 394,
       "original_label": "",
       "source_sha256": "792e484d30655bff4348ada52a488db5cea2b85b990da8c36c77151d916e2ec0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 법령에 근거하는 경우를 제외하고는 가명가공정보(개인정보인 것을 제외한다. 이하 이 조 및 제128조에서 같다)를 제3자(해당 가명가공정보의 취급을 위탁받은 자를 제외한다)에게 제공하여서는 아니 된다.",
+      "markdown_anchor": "main-a73-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a73-p2",
@@ -6736,10 +6946,11 @@
       "source_order": 395,
       "original_label": "２",
       "source_sha256": "553afebfd7951f4335175d3763cb062a05169be8d33d52cd06b32237dbb18396",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 그 취급하는 가명가공정보의 유출 방지 및 그 밖의 가명가공정보의 안전관리를 위하여 필요하고 적절한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a73-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a73-p3",
@@ -6750,10 +6961,11 @@
       "source_order": 396,
       "original_label": "３",
       "source_sha256": "2f75351bd327e6a402b6dd9cff75d97ef6a180a50d0363ba5d40ed57be54e1eb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 가명가공정보를 취급할 때 법령에 근거하는 경우를 제외하고 해당 가명가공정보의 작성에 사용된 개인정보에 관한 본인을 식별하기 위하여 삭제정보 등(가명가공정보의 작성에 사용된 개인정보에서 삭제된 기술 등 및 개인식별부호와 제41조 제1항의 규정에 따라 이루어진 가공 방법에 관한 정보를 말한다)을 취득하거나 해당 가명가공정보를 다른 정보와 대조하여서는 아니 된다.",
+      "markdown_anchor": "main-a73-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a73-p4",
@@ -6764,10 +6976,11 @@
       "source_order": 397,
       "original_label": "４",
       "source_sha256": "db6fdde5058afa3ebd39037ffb7ccc0fd6e4571a436ed7cc628d45e2a2de5a11",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 가명가공정보를 취급할 때 법령에 근거하는 경우를 제외하고 전화를 걸거나, 우편 또는 민간사업자에 의한 신서의 송달에 관한 법률 제2조 제6항에 규정된 일반신서편사업자나 같은 조 제9항에 규정된 특정신서편사업자에 의한 같은 조 제2항에 규정된 신서편으로 송부하거나, 전보를 송달하거나, 팩시밀리 장치나 전자적·자기적 방법(전자정보처리조직을 사용하는 방법 및 그 밖의 정보통신 기술을 이용하는 방법으로서 개인정보보호위원회 규칙으로 정하는 것을 말한다)을 사용하여 송신하거나, 주거를 방문하기 위하여 해당 가명가공정보에 포함된 연락처 및 그 밖의 정보를 이용하여서는 아니 된다.",
+      "markdown_anchor": "main-a73-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a73-p5",
@@ -6778,10 +6991,11 @@
       "source_order": 398,
       "original_label": "５",
       "source_sha256": "8e221a9793f63cad492ed06ebc6f97bbb35fc20fcb50dad0840c6ca132448740",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 항의 규정은 행정기관의 장 등으로부터 가명가공정보 취급의 위탁(둘 이상의 단계에 걸친 위탁을 포함한다)을 받은 자가 수탁한 업무를 수행하는 경우에 관하여 준용한다.",
+      "markdown_anchor": "main-a73-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s3",
@@ -6792,10 +7006,11 @@
       "source_order": 399,
       "original_label": "第三節　個人情報ファイル",
       "source_sha256": "294609f49f295500936aa88d6508f1861012d4dff53c1c9d277f16eb7effcfee",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s3",
+      "korean_title": "제3절 개인정보파일"
     },
     {
       "node_id": "main-a74",
@@ -6806,10 +7021,11 @@
       "source_order": 400,
       "original_label": "第七十四条",
       "source_sha256": "29712f29c3b823a671b304c175d929d70767158feefd10d94ae0e6a22a51d33e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a74",
+      "korean_title": "제74조 (개인정보파일의 보유 등에 관한 사전 통지)"
     },
     {
       "node_id": "main-a74-p1",
@@ -6820,10 +7036,11 @@
       "source_order": 401,
       "original_label": "",
       "source_sha256": "d77e045dd089f8a77bd74e87f8438d1a1da9863803c452bf1e1780d0526a134d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관(회계검사원을 제외한다. 이하 이 조에서 같다)이 개인정보파일을 보유하려는 때에는 해당 행정기관의 장은 미리 개인정보보호위원회에 다음에 열거된 사항을 통지하여야 한다. 통지한 사항을 변경하려는 때에도 같다.",
+      "markdown_anchor": "main-a74-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i1",
@@ -6834,10 +7051,11 @@
       "source_order": 402,
       "original_label": "一",
       "source_sha256": "f77c0f8bb5065c64ea68a9db6077d97a4c577dbe0d3af21578a8ee1b2d2ac8e8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보파일의 명칭.",
+      "markdown_anchor": "main-a74-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i2",
@@ -6848,10 +7066,11 @@
       "source_order": 403,
       "original_label": "二",
       "source_sha256": "234ffedbb0e824e806593c907c763844d6fb08801d17a7d5632101530ef803b1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 기관의 명칭 및 개인정보파일이 이용되는 사무를 담당하는 조직의 명칭.",
+      "markdown_anchor": "main-a74-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i3",
@@ -6862,10 +7081,11 @@
       "source_order": 404,
       "original_label": "三",
       "source_sha256": "dc9ed20d0b5130ef8b27353a7a1ca84c857be067fdd888c19957dc45d7a44f42",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보파일의 이용목적.",
+      "markdown_anchor": "main-a74-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i4",
@@ -6876,10 +7096,11 @@
       "source_order": 405,
       "original_label": "四",
       "source_sha256": "e8ac10fc6c7aca58fa8e24eea1c02cad4675b40d2e2c2047ee26e6262c25d657",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보파일에 기록되는 항목(이하 이 절에서 “기록항목”이라 한다) 및 본인(다른 개인의 성명, 생년월일 및 그 밖의 기술 등에 의하지 않고 검색할 수 있는 자로 한정한다. 다음 항 제9호에서 같다)으로 개인정보파일에 기록되는 개인의 범위(이하 이 절에서 “기록범위”라 한다).",
+      "markdown_anchor": "main-a74-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i5",
@@ -6890,10 +7111,11 @@
       "source_order": 406,
       "original_label": "五",
       "source_sha256": "e5fc1f4e244f9cb1c75ca3f5097ba65bbc00b60c8a363766a1c12395af106a45",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보파일에 기록되는 개인정보(이하 이 절에서 “기록정보”라 한다)의 수집방법.",
+      "markdown_anchor": "main-a74-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i6",
@@ -6904,10 +7126,11 @@
       "source_order": 407,
       "original_label": "六",
       "source_sha256": "fb5ef9260a9605d67dd0cf7bce912f2f8b238c380cfb1cf9337a9c2d6c5c746b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "기록정보에 배려가 필요한 개인정보가 포함된 때에는 그 사실.",
+      "markdown_anchor": "main-a74-p1-i6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i7",
@@ -6918,10 +7141,11 @@
       "source_order": 408,
       "original_label": "七",
       "source_sha256": "3773d2203d218d8872af8608ad0a9cb2413621ccff02babc580398ff51ffdecf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "기록정보를 해당 기관 외의 자에게 상시 제공하는 경우에는 그 제공 대상.",
+      "markdown_anchor": "main-a74-p1-i7",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i8",
@@ -6932,10 +7156,11 @@
       "source_order": 409,
       "original_label": "八",
       "source_sha256": "2bf160e46a28dd2c7d39b238d951cddc80ea226b0ed92204ef139a1a18ada198",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 조 제3항의 규정에 따라 기록항목의 일부 또는 제5호나 전호에 열거된 사항을 다음 조 제1항에 규정된 개인정보파일부에 기재하지 않기로 하는 때 또는 개인정보파일을 같은 항에 규정된 개인정보파일부에 등재하지 않기로 하는 때에는 그 사실.",
+      "markdown_anchor": "main-a74-p1-i8",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i9",
@@ -6946,10 +7171,11 @@
       "source_order": 410,
       "original_label": "九",
       "source_sha256": "aaa9306776c78555b2b92004f60287bdbaa9b605e5628a7e33edb2f64d7dd26f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제76조 제1항, 제90조 제1항 또는 제98조 제1항의 규정에 따른 청구를 접수하는 조직의 명칭 및 소재지.",
+      "markdown_anchor": "main-a74-p1-i9",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i10",
@@ -6960,10 +7186,11 @@
       "source_order": 411,
       "original_label": "十",
       "source_sha256": "70994cc41ff270608ec8a638b52bcdc96920f3ca9d289b2e3211b11399b5ad99",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제90조 제1항 단서 또는 제98조 제1항 단서에 해당하는 때에는 그 사실.",
+      "markdown_anchor": "main-a74-p1-i10",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p1-i11",
@@ -6974,10 +7201,11 @@
       "source_order": 412,
       "original_label": "十一",
       "source_sha256": "fb181bc3c6e93c4c6d557294e4f079d3a30ae7853a3f49d1c32616f2714f6170",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "그 밖에 정령으로 정하는 사항.",
+      "markdown_anchor": "main-a74-p1-i11",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2",
@@ -6988,10 +7216,11 @@
       "source_order": 413,
       "original_label": "２",
       "source_sha256": "fcbb2875bfa40efed0a211a985f2dd4452c7207213f285a3276d10019ae032e2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정은 다음에 열거된 개인정보파일에 대해서는 적용하지 아니한다.",
+      "markdown_anchor": "main-a74-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i1",
@@ -7002,10 +7231,11 @@
       "source_order": 414,
       "original_label": "一",
       "source_sha256": "b34bb420e8ede23d78f55ea7d609bbf0efc069a7477d354a08ea2a67749a1d65",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "국가의 안전, 외교상의 비밀 또는 그 밖의 국가의 중대한 이익에 관한 사항을 기록하는 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i2",
@@ -7016,10 +7246,11 @@
       "source_order": 415,
       "original_label": "二",
       "source_sha256": "bedbd892e2149025117be71c6b9b94328e0be3b1d9aa7c3b86aee728859937d3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "범죄의 수사, 조세에 관한 법률 규정에 따른 범칙사건의 조사 또는 공소의 제기나 유지를 위하여 작성하거나 취득하는 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i3",
@@ -7030,10 +7261,11 @@
       "source_order": 416,
       "original_label": "三",
       "source_sha256": "9ee05e53f3c3e29d4c85a88320a0e29dcf2a5a7eec833a564cf379d608f9a79e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 기관의 직원 또는 직원이었던 자에 관한 개인정보파일로서 오로지 그 인사, 급여 또는 복리후생에 관한 사항이나 이에 준하는 사항을 기록하는 것(해당 기관이 실시하는 직원 채용시험에 관한 개인정보파일을 포함한다).",
+      "markdown_anchor": "main-a74-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i4",
@@ -7044,10 +7276,11 @@
       "source_order": 417,
       "original_label": "四",
       "source_sha256": "9dcdcd5b68395d45458fa3dac7f25484454e248e8cecd9dbbe3446efdf7c66c2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "오로지 시험적인 전자계산기 처리에 사용하기 위한 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i5",
@@ -7058,10 +7291,11 @@
       "source_order": 418,
       "original_label": "五",
       "source_sha256": "6d8f6213792254bf271d151c2fae885c1ee3b752a09b18b6c7b1f7917767cb77",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따른 통지에 관한 개인정보파일에 기록되어 있는 기록정보의 전부 또는 일부를 기록한 개인정보파일로서 그 이용목적, 기록항목 및 기록범위가 해당 통지에 관한 이들 사항의 범위 내에 있는 것.",
+      "markdown_anchor": "main-a74-p2-i5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i6",
@@ -7072,10 +7306,11 @@
       "source_order": 419,
       "original_label": "六",
       "source_sha256": "a3fb8160ce6829f3009b6fe9fecadc391cbe1c014efb7c6d0d70d5e7ee0d24b4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "1년 이내에 소거하기로 되어 있는 기록정보만을 기록하는 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i7",
@@ -7086,10 +7321,11 @@
       "source_order": 420,
       "original_label": "七",
       "source_sha256": "8f1f6f38a1a9cc7b669958483ea6377f7a2f10703322b2d6f6e23077e40a57d9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "자료 및 그 밖의 물품이나 금전의 송부 또는 업무상 필요한 연락을 위하여 이용하는 기록정보를 기록한 개인정보파일로서 송부 또는 연락 상대방의 성명, 주소 및 그 밖에 송부 또는 연락에 필요한 사항만을 기록하는 것.",
+      "markdown_anchor": "main-a74-p2-i7",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i8",
@@ -7100,10 +7336,11 @@
       "source_order": 421,
       "original_label": "八",
       "source_sha256": "f23d5006eb5128e8d928a2687c23580f99627725cb0d106b35ac858b9540b1ab",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "직원이 학술연구에 사용하기 위하여 자신의 발의에 따라 작성하거나 취득하는 개인정보파일로서 기록정보를 오로지 해당 학술연구의 목적을 위하여 이용하는 것.",
+      "markdown_anchor": "main-a74-p2-i8",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i9",
@@ -7114,10 +7351,11 @@
       "source_order": 422,
       "original_label": "九",
       "source_sha256": "4954a76b0c3b5e315371e16bef4fcc43b1c0263df103e8dd5143839e5f24f670",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "본인의 수가 정령으로 정하는 수에 미치지 못하는 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i9",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i10",
@@ -7128,10 +7366,11 @@
       "source_order": 423,
       "original_label": "十",
       "source_sha256": "3aa02750bf57d9720b123350fbd0fc13a18c914c4bf7d90ef5aff30c8b71e2f7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제3호부터 전호까지에 열거된 개인정보파일에 준하는 것으로 정령으로 정하는 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i10",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p2-i11",
@@ -7142,10 +7381,11 @@
       "source_order": 424,
       "original_label": "十一",
       "source_sha256": "419afa6fa0b7e9e0034faff41960f97d90daf8fb8606c474e7cf99d44882c722",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제60조 제2항 제2호에 관한 개인정보파일.",
+      "markdown_anchor": "main-a74-p2-i11",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a74-p3",
@@ -7156,10 +7396,11 @@
       "source_order": 425,
       "original_label": "３",
       "source_sha256": "feef31a7624f3828b2de21defa3fe5288c9b5ca8e7369b29ce117ed62005d8c2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장은 제1항에 규정된 사항을 통지한 개인정보파일에 대하여 해당 행정기관이 그 보유를 그만둔 때 또는 그 개인정보파일이 전항 제9호에 해당하게 된 때에는 지체 없이 개인정보보호위원회에 그 사실을 통지하여야 한다.",
+      "markdown_anchor": "main-a74-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75",
@@ -7170,10 +7411,11 @@
       "source_order": 426,
       "original_label": "第七十五条",
       "source_sha256": "93d6f5f9bbb9d3d5431a82bf199a1bcbc1509edfe38da9aba67ecc1097ae64e1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a75",
+      "korean_title": "제75조 (개인정보파일부의 작성 및 공표)"
     },
     {
       "node_id": "main-a75-p1",
@@ -7184,10 +7426,11 @@
       "source_order": 427,
       "original_label": "",
       "source_sha256": "c80f1b5ed7ad9d8184aac90b772a125135c689816f2e70f84dac530af58029eb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정령으로 정하는 바에 따라 해당 행정기관의 장 등이 속한 행정기관 등이 보유하고 있는 개인정보파일에 대하여 각각 전조 제1항 제1호부터 제7호까지, 제9호 및 제10호에 열거된 사항과 그 밖에 정령으로 정하는 사항을 기재한 장부(이하 이 장에서 “개인정보파일부”라 한다)를 작성하고 공표하여야 한다.",
+      "markdown_anchor": "main-a75-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p2",
@@ -7198,10 +7441,11 @@
       "source_order": 428,
       "original_label": "２",
       "source_sha256": "465e2b39183e6daaac24fbb2b78c4e947370d8e577602dccad7aa65349940e69",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정은 다음에 열거된 개인정보파일에 대해서는 적용하지 아니한다.",
+      "markdown_anchor": "main-a75-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p2-i1",
@@ -7212,10 +7456,11 @@
       "source_order": 429,
       "original_label": "一",
       "source_sha256": "8eb090dfe9ff9fb87ed401f08f87fa4f6c593b57be0823b3570497e10f5dc487",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 제2항 제1호부터 제10호까지에 열거된 개인정보파일.",
+      "markdown_anchor": "main-a75-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p2-i2",
@@ -7226,10 +7471,11 @@
       "source_order": 430,
       "original_label": "二",
       "source_sha256": "328cffb04e8221611e1e34b4657ec1d66d167186a7860b36d27d57cac38d0647",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따른 공표에 관한 개인정보파일에 기록되어 있는 기록정보의 전부 또는 일부를 기록한 개인정보파일로서 그 이용목적, 기록항목 및 기록범위가 해당 공표에 관한 이들 사항의 범위 내에 있는 것.",
+      "markdown_anchor": "main-a75-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p2-i3",
@@ -7240,10 +7486,11 @@
       "source_order": 431,
       "original_label": "三",
       "source_sha256": "ecaeeb2cfd74301b1a7e51367a383e6e43220e5b1f17020f41ed43a81398c127",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전호에 열거된 개인정보파일에 준하는 것으로 정령으로 정하는 개인정보파일.",
+      "markdown_anchor": "main-a75-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p3",
@@ -7254,10 +7501,11 @@
       "source_order": 432,
       "original_label": "３",
       "source_sha256": "fa8ec424793ac67da9dbd4a40cb4a18e9f008a8e44f8ddf12771a567fbe3ceb4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제1항의 규정에도 불구하고 행정기관의 장 등은 기록항목의 일부 또는 전조 제1항 제5호나 제7호에 열거된 사항을 개인정보파일부에 기재하거나 개인정보파일을 개인정보파일부에 등재함으로써, 이용목적에 관한 사무 또는 사업의 성질상 해당 사무 또는 사업의 적정한 수행에 현저한 지장을 줄 우려가 있다고 인정하는 때에는 그 기록항목의 일부 또는 사항을 기재하지 않거나 그 개인정보파일을 개인정보파일부에 등재하지 않을 수 있다.",
+      "markdown_anchor": "main-a75-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p4",
@@ -7268,10 +7516,11 @@
       "source_order": 433,
       "original_label": "４",
       "source_sha256": "4c5e4e971bd09a979fd0f88d0723ee309727624c64c68afba505e379652b4e11",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대하여 제1항의 규정을 적용할 때에는 같은 항 중 “정하는 사항”을 “정하는 사항 및 기록정보에 조례상 배려가 필요한 개인정보가 포함된 때에는 그 사실”로 한다.",
+      "markdown_anchor": "main-a75-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a75-p5",
@@ -7282,10 +7531,11 @@
       "source_order": 434,
       "original_label": "５",
       "source_sha256": "bfbc54694b9ab624dabbb093f56fddb70c0e72b7564acc1b179e8e95d877c387",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 항의 규정은 지방공공단체의 기관 또는 지방독립행정법인이 조례로 정하는 바에 따라 개인정보파일부와 별도로 개인정보 보유 상황에 관한 사항을 기재한 장부를 작성하고 공표하는 것을 방해하는 것이 아니다.",
+      "markdown_anchor": "main-a75-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s4",
@@ -7296,10 +7546,11 @@
       "source_order": 435,
       "original_label": "第四節　開示、訂正及び利用停止",
       "source_sha256": "52a8ac5b426532761c62c274073659e0bce6f736155418a984a0c87557c43e4e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4",
+      "korean_title": "제4절 공개·정정 및 이용정지"
     },
     {
       "node_id": "main-c5-s4-ss1",
@@ -7310,10 +7561,11 @@
       "source_order": 436,
       "original_label": "第一款　開示",
       "source_sha256": "9e958736fa57df485030af8695edabedcf36f145f2600ac6b56eeffda463ac19",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4-ss1",
+      "korean_title": "제1관 공개"
     },
     {
       "node_id": "main-a76",
@@ -7324,10 +7576,11 @@
       "source_order": 437,
       "original_label": "第七十六条",
       "source_sha256": "118cae9b06b19f7782d64dbf4f7e7e9a6941e3165fac9835d2444c4e1ab261a5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a76",
+      "korean_title": "제76조 (공개청구권)"
     },
     {
       "node_id": "main-a76-p1",
@@ -7338,10 +7591,11 @@
       "source_order": 438,
       "original_label": "",
       "source_sha256": "95aa45f6158c7d319d0b4f5d0d44af80f3884a29f8af67126891e35394b48db9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "누구든지 이 법률이 정하는 바에 따라 행정기관의 장 등에게 해당 행정기관의 장 등이 소속된 행정기관 등이 보유하는 자신을 본인으로 하는 보유개인정보의 공개를 청구할 수 있다.",
+      "markdown_anchor": "main-a76-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a76-p2",
@@ -7352,10 +7606,11 @@
       "source_order": 439,
       "original_label": "２",
       "source_sha256": "5a235ba180ad773a19cfa2ca9570768b0eacb2e5c7d145203a1ab903a5396604",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "미성년자 또는 성년피후견인의 법정대리인이나 본인의 위임에 따른 대리인(이하 이 절에서 통틀어 “대리인”이라 한다)은 본인을 대신하여 전항의 규정에 따른 공개 청구(이하 이 절 및 제127조에서 “공개청구”라 한다)를 할 수 있다.",
+      "markdown_anchor": "main-a76-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a77",
@@ -7366,10 +7621,11 @@
       "source_order": 440,
       "original_label": "第七十七条",
       "source_sha256": "17a17c5c274d81a5589bfd2bbd0d6c44c63f6d4ec1313582bfac345d2a16d951",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a77",
+      "korean_title": "제77조 (공개청구의 절차)"
     },
     {
       "node_id": "main-a77-p1",
@@ -7380,10 +7636,11 @@
       "source_order": 441,
       "original_label": "",
       "source_sha256": "e26925d55f89a84febb76ea97283fa3047a403525b4de6092b41dee3077bf7a8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구는 다음에 열거하는 사항을 기재한 서면(제3항에서 “공개청구서”라 한다)을 행정기관의 장 등에게 제출하여 하여야 한다.",
+      "markdown_anchor": "main-a77-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a77-p1-i1",
@@ -7394,10 +7651,11 @@
       "source_order": 442,
       "original_label": "一",
       "source_sha256": "aa70a4d21a71f62121c92c657863b5d625fa9f7f8b2a26fff8537f573b28d4ed",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구를 하는 자의 성명 및 주소 또는 거소",
+      "markdown_anchor": "main-a77-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a77-p1-i2",
@@ -7408,10 +7666,11 @@
       "source_order": 443,
       "original_label": "二",
       "source_sha256": "fc28452effae5f27f87199427145a4f42e598e969aefe0423e17f58b4e6749e9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구에 관한 보유개인정보가 기록되어 있는 행정문서 등의 명칭 및 그 밖에 공개청구에 관한 보유개인정보를 특정하기에 충분한 사항",
+      "markdown_anchor": "main-a77-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a77-p2",
@@ -7422,10 +7681,11 @@
       "source_order": 444,
       "original_label": "２",
       "source_sha256": "6707019ffa35c643dcdc7d7ca6297e168d285d5b49b0d62ebb31d8db3eea846b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에 공개청구를 하는 자는 정령으로 정하는 바에 따라 공개청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 공개청구인 경우에는 공개청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "markdown_anchor": "main-a77-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a77-p3",
@@ -7436,10 +7696,11 @@
       "source_order": 445,
       "original_label": "３",
       "source_sha256": "d0c515080eb22323f1d7cecc532a6d6d20d25fdd4f30e634b1892651abba782e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구서에 형식상의 흠결이 있다고 인정하는 경우에는 공개청구를 한 자(이하 이 절에서 “공개청구자”라 한다)에게 상당한 기간을 정하여 그 보정을 요구할 수 있다. 이 경우 행정기관의 장 등은 공개청구자에게 보정에 참고가 되는 정보를 제공하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a77-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78",
@@ -7450,10 +7711,11 @@
       "source_order": 446,
       "original_label": "第七十八条",
       "source_sha256": "68fc56013772cebce9eba030db7c84be14a1aeff3fd3307b617d40b9cea02239",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a78",
+      "korean_title": "제78조 (보유개인정보의 공개 의무)"
     },
     {
       "node_id": "main-a78-p1",
@@ -7464,10 +7726,11 @@
       "source_order": 447,
       "original_label": "",
       "source_sha256": "b36282904a083713c0f96149474eb5e0d3bb8283247450e21a5291ae6af65e7f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구가 있으면 공개청구에 관한 보유개인정보에 다음 각 호에 열거하는 정보(이하 이 절에서 “비공개정보”라 한다) 중 어느 하나가 포함되어 있는 경우를 제외하고는 공개청구자에게 해당 보유개인정보를 공개하여야 한다.",
+      "markdown_anchor": "main-a78-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i1",
@@ -7478,10 +7741,11 @@
       "source_order": 448,
       "original_label": "一",
       "source_sha256": "39d97e408dd06b278176b9ef842fe87bd05f348031d9a01ad5e56fe5935fc3d5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구자(제76조 제2항의 규정에 따라 대리인이 본인을 대신하여 공개청구를 하는 경우에는 해당 본인을 말한다. 다음 호 및 제3호, 다음 조 제2항 및 제86조 제1항에서 같다)의 생명, 건강, 생활 또는 재산을 해칠 우려가 있는 정보",
+      "markdown_anchor": "main-a78-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i2",
@@ -7492,10 +7756,11 @@
       "source_order": 449,
       "original_label": "二",
       "source_sha256": "ab2320d213ec3a7b398f8876f9d53a0b10c28ef300652d64d4a3355cc0e0f088",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구자 이외의 개인에 관한 정보(사업을 영위하는 개인의 해당 사업에 관한 정보는 제외한다)로서 해당 정보에 포함된 성명, 생년월일 및 그 밖의 기술 등에 따라 공개청구자 이외의 특정 개인을 식별할 수 있는 것(다른 정보와 대조함으로써 공개청구자 이외의 특정 개인을 식별할 수 있게 되는 것을 포함한다) 또는 개인식별부호가 포함된 것, 또는 공개청구자 이외의 특정 개인을 식별할 수는 없으나 공개함으로써 여전히 공개청구자 이외의 개인의 권리이익을 해칠 우려가 있는 것. 다만, 다음에 열거하는 정보는 제외한다.",
+      "markdown_anchor": "main-a78-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i2-si11",
@@ -7506,10 +7771,12 @@
       "source_order": 450,
       "original_label": "イ",
       "source_sha256": "12343a95526697ca0c72a4bb8bfc6007b7a1a8a80c52d60aad8f60117aef4418",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법령의 규정에 따라 또는 관행으로서 공개청구자가 알 수 있거나 알 것으로 예정되어 있는 정보",
+      "markdown_anchor": "main-a78-p1-i2-si11",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "가(イ)목"
     },
     {
       "node_id": "main-a78-p1-i2-si12",
@@ -7520,10 +7787,12 @@
       "source_order": 451,
       "original_label": "ロ",
       "source_sha256": "ba4148c9b821d24585f3cb0101ef6e0fff38520eb85f15ef56204a18bd64addf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사람의 생명, 건강, 생활 또는 재산을 보호하기 위하여 공개하는 것이 필요하다고 인정되는 정보",
+      "markdown_anchor": "main-a78-p1-i2-si12",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "나(ロ)목"
     },
     {
       "node_id": "main-a78-p1-i2-si13",
@@ -7534,10 +7803,12 @@
       "source_order": 452,
       "original_label": "ハ",
       "source_sha256": "bb89a330f47f046d457a214ffe149720a8d2fcf723146663d44721087f78d965",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 개인이 공무원 등(국가공무원법(쇼와 22년 법률 제120호) 제2조 제1항에 규정하는 국가공무원(독립행정법인 통칙법 제2조 제4항에 규정하는 행정집행법인의 직원은 제외한다), 독립행정법인 등의 직원, 지방공무원법(쇼와 25년 법률 제261호) 제2조에 규정하는 지방공무원 및 지방독립행정법인의 직원을 말한다)인 경우에 해당 정보가 그 직무 수행에 관한 정보인 때에는 해당 정보 중 해당 공무원 등의 직 및 해당 직무 수행의 내용에 관한 부분",
+      "markdown_anchor": "main-a78-p1-i2-si13",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "다(ハ)목"
     },
     {
       "node_id": "main-a78-p1-i3",
@@ -7548,10 +7819,11 @@
       "source_order": 453,
       "original_label": "三",
       "source_sha256": "63ba650fbb5e533427b6fcbfaf313261edf955c294cec04c16f63fc2077b359f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법인 및 그 밖의 단체(국가, 독립행정법인 등, 지방공공단체 및 지방독립행정법인은 제외한다. 이하 이 호에서 “법인 등”이라 한다)에 관한 정보 또는 공개청구자 이외의 사업을 영위하는 개인의 해당 사업에 관한 정보로서 다음에 열거하는 것. 다만, 사람의 생명, 건강, 생활 또는 재산을 보호하기 위하여 공개하는 것이 필요하다고 인정되는 정보는 제외한다.",
+      "markdown_anchor": "main-a78-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i3-si11",
@@ -7562,10 +7834,12 @@
       "source_order": 454,
       "original_label": "イ",
       "source_sha256": "4e8138f8e9f7acaaa1831efd689a4b0491d26f4c9c060bc442a6619daddab31f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개함으로써 해당 법인 등 또는 해당 개인의 권리, 경쟁상의 지위 및 그 밖의 정당한 이익을 해칠 우려가 있는 것",
+      "markdown_anchor": "main-a78-p1-i3-si11",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "가(イ)목"
     },
     {
       "node_id": "main-a78-p1-i3-si12",
@@ -7576,10 +7850,12 @@
       "source_order": 455,
       "original_label": "ロ",
       "source_sha256": "a39e4861efe88c8b1da6bdc00f727e4633373625052f848b584cfb3216cc37f9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등의 요청을 받아 공개하지 않는다는 조건으로 임의로 제공된 것으로서 법인 등 또는 개인의 통례상 공개하지 않는 것으로 되어 있는 것 및 그 밖에 해당 조건을 붙이는 것이 해당 정보의 성질, 당시의 상황 등에 비추어 합리적이라고 인정되는 것",
+      "markdown_anchor": "main-a78-p1-i3-si12",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "나(ロ)목"
     },
     {
       "node_id": "main-a78-p1-i4",
@@ -7590,10 +7866,11 @@
       "source_order": 456,
       "original_label": "四",
       "source_sha256": "7d111366dc21011a6afafbba41890791f7d3b277199a87e65e16a70fc9c9bab9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장이 제82조 각 항의 결정(이하 이 절에서 “공개결정 등”이라 한다)을 하는 경우에 공개함으로써 국가의 안전이 침해될 우려, 다른 국가 또는 국제기관과의 신뢰관계가 손상될 우려 또는 다른 국가나 국제기관과의 교섭에서 불이익을 입을 우려가 있다고 해당 행정기관의 장이 인정하는 데에 상당한 이유가 있는 정보",
+      "markdown_anchor": "main-a78-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i5",
@@ -7604,10 +7881,11 @@
       "source_order": 457,
       "original_label": "五",
       "source_sha256": "8f8516aee8727d59bef1252679a939c364b13889b4aedaf5bd9e4c21e970fdd8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 또는 지방공공단체의 기관(도도부현의 기관에 한정한다)이 공개결정 등을 하는 경우에 공개함으로써 범죄의 예방, 진압 또는 수사, 공소의 유지, 형의 집행 및 그 밖의 공공의 안전과 질서 유지에 지장을 줄 우려가 있다고 해당 행정기관의 장 또는 지방공공단체의 기관이 인정하는 데에 상당한 이유가 있는 정보",
+      "markdown_anchor": "main-a78-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i6",
@@ -7618,10 +7896,11 @@
       "source_order": 458,
       "original_label": "六",
       "source_sha256": "95fe2fc422391df22b373425ec111f2c22aa8c1b19a80058f9cc1ed0fed5aef9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "국가기관, 독립행정법인 등, 지방공공단체 및 지방독립행정법인의 내부 또는 상호 간의 심의, 검토 또는 협의에 관한 정보로서 공개함으로써 솔직한 의견 교환이나 의사결정의 중립성이 부당하게 손상될 우려, 부당하게 국민 사이에 혼란을 일으킬 우려 또는 특정한 자에게 부당하게 이익을 주거나 불이익을 미칠 우려가 있는 것",
+      "markdown_anchor": "main-a78-p1-i6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i7",
@@ -7632,10 +7911,11 @@
       "source_order": 459,
       "original_label": "七",
       "source_sha256": "7e3e20f1d4882f99b3846d7f30a8f506ef7ed7e73a2c05f19e80a3d6d860affe",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "국가기관, 독립행정법인 등, 지방공공단체 또는 지방독립행정법인이 수행하는 사무 또는 사업에 관한 정보로서 공개함으로써 다음에 열거하는 우려 및 그 밖에 해당 사무 또는 사업의 성질상 해당 사무 또는 사업의 적정한 수행에 지장을 줄 우려가 있는 것",
+      "markdown_anchor": "main-a78-p1-i7",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a78-p1-i7-si11",
@@ -7646,10 +7926,12 @@
       "source_order": 460,
       "original_label": "イ",
       "source_sha256": "347fa013522d072caf23c54c20f01c57e4ae9ff1e4429f38c62b8c43c815ac39",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인이 공개결정 등을 하는 경우에 국가의 안전이 침해될 우려, 다른 국가 또는 국제기관과의 신뢰관계가 손상될 우려 또는 다른 국가나 국제기관과의 교섭에서 불이익을 입을 우려",
+      "markdown_anchor": "main-a78-p1-i7-si11",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "가(イ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si12",
@@ -7660,10 +7942,12 @@
       "source_order": 461,
       "original_label": "ロ",
       "source_sha256": "fbc9c42ed9e280ecbf6cef6bcd13b2ca2fe686ae4152fae62944fb0a05b08d8e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등, 지방공공단체의 기관(도도부현의 기관은 제외한다) 또는 지방독립행정법인이 공개결정 등을 하는 경우에 범죄의 예방, 진압 또는 수사 및 그 밖의 공공의 안전과 질서 유지에 지장을 줄 우려",
+      "markdown_anchor": "main-a78-p1-i7-si12",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "나(ロ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si13",
@@ -7674,10 +7958,12 @@
       "source_order": 462,
       "original_label": "ハ",
       "source_sha256": "9a172f01fc7cb7a6e3f6f8ebeb067512914f538ed2fafe519fe91ff7341c7e88",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "감사, 검사, 단속, 시험 또는 조세의 부과나 징수에 관한 사무와 관련하여 정확한 사실 파악을 어렵게 할 우려 또는 위법하거나 부당한 행위를 용이하게 하거나 그 발견을 어렵게 할 우려",
+      "markdown_anchor": "main-a78-p1-i7-si13",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "다(ハ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si14",
@@ -7688,10 +7974,12 @@
       "source_order": 463,
       "original_label": "ニ",
       "source_sha256": "46b8986095076cc067135eff0e959c546332eef0a8690ca859d6990465f730df",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "계약, 교섭 또는 쟁송에 관한 사무와 관련하여 국가, 독립행정법인 등, 지방공공단체 또는 지방독립행정법인의 재산상의 이익 또는 당사자로서의 지위를 부당하게 해칠 우려",
+      "markdown_anchor": "main-a78-p1-i7-si14",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "라(ニ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si15",
@@ -7702,10 +7990,12 @@
       "source_order": 464,
       "original_label": "ホ",
       "source_sha256": "52e9a41910e506ea55e2221c583da80a4363bc83c35308e0ba99605c0ec3368e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "조사연구에 관한 사무와 관련하여 그 공정하고 능률적인 수행을 부당하게 방해할 우려",
+      "markdown_anchor": "main-a78-p1-i7-si15",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "마(ホ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si16",
@@ -7716,10 +8006,12 @@
       "source_order": 465,
       "original_label": "ヘ",
       "source_sha256": "4466def6cb4174691127324b0f801f30b656249c1379b1a12167482bd0c60c26",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인사관리에 관한 사무와 관련하여 공정하고 원활한 인사의 확보에 지장을 줄 우려",
+      "markdown_anchor": "main-a78-p1-i7-si16",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "바(ヘ)목"
     },
     {
       "node_id": "main-a78-p1-i7-si17",
@@ -7730,10 +8022,12 @@
       "source_order": 466,
       "original_label": "ト",
       "source_sha256": "b0fba208f8f4cbe86607327ee711bc49b5fd2013c077fbb33d16e27a5b11d287",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등, 지방공공단체가 경영하는 기업 또는 지방독립행정법인에 관한 사업과 관련하여 그 기업경영상의 정당한 이익을 해칠 우려",
+      "markdown_anchor": "main-a78-p1-i7-si17",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "사(ト)목"
     },
     {
       "node_id": "main-a78-p2",
@@ -7744,10 +8038,11 @@
       "source_order": 467,
       "original_label": "２",
       "source_sha256": "e17925151aaad2e312cf1de17a04daf7cefd210fef838ce82f3e4fb8c22e0924",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대한 전항의 규정의 적용에 관하여는 같은 항 중 “열거하는 정보(”를 “열거하는 정보(정보공개조례의 규정에 따라 공개하도록 되어 있는 정보로서 조례로 정하는 것은 제외한다) 또는 행정기관 정보공개법 제5조에 규정하는 비공개정보에 준하는 정보로서 정보공개조례에서 공개하지 않도록 되어 있는 것 중 해당 정보공개조례와의 정합성을 확보하기 위하여 비공개로 할 필요가 있는 것으로서 조례로 정하는 것(”으로 한다.",
+      "markdown_anchor": "main-a78-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a79",
@@ -7758,10 +8053,11 @@
       "source_order": 468,
       "original_label": "第七十九条",
       "source_sha256": "ef817fd6abe9c295e87245d5c5d4934f6fbe5d174448f37f493b4806569b3612",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a79",
+      "korean_title": "제79조 (부분 공개)"
     },
     {
       "node_id": "main-a79-p1",
@@ -7772,10 +8068,11 @@
       "source_order": 469,
       "original_label": "",
       "source_sha256": "8cc970b083ed50d0458033ae6e110de27111713ca4ec7ff486a76b31ecc5af0a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보에 비공개정보가 포함되어 있는 경우에 비공개정보에 해당하는 부분을 쉽게 구분하여 제외할 수 있으면 공개청구자에게 해당 부분을 제외한 부분에 관하여 공개하여야 한다.",
+      "markdown_anchor": "main-a79-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a79-p2",
@@ -7786,10 +8083,11 @@
       "source_order": 470,
       "original_label": "２",
       "source_sha256": "ab9a7e716f794ef0fe8b3279608ba3813b60bb4f54707c00489f4cfcc8b083b3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구에 관한 보유개인정보에 전조 제1항 제2호의 정보(공개청구자 이외의 특정 개인을 식별할 수 있는 것에 한정한다)가 포함되어 있는 경우에 해당 정보 중 성명, 생년월일 및 그 밖의 공개청구자 이외의 특정 개인을 식별할 수 있게 되는 기술 등 및 개인식별부호 부분을 제외함으로써 공개하여도 공개청구자 이외의 개인의 권리이익이 침해될 우려가 없다고 인정되면 해당 부분을 제외한 부분은 같은 호의 정보에 포함되지 않는 것으로 보아 전항의 규정을 적용한다.",
+      "markdown_anchor": "main-a79-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a80",
@@ -7800,10 +8098,11 @@
       "source_order": 471,
       "original_label": "第八十条",
       "source_sha256": "02efc6c6ce4bc734e2b46aa4746766b974d50e7dee7528d32a4980a2090e213c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a80",
+      "korean_title": "제80조 (재량에 의한 공개)"
     },
     {
       "node_id": "main-a80-p1",
@@ -7814,10 +8113,11 @@
       "source_order": 472,
       "original_label": "",
       "source_sha256": "00bfe098c6ac5df37b77717485c733d03b9ca27b6e3b42a3b4d1d3e70bc29739",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보에 비공개정보가 포함되어 있는 경우라도 개인의 권리이익을 보호하기 위하여 특별히 필요하다고 인정하면 공개청구자에게 해당 보유개인정보를 공개할 수 있다.",
+      "markdown_anchor": "main-a80-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a81",
@@ -7828,10 +8128,11 @@
       "source_order": 473,
       "original_label": "第八十一条",
       "source_sha256": "d91500ed627e43c29de1d5f848eb0718a4535eee843da11577bd6e97d34867fc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a81",
+      "korean_title": "제81조 (보유개인정보의 존재 여부에 관한 정보)"
     },
     {
       "node_id": "main-a81-p1",
@@ -7842,10 +8143,11 @@
       "source_order": 474,
       "original_label": "",
       "source_sha256": "8092b7a9e9224807f3535df3a9d8ecdf0802d4b62778ed25e19ffba0b3d5a5f1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구에 대하여 해당 공개청구에 관한 보유개인정보가 존재하는지 여부에 답하는 것만으로 비공개정보를 공개하게 되는 경우에는 행정기관의 장 등은 해당 보유개인정보의 존재 여부를 밝히지 않고 해당 공개청구를 거부할 수 있다.",
+      "markdown_anchor": "main-a81-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a82",
@@ -7856,10 +8158,11 @@
       "source_order": 475,
       "original_label": "第八十二条",
       "source_sha256": "3ec2e9a317b5996db861aa12679e28ed729308ce1d8e7e5ff34d5c41fa719878",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a82",
+      "korean_title": "제82조 (공개청구에 대한 조치)"
     },
     {
       "node_id": "main-a82-p1",
@@ -7870,10 +8173,11 @@
       "source_order": 476,
       "original_label": "",
       "source_sha256": "77b819d754ee57e03da97b408ec522e8ae5e7e33c806f5b41abe871577e3c745",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보의 전부 또는 일부를 공개하는 경우에는 그 취지의 결정을 하고 공개청구자에게 그 취지, 공개하는 보유개인정보의 이용목적 및 공개의 실시에 관하여 정령으로 정하는 사항을 서면으로 통지하여야 한다. 다만, 제62조 제2호 또는 제3호에 해당하는 경우의 해당 이용목적에 관하여는 그러하지 아니하다.",
+      "markdown_anchor": "main-a82-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a82-p2",
@@ -7884,10 +8188,11 @@
       "source_order": 477,
       "original_label": "２",
       "source_sha256": "fa99b4afc21aa62c32afcc203bfb0cabd13006bae079a44946826439f963a794",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보의 전부를 공개하지 않는 경우(전조의 규정에 따라 공개청구를 거부하는 경우 및 공개청구에 관한 보유개인정보를 보유하지 않는 경우를 포함한다)에는 공개하지 않는다는 취지의 결정을 하고 공개청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a82-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a83",
@@ -7898,10 +8203,11 @@
       "source_order": 478,
       "original_label": "第八十三条",
       "source_sha256": "6823ff794de4252df19315adfc608e4953ee520fec1fabceea6cb01fde7bc342",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a83",
+      "korean_title": "제83조 (공개결정 등의 기한)"
     },
     {
       "node_id": "main-a83-p1",
@@ -7912,10 +8218,11 @@
       "source_order": 479,
       "original_label": "",
       "source_sha256": "c9d40e959277974a375ec643f304fdb40bc8e5b9e64a62d3dee111b5d9ff9e73",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정 등은 공개청구가 있은 날부터 30일 이내에 하여야 한다. 다만, 제77조 제3항의 규정에 따라 보정을 요구한 경우에는 해당 보정에 소요된 일수는 해당 기간에 산입하지 않는다.",
+      "markdown_anchor": "main-a83-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a83-p2",
@@ -7926,10 +8233,11 @@
       "source_order": 480,
       "original_label": "２",
       "source_sha256": "96dc74a2967893679d83ea5710fc2ab8bdf396e6762f8bf837bad90c8b2a1eb7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 사무 처리상의 어려움 및 그 밖의 정당한 이유가 있으면 같은 항에 규정하는 기간을 30일 이내에 한정하여 연장할 수 있다. 이 경우 행정기관의 장 등은 공개청구자에게 지체 없이 연장 후의 기간 및 연장의 이유를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a83-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a84",
@@ -7940,10 +8248,11 @@
       "source_order": 481,
       "original_label": "第八十四条",
       "source_sha256": "6b8e5213ea7f5edca6b40c61e7034968ed4a4aab334230dfd73eaa5c34b0e856",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a84",
+      "korean_title": "제84조 (공개결정 등의 기한의 특례)"
     },
     {
       "node_id": "main-a84-p1",
@@ -7954,10 +8263,11 @@
       "source_order": 482,
       "original_label": "",
       "source_sha256": "64ac525645566af320db509bd0ac863dd365cf189a51726d1a83cfd0022e0a09",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구에 관한 보유개인정보가 현저히 대량이어서 공개청구가 있은 날부터 60일 이내에 그 전부에 대하여 공개결정 등을 함으로써 사무 수행에 현저한 지장이 생길 우려가 있는 경우에는 전조의 규정에도 불구하고 행정기관의 장 등은 공개청구에 관한 보유개인정보 중 상당한 부분에 대하여 해당 기간 내에 공개결정 등을 하고 나머지 보유개인정보에 대하여는 상당한 기간 내에 공개결정 등을 하면 충분하다. 이 경우 행정기관의 장 등은 같은 조 제1항에 규정하는 기간 내에 공개청구자에게 다음에 열거하는 사항을 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a84-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a84-p1-i1",
@@ -7968,10 +8278,11 @@
       "source_order": 483,
       "original_label": "一",
       "source_sha256": "5a517952bbc48eeeacc930730f74ce154912bef090413a9833ebe5f9b494aca8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 조의 규정을 적용한다는 취지 및 그 이유",
+      "markdown_anchor": "main-a84-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a84-p1-i2",
@@ -7982,10 +8293,11 @@
       "source_order": 484,
       "original_label": "二",
       "source_sha256": "a08e997fc2af23f05aa5cf1f6dc38cd839fc8a98a8f8f23d0f5ec5060826ed09",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "나머지 보유개인정보에 대하여 공개결정 등을 하는 기한",
+      "markdown_anchor": "main-a84-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a85",
@@ -7996,10 +8308,11 @@
       "source_order": 485,
       "original_label": "第八十五条",
       "source_sha256": "0364fd6c64fc6da048f4e89eb672955ba9e72e85418a12ba4ee668d82ecbcd5a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a85",
+      "korean_title": "제85조 (사안의 이송)"
     },
     {
       "node_id": "main-a85-p1",
@@ -8010,10 +8323,11 @@
       "source_order": 486,
       "original_label": "",
       "source_sha256": "f15274c9dc38a11415365467a84c61df8c3e558211f58b04f2bb4df61e3641a1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보가 해당 행정기관의 장 등이 소속된 행정기관 등 이외의 행정기관 등으로부터 제공된 것이거나 그 밖에 다른 행정기관의 장 등이 공개결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 공개청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a85-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a85-p2",
@@ -8024,10 +8338,11 @@
       "source_order": 487,
       "original_label": "２",
       "source_sha256": "6cc1bcde06119bd7fa3ce198e2c9808c78b66081c00738f31c398a78ddcd3ee1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따라 사안이 이송되면 이송받은 행정기관의 장 등이 해당 공개청구에 대한 공개결정 등을 하여야 한다. 이 경우 이송한 행정기관의 장 등이 이송 전에 한 행위는 이송받은 행정기관의 장 등이 한 것으로 본다.",
+      "markdown_anchor": "main-a85-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a85-p3",
@@ -8038,10 +8353,11 @@
       "source_order": 488,
       "original_label": "３",
       "source_sha256": "e59005f7052ee51e2c91152071cd8d47b0b95f95198214c082cbc20857488d0a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에 이송받은 행정기관의 장 등이 제82조 제1항의 결정(이하 이 절에서 “공개결정”이라 한다)을 하면 해당 행정기관의 장 등은 공개를 실시하여야 한다. 이 경우 이송한 행정기관의 장 등은 해당 공개 실시에 필요한 협력을 하여야 한다.",
+      "markdown_anchor": "main-a85-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a86",
@@ -8052,10 +8368,11 @@
       "source_order": 489,
       "original_label": "第八十六条",
       "source_sha256": "3d0a661194e3dce0e2fa1998b84a6eb976d7015b584b2c2e89d434cd4b8962e0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a86",
+      "korean_title": "제86조 (제3자에 대한 의견서 제출 기회의 부여 등)"
     },
     {
       "node_id": "main-a86-p1",
@@ -8066,10 +8383,11 @@
       "source_order": 490,
       "original_label": "",
       "source_sha256": "94dabca8883ebefa515a2a2a8e1dc644057c952090cf67b07f3fd4898f8e5d51",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구에 관한 보유개인정보에 국가, 독립행정법인 등, 지방공공단체, 지방독립행정법인 및 공개청구자 이외의 자(이하 이 조, 제105조 제2항 제3호 및 제107조 제1항에서 “제3자”라 한다)에 관한 정보가 포함되어 있는 경우에는 행정기관의 장 등은 공개결정 등을 할 때 해당 정보에 관한 제3자에게 정령으로 정하는 바에 따라 해당 제3자에 관한 정보의 내용 및 그 밖에 정령으로 정하는 사항을 통지하여 의견서를 제출할 기회를 줄 수 있다.",
+      "markdown_anchor": "main-a86-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a86-p2",
@@ -8080,10 +8398,11 @@
       "source_order": 491,
       "original_label": "２",
       "source_sha256": "eaa3127ff8a00a66ad2594ec30d60c78a416ad6357d2db0011e57a85af340f0d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 다음 각 호의 어느 하나에 해당하면 공개결정에 앞서 해당 제3자에게 정령으로 정하는 바에 따라 공개청구에 관한 해당 제3자에 관한 정보의 내용 및 그 밖에 정령으로 정하는 사항을 서면으로 통지하여 의견서를 제출할 기회를 주어야 한다. 다만, 해당 제3자의 소재가 밝혀지지 않은 경우에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a86-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a86-p2-i1",
@@ -8094,10 +8413,11 @@
       "source_order": 492,
       "original_label": "一",
       "source_sha256": "dd701b361cb5af07918af47dfe5d699b10394465214cfda34296d0f7f88f1c5e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유개인정보를 공개하려는 경우로서 해당 제3자에 관한 정보가 제78조 제1항 제2호 나(ロ)목 또는 같은 항 제3호 단서에 규정하는 정보에 해당한다고 인정되는 때.",
+      "markdown_anchor": "main-a86-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a86-p2-i2",
@@ -8108,10 +8428,11 @@
       "source_order": 493,
       "original_label": "二",
       "source_sha256": "fa6bbd510961b3f53123da9d35311ab7f513743e059aaf40c113ba042e07d247",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유개인정보를 제80조의 규정에 따라 공개하려는 때.",
+      "markdown_anchor": "main-a86-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a86-p3",
@@ -8122,10 +8443,11 @@
       "source_order": 494,
       "original_label": "３",
       "source_sha256": "c3cfbf3759c0ecdd22a2dec9ac82dcc73f441439111b798cf45b15f9cf25a6de",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 앞의 두 항의 규정에 따라 의견서를 제출할 기회를 받은 제3자가 해당 제3자에 관한 정보의 공개에 반대하는 의사를 표시한 의견서를 제출한 경우에 공개결정을 하는 때에는 공개결정일과 공개를 실시하는 날 사이에 적어도 2주를 두어야 한다. 이 경우 행정기관의 장 등은 공개결정 후 즉시 해당 의견서(제105조에서 “반대의견서”라 한다)를 제출한 제3자에게 공개결정을 하였다는 취지 및 그 이유와 공개를 실시하는 날을 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a86-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a87",
@@ -8136,10 +8458,11 @@
       "source_order": 495,
       "original_label": "第八十七条",
       "source_sha256": "d057ce80878139ae7197dd114b1a8e7a09adf94b5f5bfa6e822b505ab701a09e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a87",
+      "korean_title": "제87조 (공개의 실시)"
     },
     {
       "node_id": "main-a87-p1",
@@ -8150,10 +8473,11 @@
       "source_order": 496,
       "original_label": "",
       "source_sha256": "cadb9c28aacb0e656b3a0ca3507036ceee1ebe30079246d9a2ca82ff15e1dd10",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "보유개인정보의 공개는 해당 보유개인정보가 문서 또는 도화에 기록되어 있는 경우에는 열람 또는 사본의 교부로, 전자적·자기적 기록에 기록되어 있는 경우에는 그 종류, 정보화의 진전 상황 등을 고려하여 행정기관 등이 정하는 방법으로 한다. 다만, 열람의 방법으로 보유개인정보를 공개하는 경우에 행정기관의 장 등은 해당 보유개인정보가 기록되어 있는 문서 또는 도화의 보존에 지장이 생길 우려가 있다고 인정하거나 그 밖의 정당한 이유가 있으면 그 사본으로 이를 할 수 있다.",
+      "markdown_anchor": "main-a87-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a87-p2",
@@ -8164,10 +8488,11 @@
       "source_order": 497,
       "original_label": "２",
       "source_sha256": "87ac596e14db4cc56e997386fda4e4cdf1725b73e2bb70987f89da1f20894e4a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 전항의 규정에 따른 전자적·자기적 기록의 공개 방법에 관한 정함을 일반의 열람에 제공하여야 한다.",
+      "markdown_anchor": "main-a87-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a87-p3",
@@ -8178,10 +8503,11 @@
       "source_order": 498,
       "original_label": "３",
       "source_sha256": "f3a8faebce5fbace080f514b6b264e34e34a7d14107d69505eed50d7c4846a3a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정에 따라 보유개인정보의 공개를 받는 자는 정령으로 정하는 바에 따라 해당 공개결정을 한 행정기관의 장 등에게 자신이 원하는 공개 실시 방법 및 그 밖에 정령으로 정하는 사항을 신청하여야 한다.",
+      "markdown_anchor": "main-a87-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a87-p4",
@@ -8192,10 +8518,11 @@
       "source_order": 499,
       "original_label": "４",
       "source_sha256": "d5e877dc88686a945a9e4789e24a596eda7b575bc5d8ad3f4dad786177f9f751",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따른 신청은 제82조 제1항에 규정하는 통지가 있은 날부터 30일 이내에 하여야 한다. 다만, 해당 기간 내에 해당 신청을 할 수 없는 데에 정당한 이유가 있으면 그러하지 아니하다.",
+      "markdown_anchor": "main-a87-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a88",
@@ -8206,10 +8533,11 @@
       "source_order": 500,
       "original_label": "第八十八条",
       "source_sha256": "79d6b4d2ea44118894f783acc7491cde3e81200c99aa0c6c9a9920b9a42a2d85",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a88",
+      "korean_title": "제88조 (다른 법령에 따른 공개 실시와의 조정)"
     },
     {
       "node_id": "main-a88-p1",
@@ -8220,10 +8548,11 @@
       "source_order": 501,
       "original_label": "",
       "source_sha256": "d398aa6a7685e0be0eb02a5d4f405ebb7cf8f032aab3e8e1dd94ce2d1f706d90",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 다른 법령의 규정에 따라 공개청구자에게 공개청구에 관한 보유개인정보를 전조 제1항 본문에 규정하는 방법과 동일한 방법으로 공개하도록 되어 있는 경우(공개 기간이 정해져 있는 경우에는 해당 기간 내에 한정한다)에는 같은 항 본문의 규정에도 불구하고 해당 보유개인정보에 대하여 해당 동일한 방법으로 공개하지 않는다. 다만, 해당 다른 법령의 규정에 일정한 경우에는 공개하지 않는다는 취지의 정함이 있으면 그러하지 아니하다.",
+      "markdown_anchor": "main-a88-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a88-p2",
@@ -8234,10 +8563,11 @@
       "source_order": 502,
       "original_label": "２",
       "source_sha256": "c4fddd5939116904618e4bcdee2ee1495f41a873775d91f616b0f47f6f6f4a35",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다른 법령의 규정에 정한 공개 방법이 종람인 경우에는 해당 종람을 전조 제1항 본문의 열람으로 보아 전항의 규정을 적용한다.",
+      "markdown_anchor": "main-a88-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89",
@@ -8248,10 +8578,11 @@
       "source_order": 503,
       "original_label": "第八十九条",
       "source_sha256": "6b1dac490785b7fc73867b22a9d1fc297eab7f76c598cfc278542ed2345643d8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a89",
+      "korean_title": "제89조 (수수료)"
     },
     {
       "node_id": "main-a89-p1",
@@ -8262,10 +8593,11 @@
       "source_order": 504,
       "original_label": "",
       "source_sha256": "5a270a2ff64704322443e47383f09f10061249929adbc0e8548925b50eeeef90",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장에게 공개청구를 하는 자는 정령으로 정하는 바에 따라 실비의 범위 내에서 정령으로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a89-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p2",
@@ -8276,10 +8608,11 @@
       "source_order": 505,
       "original_label": "２",
       "source_sha256": "aef275a31a2d9e7eaf715ae70083c0d94a59ee72b7589f5b2a9f15d402a880d2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관에 공개청구를 하는 자는 조례로 정하는 바에 따라 실비의 범위 내에서 조례로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a89-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p3",
@@ -8290,10 +8623,11 @@
       "source_order": 506,
       "original_label": "３",
       "source_sha256": "4b921e78f861a7df05b6b19b018222f5c4ad495f47c326ed576a6d80f9ef8382",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 항의 수수료 금액을 정할 때에는 가능한 한 이용하기 쉬운 금액이 되도록 배려하여야 한다.",
+      "markdown_anchor": "main-a89-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p4",
@@ -8304,10 +8638,11 @@
       "source_order": 507,
       "original_label": "４",
       "source_sha256": "c94c85f7a612732d386f2ed2dc988725b02549828e2da5df6f68b69c8f10c267",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등에 공개청구를 하는 자는 독립행정법인 등이 정하는 바에 따라 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a89-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p5",
@@ -8318,10 +8653,11 @@
       "source_order": 508,
       "original_label": "５",
       "source_sha256": "bb04c70ca036c0e0255e13887055e12122d69ce8c112d00cbd19b0b0d9e18a39",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 수수료 금액은 실비의 범위 내에서, 또한 제1항의 수수료 금액을 참작하여 독립행정법인 등이 정한다.",
+      "markdown_anchor": "main-a89-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p6",
@@ -8332,10 +8668,11 @@
       "source_order": 509,
       "original_label": "６",
       "source_sha256": "118294f5e22cf3b8616a6ad00268f31621705184e232fafb11fcde8cf5ad066e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등은 앞의 두 항의 규정에 따른 정함을 일반의 열람에 제공하여야 한다.",
+      "markdown_anchor": "main-a89-p6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p7",
@@ -8346,10 +8683,11 @@
       "source_order": 510,
       "original_label": "７",
       "source_sha256": "c90ebcb0053a36ec6241e809306303b8b54b06b34e245a04593dbede2331ab88",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방독립행정법인에 공개청구를 하는 자는 지방독립행정법인이 정하는 바에 따라 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a89-p7",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p8",
@@ -8360,10 +8698,11 @@
       "source_order": 511,
       "original_label": "８",
       "source_sha256": "4311c6ec6ef01c18e90b10ad243c484fed749c9adfa1a5f50947535955c4b715",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 수수료 금액은 실비의 범위 내에서, 또한 제2항의 조례로 정하는 수수료 금액을 참작하여 지방독립행정법인이 정한다.",
+      "markdown_anchor": "main-a89-p8",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a89-p9",
@@ -8374,10 +8713,11 @@
       "source_order": 512,
       "original_label": "９",
       "source_sha256": "fe8c165a5ce54e6e79441a56a53cca210b3374ab2d2bfd80de2da896e317ae42",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방독립행정법인은 앞의 두 항의 규정에 따른 정함을 일반의 열람에 제공하여야 한다.",
+      "markdown_anchor": "main-a89-p9",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s4-ss2",
@@ -8388,10 +8728,11 @@
       "source_order": 513,
       "original_label": "第二款　訂正",
       "source_sha256": "b9bb7f75a72dbea752d8964cecf0d14b3a9b1be246c755047568fb8049e99f0a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4-ss2",
+      "korean_title": "제2관 정정"
     },
     {
       "node_id": "main-a90",
@@ -8402,10 +8743,11 @@
       "source_order": 514,
       "original_label": "第九十条",
       "source_sha256": "d1e9db48f0e72000fa309667d919ba75e0cfb2bc7b4f28033b9488055a60a2af",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a90",
+      "korean_title": "제90조 (정정청구권)"
     },
     {
       "node_id": "main-a90-p1",
@@ -8416,10 +8758,11 @@
       "source_order": 515,
       "original_label": "",
       "source_sha256": "56d9c5b77eef92054aafadd1e3016523ceee50faa77494344018f3b77940944b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "누구든지 자신을 본인으로 하는 보유개인정보(다음에 열거하는 것에 한정한다. 제98조 제1항에서 같다)의 내용이 사실이 아니라고 생각하면 이 법률이 정하는 바에 따라 해당 보유개인정보를 보유하는 행정기관의 장 등에게 해당 보유개인정보의 정정(추가 또는 삭제를 포함한다. 이하 이 절에서 같다)을 청구할 수 있다. 다만, 해당 보유개인정보의 정정에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a90-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a90-p1-i1",
@@ -8430,10 +8773,11 @@
       "source_order": 516,
       "original_label": "一",
       "source_sha256": "f47a6306e04e7499d7969e446c979da97d6552ae6c953a78d942d99d2401e682",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정에 따라 공개받은 보유개인정보",
+      "markdown_anchor": "main-a90-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a90-p1-i2",
@@ -8444,10 +8788,11 @@
       "source_order": 517,
       "original_label": "二",
       "source_sha256": "eb57ae2282109effcded23bc4c4b703bb085425b049ead7d810bcf44f33fb72f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정에 관한 보유개인정보로서 제88조 제1항의 다른 법령의 규정에 따라 공개받은 것",
+      "markdown_anchor": "main-a90-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a90-p2",
@@ -8458,10 +8803,11 @@
       "source_order": 518,
       "original_label": "２",
       "source_sha256": "4e4d879ffbf8d21cb1beaabd12230b2636dd2a98b1f1f1d1841ca016f6f1b2db",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "대리인은 본인을 대신하여 전항의 규정에 따른 정정 청구(이하 이 절 및 제127조에서 “정정청구”라 한다)를 할 수 있다.",
+      "markdown_anchor": "main-a90-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a90-p3",
@@ -8472,10 +8818,11 @@
       "source_order": 519,
       "original_label": "３",
       "source_sha256": "43cd62a988ae447bf1781235d956bd98f1de3340ad8d7382c64f877960a960e1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정청구는 보유개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
+      "markdown_anchor": "main-a90-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91",
@@ -8486,10 +8833,11 @@
       "source_order": 520,
       "original_label": "第九十一条",
       "source_sha256": "f56f75d2c491e03064b1d5837e101a532047390d0c31dbce2aef81694b756d7a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a91",
+      "korean_title": "제91조 (정정청구의 절차)"
     },
     {
       "node_id": "main-a91-p1",
@@ -8500,10 +8848,11 @@
       "source_order": 521,
       "original_label": "",
       "source_sha256": "b90c9b878a155e0e2fc3918bdbd8ed343cd863a2c31de59d11bf73f780f6588c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정청구는 다음에 열거하는 사항을 기재한 서면(제3항에서 “정정청구서”라 한다)을 행정기관의 장 등에게 제출하여 하여야 한다.",
+      "markdown_anchor": "main-a91-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91-p1-i1",
@@ -8514,10 +8863,11 @@
       "source_order": 522,
       "original_label": "一",
       "source_sha256": "14b9963fdc3e85b97a3a549e70227e4b5d4388cf6bf0166c322db57589eb64ac",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정청구를 하는 자의 성명 및 주소 또는 거소",
+      "markdown_anchor": "main-a91-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91-p1-i2",
@@ -8528,10 +8878,11 @@
       "source_order": 523,
       "original_label": "二",
       "source_sha256": "a2c5d2d1754c2a7716092b308c7fb9316b5387f16227c4edc2185163a2a78c39",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정청구에 관한 보유개인정보를 공개받은 날 및 그 밖에 해당 보유개인정보를 특정하기에 충분한 사항",
+      "markdown_anchor": "main-a91-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91-p1-i3",
@@ -8542,10 +8893,11 @@
       "source_order": 524,
       "original_label": "三",
       "source_sha256": "f6007dae3c95aed06741357a93d45a68be2c731e9b90d37469a99abd6f847338",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정청구의 취지 및 이유",
+      "markdown_anchor": "main-a91-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91-p2",
@@ -8556,10 +8908,11 @@
       "source_order": 525,
       "original_label": "２",
       "source_sha256": "4f070abffe50ddc0515b3a35749f0794c1bc52400e6dd4e6d9f6828e1178d393",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에 정정청구를 하는 자는 정령으로 정하는 바에 따라 정정청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 정정청구인 경우에는 정정청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "markdown_anchor": "main-a91-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a91-p3",
@@ -8570,10 +8923,11 @@
       "source_order": 526,
       "original_label": "３",
       "source_sha256": "e1a71ff107991561a8d98ae649891115f6615c4a8733c297732fa523b774a8ca",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정청구서에 형식상의 흠결이 있다고 인정하는 경우에는 정정청구를 한 자(이하 이 절에서 “정정청구자”라 한다)에게 상당한 기간을 정하여 그 보정을 요구할 수 있다.",
+      "markdown_anchor": "main-a91-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a92",
@@ -8584,10 +8938,11 @@
       "source_order": 527,
       "original_label": "第九十二条",
       "source_sha256": "82c500370749d0e478a74d14cd3799efe74b1a3f58821efa44d8b44c8f9cd6b7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a92",
+      "korean_title": "제92조 (보유개인정보의 정정 의무)"
     },
     {
       "node_id": "main-a92-p1",
@@ -8598,10 +8953,11 @@
       "source_order": 528,
       "original_label": "",
       "source_sha256": "33ace1346724e27dc9037f774312c6b4696d3eb3fb29041fd761e2ba85997d70",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정청구가 있는 경우에 해당 정정청구에 이유가 있다고 인정하면 해당 정정청구에 관한 보유개인정보의 이용목적 달성에 필요한 범위 내에서 해당 보유개인정보를 정정하여야 한다.",
+      "markdown_anchor": "main-a92-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a93",
@@ -8612,10 +8968,11 @@
       "source_order": 529,
       "original_label": "第九十三条",
       "source_sha256": "b983930f1e0d25b378239d356dcfe6e90c79e0f0b24419e9fded26d2dd2d6b5e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a93",
+      "korean_title": "제93조 (정정청구에 대한 조치)"
     },
     {
       "node_id": "main-a93-p1",
@@ -8626,10 +8983,11 @@
       "source_order": 530,
       "original_label": "",
       "source_sha256": "901fe0aa1dfa71dc95bbbde08eb7afdcca83505fdcf54d3ceb724e29c87b633b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보를 정정하는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a93-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a93-p2",
@@ -8640,10 +8998,11 @@
       "source_order": 531,
       "original_label": "２",
       "source_sha256": "21aedfb81ade0c078399bd20fbf62a65923453756f94dc552838c83cc0a89467",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보를 정정하지 않는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a93-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a94",
@@ -8654,10 +9013,11 @@
       "source_order": 532,
       "original_label": "第九十四条",
       "source_sha256": "7724a2c1f6d291a9acef931732128f391612f17f1ee64f9f8cae6d32b3db74a9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a94",
+      "korean_title": "제94조 (정정결정 등의 기한)"
     },
     {
       "node_id": "main-a94-p1",
@@ -8668,10 +9028,11 @@
       "source_order": 533,
       "original_label": "",
       "source_sha256": "7d5b64fa677e220a7e6d3445b0970abb706e841be4aa2557f100fd2394ccb386",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 각 항의 결정(이하 이 절에서 “정정결정 등”이라 한다)은 정정청구가 있은 날부터 30일 이내에 하여야 한다. 다만, 제91조 제3항의 규정에 따라 보정을 요구한 경우에는 해당 보정에 소요된 일수는 해당 기간에 산입하지 않는다.",
+      "markdown_anchor": "main-a94-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a94-p2",
@@ -8682,10 +9043,11 @@
       "source_order": 534,
       "original_label": "２",
       "source_sha256": "a866ab89265ac3a42cbd0a3990e92e5c1e5eb35944370f7c8915ed7467b4c7a2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 사무 처리상의 어려움 및 그 밖의 정당한 이유가 있으면 같은 항에 규정하는 기간을 30일 이내에 한정하여 연장할 수 있다. 이 경우 행정기관의 장 등은 정정청구자에게 지체 없이 연장 후의 기간 및 연장의 이유를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a94-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a95",
@@ -8696,10 +9058,11 @@
       "source_order": 535,
       "original_label": "第九十五条",
       "source_sha256": "6ff98cd7a0788f2eb4e8a5be18afd50b5e4673fb9a0509e7efc6535de831d5f1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a95",
+      "korean_title": "제95조 (정정결정 등의 기한의 특례)"
     },
     {
       "node_id": "main-a95-p1",
@@ -8710,10 +9073,11 @@
       "source_order": 536,
       "original_label": "",
       "source_sha256": "3fd583b835aab7a9ff80b73807ba6f58245b02a88f777c89707f29008f73a877",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정결정 등에 특별히 장기간이 필요하다고 인정하면 전조의 규정에도 불구하고 상당한 기간 내에 정정결정 등을 하면 충분하다. 이 경우 행정기관의 장 등은 같은 조 제1항에 규정하는 기간 내에 정정청구자에게 다음에 열거하는 사항을 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a95-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a95-p1-i1",
@@ -8724,10 +9088,11 @@
       "source_order": 537,
       "original_label": "一",
       "source_sha256": "5a517952bbc48eeeacc930730f74ce154912bef090413a9833ebe5f9b494aca8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 조의 규정을 적용한다는 취지 및 그 이유",
+      "markdown_anchor": "main-a95-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a95-p1-i2",
@@ -8738,10 +9103,11 @@
       "source_order": 538,
       "original_label": "二",
       "source_sha256": "2819b2665912e11b4491aed692d920a9c32d5a8ce9f8ad6ab34d0aa582ea1f50",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정정결정 등을 하는 기한",
+      "markdown_anchor": "main-a95-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a96",
@@ -8752,10 +9118,11 @@
       "source_order": 539,
       "original_label": "第九十六条",
       "source_sha256": "b117440d642742ddb66131bec77ee14ff333dbd2896d224bcb939f3759df3ce5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a96",
+      "korean_title": "제96조 (사안의 이송)"
     },
     {
       "node_id": "main-a96-p1",
@@ -8766,10 +9133,11 @@
       "source_order": 540,
       "original_label": "",
       "source_sha256": "6782780bfc20daf1d05c4ae8a0559bfc48ace61013201f9bc87caf22138d74ef",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보가 제85조 제3항의 규정에 따른 공개에 관한 것이거나 그 밖에 다른 행정기관의 장 등이 정정결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 정정청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a96-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a96-p2",
@@ -8780,10 +9148,11 @@
       "source_order": 541,
       "original_label": "２",
       "source_sha256": "5dd7cd52cd2a6f516c88fc3187940f19a5b43be85a24135f91ac5d5ca56731db",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따라 사안이 이송되면 이송받은 행정기관의 장 등이 해당 정정청구에 대한 정정결정 등을 하여야 한다. 이 경우 이송한 행정기관의 장 등이 이송 전에 한 행위는 이송받은 행정기관의 장 등이 한 것으로 본다.",
+      "markdown_anchor": "main-a96-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a96-p3",
@@ -8794,10 +9163,11 @@
       "source_order": 542,
       "original_label": "３",
       "source_sha256": "bbc245df58f0644fa539bf3242087bb3afc323364704c4a40593f7fd4136f451",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에 이송받은 행정기관의 장 등이 제93조 제1항의 결정(이하 이 항 및 다음 조에서 “정정결정”이라 한다)을 하면 이송한 행정기관의 장 등은 해당 정정결정에 따라 정정을 실시하여야 한다.",
+      "markdown_anchor": "main-a96-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a97",
@@ -8808,10 +9178,11 @@
       "source_order": 543,
       "original_label": "第九十七条",
       "source_sha256": "497ea47ea91d0db296e29e94cea2acfa08039e2bd7ed98946b276bfe6d7ac1d0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a97",
+      "korean_title": "제97조 (보유개인정보의 제공처에 대한 통지)"
     },
     {
       "node_id": "main-a97-p1",
@@ -8822,10 +9193,11 @@
       "source_order": 544,
       "original_label": "",
       "source_sha256": "d8c543b53226fc7d951a79d55712571423b2e4963706bfee5b84b745101ddcd0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 정정결정에 따른 보유개인정보의 정정을 실시한 경우에 필요하다고 인정하면 해당 보유개인정보의 제공처에 지체 없이 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a97-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s4-ss3",
@@ -8836,10 +9208,11 @@
       "source_order": 545,
       "original_label": "第三款　利用停止",
       "source_sha256": "369a9650467a2d9b9a3972f91bbae3b0ad4532f4e46501b0b4dc33d5b1d1a4b9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4-ss3",
+      "korean_title": "제3관 이용정지"
     },
     {
       "node_id": "main-a98",
@@ -8850,10 +9223,11 @@
       "source_order": 546,
       "original_label": "第九十八条",
       "source_sha256": "413afcf6d4e19dac6841fe9a5ef41e595297a2faed3ba42ca7e5714e71851093",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a98",
+      "korean_title": "제98조 (이용정지청구권)"
     },
     {
       "node_id": "main-a98-p1",
@@ -8864,10 +9238,11 @@
       "source_order": 547,
       "original_label": "",
       "source_sha256": "6615b6ecff761ba03a15224a8dd1e70267c8d9701d6236f193992f9de665cfbd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "누구든지 자신을 본인으로 하는 보유개인정보가 다음 각 호의 어느 하나에 해당한다고 생각하면 이 법률이 정하는 바에 따라 해당 보유개인정보를 보유하는 행정기관의 장 등에게 해당 각 호에 정하는 조치를 청구할 수 있다. 다만, 해당 보유개인정보의 이용 정지, 소거 또는 제공 정지(이하 이 절에서 “이용정지”라 한다)에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a98-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a98-p1-i1",
@@ -8878,10 +9253,11 @@
       "source_order": 548,
       "original_label": "一",
       "source_sha256": "9fc045de900daa407b9c8cb28cdd40d0e1f74c616786252e1831cfbd0f93d5c0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제61조 제2항의 규정을 위반하여 보유되고 있는 때, 제63조의 규정을 위반하여 취급되고 있는 때, 제64조의 규정을 위반하여 취득된 것인 때 또는 제69조 제1항 및 제2항의 규정을 위반하여 이용되고 있는 때: 해당 보유개인정보의 이용 정지 또는 소거",
+      "markdown_anchor": "main-a98-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a98-p1-i2",
@@ -8892,10 +9268,11 @@
       "source_order": 549,
       "original_label": "二",
       "source_sha256": "06b5890966edc2d0dd45d58915761c722216edf715bb994e873c3c94bde83705",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제69조 제1항 및 제2항 또는 제71조 제1항의 규정을 위반하여 제공되고 있는 때: 해당 보유개인정보의 제공 정지",
+      "markdown_anchor": "main-a98-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a98-p2",
@@ -8906,10 +9283,11 @@
       "source_order": 550,
       "original_label": "２",
       "source_sha256": "8b218ff37afc4a3033b1886fdf115bddc643bd883a8933aad8be62fef8525fff",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "대리인은 본인을 대신하여 전항의 규정에 따른 이용정지 청구(이하 이 절 및 제127조에서 “이용정지청구”라 한다)를 할 수 있다.",
+      "markdown_anchor": "main-a98-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a98-p3",
@@ -8920,10 +9298,11 @@
       "source_order": 551,
       "original_label": "３",
       "source_sha256": "5bd74254c361ee475380648a5f2bb43a311f35e1661ae7099229319ccf752a8c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지청구는 보유개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
+      "markdown_anchor": "main-a98-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99",
@@ -8934,10 +9313,11 @@
       "source_order": 552,
       "original_label": "第九十九条",
       "source_sha256": "210c2d2bad71629d1c97aa15c4b50b2042084ff7c61716fed2dfd890ce8e9cbd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a99",
+      "korean_title": "제99조 (이용정지청구의 절차)"
     },
     {
       "node_id": "main-a99-p1",
@@ -8948,10 +9328,11 @@
       "source_order": 553,
       "original_label": "",
       "source_sha256": "b88a9a63825387fcb85ed768890237422dd05a52bef8da4534f572cf00b86739",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지청구는 다음에 열거하는 사항을 기재한 서면(제3항에서 “이용정지청구서”라 한다)을 행정기관의 장 등에게 제출하여 하여야 한다.",
+      "markdown_anchor": "main-a99-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99-p1-i1",
@@ -8962,10 +9343,11 @@
       "source_order": 554,
       "original_label": "一",
       "source_sha256": "2f36edd72564085b7d52afbf3b0fdf103e77bdb84b141148066e16f1204ec7aa",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지청구를 하는 자의 성명 및 주소 또는 거소",
+      "markdown_anchor": "main-a99-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99-p1-i2",
@@ -8976,10 +9358,11 @@
       "source_order": 555,
       "original_label": "二",
       "source_sha256": "c5fb1db3df784003abc802ba0185c07f4633211830f4556eeeb3750266d209cd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지청구에 관한 보유개인정보를 공개받은 날 및 그 밖에 해당 보유개인정보를 특정하기에 충분한 사항",
+      "markdown_anchor": "main-a99-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99-p1-i3",
@@ -8990,10 +9373,11 @@
       "source_order": 556,
       "original_label": "三",
       "source_sha256": "a5d6b8dd7be848a0e116f60f7014983dffcf6e9bc79c3a836e1923bd295d424c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지청구의 취지 및 이유",
+      "markdown_anchor": "main-a99-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99-p2",
@@ -9004,10 +9388,11 @@
       "source_order": 557,
       "original_label": "２",
       "source_sha256": "655b5608c7a19806906f576fa226dbaccf56fe0c9532f158b5232b119bb37ff7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에 이용정지청구를 하는 자는 정령으로 정하는 바에 따라 이용정지청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 이용정지청구인 경우에는 이용정지청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "markdown_anchor": "main-a99-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a99-p3",
@@ -9018,10 +9403,11 @@
       "source_order": 558,
       "original_label": "３",
       "source_sha256": "3319f8a3c015e148006b0bc271015697a933c31ecf0d244253e83e989013f1dd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용정지청구서에 형식상의 흠결이 있다고 인정하는 경우에는 이용정지청구를 한 자(이하 이 절에서 “이용정지청구자”라 한다)에게 상당한 기간을 정하여 그 보정을 요구할 수 있다.",
+      "markdown_anchor": "main-a99-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a100",
@@ -9032,10 +9418,11 @@
       "source_order": 559,
       "original_label": "第百条",
       "source_sha256": "86cbb99b584e2fed997dc6383bba19944d142a5530983c328ddacbca94fd2548",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a100",
+      "korean_title": "제100조 (보유개인정보의 이용정지 의무)"
     },
     {
       "node_id": "main-a100-p1",
@@ -9046,10 +9433,11 @@
       "source_order": 560,
       "original_label": "",
       "source_sha256": "1dae763264b8cb630e40b8102b451349f348a9bebe377ced6cb6a35467d6cae4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용정지청구가 있는 경우에 해당 이용정지청구에 이유가 있다고 인정하면 해당 행정기관의 장 등이 소속된 행정기관 등에서 개인정보의 적정한 취급을 확보하기 위하여 필요한 한도에서 해당 이용정지청구에 관한 보유개인정보의 이용정지를 하여야 한다. 다만, 해당 보유개인정보의 이용정지를 함으로써 해당 보유개인정보의 이용목적에 관한 사무 또는 사업의 성질상 해당 사무 또는 사업의 적정한 수행에 현저한 지장을 줄 우려가 있다고 인정되는 경우에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a100-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a101",
@@ -9060,10 +9448,11 @@
       "source_order": 561,
       "original_label": "第百一条",
       "source_sha256": "8961977f2f69935661bc12f0d9ac5a944adb9242466485767d1f4f5b79699fa5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a101",
+      "korean_title": "제101조 (이용정지청구에 대한 조치)"
     },
     {
       "node_id": "main-a101-p1",
@@ -9074,10 +9463,11 @@
       "source_order": 562,
       "original_label": "",
       "source_sha256": "913c403f911a991efadd5b77147795a9e3a30eaf1d9bd635dd0f5ab1e2788fa4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유개인정보의 이용정지를 하는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a101-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a101-p2",
@@ -9088,10 +9478,11 @@
       "source_order": 563,
       "original_label": "２",
       "source_sha256": "31cbf97edf3dae039e8949ecc09eafcfb01712bad99a2291a1545a68cd00f0ee",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유개인정보의 이용정지를 하지 않는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a101-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a102",
@@ -9102,10 +9493,11 @@
       "source_order": 564,
       "original_label": "第百二条",
       "source_sha256": "afa08c822a6f8864d455919d00114d5e283ad7e01f295a7803b8105f557a5602",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a102",
+      "korean_title": "제102조 (이용정지결정 등의 기한)"
     },
     {
       "node_id": "main-a102-p1",
@@ -9116,10 +9508,11 @@
       "source_order": 565,
       "original_label": "",
       "source_sha256": "c45a4b31301df7351e9b86489dbad96e94a4e670d3cc212560e3372b17634fbc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 각 항의 결정(이하 이 절에서 “이용정지결정 등”이라 한다)은 이용정지청구가 있은 날부터 30일 이내에 하여야 한다. 다만, 제99조 제3항의 규정에 따라 보정을 요구한 경우에는 해당 보정에 소요된 일수는 해당 기간에 산입하지 않는다.",
+      "markdown_anchor": "main-a102-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a102-p2",
@@ -9130,10 +9523,11 @@
       "source_order": 566,
       "original_label": "２",
       "source_sha256": "0a1a8a05e58e8d5aaa213754661f1fd74748af23f25843a103ed780db618e9ec",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 사무 처리상의 어려움 및 그 밖의 정당한 이유가 있으면 같은 항에 규정하는 기간을 30일 이내에 한정하여 연장할 수 있다. 이 경우 행정기관의 장 등은 이용정지청구자에게 지체 없이 연장 후의 기간 및 연장의 이유를 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a102-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a103",
@@ -9144,10 +9538,11 @@
       "source_order": 567,
       "original_label": "第百三条",
       "source_sha256": "3f0543e2c60adbb7806cdba6708afda348bc77dafbc9ade247ed098cd260456e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a103",
+      "korean_title": "제103조 (이용정지결정 등의 기한의 특례)"
     },
     {
       "node_id": "main-a103-p1",
@@ -9158,10 +9553,11 @@
       "source_order": 568,
       "original_label": "",
       "source_sha256": "d412cba4233982c404d4de9aa91cdcaede076ee5a988f3be08d97af02f794b11",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이용정지결정 등에 특별히 장기간이 필요하다고 인정하면 전조의 규정에도 불구하고 상당한 기간 내에 이용정지결정 등을 하면 충분하다. 이 경우 행정기관의 장 등은 같은 조 제1항에 규정하는 기간 내에 이용정지청구자에게 다음에 열거하는 사항을 서면으로 통지하여야 한다.",
+      "markdown_anchor": "main-a103-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a103-p1-i1",
@@ -9172,10 +9568,11 @@
       "source_order": 569,
       "original_label": "一",
       "source_sha256": "5a517952bbc48eeeacc930730f74ce154912bef090413a9833ebe5f9b494aca8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 조의 규정을 적용한다는 취지 및 그 이유",
+      "markdown_anchor": "main-a103-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a103-p1-i2",
@@ -9186,10 +9583,11 @@
       "source_order": 570,
       "original_label": "二",
       "source_sha256": "1c28568c9248f230457263e826b6b032feaf44f103e32eff5679614cb2f1c548",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이용정지결정 등을 하는 기한",
+      "markdown_anchor": "main-a103-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s4-ss4",
@@ -9200,10 +9598,11 @@
       "source_order": 571,
       "original_label": "第四款　審査請求",
       "source_sha256": "0cb56fee2912985ea5b493e187dc68a4e64d509a83426f299e09f322bcea51ff",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4-ss4",
+      "korean_title": "제4관 심사청구"
     },
     {
       "node_id": "main-a104",
@@ -9214,10 +9613,11 @@
       "source_order": 572,
       "original_label": "第百四条",
       "source_sha256": "52ce6cc3cf0491ab76a61ad7fd195eeaf4c97ad2a1c4508136d0793b6d694dc7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a104",
+      "korean_title": "제104조 (심리원에 의한 심리절차에 관한 규정의 적용 제외 등)"
     },
     {
       "node_id": "main-a104-p1",
@@ -9228,10 +9628,11 @@
       "source_order": 573,
       "original_label": "",
       "source_sha256": "136973ef3a1fa0d64974a1dd59b2fe2f2d8c78ad20fb8c76febee472063490e2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등(지방공공단체의 기관 또는 지방독립행정법인은 제외한다. 다음 항 및 다음 조에서 같다)에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에는 행정불복심사법(헤이세이 26년 법률 제68호) 제9조, 제17조, 제24조, 제2장 제3절 및 제4절과 제50조 제2항의 규정을 적용하지 않는다.",
+      "markdown_anchor": "main-a104-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a104-p2",
@@ -9242,10 +9643,11 @@
       "source_order": 574,
       "original_label": "２",
       "source_sha256": "75b8c14d58e068d991f60ae3c2cba5893f66a2a2d61fec112e8a8ad322eed6b5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에 관하여 행정불복심사법 제2장의 규정을 적용할 때에는 같은 법 제11조 제2항 중 “제9조 제1항의 규정에 따라 지명된 자(이하 ‘심리원’이라 한다)”를 “제4조(개인정보 보호에 관한 법률(헤이세이 15년 법률 제57호) 제107조 제2항의 규정에 따른 정령을 포함한다)의 규정에 따라 심사청구를 받은 행정청(제14조의 규정에 따라 인계받은 행정청을 포함한다. 이하 ‘심사청’이라 한다)”으로, 같은 법 제13조 제1항 및 제2항 중 “심리원”을 “심사청”으로, 같은 법 제25조 제7항 중 “있은 때 또는 심리원으로부터 제40조에 규정하는 집행정지를 하여야 한다는 취지의 의견서가 제출된 때”를 “있은 때”로, 같은 법 제44조 중 “행정불복심사회 등”을 “정보공개·개인정보보호심사회(심사청이 회계검사원장인 경우에는 별도로 법률로 정하는 심사회. 제50조 제1항 제4호에서 같다)”로, “받은 때(전조 제1항의 규정에 따른 자문을 필요로 하지 않는 경우(같은 항 제2호 또는 제3호에 해당하는 경우는 제외한다)에는 심리원의견서가 제출된 때, 같은 항 제2호 또는 제3호에 해당하는 경우에는 같은 항 제2호 또는 제3호에 규정하는 심의를 거친 때)”를 “받은 때”로, 같은 법 제50조 제1항 제4호 중 “심리원의견서 또는 행정불복심사회 등이나 심의회 등”을 “정보공개·개인정보보호심사회”로 한다.",
+      "markdown_anchor": "main-a104-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105",
@@ -9256,10 +9658,11 @@
       "source_order": 575,
       "original_label": "第百五条",
       "source_sha256": "0ac44054e44395361d5b5c683b8c82149bacf363465ce670cf0170a55cd6f542",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a105",
+      "korean_title": "제105조 (심사회에 대한 자문)"
     },
     {
       "node_id": "main-a105-p1",
@@ -9270,10 +9673,11 @@
       "source_order": 576,
       "original_label": "",
       "source_sha256": "7a0c1830d56f953aee10397548953f26ac48b7abb3806a23f9563aeaf097028e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대하여 심사청구가 있으면 해당 심사청구에 대한 재결을 하여야 하는 행정기관의 장 등은 다음 각 호의 어느 하나에 해당하는 경우를 제외하고는 정보공개·개인정보보호심사회(심사청구에 대한 재결을 하여야 하는 행정기관의 장 등이 회계검사원장인 경우에는 별도로 법률로 정하는 심사회)에 자문하여야 한다.",
+      "markdown_anchor": "main-a105-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p1-i1",
@@ -9284,10 +9688,11 @@
       "source_order": 577,
       "original_label": "一",
       "source_sha256": "106a43bf89468fd49aa9d945f667341596581526cc012b711721f92f60a949c9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청구가 부적법하여 각하하는 경우",
+      "markdown_anchor": "main-a105-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p1-i2",
@@ -9298,10 +9703,11 @@
       "source_order": 578,
       "original_label": "二",
       "source_sha256": "7b180d849d0ead42fdecad0447ad32f2f8de779e4b3dd249e90dbe2c51dac154",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보의 전부를 공개하도록 하는 경우(해당 보유개인정보의 공개에 대하여 반대의견서가 제출되어 있는 경우는 제외한다)",
+      "markdown_anchor": "main-a105-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p1-i3",
@@ -9312,10 +9718,11 @@
       "source_order": 579,
       "original_label": "三",
       "source_sha256": "71a12386ce60885be6c4fb9a2cd35c2b63d1feccee051cbbd591de9c87318cd4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보를 정정하도록 하는 경우",
+      "markdown_anchor": "main-a105-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p1-i4",
@@ -9326,10 +9733,11 @@
       "source_order": 580,
       "original_label": "四",
       "source_sha256": "5d3abf289673cff5e7bfcea2466a1440220b60937c82aac3a00c07c6e6323c1b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보의 이용정지를 하도록 하는 경우",
+      "markdown_anchor": "main-a105-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p2",
@@ -9340,10 +9748,11 @@
       "source_order": 581,
       "original_label": "２",
       "source_sha256": "04c343a7cdfa4653ae625956ef83e3a156bae45ea72319ff01b8b212059cd711",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따라 자문한 행정기관의 장 등은 다음에 열거하는 자에게 자문하였다는 취지를 통지하여야 한다.",
+      "markdown_anchor": "main-a105-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p2-i1",
@@ -9354,10 +9763,11 @@
       "source_order": 582,
       "original_label": "一",
       "source_sha256": "aa30585b1904284f561b64eb9cf49d256b47afc3a56523ca0223c30693ca21b4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청구인 및 참가인(행정불복심사법 제13조 제4항에 규정하는 참가인을 말한다. 이하 이 항 및 제107조 제1항 제2호에서 같다)",
+      "markdown_anchor": "main-a105-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p2-i2",
@@ -9368,10 +9778,11 @@
       "source_order": 583,
       "original_label": "二",
       "source_sha256": "e8e5e65450cd0d78df258b123d92203f20dcf697da40d465dd6251a2a0e78b87",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개청구자, 정정청구자 또는 이용정지청구자(이들이 심사청구인 또는 참가인인 경우는 제외한다)",
+      "markdown_anchor": "main-a105-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p2-i3",
@@ -9382,10 +9793,11 @@
       "source_order": 584,
       "original_label": "三",
       "source_sha256": "048682fb996602c3145eff7ecf6c65cd1602e9d415d3765a31d05b675c21d344",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 심사청구에 관한 보유개인정보의 공개에 대하여 반대의견서를 제출한 제3자(해당 제3자가 심사청구인 또는 참가인인 경우는 제외한다)",
+      "markdown_anchor": "main-a105-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a105-p3",
@@ -9396,10 +9808,11 @@
       "source_order": 585,
       "original_label": "３",
       "source_sha256": "d1269cfa8f008b7bfa1626ec053b93699a6f2114291d1b9584b243748f829a83",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 항의 규정은 지방공공단체의 기관 또는 지방독립행정법인에 준용한다. 이 경우 제1항 중 “정보공개·개인정보보호심사회(심사청구에 대한 재결을 하여야 하는 행정기관의 장 등이 회계검사원장인 경우에는 별도로 법률로 정하는 심사회)”를 “행정불복심사법 제81조 제1항 또는 제2항의 기관”으로 바꾸어 읽는다.",
+      "markdown_anchor": "main-a105-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a106",

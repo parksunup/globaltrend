@@ -136,6 +136,56 @@
       "byte_count": 453310,
       "sha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1",
       "note": "새 환경에서 감독기관 PDF 재확보; 주 의회 대조·권리 확인 미완료"
+    },
+    {
+      "source_id": "gdpr-op-pdf",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=pdfa1a&language=en&productionSystem=cellar&part=",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 982296,
+      "sha256": "bd84e63f5b622b739a83389afc3b30d240f792bb88d8eb03a816c9a82b0c2499",
+      "note": "EU 출판국 관보 원판 PDF; 정오표·현행 통합본 검토 미완료"
+    },
+    {
+      "source_id": "gdpr-op-xhtml",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 806864,
+      "sha256": "962539af03738bf552319ff4ce42d69e5f95a576307c4dfed7bf87e81b646b9d",
+      "note": "EU 출판국 관보 원판 XHTML; 제1~99조 순서·11장·15절·173개 고려사항 확인"
+    },
+    {
+      "source_id": "npc-search-exact",
+      "url": "https://flk.npc.gov.cn/law-search/search/list",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 1279,
+      "sha256": "ba26697f896de041c9c91fc27e3ac9a05924ee1c5be1c82ac4e5fcaf94a907b7",
+      "note": "NPC 정확 제목 검색; 유효 법률 1건; 법문 자체 아님"
+    },
+    {
+      "source_id": "pipl-details",
+      "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 13699,
+      "sha256": "684e21366f78fa136818cceb14380a278d498046c185e272ba58d72ff7759daa",
+      "note": "PIPL bbbs·제목·공포·시행 메타데이터와 74개 조 목차 확인; 조문 본문 파일 미확보"
+    },
+    {
+      "source_id": "eu-copyright",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 378575,
+      "sha256": "a26bf0dd5bc5158179640c80b9981a6ac83866dee824b73cd15d8bc594f9b601",
+      "note": "EU 출판국 편집 콘텐츠 CC BY 4.0; 개별 출판물·EUR-Lex는 별도 저작권 고지 확인을 요구"
     }
   ],
   "latest_failed_access": [
@@ -160,24 +210,30 @@
       "checked_on": "2026-10-06"
     },
     {
-      "url": "https://argos-net.com/v1/translate-en_ko-1_1.argosmodel",
-      "outcome": "proxy tunnel HTTP 403",
-      "checked_on": "2026-10-06"
-    },
-    {
       "url": "https://www.pipc.go.kr/",
-      "outcome": "proxy tunnel HTTP 403",
-      "checked_on": "2026-10-06"
+      "outcome": "HTTP 503; network domain published",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC"
     },
     {
-      "url": "https://flk.npc.gov.cn/",
-      "outcome": "proxy tunnel HTTP 403",
-      "checked_on": "2026-10-06"
+      "url": "https://argos-net.com/v1/translate-en_ko-1_1.argosmodel",
+      "outcome": "origin HTTP 403; Cloudflare 1010; model not obtained; no circumvention",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC"
     },
     {
-      "url": "https://op.europa.eu/",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsNm=%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4+%EB%B3%B4%ED%98%B8%EB%B2%95",
+      "outcome": "HTTP 503; current PIPA text not obtained",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC",
+      "checked_on_kst": "2026-10-07"
+    },
+    {
+      "url": "https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EB%B3%B4%ED%98%B8%EB%B2%95&mode=20",
       "outcome": "proxy tunnel HTTP 403",
-      "checked_on": "2026-10-06"
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC",
+      "checked_on_kst": "2026-10-07"
     }
   ]
 }

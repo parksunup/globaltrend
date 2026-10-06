@@ -68,6 +68,33 @@ def validate(source_path=None):
         children = [node for node in nodes if node["node_id"].startswith(article["node_id"] + "-")
                     and node["tag"] in {"Paragraph", "Item", "Subitem1", "Subitem2", "Subitem3"}]
         check(all(node["korean_text"] for node in children), f"번역 조문 내부 누락: {article['node_id']}")
+        tables = [node for node in nodes if node["node_id"].startswith(article["node_id"] + "-")
+                  and node["tag"] in {"Table", "TableRow", "TableColumn"}]
+        check(all(node["translation_status"] == "draft" for node in tables),
+              f"작성 완료 조문 내부 표 미번역: {article['node_id']}")
+
+    groups = document["coverage"]["heading_groups"]
+    headings = [node for node in nodes if node["tag"] in {"Chapter", "Section", "Subsection"}]
+    check([group["node_id"] for group in groups] == [node["node_id"] for node in headings],
+          "장·절·관 작성 범위 목록 누락·순서 불일치")
+    for group, heading in zip(groups, headings):
+        descendants = []
+        for node in nodes:
+            parent = node["parent_id"]
+            while parent in by_id:
+                if parent == heading["node_id"]:
+                    descendants.append(node)
+                    break
+                parent = by_id[parent]["parent_id"]
+        articles = [node for node in descendants if node["tag"] == "Article"]
+        check(group["first_article"] == articles[0]["number"]
+              and group["last_article"] == articles[-1]["number"]
+              and group["total_articles"] == len(articles), "장·절·관 원문 조문 범위 불일치")
+        check(group["drafted_articles"] == sum(n["translation_status"] == "draft" for n in articles)
+              and group["heading_translated"] == (heading["translation_status"] == "draft")
+              and group["all_nodes_drafted"] == all(n["translation_status"] == "draft"
+                                                    for n in [heading, *descendants]),
+              "제목 번역을 장·절·관 전체 작성으로 잘못 표시함")
 
     if source_path:
         source = json.loads(Path(source_path).read_bytes())
@@ -85,6 +112,13 @@ def validate(source_path=None):
         original_counts = collections.Counter(node["tag"] for node in original
                                              if node["tag"] in counts)
         check(original_counts == counts, "공식 원문과 저장된 구조 수 불일치")
+        source_headings = [node for node in original if node["tag"] in {"Chapter", "Section", "Subsection"}]
+        for source_heading, group in zip(source_headings, groups):
+            source_numbers = [node["attr"]["Num"] for node in walk(source_heading) if node["tag"] == "Article"]
+            check(source_numbers[0] == group["first_article"]
+                  and source_numbers[-1] == group["last_article"]
+                  and len(source_numbers) == group["total_articles"],
+                  f"공식 원문 장·절·관 경계 불일치: {group['node_id']}")
         for article in drafts:
             source_article = next(node for child in body["children"]
                                   if child["tag"] == "MainProvision" for node in walk(child)
@@ -121,6 +155,14 @@ def validate(source_path=None):
     for cell in cells:
         law = next(law for law in laws if law["record_id"] == cell["instrument_id"])
         check(cell["official_source_url"] == law["official_url"], "셀 공식 URL과 법제 목록 불일치")
+        check(cell["source_version"] == law["version_label"], "셀 판본 상태와 법제 목록 불일치")
+    review = (BASE / "japan-comparison-review.md").read_text()
+    review_rows = [line for line in review.splitlines() if re.match(r"\| \d+\. ", line)]
+    check(len(review_rows) == 17, "한국·일본 점검 기준 수 불일치")
+    for (_, label, order), line in zip(criteria, review_rows):
+        check(line.startswith(f"| {order}. {label} |"), "한국·일본 점검 기준명·순서 불일치")
+    review_anchors = re.findall(r"\./translations/appi\.md#([^\)]+)", review)
+    check(all(anchor in anchors for anchor in review_anchors), "한국·일본 점검 링크 대상 미번역·누락")
     print(f"구조 검사 통과: APPI {len(nodes)}개 원문 노드, {len(drafts)}개 본칙 초안, "
           f"{len(anchors)}개 앵커, 비교 준비 셀 {len(cells)}개. 사람 검수·전문 번역은 미완료.")
 

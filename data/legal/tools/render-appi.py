@@ -13,6 +13,37 @@ from pathlib import Path
 BASE = Path(__file__).resolve().parents[1] / "translations"
 
 
+def heading_coverage(nodes):
+    """제목 번역과 그 장·절·관 전체의 작성 범위를 구분한다."""
+    by_id = {n["node_id"]: n for n in nodes}
+    result = []
+    for heading in nodes:
+        if heading["tag"] not in {"Chapter", "Section", "Subsection"}:
+            continue
+        descendants = []
+        for node in nodes:
+            parent = node["parent_id"]
+            while parent in by_id:
+                if parent == heading["node_id"]:
+                    descendants.append(node)
+                    break
+                parent = by_id[parent]["parent_id"]
+        articles = [n for n in descendants if n["tag"] == "Article"]
+        result.append({
+            "node_id": heading["node_id"],
+            "tag": heading["tag"],
+            "first_article": articles[0]["number"] if articles else None,
+            "last_article": articles[-1]["number"] if articles else None,
+            "total_articles": len(articles),
+            "drafted_articles": sum(n["translation_status"] == "draft" for n in articles),
+            "heading_translated": heading["translation_status"] == "draft",
+            "all_nodes_drafted": all(n["translation_status"] == "draft"
+                                     for n in [heading, *descendants]),
+            "human_review_status": "not_started",
+        })
+    return result
+
+
 def render():
     path = BASE / "appi.json"
     doc = json.loads(path.read_text())
@@ -31,6 +62,10 @@ def render():
                     and n["tag"] in content_tags]
         if not all(n.get("korean_text") for n in children):
             raise ValueError(f"작성 조문 내부 미번역: {article['node_id']}")
+        tables = [n for n in nodes if n["node_id"].startswith(article["node_id"] + "-")
+                  and n["tag"] in {"Table", "TableRow", "TableColumn"}]
+        if tables:
+            raise ValueError(f"표 번역과 출력 지원을 먼저 완성해야 합니다: {article['node_id']}")
     source_counts = collections.Counter(n["tag"] for n in nodes)
     draft_counts = collections.Counter(n["tag"] for n in nodes if n["translation_status"] == "draft")
     missing = [n["node_id"] for n in nodes if n["translation_status"] == "not_started"]
@@ -45,7 +80,8 @@ def render():
     )
     doc["coverage"].update(source_counts=dict(source_counts), draft_counts=dict(draft_counts),
                            missing_node_ids=missing, translated_prefix_order_verified=True,
-                           full_order_verified=False, semantic_completeness_verified=False)
+                           full_order_verified=False, semantic_completeness_verified=False,
+                           heading_groups=heading_coverage(nodes))
     path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
     version = doc["source"]["version_id"]
     last = drafted[-1]["number"] if drafted else "0"
@@ -96,6 +132,18 @@ def render():
     for tag in ["Chapter", "Section", "Subsection", "Article", "Paragraph", "Item", "Subitem1",
                 "SupplProvision", "AppdxTable", "TableRow", "TableColumn"]:
         rows.append(f"| {tag} | {source_counts[tag]} | {draft_counts[tag]} | {source_counts[tag]-draft_counts[tag]} |")
+    rows.extend(["", "장·절·관의 위 숫자는 **제목을 번역한 수**이며 해당 단위 전체 작성 수가 아닙니다. "
+                 "아래 표는 원문 상위 관계로 계산한 각 장의 실제 조문 범위입니다. "
+                 "전체 작성도 사람 검수 완료를 뜻하지 않습니다.", "",
+                 "| 장 | 원문 조문 범위 | 번역 조문 수 / 원문 수 | 장 전체 작성 상태 | 사람 검수 |",
+                 "| --- | --- | ---: | --- | --- |"])
+    for group in doc["coverage"]["heading_groups"]:
+        if group["tag"] != "Chapter":
+            continue
+        heading = next(n for n in nodes if n["node_id"] == group["node_id"])
+        state = "전체 초안 작성" if group["all_nodes_drafted"] else "미완성"
+        rows.append(f"| {heading['original_label']} | 제{group['first_article']}조~제{group['last_article']}조 "
+                    f"| {group['drafted_articles']} / {group['total_articles']} | {state} | 미착수 |")
     rows.extend(["", "## 조문별 상태", "",
                  "같은 조 번호가 반복되는 본칙(main)·부칙 묶음(suppl1~suppl22)을 구분합니다. "
                  "부칙의 가지 번호는 원문 Num 값을 유지합니다.", "",
