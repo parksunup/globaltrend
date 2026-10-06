@@ -13,7 +13,7 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell({ initialItems, dataSource, teamMode = false, canReview = false, teamRole, showSubmissionPreview = false, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; canReview?: boolean; teamRole?: string; showSubmissionPreview?: boolean; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
+export default function ReviewShell({ initialItems, dataSource, teamMode = false, publicReviewMode = false, canReview = false, teamRole, showSubmissionPreview = false, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; publicReviewMode?: boolean; canReview?: boolean; teamRole?: string; showSubmissionPreview?: boolean; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
   const [reviewItems, setReviewItems] = useState(initialItems);
   const [showSubmissions, setShowSubmissions] = useState(showSubmissionPreview);
   const [kind, setKind] = useState<ReviewKind>("sources");
@@ -68,7 +68,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
       <aside className="sidebar">
         <div className="brand-mark">GT</div>
         <div className="brand-copy"><strong>GlobalTrend</strong><span>검토 보드</span></div>
-        <div className="preview-pill">{teamMode ? `TEAM · ${teamRole ?? "검수"}` : dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
+        <div className="preview-pill">{publicReviewMode ? "검수 자료 · 공개 열람" : teamMode ? `TEAM · ${teamRole ?? "검수"}` : dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
         <nav className="nav-list" aria-label="자료 유형">
           {showSubmissionPreview && <button className={"nav-item " + (showSubmissions ? "active" : "")} onClick={() => setShowSubmissions(true)}>
             <span>PR 제출물</span><em>{submissions.length}</em>
@@ -81,9 +81,9 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
           ))}
         </nav>
         <div className="sidebar-foot">
-          <span className="dot" /> 실제 공개 전 검수 전용
+          <span className="dot" /> {publicReviewMode ? "공개 전 목록 포함 · 읽기 전용" : "실제 공개 전 검수 전용"}
           <a className="guide-link" href="/guide">팀 가이드</a>
-          <a className="guide-link" href={teamMode ? "/" : "/team"}>{teamMode ? "공개 보드" : "팀 검수 로그인"}</a>
+          <a className="guide-link" href={teamMode || publicReviewMode ? "/" : "/team"}>{teamMode || publicReviewMode ? "공개 보드" : "검수 자료 보기"}</a>
         </div>
       </aside>
 
@@ -91,7 +91,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
         {showSubmissions ? <SubmissionPreview items={submissions} commitSha={submissionCommitSha} /> : <>
         <header className="topbar">
           <div><p className="eyebrow">WORKSPACE / REVIEW</p><h1>{kindLabels[kind]}</h1></div>
-          <div className="topbar-note"><span className="lock">◈</span> {teamMode ? "팀 검수 단계" : "공개 전 단계"} <b>{teamMode ? "로그인됨" : "읽기 전용"}</b></div>
+          <div className="topbar-note"><span className="lock">◈</span> {publicReviewMode ? "검수 자료 열람" : teamMode ? "팀 검수 단계" : "공개 전 단계"} <b>{teamMode ? "로그인됨" : "읽기 전용"}</b></div>
         </header>
         <div className="toolbar">
           <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="항목명, 설명, 국가로 검색" /></label>
@@ -128,7 +128,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
                   <button type="button" className="review-approve" onClick={() => saveReview("approved")} disabled={isPending || selected.status === "published"}>승인</button>
                 </div>
                 <p className="publish-warning">승인은 검수 결과만 저장합니다. 공개 상태로 자동 변경하지 않습니다.</p>
-              </div> : <button className="disabled-action" disabled>검수 상태를 변경할 권한이 없습니다</button>}
+              </div> : <button className="disabled-action" disabled>{publicReviewMode ? "읽기 전용 화면입니다" : "검수 상태를 변경할 권한이 없습니다"}</button>}
             </> : <div className="empty detail-empty">목록에서 항목을 선택해 주세요.</div>}
           </aside>
         </div>

@@ -1,6 +1,6 @@
 begin;
 
-select plan(25);
+select plan(28);
 
 select has_table('public', 'sources', 'sources table exists');
 select has_table('public', 'legal_instruments', 'legal instruments table exists');
@@ -60,13 +60,29 @@ select results_eq(
   array[3::bigint],
   'anonymous users can read active source metadata'
 );
-select is_empty(
-  'select * from public.legal_instruments',
-  'anonymous users cannot read unpublished legal instruments'
+select results_eq(
+  'select count(*)::bigint from public.legal_instruments',
+  array[7::bigint],
+  'anonymous visitors can read the legal catalog on /team'
 );
-select is_empty(
-  'select * from public.criteria',
-  'anonymous users cannot read unpublished criteria'
+select results_eq(
+  'select count(*)::bigint from public.criteria',
+  array[17::bigint],
+  'anonymous visitors can read the comparison criteria on /team'
+);
+select ok(
+  has_column_privilege('anon', 'public.review_states', 'status', 'select'),
+  'anonymous visitors can read review status'
+);
+select ok(
+  not has_column_privilege('anon', 'public.review_states', 'note', 'select'),
+  'review notes remain private'
+);
+select throws_ok(
+  $$insert into public.legal_instruments (jurisdiction_code, short_name, official_name) values ('ZZ', 'ANON-NOPE', 'Denied')$$,
+  '42501',
+  null,
+  'anonymous visitors cannot edit catalog entries'
 );
 
 set local role authenticated;
