@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0",
+  "scope": "access receipts; not human verification or republication permission",
+  "sources": [
+    {
+      "source_id": "appi",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "현행 판본 전체 법문 확보; 정확한 revision_id는 appi.json"
+    },
+    {
+      "source_id": "appi-pinned",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "고정 판본 동일 반환 확인"
+    },
+    {
+      "source_id": "egov-copyright",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 890783,
+      "sha256": "62cb548beb0a9b3cda78933b942c2df3e1456adc6911290b21aa137b74c73deb",
+      "note": "본칙 제13조 제1호 법령 권리 대상 제외 확인"
+    },
+    {
+      "source_id": "pdl",
+      "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 59198,
+      "sha256": "7f5b09b92a3b7fa2f34aa770d0fc66d5c2eb2e5cd4a3cb2d1b8b3b1c02dbc1cd",
+      "note": "PDL1.0 본문 확인; e-Gov 적용 여부와 구분"
+    },
+    {
+      "source_id": "ukgdpr",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1675157,
+      "sha256": "d041959993a42b6aaddff53031a681b48d7d05d46923e67205102a89d2d830fe",
+      "note": "revised XML; 미반영 개정 5건 확인"
+    },
+    {
+      "source_id": "gdpr-original-xml",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/2016-05-04/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 676598,
+      "sha256": "6d8634509c696c30891b90674ddc924e285be2a496eb0539b5ae281599be02d4",
+      "note": "영국 사이트의 과거 시점 제공본; EU 현행 통합본으로 사용하지 않음"
+    },
+    {
+      "source_id": "ccpa-pdf",
+      "url": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 453310,
+      "sha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1",
+      "note": "CPPA PDF effective 01/01/2026; AB 137·AB 566 update"
+    },
+    {
+      "source_id": "ccpa-textpdf",
+      "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute_eff_20260101.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 615548,
+      "sha256": "8d57eba97a7fe13346b7827d0131e1ab84dc110c6ff20daa6fa6ec4a4329d0fe",
+      "note": "별도 PDF; 주 의회 법전 대조 미완료"
+    },
+    {
+      "source_id": "pdpa",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 263893,
+      "sha256": "f78c2527cc84fb7a67c3e3353fc3d7afe0a5a5f3c2a48a5e90dbc391af55cb2e",
+      "note": "HTML 현재판 표기; 전체 조문 범위 검토 필요; 이후 자동취득은 시간 조건 준수"
+    },
+    {
+      "source_id": "pdpa-terms",
+      "url": "https://sso.agc.gov.sg/Terms-of-Use",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 42663,
+      "sha256": "50162014682ad7034125b5fc1976d01fcf7932e26ac2273feca5523f0a6f903d",
+      "note": "제5·7·8·13조 등 확인; 자동취득 싱가포르 시각 03~07시 조건"
+    },
+    {
+      "source_id": "dpa2018",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 5919263,
+      "sha256": "525e8300e3be65844da0ecc834aab8cb458572b897cae8fdcb5e6a3c32ecfc3a",
+      "note": "UK GDPR 보완 법률; 별도 비교 기준 추가하지 않음"
+    },
+    {
+      "source_id": "duaa2025",
+      "url": "https://www.legislation.gov.uk/ukpga/2025/18/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1793657,
+      "sha256": "20101adfc8d2d8c40e516549b82eddd5a6c82775aec42b639663ce35e4b1f8f1",
+      "note": "UK GDPR 개정 관련 법률; 적용·시행 관계 검토 필요"
+    }
+  ]
+}
