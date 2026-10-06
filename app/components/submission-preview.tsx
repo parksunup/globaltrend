@@ -44,7 +44,7 @@ export default function SubmissionPreview({ items, commitSha }: { items: Submiss
             <div className="item-card-head"><span className={`submission-status ${item.status === "error" ? "submission-error" : ""}`}>{statusLabels[item.status] ?? item.status}</span><span className="item-type">{item.kind}</span></div>
             <strong>{item.title}</strong><p>{item.summary}</p><div className="chips"><span>{groupLabels[item.group]}</span><span>{item.subtitle}</span></div>
           </button>)}
-          {visible.length === 0 && <div className="empty">이 브랜치에 해당 제출물이 없습니다. 파일이 PR에 커밋됐는지 확인해 주세요.</div>}
+          {visible.length === 0 && <div className="empty">{items.length === 0 ? "이 브랜치에는 법제·동향 제출 파일이 없습니다. PR #17은 화면 코드만 담고 있으며, 팀원 PR의 자료는 해당 브랜치가 최신 main을 반영한 뒤 그 Preview에서 확인할 수 있습니다." : "현재 검색·담당자 조건에 맞는 제출물이 없습니다."}</div>}
         </div>
       </section>
       <aside className="detail-panel submission-detail">
@@ -58,7 +58,7 @@ export default function SubmissionPreview({ items, commitSha }: { items: Submiss
             ? <a key={file} href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/${file}`} target="_blank" rel="noopener noreferrer">{file}<span>↗</span></a>
             : <p key={file}>{file}</p>)}</div>
           <p className="publish-warning">이 화면에서는 검수 상태를 변경하거나 자료를 공개하지 않습니다.</p>
-        </> : <div className="empty detail-empty">이 브랜치에 표시할 제출물이 없습니다.</div>}
+        </> : <div className="empty detail-empty">{items.length === 0 ? "제출 자료가 있는 팀원 브랜치의 Preview에서 실제 내용을 확인해 주세요." : "조건에 맞는 제출물이 없습니다."}</div>}
       </aside>
     </div>
   </>;

@@ -4,6 +4,7 @@ import { loadSubmissionPreview, submissionPreviewEnabled } from "../lib/submissi
 
 export default async function Home() {
   const { items, source } = await loadReviewItems();
-  const submissions = submissionPreviewEnabled() ? loadSubmissionPreview() : [];
-  return <ReviewShell initialItems={items} dataSource={source} submissions={submissions} submissionCommitSha={process.env.VERCEL_GIT_COMMIT_SHA} />;
+  const showSubmissionPreview = submissionPreviewEnabled();
+  const submissions = showSubmissionPreview ? loadSubmissionPreview() : [];
+  return <ReviewShell initialItems={items} dataSource={source} showSubmissionPreview={showSubmissionPreview} submissions={submissions} submissionCommitSha={process.env.VERCEL_GIT_COMMIT_SHA} />;
 }

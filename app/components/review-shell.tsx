@@ -13,9 +13,9 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell({ initialItems, dataSource, teamMode = false, canReview = false, teamRole, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; canReview?: boolean; teamRole?: string; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
+export default function ReviewShell({ initialItems, dataSource, teamMode = false, canReview = false, teamRole, showSubmissionPreview = false, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; canReview?: boolean; teamRole?: string; showSubmissionPreview?: boolean; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
   const [reviewItems, setReviewItems] = useState(initialItems);
-  const [showSubmissions, setShowSubmissions] = useState(submissions.length > 0);
+  const [showSubmissions, setShowSubmissions] = useState(showSubmissionPreview);
   const [kind, setKind] = useState<ReviewKind>("sources");
   const [status, setStatus] = useState<ReviewStatus | "all">("all");
   const [query, setQuery] = useState("");
@@ -70,7 +70,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
         <div className="brand-copy"><strong>GlobalTrend</strong><span>검토 보드</span></div>
         <div className="preview-pill">{teamMode ? `TEAM · ${teamRole ?? "검수"}` : dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
         <nav className="nav-list" aria-label="자료 유형">
-          {submissions.length > 0 && <button className={"nav-item " + (showSubmissions ? "active" : "")} onClick={() => setShowSubmissions(true)}>
+          {showSubmissionPreview && <button className={"nav-item " + (showSubmissions ? "active" : "")} onClick={() => setShowSubmissions(true)}>
             <span>PR 제출물</span><em>{submissions.length}</em>
           </button>}
           {kinds.map((itemKind) => (
