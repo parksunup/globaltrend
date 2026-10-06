@@ -25,13 +25,13 @@
     "status": "partial_draft",
     "human_review_status": "not_started",
     "complete": false,
-    "translated_main_articles": 40,
+    "translated_main_articles": 58,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 21.62,
+    "main_article_coverage_percent": 31.35,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
-    "next_main_article": "41"
+    "next_main_article": "59"
   },
   "coverage": {
     "source_counts": {
@@ -50,102 +50,15 @@
     },
     "draft_counts": {
       "Chapter": 4,
-      "Article": 40,
-      "Paragraph": 106,
-      "Item": 81,
-      "Section": 6
+      "Article": 58,
+      "Paragraph": 153,
+      "Item": 98,
+      "Section": 10,
+      "Subitem1": 2
     },
     "main_articles": 185,
     "supplementary_articles": 65,
     "missing_node_ids": [
-      "main-c4-s3",
-      "main-a41",
-      "main-a41-p1",
-      "main-a41-p2",
-      "main-a41-p3",
-      "main-a41-p4",
-      "main-a41-p5",
-      "main-a41-p6",
-      "main-a41-p7",
-      "main-a41-p8",
-      "main-a41-p9",
-      "main-a42",
-      "main-a42-p1",
-      "main-a42-p2",
-      "main-a42-p3",
-      "main-c4-s4",
-      "main-a43",
-      "main-a43-p1",
-      "main-a43-p2",
-      "main-a43-p3",
-      "main-a43-p4",
-      "main-a43-p5",
-      "main-a43-p6",
-      "main-a44",
-      "main-a44-p1",
-      "main-a45",
-      "main-a45-p1",
-      "main-a46",
-      "main-a46-p1",
-      "main-c4-s5",
-      "main-a47",
-      "main-a47-p1",
-      "main-a47-p1-i1",
-      "main-a47-p1-i2",
-      "main-a47-p1-i3",
-      "main-a47-p2",
-      "main-a47-p3",
-      "main-a47-p4",
-      "main-a48",
-      "main-a48-p1",
-      "main-a48-p1-i1",
-      "main-a48-p1-i2",
-      "main-a48-p1-i3",
-      "main-a48-p1-i3-si11",
-      "main-a48-p1-i3-si12",
-      "main-a49",
-      "main-a49-p1",
-      "main-a49-p1-i1",
-      "main-a49-p1-i2",
-      "main-a49-p1-i3",
-      "main-a50",
-      "main-a50-p1",
-      "main-a50-p2",
-      "main-a51",
-      "main-a51-p1",
-      "main-a51-p2",
-      "main-a52",
-      "main-a52-p1",
-      "main-a52-p2",
-      "main-a53",
-      "main-a53-p1",
-      "main-a53-p2",
-      "main-a53-p3",
-      "main-a54",
-      "main-a54-p1",
-      "main-a54-p2",
-      "main-a54-p3",
-      "main-a54-p4",
-      "main-a55",
-      "main-a55-p1",
-      "main-a56",
-      "main-a56-p1",
-      "main-c4-s6",
-      "main-a57",
-      "main-a57-p1",
-      "main-a57-p1-i1",
-      "main-a57-p1-i2",
-      "main-a57-p1-i3",
-      "main-a57-p1-i4",
-      "main-a57-p2",
-      "main-a57-p3",
-      "main-a58",
-      "main-a58-p1",
-      "main-a58-p1-i1",
-      "main-a58-p1-i2",
-      "main-a58-p2",
-      "main-a58-p2-i1",
-      "main-a58-p2-i2",
       "main-a59",
       "main-a59-p1",
       "main-c5",
@@ -1156,7 +1069,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c1"
+      "markdown_anchor": "main-c1",
+      "korean_title": "제1장 총칙"
     },
     {
       "node_id": "main-a1",
@@ -1170,7 +1084,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a1"
+      "markdown_anchor": "main-a1",
+      "korean_title": "제1조 (목적)"
     },
     {
       "node_id": "main-a1-p1",
@@ -1198,7 +1113,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a2"
+      "markdown_anchor": "main-a2",
+      "korean_title": "제2조 (정의)"
     },
     {
       "node_id": "main-a2-p1",
@@ -1618,7 +1534,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a3"
+      "markdown_anchor": "main-a3",
+      "korean_title": "제3조 (기본이념)"
     },
     {
       "node_id": "main-a3-p1",
@@ -1646,7 +1563,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c2"
+      "markdown_anchor": "main-c2",
+      "korean_title": "제2장 국가 및 지방공공단체의 책무 등"
     },
     {
       "node_id": "main-a4",
@@ -1660,7 +1578,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a4"
+      "markdown_anchor": "main-a4",
+      "korean_title": "제4조 (국가의 책무)"
     },
     {
       "node_id": "main-a4-p1",
@@ -1688,7 +1607,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a5"
+      "markdown_anchor": "main-a5",
+      "korean_title": "제5조 (지방공공단체의 책무)"
     },
     {
       "node_id": "main-a5-p1",
@@ -1716,7 +1636,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a6"
+      "markdown_anchor": "main-a6",
+      "korean_title": "제6조 (법제상의 조치 등)"
     },
     {
       "node_id": "main-a6-p1",
@@ -1744,7 +1665,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c3"
+      "markdown_anchor": "main-c3",
+      "korean_title": "제3장 개인정보 보호에 관한 시책 등"
     },
     {
       "node_id": "main-c3-s1",
@@ -1758,7 +1680,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c3-s1"
+      "markdown_anchor": "main-c3-s1",
+      "korean_title": "제1절 개인정보 보호에 관한 기본방침"
     },
     {
       "node_id": "main-a7",
@@ -1772,7 +1695,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a7"
+      "markdown_anchor": "main-a7",
+      "korean_title": "제7조"
     },
     {
       "node_id": "main-a7-p1",
@@ -1968,7 +1892,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c3-s2"
+      "markdown_anchor": "main-c3-s2",
+      "korean_title": "제2절 국가의 시책"
     },
     {
       "node_id": "main-a8",
@@ -1982,7 +1907,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a8"
+      "markdown_anchor": "main-a8",
+      "korean_title": "제8조 (국가기관 등이 보유하는 개인정보의 보호)"
     },
     {
       "node_id": "main-a8-p1",
@@ -2024,7 +1950,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a9"
+      "markdown_anchor": "main-a9",
+      "korean_title": "제9조 (지방공공단체 등에 대한 지원)"
     },
     {
       "node_id": "main-a9-p1",
@@ -2052,7 +1979,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a10"
+      "markdown_anchor": "main-a10",
+      "korean_title": "제10조 (고충 처리를 위한 조치)"
     },
     {
       "node_id": "main-a10-p1",
@@ -2080,7 +2008,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a11"
+      "markdown_anchor": "main-a11",
+      "korean_title": "제11조 (개인정보의 적정한 취급을 확보하기 위한 조치)"
     },
     {
       "node_id": "main-a11-p1",
@@ -2122,7 +2051,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c3-s3"
+      "markdown_anchor": "main-c3-s3",
+      "korean_title": "제3절 지방공공단체의 시책"
     },
     {
       "node_id": "main-a12",
@@ -2136,7 +2066,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a12"
+      "markdown_anchor": "main-a12",
+      "korean_title": "제12조 (지방공공단체의 기관 등이 보유하는 개인정보의 보호)"
     },
     {
       "node_id": "main-a12-p1",
@@ -2178,7 +2109,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a13"
+      "markdown_anchor": "main-a13",
+      "korean_title": "제13조 (구역 내 사업자 등에 대한 지원)"
     },
     {
       "node_id": "main-a13-p1",
@@ -2206,7 +2138,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a14"
+      "markdown_anchor": "main-a14",
+      "korean_title": "제14조 (고충 처리의 알선 등)"
     },
     {
       "node_id": "main-a14-p1",
@@ -2234,7 +2167,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c3-s4"
+      "markdown_anchor": "main-c3-s4",
+      "korean_title": "제4절 국가 및 지방공공단체의 협력"
     },
     {
       "node_id": "main-a15",
@@ -2248,7 +2182,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a15"
+      "markdown_anchor": "main-a15",
+      "korean_title": "제15조"
     },
     {
       "node_id": "main-a15-p1",
@@ -2276,7 +2211,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c4"
+      "markdown_anchor": "main-c4",
+      "korean_title": "제4장 개인정보취급사업자 등의 의무 등"
     },
     {
       "node_id": "main-c4-s1",
@@ -2290,7 +2226,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c4-s1"
+      "markdown_anchor": "main-c4-s1",
+      "korean_title": "제1절 총칙"
     },
     {
       "node_id": "main-a16",
@@ -2304,7 +2241,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a16"
+      "markdown_anchor": "main-a16",
+      "korean_title": "제16조 (정의)"
     },
     {
       "node_id": "main-a16-p1",
@@ -2514,7 +2452,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-c4-s2"
+      "markdown_anchor": "main-c4-s2",
+      "korean_title": "제2절 개인정보취급사업자 및 개인관련정보취급사업자의 의무"
     },
     {
       "node_id": "main-a17",
@@ -2528,7 +2467,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a17"
+      "markdown_anchor": "main-a17",
+      "korean_title": "제17조 (이용목적의 특정)"
     },
     {
       "node_id": "main-a17-p1",
@@ -2570,7 +2510,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a18"
+      "markdown_anchor": "main-a18",
+      "korean_title": "제18조 (이용목적에 따른 제한)"
     },
     {
       "node_id": "main-a18-p1",
@@ -2710,7 +2651,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a19"
+      "markdown_anchor": "main-a19",
+      "korean_title": "제19조 (부적정한 이용의 금지)"
     },
     {
       "node_id": "main-a19-p1",
@@ -2738,7 +2680,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a20"
+      "markdown_anchor": "main-a20",
+      "korean_title": "제20조 (적정한 취득)"
     },
     {
       "node_id": "main-a20-p1",
@@ -2892,7 +2835,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a21"
+      "markdown_anchor": "main-a21",
+      "korean_title": "제21조 (취득 시 이용목적의 통지 등)"
     },
     {
       "node_id": "main-a21-p1",
@@ -3018,7 +2962,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a22"
+      "markdown_anchor": "main-a22",
+      "korean_title": "제22조 (데이터 내용의 정확성 확보 등)"
     },
     {
       "node_id": "main-a22-p1",
@@ -3046,7 +2991,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a23"
+      "markdown_anchor": "main-a23",
+      "korean_title": "제23조 (안전관리조치)"
     },
     {
       "node_id": "main-a23-p1",
@@ -3074,7 +3020,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a24"
+      "markdown_anchor": "main-a24",
+      "korean_title": "제24조 (종사자의 감독)"
     },
     {
       "node_id": "main-a24-p1",
@@ -3102,7 +3049,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a25"
+      "markdown_anchor": "main-a25",
+      "korean_title": "제25조 (위탁받은 자의 감독)"
     },
     {
       "node_id": "main-a25-p1",
@@ -3130,7 +3078,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a26"
+      "markdown_anchor": "main-a26",
+      "korean_title": "제26조 (유출 등의 보고 등)"
     },
     {
       "node_id": "main-a26-p1",
@@ -3172,7 +3121,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a27"
+      "markdown_anchor": "main-a27",
+      "korean_title": "제27조 (제3자 제공의 제한)"
     },
     {
       "node_id": "main-a27-p1",
@@ -3522,7 +3472,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a28"
+      "markdown_anchor": "main-a28",
+      "korean_title": "제28조 (외국에 있는 제3자에 대한 제공의 제한)"
     },
     {
       "node_id": "main-a28-p1",
@@ -3578,7 +3529,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a29"
+      "markdown_anchor": "main-a29",
+      "korean_title": "제29조 (제3자 제공에 관한 기록의 작성 등)"
     },
     {
       "node_id": "main-a29-p1",
@@ -3620,7 +3572,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a30"
+      "markdown_anchor": "main-a30",
+      "korean_title": "제30조 (제3자로부터 제공받을 때의 확인 등)"
     },
     {
       "node_id": "main-a30-p1",
@@ -3718,7 +3671,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a31"
+      "markdown_anchor": "main-a31",
+      "korean_title": "제31조 (개인관련정보의 제3자 제공 제한 등)"
     },
     {
       "node_id": "main-a31-p1",
@@ -3802,7 +3756,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a32"
+      "markdown_anchor": "main-a32",
+      "korean_title": "제32조 (보유개인데이터에 관한 사항의 공표 등)"
     },
     {
       "node_id": "main-a32-p1",
@@ -3942,7 +3897,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a33"
+      "markdown_anchor": "main-a33",
+      "korean_title": "제33조 (공개)"
     },
     {
       "node_id": "main-a33-p1",
@@ -4068,7 +4024,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a34"
+      "markdown_anchor": "main-a34",
+      "korean_title": "제34조 (정정 등)"
     },
     {
       "node_id": "main-a34-p1",
@@ -4124,7 +4081,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a35"
+      "markdown_anchor": "main-a35",
+      "korean_title": "제35조 (이용정지 등)"
     },
     {
       "node_id": "main-a35-p1",
@@ -4236,7 +4194,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a36"
+      "markdown_anchor": "main-a36",
+      "korean_title": "제36조 (이유의 설명)"
     },
     {
       "node_id": "main-a36-p1",
@@ -4264,7 +4223,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a37"
+      "markdown_anchor": "main-a37",
+      "korean_title": "제37조 (공개 등의 청구 등에 응하는 절차)"
     },
     {
       "node_id": "main-a37-p1",
@@ -4334,7 +4294,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a38"
+      "markdown_anchor": "main-a38",
+      "korean_title": "제38조 (수수료)"
     },
     {
       "node_id": "main-a38-p1",
@@ -4376,7 +4337,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a39"
+      "markdown_anchor": "main-a39",
+      "korean_title": "제39조 (사전 청구)"
     },
     {
       "node_id": "main-a39-p1",
@@ -4432,7 +4394,8 @@
       "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": "main-a40"
+      "markdown_anchor": "main-a40",
+      "korean_title": "제40조 (개인정보취급사업자의 고충 처리)"
     },
     {
       "node_id": "main-a40-p1",
@@ -4471,10 +4434,11 @@
       "source_order": 237,
       "original_label": "第三節　仮名加工情報取扱事業者等の義務",
       "source_sha256": "be2ea142c95946cbb4f371f539183fc30d48843d4401ef761cf6a18f09b7b3b6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c4-s3",
+      "korean_title": "제3절 가명가공정보취급사업자 등의 의무"
     },
     {
       "node_id": "main-a41",
@@ -4485,10 +4449,11 @@
       "source_order": 238,
       "original_label": "第四十一条",
       "source_sha256": "aa398055680e22fd306fe2e2197b292f9f37b0781554f16b1df36670ebd37e53",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a41",
+      "korean_title": "제41조 (가명가공정보의 작성 등)"
     },
     {
       "node_id": "main-a41-p1",
@@ -4499,10 +4464,11 @@
       "source_order": 239,
       "original_label": "",
       "source_sha256": "c32fd341a7f124d6680f4fcfd03ea8ecbcadcc7102f0738336d8bb40e57c3652",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 가명가공정보(가명가공정보데이터베이스 등을 구성하는 것으로 한정한다. 이하 이 장 및 제6장에서 같다)를 작성하는 때에는 다른 정보와 대조하지 않는 한 특정 개인을 식별할 수 없도록 하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 따라 개인정보를 가공하여야 한다.",
+      "markdown_anchor": "main-a41-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p2",
@@ -4513,10 +4479,11 @@
       "source_order": 240,
       "original_label": "２",
       "source_sha256": "05d045ffe11be1327a7b00c2df4857f637766f0802e27eeb1d86aa640b32c268",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 가명가공정보를 작성한 때 또는 가명가공정보 및 해당 가명가공정보에 관한 삭제정보 등(가명가공정보의 작성에 사용된 개인정보에서 삭제된 기술 등 및 개인식별부호와 전항의 규정에 따라 이루어진 가공 방법에 관한 정보를 말한다. 이하 이 조 및 다음 조 제3항에서 바꾸어 읽어 준용하는 제7항에서 같다)을 취득한 때에는 삭제정보 등의 유출을 방지하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 따라 삭제정보 등의 안전관리를 위한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a41-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p3",
@@ -4527,10 +4494,11 @@
       "source_order": 241,
       "original_label": "３",
       "source_sha256": "a83f8392ecff8f4861c0fc07fc6d4d1071e68218b574733d8fdf2964b68cfb1a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자(개인정보취급사업자인 자로 한정한다. 이하 이 조에서 같다)는 제18조의 규정에도 불구하고 법령에 근거하는 경우를 제외하고는 제17조 제1항의 규정에 따라 특정된 이용목적의 달성에 필요한 범위를 넘어 가명가공정보(개인정보인 것으로 한정한다. 이하 이 조에서 같다)를 취급하여서는 아니 된다.",
+      "markdown_anchor": "main-a41-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p4",
@@ -4541,10 +4509,11 @@
       "source_order": 242,
       "original_label": "４",
       "source_sha256": "2d1e29f2efadaca7a1e5adf0fd01f1ca4b497773e30b005fb381828bcd596778",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보에 대하여 제21조의 규정을 적용할 때에는 같은 조 제1항 및 제3항 중 “본인에게 통지하거나 공표하여야”를 “공표하여야”로, 같은 조 제4항 제1호부터 제3호까지의 규정 중 “본인에게 통지하거나 공표함”을 “공표함”으로 한다.",
+      "markdown_anchor": "main-a41-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p5",
@@ -4555,10 +4524,11 @@
       "source_order": 243,
       "original_label": "５",
       "source_sha256": "a5f354e1baf03b9ee6c1432c2008e25b39d903424f294244222ad21bbf64dcde",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자는 가명가공정보인 개인데이터 및 삭제정보 등을 이용할 필요가 없어진 때에는 해당 개인데이터 및 삭제정보 등을 지체 없이 소거하도록 노력하여야 한다. 이 경우에는 제22조의 규정을 적용하지 아니한다.",
+      "markdown_anchor": "main-a41-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p6",
@@ -4569,10 +4539,11 @@
       "source_order": 244,
       "original_label": "６",
       "source_sha256": "6fb67eea6d77bf31712686246d01939959e6ef86a9dd3f90845507ed695be748",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자는 제27조 제1항 및 제2항과 제28조 제1항의 규정에도 불구하고 법령에 근거하는 경우를 제외하고는 가명가공정보인 개인데이터를 제3자에게 제공하여서는 아니 된다. 이 경우 제27조 제5항 중 “앞의 각 항”을 “제41조 제6항”으로, 같은 항 제3호 중 “본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두고”를 “공표하고”로, 같은 조 제6항 중 “본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두어야”를 “공표하여야”로, 제29조 제1항 단서 중 “제27조 제1항 각 호 또는 제5항 각 호의 어느 하나(전조 제1항의 규정에 따른 개인데이터의 제공인 경우에는 제27조 제1항 각 호의 어느 하나)” 및 제30조 제1항 단서 중 “제27조 제1항 각 호 또는 제5항 각 호의 어느 하나”를 “법령에 근거하는 경우 또는 제27조 제5항 각 호의 어느 하나”로 한다.",
+      "markdown_anchor": "main-a41-p6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p7",
@@ -4583,10 +4554,11 @@
       "source_order": 245,
       "original_label": "７",
       "source_sha256": "48849543f60a5b3037ac423b818bdef92c8bce8879096f0b69981b44f99bc373",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자는 가명가공정보를 취급할 때 해당 가명가공정보의 작성에 사용된 개인정보에 관한 본인을 식별하기 위하여 해당 가명가공정보를 다른 정보와 대조하여서는 아니 된다.",
+      "markdown_anchor": "main-a41-p7",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p8",
@@ -4597,10 +4569,11 @@
       "source_order": 246,
       "original_label": "８",
       "source_sha256": "03f38a7b4281181849df0a1b9ff4a3c67bf7ca4a792e9b430ca68f0f8aeab145",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자는 가명가공정보를 취급할 때 전화를 걸거나, 우편 또는 민간사업자에 의한 신서의 송달에 관한 법률(헤이세이 14년 법률 제99호) 제2조 제6항에 규정된 일반신서편사업자나 같은 조 제9항에 규정된 특정신서편사업자에 의한 같은 조 제2항에 규정된 신서편으로 송부하거나, 전보를 송달하거나, 팩시밀리 장치나 전자적·자기적 방법(전자정보처리조직을 사용하는 방법 및 그 밖의 정보통신 기술을 이용하는 방법으로서 개인정보보호위원회 규칙으로 정하는 것을 말한다)을 사용하여 송신하거나, 주거를 방문하기 위하여 해당 가명가공정보에 포함된 연락처 및 그 밖의 정보를 이용하여서는 아니 된다.",
+      "markdown_anchor": "main-a41-p8",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a41-p9",
@@ -4611,10 +4584,11 @@
       "source_order": 247,
       "original_label": "９",
       "source_sha256": "a1266e1c6dc926a93c68def862206b7dda8e383a86f6a85d900b158fffa6feba",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보, 가명가공정보인 개인데이터 및 가명가공정보인 보유개인데이터에 대해서는 제17조 제2항, 제26조 및 제32조부터 제39조까지의 규정을 적용하지 아니한다.",
+      "markdown_anchor": "main-a41-p9",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a42",
@@ -4625,10 +4599,11 @@
       "source_order": 248,
       "original_label": "第四十二条",
       "source_sha256": "9eabed66d6900f10081f19689766dbfd47e3602d3cd66c8a5cb9c5d488e0ffd7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a42",
+      "korean_title": "제42조 (가명가공정보의 제3자 제공 제한 등)"
     },
     {
       "node_id": "main-a42-p1",
@@ -4639,10 +4614,11 @@
       "source_order": 249,
       "original_label": "",
       "source_sha256": "d5c180006376409cfc55e11c91ad62eeb59eee830b7cba5ceba61a6e7942d57f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "가명가공정보취급사업자는 법령에 근거하는 경우를 제외하고는 가명가공정보(개인정보인 것을 제외한다. 다음 항 및 제3항에서 같다)를 제3자에게 제공하여서는 아니 된다.",
+      "markdown_anchor": "main-a42-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a42-p2",
@@ -4653,10 +4629,11 @@
       "source_order": 250,
       "original_label": "２",
       "source_sha256": "327c098c81898e1889b6201fe62e9fe80affd6ebc6efb659f301c51c38ce1607",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제27조 제5항 및 제6항의 규정은 가명가공정보를 제공받는 자에 관하여 준용한다. 이 경우 같은 조 제5항 중 “앞의 각 항”을 “제42조 제1항”으로, 같은 항 제1호 중 “개인정보취급사업자”를 “가명가공정보취급사업자”로, 같은 항 제3호 중 “본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두고”를 “공표하고”로, 같은 조 제6항 중 “개인정보취급사업자”를 “가명가공정보취급사업자”로, “본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두어야”를 “공표하여야”로 바꾸어 읽는다.",
+      "markdown_anchor": "main-a42-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a42-p3",
@@ -4667,10 +4644,11 @@
       "source_order": 251,
       "original_label": "３",
       "source_sha256": "d3f4ce9e5c31370fbbdf5d9c73d3979a52d2a8100e3792df46dd23519f413cc6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제23조부터 제25조까지, 제40조 및 전조 제7항과 제8항의 규정은 가명가공정보취급사업자에 의한 가명가공정보의 취급에 관하여 준용한다. 이 경우 제23조 중 “유출, 멸실 또는 훼손”을 “유출”로, 전조 제7항 중 “위하여”를 “위하여 삭제정보 등을 취득하거나”로 바꾸어 읽는다.",
+      "markdown_anchor": "main-a42-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c4-s4",
@@ -4681,10 +4659,11 @@
       "source_order": 252,
       "original_label": "第四節　匿名加工情報取扱事業者等の義務",
       "source_sha256": "88f0578e9f5e932d2ffe3d8b25a3d66473d3c665453d6060083eafff64539f96",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c4-s4",
+      "korean_title": "제4절 익명가공정보취급사업자 등의 의무"
     },
     {
       "node_id": "main-a43",
@@ -4695,10 +4674,11 @@
       "source_order": 253,
       "original_label": "第四十三条",
       "source_sha256": "ed73eaeb4170b02bd6f3f751e49efb24261fcc6248f18ebadf18ac13e55bae6f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a43",
+      "korean_title": "제43조 (익명가공정보의 작성 등)"
     },
     {
       "node_id": "main-a43-p1",
@@ -4709,10 +4689,11 @@
       "source_order": 254,
       "original_label": "",
       "source_sha256": "2a9d5c5cf8e6771a2d055a70ea90fd8c7f4d230aed1c19ef6a3aabf6d77f90d8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보(익명가공정보데이터베이스 등을 구성하는 것으로 한정한다. 이하 이 장 및 제6장에서 같다)를 작성하는 때에는 특정 개인을 식별하거나 그 작성에 사용하는 개인정보를 복원할 수 없도록 하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 따라 해당 개인정보를 가공하여야 한다.",
+      "markdown_anchor": "main-a43-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a43-p2",
@@ -4723,10 +4704,11 @@
       "source_order": 255,
       "original_label": "２",
       "source_sha256": "8df710accc88eb11e36cffd1c8af4917a64ac278f8813856069e4f7a71edc51b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보를 작성한 때에는 그 작성에 사용한 개인정보에서 삭제한 기술 등 및 개인식별부호와 전항의 규정에 따라 실시한 가공 방법에 관한 정보의 유출을 방지하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 따라 이들 정보의 안전관리를 위한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a43-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a43-p3",
@@ -4737,10 +4719,11 @@
       "source_order": 256,
       "original_label": "３",
       "source_sha256": "ecaaed643ec77e58cf21bfc2bf9a66b19d651c23e8be0a52fbd41b9961b71c07",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보를 작성한 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 익명가공정보에 포함된 개인에 관한 정보의 항목을 공표하여야 한다.",
+      "markdown_anchor": "main-a43-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a43-p4",
@@ -4751,10 +4734,11 @@
       "source_order": 257,
       "original_label": "４",
       "source_sha256": "15ab52556765509fd850cb23793882273063eba994a52424dd62a20bb91bc3dd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보를 작성하여 해당 익명가공정보를 제3자에게 제공하는 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 제3자에게 제공되는 익명가공정보에 포함된 개인에 관한 정보의 항목 및 그 제공방법을 공표하는 동시에 해당 제3자에게 해당 제공에 관한 정보가 익명가공정보라는 사실을 명시하여야 한다.",
+      "markdown_anchor": "main-a43-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a43-p5",
@@ -4765,10 +4749,11 @@
       "source_order": 258,
       "original_label": "５",
       "source_sha256": "f44feed79003b63040e808095f6f9dd5571c3cbc0ccdc4cb23d0fe5b0ff02feb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보를 작성하여 스스로 해당 익명가공정보를 취급할 때 해당 익명가공정보의 작성에 사용된 개인정보에 관한 본인을 식별하기 위하여 해당 익명가공정보를 다른 정보와 대조하여서는 아니 된다.",
+      "markdown_anchor": "main-a43-p5",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a43-p6",
@@ -4779,10 +4764,11 @@
       "source_order": 259,
       "original_label": "６",
       "source_sha256": "57065f022dda05c15081e177d97b59ce9579afb3ec2046a275066ba5ba7c7f8e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자는 익명가공정보를 작성한 때에는 해당 익명가공정보의 안전관리를 위하여 필요하고 적절한 조치, 해당 익명가공정보의 작성 및 그 밖의 취급에 관한 고충의 처리, 그 밖에 해당 익명가공정보의 적정한 취급을 확보하기 위하여 필요한 조치를 스스로 취하고 그 조치의 내용을 공표하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a43-p6",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a44",
@@ -4793,10 +4779,11 @@
       "source_order": 260,
       "original_label": "第四十四条",
       "source_sha256": "2370b23fe6f8d603380b68b4d3ee77065d6b12b9e86d16efc824d848e8039858",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a44",
+      "korean_title": "제44조 (익명가공정보의 제공)"
     },
     {
       "node_id": "main-a44-p1",
@@ -4807,10 +4794,11 @@
       "source_order": 261,
       "original_label": "",
       "source_sha256": "1e53e4acca576421b3daa49b105155d2a116cc29d9b1ad9653b683d3005e9838",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "익명가공정보취급사업자는 익명가공정보(스스로 개인정보를 가공하여 작성한 것을 제외한다. 이하 이 절에서 같다)를 제3자에게 제공하는 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 제3자에게 제공되는 익명가공정보에 포함된 개인에 관한 정보의 항목 및 그 제공방법을 공표하는 동시에 해당 제3자에게 해당 제공에 관한 정보가 익명가공정보라는 사실을 명시하여야 한다.",
+      "markdown_anchor": "main-a44-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a45",
@@ -4821,10 +4809,11 @@
       "source_order": 262,
       "original_label": "第四十五条",
       "source_sha256": "7c63a7fbdd0e2ee0385d74c858b00e7daa5980ffa9835cf469d4475576918e25",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a45",
+      "korean_title": "제45조 (식별행위의 금지)"
     },
     {
       "node_id": "main-a45-p1",
@@ -4835,10 +4824,11 @@
       "source_order": 263,
       "original_label": "",
       "source_sha256": "b793ad7661c7e80a61c604d73105be740bd3c6897c78e8864ec675e5e9f9f377",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "익명가공정보취급사업자는 익명가공정보를 취급할 때 해당 익명가공정보의 작성에 사용된 개인정보에 관한 본인을 식별하기 위하여, 해당 개인정보에서 삭제된 기술 등이나 개인식별부호 또는 제43조 제1항이나 제116조 제1항(같은 조 제2항에서 준용하는 경우를 포함한다)의 규정에 따라 실시된 가공 방법에 관한 정보를 취득하거나 해당 익명가공정보를 다른 정보와 대조하여서는 아니 된다.",
+      "markdown_anchor": "main-a45-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a46",
@@ -4849,10 +4839,11 @@
       "source_order": 264,
       "original_label": "第四十六条",
       "source_sha256": "b1dcb3e8abf87f3f1c7f28ab6ba8af93a6948d20fe777a0e57585ba7d3166e53",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a46",
+      "korean_title": "제46조 (안전관리조치 등)"
     },
     {
       "node_id": "main-a46-p1",
@@ -4863,10 +4854,11 @@
       "source_order": 265,
       "original_label": "",
       "source_sha256": "6445259f88d8ee7bc6a47b2256c64677d32360c1bb96568e42adcf662de6b0e4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "익명가공정보취급사업자는 익명가공정보의 안전관리를 위하여 필요하고 적절한 조치, 익명가공정보의 취급에 관한 고충의 처리, 그 밖에 익명가공정보의 적정한 취급을 확보하기 위하여 필요한 조치를 스스로 취하고 그 조치의 내용을 공표하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a46-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c4-s5",
@@ -4877,10 +4869,11 @@
       "source_order": 266,
       "original_label": "第五節　民間団体による個人情報の保護の推進",
       "source_sha256": "a6849c662e8c2f23fe059bfd5d4ccf93ad4ef0a74d9c042e5597613157c10549",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c4-s5",
+      "korean_title": "제5절 민간단체에 의한 개인정보 보호의 추진"
     },
     {
       "node_id": "main-a47",
@@ -4891,10 +4884,11 @@
       "source_order": 267,
       "original_label": "第四十七条",
       "source_sha256": "43dc7086e55190839b2acd247dd2eb496f700df6d5446612813ac6d284422763",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a47",
+      "korean_title": "제47조 (인정)"
     },
     {
       "node_id": "main-a47-p1",
@@ -4905,10 +4899,11 @@
       "source_order": 268,
       "original_label": "",
       "source_sha256": "d739848a5129afd0128fa98d54e8ba671d7d72216b0e5e6980545ac8fe6be4f2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자, 가명가공정보취급사업자 또는 익명가공정보취급사업자(이하 이 장에서 “개인정보취급사업자 등”이라 한다)의 개인정보, 가명가공정보 또는 익명가공정보(이하 이 장에서 “개인정보 등”이라 한다)의 적정한 취급의 확보를 목적으로 다음에 열거된 업무를 수행하려는 법인(법인이 아닌 단체로서 대표자 또는 관리인을 정한 것을 포함한다. 다음 조 제3호 나목에서 같다)은 개인정보보호위원회의 인정을 받을 수 있다.",
+      "markdown_anchor": "main-a47-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p1-i1",
@@ -4919,10 +4914,11 @@
       "source_order": 269,
       "original_label": "一",
       "source_sha256": "03e852b997ff5ef8c52a96d7aa9c1a6d536fbb9aa9fd4db25e9d735482474d6f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "업무의 대상이 되는 개인정보취급사업자 등(이하 이 절에서 “대상사업자”라 한다)의 개인정보 등의 취급에 관한 제53조의 규정에 따른 고충의 처리.",
+      "markdown_anchor": "main-a47-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p1-i2",
@@ -4933,10 +4929,11 @@
       "source_order": 270,
       "original_label": "二",
       "source_sha256": "8ebb1e075b9509c25c562e1eb74d486bcbbb9194c9a51d68dcadab9356c33e7f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보 등의 적정한 취급의 확보에 기여하는 사항에 관한 대상사업자에 대한 정보의 제공.",
+      "markdown_anchor": "main-a47-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p1-i3",
@@ -4947,10 +4944,11 @@
       "source_order": 271,
       "original_label": "三",
       "source_sha256": "cf28cf440eae35e7fa356365ae52a28f19714d7424001adff148445f855029f6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 호에 열거된 것 외에 대상사업자의 개인정보 등의 적정한 취급의 확보에 관하여 필요한 업무.",
+      "markdown_anchor": "main-a47-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p2",
@@ -4961,10 +4959,11 @@
       "source_order": 272,
       "original_label": "２",
       "source_sha256": "63632e9e0790ce67218b63f9839a6924c10af17752c29671345b5a091e014f07",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 인정은 대상이 되는 개인정보취급사업자 등의 사업 종류 및 그 밖의 업무 범위를 한정하여 할 수 있다.",
+      "markdown_anchor": "main-a47-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p3",
@@ -4975,10 +4974,11 @@
       "source_order": 273,
       "original_label": "３",
       "source_sha256": "1137865fe4b21a1c609eff20a486659ebc0016fded042a2a188a5d1df81ffb7b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제1항의 인정을 받으려는 자는 정령으로 정하는 바에 따라 개인정보보호위원회에 신청하여야 한다.",
+      "markdown_anchor": "main-a47-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a47-p4",
@@ -4989,10 +4989,11 @@
       "source_order": 274,
       "original_label": "４",
       "source_sha256": "c34315328be5bce2feff9bd73e931ee92196e97ac95b75d10417d3014425f947",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보보호위원회는 제1항의 인정을 한 때에는 그 사실(제2항의 규정에 따라 업무 범위를 한정하는 인정인 경우에는 그 인정에 관한 업무 범위를 포함한다)을 공시하여야 한다.",
+      "markdown_anchor": "main-a47-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a48",
@@ -5003,10 +5004,11 @@
       "source_order": 275,
       "original_label": "第四十八条",
       "source_sha256": "39c5653a679fd2fa93672d98ce9cb35341f61476860532fbd9923d7a9b906911",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a48",
+      "korean_title": "제48조 (결격조항)"
     },
     {
       "node_id": "main-a48-p1",
@@ -5017,10 +5019,11 @@
       "source_order": 276,
       "original_label": "",
       "source_sha256": "acf3b87f461dde260525670d3f0bd444bc53b9db45deba956868cc67ec5c5856",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 각 호의 어느 하나에 해당하는 자는 전조 제1항의 인정을 받을 수 없다.",
+      "markdown_anchor": "main-a48-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a48-p1-i1",
@@ -5031,10 +5034,11 @@
       "source_order": 277,
       "original_label": "一",
       "source_sha256": "c8a65d80cd3f692c8b81c65081b610ee337695cd5c8c9ffff1cd30ae6e8a8d0d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률의 규정에 따라 형을 선고받아 그 집행이 종료되거나 집행을 받지 않게 된 날부터 2년이 지나지 않은 자.",
+      "markdown_anchor": "main-a48-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a48-p1-i2",
@@ -5045,10 +5049,11 @@
       "source_order": 278,
       "original_label": "二",
       "source_sha256": "f55290c5312fcec99d6b0fa2bcef874a73ed3c5c224af2e085e14f82e1a8da8e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제155조 제1항의 규정에 따라 인정이 취소되어 그 취소일부터 2년이 지나지 않은 자.",
+      "markdown_anchor": "main-a48-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a48-p1-i3",
@@ -5059,10 +5064,11 @@
       "source_order": 279,
       "original_label": "三",
       "source_sha256": "2dddf7eb0c0983f08f49fe5e28f777b9bb5c14396923defca466a05b0a164ff6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "그 업무를 수행하는 임원(법인이 아닌 단체로서 대표자 또는 관리인을 정한 것의 대표자 또는 관리인을 포함한다. 이하 이 조에서 같다) 중에 다음의 어느 하나에 해당하는 자가 있는 것.",
+      "markdown_anchor": "main-a48-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a48-p1-i3-si11",
@@ -5073,10 +5079,12 @@
       "source_order": 280,
       "original_label": "イ",
       "source_sha256": "47a902f83d8190a6b7b1e8bae61b75e74df87791eefcc9badbd04444cd106fc4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "구금형 이상의 형을 선고받거나 이 법률의 규정에 따라 형을 선고받아 그 집행이 종료되거나 집행을 받지 않게 된 날부터 2년이 지나지 않은 자.",
+      "markdown_anchor": "main-a48-p1-i3-si11",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "가(イ)목"
     },
     {
       "node_id": "main-a48-p1-i3-si12",
@@ -5087,10 +5095,12 @@
       "source_order": 281,
       "original_label": "ロ",
       "source_sha256": "fc3884f7b83a4fe0c8bc8999c91db86257bbd84943d5f7709914fc454226470d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제155조 제1항의 규정에 따라 인정이 취소된 법인에서 그 취소일 전 30일 이내에 임원이었던 자로서 그 취소일부터 2년이 지나지 않은 자.",
+      "markdown_anchor": "main-a48-p1-i3-si12",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_label": "나(ロ)목"
     },
     {
       "node_id": "main-a49",
@@ -5101,10 +5111,11 @@
       "source_order": 282,
       "original_label": "第四十九条",
       "source_sha256": "128baef0bbb2639dcb02e5de736f629cd6db9e30305a179be879587cceeaeaee",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a49",
+      "korean_title": "제49조 (인정 기준)"
     },
     {
       "node_id": "main-a49-p1",
@@ -5115,10 +5126,11 @@
       "source_order": 283,
       "original_label": "",
       "source_sha256": "b029e1030cad63fa313b81db0ac6bef70a899b7a2a60644094771cd98c6c6c41",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보보호위원회는 제47조 제1항의 인정 신청이 다음 각 호의 모두에 적합하다고 인정할 때가 아니면 그 인정을 하여서는 아니 된다.",
+      "markdown_anchor": "main-a49-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a49-p1-i1",
@@ -5129,10 +5141,11 @@
       "source_order": 284,
       "original_label": "一",
       "source_sha256": "251a1108334d294e8e783f21bd9ddfc485d41bcfc5b4e66f876d9ddc06d63251",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제1항 각 호에 열거된 업무를 적정하고 확실하게 수행하기 위하여 필요한 업무 실시방법이 정해져 있을 것.",
+      "markdown_anchor": "main-a49-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a49-p1-i2",
@@ -5143,10 +5156,11 @@
       "source_order": 285,
       "original_label": "二",
       "source_sha256": "e359c870ab36ae87139e403a3e790dc467d83c882cae4b3104b4d502ccdb3b39",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제1항 각 호에 열거된 업무를 적정하고 확실하게 수행하기에 충분한 지식 및 능력과 경리적 기초를 가지고 있을 것.",
+      "markdown_anchor": "main-a49-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a49-p1-i3",
@@ -5157,10 +5171,11 @@
       "source_order": 286,
       "original_label": "三",
       "source_sha256": "e410b30fb6ff093d3b511232cb825757702475e5c1da3d4709848a83d08f04fc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제1항 각 호에 열거된 업무 외의 업무를 수행하는 경우 그 업무를 수행함으로써 같은 항 각 호에 열거된 업무가 불공정하게 될 우려가 없을 것.",
+      "markdown_anchor": "main-a49-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a50",
@@ -5171,10 +5186,11 @@
       "source_order": 287,
       "original_label": "第五十条",
       "source_sha256": "13401935d5d64d1fd8c2b3d3e864e8a697c75507dba7b4839e583da032599037",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a50",
+      "korean_title": "제50조 (변경 인정 등)"
     },
     {
       "node_id": "main-a50-p1",
@@ -5185,10 +5201,11 @@
       "source_order": 288,
       "original_label": "",
       "source_sha256": "809bbab98b5974159d6d71241c4a7e00845e753bd6e312e78f99f5634d66f601",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제1항의 인정(같은 조 제2항의 규정에 따라 업무 범위를 한정하는 인정을 포함한다. 다음 조 제1항 및 제155조 제1항 제5호에서 같다)을 받은 자는 그 인정에 관한 업무 범위를 변경하려는 때에는 개인정보보호위원회의 인정을 받아야 한다. 다만, 개인정보보호위원회 규칙으로 정하는 경미한 변경의 경우에는 그러하지 아니하다.",
+      "markdown_anchor": "main-a50-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a50-p2",
@@ -5199,10 +5216,11 @@
       "source_order": 289,
       "original_label": "２",
       "source_sha256": "c4acc4d76af49f7067b687ccbb5cedd460e848b31e2bfd4cae9a337c0f387ff3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제3항 및 제4항과 전조의 규정은 전항의 변경 인정에 관하여 준용한다.",
+      "markdown_anchor": "main-a50-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a51",
@@ -5213,10 +5231,11 @@
       "source_order": 290,
       "original_label": "第五十一条",
       "source_sha256": "3477c2435acb87fb07384bdc26a3301b99d49d99af7751bf0293badaeb91b69b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a51",
+      "korean_title": "제51조 (폐지 신고)"
     },
     {
       "node_id": "main-a51-p1",
@@ -5227,10 +5246,11 @@
       "source_order": 291,
       "original_label": "",
       "source_sha256": "5ccd1564064b225918a386930c2d78e2214733fad913b3623cd972aa668042cf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제47조 제1항의 인정(전조 제1항의 변경 인정을 포함한다)을 받은 자(이하 이 절 및 제6장에서 “인정개인정보보호단체”라 한다)는 그 인정에 관한 업무(이하 이 절 및 제6장에서 “인정업무”라 한다)를 폐지하려는 때에는 정령으로 정하는 바에 따라 미리 그 사실을 개인정보보호위원회에 신고하여야 한다.",
+      "markdown_anchor": "main-a51-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a51-p2",
@@ -5241,10 +5261,11 @@
       "source_order": 292,
       "original_label": "２",
       "source_sha256": "88d345cd3576bbcc77b08f20fbd24cf6da07ea6d168abd7ce5568b06610d1f21",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보보호위원회는 전항의 규정에 따른 신고가 있었을 때에는 그 사실을 공시하여야 한다.",
+      "markdown_anchor": "main-a51-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a52",
@@ -5255,10 +5276,11 @@
       "source_order": 293,
       "original_label": "第五十二条",
       "source_sha256": "2241b1544bfdaaca636d65d30922cc1483607a31dbbd325432d4fd1da10d5d68",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a52",
+      "korean_title": "제52조 (대상사업자)"
     },
     {
       "node_id": "main-a52-p1",
@@ -5269,10 +5291,11 @@
       "source_order": 294,
       "original_label": "",
       "source_sha256": "fc2cce5c6c47cba3808c0742e5d7068472e585861cee476952e4bd66145de6f0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 인정업무의 대상이 되는 것에 동의한 개인정보취급사업자 등을 대상사업자로 하여야 한다. 이 경우 제54조 제4항의 규정에 따른 조치를 취하였음에도 대상사업자가 같은 조 제1항에 규정된 개인정보보호지침을 준수하지 않는 때에는 해당 대상사업자를 인정업무의 대상에서 제외할 수 있다.",
+      "markdown_anchor": "main-a52-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a52-p2",
@@ -5283,10 +5306,11 @@
       "source_order": 295,
       "original_label": "２",
       "source_sha256": "c87c6c7f5231408535e6b485ee3ea49604446cf5ec78fa320e8d687f2c9a8ce0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 대상사업자의 성명 또는 명칭을 공표하여야 한다.",
+      "markdown_anchor": "main-a52-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a53",
@@ -5297,10 +5321,11 @@
       "source_order": 296,
       "original_label": "第五十三条",
       "source_sha256": "d5949e2aae2781874ea5d4a5f64e55d57746675ed277c47dd89c0f5125c56c03",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a53",
+      "korean_title": "제53조 (고충 처리)"
     },
     {
       "node_id": "main-a53-p1",
@@ -5311,10 +5336,11 @@
       "source_order": 297,
       "original_label": "",
       "source_sha256": "1878ab24b9d672f69904f96a0e23318af02673b579458696f6e1af456833c72e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 본인 또는 그 밖의 관계자로부터 대상사업자의 개인정보 등의 취급에 관한 고충의 해결 신청이 있었을 때에는 그 상담에 응하고 신청인에게 필요한 조언을 하며 그 고충에 관한 사정을 조사하는 동시에 해당 대상사업자에게 그 고충의 내용을 통지하여 신속한 해결을 요구하여야 한다.",
+      "markdown_anchor": "main-a53-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a53-p2",
@@ -5325,10 +5351,11 @@
       "source_order": 298,
       "original_label": "２",
       "source_sha256": "714f75016094686a9c7437626e9adc67dd97840a985a2d56aa1160878c5f06cf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 전항의 신청에 관한 고충의 해결에 필요하다고 인정하는 때에는 해당 대상사업자에게 문서 또는 구두에 의한 설명이나 자료의 제출을 요구할 수 있다.",
+      "markdown_anchor": "main-a53-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a53-p3",
@@ -5339,10 +5366,11 @@
       "source_order": 299,
       "original_label": "３",
       "source_sha256": "b45ff72017c22b1840beed42b2b71fa7d1361002c766e802370a0f901084eaeb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "대상사업자는 인정개인정보보호단체로부터 전항의 규정에 따른 요구가 있었을 때에는 정당한 이유 없이 이를 거절하여서는 아니 된다.",
+      "markdown_anchor": "main-a53-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a54",
@@ -5353,10 +5381,11 @@
       "source_order": 300,
       "original_label": "第五十四条",
       "source_sha256": "ce4c966275066713f61b60928ae2a8f5c9543a59544b1853c97661aea236b30a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a54",
+      "korean_title": "제54조 (개인정보보호지침)"
     },
     {
       "node_id": "main-a54-p1",
@@ -5367,10 +5396,11 @@
       "source_order": 301,
       "original_label": "",
       "source_sha256": "f461794b3cab8fd78c87c17d8240946e4a65c2ae6c9c2ac7fdc51a7bc4590a3b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 대상사업자의 개인정보 등의 적정한 취급을 확보하기 위하여, 개인정보에 관한 이용목적의 특정, 안전관리를 위한 조치, 공개 등의 청구 등에 응하는 절차 및 그 밖의 사항 또는 가명가공정보나 익명가공정보에 관한 작성방법, 그 정보의 안전관리를 위한 조치 및 그 밖의 사항에 관하여 소비자의 의견을 대표하는 자 및 그 밖의 관계자의 의견을 듣고 이 법률 규정의 취지에 따른 지침(이하 이 절 및 제6장에서 “개인정보보호지침”이라 한다)을 작성하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a54-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a54-p2",
@@ -5381,10 +5411,11 @@
       "source_order": 302,
       "original_label": "２",
       "source_sha256": "42c183e599cd5349cd0f016a8f1c17343aac17accefc63c0707d3fa7a2de9288",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 전항의 규정에 따라 개인정보보호지침을 작성한 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 지체 없이 해당 개인정보보호지침을 개인정보보호위원회에 신고하여야 한다. 이를 변경한 때에도 같다.",
+      "markdown_anchor": "main-a54-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a54-p3",
@@ -5395,10 +5426,11 @@
       "source_order": 303,
       "original_label": "３",
       "source_sha256": "3983fc2d27f89165790d50aee8ce2642195aa8abd48fab0d51ffd61da1aedc10",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보보호위원회는 전항의 규정에 따른 신고가 있었을 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 개인정보보호지침을 공표하여야 한다.",
+      "markdown_anchor": "main-a54-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a54-p4",
@@ -5409,10 +5441,11 @@
       "source_order": 304,
       "original_label": "４",
       "source_sha256": "de28571aa752ec6781e413c4f6f5c552a5dedb21af9f16b1ff001825c7bb4c91",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 전항의 규정에 따라 개인정보보호지침이 공표된 때에는 대상사업자에게 해당 개인정보보호지침을 준수하게 하기 위하여 필요한 지도, 권고 및 그 밖의 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a54-p4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a55",
@@ -5423,10 +5456,11 @@
       "source_order": 305,
       "original_label": "第五十五条",
       "source_sha256": "1b04106525a991e7319210fe33cdba70a71169d83b7d18fdfba0348b5febaca3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a55",
+      "korean_title": "제55조 (목적 외 이용의 금지)"
     },
     {
       "node_id": "main-a55-p1",
@@ -5437,10 +5471,11 @@
       "source_order": 306,
       "original_label": "",
       "source_sha256": "dfe31425c7e4037baaf3168d5df884f4f9c78171b43961627b4fe99baa399e22",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체는 인정업무를 수행하면서 알게 된 정보를 인정업무에 사용하는 목적 외에 이용하여서는 아니 된다.",
+      "markdown_anchor": "main-a55-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a56",
@@ -5451,10 +5486,11 @@
       "source_order": 307,
       "original_label": "第五十六条",
       "source_sha256": "1a44ce19b7d7f921108f885f938ede2f0e07530af6906c0a5604746e75cb277c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a56",
+      "korean_title": "제56조 (명칭의 사용 제한)"
     },
     {
       "node_id": "main-a56-p1",
@@ -5465,10 +5501,11 @@
       "source_order": 308,
       "original_label": "",
       "source_sha256": "3260a0fc08aedb8713cac38c8f9950b133fe71b02756faee99d6632f4e2e30e8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체가 아닌 자는 인정개인정보보호단체라는 명칭 또는 이와 혼동하기 쉬운 명칭을 사용하여서는 아니 된다.",
+      "markdown_anchor": "main-a56-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c4-s6",
@@ -5479,10 +5516,11 @@
       "source_order": 309,
       "original_label": "第六節　雑則",
       "source_sha256": "c5c1c6a0471310b9a62d74cf1a23e78632b81421a749bd969dc34925f1a88834",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c4-s6",
+      "korean_title": "제6절 잡칙"
     },
     {
       "node_id": "main-a57",
@@ -5493,10 +5531,11 @@
       "source_order": 310,
       "original_label": "第五十七条",
       "source_sha256": "78fc68c7f6bf50359896287e3d8c7a3bdd88f01476155eefd5c783c022d9de56",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a57",
+      "korean_title": "제57조 (적용 제외)"
     },
     {
       "node_id": "main-a57-p1",
@@ -5507,10 +5546,11 @@
       "source_order": 311,
       "original_label": "",
       "source_sha256": "682de78b9ccddb55e6f2348ee7b9f42c31e1c2e6d1ea5acd0c072d25933ab315",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자 등 및 개인관련정보취급사업자 중 다음 각 호에 열거된 자에 대해서는 그 개인정보 등 및 개인관련정보를 취급하는 목적의 전부 또는 일부가 각각 해당 각 호에 규정된 목적인 때에는 이 장의 규정을 적용하지 아니한다.",
+      "markdown_anchor": "main-a57-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p1-i1",
@@ -5521,10 +5561,11 @@
       "source_order": 312,
       "original_label": "一",
       "source_sha256": "44b004f001b68a962af71cc40b65b6121f39d5b0e21ce36b5e25dd3b201dccb6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "방송기관, 신문사, 통신사 및 그 밖의 보도기관(보도를 업으로 하는 개인을 포함한다): 보도에 사용하기 위한 목적.",
+      "markdown_anchor": "main-a57-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p1-i2",
@@ -5535,10 +5576,11 @@
       "source_order": 313,
       "original_label": "二",
       "source_sha256": "e0a463c48858cee7cf8b9599d12dd65a15cb25b955ccc88ff7423002a878d5e0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "저술을 업으로 하는 자: 저술에 사용하기 위한 목적.",
+      "markdown_anchor": "main-a57-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p1-i3",
@@ -5549,10 +5591,11 @@
       "source_order": 314,
       "original_label": "三",
       "source_sha256": "04056637accfb3023a2d80956127e7eb8acefba5a67afc9fb82ac19f00d05263",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "종교단체: 종교활동(이에 부수되는 활동을 포함한다)에 사용하기 위한 목적.",
+      "markdown_anchor": "main-a57-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p1-i4",
@@ -5563,10 +5606,11 @@
       "source_order": 315,
       "original_label": "四",
       "source_sha256": "ddff0e7117eaee39d0752de9a4cf1e634ab309dc1fc135a0def78077964c6fc9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "정치단체: 정치활동(이에 부수되는 활동을 포함한다)에 사용하기 위한 목적.",
+      "markdown_anchor": "main-a57-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p2",
@@ -5577,10 +5621,11 @@
       "source_order": 316,
       "original_label": "２",
       "source_sha256": "40694a55d7dc525c67e65d78631b2b4aa0f191e82884c41dc8f36e9bb8802309",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항 제1호에 규정된 “보도”란 불특정 다수에게 객관적 사실을 사실로 알리는 것(이에 근거하여 의견 또는 견해를 밝히는 것을 포함한다)을 말한다.",
+      "markdown_anchor": "main-a57-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a57-p3",
@@ -5591,10 +5636,11 @@
       "source_order": 317,
       "original_label": "３",
       "source_sha256": "55d76d569101988648fe2cfdb1fd19210605aa405fd723f04f39fa708b17b517",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제1항 각 호에 열거된 개인정보취급사업자 등은 개인데이터, 가명가공정보 또는 익명가공정보의 안전관리를 위하여 필요하고 적절한 조치, 개인정보 등의 취급에 관한 고충의 처리, 그 밖에 개인정보 등의 적정한 취급을 확보하기 위하여 필요한 조치를 스스로 취하고 그 조치의 내용을 공표하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a57-p3",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58",
@@ -5605,10 +5651,11 @@
       "source_order": 318,
       "original_label": "第五十八条",
       "source_sha256": "a0052c06b951f5a6b69e89dee6c234df2e66fffa63d3c5cf6ebd6d5040a67a1f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a58",
+      "korean_title": "제58조 (적용 특례)"
     },
     {
       "node_id": "main-a58-p1",
@@ -5619,10 +5666,11 @@
       "source_order": 319,
       "original_label": "",
       "source_sha256": "7c0460e7c2daec610f77d0d88267270021b72b82b93eab004198ceff55dbc973",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자 또는 익명가공정보취급사업자 중 다음에 열거된 자에 대해서는 제32조부터 제39조까지 및 제4절의 규정을 적용하지 아니한다.",
+      "markdown_anchor": "main-a58-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58-p1-i1",
@@ -5633,10 +5681,11 @@
       "source_order": 320,
       "original_label": "一",
       "source_sha256": "feb632e694c9afc5052ee490182799f116a8a2841ae0cbf633b909de296896f8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "별표 제2에 열거된 법인.",
+      "markdown_anchor": "main-a58-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58-p1-i2",
@@ -5647,10 +5696,11 @@
       "source_order": 321,
       "original_label": "二",
       "source_sha256": "495ed0f7bbea0c925ea4d4c3b7fa98e6ffa58d3726410e9d66f4ed98c367912a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방독립행정법인 중 지방독립행정법인법 제21조 제1호에 열거된 업무를 주된 목적으로 하는 것 또는 같은 조 제2호나 제3호(치(チ)에 관한 부분으로 한정한다)에 열거된 업무를 목적으로 하는 것.",
+      "markdown_anchor": "main-a58-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58-p2",
@@ -5661,10 +5711,11 @@
       "source_order": 322,
       "original_label": "２",
       "source_sha256": "cffdaf1a96b5f655ee7c6781a1e1ae906aee00f74a50412bb1db9067f5593327",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 각 호에 열거된 자가 수행하는 해당 각 호에서 정하는 업무에서의 개인정보, 가명가공정보 또는 개인관련정보의 취급에 대해서는 개인정보취급사업자, 가명가공정보취급사업자 또는 개인관련정보취급사업자에 의한 개인정보, 가명가공정보 또는 개인관련정보의 취급으로 보아 이 장(제32조부터 제39조까지 및 제4절을 제외한다) 및 제6장부터 제8장까지의 규정을 적용한다.",
+      "markdown_anchor": "main-a58-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58-p2-i1",
@@ -5675,10 +5726,11 @@
       "source_order": 323,
       "original_label": "一",
       "source_sha256": "0db63045a2601a53aa65c94d3d60c7906f9a1bd1651e760ebe4eb56c764f7f19",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관: 의료법(쇼와 23년 법률 제205호) 제1조의5 제1항에 규정된 병원(다음 호에서 “병원”이라 한다) 및 같은 조 제2항에 규정된 진료소와 학교교육법(쇼와 22년 법률 제26호) 제1조에 규정된 대학의 운영.",
+      "markdown_anchor": "main-a58-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a58-p2-i2",
@@ -5689,10 +5741,11 @@
       "source_order": 324,
       "original_label": "二",
       "source_sha256": "93b04227eaa683bd2d4fa37062075d211973a8911833103fd221c07f8970eba3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인노동자건강안전기구: 병원의 운영.",
+      "markdown_anchor": "main-a58-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a59",

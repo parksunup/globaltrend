@@ -109,6 +109,75 @@
       "byte_count": 1793657,
       "sha256": "20101adfc8d2d8c40e516549b82eddd5a6c82775aec42b639663ce35e4b1f8f1",
       "note": "UK GDPR 개정 관련 법률; 적용·시행 관계 검토 필요"
+    },
+    {
+      "source_id": "appi-recheck",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "새 환경에서 고정 판본 재확보; 법문 정규화 해시 대조 통과"
+    },
+    {
+      "source_id": "uk-recheck",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1675157,
+      "sha256": "d041959993a42b6aaddff53031a681b48d7d05d46923e67205102a89d2d830fe",
+      "note": "새 환경에서 XML 재확보; 현행성·권리 조건 검토 상태 유지"
+    },
+    {
+      "source_id": "ccpa-recheck",
+      "url": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 453310,
+      "sha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1",
+      "note": "새 환경에서 감독기관 PDF 재확보; 주 의회 대조·권리 확인 미완료"
+    }
+  ],
+  "latest_failed_access": [
+    {
+      "url": "https://www.law.go.kr/법령/개인정보보호법",
+      "outcome": "HTTP 503",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://www.npc.gov.cn/npc/c30834/202108/t20210820_313088.html",
+      "outcome": "HTTP 503",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679",
+      "outcome": "HTTP 202; zero-byte response",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://world.moleg.go.kr/",
+      "outcome": "HTTP 503",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://argos-net.com/v1/translate-en_ko-1_1.argosmodel",
+      "outcome": "proxy tunnel HTTP 403",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://www.pipc.go.kr/",
+      "outcome": "proxy tunnel HTTP 403",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://flk.npc.gov.cn/",
+      "outcome": "proxy tunnel HTTP 403",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://op.europa.eu/",
+      "outcome": "proxy tunnel HTTP 403",
+      "checked_on": "2026-10-06"
     }
   ]
 }
