@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0",
+  "document_id": "jp-appi",
+  "official_name": "個人情報の保護に関する法律",
+  "korean_title": "개인정보 보호에 관한 법률",
+  "jurisdiction_code": "JP",
+  "law_number": "平成十五年法律第五十七号",
+  "checked_on": "2026-10-06",
+  "checked_timezone": "Asia/Seoul",
+  "source": {
+    "original_url": "https://elaws.e-gov.go.jp/document?lawid=415AC0000000057",
+    "redirected_url": "https://laws.e-gov.go.jp/document?lawid=415AC0000000057",
+    "authority_index_url": "https://www.ppc.go.jp/personalinfo/legal/",
+    "access_status": "blocked",
+    "version_id": null,
+    "version_status": "unconfirmed",
+    "effective_date": null,
+    "candidate_version_label": "PPC 안내: 令和８年10月１日施行版",
+    "candidate_effective_date": "2026-10-01",
+    "full_text_obtained": false,
+    "full_text_sha256": null
+  },
+  "translation": {
+    "language": "ko",
+    "status": "blocked_before_translation",
+    "human_review_status": "not_started",
+    "complete": false,
+    "public_release_status": "withheld",
+    "withheld_reasons": [
+      "공식 법문 전체 및 정확한 적용 판본 미확보",
+      "PPC가 연결한 PDL1.0 이용규약 전체 및 원문 공급자의 조건 미확인"
+    ],
+    "coverage_percent": null,
+    "translated_articles": 0,
+    "provisions": [],
+    "appendices": []
+  },
+  "coverage": {
+    "source_counts": {
+      "parts": null,
+      "chapters": null,
+      "sections": null,
+      "subsections": null,
+      "articles": null,
+      "paragraphs": null,
+      "items": null,
+      "subitems": null,
+      "supplementary_provisions": null,
+      "supplementary_articles": null,
+      "appended_tables": null
+    },
+    "translated_counts": {
+      "parts": 0,
+      "chapters": 0,
+      "sections": 0,
+      "subsections": 0,
+      "articles": 0,
+      "paragraphs": 0,
+      "items": 0,
+      "subitems": 0,
+      "supplementary_provisions": 0,
+      "supplementary_articles": 0,
+      "appended_tables": 0
+    },
+    "missing_node_ids": null,
+    "order_verified": false,
+    "comparison_status": "not_possible_without_full_source"
+  },
+  "links": {
+    "markdown": "appi.md",
+    "status": "appi-status.md",
+    "review_notes": "appi-review-notes.md"
+  },
+  "future_node_id_policy": {
+    "rule": "확정된 판본 안에서만 jp-appi/{version_id}/article/{source_article_id}/paragraph/{source_paragraph_id}/item/{source_item_id} 형식으로 안정적 식별자를 부여한다. 삭제·가지 조문 및 부칙·별표도 원문 식별자로 별도 보존한다.",
+    "assigned": false
+  }
+}
