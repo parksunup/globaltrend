@@ -1,0 +1,115 @@
+{
+  "source_id": "curia",
+  "checked_at": "2026-10-06T14:54:33+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 2,
+  "counting_unit": "one_event_per_record; related documents are not separate samples",
+  "items": [
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "curia-c97-23p",
+      "original_title": "GDPR: the action brought by WhatsApp Ireland against Binding Decision 1/2021 of the European Data Protection Board is admissible",
+      "organization": [
+        "Court of Justice of the European Union"
+      ],
+      "jurisdictions": [
+        "EU",
+        "IE"
+      ],
+      "source_published_date": "2026-02-10",
+      "source_published_date_precision": "day",
+      "official_url": "https://curia.europa.eu/site/upload/docs/application/pdf/2026-02/cp260011en.pdf",
+      "document_type": "court_press_release",
+      "korean_title": "WhatsApp의 EDPB 구속력 있는 결정 취소소송, 적법성 인정",
+      "summary_ko": "CURIA 보도자료에 따르면 사법재판소는 EDPB 결정이 소송으로 다툴 수 있는 행위이고 WhatsApp에 직접 관련된다고 판단했다. 일반재판소의 각하 결정을 취소하고 본안 심사를 위해 사건을 돌려보냈으며, 이 단계에서 GDPR 위반 여부를 최종 판단한 것으로 쓰지 않는다.",
+      "evidence": [
+        {
+          "url": "https://curia.europa.eu/site/upload/docs/application/pdf/2026-02/cp260011en.pdf",
+          "location": "PDF 1쪽 제목·상단 날짜·도입 두 문단, 2쪽 WhatsApp’s action is thus declared admissible로 시작하는 문단"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "권리구제",
+        "EDPB",
+        "취소소송"
+      ],
+      "event_id": "C-97/23 P",
+      "related_documents": [
+        {
+          "official_url": "https://curia.europa.eu/juris/documents.jsf?num=C-97/23%20P",
+          "relationship": "same_case_judgment_document_list",
+          "access_status": "blocked_after_redirect_to_infocuria_proxy_connect_403",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "CURIA 공식 보도자료를 직접 확인했습니다. 원문은 미디어용 비구속적 문서라고 명시합니다. 판결 전문 검수와 사람의 법적 검토는 미완료입니다.",
+        "PDF 상단 날짜를 보도자료 발행일로 기록했습니다. 선고일도 본문에서 같은 날의 판결로 설명되지만 별도 날짜 필드로 보존합니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "case_metadata": {
+        "case_number": "C-97/23 P",
+        "ecli": null,
+        "ecli_status": "not_visible_in_press_release",
+        "judgment_date": "2026-02-10"
+      }
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "curia-c526-24",
+      "original_title": "A request for access to one’s own personal data may be considered abusive and refused if it is made for the sole purpose of subsequently claiming compensation for an alleged infringement of the GDPR",
+      "organization": [
+        "Court of Justice of the European Union"
+      ],
+      "jurisdictions": [
+        "EU",
+        "DE",
+        "AT"
+      ],
+      "source_published_date": "2026-03-19",
+      "source_published_date_precision": "day",
+      "official_url": "https://curia.europa.eu/site/upload/docs/application/pdf/2026-03/cp260038en.pdf",
+      "document_type": "court_press_release",
+      "korean_title": "손해배상 청구 조건을 인위적으로 만들기 위한 개인정보 열람 요구의 남용 판단",
+      "summary_ko": "CURIA 보도자료는 최초 열람 요구도 일정한 상황에서 과도하거나 남용적일 수 있다고 설명한다. 개인정보처리자가 손해배상 조건을 인위적으로 만들려는 의도를 입증하는 경우를 전제로 하며, 실제 분쟁 해결은 독일 국내법원이 맡는다. 모든 열람 요구를 거부할 수 있다는 결론으로 일반화하지 않는다.",
+      "evidence": [
+        {
+          "url": "https://curia.europa.eu/site/upload/docs/application/pdf/2026-03/cp260038en.pdf",
+          "location": "PDF 1쪽 The Court replies / That is the case where로 시작하는 문단, 2쪽 첫 문단; 1쪽 사건번호·상단 날짜"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "권리구제",
+        "열람권",
+        "권리남용",
+        "손해배상"
+      ],
+      "event_id": "C-526/24",
+      "related_documents": [
+        {
+          "official_url": "https://curia.europa.eu/juris/documents.jsf?num=C-526/24",
+          "relationship": "same_case_judgment_document_list",
+          "access_status": "blocked_after_redirect_to_infocuria_proxy_connect_403",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "CURIA 공식 보도자료를 직접 확인했습니다. 원문은 미디어용 비구속적 문서라고 명시합니다. 판결 전문 검수와 사람의 법적 검토는 미완료입니다.",
+        "PDF 상단 날짜를 보도자료 발행일로 기록했습니다. 선고일도 본문에서 같은 날의 판결로 설명되지만 별도 날짜 필드로 보존합니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "case_metadata": {
+        "case_number": "C-526/24",
+        "ecli": null,
+        "ecli_status": "not_visible_in_press_release",
+        "judgment_date": "2026-03-19"
+      }
+    }
+  ]
+}

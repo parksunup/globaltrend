@@ -1,0 +1,298 @@
+{
+  "source_id": "edpb",
+  "checked_at": "2026-10-06T14:54:33+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 5,
+  "counting_unit": "one_event_per_record; related documents are not separate samples",
+  "items": [
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "edpb-2026-09-21-1",
+      "original_title": "EDPB harmonises fining methodology and adopts final DSA-GDPR guidelines",
+      "organization": [
+        "European Data Protection Board"
+      ],
+      "jurisdictions": [
+        "EU"
+      ],
+      "source_published_date": "2026-09-21",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en",
+      "document_type": "official_news",
+      "korean_title": "과징금 부과 판단 기준과 DSA–GDPR 최종 지침 채택",
+      "summary_ko": "EDPB는 GDPR 과징금 부과 여부를 판단하는 지침과 DSA–GDPR 상호작용에 관한 최종 지침을 채택했다고 밝혔다. 과징금 관련 새 지침은 2026년 11월 13일까지 공개 의견수렴 대상이며, DSA–GDPR 지침은 의견수렴 후 최종화되었다.",
+      "evidence": [
+        {
+          "url": "https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en",
+          "location": ".node-article-full__body의 p 1, p 8, p 9; 상단 .node-article-full__title 및 time.node-article-full__date"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "과징금",
+        "DSA",
+        "규제협력"
+      ],
+      "event_id": "edpb-event-2026-09-21-1",
+      "related_documents": [
+        {
+          "official_url": "https://www.edpb.europa.eu/documents/guideline/guidelines-042026-on-the-application-of-the-power-to-impose-administrative_en",
+          "original_title": "guidelines on the application of the power to impose administrative fines in relation to other corrective powers under the GDPR",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/documents/guideline/guidelines-32025-on-the-interplay-between-the-dsa-and-the-gdpr_en",
+          "original_title": "the final version of its guidelines on interplay between the Digital Service Act (DSA) and the GDPR",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/public-consultations/guidelines-042026-on-the-application-of-the-power-to-impose-administrative_en#no-back",
+          "original_title": "public consultation until 13 November 2026",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/endorsed-wp29-guidelines_en",
+          "original_title": "WP29 guidelines on the application and setting of administrative fines for the purposes of the Regulation 2016/679",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/documents/guideline/guidelines-042022-on-the-calculation-of-administrative-fines-under-the-gdpr_en",
+          "original_title": "adopted guidelines on the calculation of administrative fines under the GDPR",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "직접 확인한 기사에 근거한 한국어 초안입니다. 관련 결정·지침 전문은 별도 검수 대상입니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다."
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "edpb-2026-07-17-2",
+      "original_title": "EDPB calls for legal basis for cross-regulatory information sharing",
+      "organization": [
+        "European Data Protection Board"
+      ],
+      "jurisdictions": [
+        "EU"
+      ],
+      "source_published_date": "2026-07-17",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en",
+      "document_type": "official_news",
+      "korean_title": "분야별 규제기관 간 정보 공유의 법적 근거 마련 촉구",
+      "summary_ko": "EDPB는 유럽연합 집행위원회에 서로 다른 분야의 규제기관이 집행 관련 정보를 공유할 수 있도록 법적 근거를 제안할 것을 촉구했다. 감독기구 간 자원 공유와 공동 집행 협력 강화도 논의했다고 밝혔다.",
+      "evidence": [
+        {
+          "url": "https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en",
+          "location": "본문 p 1, p 3, p 9: 법적 근거 제안 요청과 감독기구 협력; 상단 제목·날짜"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "규제기관 정보공유",
+        "공동집행"
+      ],
+      "event_id": "edpb-event-2026-07-17-2",
+      "related_documents": [],
+      "review_notes": [
+        "직접 확인한 기사에 근거한 한국어 초안입니다. 관련 결정·지침 전문은 별도 검수 대상입니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다."
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "edpb-2026-07-14-3",
+      "original_title": "EDPB requires Belgian DPA to handle the merits of NOYB cookie banner complaint",
+      "organization": [
+        "European Data Protection Board"
+      ],
+      "jurisdictions": [
+        "EU",
+        "BE",
+        "AT"
+      ],
+      "source_published_date": "2026-07-14",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.edpb.europa.eu/news/edpb-requires-belgian-dpa-to-handle-the-merits-of-noyb-cookie-banner-complaint_en",
+      "document_type": "official_news",
+      "korean_title": "벨기에 감독기구에 NOYB 쿠키 배너 민원의 본안 심사 요구",
+      "summary_ko": "EDPB는 벨기에 VRT의 쿠키 배너에 관한 NOYB 민원을 절차상 이유로 기각하지 말고 본안을 심사하도록 벨기에 감독기구에 지시했다고 밝혔다. 기사상 권리 남용을 입증하는 요소가 확인되지 않았다는 판단이며, VRT의 GDPR 위반 여부에 대한 최종 판단으로 쓰지 않는다.",
+      "evidence": [
+        {
+          "url": "https://www.edpb.europa.eu/news/edpb-requires-belgian-dpa-to-handle-the-merits-of-noyb-cookie-banner-complaint_en",
+          "location": "본문 p 1, p 6, p 7: 2026-05-28 결정, 권리 남용 판단, 본안 심사 지시; 상단 제목·날짜"
+        }
+      ],
+      "topic_tags": [
+        "쿠키",
+        "민원",
+        "GDPR",
+        "권리구제"
+      ],
+      "event_id": "edpb-event-2026-07-14-3",
+      "related_documents": [
+        {
+          "official_url": "https://www.edpb.europa.eu/documents/edpb-binding-decisions/binding-decision-12026-on-the-dispute-submitted-by-the-belgian-sa_en",
+          "original_title": "binding decision of 28 May 2026 under Art.65(1)(a) GDPR*.",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/our-work-tools/our-documents/guidelines/guidelines-092020-relevant-and-reasoned-objection-under_en",
+          "original_title": "EDPB Guidelines on the concept of relevant and reasoned objection",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "직접 확인한 기사에 근거한 한국어 초안입니다. 관련 결정·지침 전문은 별도 검수 대상입니다.",
+        "source_published_date는 기사 게시일 2026-07-14이며, 결정일 2026-05-28과 구분합니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다."
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "edpb-2026-07-08-4",
+      "original_title": "EDPB sheds light on anonymisation and web scraping for generative AI and adopts final version of guidelines on blockchain",
+      "organization": [
+        "European Data Protection Board"
+      ],
+      "jurisdictions": [
+        "EU"
+      ],
+      "source_published_date": "2026-07-08",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en",
+      "document_type": "official_news",
+      "korean_title": "익명화·생성형 AI 웹 스크래핑 지침 및 블록체인 최종 지침",
+      "summary_ko": "EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을 채택하고, 블록체인 개인정보 처리 지침을 최종화했다고 밝혔다. 앞의 두 지침은 공개 의견수렴 대상으로 안내되어 있어 최종 지침과 구분해야 한다.",
+      "evidence": [
+        {
+          "url": "https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en",
+          "location": "본문 p 1 및 Understanding anonymous data / Clarifying data protection implications of web scraping for AI development / Blockchains guidelines finalised after public consultation 절; 상단 제목·날짜"
+        }
+      ],
+      "topic_tags": [
+        "익명화",
+        "웹스크래핑",
+        "생성형AI",
+        "블록체인"
+      ],
+      "event_id": "edpb-event-2026-07-08-4",
+      "related_documents": [
+        {
+          "official_url": "https://www.edpb.europa.eu/system/files/2026-07/edpb_guidelines_202602_anonymisation_v1_en_0.pdf",
+          "original_title": "guidelines on anonymisation",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/system/files/2026-07/edpb_guidelines_2020603_webscraping_v1_en_0.pdf",
+          "original_title": "guidelines on web scraping in the context of generative AI.",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/system/files/2026-07/edpb_guidelines_202502_blockchain_v2_en.pdf",
+          "original_title": "guidelines on the processing of personal data through blockchain technologies.",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/public-consultations/guidelines-on-anonymisation_en",
+          "original_title": "public consultation",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/public-consultations/guidelines-on-web-scraping_en",
+          "original_title": "public consultation",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/system/files/2026-07/edpbreport_publicconsultaton_guidelines_blockchain_202502_en.pdf",
+          "original_title": "report on the outcome of the dedicated public consultation",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.edpb.europa.eu/system/files/2026-07/edpb_guidelines_202502_blockchain_v2_trackchanges.docx",
+          "original_title": "track changes version of the guidelines",
+          "relationship": "article_linked_supporting_document",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "review_notes": [
+        "직접 확인한 기사에 근거한 한국어 초안입니다. 관련 결정·지침 전문은 별도 검수 대상입니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다."
+    },
+    {
+      "checked_at": "2026-10-06T14:54:33+09:00",
+      "review_status": "unreviewed",
+      "duplicate_status": "unique_in_selected_samples",
+      "record_id": "edpb-2026-07-01-5",
+      "original_title": "EDPB and AMLA to develop Joint Guidelines on partnerships for information sharing",
+      "organization": [
+        "European Data Protection Board",
+        "Anti-Money Laundering Authority"
+      ],
+      "jurisdictions": [
+        "EU"
+      ],
+      "source_published_date": "2026-07-01",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en",
+      "document_type": "official_news",
+      "korean_title": "EDPB·AMLA, 정보 공유 협력을 위한 공동 지침 개발",
+      "summary_ko": "EDPB와 AMLA는 금융범죄 대응을 위한 정보 공유와 개인정보 보호를 함께 다루는 공동 지침을 개발할 예정이라고 밝혔다. 기사에 따르면 관련 정보 공유 가능성은 2027년 7월 10일부터 적용되며, 지침 초안 의견수렴은 2027년 상반기로 계획되어 있다.",
+      "evidence": [
+        {
+          "url": "https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en",
+          "location": "본문 p 1–4: 공동 지침 개발, 2027-07-10 적용 예정 및 2027년 상반기 의견수렴 계획; 상단 제목·날짜"
+        }
+      ],
+      "topic_tags": [
+        "자금세탁방지",
+        "정보공유",
+        "GDPR",
+        "AMLA"
+      ],
+      "event_id": "edpb-event-2026-07-01-5",
+      "related_documents": [],
+      "review_notes": [
+        "직접 확인한 기사에 근거한 한국어 초안입니다. 관련 결정·지침 전문은 별도 검수 대상입니다."
+      ],
+      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다."
+    }
+  ]
+}
