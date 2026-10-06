@@ -2,6 +2,6 @@
   "official_name": "個人情報の保護に関する法律",
   "korean_title": "개인정보 보호에 관한 법률",
   "source": { "original_url": "https://laws.e-gov.go.jp/document?lawid=415AC0000000057", "version_status": "unconfirmed", "full_text_obtained": false },
-  "translation": { "translated_articles": 0, "status": "blocked_before_translation", "public_release_status": "withheld", "withheld_reasons": ["원문 판본 미확인"] },
-  "coverage": { "comparison_status": "not_possible_without_full_source" }
+  "translation": { "translated_main_articles": 58, "total_main_articles": 185, "status": "partial_draft", "public_release_status": "draft_for_review" },
+  "coverage": { "draft_counts": { "Article": 58 }, "main_articles": 185, "comparison_status": "in_progress" }
 }

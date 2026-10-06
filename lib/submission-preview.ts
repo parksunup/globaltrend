@@ -114,11 +114,13 @@ function appiItem(root: string): SubmissionItem[] {
   const source = record(data.source);
   const translation = record(data.translation);
   const coverage = record(data.coverage);
+  const translatedArticles = translation.translated_main_articles ?? translation.translated_articles;
+  const totalArticles = translation.total_main_articles ?? coverage.main_articles;
   return [{
     id: "legal-appi-translation", group: "legal", kind: "번역 진행",
     title: `APPI · ${label(data.korean_title, "한국어 번역")}`,
     subtitle: label(data.official_name),
-    summary: `번역 조문 ${label(translation.translated_articles, "0")}건 · ${label(translation.status)}`,
+    summary: `본칙 번역 ${label(translatedArticles)}${totalArticles == null ? "" : `/${label(totalArticles)}`}조 · ${label(translation.status)}`,
     status: label(translation.public_release_status, "unreviewed"),
     fields: [
       { label: "원문 판본", value: label(source.version_status) },

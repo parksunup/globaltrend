@@ -14,6 +14,7 @@ test("PR branch deliverables are visible without a database import", () => {
   assert.equal(items.find((item) => item.id === "fixture-edpb-edpb-example")?.summary, "한국어 요약");
   assert.equal(items.find((item) => item.id === "weekly-sample")?.status, "draft");
   assert.equal(items.find((item) => item.id === "legal-appi-translation")?.fields.find((field) => field.label === "원문 확보")?.value, "false");
+  assert.match(items.find((item) => item.id === "legal-appi-translation")?.summary ?? "", /58\/185조/);
 });
 
 test("missing submitted files do not create fake entries", () => {
