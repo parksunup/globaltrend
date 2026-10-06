@@ -9,7 +9,7 @@ type ReviewStateRow = {
   entity_type: ReviewItem["kind"];
   entity_id: string;
   status: "unreviewed" | "in_review" | "approved" | "rejected";
-  note: string | null;
+  note?: string | null;
   reviewed_at: string | null;
 };
 
@@ -32,8 +32,8 @@ export async function loadReviewItems(): Promise<{ items: ReviewItem[]; source: 
   const supabase = createClient(url, key);
   const [sources, laws, criteria] = await Promise.all([
     supabase.from("sources").select("id,name,start_url,source_kind,is_active,publishers(name)").eq("is_active", true).order("name"),
-    supabase.from("legal_instruments").select("id,short_name,official_name,official_url,jurisdiction_code,is_published").order("short_name"),
-    supabase.from("criteria").select("id,criterion_key,label_ko,sort_order,criteria_sets(name,is_published)").order("sort_order")
+    supabase.from("legal_instruments").select("id,short_name,official_name,official_url,jurisdiction_code,is_published").eq("is_published", true).order("short_name"),
+    supabase.from("criteria").select("id,criterion_key,label_ko,sort_order,criteria_sets!inner(name,is_published)").eq("criteria_sets.is_published", true).order("sort_order")
   ]);
 
   if (sources.error || laws.error || criteria.error) return { items: sampleItems, source: "sample" };
@@ -57,12 +57,12 @@ export async function loadReviewItems(): Promise<{ items: ReviewItem[]; source: 
   return mapped.length ? { items: mapped, source: "supabase" } : { items: sampleItems, source: "sample" };
 }
 
-export async function loadTeamReviewItems(supabase: SupabaseClient): Promise<{ items: ReviewItem[]; source: "supabase" }> {
+async function loadCatalogItems(supabase: SupabaseClient): Promise<{ items: ReviewItem[]; source: "supabase" }> {
   const [sources, laws, criteria, reviewStates] = await Promise.all([
     supabase.from("sources").select("id,name,start_url,source_kind,is_active,publishers(name)").order("name"),
     supabase.from("legal_instruments").select("id,short_name,official_name,official_url,jurisdiction_code,is_published").order("short_name"),
     supabase.from("criteria").select("id,criterion_key,label_ko,sort_order,criteria_sets(name,is_published)").order("sort_order"),
-    supabase.from("review_states").select("entity_type,entity_id,status,note,reviewed_at"),
+    supabase.from("review_states").select("entity_type,entity_id,status,reviewed_at"),
   ]);
   if (sources.error || laws.error || criteria.error) return { items: [], source: "supabase" };
   const states = reviewStates.error ? new Map<string, ReviewStateRow>() : indexReviewStates(reviewStates.data as ReviewStateRow[] | null);
@@ -72,4 +72,10 @@ export async function loadTeamReviewItems(supabase: SupabaseClient): Promise<{ i
     ...(criteria.data ?? []).map((row: any) => ({ id: row.id, kind: "criteria" as const, title: row.label_ko, subtitle: row.criteria_sets?.name ?? "비교 기준", description: "비교표에 사용할 기준 항목입니다.", ...reviewFields(states, "criteria", row.id, Boolean(row.criteria_sets?.is_published)), metadata: [`순서 ${row.sort_order}`, row.criteria_sets?.is_published ? "공개" : "검수 전"], note: "법제별 근거 조문을 연결한 뒤 공개합니다." })),
   ];
   return { items, source: "supabase" };
+}
+
+export async function loadPublicTeamReviewItems(): Promise<{ items: ReviewItem[]; source: "supabase" | "sample" }> {
+  if (!url || !key) return { items: sampleItems, source: "sample" };
+  // This client has no session or privileged key, so it always reads as `anon`.
+  return loadCatalogItems(createClient(url, key));
 }
