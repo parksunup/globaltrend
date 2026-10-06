@@ -1,0 +1,12 @@
+{
+  "items": [{
+    "record_id": "edpb-example",
+    "original_title": "Original title",
+    "korean_title": "한국어 제목",
+    "summary_ko": "한국어 요약",
+    "review_status": "unreviewed",
+    "official_url": "https://www.edpb.europa.eu/news_en",
+    "evidence": [{ "url": "https://www.edpb.europa.eu/news_en", "location": "본문 1문단" }],
+    "source_published_date": "2026-10-06"
+  }]
+}
