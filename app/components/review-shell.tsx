@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { kindLabels, statusLabels, type ReviewItem, type ReviewKind, type ReviewStatus } from "../sample-data";
 import { updateReviewState } from "../team/actions";
+import SubmissionPreview from "./submission-preview";
+import type { SubmissionItem } from "../../lib/submission-preview";
 
 const kinds: ReviewKind[] = ["sources", "laws", "criteria"];
 const statuses: Array<ReviewStatus | "all"> = ["all", "unreviewed", "in_review", "approved", "rejected", "published"];
@@ -11,8 +13,9 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell({ initialItems, dataSource, teamMode = false, canReview = false, teamRole }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; canReview?: boolean; teamRole?: string }) {
+export default function ReviewShell({ initialItems, dataSource, teamMode = false, canReview = false, teamRole, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; canReview?: boolean; teamRole?: string; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
   const [reviewItems, setReviewItems] = useState(initialItems);
+  const [showSubmissions, setShowSubmissions] = useState(submissions.length > 0);
   const [kind, setKind] = useState<ReviewKind>("sources");
   const [status, setStatus] = useState<ReviewStatus | "all">("all");
   const [query, setQuery] = useState("");
@@ -36,6 +39,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
   }, [selected?.id]);
 
   function selectKind(nextKind: ReviewKind) {
+    setShowSubmissions(false);
     setKind(nextKind);
     setStatus("all");
     setQuery("");
@@ -66,8 +70,11 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
         <div className="brand-copy"><strong>GlobalTrend</strong><span>검토 보드</span></div>
         <div className="preview-pill">{teamMode ? `TEAM · ${teamRole ?? "검수"}` : dataSource === "supabase" ? "SUPABASE · 읽기 전용" : "PREVIEW · 샘플 데이터"}</div>
         <nav className="nav-list" aria-label="자료 유형">
+          {submissions.length > 0 && <button className={"nav-item " + (showSubmissions ? "active" : "")} onClick={() => setShowSubmissions(true)}>
+            <span>PR 제출물</span><em>{submissions.length}</em>
+          </button>}
           {kinds.map((itemKind) => (
-            <button className={"nav-item " + (kind === itemKind ? "active" : "")} key={itemKind} onClick={() => selectKind(itemKind)}>
+            <button className={"nav-item " + (!showSubmissions && kind === itemKind ? "active" : "")} key={itemKind} onClick={() => selectKind(itemKind)}>
               <span>{kindLabels[itemKind]}</span>
               <em>{initialItems.filter((item) => item.kind === itemKind).length}</em>
             </button>
@@ -81,6 +88,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
       </aside>
 
       <section className="content">
+        {showSubmissions ? <SubmissionPreview items={submissions} commitSha={submissionCommitSha} /> : <>
         <header className="topbar">
           <div><p className="eyebrow">WORKSPACE / REVIEW</p><h1>{kindLabels[kind]}</h1></div>
           <div className="topbar-note"><span className="lock">◈</span> {teamMode ? "팀 검수 단계" : "공개 전 단계"} <b>{teamMode ? "로그인됨" : "읽기 전용"}</b></div>
@@ -124,6 +132,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
             </> : <div className="empty detail-empty">목록에서 항목을 선택해 주세요.</div>}
           </aside>
         </div>
+        </>}
       </section>
     </main>
   );

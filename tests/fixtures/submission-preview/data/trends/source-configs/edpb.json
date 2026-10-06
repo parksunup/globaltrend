@@ -1,0 +1,9 @@
+{
+  "organization": "European Data Protection Board",
+  "start_url": "https://www.edpb.europa.eu/news_en",
+  "collection_method": "공식 목록 확인",
+  "review_status": "unreviewed",
+  "document_types": ["뉴스"],
+  "terms_status": "unreviewed",
+  "verification": { "listing_page_checked": true, "detail_page_checked": true }
+}
