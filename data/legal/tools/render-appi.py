@@ -7,6 +7,7 @@ python data/legal/tools/render-appi.py
 
 import collections
 import json
+import html
 from pathlib import Path
 
 
@@ -49,7 +50,8 @@ def render():
     doc = json.loads(path.read_text())
     nodes = doc["provisions"]
     for node in nodes:
-        translated = bool(node.get("korean_text") or node.get("korean_title"))
+        translated = bool(node.get("korean_text") or node.get("korean_title")
+                          or node.get("table_structure_ready") or node.get("source_cell_empty"))
         node["translation_status"] = "draft" if translated else "not_started"
         node["markdown_anchor"] = node["node_id"] if translated else None
     main = [n for n in nodes if n["tag"] == "Article" and n["scope"] == "main"]
@@ -64,8 +66,8 @@ def render():
             raise ValueError(f"작성 조문 내부 미번역: {article['node_id']}")
         tables = [n for n in nodes if n["node_id"].startswith(article["node_id"] + "-")
                   and n["tag"] in {"Table", "TableRow", "TableColumn"}]
-        if tables:
-            raise ValueError(f"표 번역과 출력 지원을 먼저 완성해야 합니다: {article['node_id']}")
+        if not all(n["translation_status"] == "draft" for n in tables):
+            raise ValueError(f"작성 조문 내부 표 미번역: {article['node_id']}")
     source_counts = collections.Counter(n["tag"] for n in nodes)
     draft_counts = collections.Counter(n["tag"] for n in nodes if n["translation_status"] == "draft")
     missing = [n["node_id"] for n in nodes if n["translation_status"] == "not_started"]
@@ -104,9 +106,31 @@ def render():
     for node in nodes:
         if node["translation_status"] != "draft":
             continue
-        lines.extend([f'<a id="{node["node_id"]}"></a>', ""])
         tag = node["tag"]
-        if tag in {"Chapter", "Section", "Subsection"}:
+        if tag not in {"TableRow", "TableColumn"}:
+            lines.extend([f'<a id="{node["node_id"]}"></a>', ""])
+        if tag == "Table":
+            lines.append('<table>')
+        elif tag == "TableRow":
+            lines.append('<tr>')
+        elif tag == "TableColumn":
+            text = html.escape(node["korean_text"] or "")
+            siblings = [n for n in nodes if n["parent_id"] == node["parent_id"]]
+            row_anchor = f'<a id="{node["parent_id"]}"></a>' if node == siblings[0] else ""
+            anchor = f'<a id="{node["node_id"]}"></a>'
+            attrs = node.get("source_attributes", {})
+            borders = ";".join(f"border-{side}:" + ("none" if attrs[key] == "none" else "1px solid")
+                               for side, key in [("top", "BorderTop"), ("bottom", "BorderBottom"),
+                                                 ("left", "BorderLeft"), ("right", "BorderRight")]
+                               if attrs.get(key) in {"none", "solid"})
+            lines.append(f'<td style="{borders}">{row_anchor}{anchor}{text}</td>')
+            if node == siblings[-1]:
+                lines.append('</tr>')
+                row = next(n for n in nodes if n["node_id"] == node["parent_id"])
+                rows = [n for n in nodes if n["parent_id"] == row["parent_id"]]
+                if row == rows[-1]:
+                    lines.extend(['</table>', ''])
+        elif tag in {"Chapter", "Section", "Subsection"}:
             level = {"Chapter": "##", "Section": "###", "Subsection": "####"}[tag]
             lines.extend([level + " " + node["korean_title"], ""])
         elif tag == "Article":

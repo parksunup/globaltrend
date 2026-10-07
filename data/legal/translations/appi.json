@@ -25,13 +25,13 @@
     "status": "partial_draft",
     "human_review_status": "not_started",
     "complete": false,
-    "translated_main_articles": 105,
+    "translated_main_articles": 108,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 56.76,
+    "main_article_coverage_percent": 58.38,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
-    "next_main_article": "106"
+    "next_main_article": "109"
   },
   "coverage": {
     "source_counts": {
@@ -50,112 +50,20 @@
     },
     "draft_counts": {
       "Chapter": 5,
-      "Article": 105,
-      "Paragraph": 263,
-      "Item": 179,
+      "Article": 108,
+      "Paragraph": 268,
+      "Item": 181,
       "Section": 14,
       "Subitem1": 16,
-      "Subsection": 4
+      "Subsection": 4,
+      "Table": 1,
+      "TableRow": 21,
+      "TableColumn": 63
     },
     "main_articles": 185,
     "supplementary_articles": 65,
     "missing_node_ids": [
-      "main-a106",
-      "main-a106-p1",
-      "main-a106-p2",
-      "main-a106-p2-t1",
-      "main-a106-p2-t1-r1",
-      "main-a106-p2-t1-r1-col1",
-      "main-a106-p2-t1-r1-col2",
-      "main-a106-p2-t1-r1-col3",
-      "main-a106-p2-t1-r2",
-      "main-a106-p2-t1-r2-col1",
-      "main-a106-p2-t1-r2-col2",
-      "main-a106-p2-t1-r2-col3",
-      "main-a106-p2-t1-r3",
-      "main-a106-p2-t1-r3-col1",
-      "main-a106-p2-t1-r3-col2",
-      "main-a106-p2-t1-r3-col3",
-      "main-a106-p2-t1-r4",
-      "main-a106-p2-t1-r4-col1",
-      "main-a106-p2-t1-r4-col2",
-      "main-a106-p2-t1-r4-col3",
-      "main-a106-p2-t1-r5",
-      "main-a106-p2-t1-r5-col1",
-      "main-a106-p2-t1-r5-col2",
-      "main-a106-p2-t1-r5-col3",
-      "main-a106-p2-t1-r6",
-      "main-a106-p2-t1-r6-col1",
-      "main-a106-p2-t1-r6-col2",
-      "main-a106-p2-t1-r6-col3",
-      "main-a106-p2-t1-r7",
-      "main-a106-p2-t1-r7-col1",
-      "main-a106-p2-t1-r7-col2",
-      "main-a106-p2-t1-r7-col3",
-      "main-a106-p2-t1-r8",
-      "main-a106-p2-t1-r8-col1",
-      "main-a106-p2-t1-r8-col2",
-      "main-a106-p2-t1-r8-col3",
-      "main-a106-p2-t1-r9",
-      "main-a106-p2-t1-r9-col1",
-      "main-a106-p2-t1-r9-col2",
-      "main-a106-p2-t1-r9-col3",
-      "main-a106-p2-t1-r10",
-      "main-a106-p2-t1-r10-col1",
-      "main-a106-p2-t1-r10-col2",
-      "main-a106-p2-t1-r10-col3",
-      "main-a106-p2-t1-r11",
-      "main-a106-p2-t1-r11-col1",
-      "main-a106-p2-t1-r11-col2",
-      "main-a106-p2-t1-r11-col3",
-      "main-a106-p2-t1-r12",
-      "main-a106-p2-t1-r12-col1",
-      "main-a106-p2-t1-r12-col2",
-      "main-a106-p2-t1-r12-col3",
-      "main-a106-p2-t1-r13",
-      "main-a106-p2-t1-r13-col1",
-      "main-a106-p2-t1-r13-col2",
-      "main-a106-p2-t1-r13-col3",
-      "main-a106-p2-t1-r14",
-      "main-a106-p2-t1-r14-col1",
-      "main-a106-p2-t1-r14-col2",
-      "main-a106-p2-t1-r14-col3",
-      "main-a106-p2-t1-r15",
-      "main-a106-p2-t1-r15-col1",
-      "main-a106-p2-t1-r15-col2",
-      "main-a106-p2-t1-r15-col3",
-      "main-a106-p2-t1-r16",
-      "main-a106-p2-t1-r16-col1",
-      "main-a106-p2-t1-r16-col2",
-      "main-a106-p2-t1-r16-col3",
-      "main-a106-p2-t1-r17",
-      "main-a106-p2-t1-r17-col1",
-      "main-a106-p2-t1-r17-col2",
-      "main-a106-p2-t1-r17-col3",
-      "main-a106-p2-t1-r18",
-      "main-a106-p2-t1-r18-col1",
-      "main-a106-p2-t1-r18-col2",
-      "main-a106-p2-t1-r18-col3",
-      "main-a106-p2-t1-r19",
-      "main-a106-p2-t1-r19-col1",
-      "main-a106-p2-t1-r19-col2",
-      "main-a106-p2-t1-r19-col3",
-      "main-a106-p2-t1-r20",
-      "main-a106-p2-t1-r20-col1",
-      "main-a106-p2-t1-r20-col2",
-      "main-a106-p2-t1-r20-col3",
-      "main-a106-p2-t1-r21",
-      "main-a106-p2-t1-r21-col1",
-      "main-a106-p2-t1-r21-col2",
-      "main-a106-p2-t1-r21-col3",
-      "main-a107",
-      "main-a107-p1",
-      "main-a107-p1-i1",
-      "main-a107-p1-i2",
-      "main-a107-p2",
       "main-c5-s4-ss5",
-      "main-a108",
-      "main-a108-p1",
       "main-c5-s5",
       "main-a109",
       "main-a109-p1",
@@ -956,7 +864,7 @@
         "first_article": "60",
         "last_article": "129",
         "total_articles": 70,
-        "drafted_articles": 46,
+        "drafted_articles": 49,
         "heading_translated": true,
         "all_nodes_drafted": false,
         "human_review_status": "not_started"
@@ -1000,7 +908,7 @@
         "first_article": "76",
         "last_article": "108",
         "total_articles": 33,
-        "drafted_articles": 30,
+        "drafted_articles": 33,
         "heading_translated": true,
         "all_nodes_drafted": false,
         "human_review_status": "not_started"
@@ -1044,9 +952,9 @@
         "first_article": "104",
         "last_article": "107",
         "total_articles": 4,
-        "drafted_articles": 2,
+        "drafted_articles": 4,
         "heading_translated": true,
-        "all_nodes_drafted": false,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -1055,7 +963,7 @@
         "first_article": "108",
         "last_article": "108",
         "total_articles": 1,
-        "drafted_articles": 0,
+        "drafted_articles": 1,
         "heading_translated": false,
         "all_nodes_drafted": false,
         "human_review_status": "not_started"
@@ -9823,10 +9731,11 @@
       "source_order": 586,
       "original_label": "第百六条",
       "source_sha256": "60871729228bce1ca10e7b26792343b8beb384702bf8b2cd1b63f17ec2600d36",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106",
+      "korean_title": "제106조 (지방공공단체의 기관 등에서 심리원에 의한 심리절차에 관한 규정의 적용 제외 등)"
     },
     {
       "node_id": "main-a106-p1",
@@ -9837,10 +9746,11 @@
       "source_order": 587,
       "original_label": "",
       "source_sha256": "78af4bf399c5ef6299082531ea79d9acc3ab3fb888652a8df765adbd82799dc1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에는 행정불복심사법 제9조 제1항부터 제3항까지, 제17조, 제40조, 제42조, 제2장 제4절 및 제50조 제2항의 규정을 적용하지 않는다.",
+      "markdown_anchor": "main-a106-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a106-p2",
@@ -9851,10 +9761,11 @@
       "source_order": 588,
       "original_label": "２",
       "source_sha256": "6f2b58542c08306d7473d9c4b84f93071f61f2919a93bdc5779c41b9fa2453e3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에 관하여 다음 표의 상란에 열거하는 행정불복심사법의 규정을 적용할 때에는 해당 규정 중 같은 표의 중란에 열거하는 문구를 각각 같은 표의 하란에 열거하는 문구로 하는 외에 필요한 기술적 치환은 정령으로 정한다.",
+      "markdown_anchor": "main-a106-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a106-p2-t1",
@@ -9865,10 +9776,11 @@
       "source_order": 589,
       "original_label": "",
       "source_sha256": "b5a9cb79c9743fbca681c9ccf48a1991a9eaeb04288848bb4265e013971697ba",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r1",
@@ -9879,10 +9791,11 @@
       "source_order": 590,
       "original_label": "",
       "source_sha256": "b4b04585226e8885c9b83530cfafc412aaf48bcd2d56bc41b6c2d7297282c60a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r1",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r1-col1",
@@ -9893,10 +9806,18 @@
       "source_order": 591,
       "original_label": "",
       "source_sha256": "b6ffe31913745699565c0a26ba684af06c73759e0df2c22a890f17b5c3827d19",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제9조 제4항",
+      "markdown_anchor": "main-a106-p2-t1-r1-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r1-col2",
@@ -9907,10 +9828,18 @@
       "source_order": 592,
       "original_label": "",
       "source_sha256": "fff4425c7f02ade32d27a18b225861150d49522324a2aedd81332b2f5e76c453",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항에 규정하는 경우에 심사청",
+      "markdown_anchor": "main-a106-p2-t1-r1-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r1-col3",
@@ -9921,10 +9850,18 @@
       "source_order": 593,
       "original_label": "",
       "source_sha256": "bc4ddbffc65e561693188de7e2c2f65cdfc8baedd9d4db18adafc95635f75cf2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제4조 또는 개인정보 보호에 관한 법률(헤이세이 15년 법률 제57호) 제107조 제2항의 규정에 따른 조례의 규정에 따라 심사청구를 받은 행정청(제14조의 규정에 따라 인계받은 행정청을 포함한다. 이하 “심사청”이라 한다)",
+      "markdown_anchor": "main-a106-p2-t1-r1-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r2",
@@ -9935,10 +9872,11 @@
       "source_order": 594,
       "original_label": "",
       "source_sha256": "87779e2ee37a1e306ddda6b430cddd652afe7c28d7ace01a862002a558dee6ab",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r2",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r2-col1",
@@ -9949,10 +9887,19 @@
       "source_order": 595,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r2-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r2-col2",
@@ -9963,10 +9910,18 @@
       "source_order": 596,
       "original_label": "",
       "source_sha256": "06e35dd64d263019b94d854a486a0dd80137abfd35412224fac45e8a2204345c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항에서 바꾸어 읽어 적용하는 제31조 제1항",
+      "markdown_anchor": "main-a106-p2-t1-r2-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r2-col3",
@@ -9977,10 +9932,18 @@
       "source_order": 597,
       "original_label": "",
       "source_sha256": "e4dff002979c0efa68b512ad82532450d41028e5d20f71bd8b4881bc87269353",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제31조 제1항",
+      "markdown_anchor": "main-a106-p2-t1-r2-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r3",
@@ -9991,10 +9954,11 @@
       "source_order": 598,
       "original_label": "",
       "source_sha256": "b4dbf821f03312f6d93f00854008a2d31e8e6198f3f973591b2ad303f50be139",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r3",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r3-col1",
@@ -10005,10 +9969,19 @@
       "source_order": 599,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r3-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r3-col2",
@@ -10019,10 +9992,18 @@
       "source_order": 600,
       "original_label": "",
       "source_sha256": "88a337db1532a801c8e582d719ebc30828a6ba3819f076cbdf8048ce590833b3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항에서 바꾸어 읽어 적용하는 제34조",
+      "markdown_anchor": "main-a106-p2-t1-r3-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r3-col3",
@@ -10033,10 +10014,18 @@
       "source_order": 601,
       "original_label": "",
       "source_sha256": "328e564feef23ef61468b05976d8e267d718356ed3376bda5fcb19b1c1883bde",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제34조",
+      "markdown_anchor": "main-a106-p2-t1-r3-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r4",
@@ -10047,10 +10036,11 @@
       "source_order": 602,
       "original_label": "",
       "source_sha256": "8922ee96617e792a9a39b1e63790d02bbd29801c2497276ebaed5e4184f2ca03",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r4",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r4-col1",
@@ -10061,10 +10051,19 @@
       "source_order": 603,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r4-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r4-col2",
@@ -10075,10 +10074,18 @@
       "source_order": 604,
       "original_label": "",
       "source_sha256": "b4291bcaa96b9df50cdbbff2aef1d7182dfe7fa38e96e9da1928acdbabd33834",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항에서 바꾸어 읽어 적용하는 제36조",
+      "markdown_anchor": "main-a106-p2-t1-r4-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r4-col3",
@@ -10089,10 +10096,18 @@
       "source_order": 605,
       "original_label": "",
       "source_sha256": "88ea4f77916b06f16a357ce7cc6b4c4d0a36567da940ff8ea1297aae9185aa0d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제36조",
+      "markdown_anchor": "main-a106-p2-t1-r4-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r5",
@@ -10103,10 +10118,11 @@
       "source_order": 606,
       "original_label": "",
       "source_sha256": "5b3e99fbd5b72cf4a2dfaedee983f2367ad03b0cb1cc0b5c3f04582944bbaab5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r5",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r5-col1",
@@ -10117,10 +10133,18 @@
       "source_order": 607,
       "original_label": "",
       "source_sha256": "beb1c7bb905525e085ba62518dbbd196d4da47ee3d43084485430fede4159f33",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제11조 제2항",
+      "markdown_anchor": "main-a106-p2-t1-r5-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r5-col2",
@@ -10131,10 +10155,18 @@
       "source_order": 608,
       "original_label": "",
       "source_sha256": "7c2d065a7601bfaf11666998cb680a3c60001db452351e6639b300adf0423d2a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제9조 제1항의 규정에 따라 지명된 자(이하 “심리원”이라 한다)",
+      "markdown_anchor": "main-a106-p2-t1-r5-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r5-col3",
@@ -10145,10 +10177,18 @@
       "source_order": 609,
       "original_label": "",
       "source_sha256": "65cbb3fd9f25d8a00f1c7d8e6915eb474b5a228760320e516b9baa6003265933",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청",
+      "markdown_anchor": "main-a106-p2-t1-r5-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r6",
@@ -10159,10 +10199,11 @@
       "source_order": 610,
       "original_label": "",
       "source_sha256": "55960693e8d6333fd28e758031823a7ff11d243c317107dd126c33ef27702346",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r6",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r6-col1",
@@ -10173,10 +10214,18 @@
       "source_order": 611,
       "original_label": "",
       "source_sha256": "1bdc427430407aac2c28a3d3a26281c7af68f3779dcfc0ea38d5c1be382ee7fe",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제13조 제1항 및 제2항, 제28조, 제30조, 제31조, 제32조 제3항, 제33조부터 제37조까지, 제38조 제1항부터 제3항까지 및 제5항, 제39조 및 제41조 제1항 및 제2항",
+      "markdown_anchor": "main-a106-p2-t1-r6-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r6-col2",
@@ -10187,10 +10236,18 @@
       "source_order": 612,
       "original_label": "",
       "source_sha256": "6feef5ba467f34dea060cd36d9d43ebcdccc5cb80222471bf4f0bae486ba6c75",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원",
+      "markdown_anchor": "main-a106-p2-t1-r6-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r6-col3",
@@ -10201,10 +10258,18 @@
       "source_order": 613,
       "original_label": "",
       "source_sha256": "65cbb3fd9f25d8a00f1c7d8e6915eb474b5a228760320e516b9baa6003265933",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청",
+      "markdown_anchor": "main-a106-p2-t1-r6-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r7",
@@ -10215,10 +10280,11 @@
       "source_order": 614,
       "original_label": "",
       "source_sha256": "c5086bb2ab5613a6a131852e5701cad01cd3cf87d63110452e4deaedab5e03dc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r7",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r7-col1",
@@ -10229,10 +10295,18 @@
       "source_order": 615,
       "original_label": "",
       "source_sha256": "e75b2228a003ab6d2c87cc33405a3673a37c86279fa0f53fbe0a80790ff1ead8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제25조 제7항",
+      "markdown_anchor": "main-a106-p2-t1-r7-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r7-col2",
@@ -10243,10 +10317,18 @@
       "source_order": 616,
       "original_label": "",
       "source_sha256": "e9f3126d57ac4ed28116cc9bd9e9adb71ce3b9b657308e66cfbe44a3d697488f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "집행정지의 신청이 있은 때 또는 심리원으로부터 제40조에 규정하는 집행정지를 하여야 한다는 취지의 의견서가 제출된 때",
+      "markdown_anchor": "main-a106-p2-t1-r7-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r7-col3",
@@ -10257,10 +10339,18 @@
       "source_order": 617,
       "original_label": "",
       "source_sha256": "37b975e2d2d905660601392a21fbbbb815c66cec8958e501209c9b8d80c188f5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "집행정지의 신청이 있은 때",
+      "markdown_anchor": "main-a106-p2-t1-r7-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r8",
@@ -10271,10 +10361,11 @@
       "source_order": 618,
       "original_label": "",
       "source_sha256": "053affc8f4d25f7830e045c67e0cce43b623745e455c761a8a7ebe0a3375f665",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r8",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r8-col1",
@@ -10285,10 +10376,18 @@
       "source_order": 619,
       "original_label": "",
       "source_sha256": "562862372376a1580f35da395983802555d650c6dcff2d083b03dfb110fd10ee",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제29조 제1항",
+      "markdown_anchor": "main-a106-p2-t1-r8-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r8-col2",
@@ -10299,10 +10398,18 @@
       "source_order": 620,
       "original_label": "",
       "source_sha256": "db90b36902ad45967db305c41ac6203723e66d5259ae29c03fa8a8d594a63000",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원은 심사청으로부터 지명되면 즉시",
+      "markdown_anchor": "main-a106-p2-t1-r8-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r8-col3",
@@ -10313,10 +10420,18 @@
       "source_order": 621,
       "original_label": "",
       "source_sha256": "db2682f49884806888e42ec1a9aceddcc14fd5ac08088091195fd1d25dd836f3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청은 심사청구를 받으면 제24조의 규정에 따라 해당 심사청구를 각하하는 경우를 제외하고 신속하게",
+      "markdown_anchor": "main-a106-p2-t1-r8-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r9",
@@ -10327,10 +10442,11 @@
       "source_order": 622,
       "original_label": "",
       "source_sha256": "28fb7758bd0f09b186f8c17dac3bd451a67c27c62a260c91e380b4b7f7db2ea7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r9",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r9-col1",
@@ -10341,10 +10457,18 @@
       "source_order": 623,
       "original_label": "",
       "source_sha256": "daed825ff18663376c5521afd159a1f05d3fead5bbb7cabb8cb07f1bdb1d2819",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제29조 제2항",
+      "markdown_anchor": "main-a106-p2-t1-r9-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r9-col2",
@@ -10355,10 +10479,18 @@
       "source_order": 624,
       "original_label": "",
       "source_sha256": "f2edfbbb89a5b5a9934000be1d941d67f76d88a11eb0b3c6bebc501593b4d5c8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원은",
+      "markdown_anchor": "main-a106-p2-t1-r9-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r9-col3",
@@ -10369,10 +10501,18 @@
       "source_order": 625,
       "original_label": "",
       "source_sha256": "6f5afeecfccb900bb4e6c59820e1ed2d93fb7ec0cf06c5137e039740518ea350",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청은 심사청이 처분청 등 이외인 경우에는",
+      "markdown_anchor": "main-a106-p2-t1-r9-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r10",
@@ -10383,10 +10523,11 @@
       "source_order": 626,
       "original_label": "",
       "source_sha256": "db77ea8bc9f9f610365699922ead4d2a05e644b37f1cbb0bfa173a1d4c1ccf02",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r10",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r10-col1",
@@ -10397,10 +10538,19 @@
       "source_order": 627,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r10-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r10-col2",
@@ -10411,10 +10561,18 @@
       "source_order": 628,
       "original_label": "",
       "source_sha256": "a509ce055930512f0bced99bc115690e6f423e71f76527728300148e43173aac",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제출을 요구한다",
+      "markdown_anchor": "main-a106-p2-t1-r10-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r10-col3",
@@ -10425,10 +10583,18 @@
       "source_order": 629,
       "original_label": "",
       "source_sha256": "407c535343a79ca17e38b1dacd89d0b7d9f8c4a7ab59fcac94060998a3fb9c78",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제출을 요구하고 심사청이 처분청 등인 경우에는 상당한 기간 내에 변명서를 작성한다",
+      "markdown_anchor": "main-a106-p2-t1-r10-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r11",
@@ -10439,10 +10605,11 @@
       "source_order": 630,
       "original_label": "",
       "source_sha256": "73c64b084a537a6d20caa11149607455aeb7ac319ffc34bbc45076756bbf144e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r11",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r11-col1",
@@ -10453,10 +10620,18 @@
       "source_order": 631,
       "original_label": "",
       "source_sha256": "cb3bf968f4313917a022f1eb7eca446a3278d47a3876b94c01ae707a580eb92b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제29조 제5항",
+      "markdown_anchor": "main-a106-p2-t1-r11-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r11-col2",
@@ -10467,10 +10642,18 @@
       "source_order": 632,
       "original_label": "",
       "source_sha256": "f2edfbbb89a5b5a9934000be1d941d67f76d88a11eb0b3c6bebc501593b4d5c8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원은",
+      "markdown_anchor": "main-a106-p2-t1-r11-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r11-col3",
@@ -10481,10 +10664,18 @@
       "source_order": 633,
       "original_label": "",
       "source_sha256": "bffafbaf1a062d23d085acabea3ec83ce5339973ae9c37b549bb6045dfdd6635",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청은 제2항의 규정에 따라",
+      "markdown_anchor": "main-a106-p2-t1-r11-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r12",
@@ -10495,10 +10686,11 @@
       "source_order": 634,
       "original_label": "",
       "source_sha256": "bb40bc201b93b60471e51f37a5ee48be3698ba479c4c2e6591750692cbfe5c20",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r12",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r12-col1",
@@ -10509,10 +10701,19 @@
       "source_order": 635,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r12-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r12-col2",
@@ -10523,10 +10724,18 @@
       "source_order": 636,
       "original_label": "",
       "source_sha256": "e2fbe569e96a66f8ffb92a27f1b68737645b73fe05c0b79c92e762b56cce8bbe",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제출이 있은 때",
+      "markdown_anchor": "main-a106-p2-t1-r12-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r12-col3",
@@ -10537,10 +10746,18 @@
       "source_order": 637,
       "original_label": "",
       "source_sha256": "3600a7691abfd0608c0bd2131e2c14ed8aa13b04645a2f6e6c17bf5cdcefa2ab",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제출이 있은 때 또는 변명서를 작성한 때",
+      "markdown_anchor": "main-a106-p2-t1-r12-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r13",
@@ -10551,10 +10768,11 @@
       "source_order": 638,
       "original_label": "",
       "source_sha256": "8a3127d5d25e96a5d8f0cc7a4ad3e574ec3964221cee5bd8840282b305117f6a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r13",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r13-col1",
@@ -10565,10 +10783,18 @@
       "source_order": 639,
       "original_label": "",
       "source_sha256": "42390aa4e10768c806d8a9fd076d0c235916124d033f6d34b26b8780d902821c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제30조 제3항",
+      "markdown_anchor": "main-a106-p2-t1-r13-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r13-col2",
@@ -10579,10 +10805,18 @@
       "source_order": 640,
       "original_label": "",
       "source_sha256": "378d091da4d3dc01a91b3499c5fcca5e800011d65c750d68e5dd2736c7d3a57c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "참가인 및 처분청 등",
+      "markdown_anchor": "main-a106-p2-t1-r13-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r13-col3",
@@ -10593,10 +10827,18 @@
       "source_order": 641,
       "original_label": "",
       "source_sha256": "9f9cdbac4ac7cf49942364986f63e5658512b6f3add1d5b1ed29e264acabf3ff",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "참가인 및 처분청 등(처분청 등이 심사청인 경우에는 참가인)",
+      "markdown_anchor": "main-a106-p2-t1-r13-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r14",
@@ -10607,10 +10849,11 @@
       "source_order": 642,
       "original_label": "",
       "source_sha256": "1fef9c736f4f66378082e5d566279616d051660594a6866528e92923fee0ba20",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r14",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r14-col1",
@@ -10621,10 +10864,19 @@
       "source_order": 643,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r14-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r14-col2",
@@ -10635,10 +10887,18 @@
       "source_order": 644,
       "original_label": "",
       "source_sha256": "578ec2aed2156de4a4936755f21d251729f98d230be38454d96c1f5d0f629057",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청구인 및 처분청 등",
+      "markdown_anchor": "main-a106-p2-t1-r14-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r14-col3",
@@ -10649,10 +10909,18 @@
       "source_order": 645,
       "original_label": "",
       "source_sha256": "3904d36921b0524ac5055330c292fa3c89536abf0fc6de20c2fd20e92d595b1d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청구인 및 처분청 등(처분청 등이 심사청인 경우에는 심사청구인)",
+      "markdown_anchor": "main-a106-p2-t1-r14-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r15",
@@ -10663,10 +10931,11 @@
       "source_order": 646,
       "original_label": "",
       "source_sha256": "307e42737067d45c34fa67f32f0722298710cd083cdf3ab1bb94ff2a389da931",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r15",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r15-col1",
@@ -10677,10 +10946,18 @@
       "source_order": 647,
       "original_label": "",
       "source_sha256": "4460f1595b939de75678864d82de566dfdb48249e86b75c24dd5d024953d004e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제31조 제2항",
+      "markdown_anchor": "main-a106-p2-t1-r15-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r15-col2",
@@ -10691,10 +10968,18 @@
       "source_order": 648,
       "original_label": "",
       "source_sha256": "0778416659decac68c31b51ada52da3fecf62a5ee3a7a2ba6791038bf15ff5a3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리관계인",
+      "markdown_anchor": "main-a106-p2-t1-r15-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r15-col3",
@@ -10705,10 +10990,18 @@
       "source_order": 649,
       "original_label": "",
       "source_sha256": "ef383e658513ef61637971736d6fe7da80299adacc2f8da03f8747be60b74907",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리관계인(처분청 등이 심사청인 경우에는 심사청구인 및 참가인. 이하 이 절 및 제50조 제1항 제3호에서 같다)",
+      "markdown_anchor": "main-a106-p2-t1-r15-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r16",
@@ -10719,10 +11012,11 @@
       "source_order": 650,
       "original_label": "",
       "source_sha256": "3a633c1d7e15722709bbc6d5051e902d6b094af611bdcebe79dde6d23b2136ea",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r16",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r16-col1",
@@ -10733,10 +11027,18 @@
       "source_order": 651,
       "original_label": "",
       "source_sha256": "a7d97dbca289206501243f3b7b03afac3b630b3c00aef6801c0b907f0c2a3bca",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제41조 제3항",
+      "markdown_anchor": "main-a106-p2-t1-r16-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r16-col2",
@@ -10747,10 +11049,18 @@
       "source_order": 652,
       "original_label": "",
       "source_sha256": "2f398afb6420b95c258614d375d164828606e70bde370479691b0305bbe238c0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원이",
+      "markdown_anchor": "main-a106-p2-t1-r16-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r16-col3",
@@ -10761,10 +11071,18 @@
       "source_order": 653,
       "original_label": "",
       "source_sha256": "24828cb70905c290b1c66661cab97e3140fee9a27228412481fbcaab0d560e5b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청이",
+      "markdown_anchor": "main-a106-p2-t1-r16-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r17",
@@ -10775,10 +11093,11 @@
       "source_order": 654,
       "original_label": "",
       "source_sha256": "e72b26c22f82b3f345b2b4285e72eb516272daac39cb52a30b5d5424dc21ca05",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r17",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r17-col1",
@@ -10789,10 +11108,19 @@
       "source_order": 655,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r17-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r17-col2",
@@ -10803,10 +11131,18 @@
       "source_order": 656,
       "original_label": "",
       "source_sha256": "e2c80bb62a3a7b119feb6ca40b63ca01c50927e6fd7679fecc265bf199030c97",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "종결하였다는 취지와 다음 조 제1항에 규정하는 심리원의견서 및 사건기록(심사청구서, 변명서 및 그 밖의 심사청구에 관한 사건에 관한 서류나 물건 중 정령으로 정하는 것을 말한다. 같은 조 제2항 및 제43조 제2항에서 같다)을 심사청에 제출할 예정 시기를 통지하여야 한다. 해당 예정 시기를 변경한 때에도 같다",
+      "markdown_anchor": "main-a106-p2-t1-r17-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r17-col3",
@@ -10817,10 +11153,18 @@
       "source_order": 657,
       "original_label": "",
       "source_sha256": "6e9fe3dfc0abef9d4f7b0aea75abe60945ec1c4220b70ab2f85cdcc4348b1db6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "종결하였다는 취지를 통지하여야 한다",
+      "markdown_anchor": "main-a106-p2-t1-r17-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r18",
@@ -10831,10 +11175,11 @@
       "source_order": 658,
       "original_label": "",
       "source_sha256": "d02ac2a90f9af2538babc3c7b1fa282d7b5eaaf81d22e29c26869d03b1b72389",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r18",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r18-col1",
@@ -10845,10 +11190,18 @@
       "source_order": 659,
       "original_label": "",
       "source_sha256": "7c2bd9a349d8a52bc1f4c15c4e1609d29a3cc9a94ef6c04efba6dfbc526b42cf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제44조",
+      "markdown_anchor": "main-a106-p2-t1-r18-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "none",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r18-col2",
@@ -10859,10 +11212,18 @@
       "source_order": 660,
       "original_label": "",
       "source_sha256": "054d71f2dca0c842d9906cfcb3eaecb5650315df2e5847a070e4b06c194699f9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정불복심사회 등",
+      "markdown_anchor": "main-a106-p2-t1-r18-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r18-col3",
@@ -10873,10 +11234,18 @@
       "source_order": 661,
       "original_label": "",
       "source_sha256": "bd10aecd787bd59e6dbd68afc633ea457d81aab6b3b8a445a07b9ad384fca6a8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제81조 제1항 또는 제2항의 기관",
+      "markdown_anchor": "main-a106-p2-t1-r18-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r19",
@@ -10887,10 +11256,11 @@
       "source_order": 662,
       "original_label": "",
       "source_sha256": "378a15eeb4a76ef913b5a1f41cd73f3ba3154a71304c287e2646575a530d66d7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r19",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r19-col1",
@@ -10901,10 +11271,19 @@
       "source_order": 663,
       "original_label": "",
       "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "",
+      "markdown_anchor": "main-a106-p2-t1-r19-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_cell_empty": true,
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "none"
+      },
+      "source_text_empty": true
     },
     {
       "node_id": "main-a106-p2-t1-r19-col2",
@@ -10915,10 +11294,18 @@
       "source_order": 664,
       "original_label": "",
       "source_sha256": "788513f36d9d429c5848a938738271279c3d1c5ec5b5ed54f65dac7748f9527b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "받은 때(전조 제1항의 규정에 따른 자문을 필요로 하지 않는 경우(같은 항 제2호 또는 제3호에 해당하는 경우는 제외한다)에는 심리원의견서가 제출된 때, 같은 항 제2호 또는 제3호에 해당하는 경우에는 같은 항 제2호 또는 제3호에 규정하는 심의를 거친 때)",
+      "markdown_anchor": "main-a106-p2-t1-r19-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r19-col3",
@@ -10929,10 +11316,18 @@
       "source_order": 665,
       "original_label": "",
       "source_sha256": "91c5a45fde022be831fa490e3121e50782e9415a8ff9c87031a0d07e831c6242",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "받은 때",
+      "markdown_anchor": "main-a106-p2-t1-r19-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r20",
@@ -10943,10 +11338,11 @@
       "source_order": 666,
       "original_label": "",
       "source_sha256": "8452652bf6d62ec23670c47ce46fb076b87945e102ae575c28357b3dbb3397a0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r20",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r20-col1",
@@ -10957,10 +11353,18 @@
       "source_order": 667,
       "original_label": "",
       "source_sha256": "c39ac9228bf3528d2a7627a62a0ce8428c9f3ec8dcb20b6d122090335b2246dc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제50조 제1항 제4호",
+      "markdown_anchor": "main-a106-p2-t1-r20-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r20-col2",
@@ -10971,10 +11375,18 @@
       "source_order": 668,
       "original_label": "",
       "source_sha256": "0c0f42671e0eadce51532fcb17bde661db762dec30e9840132ffc4bdcf6f67ce",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심리원의견서 또는 행정불복심사회 등이나 심의회 등",
+      "markdown_anchor": "main-a106-p2-t1-r20-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r20-col3",
@@ -10985,10 +11397,18 @@
       "source_order": 669,
       "original_label": "",
       "source_sha256": "bd10aecd787bd59e6dbd68afc633ea457d81aab6b3b8a445a07b9ad384fca6a8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제81조 제1항 또는 제2항의 기관",
+      "markdown_anchor": "main-a106-p2-t1-r20-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r21",
@@ -10999,10 +11419,11 @@
       "source_order": 670,
       "original_label": "",
       "source_sha256": "dcde115886b26d3fc69f6979cada6650306a64d7a5369ceb96fab10cb21f25eb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a106-p2-t1-r21",
+      "table_structure_ready": true
     },
     {
       "node_id": "main-a106-p2-t1-r21-col1",
@@ -11013,10 +11434,18 @@
       "source_order": 671,
       "original_label": "",
       "source_sha256": "0c6c81cf5877261791a42c45e9b34c714fea811932a8d4cca5f61ba62ac7da04",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제81조 제3항에서 준용하는 제74조",
+      "markdown_anchor": "main-a106-p2-t1-r21-col1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r21-col2",
@@ -11027,10 +11456,18 @@
       "source_order": 672,
       "original_label": "",
       "source_sha256": "a005afc43077e717e3de9778b3587535126a81aa9e0a4859c4fcfefc7b505b7d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제43조 제1항의 규정에 따라 심사회에 자문한 심사청",
+      "markdown_anchor": "main-a106-p2-t1-r21-col2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a106-p2-t1-r21-col3",
@@ -11041,10 +11478,18 @@
       "source_order": 673,
       "original_label": "",
       "source_sha256": "65cbb3fd9f25d8a00f1c7d8e6915eb474b5a228760320e516b9baa6003265933",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청",
+      "markdown_anchor": "main-a106-p2-t1-r21-col3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "source_attributes": {
+        "BorderBottom": "solid",
+        "BorderLeft": "solid",
+        "BorderRight": "solid",
+        "BorderTop": "solid"
+      },
+      "source_text_empty": false
     },
     {
       "node_id": "main-a107",
@@ -11055,10 +11500,11 @@
       "source_order": 674,
       "original_label": "第百七条",
       "source_sha256": "7a661cd88bf92ec3d4019873ac0ef37fc3b25856cabea0fdd18ac98e0e2d7280",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a107",
+      "korean_title": "제107조 (제3자의 심사청구를 기각하는 경우 등의 절차 등)"
     },
     {
       "node_id": "main-a107-p1",
@@ -11069,10 +11515,11 @@
       "source_order": 675,
       "original_label": "",
       "source_sha256": "bca28acf5d518f5cd405cbc56a9de560d1b8c05c6efe12330f595ff9a13df1a0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제86조 제3항의 규정은 다음 각 호의 어느 하나에 해당하는 재결을 하는 경우에 준용한다.",
+      "markdown_anchor": "main-a107-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a107-p1-i1",
@@ -11083,10 +11530,11 @@
       "source_order": 676,
       "original_label": "一",
       "source_sha256": "2726dc1ff7296d2b6e5917f25b8552445cac5e7c44797f970369cf1efb101576",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정에 대한 제3자의 심사청구를 각하하거나 기각하는 재결",
+      "markdown_anchor": "main-a107-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a107-p1-i2",
@@ -11097,10 +11545,11 @@
       "source_order": 677,
       "original_label": "二",
       "source_sha256": "2af3ad6d3214e59a3141ba3d2fd1b34709ef62a02d3671ef5a6b94a97eee8a79",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심사청구에 관한 공개결정 등(공개청구에 관한 보유개인정보의 전부를 공개한다는 취지의 결정은 제외한다)을 변경하여 해당 심사청구에 관한 보유개인정보를 공개한다는 취지의 재결(제3자인 참가인이 해당 제3자에 관한 정보의 공개에 반대하는 의사를 표시하고 있는 경우에 한정한다)",
+      "markdown_anchor": "main-a107-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-a107-p2",
@@ -11111,10 +11560,11 @@
       "source_order": 678,
       "original_label": "２",
       "source_sha256": "1b8f12c12111975bad1742914bde890f479b695eda653d9b63d5855723e6f8be",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에 관하여는 정령(지방공공단체의 기관 또는 지방독립행정법인의 경우에는 조례)으로 정하는 바에 따라 행정불복심사법 제4조의 규정의 특례를 둘 수 있다.",
+      "markdown_anchor": "main-a107-p2",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s4-ss5",
@@ -11139,10 +11589,11 @@
       "source_order": 680,
       "original_label": "第百八条",
       "source_sha256": "4dfceb76c880ea818b322fda6739002b7d4ab15709c75dcc236878ecac80c547",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a108",
+      "korean_title": "제108조"
     },
     {
       "node_id": "main-a108-p1",
@@ -11153,10 +11604,11 @@
       "source_order": 681,
       "original_label": "",
       "source_sha256": "987599e721843a2e0c17bf9be724e11ba56c00d3c6fb5be8c2dd52f0c84927cb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 절의 규정은 지방공공단체가 보유개인정보의 공개, 정정 및 이용정지 절차와 심사청구 절차에 관한 사항에 대하여 이 절의 규정에 어긋나지 않는 한 조례로 필요한 규정을 정하는 것을 방해하지 않는다.",
+      "markdown_anchor": "main-a108-p1",
+      "translation_method": "assistant_translation_from_official_japanese"
     },
     {
       "node_id": "main-c5-s5",

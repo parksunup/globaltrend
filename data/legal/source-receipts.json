@@ -190,11 +190,6 @@
   ],
   "latest_failed_access": [
     {
-      "url": "https://www.law.go.kr/법령/개인정보보호법",
-      "outcome": "HTTP 503",
-      "checked_on": "2026-10-06"
-    },
-    {
       "url": "https://www.npc.gov.cn/npc/c30834/202108/t20210820_313088.html",
       "outcome": "HTTP 503",
       "checked_on": "2026-10-06"
@@ -234,6 +229,11 @@
       "checked_on": "2026-10-06",
       "checked_on_timezone": "UTC",
       "checked_on_kst": "2026-10-07"
+    },
+    {
+      "url": "https://www.law.go.kr/법령/개인정보보호법",
+      "outcome": "HTTP 403; current PIPA text not obtained",
+      "checked_on": "2026-10-07"
     }
   ]
 }

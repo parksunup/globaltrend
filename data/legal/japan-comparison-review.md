@@ -6,7 +6,7 @@
 
 현재 [비교표](./criteria-mapping.md)는 119개 셀 모두 미검토인 준비표다. 한국·일본의 비교 내용이 완성되었거나 정확성 검수를 통과했다고 평가할 수 없다. 별도 원본 첨부파일은 확보하지 못했으며, 저장소에 확정된 [architecture.md §6.0](../../architecture.md#60-첫-법제-범위와-비교-기준)과 기존 seed의 17개 기준명·순서를 그대로 대조했다.
 
-일본은 [공식 고정 판본](https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070)을 기준으로 [제1조~제105조 초안](./translations/appi.md)을 작성했다. 본칙 185개 조문 중 105개이며, 부칙·별표와 제106조 이후는 미번역이다. 한국은 [공식 한국어 법문](https://www.law.go.kr/법령/개인정보보호법)의 현행 판본을 아직 확보하지 못했다. 2026-10-07 한국 시각의 재시도에서도 법령 페이지와 법률명 조회는 HTTP 503, 연결 경로는 프록시 403이었다. 한국 조문 번호를 기억으로 채우지 않았다.
+일본은 [공식 고정 판본](https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070)을 기준으로 [제1조~제108조 초안](./translations/appi.md)을 작성했다. 본칙 185개 조문 중 108개이며, 부칙·별표와 제109조 이후는 미번역이다. 한국은 [공식 한국어 법문](https://www.law.go.kr/법령/개인정보보호법)의 현행 판본을 아직 확보하지 못했다. 2026-10-07 한국 시각의 재시도에서도 법령 페이지와 법률명 조회는 HTTP 503, 연결 경로는 프록시 403이었다. 한국 조문 번호를 기억으로 채우지 않았다.
 
 ## 기존 17개 기준에서 검토할 질문
 
@@ -17,7 +17,7 @@
 | 1. 개인정보 범위 | [제2조](./translations/appi.md#main-a2), [제16조](./translations/appi.md#main-a16), [제60조](./translations/appi.md#main-a60) | 개인정보·개인데이터·보유개인데이터·보유개인정보를 구분하고 한국 용어와의 대응 근거를 확인 | 비교 미작성·초안 검수 전 |
 | 2. 법 적용 대상 | [제16조](./translations/appi.md#main-a16), [제57조](./translations/appi.md#main-a57), [제58조](./translations/appi.md#main-a58), [제60조](./translations/appi.md#main-a60) | 사업자·공공기관의 적용 범위, 특례·제외와 일본 제125조·제171조의 미번역 근거를 확인 | 비교 미작성·후속 조문 미번역 |
 | 3. 개인정보보호 원칙 | [제3조](./translations/appi.md#main-a3), [제17조](./translations/appi.md#main-a17), [제18조](./translations/appi.md#main-a18), [제19조](./translations/appi.md#main-a19), [제61조](./translations/appi.md#main-a61) | 기본 원칙과 개별 의무·노력 의무를 구분하고 목적 제한의 예외를 확인 | 비교 미작성·초안 검수 전 |
-| 4. 정보주체 권리 | [제32조](./translations/appi.md#main-a32), [제33조](./translations/appi.md#main-a33), [제34조](./translations/appi.md#main-a34), [제35조](./translations/appi.md#main-a35), [제76조](./translations/appi.md#main-a76), [제90조](./translations/appi.md#main-a90), [제98조](./translations/appi.md#main-a98) | 민간·공공 권리의 요건·거절 사유·기한을 구분하고 제106조 이후 절차·제124조 특례를 추가 확인 | 비교 미작성·권리 절차 일부 미번역 |
+| 4. 정보주체 권리 | [제32조](./translations/appi.md#main-a32), [제33조](./translations/appi.md#main-a33), [제34조](./translations/appi.md#main-a34), [제35조](./translations/appi.md#main-a35), [제76조](./translations/appi.md#main-a76), [제90조](./translations/appi.md#main-a90), [제98조](./translations/appi.md#main-a98) | 민간·공공 권리의 요건·거절 사유·기한을 구분하고 제109조 이후 및 제124조 특례를 추가 확인 | 비교 미작성·권리 절차 일부 미번역 |
 | 5. 처리근거 — 수집 | [제20조](./translations/appi.md#main-a20), [제21조](./translations/appi.md#main-a21), [제62조](./translations/appi.md#main-a62), [제64조](./translations/appi.md#main-a64) | 수집·고지·특별한 정보 취득의 요건을 구분하고 동의 예외를 모두 확인 | 비교 미작성·초안 검수 전 |
 | 6. 처리근거 — 이용 | [제17조](./translations/appi.md#main-a17), [제18조](./translations/appi.md#main-a18), [제19조](./translations/appi.md#main-a19), [제69조](./translations/appi.md#main-a69) | 이용목적의 특정·변경·목적 외 이용 및 공공부문 예외를 따로 확인 | 비교 미작성·초안 검수 전 |
 | 7. 제공 | [제27조](./translations/appi.md#main-a27), [제29조](./translations/appi.md#main-a29), [제30조](./translations/appi.md#main-a30), [제31조](./translations/appi.md#main-a31), [제69조](./translations/appi.md#main-a69), [제70조](./translations/appi.md#main-a70), [제72조](./translations/appi.md#main-a72) | 제3자 제공, 공동이용·위탁, 확인·기록 의무와 개인관련정보의 조건을 구분 | 비교 미작성·초안 검수 전 |
@@ -35,6 +35,6 @@
 ## 발견한 오류와 이어서 할 일
 
 - 이전 PR의 ‘제1~4장(제1~58조)’ 표현은 잘못되었다. 제4장은 **제59조까지**다. 이번 상태 목록은 공식 상위 관계로 장·절·관의 시작·끝 조 번호를 계산하여 제목 번역 수와 장 전체 작성 수를 구분한다.
-- 다음 번역 구간은 제106조부터다. **제106조 제2항의 법정 치환표도 법문**이므로 항 문장만 번역하고 해당 조를 완료로 표시하면 안 된다. 표의 행·셀·빈 셀·순서와 인용 문구를 유지할 출력·검증을 추가한 뒤 작성한다.
+- 제106조 제2항의 법정 치환표 21행·63셀 및 제107~108조를 초안으로 작성했다. 원문 빈 셀·행·열 순서·테두리 속성을 유지하고 셀별 앵커를 연결했다. 다음 구간은 제109조부터이며 표의 문구와 인용 관계는 사람 검수 전이다.
 - APPI의 나머지 본칙·제공 부칙·별표를 같은 문서에 이어 작성하고 전체 누락을 대조한다. 한국 공식 원문을 확보한 뒤 두 법률을 같은 기준일의 판본으로 비교한다.
 - 실제 비교 셀을 채울 때는 모든 관련 조항, 한국어 핵심 요약, 예외, 조항 앵커, 공식 URL, 판본, 사람 검수 상태를 기록한다. 작성된 비교표의 17행은 위 질문을 따라 한국·일본부터 검토하고, 그 이후 다른 해외법 작업을 재개한다.

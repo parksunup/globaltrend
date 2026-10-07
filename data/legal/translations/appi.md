@@ -6,7 +6,7 @@
 - 공식 API·선택 판본: https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070
 - 판본 식별자: `415AC0000000057_20261001_507AC0000000070`; 원문 API 상태: `CurrentEnforced`.
 - 선택 개정 판본 시행일: 2026-10-01. 법률 최초 공포일: 2003-05-30. 법 전체의 단일 최초 시행일과 구분합니다.
-- 번역 상태: 본칙 제1조~제105조 작성(105/185개, 56.76%). 제106조 이후·22개 부칙 묶음·2개 별표 미번역. **전문 미완성·사람 검수 전 초안**.
+- 번역 상태: 본칙 제1조~제108조 작성(108/185개, 58.38%). 제109조 이후·22개 부칙 묶음·2개 별표 미번역. **전문 미완성·사람 검수 전 초안**.
 - 출처: e-Gov 법령검색의 위 공식 판본. 원문을 기초로 이 프로젝트가 한국어로 번역·가공한 비공식 초안이며 일본 정부가 작성한 번역이 아닙니다.
 - 조사일: 2026-10-06. 원문 제공 범위에는 일부 개정법 부칙의 발췌(`Extract=true`)가 포함됩니다. 각 개정법 전체를 번역한 문서는 아닙니다.
 - [조항별 JSON](./appi.json) · [누락·검수 목록](./appi-status.md) · [용어·이용조건·대조 메모](./appi-review-notes.md)
@@ -2357,6 +2357,156 @@
 
 **3항.** 앞의 두 항의 규정은 지방공공단체의 기관 또는 지방독립행정법인에 준용한다. 이 경우 제1항 중 “정보공개·개인정보보호심사회(심사청구에 대한 재결을 하여야 하는 행정기관의 장 등이 회계검사원장인 경우에는 별도로 법률로 정하는 심사회)”를 “행정불복심사법 제81조 제1항 또는 제2항의 기관”으로 바꾸어 읽는다.
 
+<a id="main-a106"></a>
+
+#### 제106조 (지방공공단체의 기관 등에서 심리원에 의한 심리절차에 관한 규정의 적용 제외 등)
+
+<a id="main-a106-p1"></a>
+
+**1항.** 지방공공단체의 기관 또는 지방독립행정법인에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에는 행정불복심사법 제9조 제1항부터 제3항까지, 제17조, 제40조, 제42조, 제2장 제4절 및 제50조 제2항의 규정을 적용하지 않는다.
+
+<a id="main-a106-p2"></a>
+
+**2항.** 지방공공단체의 기관 또는 지방독립행정법인에 대한 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에 관하여 다음 표의 상란에 열거하는 행정불복심사법의 규정을 적용할 때에는 해당 규정 중 같은 표의 중란에 열거하는 문구를 각각 같은 표의 하란에 열거하는 문구로 하는 외에 필요한 기술적 치환은 정령으로 정한다.
+
+<a id="main-a106-p2-t1"></a>
+
+<table>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r1"></a><a id="main-a106-p2-t1-r1-col1"></a>제9조 제4항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r1-col2"></a>전항에 규정하는 경우에 심사청</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r1-col3"></a>제4조 또는 개인정보 보호에 관한 법률(헤이세이 15년 법률 제57호) 제107조 제2항의 규정에 따른 조례의 규정에 따라 심사청구를 받은 행정청(제14조의 규정에 따라 인계받은 행정청을 포함한다. 이하 “심사청”이라 한다)</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r2"></a><a id="main-a106-p2-t1-r2-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r2-col2"></a>전항에서 바꾸어 읽어 적용하는 제31조 제1항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r2-col3"></a>같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제31조 제1항</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r3"></a><a id="main-a106-p2-t1-r3-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r3-col2"></a>전항에서 바꾸어 읽어 적용하는 제34조</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r3-col3"></a>같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제34조</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r4"></a><a id="main-a106-p2-t1-r4-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r4-col2"></a>전항에서 바꾸어 읽어 적용하는 제36조</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r4-col3"></a>같은 법 제106조 제2항에서 바꾸어 읽어 적용하는 제36조</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r5"></a><a id="main-a106-p2-t1-r5-col1"></a>제11조 제2항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r5-col2"></a>제9조 제1항의 규정에 따라 지명된 자(이하 “심리원”이라 한다)</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r5-col3"></a>심사청</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r6"></a><a id="main-a106-p2-t1-r6-col1"></a>제13조 제1항 및 제2항, 제28조, 제30조, 제31조, 제32조 제3항, 제33조부터 제37조까지, 제38조 제1항부터 제3항까지 및 제5항, 제39조 및 제41조 제1항 및 제2항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r6-col2"></a>심리원</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r6-col3"></a>심사청</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r7"></a><a id="main-a106-p2-t1-r7-col1"></a>제25조 제7항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r7-col2"></a>집행정지의 신청이 있은 때 또는 심리원으로부터 제40조에 규정하는 집행정지를 하여야 한다는 취지의 의견서가 제출된 때</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r7-col3"></a>집행정지의 신청이 있은 때</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r8"></a><a id="main-a106-p2-t1-r8-col1"></a>제29조 제1항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r8-col2"></a>심리원은 심사청으로부터 지명되면 즉시</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r8-col3"></a>심사청은 심사청구를 받으면 제24조의 규정에 따라 해당 심사청구를 각하하는 경우를 제외하고 신속하게</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r9"></a><a id="main-a106-p2-t1-r9-col1"></a>제29조 제2항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r9-col2"></a>심리원은</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r9-col3"></a>심사청은 심사청이 처분청 등 이외인 경우에는</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r10"></a><a id="main-a106-p2-t1-r10-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r10-col2"></a>제출을 요구한다</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r10-col3"></a>제출을 요구하고 심사청이 처분청 등인 경우에는 상당한 기간 내에 변명서를 작성한다</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r11"></a><a id="main-a106-p2-t1-r11-col1"></a>제29조 제5항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r11-col2"></a>심리원은</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r11-col3"></a>심사청은 제2항의 규정에 따라</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r12"></a><a id="main-a106-p2-t1-r12-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r12-col2"></a>제출이 있은 때</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r12-col3"></a>제출이 있은 때 또는 변명서를 작성한 때</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r13"></a><a id="main-a106-p2-t1-r13-col1"></a>제30조 제3항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r13-col2"></a>참가인 및 처분청 등</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r13-col3"></a>참가인 및 처분청 등(처분청 등이 심사청인 경우에는 참가인)</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r14"></a><a id="main-a106-p2-t1-r14-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r14-col2"></a>심사청구인 및 처분청 등</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r14-col3"></a>심사청구인 및 처분청 등(처분청 등이 심사청인 경우에는 심사청구인)</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r15"></a><a id="main-a106-p2-t1-r15-col1"></a>제31조 제2항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r15-col2"></a>심리관계인</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r15-col3"></a>심리관계인(처분청 등이 심사청인 경우에는 심사청구인 및 참가인. 이하 이 절 및 제50조 제1항 제3호에서 같다)</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r16"></a><a id="main-a106-p2-t1-r16-col1"></a>제41조 제3항</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r16-col2"></a>심리원이</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r16-col3"></a>심사청이</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r17"></a><a id="main-a106-p2-t1-r17-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r17-col2"></a>종결하였다는 취지와 다음 조 제1항에 규정하는 심리원의견서 및 사건기록(심사청구서, 변명서 및 그 밖의 심사청구에 관한 사건에 관한 서류나 물건 중 정령으로 정하는 것을 말한다. 같은 조 제2항 및 제43조 제2항에서 같다)을 심사청에 제출할 예정 시기를 통지하여야 한다. 해당 예정 시기를 변경한 때에도 같다</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r17-col3"></a>종결하였다는 취지를 통지하여야 한다</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:none;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r18"></a><a id="main-a106-p2-t1-r18-col1"></a>제44조</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r18-col2"></a>행정불복심사회 등</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r18-col3"></a>제81조 제1항 또는 제2항의 기관</td>
+</tr>
+<tr>
+<td style="border-top:none;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r19"></a><a id="main-a106-p2-t1-r19-col1"></a></td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r19-col2"></a>받은 때(전조 제1항의 규정에 따른 자문을 필요로 하지 않는 경우(같은 항 제2호 또는 제3호에 해당하는 경우는 제외한다)에는 심리원의견서가 제출된 때, 같은 항 제2호 또는 제3호에 해당하는 경우에는 같은 항 제2호 또는 제3호에 규정하는 심의를 거친 때)</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r19-col3"></a>받은 때</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r20"></a><a id="main-a106-p2-t1-r20-col1"></a>제50조 제1항 제4호</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r20-col2"></a>심리원의견서 또는 행정불복심사회 등이나 심의회 등</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r20-col3"></a>제81조 제1항 또는 제2항의 기관</td>
+</tr>
+<tr>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r21"></a><a id="main-a106-p2-t1-r21-col1"></a>제81조 제3항에서 준용하는 제74조</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r21-col2"></a>제43조 제1항의 규정에 따라 심사회에 자문한 심사청</td>
+<td style="border-top:1px solid;border-bottom:1px solid;border-left:1px solid;border-right:1px solid"><a id="main-a106-p2-t1-r21-col3"></a>심사청</td>
+</tr>
+</table>
+
+<a id="main-a107"></a>
+
+#### 제107조 (제3자의 심사청구를 기각하는 경우 등의 절차 등)
+
+<a id="main-a107-p1"></a>
+
+**1항.** 제86조 제3항의 규정은 다음 각 호의 어느 하나에 해당하는 재결을 하는 경우에 준용한다.
+
+<a id="main-a107-p1-i1"></a>
+
+**1호.** 공개결정에 대한 제3자의 심사청구를 각하하거나 기각하는 재결
+
+<a id="main-a107-p1-i2"></a>
+
+**2호.** 심사청구에 관한 공개결정 등(공개청구에 관한 보유개인정보의 전부를 공개한다는 취지의 결정은 제외한다)을 변경하여 해당 심사청구에 관한 보유개인정보를 공개한다는 취지의 재결(제3자인 참가인이 해당 제3자에 관한 정보의 공개에 반대하는 의사를 표시하고 있는 경우에 한정한다)
+
+<a id="main-a107-p2"></a>
+
+**2항.** 공개결정 등, 정정결정 등, 이용정지결정 등 또는 공개청구, 정정청구나 이용정지청구에 관한 부작위에 대한 심사청구에 관하여는 정령(지방공공단체의 기관 또는 지방독립행정법인의 경우에는 조례)으로 정하는 바에 따라 행정불복심사법 제4조의 규정의 특례를 둘 수 있다.
+
+<a id="main-a108"></a>
+
+#### 제108조
+
+<a id="main-a108-p1"></a>
+
+**1항.** 이 절의 규정은 지방공공단체가 보유개인정보의 공개, 정정 및 이용정지 절차와 심사청구 절차에 관한 사항에 대하여 이 절의 규정에 어긋나지 않는 한 조례로 필요한 규정을 정하는 것을 방해하지 않는다.
+
 ---
 
-번역은 제105조까지입니다. 나머지 본칙·부칙·별표는 [누락 목록](./appi-status.md)을 따라 같은 문서에 이어 작성합니다.
+번역은 제108조까지입니다. 나머지 본칙·부칙·별표는 [누락 목록](./appi-status.md)을 따라 같은 문서에 이어 작성합니다.

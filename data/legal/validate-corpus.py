@@ -72,6 +72,10 @@ def validate(source_path=None):
                   and node["tag"] in {"Table", "TableRow", "TableColumn"}]
         check(all(node["translation_status"] == "draft" for node in tables),
               f"작성 완료 조문 내부 표 미번역: {article['node_id']}")
+        for cell in [n for n in tables if n["tag"] == "TableColumn"]:
+            empty = cell["source_sha256"] == hashlib.sha256(b"").hexdigest()
+            check(empty == bool(cell.get("source_cell_empty")) == (cell["korean_text"] == ""),
+                  f"표 셀의 원문 빈 값·번역 누락 구분 오류: {cell['node_id']}")
 
     groups = document["coverage"]["heading_groups"]
     headings = [node for node in nodes if node["tag"] in {"Chapter", "Section", "Subsection"}]
@@ -128,6 +132,16 @@ def validate(source_path=None):
             saved = [node["number"] for node in nodes
                      if node["tag"] == "Paragraph" and node["parent_id"] == article["node_id"]]
             check(paragraph_ids == saved, f"공식 원문 항 번호·순서 불일치: {article['node_id']}")
+            original_cells = [n for n in walk(source_article) if n["tag"] == "TableColumn"]
+            saved_cells = [n for n in nodes if n["node_id"].startswith(article["node_id"] + "-")
+                           and n["tag"] == "TableColumn"]
+            check(len(original_cells) == len(saved_cells), "공식 원문 표 셀 누락")
+            def flatten(n):
+                return n if isinstance(n, str) else "".join(flatten(c) for c in n.get("children", []))
+            for original_cell, saved_cell in zip(original_cells, saved_cells):
+                check(hashlib.sha256(flatten(original_cell).encode()).hexdigest() == saved_cell["source_sha256"]
+                      and original_cell["attr"] == saved_cell["source_attributes"],
+                      f"공식 원문 표 셀 순서·내용 해시·속성 불일치: {saved_cell['node_id']}")
 
     with (BASE / "criteria-mapping.csv").open() as stream:
         cells = list(csv.DictReader(stream))
