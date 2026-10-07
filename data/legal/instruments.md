@@ -16,6 +16,6 @@
 | us-ca-ccpa | US-CA — CCPA | California Consumer Privacy Act of 2018 (California Civil Code, Division 3, Part 4, Title 1.81.5) | [원문·대상](https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf) | CPPA PDF 표제 effective 01/01/2026, AB 137·AB 566 update; 주 의회 법전과 후속 개정 대조 필요; 선택 판본 시행일: 2026-01-01 | 유무·직접 출처 검토 필요 | in_review |
 | sg-pdpa | SG — PDPA | Personal Data Protection Act 2012 | [원문·대상](https://sso.agc.gov.sg/Act/PDPA2012) | SSO Current version as at 06 Oct 2026; 2020 REVISED EDITION 기반; 전체 범위·후속 개정 시행일 검토 필요; 선택 판본 시행일: 검토 필요 | 유무·직접 출처 검토 필요 | in_review |
 
-APPI 본칙 제1조~제185조 초안과 조항 연결은 [appi.md](./translations/appi.md), [appi.json](./translations/appi.json)에 있다. 누락·이용조건·용어 검토는 [APPI 검토 메모](./translations/appi-review-notes.md), 나머지 법률과 영국 보완 법령은 [전체 검토 메모](./review-notes.md)를 참조한다.
+APPI 본칙·제공 부칙·별표 전체 초안과 조항 연결은 [appi.md](./translations/appi.md), [appi.json](./translations/appi.json)에 있다. 누락·이용조건·용어 검토는 [APPI 검토 메모](./translations/appi-review-notes.md), 나머지 법률과 영국 보완 법령은 [전체 검토 메모](./review-notes.md)를 참조한다.
 
-[7개 법제 진행표](./translation-progress.md)와 [17개 기준 비교표 준비 파일](./criteria-mapping.md)은 전문 번역이 완료된 법률부터 채운다. 비교 내용은 전부 미검토이며 법적 결론으로 사용할 수 없다.
+[7개 법제 진행표](./translation-progress.md)와 [17개 기준 분류·요약표](./criteria-mapping.md)는 한국·일본 34개 셀의 사람 검수 전 초안이다. 다른 5개 법제 85개 셀은 미검토다. 한국은 [공식 한국어 원문 색인](./sources/pipa-index.md)에서 본문을 연결하며 원문 자체는 저장소에 포함하지 않는다.

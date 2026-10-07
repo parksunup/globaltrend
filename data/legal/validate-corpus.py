@@ -11,6 +11,8 @@ import hashlib
 import json
 import re
 from pathlib import Path
+from tools.criteria_format import read_list, render_cell
+from tools.pipa_index import extract as extract_pipa
 
 
 BASE = Path(__file__).resolve().parent
@@ -29,7 +31,7 @@ def walk(node):
             yield from walk(child)
 
 
-def validate(source_path=None):
+def validate(source_path=None, pipa_source_path=None):
     document = json.loads((BASE / "translations/appi.json").read_text())
     nodes = document["provisions"]
     by_id = {node["node_id"]: node for node in nodes}
@@ -204,6 +206,24 @@ def validate(source_path=None):
 
     with (BASE / "criteria-mapping.csv").open() as stream:
         cells = list(csv.DictReader(stream))
+    pipa_index = json.loads((BASE / "sources/pipa-index.json").read_text())
+    pipa_nodes = pipa_index["articles"]
+    pipa_ids = [n["node_id"] for n in pipa_nodes]
+    check(len(set(pipa_ids)) == len(pipa_ids), "한국 색인 ID 중복")
+    pipa_markdown = (BASE / "sources/pipa-index.md").read_text()
+    check(re.findall(r'<a id="([^"]+)"></a>', pipa_markdown) == pipa_ids, "한국 색인 앵커·순서 불일치")
+    check(pipa_index["source_body_in_repository"] is False
+          and pipa_index["human_review_status"] == "not_started", "한국 본문 공개·검수 상태 불일치")
+    check(sum(n["scope"] == "main" for n in pipa_nodes) == pipa_index["article_labels_observed"],
+          "한국 본칙 표제 관측 수 불일치")
+    if pipa_source_path:
+        pipa_raw = Path(pipa_source_path).read_bytes()
+        check(hashlib.sha256(pipa_raw).hexdigest() == pipa_index["source_body_sha256"], "한국 입력 원문 해시 불일치")
+        observed = extract_pipa(pipa_raw.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n"))
+        saved = [{"article_label": n["article_label"], "html_char_offset": n["source_html_char_offset"],
+                  "line": n["source_line"], "deleted_marker": n["deleted_marker_observed"], "scope": n["scope"]}
+                 for n in pipa_nodes]
+        check(saved == observed, "한국 실제 선두 표제·번호·삭제 표지·원문 위치·순서 불일치")
     with (BASE / "instruments.csv").open() as stream:
         laws = list(csv.DictReader(stream))
     seed = (ROOT / "supabase/migrations/20260927140000_p1_seed_sources_criteria.sql").read_text()
@@ -217,18 +237,61 @@ def validate(source_path=None):
     table_rows = [line for line in comparison.splitlines() if re.match(r"\| \d+\. ", line)]
     check(len(table_rows) == 17, "Markdown 비교 행 누락")
     for (key, label, order), line in zip(criteria, table_rows):
-        check(line == "| " + str(order) + ". " + label + " | " + " | ".join(["미검토"] * 7) + " |",
-              "Markdown과 CSV 준비표 불일치")
         group = [cell for cell in cells if cell["criterion_id"] == key]
+        check(line == "| " + str(order) + ". " + label + " | " + " | ".join(render_cell(c) for c in group) + " |",
+              "Markdown과 CSV 분류 내용·링크 불일치")
         check(all(cell["criterion_name"] == label and int(cell["criterion_order"]) == order
                   for cell in group), "CSV 기준명·번호 불일치")
-    check(all(cell["review_status"] == "unreviewed" and cell["korean_summary"] == "미검토"
-              and cell["major_exceptions"] == "미검토" and not cell["article_numbers"]
-              and not cell["translation_links"] for cell in cells), "전문 미완료 상태의 비교 내용 입력")
     for cell in cells:
+        check(cell["review_status"] == "unreviewed", "사람 미검수 분류를 검수 완료로 표시함")
         law = next(law for law in laws if law["record_id"] == cell["instrument_id"])
         check(cell["official_source_url"] == law["official_url"], "셀 공식 URL과 법제 목록 불일치")
         check(cell["source_version"] == law["version_label"], "셀 판본 상태와 법제 목록 불일치")
+        if cell["korean_summary"] == "미검토":
+            check(cell["major_exceptions"] == "미검토" and not cell["article_numbers"]
+                  and not cell["translation_links"], "미검토 셀에 확정되지 않은 근거를 입력함")
+            continue
+        check(cell["jurisdiction_code"] in {"KR", "JP"}, "후순위 법제의 미완성 번역으로 비교 입력")
+        check(cell["major_exceptions"] not in {"", "미검토"} and cell["pending_reason"], "예외·검수 필요 항목 누락")
+        references = read_list(cell["article_numbers"])
+        links = read_list(cell["translation_links"])
+        check(len(references) == len(links) and bool(links), "복수 조항·링크 대응 누락")
+        if cell["jurisdiction_code"] == "JP":
+            check(document["translation"]["complete"] and cell["translation_status"] == "full_draft",
+                  "일본 전체 초안 작성 전 분류 입력")
+            prefix, targets = "./translations/appi.md#", anchors
+        else:
+            check(cell["translation_status"] == "official_original_indexed", "한국 공식 원문과 번역 상태 혼동")
+            check(pipa_index["official_url"] == cell["official_source_url"], "한국 색인 공식 판본 불일치")
+            prefix, targets = "./sources/pipa-index.md#", pipa_ids
+        check(all(link.startswith(prefix) and link[len(prefix):] in targets for link in links),
+              "분류 조항 링크가 해당 법제 문서의 조항을 가리키지 않음")
+        for label, link in zip(references, links):
+            target_id = link[len(prefix):]
+            if cell["jurisdiction_code"] == "KR":
+                target = next(n for n in pipa_nodes if n["node_id"] == target_id)
+                numbers = re.findall(r"제\d+조(?:의\d+)?", label)
+                check(numbers == [target["article_label"]], "한국 표시 조 번호와 읽기 링크 불일치")
+                check(("부칙" in label) == target["scope"].startswith("suppl-"), "한국 본칙·부칙 링크 혼동")
+                if target["scope"].startswith("suppl-"):
+                    check("법률 제" + target["scope"].split("-")[1] + "호" in label, "한국 부칙 개정법 번호 불일치")
+                continue
+            target = by_id[target_id]
+            chain = [target]
+            while chain[-1]["parent_id"] in by_id:
+                chain.append(by_id[chain[-1]["parent_id"]])
+            check(("부칙" in label) == target["scope"].startswith("suppl"), "일본 본칙·부칙 링크 혼동")
+            for tag, suffix in [("Article", "조"), ("Paragraph", "항"), ("Item", "호")]:
+                numbers = re.findall(r"제(\d+)" + suffix + r"(?:의(\d+))?", label)
+                if not numbers:
+                    continue
+                ancestor = next((n for n in chain if n["tag"] == tag), None)
+                expected = numbers[-1][0] + ("_" + numbers[-1][1] if numbers[-1][1] else "")
+                if tag == "Item" and re.search(r"법률\s*제\d+호", label) and len(numbers) == 1:
+                    continue
+                check(ancestor and ancestor["number"] == expected, "일본 표시 조·항·호와 링크 불일치")
+            if target["tag"] == "AppdxTable":
+                check(re.findall(r"별표\s*제?(\d+)", label) == [target["number"]], "일본 별표 번호 링크 불일치")
     review = (BASE / "japan-comparison-review.md").read_text()
     review_rows = [line for line in review.splitlines() if re.match(r"\| \d+\. ", line)]
     check(len(review_rows) == 17, "한국·일본 점검 기준 수 불일치")
@@ -237,11 +300,14 @@ def validate(source_path=None):
     review_anchors = re.findall(r"\./translations/appi\.md#([^\)]+)", review)
     check(all(anchor in anchors for anchor in review_anchors), "한국·일본 점검 링크 대상 미번역·누락")
     print(f"구조 검사 통과: APPI {len(nodes)}개 원문 노드, {len(drafts)}개 본칙 초안, "
-          f"{len(anchors)}개 앵커, 비교 준비 셀 {len(cells)}개. "
-          f"선택 원문 번역 누락 {len(missing)}개; 사람 검수·비교는 미완료.")
+          f"{len(anchors)}개 앵커, 한국 색인 {len(pipa_ids)}개, "
+          f"분류 초안 {sum(c['korean_summary'] != '미검토' for c in cells)}/{len(cells)}셀. "
+          f"선택 원문 번역 누락 {len(missing)}개; 사람 번역·비교 검수는 미완료.")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--appi-source", type=Path)
-    validate(parser.parse_args().appi_source)
+    parser.add_argument("--pipa-source", type=Path)
+    args = parser.parse_args()
+    validate(args.appi_source, args.pipa_source)
