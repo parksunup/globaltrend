@@ -25,13 +25,13 @@
     "status": "partial_draft",
     "human_review_status": "not_started",
     "complete": false,
-    "translated_main_articles": 123,
+    "translated_main_articles": 185,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 66.49,
+    "main_article_coverage_percent": 100.0,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
-    "next_main_article": "124"
+    "next_main_article": null
   },
   "coverage": {
     "source_counts": {
@@ -49,13 +49,13 @@
       "AppdxTable": 2
     },
     "draft_counts": {
-      "Chapter": 5,
-      "Article": 123,
-      "Paragraph": 306,
-      "Item": 216,
-      "Section": 15,
+      "Chapter": 8,
+      "Article": 185,
+      "Paragraph": 417,
+      "Item": 249,
+      "Section": 20,
       "Subitem1": 16,
-      "Subsection": 4,
+      "Subsection": 8,
       "Table": 1,
       "TableRow": 21,
       "TableColumn": 63
@@ -63,224 +63,6 @@
     "main_articles": 185,
     "supplementary_articles": 65,
     "missing_node_ids": [
-      "main-c5-s4-ss5",
-      "main-c5-s6",
-      "main-a124",
-      "main-a124-p1",
-      "main-a124-p2",
-      "main-a125",
-      "main-a125-p1",
-      "main-a125-p2",
-      "main-a125-p3",
-      "main-a126",
-      "main-a126-p1",
-      "main-a127",
-      "main-a127-p1",
-      "main-a128",
-      "main-a128-p1",
-      "main-a129",
-      "main-a129-p1",
-      "main-c6",
-      "main-c6-s1",
-      "main-a130",
-      "main-a130-p1",
-      "main-a130-p2",
-      "main-a131",
-      "main-a131-p1",
-      "main-a132",
-      "main-a132-p1",
-      "main-a132-p1-i1",
-      "main-a132-p1-i2",
-      "main-a132-p1-i3",
-      "main-a132-p1-i4",
-      "main-a132-p1-i5",
-      "main-a132-p1-i6",
-      "main-a132-p1-i7",
-      "main-a132-p1-i8",
-      "main-a132-p1-i9",
-      "main-a133",
-      "main-a133-p1",
-      "main-a134",
-      "main-a134-p1",
-      "main-a134-p2",
-      "main-a134-p3",
-      "main-a134-p4",
-      "main-a135",
-      "main-a135-p1",
-      "main-a135-p2",
-      "main-a135-p3",
-      "main-a135-p4",
-      "main-a135-p5",
-      "main-a136",
-      "main-a136-p1",
-      "main-a136-p1-i1",
-      "main-a136-p1-i2",
-      "main-a136-p1-i3",
-      "main-a136-p1-i4",
-      "main-a137",
-      "main-a137-p1",
-      "main-a138",
-      "main-a138-p1",
-      "main-a138-p2",
-      "main-a139",
-      "main-a139-p1",
-      "main-a139-p2",
-      "main-a139-p3",
-      "main-a139-p4",
-      "main-a139-p5",
-      "main-a140",
-      "main-a140-p1",
-      "main-a140-p2",
-      "main-a140-p3",
-      "main-a140-p4",
-      "main-a141",
-      "main-a141-p1",
-      "main-a141-p2",
-      "main-a141-p3",
-      "main-a142",
-      "main-a142-p1",
-      "main-a142-p2",
-      "main-a143",
-      "main-a143-p1",
-      "main-a144",
-      "main-a144-p1",
-      "main-a145",
-      "main-a145-p1",
-      "main-c6-s2",
-      "main-c6-s2-ss1",
-      "main-a146",
-      "main-a146-p1",
-      "main-a146-p2",
-      "main-a146-p3",
-      "main-a147",
-      "main-a147-p1",
-      "main-a148",
-      "main-a148-p1",
-      "main-a148-p2",
-      "main-a148-p3",
-      "main-a148-p4",
-      "main-a149",
-      "main-a149-p1",
-      "main-a149-p2",
-      "main-a150",
-      "main-a150-p1",
-      "main-a150-p2",
-      "main-a150-p3",
-      "main-a150-p4",
-      "main-a150-p5",
-      "main-a150-p6",
-      "main-a150-p7",
-      "main-a150-p8",
-      "main-a150-p9",
-      "main-a151",
-      "main-a151-p1",
-      "main-a152",
-      "main-a152-p1",
-      "main-a152-p1-i1",
-      "main-a152-p1-i2",
-      "main-c6-s2-ss2",
-      "main-a153",
-      "main-a153-p1",
-      "main-a154",
-      "main-a154-p1",
-      "main-a155",
-      "main-a155-p1",
-      "main-a155-p1-i1",
-      "main-a155-p1-i2",
-      "main-a155-p1-i3",
-      "main-a155-p1-i4",
-      "main-a155-p1-i5",
-      "main-a155-p2",
-      "main-c6-s2-ss3",
-      "main-a156",
-      "main-a156-p1",
-      "main-a157",
-      "main-a157-p1",
-      "main-a158",
-      "main-a158-p1",
-      "main-a159",
-      "main-a159-p1",
-      "main-a160",
-      "main-a160-p1",
-      "main-c6-s3",
-      "main-a161",
-      "main-a161-p1",
-      "main-a161-p2",
-      "main-a162",
-      "main-a162-p1",
-      "main-a163",
-      "main-a163-p1",
-      "main-a163-p1-i1",
-      "main-a163-p1-i2",
-      "main-a163-p1-i3",
-      "main-a163-p2",
-      "main-a163-p3",
-      "main-a163-p4",
-      "main-a164",
-      "main-a164-p1",
-      "main-c6-s4",
-      "main-a165",
-      "main-a165-p1",
-      "main-a165-p2",
-      "main-a166",
-      "main-a166-p1",
-      "main-a166-p2",
-      "main-a167",
-      "main-a167-p1",
-      "main-a167-p2",
-      "main-a167-p3",
-      "main-a168",
-      "main-a168-p1",
-      "main-a169",
-      "main-a169-p1",
-      "main-a170",
-      "main-a170-p1",
-      "main-c7",
-      "main-a171",
-      "main-a171-p1",
-      "main-a172",
-      "main-a172-p1",
-      "main-a172-p2",
-      "main-a172-p3",
-      "main-a172-p3-i1",
-      "main-a172-p3-i2",
-      "main-a172-p3-i3",
-      "main-a172-p4",
-      "main-a173",
-      "main-a173-p1",
-      "main-a174",
-      "main-a174-p1",
-      "main-a175",
-      "main-a175-p1",
-      "main-c8",
-      "main-a176",
-      "main-a176-p1",
-      "main-a177",
-      "main-a177-p1",
-      "main-a178",
-      "main-a178-p1",
-      "main-a179",
-      "main-a179-p1",
-      "main-a180",
-      "main-a180-p1",
-      "main-a181",
-      "main-a181-p1",
-      "main-a182",
-      "main-a182-p1",
-      "main-a182-p1-i1",
-      "main-a182-p1-i2",
-      "main-a183",
-      "main-a183-p1",
-      "main-a184",
-      "main-a184-p1",
-      "main-a184-p1-i1",
-      "main-a184-p1-i2",
-      "main-a184-p2",
-      "main-a185",
-      "main-a185-p1",
-      "main-a185-p1-i1",
-      "main-a185-p1-i2",
-      "main-a185-p1-i3",
       "suppl1",
       "suppl1-a1",
       "suppl1-a1-p1",
@@ -775,9 +557,9 @@
         "first_article": "60",
         "last_article": "129",
         "total_articles": 70,
-        "drafted_articles": 64,
+        "drafted_articles": 70,
         "heading_translated": true,
-        "all_nodes_drafted": false,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -821,7 +603,7 @@
         "total_articles": 33,
         "drafted_articles": 33,
         "heading_translated": true,
-        "all_nodes_drafted": false,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -875,8 +657,8 @@
         "last_article": "108",
         "total_articles": 1,
         "drafted_articles": 1,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -896,9 +678,9 @@
         "first_article": "124",
         "last_article": "129",
         "total_articles": 6,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 6,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -907,9 +689,9 @@
         "first_article": "130",
         "last_article": "170",
         "total_articles": 41,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 41,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -918,9 +700,9 @@
         "first_article": "130",
         "last_article": "145",
         "total_articles": 16,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 16,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -929,9 +711,9 @@
         "first_article": "146",
         "last_article": "160",
         "total_articles": 15,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 15,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -940,9 +722,9 @@
         "first_article": "146",
         "last_article": "152",
         "total_articles": 7,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 7,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -951,9 +733,9 @@
         "first_article": "153",
         "last_article": "155",
         "total_articles": 3,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 3,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -962,9 +744,9 @@
         "first_article": "156",
         "last_article": "160",
         "total_articles": 5,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 5,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -973,9 +755,9 @@
         "first_article": "161",
         "last_article": "164",
         "total_articles": 4,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 4,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -984,9 +766,9 @@
         "first_article": "165",
         "last_article": "170",
         "total_articles": 6,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 6,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -995,9 +777,9 @@
         "first_article": "171",
         "last_article": "175",
         "total_articles": 5,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 5,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -1006,9 +788,9 @@
         "first_article": "176",
         "last_article": "185",
         "total_articles": 10,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 10,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       }
     ]
@@ -11486,10 +11268,12 @@
       "source_order": 679,
       "original_label": "第五款　条例との関係",
       "source_sha256": "848df421d72baaca0fcc8c83430ae26bf8ece7f8642b7ea54abbb68d423b3341",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s4-ss5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "korean_title": "제5관 조례와의 관계"
     },
     {
       "node_id": "main-a108",
@@ -12970,10 +12754,13 @@
       "source_order": 771,
       "original_label": "第六節　雑則",
       "source_sha256": "cf25e6e981ec6ae2d352b7f0183a7ae03fd43907737b7ee10bac9a345767e579",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s6",
+      "korean_title": "제6절 잡칙",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a124",
@@ -12984,10 +12771,13 @@
       "source_order": 772,
       "original_label": "第百二十四条",
       "source_sha256": "18c9a344dc874ff952e34e2e7ad68a744d27dcc62d6f36424f524d33504491d8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a124",
+      "korean_title": "제124조 (적용 제외 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a124-p1",
@@ -12998,10 +12788,12 @@
       "source_order": 773,
       "original_label": "",
       "source_sha256": "f40dab0b30a59e912f069afafa3a1619668d0ae1e691cb96f4aec421427d4b1d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제4절의 규정은 형사사건이나 소년의 보호사건에 관한 재판, 검사, 검찰사무관 또는 사법경찰직원이 하는 처분, 형이나 보호처분의 집행, 갱생긴급보호 또는 사면에 관한 보유개인정보(해당 재판, 처분이나 집행을 받은 자, 갱생긴급보호를 신청한 자 또는 사면의 상신이 있었던 자에 관한 것에 한정한다)에 대해서는 적용하지 않는다.",
+      "markdown_anchor": "main-a124-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a124-p2",
@@ -13012,10 +12804,12 @@
       "source_order": 774,
       "original_label": "２",
       "source_sha256": "3f2385e4ebecd1e72b8103b5a5a9b282002d2331bdcc5dade64ffc5bfaf26df4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "보유개인정보(행정기관정보공개법 제5조, 독립행정법인등정보공개법 제5조 또는 정보공개조례에 규정된 비공개정보만을 기록하는 행정문서 등에 기록되어 있는 것에 한정한다) 중 아직 분류나 그 밖의 정리가 이루어지지 않은 것으로서 동일한 이용목적에 관한 것이 현저히 대량으로 존재하기 때문에 그중에서 특정 보유개인정보를 검색하는 것이 현저히 곤란한 것은 제4절(제4관을 제외한다)의 규정을 적용할 때에는 행정기관 등에 보유되어 있지 않은 것으로 본다.",
+      "markdown_anchor": "main-a124-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a125",
@@ -13026,10 +12820,13 @@
       "source_order": 775,
       "original_label": "第百二十五条",
       "source_sha256": "12cae636b94f5eab199b51741c4670ffb0baa55e33e8f8478821462eb683c6c6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a125",
+      "korean_title": "제125조 (적용의 특례)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a125-p1",
@@ -13040,10 +12837,12 @@
       "source_order": 776,
       "original_label": "",
       "source_sha256": "b51eb06f8d00691d3e1c87fd1f974d01bd3c6a0d74b76f7f63a49d89c986c9a6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제58조 제2항 각 호에 열거하는 자가 수행하는 해당 각 호에서 정하는 업무에서의 개인정보, 가명가공정보 또는 개인관련정보의 취급에 대해서는 이 장(제1절, 제66조 제2항[제4호 및 제5호(같은 항 제4호에 관한 부분에 한정한다)에 관한 부분에 한정한다]에서 준용하는 같은 조 제1항, 제75조, 앞의 두 절, 전조 제2항 및 제127조를 제외한다)의 규정, 제176조 및 제180조의 규정(이들 규정 중 제66조 제2항 제4호 및 제5호[같은 항 제4호에 관한 부분에 한정한다]에서 정하는 업무에 관한 부분을 제외한다)과 제181조의 규정은 적용하지 않는다.",
+      "markdown_anchor": "main-a125-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a125-p2",
@@ -13054,10 +12853,12 @@
       "source_order": 777,
       "original_label": "２",
       "source_sha256": "bc99b547b653874eafbfe4a1ebe2ec993a0aae073db2ddc9671133f6f74a355e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제58조 제1항 각 호에 열거하는 자에 의한 개인정보 또는 익명가공정보의 취급에 대해서는 같은 항 제1호에 열거하는 자를 독립행정법인 등으로, 같은 항 제2호에 열거하는 자를 지방독립행정법인으로 각각 보아 제1절, 제75조, 앞의 두 절, 전조 제2항, 제127조 및 다음 장부터 제8장까지(제176조, 제180조 및 제181조를 제외한다)의 규정을 적용한다.",
+      "markdown_anchor": "main-a125-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a125-p3",
@@ -13068,10 +12869,12 @@
       "source_order": 778,
       "original_label": "３",
       "source_sha256": "7e63465cf762acb6bd184aa97fca71601a028750da12e29321e2ca665b33fcec",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제58조 제1항 각 호 및 제2항 각 호에 열거하는 자(같은 항 각 호에서 정하는 업무를 수행하는 경우에 한정한다)에 대한 제98조의 규정을 적용할 때에는 같은 조 제1항 제1호 중 ‘제61조 제2항의 규정을 위반하여 보유되고 있는 때, 제63조의 규정을 위반하여 취급되고 있는 때, 제64조의 규정을 위반하여 취득된 것인 때 또는 제69조 제1항 및 제2항의 규정을 위반하여 이용되고 있는 때’는 ‘제18조 또는 제19조의 규정을 위반하여 취급되고 있는 때 또는 제20조의 규정을 위반하여 취득된 것인 때’로, 같은 항 제2호 중 ‘제69조 제1항 및 제2항 또는 제71조 제1항’은 ‘제27조 제1항 또는 제28조’로 한다.",
+      "markdown_anchor": "main-a125-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a126",
@@ -13082,10 +12885,13 @@
       "source_order": 779,
       "original_label": "第百二十六条",
       "source_sha256": "c1a9efab1759c97e21d1323107313409430dc00a6a29ee84d8099489779047b6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a126",
+      "korean_title": "제126조 (권한 또는 사무의 위임)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a126-p1",
@@ -13096,10 +12902,12 @@
       "source_order": 780,
       "original_label": "",
       "source_sha256": "275ff63f7dd3bd7b2e4d1fe5d19a694f0c52eb7fda7cdec38415b8f83c0f3265",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장은 정령(내각의 소관 아래에 설치되는 기관 및 회계검사원의 경우에는 해당 기관의 명령)으로 정하는 바에 따라 제2절부터 전절까지(제74조 및 제4절 제4관을 제외한다)에서 정하는 권한 또는 사무를 해당 행정기관의 직원에게 위임할 수 있다.",
+      "markdown_anchor": "main-a126-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a127",
@@ -13110,10 +12918,13 @@
       "source_order": 781,
       "original_label": "第百二十七条",
       "source_sha256": "c1d562f8483dfbd8c3245efeea13d63dd6b35293f115ba04eb6ea7f04d71363c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a127",
+      "korean_title": "제127조 (공개청구 등을 하려는 자에 대한 정보의 제공 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a127-p1",
@@ -13124,10 +12935,12 @@
       "source_order": 782,
       "original_label": "",
       "source_sha256": "8c14729208cf39e6fd2ba8227b8a2fde8e33725753f1ccc5872d49fcaa5670d1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 공개청구, 정정청구 또는 이용정지청구나 제112조 제1항 또는 제118조 제1항의 제안(이하 이 조에서 ‘공개청구 등’이라 한다)을 하려는 자가 각각 용이하고 정확하게 공개청구 등을 할 수 있도록 해당 행정기관의 장 등이 속한 행정기관 등이 보유하는 보유개인정보의 특정 또는 해당 제안에 도움이 되는 정보의 제공과 그 밖에 공개청구 등을 하려는 자의 편의를 고려한 적절한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a127-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a128",
@@ -13138,10 +12951,13 @@
       "source_order": 783,
       "original_label": "第百二十八条",
       "source_sha256": "480f6150772bfb92d81062c0bd3167a9937990f6534bb5ec8275cdfce4d073ee",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a128",
+      "korean_title": "제128조 (행정기관 등의 개인정보 등의 취급에 관한 고충처리)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a128-p1",
@@ -13152,10 +12968,12 @@
       "source_order": 784,
       "original_label": "",
       "source_sha256": "9885b02cb228e00369e87056346038574bf8b1d3fb41576858adfd40b1f7235c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 행정기관 등의 개인정보, 가명가공정보 또는 익명가공정보의 취급에 관한 고충을 적절하고 신속하게 처리하도록 노력하여야 한다.",
+      "markdown_anchor": "main-a128-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a129",
@@ -13166,10 +12984,13 @@
       "source_order": 785,
       "original_label": "第百二十九条",
       "source_sha256": "c65623883647c765d3ab909df3d3277fadd6ca39af34bb894befed1f6b33cc7c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a129",
+      "korean_title": "제129조 (지방공공단체에 설치하는 심의회 등에 대한 자문)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a129-p1",
@@ -13180,10 +13001,12 @@
       "source_order": 786,
       "original_label": "",
       "source_sha256": "1dc3d476302cfcb3aaf4665de89ce09b21071abe74a4821527b4388446656a1f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 기관은 조례로 정하는 바에 따라 제3장 제3절의 시책을 취하는 경우나 그 밖의 경우에 개인정보의 적정한 취급을 확보하기 위하여 전문적인 식견에 근거한 의견을 듣는 것이 특히 필요하다고 인정하는 때에는 심의회나 그 밖의 합의제 기관에 자문할 수 있다.",
+      "markdown_anchor": "main-a129-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6",
@@ -13194,10 +13017,13 @@
       "source_order": 787,
       "original_label": "第六章　個人情報保護委員会",
       "source_sha256": "afa0d35129db082f2f99cc5fe56a67ad6aeedc921d77382fa31f9fbc7ee747b2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6",
+      "korean_title": "제6장 개인정보보호위원회",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s1",
@@ -13208,10 +13034,13 @@
       "source_order": 788,
       "original_label": "第一節　設置等",
       "source_sha256": "36b1cef9f0f449cfd605868eef5bad46be8957c60c0e30c1631f1667aa054a8a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s1",
+      "korean_title": "제1절 설치 등",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a130",
@@ -13222,10 +13051,13 @@
       "source_order": 789,
       "original_label": "第百三十条",
       "source_sha256": "f9775c9dc2bc5e6f32e55dc6f33c2c1636688e535f57d4c07ae6ca396322dcb5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a130",
+      "korean_title": "제130조 (설치)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a130-p1",
@@ -13236,10 +13068,12 @@
       "source_order": 790,
       "original_label": "",
       "source_sha256": "b464bd8d0adebf027f6e9251d35c51f33de123c67c0d5c2140f91fe3a3f08e77",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "내각부설치법 제49조 제3항의 규정에 근거하여 개인정보보호위원회(이하 ‘위원회’라 한다)를 설치한다.",
+      "markdown_anchor": "main-a130-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a130-p2",
@@ -13250,10 +13084,12 @@
       "source_order": 791,
       "original_label": "２",
       "source_sha256": "c4e8bd906145838dbc37ecbbaa7d2d52a1709e0a3e48e456979cc11d1d5ddc30",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 내각총리대신의 소관에 속한다.",
+      "markdown_anchor": "main-a130-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a131",
@@ -13264,10 +13100,13 @@
       "source_order": 792,
       "original_label": "第百三十一条",
       "source_sha256": "2fa419ca7f6533091577a977593a5908cf8d76d7a02665e61a58abd10cf4d55b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a131",
+      "korean_title": "제131조 (임무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a131-p1",
@@ -13278,10 +13117,12 @@
       "source_order": 793,
       "original_label": "",
       "source_sha256": "83ebdb66c89b98a20b25f3f6e87ac9a4ec0b1940881bc2fa60d69a99e784240c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 행정기관 등의 사무 및 사업의 적정하고 원활한 운영을 도모하고, 개인정보의 적정하고 효과적인 활용이 새로운 산업의 창출과 활력 있는 경제사회 및 풍요로운 국민생활의 실현에 이바지한다는 점과 그 밖의 개인정보의 유용성을 배려하면서 개인의 권리이익을 보호하기 위하여 개인정보의 적정한 취급의 확보를 도모하는 것(개인번호이용사무등실시자[행정절차에서의 특정 개인을 식별하기 위한 번호의 이용 등에 관한 법률(헤이세이 25년 법률 제27호. 이하 ‘번호이용법’이라 한다) 제12조에 규정된 개인번호이용사무등실시자를 말한다]에 대한 지도 및 조언과 그 밖의 조치를 취하는 것을 포함한다)을 임무로 한다.",
+      "markdown_anchor": "main-a131-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132",
@@ -13292,10 +13133,13 @@
       "source_order": 794,
       "original_label": "第百三十二条",
       "source_sha256": "ed19cfa9d93ffa8b99ef8b96f8f4a1eac563c440a62b085c764870500a73efac",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a132",
+      "korean_title": "제132조 (소관 사무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1",
@@ -13306,10 +13150,12 @@
       "source_order": 795,
       "original_label": "",
       "source_sha256": "0b3cee308ecdc64bc6883ce0e036d6b4950f3d1de6111d6a462e73bb79753dc9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전조의 임무를 달성하기 위하여 다음에 열거하는 사무를 관장한다.",
+      "markdown_anchor": "main-a132-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i1",
@@ -13320,10 +13166,12 @@
       "source_order": 796,
       "original_label": "一",
       "source_sha256": "9db2212ead8a878f38672b2793d406447afe2aa52e5d28c7f7dc88a264594f40",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "기본방침의 수립 및 추진에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i2",
@@ -13334,10 +13182,12 @@
       "source_order": 797,
       "original_label": "二",
       "source_sha256": "32cc7aba75a189b0b9da3dcd85e6ee851675b290c525689df3815c3653a1c191",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자의 개인정보 취급, 개인정보취급사업자 및 가명가공정보취급사업자의 가명가공정보 취급, 개인정보취급사업자 및 익명가공정보취급사업자의 익명가공정보 취급과 개인관련정보취급사업자의 개인관련정보 취급에 관한 감독, 행정기관 등의 개인정보, 가명가공정보, 익명가공정보 및 개인관련정보의 취급에 관한 감시와 개인정보, 가명가공정보 및 익명가공정보의 취급에 관한 고충의 신청에 대한 필요한 알선 및 그 처리를 하는 사업자에 대한 협력에 관한 사항(제4호에 열거하는 것을 제외한다)",
+      "markdown_anchor": "main-a132-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i3",
@@ -13348,10 +13198,12 @@
       "source_order": 798,
       "original_label": "三",
       "source_sha256": "deaca2942deb6c5770b98a5e42b40ceba96ca4474b387fb576d922b2e23cd83c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "인정개인정보보호단체에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i4",
@@ -13362,10 +13214,12 @@
       "source_order": 799,
       "original_label": "四",
       "source_sha256": "3e2a81b6f3dd9ab831e96a4dc9a97637163f91aee41d6470791ac46d5dc28123",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "특정개인정보(번호이용법 제2조 제9항에 규정된 특정개인정보를 말한다)의 취급에 관한 감시 또는 감독과 고충의 신청에 대한 필요한 알선 및 그 처리를 하는 사업자에 대한 협력에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i5",
@@ -13376,10 +13230,12 @@
       "source_order": 800,
       "original_label": "五",
       "source_sha256": "e82de39e235e4d09119eb58504e628a575edfb71709a637633abc4ad0b91d479",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "특정개인정보보호평가(번호이용법 제27조 제1항에 규정된 특정개인정보보호평가를 말한다)에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i6",
@@ -13390,10 +13246,12 @@
       "source_order": 801,
       "original_label": "六",
       "source_sha256": "90a9d5bf2f7de5b25110993cedbe08da5dfaae6d4748a8020c66b81b24586e22",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보의 보호 및 적정하고 효과적인 활용에 대한 홍보 및 계발에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i7",
@@ -13404,10 +13262,12 @@
       "source_order": 802,
       "original_label": "七",
       "source_sha256": "375d424bda50551b62d65bb8213b410229dbf163d76a16be06de670c82d8be70",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 호에 열거하는 사무를 수행하기 위하여 필요한 조사 및 연구에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i7",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i8",
@@ -13418,10 +13278,12 @@
       "source_order": 803,
       "original_label": "八",
       "source_sha256": "2759d3203c96c397250949b48b3b5120219b6f0b6e6da62e419b64b10c511dc6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "소관 사무에 관한 국제협력에 관한 사항",
+      "markdown_anchor": "main-a132-p1-i8",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a132-p1-i9",
@@ -13432,10 +13294,12 @@
       "source_order": 804,
       "original_label": "九",
       "source_sha256": "327da51fc209e1d3068021e86a2a41e3b03babc9cf71f6ba0e1e0e10cf72e8ac",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 호에 열거하는 것 외에 법률(법률에 근거한 명령을 포함한다)에 근거하여 위원회에 속하게 된 사무",
+      "markdown_anchor": "main-a132-p1-i9",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a133",
@@ -13446,10 +13310,13 @@
       "source_order": 805,
       "original_label": "第百三十三条",
       "source_sha256": "8d29ca694138431ceb71251d922dcf4dacb2f7519348f1e5cc7c71e143868a8e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a133",
+      "korean_title": "제133조 (직권 행사의 독립성)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a133-p1",
@@ -13460,10 +13327,12 @@
       "source_order": 806,
       "original_label": "",
       "source_sha256": "5bd3fce93b971d3957104b0435315a5ef5e55fcbd9b089b3b5a71624eea91e88",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회의 위원장 및 위원은 독립하여 그 직권을 행사한다.",
+      "markdown_anchor": "main-a133-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a134",
@@ -13474,10 +13343,13 @@
       "source_order": 807,
       "original_label": "第百三十四条",
       "source_sha256": "840de56a677944982ee34ff40992f3b4a0fda85efe1d90a6c3c9e6bfe938a9b3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a134",
+      "korean_title": "제134조 (조직 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a134-p1",
@@ -13488,10 +13360,12 @@
       "source_order": 808,
       "original_label": "",
       "source_sha256": "6a1fd63aa441b1cdab2eaffccdaea39518731b46f9b492e7c4424322a085ab45",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 위원장 및 위원 8명으로 조직한다.",
+      "markdown_anchor": "main-a134-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a134-p2",
@@ -13502,10 +13376,12 @@
       "source_order": 809,
       "original_label": "２",
       "source_sha256": "9442d1e79430c2f644aa8ac3595915fd855a97f869dc555f2fec101c2702c636",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원 중 4명은 비상근으로 한다.",
+      "markdown_anchor": "main-a134-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a134-p3",
@@ -13516,10 +13392,12 @@
       "source_order": 810,
       "original_label": "３",
       "source_sha256": "9f11598fa95454a8a53050a65f21fb1c8d80b1d0fc6c90d096e91c826b7264b1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원은 인격이 고결하고 식견이 높은 자 중에서 양원의 동의를 얻어 내각총리대신이 임명한다.",
+      "markdown_anchor": "main-a134-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a134-p4",
@@ -13530,10 +13408,12 @@
       "source_order": 811,
       "original_label": "４",
       "source_sha256": "c4c2b8c6b819e3fd79ad0b37ec4fe54e7b41b0846cb6f6c06b7cb8be4a87ce5d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원에는 개인정보의 보호 및 적정하고 효과적인 활용에 관한 학식과 경험이 있는 자, 소비자의 보호에 관하여 충분한 지식과 경험을 가진 자, 정보처리기술에 관한 학식과 경험이 있는 자, 행정분야에 관한 학식과 경험이 있는 자, 민간기업의 실무에 관하여 충분한 지식과 경험을 가진 자 및 연합조직(지방자치법 제263조의3 제1항의 연합조직으로서 같은 항의 규정에 따른 신고를 한 것을 말한다)이 추천하는 자가 포함되어야 한다.",
+      "markdown_anchor": "main-a134-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135",
@@ -13544,10 +13424,13 @@
       "source_order": 812,
       "original_label": "第百三十五条",
       "source_sha256": "cc3d15745d2a1740c678589e7e80196c055d36bba8bbefe41a7cd9c1395ab3d7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a135",
+      "korean_title": "제135조 (임기 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135-p1",
@@ -13558,10 +13441,12 @@
       "source_order": 813,
       "original_label": "",
       "source_sha256": "29d70fa1e7b0b26ab5d7d856bf83db047396bcc9a986a5c84b59134586b478d1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원의 임기는 5년으로 한다. 다만, 보결 위원장 또는 위원의 임기는 전임자의 잔임기간으로 한다.",
+      "markdown_anchor": "main-a135-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135-p2",
@@ -13572,10 +13457,12 @@
       "source_order": 814,
       "original_label": "２",
       "source_sha256": "bff32c6d15a6b1c68f6d78829553ec9e67275e6639df742213386dc834e00b3c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원은 재임명될 수 있다.",
+      "markdown_anchor": "main-a135-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135-p3",
@@ -13586,10 +13473,12 @@
       "source_order": 815,
       "original_label": "３",
       "source_sha256": "d26e6b415499158886f86a0398ec9fe2f2ff3847ccd22e75d4235e455c3af4cd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원의 임기가 만료된 때에는 해당 위원장 및 위원은 후임자가 임명될 때까지 계속 그 직무를 수행하여야 한다.",
+      "markdown_anchor": "main-a135-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135-p4",
@@ -13600,10 +13489,12 @@
       "source_order": 816,
       "original_label": "４",
       "source_sha256": "a1e552b9d3e291234272873f295a0073fd07511484fabb1808c49842afa8b9a5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 또는 위원의 임기가 만료되거나 결원이 발생한 경우에 국회의 폐회 또는 중의원의 해산으로 양원의 동의를 얻을 수 없는 때에는 내각총리대신은 전조 제3항의 규정에도 불구하고 같은 항에서 정하는 자격을 가진 자 중에서 위원장 또는 위원을 임명할 수 있다.",
+      "markdown_anchor": "main-a135-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a135-p5",
@@ -13614,10 +13505,12 @@
       "source_order": 817,
       "original_label": "５",
       "source_sha256": "0e36261ad93e95012a2054724b09d0ea89fd5842ed7aaf09de4e6b0432a264d5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 경우에는 임명 후 최초의 국회에서 양원의 사후 승인을 얻어야 한다. 이 경우 양원의 사후 승인을 얻지 못한 때에는 내각총리대신은 즉시 그 위원장 또는 위원을 파면하여야 한다.",
+      "markdown_anchor": "main-a135-p5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136",
@@ -13628,10 +13521,13 @@
       "source_order": 818,
       "original_label": "第百三十六条",
       "source_sha256": "f077f1ecfef98c2a743155df98b0c92228be7a9c9c5d9735fc61798ca234cc79",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a136",
+      "korean_title": "제136조 (신분보장)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136-p1",
@@ -13642,10 +13538,12 @@
       "source_order": 819,
       "original_label": "",
       "source_sha256": "77270151c962decb7447ee3f2599681cbb49dfffffdc63d247a09e641e8932f0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원은 다음 각 호의 어느 하나에 해당하는 경우를 제외하고는 재임 중 그 의사에 반하여 파면되지 않는다.",
+      "markdown_anchor": "main-a136-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136-p1-i1",
@@ -13656,10 +13554,12 @@
       "source_order": 820,
       "original_label": "一",
       "source_sha256": "e2f9c5d2d4bd91faa04a25e892a0a9aa93cd9952fe865821fdb22e827df77dcd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "파산절차 개시 결정을 받은 때",
+      "markdown_anchor": "main-a136-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136-p1-i2",
@@ -13670,10 +13570,12 @@
       "source_order": 821,
       "original_label": "二",
       "source_sha256": "9b7f5f3b3acf4106aa59d6dfbff3e7ab7cdecda89c890131896d4d066bdc7201",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률 또는 번호이용법의 규정에 위반하여 형에 처해진 때",
+      "markdown_anchor": "main-a136-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136-p1-i3",
@@ -13684,10 +13586,12 @@
       "source_order": 822,
       "original_label": "三",
       "source_sha256": "09f5c6bcb6f4df75095b0cc0307c27706a9a223d75802cbe4246fb4b272206f4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "구금형 이상의 형에 처해진 때",
+      "markdown_anchor": "main-a136-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a136-p1-i4",
@@ -13698,10 +13602,12 @@
       "source_order": 823,
       "original_label": "四",
       "source_sha256": "2a60e926cb6800c8dae88c488ae49759588dada43d207ddb84948132d1d8ee9b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회가 심신의 장애로 직무를 집행할 수 없다고 인정한 때 또는 직무상 의무 위반이나 그 밖에 위원장 또는 위원으로 적합하지 않은 비행이 있다고 인정한 때",
+      "markdown_anchor": "main-a136-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a137",
@@ -13712,10 +13618,13 @@
       "source_order": 824,
       "original_label": "第百三十七条",
       "source_sha256": "dcc21e3a0c6ab333713dc79d01339b96866ab37535202d962c95603ee05547f1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a137",
+      "korean_title": "제137조 (파면)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a137-p1",
@@ -13726,10 +13635,12 @@
       "source_order": 825,
       "original_label": "",
       "source_sha256": "3062ad244017eefd3a0b84b93e4a722bf4d4fd16c0e9bb3256e9bec8b571baa3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "내각총리대신은 위원장 또는 위원이 전조 각 호의 어느 하나에 해당하는 때에는 그 위원장 또는 위원을 파면하여야 한다.",
+      "markdown_anchor": "main-a137-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a138",
@@ -13740,10 +13651,13 @@
       "source_order": 826,
       "original_label": "第百三十八条",
       "source_sha256": "cdc8a169a836098116f3a50a756d88ac9369401e172c29a6a3d727632377cca5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a138",
+      "korean_title": "제138조 (위원장)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a138-p1",
@@ -13754,10 +13668,12 @@
       "source_order": 827,
       "original_label": "",
       "source_sha256": "158083d5b827178f0dfcf2b08fcecf1c15e671bf9a37ca5b7782a9055eea0cdd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장은 위원회의 업무를 총괄하고 위원회를 대표한다.",
+      "markdown_anchor": "main-a138-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a138-p2",
@@ -13768,10 +13684,12 @@
       "source_order": 828,
       "original_label": "２",
       "source_sha256": "6e504d620c840c34715202b401f9eed92b7b2ab031cc30da0661b1a53eb7a771",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 미리 상근위원 중에서 위원장에게 사고가 있는 경우 위원장을 대리할 자를 정하여 두어야 한다.",
+      "markdown_anchor": "main-a138-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139",
@@ -13782,10 +13700,13 @@
       "source_order": 829,
       "original_label": "第百三十九条",
       "source_sha256": "f2f1fc15c5038be88d5af3b74bd5efbd82982514c687a88a0239fb6558a4df84",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a139",
+      "korean_title": "제139조 (회의)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139-p1",
@@ -13796,10 +13717,12 @@
       "source_order": 830,
       "original_label": "",
       "source_sha256": "0688e2f38f24f9349b1e9fd897467923dd7b9cf277498f3c72ac8bdf6f0d33c5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회의 회의는 위원장이 소집한다.",
+      "markdown_anchor": "main-a139-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139-p2",
@@ -13810,10 +13733,12 @@
       "source_order": 831,
       "original_label": "２",
       "source_sha256": "9e0484adbedb59ebd4f2db9f9cb23d438b3867c3aaaa9a9c2862580a860b9af4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 위원장 및 4명 이상의 위원이 출석하지 않으면 회의를 열고 의결할 수 없다.",
+      "markdown_anchor": "main-a139-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139-p3",
@@ -13824,10 +13749,12 @@
       "source_order": 832,
       "original_label": "３",
       "source_sha256": "82cb2a1344f6b9e0c814d7a1322216c10302997bc78314335d85b0c246ab3545",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회의 의사는 출석자의 과반수로 결정하고 가부동수인 때에는 위원장이 결정하는 바에 따른다.",
+      "markdown_anchor": "main-a139-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139-p4",
@@ -13838,10 +13765,12 @@
       "source_order": 833,
       "original_label": "４",
       "source_sha256": "bb0e98596df2d7d1d8c97eeb7755b67d01aafaca6f3ab5fac44a4624cfe2c5a9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제136조 제4호의 규정에 따른 인정을 하려면 전항의 규정에도 불구하고 본인을 제외한 전원의 일치가 있어야 한다.",
+      "markdown_anchor": "main-a139-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a139-p5",
@@ -13852,10 +13781,12 @@
       "source_order": 834,
       "original_label": "５",
       "source_sha256": "936d743138da1da39febce80f7dca862df613b7d8eb28ac18344f67aa7887f3f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장에게 사고가 있는 경우 제2항의 규정을 적용할 때에는 전조 제2항에 규정된 위원장을 대리하는 자는 위원장으로 본다.",
+      "markdown_anchor": "main-a139-p5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a140",
@@ -13866,10 +13797,13 @@
       "source_order": 835,
       "original_label": "第百四十条",
       "source_sha256": "d330d295ec71acffe23dd4c24122a58ae14131ae672154e7f2e963ea49ecf5be",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a140",
+      "korean_title": "제140조 (전문위원)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a140-p1",
@@ -13880,10 +13814,12 @@
       "source_order": 836,
       "original_label": "",
       "source_sha256": "23ca006eaa4fc18ad6e49ab7634e9ef9fc69847577e08f583ff2ba73cdd23fb9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회에 전문적인 사항을 조사하게 하기 위하여 전문위원을 둘 수 있다.",
+      "markdown_anchor": "main-a140-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a140-p2",
@@ -13894,10 +13830,12 @@
       "source_order": 837,
       "original_label": "２",
       "source_sha256": "17ec887f33b3480bd7f3c223a09c8f28158d3b98b5659c1168a65923836475e8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전문위원은 위원회의 신청에 근거하여 내각총리대신이 임명한다.",
+      "markdown_anchor": "main-a140-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a140-p3",
@@ -13908,10 +13846,12 @@
       "source_order": 838,
       "original_label": "３",
       "source_sha256": "824ed94acf037c43620dc5da17fcabb64a6004930e66857b1a253e3436c7dc3f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전문위원은 해당 전문적인 사항에 관한 조사가 종료된 때에는 해임하여야 한다.",
+      "markdown_anchor": "main-a140-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a140-p4",
@@ -13922,10 +13862,12 @@
       "source_order": 839,
       "original_label": "４",
       "source_sha256": "2a99ccbf037af22398cb1547e887ea93e88481a382efdfe80de80ca5af66418c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전문위원은 비상근으로 한다.",
+      "markdown_anchor": "main-a140-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a141",
@@ -13936,10 +13878,13 @@
       "source_order": 840,
       "original_label": "第百四十一条",
       "source_sha256": "667e9b1ada3cf64c6084ef198b99ecd62788b4d0cc74363a9ec14de0cae89315",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a141",
+      "korean_title": "제141조 (사무국)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a141-p1",
@@ -13950,10 +13895,12 @@
       "source_order": 841,
       "original_label": "",
       "source_sha256": "fef34321e3cec0352308d56563c4f4a1d87c3e7e6e21e1a916615eb1e5b0208c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회의 사무를 처리하게 하기 위하여 위원회에 사무국을 둔다.",
+      "markdown_anchor": "main-a141-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a141-p2",
@@ -13964,10 +13911,12 @@
       "source_order": 842,
       "original_label": "２",
       "source_sha256": "8d8bb52d0a9964e84bc9a66acb20fe669cc7c038689c541e22523d092633df0c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사무국에 사무국장과 그 밖의 직원을 둔다.",
+      "markdown_anchor": "main-a141-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a141-p3",
@@ -13978,10 +13927,12 @@
       "source_order": 843,
       "original_label": "３",
       "source_sha256": "95276e75cbb727e87dc369acdeb5a42aadb1a18fe08707dc5aa56a61f180fa4e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사무국장은 위원장의 명을 받아 사무국의 업무를 관장한다.",
+      "markdown_anchor": "main-a141-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a142",
@@ -13992,10 +13943,13 @@
       "source_order": 844,
       "original_label": "第百四十二条",
       "source_sha256": "1df83eefb92b4b4d48cc9de7746f2023a17bfd31f736a5f3d48f11f171f86b80",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a142",
+      "korean_title": "제142조 (정치운동 등의 금지)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a142-p1",
@@ -14006,10 +13960,12 @@
       "source_order": 845,
       "original_label": "",
       "source_sha256": "b0311663895ead49a06c46133832214ccddedfdca7f96a527ee4706c3436531a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원은 재임 중 정당이나 그 밖의 정치단체의 임원이 되거나 적극적으로 정치운동을 해서는 안 된다.",
+      "markdown_anchor": "main-a142-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a142-p2",
@@ -14020,10 +13976,12 @@
       "source_order": 846,
       "original_label": "２",
       "source_sha256": "1fdd3de0bcdc88081b6a8b54e31094dddfacfefbad63e366f0aebc98e9b31e99",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 상근위원은 재임 중 내각총리대신의 허가가 있는 경우를 제외하고는 보수를 받고 다른 직무에 종사하거나 영리사업을 경영하거나 그 밖에 금전상의 이익을 목적으로 하는 업무를 수행해서는 안 된다.",
+      "markdown_anchor": "main-a142-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a143",
@@ -14034,10 +13992,13 @@
       "source_order": 847,
       "original_label": "第百四十三条",
       "source_sha256": "ff1ec4ef10e8fb0d38d34dcb773a6ca5c6b9623f8d434136ff1500d4ee12a512",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a143",
+      "korean_title": "제143조 (비밀유지의무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a143-p1",
@@ -14048,10 +14009,12 @@
       "source_order": 848,
       "original_label": "",
       "source_sha256": "eced01aa3234134e9a42f9cf2043d426d98cd142ceaed316dadb80289e784b43",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장, 위원, 전문위원 및 사무국의 직원은 직무상 알게 된 비밀을 누설하거나 도용해서는 안 된다. 그 직무에서 물러난 후에도 같다.",
+      "markdown_anchor": "main-a143-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a144",
@@ -14062,10 +14025,13 @@
       "source_order": 849,
       "original_label": "第百四十四条",
       "source_sha256": "45015355c28f700bf2cf49b1bf95d58c8a9a63525a148fb57f81f9eda6bf49d0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a144",
+      "korean_title": "제144조 (급여)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a144-p1",
@@ -14076,10 +14042,12 @@
       "source_order": 850,
       "original_label": "",
       "source_sha256": "150db7daa153fd772979997246a95be5d0e1ab91efb7e28e82fd3e62899edb2c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원장 및 위원의 급여는 별도로 법률로 정한다.",
+      "markdown_anchor": "main-a144-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a145",
@@ -14090,10 +14058,13 @@
       "source_order": 851,
       "original_label": "第百四十五条",
       "source_sha256": "dac997a38fb199148b8facb9d1adf7ba7f06f22123b895c5af5253d51e48f3a7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a145",
+      "korean_title": "제145조 (규칙의 제정)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a145-p1",
@@ -14104,10 +14075,12 @@
       "source_order": 852,
       "original_label": "",
       "source_sha256": "f432cf48ac86738550728558f443cbaaf2adc17d1e53e9c5b8d98292515929a0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 그 소관 사무에 대하여 법률이나 정령을 실시하기 위하여 또는 법률이나 정령의 특별한 위임에 근거하여 개인정보보호위원회 규칙을 제정할 수 있다.",
+      "markdown_anchor": "main-a145-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s2",
@@ -14118,10 +14091,13 @@
       "source_order": 853,
       "original_label": "第二節　監督及び監視",
       "source_sha256": "00a173d0ed28d2d56e06fb4df74596107f96539a4e098b85bda1fec83c3bd24f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s2",
+      "korean_title": "제2절 감독 및 감시",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s2-ss1",
@@ -14132,10 +14108,13 @@
       "source_order": 854,
       "original_label": "第一款　個人情報取扱事業者等の監督",
       "source_sha256": "b7cbcf86ae4ab9a4e98b0d6d9af3428350b5b1e4679d0a42fb6720eee92e9b95",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s2-ss1",
+      "korean_title": "제1관 개인정보취급사업자 등의 감독",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a146",
@@ -14146,10 +14125,13 @@
       "source_order": 855,
       "original_label": "第百四十六条",
       "source_sha256": "2f6e49739951808bd490c97ac81c328e98de0fbbcb4ddd08df093786b08a29ca",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a146",
+      "korean_title": "제146조 (보고 및 출입검사)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a146-p1",
@@ -14160,10 +14142,12 @@
       "source_order": 856,
       "original_label": "",
       "source_sha256": "8a8933c86469353b606e723302017874cd98514e47ed671e5cbd65105f90f251",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 제4장(제5절을 제외한다. 다음 조 및 제151조에서 같다)의 규정의 시행에 필요한 한도에서 개인정보취급사업자, 가명가공정보취급사업자, 익명가공정보취급사업자 또는 개인관련정보취급사업자(이하 이 관에서 ‘개인정보취급사업자 등’이라 한다)와 그 밖의 관계자에게 개인정보, 가명가공정보, 익명가공정보 또는 개인관련정보(이하 이 관 및 제3관에서 ‘개인정보 등’이라 한다)의 취급에 관하여 필요한 보고 또는 자료의 제출을 요구하거나 그 직원으로 하여금 해당 개인정보취급사업자 등과 그 밖의 관계자의 사무소나 그 밖의 필요한 장소에 출입하여 개인정보 등의 취급에 관하여 질문하거나 장부서류나 그 밖의 물건을 검사하게 할 수 있다.",
+      "markdown_anchor": "main-a146-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a146-p2",
@@ -14174,10 +14158,12 @@
       "source_order": 857,
       "original_label": "２",
       "source_sha256": "e9c66d16a2b894146a1a98c4a33dcaf540bd464185f84bd1bf5bfb8f4be697e7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따라 출입검사를 하는 직원은 그 신분을 나타내는 증명서를 휴대하고 관계인의 청구가 있는 때에는 이를 제시하여야 한다.",
+      "markdown_anchor": "main-a146-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a146-p3",
@@ -14188,10 +14174,12 @@
       "source_order": 858,
       "original_label": "３",
       "source_sha256": "ff0f2c33763f5cc5c4f734553ea002997c907910e7b0275760c2e38cfc40eaed",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제1항의 규정에 따른 출입검사의 권한은 범죄수사를 위하여 인정된 것으로 해석해서는 안 된다.",
+      "markdown_anchor": "main-a146-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a147",
@@ -14202,10 +14190,13 @@
       "source_order": 859,
       "original_label": "第百四十七条",
       "source_sha256": "7f8f0a5d298cb7ebef8991fc753e105e4a0747b9eff56fc8ba7a7d93e2e3d928",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a147",
+      "korean_title": "제147조 (지도 및 조언)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a147-p1",
@@ -14216,10 +14207,12 @@
       "source_order": 860,
       "original_label": "",
       "source_sha256": "7f0a1c5cbb799885481dc2010b8b4d117b41649e7a82fe3c096ae1b095c4a87c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 제4장의 규정의 시행에 필요한 한도에서 개인정보취급사업자 등에게 개인정보 등의 취급에 관하여 필요한 지도 및 조언을 할 수 있다.",
+      "markdown_anchor": "main-a147-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a148",
@@ -14230,10 +14223,13 @@
       "source_order": 861,
       "original_label": "第百四十八条",
       "source_sha256": "417eb80c7bee757b6974413abe6804b75d4878c6c1a00082e91bd50e118bedf0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a148",
+      "korean_title": "제148조 (권고 및 명령)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a148-p1",
@@ -14244,10 +14240,12 @@
       "source_order": 862,
       "original_label": "",
       "source_sha256": "1c8f366e3f499cd4a43b24055e1e2328a78640add1a7743e99b1a7f1d4498517",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 개인정보취급사업자가 제18조부터 제20조까지, 제21조(제1항, 제3항 및 제4항의 규정을 제41조 제4항의 규정에 따라 바꾸어 읽어 적용하는 경우를 포함한다), 제23조부터 제26조까지, 제27조(제4항을 제외하고, 제5항 및 제6항의 규정을 제41조 제6항의 규정에 따라 바꾸어 읽어 적용하는 경우를 포함한다), 제28조, 제29조(제1항 단서의 규정을 제41조 제6항의 규정에 따라 바꾸어 읽어 적용하는 경우를 포함한다), 제30조(제2항을 제외하고, 제1항 단서의 규정을 제41조 제6항의 규정에 따라 바꾸어 읽어 적용하는 경우를 포함한다), 제32조, 제33조(제1항[제5항에서 준용하는 경우를 포함한다]을 제외한다), 제34조 제2항 또는 제3항, 제35조(제1항, 제3항 및 제5항을 제외한다), 제38조 제2항, 제41조(제4항 및 제5항을 제외한다) 또는 제43조(제6항을 제외한다)의 규정에 위반한 경우, 개인관련정보취급사업자가 제31조 제1항, 같은 조 제2항에서 바꾸어 읽어 준용하는 제28조 제3항 또는 제31조 제3항에서 바꾸어 읽어 준용하는 제30조 제3항 또는 제4항의 규정에 위반한 경우, 가명가공정보취급사업자가 제42조 제1항, 같은 조 제2항에서 바꾸어 읽어 준용하는 제27조 제5항 또는 제6항이나 제42조 제3항에서 바꾸어 읽어 준용하는 제23조부터 제25조까지 또는 제41조 제7항 또는 제8항의 규정에 위반한 경우, 또는 익명가공정보취급사업자가 제44조 또는 제45조의 규정에 위반한 경우에 개인의 권리이익을 보호하기 위하여 필요하다고 인정하는 때에는 해당 개인정보취급사업자 등에게 해당 위반행위의 중지와 그 밖에 위반을 시정하기 위하여 필요한 조치를 취하여야 한다는 취지를 권고할 수 있다.",
+      "markdown_anchor": "main-a148-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a148-p2",
@@ -14258,10 +14256,12 @@
       "source_order": 863,
       "original_label": "２",
       "source_sha256": "4ad4280f12720427286de6bb117f4771bddefa2623de5b90975b64286501d697",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전항의 규정에 따른 권고를 받은 개인정보취급사업자 등이 정당한 이유 없이 그 권고에 관련된 조치를 취하지 않은 경우에 개인의 중대한 권리이익의 침해가 임박해 있다고 인정하는 때에는 해당 개인정보취급사업자 등에게 그 권고에 관련된 조치를 취할 것을 명령할 수 있다.",
+      "markdown_anchor": "main-a148-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a148-p3",
@@ -14272,10 +14272,12 @@
       "source_order": 864,
       "original_label": "３",
       "source_sha256": "83497057eaafcd8b4febcd24a3eef91150a5b07d15060609fbeed5cc86f09b29",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 앞의 두 항의 규정에도 불구하고 개인정보취급사업자가 제18조부터 제20조까지, 제23조부터 제26조까지, 제27조 제1항, 제28조 제1항 또는 제3항, 제41조 제1항부터 제3항까지 또는 제6항부터 제8항까지나 제43조 제1항, 제2항 또는 제5항의 규정에 위반한 경우, 개인관련정보취급사업자가 제31조 제1항 또는 같은 조 제2항에서 바꾸어 읽어 준용하는 제28조 제3항의 규정에 위반한 경우, 가명가공정보취급사업자가 제42조 제1항 또는 같은 조 제3항에서 바꾸어 읽어 준용하는 제23조부터 제25조까지나 제41조 제7항 또는 제8항의 규정에 위반한 경우, 또는 익명가공정보취급사업자가 제45조의 규정에 위반한 경우에 개인의 중대한 권리이익을 해치는 사실이 있어 긴급히 조치를 취할 필요가 있다고 인정하는 때에는 해당 개인정보취급사업자 등에게 해당 위반행위의 중지와 그 밖에 위반을 시정하기 위하여 필요한 조치를 취할 것을 명령할 수 있다.",
+      "markdown_anchor": "main-a148-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a148-p4",
@@ -14286,10 +14288,12 @@
       "source_order": 865,
       "original_label": "４",
       "source_sha256": "d38e9aed4e7bf4ba0dc802834ac22d114c19bfde3f3d0f26cbfb25e292583c9d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 앞의 두 항의 규정에 따른 명령을 한 경우에 그 명령을 받은 개인정보취급사업자 등이 그 명령에 위반한 때에는 그 취지를 공표할 수 있다.",
+      "markdown_anchor": "main-a148-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a149",
@@ -14300,10 +14304,13 @@
       "source_order": 866,
       "original_label": "第百四十九条",
       "source_sha256": "1d4eb0d4c4e07880796559f13d04c961a962d3392f63547087d74dc3e7d493d7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a149",
+      "korean_title": "제149조 (위원회의 권한 행사의 제한)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a149-p1",
@@ -14314,10 +14321,12 @@
       "source_order": 867,
       "original_label": "",
       "source_sha256": "3da0d9242fe8a4355eef5a4573b45ee046280362952b3ed9ffe00428f7a30671",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 앞의 3개 조의 규정에 따라 개인정보취급사업자 등에게 보고 또는 자료 제출의 요구, 출입검사, 지도, 조언, 권고 또는 명령을 할 때에는 표현의 자유, 학문의 자유, 종교의 자유 및 정치활동의 자유를 방해해서는 안 된다.",
+      "markdown_anchor": "main-a149-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a149-p2",
@@ -14328,10 +14337,12 @@
       "source_order": 868,
       "original_label": "２",
       "source_sha256": "7d215cf0c1a7d137b596e97cbd7e522924d7095990589e45a4080500333adab8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정의 취지에 비추어 위원회는 개인정보취급사업자 등이 제57조 제1항 각 호에 열거하는 자(각각 해당 각 호에서 정하는 목적으로 개인정보 등을 취급하는 경우에 한정한다)에게 개인정보 등을 제공하는 행위에 대해서는 그 권한을 행사하지 않아야 한다.",
+      "markdown_anchor": "main-a149-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150",
@@ -14342,10 +14353,13 @@
       "source_order": 869,
       "original_label": "第百五十条",
       "source_sha256": "3fb18fc904de8dcfbcfc5c173bc554e08567c5ed1fcf991165eaae98c8635cbf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a150",
+      "korean_title": "제150조 (권한의 위임)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p1",
@@ -14356,10 +14370,12 @@
       "source_order": 870,
       "original_label": "",
       "source_sha256": "3570a717820fcb14791f145e945e038521ba92f2fbd2a43bfdf26e19ff4ed695",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 긴급하고 중점적으로 개인정보 등의 적정한 취급의 확보를 도모할 필요가 있다는 점이나 그 밖의 정령으로 정하는 사정이 있어 개인정보취급사업자 등에게 제148조 제1항의 규정에 따른 권고 또는 같은 조 제2항이나 제3항의 규정에 따른 명령을 효과적으로 하는 데 필요하다고 인정하는 때에는 정령으로 정하는 바에 따라 제26조 제1항, 제146조 제1항, 제162조에서 바꾸어 읽어 준용하는 민사소송법(헤이세이 8년 법률 제109호) 제100조 제1항, 제101조, 제102조의2, 제103조, 제105조, 제106조 및 제108조, 제163조와 제164조의 규정에 따른 권한을 사업소관대신에게 위임할 수 있다.",
+      "markdown_anchor": "main-a150-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p2",
@@ -14370,10 +14386,12 @@
       "source_order": 871,
       "original_label": "２",
       "source_sha256": "47dd02b390235b6021b779e619eb701e3b3a1a55fb8796d6b09fedb10ace2b1e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사업소관대신은 전항의 규정에 따라 위임된 권한을 행사한 때에는 정령으로 정하는 바에 따라 그 결과를 위원회에 보고하여야 한다.",
+      "markdown_anchor": "main-a150-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p3",
@@ -14384,10 +14402,12 @@
       "source_order": 872,
       "original_label": "３",
       "source_sha256": "32cbf981e444b016acb7b861e53c75002e90da9f62e446fc147157acd55e8e96",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사업소관대신은 정령으로 정하는 바에 따라 제1항의 규정에 따라 위임된 권한 및 전항의 규정에 따른 권한의 전부 또는 일부를 내각부설치법 제43조의 지방지분부국이나 그 밖의 정령으로 정하는 부국 또는 기관의 장에게 위임할 수 있다.",
+      "markdown_anchor": "main-a150-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p4",
@@ -14398,10 +14418,12 @@
       "source_order": 873,
       "original_label": "４",
       "source_sha256": "b7161a5377814e5b2e358fdcfe80d692d2e7035ad15b8e002d72d7fb048e8edc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "내각총리대신은 제1항의 규정에 따라 위임된 권한 및 제2항의 규정에 따른 권한(금융청의 소관에 관한 것에 한정하고 정령으로 정하는 것을 제외한다)을 금융청장관에게 위임한다.",
+      "markdown_anchor": "main-a150-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p5",
@@ -14412,10 +14434,12 @@
       "source_order": 874,
       "original_label": "５",
       "source_sha256": "4b9dbaf576e15dabd9b91bcb5408214c80c0a45435033f5c0f6d225dcf1290b4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "금융청장관은 정령으로 정하는 바에 따라 전항의 규정에 따라 위임된 권한의 일부를 증권거래등감시위원회에 위임할 수 있다.",
+      "markdown_anchor": "main-a150-p5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p6",
@@ -14426,10 +14450,12 @@
       "source_order": 875,
       "original_label": "６",
       "source_sha256": "3b50cfa85ff4d9c5145d297d167a71e002a9bed1f6badf1e48114491ce3a18f0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "금융청장관은 정령으로 정하는 바에 따라 제4항의 규정에 따라 위임된 권한(전항의 규정에 따라 증권거래등감시위원회에 위임된 것을 제외한다)의 일부를 재무국장 또는 재무지국장에게 위임할 수 있다.",
+      "markdown_anchor": "main-a150-p6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p7",
@@ -14440,10 +14466,12 @@
       "source_order": 876,
       "original_label": "７",
       "source_sha256": "af8f39331a6160c14cf4a05cf513dfd8e02c46b1b6e5e6c222bdf0fcea4dcc91",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "증권거래등감시위원회는 정령으로 정하는 바에 따라 제5항의 규정에 따라 위임된 권한의 일부를 재무국장 또는 재무지국장에게 위임할 수 있다.",
+      "markdown_anchor": "main-a150-p7",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p8",
@@ -14454,10 +14482,12 @@
       "source_order": 877,
       "original_label": "８",
       "source_sha256": "a7f3521d3a33eba126b17b8d899dd1ec16bcc41c1cbab58d3699b4228e6e686d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따라 재무국장 또는 재무지국장에게 위임된 권한에 관련된 사무에 관해서는 증권거래등감시위원회가 재무국장 또는 재무지국장을 지휘감독한다.",
+      "markdown_anchor": "main-a150-p8",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a150-p9",
@@ -14468,10 +14498,12 @@
       "source_order": 878,
       "original_label": "９",
       "source_sha256": "2baa7c6eec34051534e2811ca3c52c47f689f5d4de45bad01633cc8770efefec",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제5항의 경우 증권거래등감시위원회가 하는 보고 또는 자료 제출의 요구(제7항의 규정에 따라 재무국장 또는 재무지국장이 하는 경우를 포함한다)에 대한 심사청구는 증권거래등감시위원회에 대해서만 할 수 있다.",
+      "markdown_anchor": "main-a150-p9",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a151",
@@ -14482,10 +14514,13 @@
       "source_order": 879,
       "original_label": "第百五十一条",
       "source_sha256": "6b4adacccb6ab2fefa456f7e02c39dd766652085dee5fc37b743221ef71c790d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a151",
+      "korean_title": "제151조 (사업소관대신의 요구)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a151-p1",
@@ -14496,10 +14531,12 @@
       "source_order": 880,
       "original_label": "",
       "source_sha256": "b873a146ffc53bbc94b27107a72266bd18ceed4ce34d218525bf67d185714c55",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "사업소관대신은 개인정보취급사업자 등에게 제4장의 규정에 위반하는 행위가 있다고 인정하는 때나 그 밖에 개인정보취급사업자 등에 의한 개인정보 등의 적정한 취급을 확보하기 위하여 필요하다고 인정하는 때에는 위원회에 이 법률의 규정에 따라 적당한 조치를 취할 것을 요구할 수 있다.",
+      "markdown_anchor": "main-a151-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a152",
@@ -14510,10 +14547,13 @@
       "source_order": 881,
       "original_label": "第百五十二条",
       "source_sha256": "d141467e6a8b72359749e4d50aed4b72868a21d8954951973122b7d8c06e2ec6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a152",
+      "korean_title": "제152조 (사업소관대신)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a152-p1",
@@ -14524,10 +14564,12 @@
       "source_order": 882,
       "original_label": "",
       "source_sha256": "859b98d811966caefea60f6bc82b955d1821478ee03ca48ddf2dbf4a5335a71b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 관의 규정에서의 사업소관대신은 다음과 같이 한다.",
+      "markdown_anchor": "main-a152-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a152-p1-i1",
@@ -14538,10 +14580,12 @@
       "source_order": 883,
       "original_label": "一",
       "source_sha256": "4654c7f00996912ab6bf6635c99d4176b0139b258f260edaa7aac07d1eb478d5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자 등이 하는 개인정보 등의 취급 중 고용관리에 관한 것에 대해서는 후생노동대신(선원의 고용관리에 관한 것에 대해서는 국토교통대신) 및 해당 개인정보취급사업자 등이 수행하는 사업을 소관하는 대신, 국가공안위원회 또는 카지노관리위원회(다음 호에서 ‘대신 등’이라 한다)",
+      "markdown_anchor": "main-a152-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a152-p1-i2",
@@ -14552,10 +14596,12 @@
       "source_order": 884,
       "original_label": "二",
       "source_sha256": "98bf67875b9fbd2fcafbe4013b50d97e5ab8427439e9d3fbd65d1c7a546a904f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자 등이 하는 개인정보 등의 취급 중 전호에 열거하는 것 외의 것에 대해서는 해당 개인정보취급사업자 등이 수행하는 사업을 소관하는 대신 등",
+      "markdown_anchor": "main-a152-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s2-ss2",
@@ -14566,10 +14612,13 @@
       "source_order": 885,
       "original_label": "第二款　認定個人情報保護団体の監督",
       "source_sha256": "2e1278ced5886695b20231383896a40d3dc7d389ea397556ad49c6a50eac0a99",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s2-ss2",
+      "korean_title": "제2관 인정개인정보보호단체의 감독",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a153",
@@ -14580,10 +14629,13 @@
       "source_order": 886,
       "original_label": "第百五十三条",
       "source_sha256": "b5229ceba6196e54f69d1a9b7bdada7ee7055aaacf44d56e5ea62cccc62d533b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a153",
+      "korean_title": "제153조 (보고의 징수)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a153-p1",
@@ -14594,10 +14646,12 @@
       "source_order": 887,
       "original_label": "",
       "source_sha256": "db561c372fec05f850505fbe212a1ae3831ea3086db7cb88b373a6e72ab6e1ec",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 제4장 제5절의 규정의 시행에 필요한 한도에서 인정개인정보보호단체에 인정업무에 관하여 보고하게 할 수 있다.",
+      "markdown_anchor": "main-a153-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a154",
@@ -14608,10 +14662,13 @@
       "source_order": 888,
       "original_label": "第百五十四条",
       "source_sha256": "3429ed28eabdcdce33e347e38bef33ee3718ccdfb1ae46a38fdecb810dd88244",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a154",
+      "korean_title": "제154조 (명령)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a154-p1",
@@ -14622,10 +14679,12 @@
       "source_order": 889,
       "original_label": "",
       "source_sha256": "a462fec872b635f8034c41476021f0bbd76a97f040b6a3dd738967653dd6140a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 제4장 제5절의 규정의 시행에 필요한 한도에서 인정개인정보보호단체에 인정업무의 실시 방법 개선, 개인정보보호지침의 변경과 그 밖의 필요한 조치를 취하여야 한다는 취지를 명령할 수 있다.",
+      "markdown_anchor": "main-a154-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155",
@@ -14636,10 +14695,13 @@
       "source_order": 890,
       "original_label": "第百五十五条",
       "source_sha256": "9dc8ec2ce4e16543d0b722be721b2893a2e4e4b5271a3dd2eb54c9cae1632093",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a155",
+      "korean_title": "제155조 (인정의 취소)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1",
@@ -14650,10 +14712,12 @@
       "source_order": 891,
       "original_label": "",
       "source_sha256": "d4f5d237bff0fa34ffb8f1f5b501fd9402de878bba5666df8d72a654020245f9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 인정개인정보보호단체가 다음 각 호의 어느 하나에 해당하는 때에는 그 인정을 취소할 수 있다.",
+      "markdown_anchor": "main-a155-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1-i1",
@@ -14664,10 +14728,12 @@
       "source_order": 892,
       "original_label": "一",
       "source_sha256": "8f712e9cd9039f67cfa9c5df6189583f8f87e1e82dbded422bc5412883fe0d04",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제48조 제1호 또는 제3호에 해당하게 된 때",
+      "markdown_anchor": "main-a155-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1-i2",
@@ -14678,10 +14744,12 @@
       "source_order": 893,
       "original_label": "二",
       "source_sha256": "7aa3f97092555ad0176929180307760276f53aca7b442f1a486bcb1d81944b41",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제49조 각 호의 어느 하나에 적합하지 않게 된 때",
+      "markdown_anchor": "main-a155-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1-i3",
@@ -14692,10 +14760,12 @@
       "source_order": 894,
       "original_label": "三",
       "source_sha256": "7e8e2e6e9a261aa3ec963bd5843ea456dacc008b6dbf0ec5b59b3fa182b29050",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제55조의 규정을 위반한 때",
+      "markdown_anchor": "main-a155-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1-i4",
@@ -14706,10 +14776,12 @@
       "source_order": 895,
       "original_label": "四",
       "source_sha256": "cbc05048dc0a895ed83125ba12ea43bd34fbcd8d557121ea13046011ff9e2dc4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조의 명령에 따르지 않는 때",
+      "markdown_anchor": "main-a155-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p1-i5",
@@ -14720,10 +14792,12 @@
       "source_order": 896,
       "original_label": "五",
       "source_sha256": "d76fa842cadcd498618bea65c3d298ca1cfa168df13227d318c7b61ab6f67c0c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "부정한 수단으로 제47조 제1항의 인정 또는 제50조 제1항의 변경 인정을 받은 때",
+      "markdown_anchor": "main-a155-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a155-p2",
@@ -14734,10 +14808,12 @@
       "source_order": 897,
       "original_label": "２",
       "source_sha256": "2b147e410d349f59a4ac9e5c30c3d03ba0de1b9edea074916839fe6f23767351",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전항의 규정에 따라 인정을 취소한 때에는 그 취지를 공시하여야 한다.",
+      "markdown_anchor": "main-a155-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s2-ss3",
@@ -14748,10 +14824,13 @@
       "source_order": 898,
       "original_label": "第三款　行政機関等の監視",
       "source_sha256": "90e05e91f5952bac3a24fe51f4ce57cdb75b567daa84e3396296c42ff2d0e871",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s2-ss3",
+      "korean_title": "제3관 행정기관 등의 감시",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a156",
@@ -14762,10 +14841,13 @@
       "source_order": 899,
       "original_label": "第百五十六条",
       "source_sha256": "42b1455ef2d4baffaed9124c7081d1a8ab6faf445ef4ede0359b068814dea1e8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a156",
+      "korean_title": "제156조 (자료 제출의 요구 및 실지조사)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a156-p1",
@@ -14776,10 +14858,12 @@
       "source_order": 900,
       "original_label": "",
       "source_sha256": "9ba4ec3e5e468afd2fe133dec57bdb53214174d69b81c53b3837d2b2241590d4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전장의 규정의 원활한 운용을 확보하기 위하여 필요하다고 인정하는 때에는 행정기관의 장 등(회계검사원장을 제외한다. 이하 이 관에서 같다)에게 행정기관 등의 개인정보 등의 취급에 관한 사무의 실시 상황에 대하여 자료의 제출 및 설명을 요구하거나 그 직원으로 하여금 실지조사를 하게 할 수 있다.",
+      "markdown_anchor": "main-a156-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a157",
@@ -14790,10 +14874,13 @@
       "source_order": 901,
       "original_label": "第百五十七条",
       "source_sha256": "eb2394be98b825088362559299070d3f3e74dee61aceaec87721c0c271b25b5d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a157",
+      "korean_title": "제157조 (지도 및 조언)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a157-p1",
@@ -14804,10 +14891,12 @@
       "source_order": 902,
       "original_label": "",
       "source_sha256": "b756561001fbebef8533b8c5fc4f91969133874b54f10af9aff1a6623a76042d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전장의 규정의 원활한 운용을 확보하기 위하여 필요하다고 인정하는 때에는 행정기관의 장 등에게 행정기관 등의 개인정보 등의 취급에 대하여 필요한 지도 및 조언을 할 수 있다.",
+      "markdown_anchor": "main-a157-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a158",
@@ -14818,10 +14907,13 @@
       "source_order": 903,
       "original_label": "第百五十八条",
       "source_sha256": "e4fd9ab76b44d69248cee1af8bc696c29947f8c9489a1a500373f1e2b9828205",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a158",
+      "korean_title": "제158조 (권고)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a158-p1",
@@ -14832,10 +14924,12 @@
       "source_order": 904,
       "original_label": "",
       "source_sha256": "d3dd95a85f4a46208fedb564daa6c22808f5eb1b725f1746d8642e9df3d30dfb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전장의 규정의 원활한 운용을 확보하기 위하여 필요하다고 인정하는 때에는 행정기관의 장 등에게 행정기관 등의 개인정보 등의 취급에 대하여 권고할 수 있다.",
+      "markdown_anchor": "main-a158-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a159",
@@ -14846,10 +14940,13 @@
       "source_order": 905,
       "original_label": "第百五十九条",
       "source_sha256": "ca7c2ea14fbc10e956d4ff62c01485447523387bdb0d37386ef8cec00523ee23",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a159",
+      "korean_title": "제159조 (권고에 근거하여 취한 조치에 대한 보고의 요구)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a159-p1",
@@ -14860,10 +14957,12 @@
       "source_order": 906,
       "original_label": "",
       "source_sha256": "b16fd8969fc2f2a7d4c3d5cc73216a357252a469ec5061da03523040591b7469",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전조의 규정에 따라 행정기관의 장 등에게 권고한 때에는 해당 행정기관의 장 등에게 그 권고에 근거하여 취한 조치에 대한 보고를 요구할 수 있다.",
+      "markdown_anchor": "main-a159-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a160",
@@ -14874,10 +14973,13 @@
       "source_order": 907,
       "original_label": "第百六十条",
       "source_sha256": "d40a2524351ad5fbf9347b48959c3464e7ae69567e88e45dc198caeaf6207356",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a160",
+      "korean_title": "제160조 (위원회의 권한 행사의 제한)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a160-p1",
@@ -14888,10 +14990,12 @@
       "source_order": 908,
       "original_label": "",
       "source_sha256": "53a40c4bb003975bb68d553326eb7ede3c8502671a4966913ddea78c5a36a1bd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제149조 제1항의 규정의 취지에 비추어 위원회는 행정기관의 장 등이 제57조 제1항 각 호에 열거하는 자(각각 해당 각 호에서 정하는 목적으로 개인정보 등을 취급하는 경우에 한정한다)에게 개인정보 등을 제공하는 행위에 대해서는 그 권한을 행사하지 않아야 한다.",
+      "markdown_anchor": "main-a160-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s3",
@@ -14902,10 +15006,13 @@
       "source_order": 909,
       "original_label": "第三節　送達",
       "source_sha256": "930fbd1b7e7d0895fffea185671ffc431900c35b3c81de2e6a8d5ec6df3f932c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s3",
+      "korean_title": "제3절 송달",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a161",
@@ -14916,10 +15023,13 @@
       "source_order": 910,
       "original_label": "第百六十一条",
       "source_sha256": "496c7a7a24a313324a844607532dad2d07e942ed5a1fd12a3e2f6038bc4ed08f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a161",
+      "korean_title": "제161조 (송달하여야 할 서류)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a161-p1",
@@ -14930,10 +15040,12 @@
       "source_order": 911,
       "original_label": "",
       "source_sha256": "3ca45359dd57a1826f9de6f6fc3570eb7769b031cae68b23c6fcb2f17443f889",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제146조 제1항의 규정에 따른 보고 또는 자료 제출의 요구, 제148조 제1항의 규정에 따른 권고 또는 같은 조 제2항이나 제3항의 규정에 따른 명령, 제153조의 규정에 따른 보고의 징수, 제154조의 규정에 따른 명령 또는 제155조 제1항의 규정에 따른 취소는 개인정보보호위원회 규칙으로 정하는 서류를 송달하여 한다.",
+      "markdown_anchor": "main-a161-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a161-p2",
@@ -14944,10 +15056,12 @@
       "source_order": 912,
       "original_label": "２",
       "source_sha256": "7e35eae7b2845372a05cc370efb3394afccb3412b05583faa27def31759744f0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제148조 제2항이나 제3항 또는 제154조의 규정에 따른 명령이나 제155조 제1항의 규정에 따른 취소에 관한 행정절차법(헤이세이 5년 법률 제88호) 제15조 제1항 또는 제30조의 통지는 같은 법 제15조 제1항 및 제2항 또는 제30조의 서류를 송달하여 한다. 이 경우 같은 법 제15조 제3항(같은 법 제31조에서 바꾸어 읽어 준용하는 경우를 포함한다)의 규정은 적용하지 않는다.",
+      "markdown_anchor": "main-a161-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a162",
@@ -14958,10 +15072,13 @@
       "source_order": 913,
       "original_label": "第百六十二条",
       "source_sha256": "c828d77d441db59f5a60dbe544856118f8a5c8b3b80ab4b4046130a7e07313a5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a162",
+      "korean_title": "제162조 (송달에 관한 민사소송법의 준용)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a162-p1",
@@ -14972,10 +15089,12 @@
       "source_order": 914,
       "original_label": "",
       "source_sha256": "dd8d3e7086cd7aeb88e79b8f8eea47451f72049e86d9ca43a9f779698365ca8d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조의 규정에 따른 송달에 대해서는 민사소송법 제100조 제1항, 제101조, 제102조의2, 제103조, 제105조, 제106조 및 제108조의 규정을 준용한다. 이 경우 같은 항 중 ‘재판소’ 및 같은 조 중 ‘재판장’은 ‘개인정보보호위원회’로, 같은 법 제101조 제1항 중 ‘집행관’은 ‘개인정보보호위원회의 직원’으로 바꾸어 읽어야 한다.",
+      "markdown_anchor": "main-a162-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163",
@@ -14986,10 +15105,13 @@
       "source_order": 915,
       "original_label": "第百六十三条",
       "source_sha256": "7461b55c4c72a8da755ba1615f24bf24612e1121a2a4122699bda30c75b473ce",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a163",
+      "korean_title": "제163조 (공시송달)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p1",
@@ -15000,10 +15122,12 @@
       "source_order": 916,
       "original_label": "",
       "source_sha256": "50d82b4d7935ef774131667b7129a479d9e9724b9a3b02a521ad90ea3243740d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 다음에 열거하는 경우에는 공시송달을 할 수 있다.",
+      "markdown_anchor": "main-a163-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p1-i1",
@@ -15014,10 +15138,12 @@
       "source_order": 917,
       "original_label": "一",
       "source_sha256": "c656ba80398379ce1ce69b46909495815c0cc3a21f21647eb1836103d732d11b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "송달을 받아야 할 자의 주소, 거소나 그 밖의 송달을 하여야 할 장소를 알 수 없는 경우",
+      "markdown_anchor": "main-a163-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p1-i2",
@@ -15028,10 +15154,12 @@
       "source_order": 918,
       "original_label": "二",
       "source_sha256": "9cc965e5c376bb28a6b0292dab97c0e1d03ea6eca00ad7617f1185a14786f35e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "외국(일본 영역 밖에 있는 국가 또는 지역을 말한다. 이하 같다)에서 하여야 할 송달에 대하여 전조에서 바꾸어 읽어 준용하는 민사소송법 제108조의 규정에 따를 수 없거나 이에 따라도 송달을 할 수 없다고 인정하여야 할 경우",
+      "markdown_anchor": "main-a163-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p1-i3",
@@ -15042,10 +15170,12 @@
       "source_order": 919,
       "original_label": "三",
       "source_sha256": "9f0e8fe17c0f7a6fc97bda347e8d9ec3aab95c2260f4f085c3adabce43e9ef26",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조에서 바꾸어 읽어 준용하는 민사소송법 제108조의 규정에 따라 외국의 관할 관청에 촉탁을 발송한 후 6개월이 경과하여도 그 송달을 증명하는 서면이 송부되지 않은 경우",
+      "markdown_anchor": "main-a163-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p2",
@@ -15056,10 +15186,12 @@
       "source_order": 920,
       "original_label": "２",
       "source_sha256": "22a0ddec282563639008c2df491947ade1104d873b31e80fa13bce9378f2ee5b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공시송달은 송달을 하여야 할 서류를 송달을 받아야 할 자에게 언제든지 교부하여야 한다는 취지를 위원회의 게시장에 게시하여 한다.",
+      "markdown_anchor": "main-a163-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p3",
@@ -15070,10 +15202,12 @@
       "source_order": 921,
       "original_label": "３",
       "source_sha256": "d2fc93a6c6d23b4e65e17ec60a4089eb03f2f2312392d1a57972287ee3285307",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "공시송달은 전항의 규정에 따른 게시를 시작한 날부터 2주가 경과함으로써 그 효력이 발생한다.",
+      "markdown_anchor": "main-a163-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a163-p4",
@@ -15084,10 +15218,12 @@
       "source_order": 922,
       "original_label": "４",
       "source_sha256": "2227ec50141660c6fed16834f7bf98ea64c57f1f6fe30ba0e6b99cf7184e68c2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "외국에서 하여야 할 송달에 대하여 한 공시송달의 경우 전항의 기간은 6주로 한다.",
+      "markdown_anchor": "main-a163-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a164",
@@ -15098,10 +15234,13 @@
       "source_order": 923,
       "original_label": "第百六十四条",
       "source_sha256": "0a26efd22ac0e16d7819c2a16ef1ce7a4ecf80ee971a394295d87ad32cc6d8ba",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a164",
+      "korean_title": "제164조 (전자정보처리조직의 사용)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a164-p1",
@@ -15112,10 +15251,12 @@
       "source_order": 924,
       "original_label": "",
       "source_sha256": "7304113d5ac3eecc862528601814d95950ed5467b4a6a18521f2b72133fc092e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회의 직원이 정보통신기술을 활용한 행정의 추진 등에 관한 법률(헤이세이 14년 법률 제151호) 제3조 제9호에 규정된 처분통지 등으로서 제161조의 규정에 따라 서류를 송달하여 하도록 되어 있는 것에 관한 사무를 같은 법 제7조 제1항의 규정에 따라 같은 법 제6조 제1항에 규정된 전자정보처리조직을 사용하여 한 때에는 제162조에서 바꾸어 읽어 준용하는 민사소송법 제100조 제1항의 규정에 따른 송달에 관한 사항을 기재한 서면의 작성 및 제출을 대신하여 해당 사항을 해당 전자정보처리조직을 사용하여 위원회가 사용하는 전자계산기(입출력장치를 포함한다)에 갖추어진 파일에 기록하여야 한다.",
+      "markdown_anchor": "main-a164-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c6-s4",
@@ -15126,10 +15267,13 @@
       "source_order": 925,
       "original_label": "第四節　雑則",
       "source_sha256": "c73c974f5803005bdd5ef3bc23397f1640bd03a0c1629d28fa468a07f1c2875f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c6-s4",
+      "korean_title": "제4절 잡칙",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a165",
@@ -15140,10 +15284,13 @@
       "source_order": 926,
       "original_label": "第百六十五条",
       "source_sha256": "f35ab7eb2afa7132898f0c7e6be4daec9e395d906fad804abc19b0643487032e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a165",
+      "korean_title": "제165조 (시행 상황의 공표)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a165-p1",
@@ -15154,10 +15301,12 @@
       "source_order": 927,
       "original_label": "",
       "source_sha256": "35974f7f39c9900cbd49dfe57c08f95bf44857900ee7c67dd1522be35a541d50",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 행정기관의 장 등에게 이 법률의 시행 상황에 관한 보고를 요구할 수 있다.",
+      "markdown_anchor": "main-a165-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a165-p2",
@@ -15168,10 +15317,12 @@
       "source_order": 928,
       "original_label": "２",
       "source_sha256": "a9d05717b3a5238221e24923ae8ad3b48d711b40fa7da1c8fbffbc0a35547ff5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 매 회계연도 전항의 보고를 취합하고 그 개요를 공표하여야 한다.",
+      "markdown_anchor": "main-a165-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a166",
@@ -15182,10 +15333,13 @@
       "source_order": 929,
       "original_label": "第百六十六条",
       "source_sha256": "300b71af1f18076ea7e53fa9c67c66629dbead47d1ed90a0e970da8f264ed177",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a166",
+      "korean_title": "제166조 (지방공공단체의 필요한 정보 제공 등의 요구)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a166-p1",
@@ -15196,10 +15350,12 @@
       "source_order": 930,
       "original_label": "",
       "source_sha256": "5075cf7523f3172deb36572729befc3e94a2df8a05920c253e5fbb132371d8eb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체는 지방공공단체의 기관, 지방독립행정법인 및 사업자 등에 의한 개인정보의 적정한 취급을 확보하기 위하여 필요하다고 인정하는 때에는 위원회에 필요한 정보의 제공 또는 기술적 조언을 요구할 수 있다.",
+      "markdown_anchor": "main-a166-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a166-p2",
@@ -15210,10 +15366,12 @@
       "source_order": 931,
       "original_label": "２",
       "source_sha256": "1dc9c9bf24b90c1aa012e07ce4db61e8321bc199a83323fba71fd76bcdf93e44",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전항의 규정에 따른 요구가 있는 때에는 필요한 정보의 제공 또는 기술적 조언을 하여야 한다.",
+      "markdown_anchor": "main-a166-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a167",
@@ -15224,10 +15382,13 @@
       "source_order": 932,
       "original_label": "第百六十七条",
       "source_sha256": "3f5063a16da85236666a7dddf267d574185d20279dfa7d5b72f1967ab0ed6826",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a167",
+      "korean_title": "제167조 (조례를 정한 때의 신고)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a167-p1",
@@ -15238,10 +15399,12 @@
       "source_order": 933,
       "original_label": "",
       "source_sha256": "19cce4094995d0d8678982540207a97931f4b2c01b6771681394f108a9672470",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방공공단체의 장은 이 법률의 규정에 근거하여 개인정보의 보호에 관한 조례를 정한 때에는 지체 없이 개인정보보호위원회 규칙으로 정하는 바에 따라 그 취지 및 그 내용을 위원회에 신고하여야 한다.",
+      "markdown_anchor": "main-a167-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a167-p2",
@@ -15252,10 +15415,12 @@
       "source_order": 934,
       "original_label": "２",
       "source_sha256": "b2e7d851d64859e50b2433ac6caac4c5d8529a888f5480b5c58888417b0f2e1e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전항의 규정에 따른 신고가 있는 때에는 해당 신고에 관련된 사항을 인터넷의 이용이나 그 밖의 적절한 방법으로 공표하여야 한다.",
+      "markdown_anchor": "main-a167-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a167-p3",
@@ -15266,10 +15431,12 @@
       "source_order": 935,
       "original_label": "３",
       "source_sha256": "06967504f5db47b3a5b7bff0d89778699a92fb2fc1580f1e5196ac483274b812",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 항의 규정은 제1항의 규정에 따른 신고에 관련된 사항의 변경에 준용한다.",
+      "markdown_anchor": "main-a167-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a168",
@@ -15280,10 +15447,13 @@
       "source_order": 936,
       "original_label": "第百六十八条",
       "source_sha256": "e3f8cf264055ab267ac52f316736bf733881ec7e8a32443628642a108171b4b3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a168",
+      "korean_title": "제168조 (국회에 대한 보고)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a168-p1",
@@ -15294,10 +15464,12 @@
       "source_order": 937,
       "original_label": "",
       "source_sha256": "a4cfc254cc4d1311bd57d82e81ad70d9a47ba7ee97663e80a3ae079276f9aa02",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 매년 내각총리대신을 경유하여 국회에 소관 사무의 처리 상황을 보고함과 동시에 그 개요를 공표하여야 한다.",
+      "markdown_anchor": "main-a168-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a169",
@@ -15308,10 +15480,13 @@
       "source_order": 938,
       "original_label": "第百六十九条",
       "source_sha256": "c6afcda23c250217cf1d3255dff3993c383119b04942374c953cf807e5bdfc93",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a169",
+      "korean_title": "제169조 (안내소의 정비)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a169-p1",
@@ -15322,10 +15497,12 @@
       "source_order": 939,
       "original_label": "",
       "source_sha256": "f6cc1538bdee38f126276e85ac7cea0c09603a8574cb16a7ebc8c3aac1fd1388",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 이 법률의 원활한 운용을 확보하기 위하여 종합적인 안내소를 정비하여야 한다.",
+      "markdown_anchor": "main-a169-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a170",
@@ -15336,10 +15513,13 @@
       "source_order": 940,
       "original_label": "第百七十条",
       "source_sha256": "21d930c192650aadc6083e83936e5f9b3e73f438934c176071999517553cd294",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a170",
+      "korean_title": "제170조 (지방공공단체가 처리하는 사무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a170-p1",
@@ -15350,10 +15530,12 @@
       "source_order": 941,
       "original_label": "",
       "source_sha256": "d6c76974a03abb0d7297aeab77b101c0427eff96603cc35ea5049cb5d200c8df",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률에 규정하는 위원회의 권한 및 제150조 제1항 또는 제4항의 규정에 따라 사업소관대신 또는 금융청장관에게 위임된 권한에 속하는 사무는 정령으로 정하는 바에 따라 지방공공단체의 장이나 그 밖의 집행기관이 수행하도록 할 수 있다.",
+      "markdown_anchor": "main-a170-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c7",
@@ -15364,10 +15546,13 @@
       "source_order": 942,
       "original_label": "第七章　雑則",
       "source_sha256": "08eff2a5a37b1e8bf3a110330a542c776fc4c66e3b0538bb4779909fb6127fe6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c7",
+      "korean_title": "제7장 잡칙",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a171",
@@ -15378,10 +15563,13 @@
       "source_order": 943,
       "original_label": "第百七十一条",
       "source_sha256": "d21bac485fb412b0477d6d743d141ac3d563945d4b5c6af59bf05f888b405605",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a171",
+      "korean_title": "제171조 (적용 범위)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a171-p1",
@@ -15392,10 +15580,12 @@
       "source_order": 944,
       "original_label": "",
       "source_sha256": "4ec9b44e8136876cbca231825254ae2e1c3cd029acf7756ddfb712f6a99388fb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률은 개인정보취급사업자, 가명가공정보취급사업자, 익명가공정보취급사업자 또는 개인관련정보취급사업자가 일본 국내에 있는 자에 대한 물품 또는 용역의 제공과 관련하여 일본 국내에 있는 자를 본인으로 하는 개인정보, 해당 개인정보로서 취득하게 되는 개인관련정보 또는 해당 개인정보를 사용하여 작성된 가명가공정보나 익명가공정보를 외국에서 취급하는 경우에도 적용한다.",
+      "markdown_anchor": "main-a171-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172",
@@ -15406,10 +15596,13 @@
       "source_order": 945,
       "original_label": "第百七十二条",
       "source_sha256": "05d612c0bc9b64032e371fb30dfb30671ba43ecace558368c493644e8c86ae23",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a172",
+      "korean_title": "제172조 (외국 집행당국에 대한 정보 제공)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p1",
@@ -15420,10 +15613,12 @@
       "source_order": 946,
       "original_label": "",
       "source_sha256": "c3e6f4bfbf5f5a5e64d4c73c0f1bf8d426c81d08123288f21efdd015e6cfaac9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 이 법률에 상당하는 외국의 법령을 집행하는 외국의 당국(이하 이 조에서 ‘외국 집행당국’이라 한다)에 그 직무(이 법률에 규정하는 위원회의 직무에 상당하는 것에 한정한다. 다음 항에서 같다)의 수행에 도움이 된다고 인정하는 정보를 제공할 수 있다.",
+      "markdown_anchor": "main-a172-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p2",
@@ -15434,10 +15629,12 @@
       "source_order": 947,
       "original_label": "２",
       "source_sha256": "e06dc880d1871b3299b094a26b91b1e523682733bb92085ca21136d6b687e61d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정에 따른 정보의 제공에 대해서는 해당 정보가 해당 외국 집행당국의 직무 수행 외에 사용되지 않고 또한 다음 항의 규정에 따른 동의가 없으면 외국의 형사사건 수사(그 대상인 범죄사실이 특정된 후의 것에 한정한다) 또는 심판(같은 항에서 ‘수사 등’이라 한다)에 사용되지 않도록 적절한 조치가 취해져야 한다.",
+      "markdown_anchor": "main-a172-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p3",
@@ -15448,10 +15645,12 @@
       "source_order": 948,
       "original_label": "３",
       "source_sha256": "7756d3e3501cba176c24ff5d3e681236576648e410b88531f2d7eb2bec4cc69c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 외국 집행당국의 요청이 있는 때에는 다음 각 호의 어느 하나에 해당하는 경우를 제외하고는 제1항의 규정에 따라 제공한 정보를 해당 요청에 관련된 외국 형사사건의 수사 등에 사용하는 것에 동의할 수 있다.",
+      "markdown_anchor": "main-a172-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p3-i1",
@@ -15462,10 +15661,12 @@
       "source_order": 949,
       "original_label": "一",
       "source_sha256": "c197a3186b946ef345bdd436456f31372c8fd62059eb6ff3972b94cee99abfac",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 요청에 관련된 형사사건의 수사 등의 대상이 되는 범죄가 정치범죄인 때 또는 해당 요청이 정치범죄에 대하여 수사 등을 할 목적으로 이루어진 것으로 인정되는 때",
+      "markdown_anchor": "main-a172-p3-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p3-i2",
@@ -15476,10 +15677,12 @@
       "source_order": 950,
       "original_label": "二",
       "source_sha256": "e32fb58454dadf96daaa058bf6ed751f7a92e95434e89094d303f6d139944c3d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 요청에 관련된 형사사건의 수사 등의 대상이 되는 범죄에 관한 행위가 일본 국내에서 이루어졌다고 가정한 경우 그 행위가 일본국의 법령에 따르면 죄에 해당하지 않는 때",
+      "markdown_anchor": "main-a172-p3-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p3-i3",
@@ -15490,10 +15693,12 @@
       "source_order": 951,
       "original_label": "三",
       "source_sha256": "0e012d94bd34b7d96a17d1820f085dcd76dc6884d483f8ff5fd8e40884897e5d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "일본국이 하는 동종의 요청에 응한다는 요청국의 보증이 없는 때",
+      "markdown_anchor": "main-a172-p3-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a172-p4",
@@ -15504,10 +15709,12 @@
       "source_order": 952,
       "original_label": "４",
       "source_sha256": "34cf8306f4aacebd4b6c0693023b474fecd81216be10f65221523c3015713276",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "위원회는 전항의 동의를 하는 경우에는 미리 같은 항 제1호 및 제2호에 해당하지 않는다는 점에 대하여 법무대신의 확인을, 같은 항 제3호에 해당하지 않는다는 점에 대하여 외무대신의 확인을 각각 받아야 한다.",
+      "markdown_anchor": "main-a172-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a173",
@@ -15518,10 +15725,13 @@
       "source_order": 953,
       "original_label": "第百七十三条",
       "source_sha256": "1e783ab7bbfd561bfa6880ee4563f82f21127369adb093ab0e98e227668d5213",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a173",
+      "korean_title": "제173조 (국제약속의 성실한 이행 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a173-p1",
@@ -15532,10 +15742,12 @@
       "source_order": 954,
       "original_label": "",
       "source_sha256": "e3902eb6d73ce258a23356523071f74cb5d53e2e5973feebf41e451fd3c5c0f8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률의 시행에 있어서는 일본국이 체결한 조약이나 그 밖의 국제약속의 성실한 이행을 방해하지 않도록 유의함과 동시에 확립된 국제법규를 준수하여야 한다.",
+      "markdown_anchor": "main-a173-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a174",
@@ -15546,10 +15758,13 @@
       "source_order": 955,
       "original_label": "第百七十四条",
       "source_sha256": "b21809aa46cc816deaa3dc6f2734fabeaa2da72eba88c1b4d4e4eab2bf5aefcf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a174",
+      "korean_title": "제174조 (연락 및 협력)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a174-p1",
@@ -15560,10 +15775,12 @@
       "source_order": 956,
       "original_label": "",
       "source_sha256": "3785195486178f85ac202ba773dc6e5c68fac0797915a98b9fc22b471464bce4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "내각총리대신 및 이 법률의 시행에 관계되는 행정기관의 장(회계검사원장을 제외한다)은 상호 긴밀히 연락하고 협력하여야 한다.",
+      "markdown_anchor": "main-a174-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a175",
@@ -15574,10 +15791,13 @@
       "source_order": 957,
       "original_label": "第百七十五条",
       "source_sha256": "dc85a942e7af18434c42b18dfd807d7152519f9521a05f883c0dc62fb66acf18",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a175",
+      "korean_title": "제175조 (정령에의 위임)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a175-p1",
@@ -15588,10 +15808,12 @@
       "source_order": 958,
       "original_label": "",
       "source_sha256": "5cd2f504bd226cea6e202d6bab671554792a6b63631ba852bcd21224a5a52763",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "이 법률에서 정하는 것 외에 이 법률의 실시를 위하여 필요한 사항은 정령으로 정한다.",
+      "markdown_anchor": "main-a175-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c8",
@@ -15602,10 +15824,13 @@
       "source_order": 959,
       "original_label": "第八章　罰則",
       "source_sha256": "69b1fdb325215bf72e1b8559e7a26696302b591f3e5334dbd68918c0d38a94d5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c8",
+      "korean_title": "제8장 벌칙",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a176",
@@ -15616,10 +15841,13 @@
       "source_order": 960,
       "original_label": "第百七十六条",
       "source_sha256": "2659df9de233286808c693c789ebfce694aa9e9699dd36e3a6892f630170c934",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a176",
+      "korean_title": "제176조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a176-p1",
@@ -15630,10 +15858,12 @@
       "source_order": 961,
       "original_label": "",
       "source_sha256": "154f387e71e6408ce034350c35a5f09ecf09a3dd8b95f00a2e7ed006a4dcd1e4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등의 직원 또는 직원이었던 자, 제66조 제2항 각 호에서 정하는 업무나 제73조 제5항 또는 제121조 제3항의 위탁을 받은 업무에 종사하고 있는 자 또는 종사하였던 자, 또는 행정기관 등에서 개인정보, 가명가공정보나 익명가공정보의 취급에 종사하고 있는 파견근로자 또는 종사하였던 파견근로자가 정당한 이유 없이 개인의 비밀에 속하는 사항이 기록된 제60조 제2항 제1호에 관한 개인정보파일(그 전부 또는 일부를 복제하거나 가공한 것을 포함한다)을 제공한 때에는 2년 이하의 구금형 또는 100만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a176-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a177",
@@ -15644,10 +15874,13 @@
       "source_order": 962,
       "original_label": "第百七十七条",
       "source_sha256": "98119929f0b65fd3460d8fde5fc634edbd2e8a49037ba44100e3a833b8d0ca48",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a177",
+      "korean_title": "제177조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a177-p1",
@@ -15658,10 +15891,12 @@
       "source_order": 963,
       "original_label": "",
       "source_sha256": "7e6a49f3b0827c5f2a93befc1add1d947025500c13b15e169ad7fdd7976373f4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제143조의 규정을 위반하여 비밀을 누설하거나 도용한 자는 2년 이하의 구금형 또는 100만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a177-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a178",
@@ -15672,10 +15907,13 @@
       "source_order": 964,
       "original_label": "第百七十八条",
       "source_sha256": "34c5087974f0d0e1949796843a53f278d4d570497d8824aa6228582cc974b077",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a178",
+      "korean_title": "제178조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a178-p1",
@@ -15686,10 +15924,12 @@
       "source_order": 965,
       "original_label": "",
       "source_sha256": "4b3e5206fedb01185dde838055d3bc909377fd42936e7e13d20e455935be1d97",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제148조 제2항 또는 제3항의 규정에 따른 명령을 위반한 경우에는 해당 위반행위를 한 자는 1년 이하의 구금형 또는 100만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a178-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a179",
@@ -15700,10 +15940,13 @@
       "source_order": 966,
       "original_label": "第百七十九条",
       "source_sha256": "271c8a83b4effb6c058eefe2bd05b88c760bce4a56191d39f4074be23629db72",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a179",
+      "korean_title": "제179조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a179-p1",
@@ -15714,10 +15957,12 @@
       "source_order": 967,
       "original_label": "",
       "source_sha256": "390fc951addb94b82e76e9bc6e1ed27712f9ee868c7b8136a45891a0bada6054",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "개인정보취급사업자(그 자가 법인[법인이 아닌 단체로서 대표자 또는 관리인이 정해져 있는 것을 포함한다. 제184조 제1항에서 같다]인 경우에는 그 임원, 대표자 또는 관리인)나 그 종업자 또는 이들이었던 자가 그 업무에 관하여 취급한 개인정보데이터베이스 등(그 전부 또는 일부를 복제하거나 가공한 것을 포함한다)을 자기 또는 제3자의 부정한 이익을 도모할 목적으로 제공하거나 도용한 때에는 1년 이하의 구금형 또는 50만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a179-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a180",
@@ -15728,10 +15973,13 @@
       "source_order": 968,
       "original_label": "第百八十条",
       "source_sha256": "4c6b8614e9f0c7038fc8641a9548cd7685c55fbb1f3c953d91be92313cad3965",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a180",
+      "korean_title": "제180조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a180-p1",
@@ -15742,10 +15990,12 @@
       "source_order": 969,
       "original_label": "",
       "source_sha256": "9c9c39eabb1dec91a69e8d4538e480a2b3f3a9be17335e95a969d3af5e1f577c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제176조에 규정된 자가 그 업무에 관하여 알게 된 보유개인정보를 자기 또는 제3자의 부정한 이익을 도모할 목적으로 제공하거나 도용한 때에는 1년 이하의 구금형 또는 50만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a180-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a181",
@@ -15756,10 +16006,13 @@
       "source_order": 970,
       "original_label": "第百八十一条",
       "source_sha256": "e634e562ec395aba454ad4b5358ecefe227f95da305b582c0420482354df2f79",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a181",
+      "korean_title": "제181조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a181-p1",
@@ -15770,10 +16023,12 @@
       "source_order": 971,
       "original_label": "",
       "source_sha256": "96c746124cfb1ab236479016d4228be75f8be7613d88acd597474154f568bb4e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등의 직원이 그 직권을 남용하여 오로지 그 직무 외의 용도로 사용할 목적으로 개인의 비밀에 속하는 사항이 기록된 문서, 도화 또는 전자적·자기적 기록을 수집한 때에는 1년 이하의 구금형 또는 50만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a181-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a182",
@@ -15784,10 +16039,13 @@
       "source_order": 972,
       "original_label": "第百八十二条",
       "source_sha256": "70750160a7b02f0a633ef8bac801d394291822d74448a85903b43b60fd30b9ad",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a182",
+      "korean_title": "제182조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a182-p1",
@@ -15798,10 +16056,12 @@
       "source_order": 973,
       "original_label": "",
       "source_sha256": "a2ee053bcbd4fd59ac76a3df756e0a9142980570fc911e53bdde3f03b7c8dc53",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 각 호의 어느 하나에 해당하는 경우에는 해당 위반행위를 한 자는 50만 엔 이하의 벌금에 처한다.",
+      "markdown_anchor": "main-a182-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a182-p1-i1",
@@ -15812,10 +16072,12 @@
       "source_order": 974,
       "original_label": "一",
       "source_sha256": "1e363459916d029d2573aa8961396b8dfe44271b7b305762489dff87e3842665",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제146조 제1항의 규정에 따른 보고 또는 자료 제출을 하지 않거나 거짓 보고를 하거나 거짓 자료를 제출한 때 또는 해당 직원의 질문에 대하여 답변을 하지 않거나 거짓 답변을 하거나 검사를 거부하거나 방해하거나 기피한 때",
+      "markdown_anchor": "main-a182-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a182-p1-i2",
@@ -15826,10 +16088,12 @@
       "source_order": 975,
       "original_label": "二",
       "source_sha256": "b28805b7cd2ad9c6ad82821da2e9d5ec4aa943dd4dbeb8d877f22a0ab4c82b57",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제153조의 규정에 따른 보고를 하지 않거나 거짓 보고를 한 때",
+      "markdown_anchor": "main-a182-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a183",
@@ -15840,10 +16104,13 @@
       "source_order": 976,
       "original_label": "第百八十三条",
       "source_sha256": "c9de02430c46020a8b6d0aba98aea054bcf691d9763d0e4ece257d6e97e17fd1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a183",
+      "korean_title": "제183조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a183-p1",
@@ -15854,10 +16121,12 @@
       "source_order": 977,
       "original_label": "",
       "source_sha256": "8734b7ae0c9d3064b860a0250c839b0075088dc5721f19eede3207bdd7188596",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제176조, 제177조 및 제179조부터 제181조까지의 규정은 일본 국외에서 이들 조의 죄를 범한 자에게도 적용한다.",
+      "markdown_anchor": "main-a183-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a184",
@@ -15868,10 +16137,13 @@
       "source_order": 978,
       "original_label": "第百八十四条",
       "source_sha256": "3a713877f53554357b0e1e2dd12b37a6910ecc572592fa95c4430f65fbb7c11d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a184",
+      "korean_title": "제184조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a184-p1",
@@ -15882,10 +16154,12 @@
       "source_order": 979,
       "original_label": "",
       "source_sha256": "9f601758b5c2b4d7b30622bd23096a95b10b5cc2cab6821b0c8f3b8c46dc567c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법인의 대표자 또는 법인이나 사람의 대리인, 사용인이나 그 밖의 종업자가 그 법인 또는 사람의 업무에 관하여 다음 각 호에 열거하는 위반행위를 한 때에는 행위자를 처벌하는 외에 그 법인에게는 해당 각 호에서 정하는 벌금형을, 그 사람에게는 각 해당 조의 벌금형을 부과한다.",
+      "markdown_anchor": "main-a184-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a184-p1-i1",
@@ -15896,10 +16170,12 @@
       "source_order": 980,
       "original_label": "一",
       "source_sha256": "a3dae5aa04360df22dfaba24f0cf99b6b2f1bae8c4deeeaf3b32e1e27e8117bd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제178조 및 제179조: 1억 엔 이하의 벌금형",
+      "markdown_anchor": "main-a184-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a184-p1-i2",
@@ -15910,10 +16186,12 @@
       "source_order": 981,
       "original_label": "二",
       "source_sha256": "1d74cbc2f83c52cf368d4dc6b347283d638012ce85fa33af7d4c6c7fa1d89d11",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제182조: 같은 조의 벌금형",
+      "markdown_anchor": "main-a184-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a184-p2",
@@ -15924,10 +16202,12 @@
       "source_order": 982,
       "original_label": "２",
       "source_sha256": "30c7711c6fee56bb4c9c62eb18b1d5fbc678906519decc3b4cea79b6c934ef60",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법인이 아닌 단체에 전항의 규정이 적용되는 경우에는 그 대표자 또는 관리인이 그 소송행위에 관하여 법인이 아닌 단체를 대표하는 외에 법인을 피고인 또는 피의자로 하는 경우의 형사소송에 관한 법률의 규정을 준용한다.",
+      "markdown_anchor": "main-a184-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a185",
@@ -15938,10 +16218,13 @@
       "source_order": 983,
       "original_label": "第百八十五条",
       "source_sha256": "55c941c60b6079446296a3c90f1ebb4b5fff9c14c3756122e541aac09f5d3677",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a185",
+      "korean_title": "제185조",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a185-p1",
@@ -15952,10 +16235,12 @@
       "source_order": 984,
       "original_label": "",
       "source_sha256": "2470cc864c9f36cf20481e1676acfb86d8d07f573289c823f341c6bb5411f57a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 각 호의 어느 하나에 해당하는 자는 10만 엔 이하의 과료에 처한다.",
+      "markdown_anchor": "main-a185-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a185-p1-i1",
@@ -15966,10 +16251,12 @@
       "source_order": 985,
       "original_label": "一",
       "source_sha256": "bd48752b97023e9df4779bddbd4a9f2d96163f9971c318287945b862f186ac13",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제30조 제2항(제31조 제3항에서 준용하는 경우를 포함한다) 또는 제56조의 규정을 위반한 자",
+      "markdown_anchor": "main-a185-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a185-p1-i2",
@@ -15980,10 +16267,12 @@
       "source_order": 986,
       "original_label": "二",
       "source_sha256": "dc5d42834f28cabec731ab6e9813e5ccff0d39dd4f592cc3e3c9d1e3f2b880fd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제51조 제1항의 규정에 따른 신고를 하지 않거나 거짓 신고를 한 자",
+      "markdown_anchor": "main-a185-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a185-p1-i3",
@@ -15994,10 +16283,12 @@
       "source_order": 987,
       "original_label": "三",
       "source_sha256": "000bfa8b4cdb4740ef00f48b66ec010635070935d7219e39005f5ec36a71582c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "거짓이나 그 밖의 부정한 수단으로 제85조 제3항에 규정된 공개결정에 근거한 보유개인정보의 공개를 받은 자",
+      "markdown_anchor": "main-a185-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "suppl1",
