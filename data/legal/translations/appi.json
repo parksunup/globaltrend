@@ -25,13 +25,13 @@
     "status": "partial_draft",
     "human_review_status": "not_started",
     "complete": false,
-    "translated_main_articles": 108,
+    "translated_main_articles": 123,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 58.38,
+    "main_article_coverage_percent": 66.49,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
-    "next_main_article": "109"
+    "next_main_article": "124"
   },
   "coverage": {
     "source_counts": {
@@ -50,10 +50,10 @@
     },
     "draft_counts": {
       "Chapter": 5,
-      "Article": 108,
-      "Paragraph": 268,
-      "Item": 181,
-      "Section": 14,
+      "Article": 123,
+      "Paragraph": 306,
+      "Item": 216,
+      "Section": 15,
       "Subitem1": 16,
       "Subsection": 4,
       "Table": 1,
@@ -64,95 +64,6 @@
     "supplementary_articles": 65,
     "missing_node_ids": [
       "main-c5-s4-ss5",
-      "main-c5-s5",
-      "main-a109",
-      "main-a109-p1",
-      "main-a109-p2",
-      "main-a109-p2-i1",
-      "main-a109-p2-i2",
-      "main-a109-p3",
-      "main-a109-p4",
-      "main-a110",
-      "main-a110-p1",
-      "main-a110-p1-i1",
-      "main-a110-p1-i2",
-      "main-a111",
-      "main-a111-p1",
-      "main-a112",
-      "main-a112-p1",
-      "main-a112-p2",
-      "main-a112-p2-i1",
-      "main-a112-p2-i2",
-      "main-a112-p2-i3",
-      "main-a112-p2-i4",
-      "main-a112-p2-i5",
-      "main-a112-p2-i6",
-      "main-a112-p2-i7",
-      "main-a112-p2-i8",
-      "main-a112-p3",
-      "main-a112-p3-i1",
-      "main-a112-p3-i2",
-      "main-a113",
-      "main-a113-p1",
-      "main-a113-p1-i1",
-      "main-a113-p1-i2",
-      "main-a113-p1-i3",
-      "main-a113-p1-i4",
-      "main-a113-p1-i5",
-      "main-a113-p1-i6",
-      "main-a114",
-      "main-a114-p1",
-      "main-a114-p1-i1",
-      "main-a114-p1-i2",
-      "main-a114-p1-i3",
-      "main-a114-p1-i4",
-      "main-a114-p1-i5",
-      "main-a114-p1-i6",
-      "main-a114-p1-i7",
-      "main-a114-p2",
-      "main-a114-p2-i1",
-      "main-a114-p2-i2",
-      "main-a114-p3",
-      "main-a115",
-      "main-a115-p1",
-      "main-a116",
-      "main-a116-p1",
-      "main-a116-p2",
-      "main-a117",
-      "main-a117-p1",
-      "main-a117-p1-i1",
-      "main-a117-p1-i2",
-      "main-a117-p1-i3",
-      "main-a118",
-      "main-a118-p1",
-      "main-a118-p2",
-      "main-a119",
-      "main-a119-p1",
-      "main-a119-p2",
-      "main-a119-p3",
-      "main-a119-p4",
-      "main-a119-p5",
-      "main-a119-p6",
-      "main-a119-p7",
-      "main-a119-p8",
-      "main-a119-p9",
-      "main-a119-p10",
-      "main-a120",
-      "main-a120-p1",
-      "main-a120-p1-i1",
-      "main-a120-p1-i2",
-      "main-a120-p1-i3",
-      "main-a121",
-      "main-a121-p1",
-      "main-a121-p2",
-      "main-a121-p3",
-      "main-a122",
-      "main-a122-p1",
-      "main-a123",
-      "main-a123-p1",
-      "main-a123-p2",
-      "main-a123-p3",
-      "main-a123-p4",
       "main-c5-s6",
       "main-a124",
       "main-a124-p1",
@@ -864,7 +775,7 @@
         "first_article": "60",
         "last_article": "129",
         "total_articles": 70,
-        "drafted_articles": 49,
+        "drafted_articles": 64,
         "heading_translated": true,
         "all_nodes_drafted": false,
         "human_review_status": "not_started"
@@ -974,9 +885,9 @@
         "first_article": "109",
         "last_article": "123",
         "total_articles": 15,
-        "drafted_articles": 0,
-        "heading_translated": false,
-        "all_nodes_drafted": false,
+        "drafted_articles": 15,
+        "heading_translated": true,
+        "all_nodes_drafted": true,
         "human_review_status": "not_started"
       },
       {
@@ -11619,10 +11530,13 @@
       "source_order": 682,
       "original_label": "第五節　行政機関等匿名加工情報の提供等",
       "source_sha256": "82882a5d4ef654b2d255cceb0e2dc9444bf6bd731016be2d03b54517b5151511",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-c5-s5",
+      "korean_title": "제5절 행정기관등익명가공정보의 제공 등",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109",
@@ -11633,10 +11547,13 @@
       "source_order": 683,
       "original_label": "第百九条",
       "source_sha256": "c34e168bf9f607f9573697b83fa143c442c59e91909adc243ba672414fbe1296",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a109",
+      "korean_title": "제109조 (행정기관등익명가공정보의 작성 및 제공 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p1",
@@ -11647,10 +11564,12 @@
       "source_order": 684,
       "original_label": "",
       "source_sha256": "f938605f9d425ae8a595fd9b813fa9773cbb4fdb9e81a7965ac14d98eb9e394b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 이 절의 규정에 따라 행정기관등익명가공정보(행정기관등익명가공정보파일을 구성하는 것에 한정한다. 이하 이 절에서 같다)를 작성할 수 있다.",
+      "markdown_anchor": "main-a109-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p2",
@@ -11661,10 +11580,12 @@
       "source_order": 685,
       "original_label": "２",
       "source_sha256": "c4d1c6fef2864bce800a5e5b3e1db6fd90f9d48f7a07eb985810dc3c97a50757",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 다음 각 호의 어느 하나에 해당하는 경우를 제외하고는 행정기관등익명가공정보를 제공해서는 안 된다.",
+      "markdown_anchor": "main-a109-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p2-i1",
@@ -11675,10 +11596,12 @@
       "source_order": 686,
       "original_label": "一",
       "source_sha256": "9d513b2466db0bfa09d1f39c2ad9d11b996ae5950fe5be55cfddc8cc23441a42",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법령에 근거한 경우(이 절의 규정에 따르는 경우를 포함한다)",
+      "markdown_anchor": "main-a109-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p2-i2",
@@ -11689,10 +11612,12 @@
       "source_order": 687,
       "original_label": "二",
       "source_sha256": "115d9ca1df1482e9dd7c8c2d3e77fa7255fe77c5f9ef0ae5dfcd4b24488884eb",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "보유개인정보를 이용목적을 위하여 제3자에게 제공할 수 있는 경우에 해당 보유개인정보를 가공하여 작성한 행정기관등익명가공정보를 해당 제3자에게 제공하는 때",
+      "markdown_anchor": "main-a109-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p3",
@@ -11703,10 +11628,12 @@
       "source_order": 688,
       "original_label": "３",
       "source_sha256": "27c131bd625307a7d7bc7dfb7ef9c0b18314b23e58cf1276def85360f75b9343",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제69조의 규정에도 불구하고 행정기관의 장 등은 법령에 근거한 경우를 제외하고는 이용목적 외의 목적을 위하여 삭제정보(보유개인정보에 해당하는 것에 한정한다)를 직접 이용하거나 제공해서는 안 된다.",
+      "markdown_anchor": "main-a109-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a109-p4",
@@ -11717,10 +11644,12 @@
       "source_order": 689,
       "original_label": "４",
       "source_sha256": "018a1819a739d0cf4136f87192b36c3447d7f4568353a79cd19bbf6e3b3ef0c0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 ‘삭제정보’란 행정기관등익명가공정보의 작성에 사용한 보유개인정보에서 삭제한 기술 등 및 개인식별부호를 말한다.",
+      "markdown_anchor": "main-a109-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a110",
@@ -11731,10 +11660,13 @@
       "source_order": 690,
       "original_label": "第百十条",
       "source_sha256": "6ebd50e2eec0ed2efea6e9b72c8a16289dad2a8f16583457e80256cc274551ab",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a110",
+      "korean_title": "제110조 (제안 모집에 관한 사항의 개인정보파일부 기재)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a110-p1",
@@ -11745,10 +11677,12 @@
       "source_order": 691,
       "original_label": "",
       "source_sha256": "e59d21be261bbe5557ffa534d90e17480e6cad1613916c438890ea57cd34c905",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 해당 행정기관의 장 등이 속한 행정기관 등이 보유하고 있는 개인정보파일이 제60조 제3항 각 호의 모두에 해당한다고 인정하는 때에는 해당 개인정보파일에 대해서는 개인정보파일부에 다음에 열거하는 사항을 기재하여야 한다. 이 경우 해당 개인정보파일에 대한 제75조 제1항의 규정을 적용할 때에는 같은 항 중 ‘제10호’는 ‘제10호 및 제110조 각 호’로 한다.",
+      "markdown_anchor": "main-a110-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a110-p1-i1",
@@ -11759,10 +11693,12 @@
       "source_order": 692,
       "original_label": "一",
       "source_sha256": "424ddd41c4df4eeb538d3445ed8a3967ac6eedf1a8c31a6ec8ff36d65e2090d8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제1항의 제안을 모집하는 개인정보파일이라는 취지",
+      "markdown_anchor": "main-a110-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a110-p1-i2",
@@ -11773,10 +11709,12 @@
       "source_order": 693,
       "original_label": "二",
       "source_sha256": "9ac3e99de366507f11e59b962ece88d25f199c55ce4d618b77c2d45846ebe9cf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제1항의 제안을 받는 조직의 명칭 및 소재지",
+      "markdown_anchor": "main-a110-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a111",
@@ -11787,10 +11725,13 @@
       "source_order": 694,
       "original_label": "第百十一条",
       "source_sha256": "6ed5469707e27d6b9c5f430b015a6116f3ae7d545815609d98d4b8255988f82c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a111",
+      "korean_title": "제111조 (제안의 모집)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a111-p1",
@@ -11801,10 +11742,12 @@
       "source_order": 695,
       "original_label": "",
       "source_sha256": "46f1de2a5daa0dfbe4b293d3e73441ae8cf825d7c33725e05acd880a51f1c35f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 개인정보보호위원회 규칙으로 정하는 바에 따라 정기적으로 해당 행정기관의 장 등이 속한 행정기관 등이 보유하고 있는 개인정보파일(개인정보파일부에 전조 제1호에 열거하는 사항이 기재되어 있는 것에 한정한다. 이하 이 절에서 같다)에 대하여 다음 조 제1항의 제안을 모집하여야 한다.",
+      "markdown_anchor": "main-a111-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112",
@@ -11815,10 +11758,13 @@
       "source_order": 696,
       "original_label": "第百十二条",
       "source_sha256": "2f38affbed33aa9b5a6e8caf77d09df5eb88b72673037af25617ed373436c2b2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a112",
+      "korean_title": "제112조 (행정기관등익명가공정보를 사용하여 수행하는 사업에 관한 제안)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p1",
@@ -11829,10 +11775,12 @@
       "source_order": 697,
       "original_label": "",
       "source_sha256": "40a7220311eb9367a2879faa57310046ac345af5658e091d6c727279711f570d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조의 규정에 따른 모집에 응하여 개인정보파일을 구성하는 보유개인정보를 가공하여 작성하는 행정기관등익명가공정보를 그 사업에 사용하려는 자는 행정기관의 장 등에게 해당 사업에 관한 제안을 할 수 있다.",
+      "markdown_anchor": "main-a112-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2",
@@ -11843,10 +11791,12 @@
       "source_order": 698,
       "original_label": "２",
       "source_sha256": "bd70e513951cce76eed07c4ab45487865f9c609329a398f491b9cb2b51a18c8e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 제안은 개인정보보호위원회 규칙으로 정하는 바에 따라 다음에 열거하는 사항을 기재한 서면을 행정기관의 장 등에게 제출하여 하여야 한다.",
+      "markdown_anchor": "main-a112-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i1",
@@ -11857,10 +11807,12 @@
       "source_order": 699,
       "original_label": "一",
       "source_sha256": "a4b177ad2b554ea3a8be7f8103a0a457040e80484981299532bb23313baebced",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안하는 자의 성명 또는 명칭 및 주소 또는 거소와 법인이나 그 밖의 단체인 경우 그 대표자의 성명",
+      "markdown_anchor": "main-a112-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i2",
@@ -11871,10 +11823,12 @@
       "source_order": 700,
       "original_label": "二",
       "source_sha256": "019c82a7602489f02ee09f398f62e92d184ed73c04827d11a36fb26aa156820e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안에 관련된 개인정보파일의 명칭",
+      "markdown_anchor": "main-a112-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i3",
@@ -11885,10 +11839,12 @@
       "source_order": 701,
       "original_label": "三",
       "source_sha256": "8aecffeacbdbb5f85e83464f588a1441aa54ff01ef9da6e9aab6d7c5faa16cd7",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안에 관련된 행정기관등익명가공정보의 본인의 수",
+      "markdown_anchor": "main-a112-p2-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i4",
@@ -11899,10 +11855,12 @@
       "source_order": 702,
       "original_label": "四",
       "source_sha256": "94d4fe3bbc3214e1c3950d3229bc4a50622bb6b8109db85fdfe3cc42c8a6f452",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전호에 열거하는 것 외에 제안에 관련된 행정기관등익명가공정보의 작성에 사용하는 제116조 제1항의 규정에 따른 가공 방법을 특정하기에 충분한 사항",
+      "markdown_anchor": "main-a112-p2-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i5",
@@ -11913,10 +11871,12 @@
       "source_order": 703,
       "original_label": "五",
       "source_sha256": "aa06bcfb3567bfaf9782d181828e90b05efadd15370660fbc042ea7d91dd657b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안에 관련된 행정기관등익명가공정보의 이용목적 및 방법과 그 밖에 해당 행정기관등익명가공정보를 사용하는 사업의 내용",
+      "markdown_anchor": "main-a112-p2-i5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i6",
@@ -11927,10 +11887,12 @@
       "source_order": 704,
       "original_label": "六",
       "source_sha256": "0cda948a9fcac21556c804abb1345f1c666683dde0a5705dfa536884c8752e78",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안에 관련된 행정기관등익명가공정보를 전호의 사업에 사용하려는 기간",
+      "markdown_anchor": "main-a112-p2-i6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i7",
@@ -11941,10 +11903,12 @@
       "source_order": 705,
       "original_label": "七",
       "source_sha256": "9be3dae522e6cd692d4b32657bcead5713efda153dd14201d48283dcf41caf27",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제안에 관련된 행정기관등익명가공정보의 유출 방지와 그 밖에 해당 행정기관등익명가공정보의 적절한 관리를 위하여 취하는 조치",
+      "markdown_anchor": "main-a112-p2-i7",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p2-i8",
@@ -11955,10 +11919,12 @@
       "source_order": 706,
       "original_label": "八",
       "source_sha256": "bf23ae84a53f117cf21d43025cae73d2de720eb9ebddaa2627f4602e8e543492",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 호에 열거하는 것 외에 개인정보보호위원회 규칙으로 정하는 사항",
+      "markdown_anchor": "main-a112-p2-i8",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p3",
@@ -11969,10 +11935,12 @@
       "source_order": 707,
       "original_label": "３",
       "source_sha256": "2a5fb7d129a51f6c0f2c629d52ef5dbc4cad498a926279f4ec331dbb07fc5ba5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 서면에는 다음에 열거하는 서면과 그 밖에 개인정보보호위원회 규칙으로 정하는 서류를 첨부하여야 한다.",
+      "markdown_anchor": "main-a112-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p3-i1",
@@ -11983,10 +11951,12 @@
       "source_order": 708,
       "original_label": "一",
       "source_sha256": "bc30d3561a6ad446e6c6ea031335eae630e2beb0b92ddbeafbccac0f23aa7c3d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제1항의 제안을 하는 자가 다음 조 각 호의 어느 것에도 해당하지 않는다는 것을 서약하는 서면",
+      "markdown_anchor": "main-a112-p3-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a112-p3-i2",
@@ -11997,10 +11967,12 @@
       "source_order": 709,
       "original_label": "二",
       "source_sha256": "35efe52e02d59bdafccbe79d18a96ab7791d54c9c782dc138e9e62e5002f027e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항 제5호의 사업이 새로운 산업의 창출 또는 활력 있는 경제사회의 실현이나 풍요로운 국민생활의 실현에 이바지하는 것임을 밝히는 서면",
+      "markdown_anchor": "main-a112-p3-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113",
@@ -12011,10 +11983,13 @@
       "source_order": 710,
       "original_label": "第百十三条",
       "source_sha256": "e13b9395e75c1804cd4b39b15172f6df75325313ed35d9331ad6174e7c41a7a1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a113",
+      "korean_title": "제113조 (결격사유)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1",
@@ -12025,10 +12000,12 @@
       "source_order": 711,
       "original_label": "",
       "source_sha256": "20fbdf309b60d24bae8a3d7612a7c7284db90f9e145064577a2b304c578649fc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 각 호의 어느 하나에 해당하는 자는 전조 제1항의 제안을 할 수 없다.",
+      "markdown_anchor": "main-a113-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i1",
@@ -12039,10 +12016,12 @@
       "source_order": 712,
       "original_label": "一",
       "source_sha256": "367276599d73be9ee18df17cc5ec492afea2d6fb1e215b67627e11412c183fb8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "미성년자",
+      "markdown_anchor": "main-a113-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i2",
@@ -12053,10 +12032,12 @@
       "source_order": 713,
       "original_label": "二",
       "source_sha256": "95c660fd4d7e236aa61afe5caf3f4c4599b1d1e8e21e0426884d55ec74e553a3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "심신의 장애로 인하여 전조 제1항의 제안에 관련된 행정기관등익명가공정보를 사용하여 수행하는 사업을 적정하게 수행할 수 없는 자로서 개인정보보호위원회 규칙으로 정하는 자",
+      "markdown_anchor": "main-a113-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i3",
@@ -12067,10 +12048,12 @@
       "source_order": 714,
       "original_label": "三",
       "source_sha256": "dbbfab867dab3b565d22f4efe02ab41c4954092ce1a66f546e8c808d73d3f140",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "파산절차 개시 결정을 받고 복권되지 않은 자",
+      "markdown_anchor": "main-a113-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i4",
@@ -12081,10 +12064,12 @@
       "source_order": 715,
       "original_label": "四",
       "source_sha256": "7b95287693f7feecaeca53712ce9e18b72b45d39b4eb28a656f753b9c0ef97bc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "구금형 이상의 형에 처해지거나 이 법률의 규정에 따라 형에 처해지고 그 집행을 마치거나 집행을 받지 않게 된 날부터 기산하여 2년이 경과하지 않은 자",
+      "markdown_anchor": "main-a113-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i5",
@@ -12095,10 +12080,12 @@
       "source_order": 716,
       "original_label": "五",
       "source_sha256": "902e3abb18a57e0223bedb8f7c86ab9615e4ac352bd6e1a45e9ab13083c74ad2",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제120조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약이 해제되고 그 해제일부터 기산하여 2년이 경과하지 않은 자",
+      "markdown_anchor": "main-a113-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a113-p1-i6",
@@ -12109,10 +12096,12 @@
       "source_order": 717,
       "original_label": "六",
       "source_sha256": "0aa08c040b035e9b6003f7c94f42090a42de703e649fb251dc0c7c53a3131c9e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "법인이나 그 밖의 단체로서 그 임원 중에 앞의 각 호의 어느 하나에 해당하는 자가 있는 것",
+      "markdown_anchor": "main-a113-p1-i6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114",
@@ -12123,10 +12112,13 @@
       "source_order": 718,
       "original_label": "第百十四条",
       "source_sha256": "b85abd3c98ff2fdbfcc4920aa15def6e15cae969eef430a081a1f54e6f73aca4",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a114",
+      "korean_title": "제114조 (제안의 심사 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1",
@@ -12137,10 +12129,12 @@
       "source_order": 719,
       "original_label": "",
       "source_sha256": "eaaca8c310c7857015df0df31ce03583b8bc0a4b254637bc98e7aa263fa75e1d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 제112조 제1항의 제안이 있는 때에는 해당 제안이 다음에 열거하는 기준에 적합한지를 심사하여야 한다.",
+      "markdown_anchor": "main-a114-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i1",
@@ -12151,10 +12145,12 @@
       "source_order": 720,
       "original_label": "一",
       "source_sha256": "7d0d091042717693a26f8b30f1fc28139287153095fc182ead4c55d820a3a79b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제1항의 제안을 한 자가 전조 각 호의 어느 것에도 해당하지 않을 것",
+      "markdown_anchor": "main-a114-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i2",
@@ -12165,10 +12161,12 @@
       "source_order": 721,
       "original_label": "二",
       "source_sha256": "bd11315bc1ec0463740d570cd31aaf9000edfe2950f7620c68b095eba489c75b",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 제3호의 제안에 관련된 행정기관등익명가공정보의 본인의 수가 행정기관등익명가공정보의 효과적인 활용이라는 관점에서 볼 때 개인정보보호위원회 규칙으로 정하는 수 이상이고, 또한 제안에 관련된 개인정보파일을 구성하는 보유개인정보의 본인의 수 이하일 것",
+      "markdown_anchor": "main-a114-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i3",
@@ -12179,10 +12177,12 @@
       "source_order": 722,
       "original_label": "三",
       "source_sha256": "b206f2d94e80bd2dfd65e8e4b2afdbc7da6040ade2dc9967c18dc0d17b2e2447",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 제3호 및 제4호에 열거하는 사항에 따라 특정되는 가공 방법이 제116조 제1항의 기준에 적합한 것일 것",
+      "markdown_anchor": "main-a114-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i4",
@@ -12193,10 +12193,12 @@
       "source_order": 723,
       "original_label": "四",
       "source_sha256": "8b88f87450d799e6255f62209758a8b111e2bdb0f964d58bad0b2560713c305d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 제5호의 사업이 새로운 산업의 창출 또는 활력 있는 경제사회의 실현이나 풍요로운 국민생활의 실현에 이바지하는 것일 것",
+      "markdown_anchor": "main-a114-p1-i4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i5",
@@ -12207,10 +12209,12 @@
       "source_order": 724,
       "original_label": "五",
       "source_sha256": "a7765f839489c46dcbe6fbb527e62880b9b1de56799d65b8184e07cfec331aa1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 제6호의 기간이 행정기관등익명가공정보의 효과적인 활용이라는 관점에서 볼 때 개인정보보호위원회 규칙으로 정하는 기간을 초과하지 않는 것일 것",
+      "markdown_anchor": "main-a114-p1-i5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i6",
@@ -12221,10 +12225,12 @@
       "source_order": 725,
       "original_label": "六",
       "source_sha256": "3142c3a3222f5b2c4b79cccea8bb20e18365aee7aae13348d62dfd43588adef8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 제5호의 제안에 관련된 행정기관등익명가공정보의 이용목적 및 방법과 같은 항 제7호의 조치가 해당 행정기관등익명가공정보의 본인의 권리이익을 보호하기에 적절한 것일 것",
+      "markdown_anchor": "main-a114-p1-i6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p1-i7",
@@ -12235,10 +12241,12 @@
       "source_order": 726,
       "original_label": "七",
       "source_sha256": "8d1d17f83499788eee51b0a0bbec989ebc7cdade62f36448b91ff9f37a14a7a3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 각 호에 열거하는 것 외에 개인정보보호위원회 규칙으로 정하는 기준에 적합한 것일 것",
+      "markdown_anchor": "main-a114-p1-i7",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p2",
@@ -12249,10 +12257,12 @@
       "source_order": 727,
       "original_label": "２",
       "source_sha256": "b6b3fdc7570c27426ebd270775ee886d41ecb5a3e4e52d098689a5a30d5ff9c6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 전항의 규정에 따라 심사한 결과 제112조 제1항의 제안이 전항 각 호에 열거하는 기준의 모두에 적합하다고 인정하는 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 제안을 한 자에게 다음에 열거하는 사항을 통지하여야 한다.",
+      "markdown_anchor": "main-a114-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p2-i1",
@@ -12263,10 +12273,12 @@
       "source_order": 728,
       "original_label": "一",
       "source_sha256": "375d65041c96ac6a20abb938da1f77e1a6b489bbcdf56f822ef509b3d45c55c1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 조의 규정에 따라 행정기관의 장 등과 행정기관등익명가공정보의 이용에 관한 계약을 체결할 수 있다는 취지",
+      "markdown_anchor": "main-a114-p2-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p2-i2",
@@ -12277,10 +12289,12 @@
       "source_order": 729,
       "original_label": "二",
       "source_sha256": "dbac56af2cf3da715d8fcb2d9a8f463ba707fb462d7cf247581fca75f3831f75",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전호에 열거하는 것 외에 개인정보보호위원회 규칙으로 정하는 사항",
+      "markdown_anchor": "main-a114-p2-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a114-p3",
@@ -12291,10 +12305,12 @@
       "source_order": 730,
       "original_label": "３",
       "source_sha256": "ddce6173c1f8273bed1d6c31e2bbc6255c69c70b2f04d2d1a25f3f1bcd52f6da",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 제1항의 규정에 따라 심사한 결과 제112조 제1항의 제안이 제1항 각 호에 열거하는 기준의 어느 하나에 적합하지 않다고 인정하는 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 제안을 한 자에게 이유를 붙여 그 취지를 통지하여야 한다.",
+      "markdown_anchor": "main-a114-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a115",
@@ -12305,10 +12321,13 @@
       "source_order": 731,
       "original_label": "第百十五条",
       "source_sha256": "5b7ff6d88c303f2a14681bcdbc330f0fb323591438d7ebca9a814be4c65b0c00",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a115",
+      "korean_title": "제115조 (행정기관등익명가공정보의 이용에 관한 계약의 체결)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a115-p1",
@@ -12319,10 +12338,12 @@
       "source_order": 732,
       "original_label": "",
       "source_sha256": "fb3adbe6bad9f0a3786bfe8462de9385739778cbe7600406b1470937cb57dbcf",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 제2항의 규정에 따른 통지를 받은 자는 개인정보보호위원회 규칙으로 정하는 바에 따라 행정기관의 장 등과 행정기관등익명가공정보의 이용에 관한 계약을 체결할 수 있다.",
+      "markdown_anchor": "main-a115-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a116",
@@ -12333,10 +12354,13 @@
       "source_order": 733,
       "original_label": "第百十六条",
       "source_sha256": "c6f9a4107040bd1707922bb39239f4f42097ce99949eb76b075d2be3c72e4366",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a116",
+      "korean_title": "제116조 (행정기관등익명가공정보의 작성 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a116-p1",
@@ -12347,10 +12371,12 @@
       "source_order": 734,
       "original_label": "",
       "source_sha256": "a50b25c8f5b346925440d4a385304f1090a03c61920687fd22b9d34bc044850c",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성하는 때에는 특정 개인을 식별할 수 없도록 하고 그 작성에 사용하는 보유개인정보를 복원할 수 없도록 하기 위하여 필요한 것으로서 개인정보보호위원회 규칙으로 정하는 기준에 따라 해당 보유개인정보를 가공하여야 한다.",
+      "markdown_anchor": "main-a116-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a116-p2",
@@ -12361,10 +12387,12 @@
       "source_order": 735,
       "original_label": "２",
       "source_sha256": "5a2d0625af94bef4e3674ed98aebfd23af6799a98c93096805173e786368777d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 규정은 행정기관 등으로부터 행정기관등익명가공정보의 작성 위탁(2개 이상의 단계에 걸친 위탁을 포함한다)을 받은 자가 수탁한 업무를 수행하는 경우에 준용한다.",
+      "markdown_anchor": "main-a116-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a117",
@@ -12375,10 +12403,13 @@
       "source_order": 736,
       "original_label": "第百十七条",
       "source_sha256": "ea8e772ebccddea29a36d723a2037564afe38e32f622e36461f267cb7e0196f8",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a117",
+      "korean_title": "제117조 (행정기관등익명가공정보에 관한 사항의 개인정보파일부 기재)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a117-p1",
@@ -12389,10 +12420,12 @@
       "source_order": 737,
       "original_label": "",
       "source_sha256": "7b0c4ad3a307f1406f652a7a55f036343bd99351e41d1497ca9e4f8afbca7cec",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성한 때에는 해당 행정기관등익명가공정보의 작성에 사용한 보유개인정보를 포함하는 개인정보파일에 대해서는 개인정보파일부에 다음에 열거하는 사항을 기재하여야 한다. 이 경우 해당 개인정보파일에 대한 제110조의 규정에 따라 바꾸어 읽어 적용하는 제75조 제1항의 규정을 적용할 때에는 같은 항 중 ‘및 제110조 각 호’는 ‘, 제110조 각 호 및 제117조 각 호’로 한다.",
+      "markdown_anchor": "main-a117-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a117-p1-i1",
@@ -12403,10 +12436,12 @@
       "source_order": 738,
       "original_label": "一",
       "source_sha256": "c3c10d869df558904ed0b52de715f9839e84d2bec5477ad6874c74d39a662d97",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관등익명가공정보의 개요로서 개인정보보호위원회 규칙으로 정하는 사항",
+      "markdown_anchor": "main-a117-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a117-p1-i2",
@@ -12417,10 +12452,12 @@
       "source_order": 739,
       "original_label": "二",
       "source_sha256": "b25754b07917fcfc23a892805bce184c63b7d628ccf5c992c2fb12144ff2df27",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 조 제1항의 제안을 받는 조직의 명칭 및 소재지",
+      "markdown_anchor": "main-a117-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a117-p1-i3",
@@ -12431,10 +12468,12 @@
       "source_order": 740,
       "original_label": "三",
       "source_sha256": "ef7c2e2b7d4b1237a2d075912a7057b4e0ed8d6f9959a515d9dc36b11e4ecacc",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "다음 조 제1항의 제안을 할 수 있는 기간",
+      "markdown_anchor": "main-a117-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a118",
@@ -12445,10 +12484,13 @@
       "source_order": 741,
       "original_label": "第百十八条",
       "source_sha256": "9bf17ab3a0ca7edd638ce7c05eb387929fe812db1ddd0a180e498ec02d303475",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a118",
+      "korean_title": "제118조 (작성된 행정기관등익명가공정보를 사용하여 수행하는 사업에 관한 제안 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a118-p1",
@@ -12459,10 +12501,12 @@
       "source_order": 742,
       "original_label": "",
       "source_sha256": "e85b65ae8035f171b999b41962e64997a5474c50e561fd8e41b180109761ac3a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조의 규정에 따라 개인정보파일부에 같은 조 제1호에 열거하는 사항이 기재된 행정기관등익명가공정보를 그 사업에 사용하려는 자는 행정기관의 장 등에게 해당 사업에 관한 제안을 할 수 있다. 해당 행정기관등익명가공정보에 대하여 제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 체결한 자가 해당 행정기관등익명가공정보를 사용하는 사업을 변경하려는 때에도 같다.",
+      "markdown_anchor": "main-a118-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a118-p2",
@@ -12473,10 +12517,12 @@
       "source_order": 743,
       "original_label": "２",
       "source_sha256": "cc1a07ae0d4d0061469db5d5f0a1845e660ee5e45eb09fdde30dbbe8bf3f098d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제112조 제2항 및 제3항과 제113조부터 제115조까지의 규정은 전항의 제안에 준용한다. 이 경우 제112조 제2항 중 ‘다음에’는 ‘제1호 및 제4호부터 제8호까지에’로, 같은 항 제4호 중 ‘전호에 열거하는 것 외에 제안’은 ‘제안’으로, ‘의 작성에 사용하는 제116조 제1항의 규정에 따른 가공 방법을 특정하기’는 ‘를 특정하기’로, 같은 항 제8호 중 ‘앞의 각 호’는 ‘제1호 및 제4호부터 전호까지’로, 제114조 제1항 중 ‘다음에’는 ‘제1호 및 제4호부터 제7호까지에’로, 같은 항 제7호 중 ‘앞의 각 호’는 ‘제1호 및 앞의 3개 호’로, 같은 조 제2항 중 ‘전항 각 호’는 ‘전항 제1호 및 제4호부터 제7호까지’로, 같은 조 제3항 중 ‘제1항 각 호’는 ‘제1항 제1호 및 제4호부터 제7호까지’로 바꾸어 읽어야 한다.",
+      "markdown_anchor": "main-a118-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119",
@@ -12487,10 +12533,13 @@
       "source_order": 744,
       "original_label": "第百十九条",
       "source_sha256": "dfa54c7ec886b329a13422695ffd2911bd72bd52e77f48ea3df92c305da0e89f",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a119",
+      "korean_title": "제119조 (수수료)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p1",
@@ -12501,10 +12550,12 @@
       "source_order": 745,
       "original_label": "",
       "source_sha256": "5b96e0b841378f4e8a08eebaefdb1c59bb574302fcdd3ef6e475956de77dbfb3",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 행정기관의 장과 체결하는 자는 정령으로 정하는 바에 따라 실비를 감안하여 정령으로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p2",
@@ -12515,10 +12566,12 @@
       "source_order": 746,
       "original_label": "２",
       "source_sha256": "1cb47ae4ed65bf5cdd94ad784e6a03a62230a003c0dbdcdb61a36ded335611c9",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 제2항에서 준용하는 제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 행정기관의 장과 체결하는 자는 정령으로 정하는 바에 따라 전항의 정령으로 정하는 금액을 참작하여 정령으로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p3",
@@ -12529,10 +12582,12 @@
       "source_order": 747,
       "original_label": "３",
       "source_sha256": "fe16edf2db0d7d916449141f150610e3010ab1fa256380291e6121e020b71def",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 지방공공단체의 기관과 체결하는 자는 조례로 정하는 바에 따라 실비를 감안하여 정령으로 정하는 금액을 표준으로 하여 조례로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p4",
@@ -12543,10 +12598,12 @@
       "source_order": 748,
       "original_label": "４",
       "source_sha256": "a9ce8a9396d786b246b0a64664c4f27aa7444d32f051e1d622f12bd05f9bd9c6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전조 제2항에서 준용하는 제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 지방공공단체의 기관과 체결하는 자는 조례로 정하는 바에 따라 전항의 정령으로 정하는 금액을 참작하여 정령으로 정하는 금액을 표준으로 하여 조례로 정하는 금액의 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p5",
@@ -12557,10 +12614,12 @@
       "source_order": 749,
       "original_label": "５",
       "source_sha256": "e6b71e635508334d6c6601a06a61bdf5955f06f06f852fa49a5f01c14c119fb6",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제115조의 규정(전조 제2항에서 준용하는 경우를 포함한다. 제8항 및 다음 조에서 같다)에 따라 행정기관등익명가공정보의 이용에 관한 계약을 독립행정법인 등과 체결하는 자는 독립행정법인 등이 정하는 바에 따라 이용료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p5",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p6",
@@ -12571,10 +12630,12 @@
       "source_order": 750,
       "original_label": "６",
       "source_sha256": "dece3ab6f6ddc4fd0de1a8d32c167c86b1ec9d6c0fed4e9a7beadb312908cbe5",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 이용료 금액은 실비를 감안하여 합리적이라고 인정되는 범위 내에서 독립행정법인 등이 정한다.",
+      "markdown_anchor": "main-a119-p6",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p7",
@@ -12585,10 +12646,12 @@
       "source_order": 751,
       "original_label": "７",
       "source_sha256": "1583b3750b2e7659647c2a4396fb1021e4e218c29ed16018e60616f2faad17a0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "독립행정법인 등은 앞의 두 항의 규정에 따른 정함을 일반의 열람에 제공하여야 한다.",
+      "markdown_anchor": "main-a119-p7",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p8",
@@ -12599,10 +12662,12 @@
       "source_order": 752,
       "original_label": "８",
       "source_sha256": "b47b1b898a95b8d53144873a9a94c1aaf46d5417ae06d1968054cef73377fe79",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 지방독립행정법인과 체결하는 자는 지방독립행정법인이 정하는 바에 따라 수수료를 납부하여야 한다.",
+      "markdown_anchor": "main-a119-p8",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p9",
@@ -12613,10 +12678,12 @@
       "source_order": 753,
       "original_label": "９",
       "source_sha256": "3bb7af1eb676f7d0b4cc89f5dad7bbe569ca2986f2f8f2ef3c0746bbe7c3af37",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "전항의 수수료 금액은 실비를 감안하고 또한 제3항 또는 제4항의 조례로 정하는 수수료 금액을 참작하여 지방독립행정법인이 정한다.",
+      "markdown_anchor": "main-a119-p9",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a119-p10",
@@ -12627,10 +12694,12 @@
       "source_order": 754,
       "original_label": "１０",
       "source_sha256": "7d496508e3e34c0a314e2115d42cdda75e92590e8a08be36af73aea85cc8fe32",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "지방독립행정법인은 앞의 두 항의 규정에 따른 정함을 일반의 열람에 제공하여야 한다.",
+      "markdown_anchor": "main-a119-p10",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a120",
@@ -12641,10 +12710,13 @@
       "source_order": 755,
       "original_label": "第百二十条",
       "source_sha256": "d70c5a3eb9c245312f5ee4cf974eea4ae95b0c4fa4717c95a872d8114998e55d",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a120",
+      "korean_title": "제120조 (행정기관등익명가공정보의 이용에 관한 계약의 해제)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a120-p1",
@@ -12655,10 +12727,12 @@
       "source_order": 756,
       "original_label": "",
       "source_sha256": "a09c3a4dcd511d6cce7f2635e5b07e603301c98ccf34681a1c585f007ede0483",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 제115조의 규정에 따라 행정기관등익명가공정보의 이용에 관한 계약을 체결한 자가 다음 각 호의 어느 하나에 해당하는 때에는 해당 계약을 해제할 수 있다.",
+      "markdown_anchor": "main-a120-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a120-p1-i1",
@@ -12669,10 +12743,12 @@
       "source_order": 757,
       "original_label": "一",
       "source_sha256": "8b53852e9f066ff9cc37ab9cbc6ddf9349843ee57f3c1bc572d32d85c7169a23",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "거짓이나 그 밖의 부정한 수단으로 해당 계약을 체결한 때",
+      "markdown_anchor": "main-a120-p1-i1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a120-p1-i2",
@@ -12683,10 +12759,12 @@
       "source_order": 758,
       "original_label": "二",
       "source_sha256": "6b301a73611b9d70744a9d30a3f97cf2b6ad60b36ff9ba60f027d2801e2c8e11",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "제113조 각 호(제118조 제2항에서 준용하는 경우를 포함한다)의 어느 하나에 해당하게 된 때",
+      "markdown_anchor": "main-a120-p1-i2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a120-p1-i3",
@@ -12697,10 +12775,12 @@
       "source_order": 759,
       "original_label": "三",
       "source_sha256": "66416a92a87898038532593a6c1a150b0f6bca533b6fa030beae69950d90093a",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "해당 계약에서 정한 사항에 대하여 중대한 위반이 있었던 때",
+      "markdown_anchor": "main-a120-p1-i3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a121",
@@ -12711,10 +12791,13 @@
       "source_order": 760,
       "original_label": "第百二十一条",
       "source_sha256": "037d55110cfaf029454819177bf7a2b02fae15d9dd200f54d58201b8b46aa6a0",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a121",
+      "korean_title": "제121조 (식별행위의 금지 등)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a121-p1",
@@ -12725,10 +12808,12 @@
       "source_order": 761,
       "original_label": "",
       "source_sha256": "9fe65f2965fa19e4b6d47a90afbd815631314c6274f119024894300822f61978",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 취급할 때에는 법령에 근거한 경우를 제외하고는 해당 행정기관등익명가공정보의 작성에 사용된 개인정보에 관련된 본인을 식별하기 위하여 해당 행정기관등익명가공정보를 다른 정보와 대조해서는 안 된다.",
+      "markdown_anchor": "main-a121-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a121-p2",
@@ -12739,10 +12824,12 @@
       "source_order": 762,
       "original_label": "２",
       "source_sha256": "8a792d30e56ffeb136558810bcfad1594e3d6d20a0e8abff0f397a31cf10ba06",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보, 제109조 제4항에 규정하는 삭제정보 및 제116조 제1항의 규정에 따라 실시한 가공 방법에 관한 정보(이하 이 조 및 다음 조에서 ‘행정기관등익명가공정보 등’이라 한다)의 유출을 방지하기 위하여 필요한 것으로서 개인정보보호위원회 규칙으로 정하는 기준에 따라 행정기관등익명가공정보 등의 적절한 관리를 위하여 필요한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a121-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a121-p3",
@@ -12753,10 +12840,12 @@
       "source_order": 763,
       "original_label": "３",
       "source_sha256": "7716dee7a0902e78a41daafbdb224f34b4bb85abe64a5a60743bf7411f8a0f52",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 항의 규정은 행정기관 등으로부터 행정기관등익명가공정보 등의 취급 위탁(2개 이상의 단계에 걸친 위탁을 포함한다)을 받은 자가 수탁한 업무를 수행하는 경우에 준용한다.",
+      "markdown_anchor": "main-a121-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a122",
@@ -12767,10 +12856,13 @@
       "source_order": 764,
       "original_label": "第百二十二条",
       "source_sha256": "36a02445e1654ab153f51fa223c372cdece31a0b9dba35b695130f75ea767fbd",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a122",
+      "korean_title": "제122조 (종사자의 의무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a122-p1",
@@ -12781,10 +12873,12 @@
       "source_order": 765,
       "original_label": "",
       "source_sha256": "593c313cd21dc377e96ed1cba894d135409ae8a46144fc89efe7f16481d205f1",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관등익명가공정보 등의 취급에 종사하는 행정기관 등의 직원 또는 직원이었던 자, 전조 제3항의 위탁을 받은 업무에 종사하고 있는 자 또는 종사하였던 자, 또는 행정기관 등에서 행정기관등익명가공정보 등의 취급에 종사하고 있는 파견근로자 또는 종사하였던 파견근로자는 그 업무에 관하여 알게 된 행정기관등익명가공정보 등의 내용을 함부로 타인에게 알리거나 부당한 목적에 이용해서는 안 된다.",
+      "markdown_anchor": "main-a122-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a123",
@@ -12795,10 +12889,13 @@
       "source_order": 766,
       "original_label": "第百二十三条",
       "source_sha256": "a39789be2edf1a88266a0227022df766358e336d1a53980f75e247213082e594",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
       "korean_text": null,
-      "markdown_anchor": null
+      "markdown_anchor": "main-a123",
+      "korean_title": "제123조 (익명가공정보의 취급에 관한 의무)",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a123-p1",
@@ -12809,10 +12906,12 @@
       "source_order": 767,
       "original_label": "",
       "source_sha256": "2cec8e771199c31152e1d3fab0ae34c7060f6ed418324f451ddf2cf74bef0c40",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 익명가공정보(행정기관등익명가공정보를 제외한다. 이하 이 조에서 같다)를 제3자에게 제공하는 때에는 법령에 근거한 경우를 제외하고는 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 제3자에게 제공되는 익명가공정보에 포함되는 개인에 관한 정보의 항목 및 그 제공 방법을 공표함과 동시에 해당 제3자에게 해당 제공에 관련된 정보가 익명가공정보라는 취지를 명시하여야 한다.",
+      "markdown_anchor": "main-a123-p1",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a123-p2",
@@ -12823,10 +12922,12 @@
       "source_order": 768,
       "original_label": "２",
       "source_sha256": "da92e965a9b802a988d1893695c2b52ce8e565ca3ffa75fa6025998e9366048e",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 익명가공정보를 취급할 때에는 법령에 근거한 경우를 제외하고는 해당 익명가공정보의 작성에 사용된 개인정보에 관련된 본인을 식별하기 위하여 해당 개인정보에서 삭제된 기술 등이나 개인식별부호 또는 제43조 제1항의 규정에 따라 실시된 가공 방법에 관한 정보를 취득하거나 해당 익명가공정보를 다른 정보와 대조해서는 안 된다.",
+      "markdown_anchor": "main-a123-p2",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a123-p3",
@@ -12837,10 +12938,12 @@
       "source_order": 769,
       "original_label": "３",
       "source_sha256": "2223d7f8217ee2d894ad581c4fa97c8f3f8e55a9dcd9db27692bdb7379f35c54",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "행정기관 등은 익명가공정보의 유출을 방지하기 위하여 필요한 것으로서 개인정보보호위원회 규칙으로 정하는 기준에 따라 익명가공정보의 적절한 관리를 위하여 필요한 조치를 취하여야 한다.",
+      "markdown_anchor": "main-a123-p3",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-a123-p4",
@@ -12851,10 +12954,12 @@
       "source_order": 770,
       "original_label": "４",
       "source_sha256": "f9aa1f05262a691e47ef5510f4f2eca01efe2dc886cc6d9438eca09213447485",
-      "translation_status": "not_started",
+      "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": null,
-      "markdown_anchor": null
+      "korean_text": "앞의 두 항의 규정은 행정기관 등으로부터 익명가공정보의 취급 위탁(2개 이상의 단계에 걸친 위탁을 포함한다)을 받은 자가 수탁한 업무를 수행하는 경우에 준용한다.",
+      "markdown_anchor": "main-a123-p4",
+      "translation_method": "assistant_translation_from_official_japanese",
+      "translation_model": "gpt-6.1-sol"
     },
     {
       "node_id": "main-c5-s6",

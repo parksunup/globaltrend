@@ -8,7 +8,7 @@
 
 | ID | 관할권 | 법률명 | 공식 원문·조사 대상 URL | 판본·시행일 | 기존 한국어 번역 | 조사 상태 |
 | --- | --- | --- | --- | --- | --- | --- |
-| kr-pipa | KR — PIPA | 개인정보 보호법 | [원문·대상](https://www.law.go.kr/법령/개인정보보호법) | 국가법령정보센터 본문·법률명 조회 HTTP 503; 연결 경로 프록시 403; 현행 판본·시행일 검토 필요; 선택 판본 시행일: 검토 필요 | 한국어 원문 기준; 확보 필요 | blocked |
+| kr-pipa | KR — PIPA | 개인정보 보호법 | [공식 판본](https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0) | 국가법령정보센터 lsiSeq 283839; 법률 제21445호, 2026-03-10 일부개정, 2026-09-11 시행; 공식 본문 HTML 확보; 시행예정·부칙·누락 및 이용조건 대조 필요; 선택 판본 시행일: 2026-09-11 | 한국어 원문 확보; 기존 번역 조사 대상 아님 | in_review |
 | jp-appi | JP — APPI | 個人情報の保護に関する法律 | [원문·대상](https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070) | 415AC0000000057_20261001_507AC0000000070; CurrentEnforced; 본칙·제공 부칙·별표 확보; 선택 판본 시행일: 2026-10-01 | 유무·직접 출처 검토 필요 | in_review |
 | cn-pipl | CN — PIPL | 中华人民共和国个人信息保护法 (Personal Information Protection Law of the People’s Republic of China) | [원문·대상](https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044) | NPC DB bbbs ff8081817b6472a3017b656cc2040044; sxx=3(유효); 공포 2021-08-20·시행 2021-11-01 메타데이터 확인; 목차 확보·법문 파일 미확보; 선택 판본 시행일: 2021-11-01 | 유무·직접 출처 검토 필요 | in_review |
 | eu-gdpr | EU — GDPR | Regulation (EU) 2016/679 of the European Parliament and of the Council of 27 April 2016 on the protection of natural persons with regard to the processing of personal data and on the free movement of such data, and repealing Directive 95/46/EC (General Data Protection Regulation) | [원문·대상](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) | EU 출판국 OJ L 119, 4.5.2016 관보 원판 HTML·PDF; 11장·15절·99조·전문 고려사항 173개; 제99조 적용 2018-05-25; 정오표·현행 통합본 검토 필요; 선택 판본 시행일: 검토 필요 | 유무·직접 출처 검토 필요 | in_review |
@@ -16,6 +16,6 @@
 | us-ca-ccpa | US-CA — CCPA | California Consumer Privacy Act of 2018 (California Civil Code, Division 3, Part 4, Title 1.81.5) | [원문·대상](https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf) | CPPA PDF 표제 effective 01/01/2026, AB 137·AB 566 update; 주 의회 법전과 후속 개정 대조 필요; 선택 판본 시행일: 2026-01-01 | 유무·직접 출처 검토 필요 | in_review |
 | sg-pdpa | SG — PDPA | Personal Data Protection Act 2012 | [원문·대상](https://sso.agc.gov.sg/Act/PDPA2012) | SSO Current version as at 06 Oct 2026; 2020 REVISED EDITION 기반; 전체 범위·후속 개정 시행일 검토 필요; 선택 판본 시행일: 검토 필요 | 유무·직접 출처 검토 필요 | in_review |
 
-APPI 본칙 제1조~제108조 초안과 조항 연결은 [appi.md](./translations/appi.md), [appi.json](./translations/appi.json)에 있다. 누락·이용조건·용어 검토는 [APPI 검토 메모](./translations/appi-review-notes.md), 나머지 법률과 영국 보완 법령은 [전체 검토 메모](./review-notes.md)를 참조한다.
+APPI 본칙 제1조~제123조 초안과 조항 연결은 [appi.md](./translations/appi.md), [appi.json](./translations/appi.json)에 있다. 누락·이용조건·용어 검토는 [APPI 검토 메모](./translations/appi-review-notes.md), 나머지 법률과 영국 보완 법령은 [전체 검토 메모](./review-notes.md)를 참조한다.
 
 [7개 법제 진행표](./translation-progress.md)와 [17개 기준 비교표 준비 파일](./criteria-mapping.md)은 전문 번역이 완료된 법률부터 채운다. 비교 내용은 전부 미검토이며 법적 결론으로 사용할 수 없다.

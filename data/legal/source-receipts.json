@@ -186,6 +186,33 @@
       "byte_count": 378575,
       "sha256": "a26bf0dd5bc5158179640c80b9981a6ac83866dee824b73cd15d8bc594f9b601",
       "note": "EU 출판국 편집 콘텐츠 CC BY 4.0; 개별 출판물·EUR-Lex는 별도 저작권 고지 확인을 요구"
+    },
+    {
+      "source_id": "pipa-spaced",
+      "url": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EB%B2%95",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 1280,
+      "sha256": "9a800715a3960628b3b955fe46cc3c2bae5c09cb11210e0607b9d3ba966a9fdc",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "pipa-frame",
+      "url": "https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 145011,
+      "sha256": "09b59ea6c54e4b4279b506acececee55b7bb78a92f00c0a7267965c473bd9cd8",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "pipa-body",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 505383,
+      "sha256": "70c505dc867c972a94ba30db8b03f0c17daa21222f59c5368750797d1605d3a5",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
     }
   ],
   "latest_failed_access": [
