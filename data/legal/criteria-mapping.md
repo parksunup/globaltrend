@@ -1,6 +1,6 @@
 # 국가·관할권별 조항 비교표 — 작성 준비·전 셀 미검토
 
-**법률 전문 번역이 완료된 뒤 비교 내용을 채운다. 현재는 비교 결과가 아니라 17개 기준 × 7개 법제의 작성 준비표다.** APPI 제1조~제185조만 번역했으므로 해당 법률도 부분 조문을 근거로 국가 전체 결론을 작성하지 않았다.
+**법률 전문 번역이 완료된 뒤 비교 내용을 채운다. 현재는 비교 결과가 아니라 17개 기준 × 7개 법제의 작성 준비표다.** APPI 선택 공식 통합 원문의 본칙·제공 부칙·별표 전체 초안을 작성했다. 한국 원문 시행 관계 대조 및 셀별 분류·요약·예외 검토는 남아 있어 비교 결과로 표시하지 않는다.
 
 기준 출처: [architecture.md §6.0](../../architecture.md#60-첫-법제-범위와-비교-기준)와 기존 seed `supabase/migrations/20260927140000_p1_seed_sources_criteria.sql`. 원래 비교표 첨부파일은 읽지 못했지만 저장소에 이미 확정된 17개 행을 그대로 사용한다. 사용자의 후속 지시에 따라 첨부 요청을 선행 조건으로 두지 않는다. 새 기준을 만들지 않았으며 EU·영국·캘리포니아는 국가와 구분되는 관할권이다.
 
@@ -35,7 +35,7 @@
 - `review_status=unreviewed`는 사람 검수 전이다. 자동 구조 검사 통과로 verified로 올리지 않는다.
 - UK GDPR과 연결되는 DPA 2018·Data (Use and Access) Act 2025는 [검토 메모](./review-notes.md)에 기록하며 비교 기준이나 법제 열을 추가하지 않는다.
 
-[번역 진행표](./translation-progress.md) · [법제 목록](./instruments.md) · [APPI 부분 초안](./translations/appi.md)
+[번역 진행표](./translation-progress.md) · [법제 목록](./instruments.md) · [APPI 전체 초안](./translations/appi.md)
 
 ## 한국·일본 우선 검토
 

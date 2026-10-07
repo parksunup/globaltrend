@@ -49,8 +49,12 @@ def validate(source_path=None):
     check(dict(draft_counts) == document["coverage"]["draft_counts"], "APPI 초안 수 불일치")
     missing = [node["node_id"] for node in nodes if node["translation_status"] == "not_started"]
     check(missing == document["coverage"]["missing_node_ids"], "미번역 노드 목록 불일치")
-    check(bool(missing) and document["translation"]["complete"] is False,
-          "미완료 원문을 완성된 전문으로 표시함")
+    check(document["translation"]["complete"] == (not missing)
+          and document["translation"]["status"] == ("partial_draft" if missing else "full_draft"),
+          "원문 범위 작성 상태와 완료 표시 불일치")
+    check(document["coverage"]["full_order_verified"] == (not missing)
+          and document["coverage"]["semantic_completeness_verified"] is False,
+          "구조 완료와 의미 검수 구분 불일치")
 
     markdown = (BASE / "translations/appi.md").read_text()
     anchors = re.findall(r'<a id="([^"]+)"></a>', markdown)
@@ -64,7 +68,7 @@ def validate(source_path=None):
     check(len(main_articles) == document["translation"]["total_main_articles"], "본칙 분모 불일치")
     check(len(drafts) == document["translation"]["translated_main_articles"], "번역 본칙 수 불일치")
     check(drafts == main_articles[:len(drafts)], "번역 조문이 원문 첫 구간과 불일치")
-    for article in drafts:
+    for article in [n for n in nodes if n["tag"] == "Article" and n["translation_status"] == "draft"]:
         children = [node for node in nodes if node["node_id"].startswith(article["node_id"] + "-")
                     and node["tag"] in {"Paragraph", "Item", "Subitem1", "Subitem2", "Subitem3"}]
         check(all(node["korean_text"] for node in children), f"번역 조문 내부 누락: {article['node_id']}")
@@ -116,7 +120,62 @@ def validate(source_path=None):
         original_counts = collections.Counter(node["tag"] for node in original
                                              if node["tag"] in counts)
         check(original_counts == counts, "공식 원문과 저장된 구조 수 불일치")
+        def flatten(n):
+            return n if isinstance(n, str) else "".join(flatten(c) for c in n.get("children", []))
+        structural = [node for node in original if node["tag"] in counts]
+        source_ids = {id(raw): saved["node_id"] for raw, saved in zip(structural, nodes)}
+        def check_parents(raw, parent):
+            if not isinstance(raw, dict):
+                return
+            if id(raw) in source_ids:
+                saved = by_id[source_ids[id(raw)]]
+                check(saved["parent_id"] == parent, f"공식 원문 상위 관계 불일치: {saved['node_id']}")
+                parent = saved["node_id"]
+            for child in raw.get("children", []):
+                check_parents(child, parent)
+        for child in body["children"]:
+            if child["tag"] in {"MainProvision", "SupplProvision", "AppdxTable"}:
+                check_parents(child, "main" if child["tag"] == "MainProvision" else "law")
+        for raw, saved in zip(structural, nodes):
+            check(raw["tag"] == saved["tag"]
+                  and hashlib.sha256(flatten(raw).encode()).hexdigest() == saved["source_sha256"],
+                  f"공식 원문 전체 노드 순서·내용 해시 불일치: {saved['node_id']}")
+            if raw["attr"].get("Num"):
+                check(raw["attr"]["Num"] == saved["number"],
+                      f"공식 원문 번호 불일치: {saved['node_id']}")
+            if raw["tag"] == "SupplProvision":
+                check(saved.get("amendment_law_number") == raw["attr"].get("AmendLawNum")
+                      and saved.get("source_extract") == (raw["attr"].get("Extract") == "true"),
+                      "부칙 개정법 식별자·발췌 표지 불일치")
+            for child in raw.get("children", []):
+                if not isinstance(child, dict):
+                    continue
+                extra = {"ParagraphCaption": ("source_caption", "korean_caption"),
+                         "RelatedArticleNum": ("source_related_articles", "korean_related_articles")}.get(child["tag"])
+                if extra and saved["translation_status"] == "draft":
+                    check(saved.get(extra[0]) == flatten(child) and bool(saved.get(extra[1])),
+                          f"원문 추가 제목·관련 조문 표시 누락: {saved['node_id']}")
+                    check(saved[extra[1]] in markdown, "추가 표시 번역 출력 누락")
+            if raw["tag"] == "TableColumn" and saved["translation_status"] == "draft":
+                check(raw["attr"] == saved["source_attributes"], "전체 표 셀 속성 불일치")
         source_headings = [node for node in original if node["tag"] in {"Chapter", "Section", "Subsection"}]
+        toc = next(child for child in body["children"] if child["tag"] == "TOC")
+        toc_groups = [n for n in walk(toc) if n["tag"] in {"TOCChapter", "TOCSection", "TOCSubsection"}]
+        check(len(toc_groups) == len(source_headings), "원문 목차 제목 수와 본문 불일치")
+        for toc_group, source_heading in zip(toc_groups, source_headings):
+            title_tag = source_heading["tag"] + "Title"
+            toc_title = next(c for c in toc_group["children"] if c["tag"] == title_tag)
+            actual_title = next(c for c in source_heading["children"] if c["tag"] == title_tag)
+            check(flatten(toc_title) == flatten(actual_title), "원문 목차 제목·순서 불일치")
+            ranges = [c for c in toc_group["children"] if c["tag"] == "ArticleRange"]
+            articles = [c for c in walk(source_heading) if c["tag"] == "Article"]
+            labels = [flatten(next(c for c in a["children"] if c["tag"] == "ArticleTitle"))
+                      for a in (articles[0], articles[-1])]
+            expected_range = "（" + (labels[0] if labels[0] == labels[1] else "―".join(labels)) + "）"
+            allowed_ranges = {expected_range}
+            if len(articles) == 2:
+                allowed_ranges.add("（" + "・".join(labels) + "）")
+            check(not ranges or flatten(ranges[0]) in allowed_ranges, "원문 목차 조문 범위 불일치")
         for source_heading, group in zip(source_headings, groups):
             source_numbers = [node["attr"]["Num"] for node in walk(source_heading) if node["tag"] == "Article"]
             check(source_numbers[0] == group["first_article"]
@@ -178,7 +237,8 @@ def validate(source_path=None):
     review_anchors = re.findall(r"\./translations/appi\.md#([^\)]+)", review)
     check(all(anchor in anchors for anchor in review_anchors), "한국·일본 점검 링크 대상 미번역·누락")
     print(f"구조 검사 통과: APPI {len(nodes)}개 원문 노드, {len(drafts)}개 본칙 초안, "
-          f"{len(anchors)}개 앵커, 비교 준비 셀 {len(cells)}개. 사람 검수·전문 번역은 미완료.")
+          f"{len(anchors)}개 앵커, 비교 준비 셀 {len(cells)}개. "
+          f"선택 원문 번역 누락 {len(missing)}개; 사람 검수·비교는 미완료.")
 
 
 if __name__ == "__main__":

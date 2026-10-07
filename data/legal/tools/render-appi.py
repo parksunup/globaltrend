@@ -82,7 +82,7 @@ def render():
     )
     doc["coverage"].update(source_counts=dict(source_counts), draft_counts=dict(draft_counts),
                            missing_node_ids=missing, translated_prefix_order_verified=True,
-                           full_order_verified=False, semantic_completeness_verified=False,
+                           full_order_verified=not missing, semantic_completeness_verified=False,
                            heading_groups=heading_coverage(nodes))
     path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
     version = doc["source"]["version_id"]
@@ -91,11 +91,19 @@ def render():
     remaining_parts = []
     if doc["translation"]["next_main_article"]:
         remaining_parts.append(f"제{doc['translation']['next_main_article']}조 이후 본칙")
-    remaining_parts.extend([f"{source_counts['SupplProvision']}개 부칙 묶음",
-                            f"{source_counts['AppdxTable']}개 별표"])
+    for tag, label in [("SupplProvision", "부칙 묶음"), ("AppdxTable", "별표")]:
+        remaining = sum(any(n["translation_status"] != "draft" for n in nodes
+                            if n["node_id"] == root["node_id"]
+                            or n["node_id"].startswith(root["node_id"] + "-"))
+                        for root in nodes if root["tag"] == tag)
+        if remaining:
+            remaining_parts.append(f"{remaining}개 {label}")
     remaining_description = "·".join(remaining_parts)
+    scope_status = "부분 번역 초안" if missing else "선택 공식 판본 전체 번역 초안"
+    completion_description = (f"{remaining_description} 미번역. **전문 미완성·사람 검수 전 초안**."
+                              if missing else "본칙·제공 부칙·별표 전체 초안 작성. **사람 검수 전·비공식 번역**.")
     lines = [
-        "# 개인정보 보호에 관한 법률(APPI) — 일본 — 2026-10-01 시행 판본 — 부분 번역 초안", "",
+        f"# 개인정보 보호에 관한 법률(APPI) — 일본 — 2026-10-01 시행 판본 — {scope_status}", "",
         "- 공식 법률명: 個人情報の保護に関する法律 (平成十五年法律第五十七号)",
         "- 관할권: 일본 (`JP`)",
         "- 공식 원문: https://laws.e-gov.go.jp/document?lawid=415AC0000000057",
@@ -103,7 +111,7 @@ def render():
         f"- 판본 식별자: `{version}`; 원문 API 상태: `CurrentEnforced`.",
         "- 선택 개정 판본 시행일: 2026-10-01. 법률 최초 공포일: 2003-05-30. 법 전체의 단일 최초 시행일과 구분합니다.",
         f"- 번역 상태: 본칙 제1조~제{last}조 작성({len(drafted)}/{len(main)}개, {percent}%). "
-        f"{remaining_description} 미번역. **전문 미완성·사람 검수 전 초안**.",
+        + completion_description,
         "- 출처: e-Gov 법령검색의 위 공식 판본. 원문을 기초로 이 프로젝트가 한국어로 번역·가공한 비공식 초안이며 일본 정부가 작성한 번역이 아닙니다.",
         "- 조사일: 2026-10-06. 원문 제공 범위에는 일부 개정법 부칙의 발췌(`Extract=true`)가 포함됩니다. 각 개정법 전체를 번역한 문서는 아닙니다.",
         "- [조항별 JSON](./appi.json) · [누락·검수 목록](./appi-status.md) · [용어·이용조건·대조 메모](./appi-review-notes.md)",
@@ -136,26 +144,34 @@ def render():
                 rows = [n for n in nodes if n["parent_id"] == row["parent_id"]]
                 if row == rows[-1]:
                     lines.extend(['</table>', ''])
-        elif tag in {"Chapter", "Section", "Subsection"}:
-            level = {"Chapter": "##", "Section": "###", "Subsection": "####"}[tag]
+        elif tag in {"Chapter", "Section", "Subsection", "SupplProvision", "AppdxTable"}:
+            level = {"Chapter": "##", "Section": "###", "Subsection": "####",
+                     "SupplProvision": "##", "AppdxTable": "##"}[tag]
             lines.extend([level + " " + node["korean_title"], ""])
+            if tag == "AppdxTable" and node.get("korean_related_articles"):
+                lines.extend([node["korean_related_articles"], ""])
         elif tag == "Article":
             lines.extend(["#### " + node["korean_title"], ""])
         elif tag in content_tags:
+            if node.get("korean_caption"):
+                lines.extend([node["korean_caption"], ""])
             if tag == "Paragraph":
                 label = node["number"] + "항"
             elif tag == "Item":
-                label = node["number"] + "호"
+                label = node.get("korean_label", node["number"] + "호")
             else:
                 label = node.get("korean_label", node["original_label"] + "목")
             lines.extend([f"**{label}.** {node['korean_text']}", ""])
         else:
             raise ValueError(f"아직 출력 형식을 구현하지 않은 단위: {tag}")
-    lines.extend(["---", "", f"번역은 본칙 제{last}조까지입니다. 나머지 {remaining_description}는 "
-                  "[누락 목록](./appi-status.md)을 따라 같은 문서에 이어 작성합니다."])
+    footer = (f"번역은 본칙 제{last}조까지입니다. 나머지 {remaining_description}는 "
+              "[누락 목록](./appi-status.md)을 따라 같은 문서에 이어 작성합니다." if missing else
+              "선택 공식 통합 판본의 본칙·제공 부칙·별표를 모두 초안으로 작성했습니다. "
+              "각 개정법의 발췌되지 않은 부칙이나 하위법령까지 포함한 문서는 아닙니다. 사람 검수는 미완료입니다.")
+    lines.extend(["---", "", footer])
     (BASE / "appi.md").write_text("\n".join(lines) + "\n")
     rows = ["# APPI 누락·순서·사람 검수 상태 목록", "",
-            f"판본: `{version}`. 번역 초안 제1조~제{last}조; 전문 미완성. "
+            f"판본: `{version}`. 본칙 번역 초안 제1조~제{last}조; {scope_status}·사람 검수 미완료. "
             "원문 전체 목록은 appi.json의 provisions 및 coverage.missing_node_ids에 있습니다. "
             "숫자 대조는 구조 검증이며 번역 정확성 검수는 아닙니다.", "",
             "| 단위 | 원문 수 | 번역 초안 수 | 남은 수 |", "| --- | ---: | ---: | ---: |"]
