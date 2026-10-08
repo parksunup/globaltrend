@@ -26,3 +26,10 @@
 .provision { margin: 0 0 1.2rem; line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; }
 .feedback { margin-top: 2.5rem; border-top: 1px solid #dce5e2; padding-top: 1.2rem; }
 @media (max-width: 760px) { .page { padding: 1rem; } .layout { grid-template-columns: 1fr; } .index { max-height: 220px; } }
+
+.documentList { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 330px), 1fr)); gap: 1rem; }
+.documentCard { display: flex; flex-direction: column; gap: .45rem; padding: 1.4rem; background: white; color: #15272a; border: 1px solid #dce5e2; border-radius: .75rem; text-decoration: none; }
+.documentCard:hover, .documentCard:focus-visible { border-color: #075b62; box-shadow: 0 3px 12px #075b621a; }
+.documentCard strong { font-size: 1.2rem; }
+.documentCard span { overflow-wrap: anywhere; }
+.documentCard small { color: #587277; line-height: 1.5; }
