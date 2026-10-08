@@ -15,6 +15,8 @@ export type TranslationSection = {
 };
 
 type Props = {
+  lawId: string;
+  title: string;
   sections: TranslationSection[];
   officialName: string;
   officialUrl: string;
@@ -27,8 +29,8 @@ type Props = {
 
 const groupNames = { main: "본칙", supplementary: "부칙", appendix: "별표" } as const;
 
-export default function TranslationReview({ sections, officialName, officialUrl, version, scopeNote, reviewStatus, branch, commitSha }: Props) {
-  const [group, setGroup] = useState<"main" | "supplementary" | "appendix">("main");
+export default function TranslationReview({ lawId, title, sections, officialName, officialUrl, version, scopeNote, reviewStatus, branch, commitSha }: Props) {
+  const [group, setGroup] = useState<"main" | "supplementary" | "appendix">(sections[0]?.group ?? "main");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(sections.find((section) => section.group === "main")?.id ?? sections[0]?.id ?? "");
   const visible = useMemo(() => sections.filter((section) =>
@@ -42,14 +44,14 @@ export default function TranslationReview({ sections, officialName, officialUrl,
 
   return <main className={styles.page}>
     <header className={styles.header}>
-      <Link href="/">← 제출물 검수로 돌아가기</Link>
+      <Link href="/legal-translation">← 법률별 번역 목록</Link>
       <p className={styles.kicker}>법제 전문 · 사람 검수 전 초안</p>
-      <h1>일본 APPI 한국어 번역 초안</h1>
+      <h1>{title}</h1>
       <p>{officialName}의 조문을 순서대로 읽고 의견을 남길 수 있습니다. 이 번역은 비공식 초안이며 검수·공개 승인을 뜻하지 않습니다.</p>
-      <div className={styles.meta}><span>선택 판본 시행일: {version}</span><span>사람 검수: {reviewStatus === "not_started" ? "미착수" : reviewStatus}</span><span>본칙 {counts.main}조 · 부칙 {counts.supplementary}조 · 별표 {counts.appendix}개</span></div>
+      <div className={styles.meta}><span>선택 판본 시행일: {version}</span><span>사람 검수: {reviewStatus === "not_started" ? "미착수" : reviewStatus}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표 {counts.appendix}항목</span></div>
       {scopeNote && <p className={styles.caveat}>범위 주의: {scopeNote}</p>}
-      {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">일본 공식 원문 보기 ↗</a>}
-      {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/appi.md`} target="_blank" rel="noopener noreferrer">번역 초안 원본 파일 보기 ↗</a>}
+      {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
+      {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">번역 초안 원본 파일 보기 ↗</a>}
     </header>
     <div className={styles.controls}>
       <div className={styles.tabs} role="group" aria-label="번역 범위">
@@ -69,7 +71,7 @@ export default function TranslationReview({ sections, officialName, officialUrl,
           <p className={styles.kicker}>{selected.context} · {selected.reviewStatus === "not_started" ? "사람 검수 전" : selected.reviewStatus}</p>
           <h2>{selected.title}</h2>
           {selected.lines.length ? selected.lines.map((line) => <p key={line.id} className={styles.provision}>{line.label && <strong>{line.label}. </strong>}{line.text}</p>) : <p>이 항목에는 번역 본문이 없습니다. 원본 파일과 범위 메모를 확인해 주세요.</p>}
-          <div className={styles.feedback}><SubmissionFeedback key={selected.id} itemId={`translation-jp-appi-${selected.id}`} branch={branch} commitSha={commitSha} /></div>
+          <div className={styles.feedback}><SubmissionFeedback key={selected.id} itemId={`translation-${lawId}-${selected.id}`} branch={branch} commitSha={commitSha} /></div>
         </> : <p>왼쪽에서 조문을 선택해 주세요.</p>}
       </article>
     </div>
