@@ -50,7 +50,13 @@ function WeeklyDocument({ document, branch, commitSha }: { document: NonNullable
 }
 
 export default function SubmissionDocumentsView({ documents, branch, commitSha }: { documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
-  if (documents.legal.length) return <LegalDocument cells={documents.legal} branch={branch} commitSha={commitSha} />;
-  if (documents.weekly) return <WeeklyDocument document={documents.weekly} branch={branch} commitSha={commitSha} />;
-  return null;
+  const [kind, setKind] = useState<"legal" | "weekly">(documents.legal.length ? "legal" : "weekly");
+  if (!documents.legal.length && !documents.weekly) return null;
+  return <>
+    {documents.legal.length > 0 && documents.weekly && <div className="document-tabs" role="group" aria-label="문서 선택">
+      <button type="button" className={kind === "legal" ? "selected" : ""} onClick={() => setKind("legal")}>법제 비교표</button>
+      <button type="button" className={kind === "weekly" ? "selected" : ""} onClick={() => setKind("weekly")}>주간 동향 예시 호</button>
+    </div>}
+    {kind === "legal" && documents.legal.length > 0 ? <LegalDocument cells={documents.legal} branch={branch} commitSha={commitSha} /> : documents.weekly ? <WeeklyDocument document={documents.weekly} branch={branch} commitSha={commitSha} /> : null}
+  </>;
 }
