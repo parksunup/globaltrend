@@ -60,8 +60,8 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   const provisions = corpus.provisions ?? [];
   return {
     id,
-    title: corpus.korean_title?.trim() || `${id.toUpperCase()} 한국어 번역 초안`,
-    officialName: corpus.official_name?.trim() || id.toUpperCase(),
+    title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역 초안`,
+    officialName: typeof corpus.official_name === "string" && corpus.official_name.trim() ? corpus.official_name.trim() : id.toUpperCase(),
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
     reviewStatus: corpus.translation?.human_review_status || "검토 필요",
     articleCount: provisions.filter((node) => node.tag === "Article").length,
@@ -71,7 +71,9 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
 export function listLegalTranslations(root = process.cwd()): LegalTranslationSummary[] {
   const dir = translationsDir(root);
   if (!existsSync(dir)) return [];
-  return readdirSync(dir)
+  let names: string[];
+  try { names = readdirSync(dir); } catch { return []; }
+  return names
     .filter((name) => name.endsWith(".json") && validId.test(name.slice(0, -5)))
     .flatMap((name) => {
       const id = name.slice(0, -5);
@@ -104,7 +106,7 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
     if (typeof node.korean_text !== "string" || !node.korean_text.trim()) continue;
     let parent = byId.get(node.parent_id ?? "");
     while (parent && !sectionById.has(parent.node_id)) parent = byId.get(parent.parent_id ?? "");
-    let section = parent && sectionById.get(parent.node_id);
+    let section = sectionById.get(node.node_id) ?? (parent && sectionById.get(parent.node_id));
     if (!section) {
       const fallbackId = `unassigned-${node.scope || "main"}`;
       section = sectionById.get(fallbackId);
