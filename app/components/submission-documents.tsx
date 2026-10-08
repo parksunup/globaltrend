@@ -17,10 +17,10 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
       {criteria.map((criterion) => <tr key={criterion.id}><th scope="row">{criterion.order}. {criterion.name}</th>{jurisdictions.map((code) => {
         const cell = lookup.get(`${criterion.id}:${code}`);
         const drafted = cell && cell.summary !== "미검토";
-        return <td key={code}>{cell ? <button type="button" className={`comparison-cell ${selected?.id === cell.id ? "selected" : ""}`} onClick={() => setSelectedId(cell.id)}><span>{drafted ? cell.summary : "미검토"}</span><small>{drafted ? cell.articleNumbers.slice(0, 2).join(" · ") : "추가 조사 필요"}</small></button> : "—"}</td>;
+        return <td key={code}>{cell ? <button type="button" className={`comparison-cell ${selected?.id === cell.id ? "selected" : ""}`} onClick={() => { setSelectedId(cell.id); document.getElementById("comparison-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}><span>{drafted ? cell.summary : "미검토"}</span><small>{drafted ? cell.articleNumbers.slice(0, 2).join(" · ") : "추가 조사 필요"}</small></button> : "—"}</td>;
       })}</tr>)}
     </tbody></table></div>
-    {selected && <article className="document-detail"><span className="panel-kicker">선택한 비교 셀 · {selected.jurisdiction} · {selected.status}</span><h3>{selected.criterionName}</h3><p className="document-lede">{selected.summary}</p>
+    {selected && <article id="comparison-detail" className="document-detail"><span className="panel-kicker">선택한 비교 셀 · {selected.jurisdiction} · {selected.status}</span><h3>{selected.criterionName}</h3><p className="document-lede">{selected.summary}</p>
       {selected.articleNumbers.length > 0 && <div className="detail-block"><span className="detail-label">관련 조항</span><p>{selected.articleNumbers.join(" · ")}</p></div>}
       {selected.exceptions && selected.exceptions !== "미검토" && <div className="detail-block"><span className="detail-label">주요 예외·주의</span><p>{selected.exceptions}</p></div>}
       <div className="detail-block"><span className="detail-label">판본</span><p>{selected.sourceVersion}</p></div>
