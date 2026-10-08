@@ -28,6 +28,8 @@ order by f.created_at, f.id;
 
 동향 담당은 조건을 `feat/trend-source-contracts`로 바꿉니다. `item_id`가 `criteria-`로 시작하면 비교표 한 셀, `weekly-`로 시작하면 예시 호의 한 기사입니다. 현재 버전은 피드백의 해결 여부를 DB에서 자동 추적하지 않으므로, 담당자는 수정 커밋과 처리 결과를 PR에 짧게 정리합니다.
 
+법제·동향을 합친 QA Preview에서 남긴 의견은 담당 PR이 아니라 `codex/review-feedback-qa` 브랜치로 저장됩니다. QA 의견을 확인할 때는 위 SQL의 브랜치 조건을 그 값으로 바꾸고, `item_id`로 담당 자료를 구분합니다.
+
 Codex에 전달할 프롬프트 예시:
 
 ```text
