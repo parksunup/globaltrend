@@ -21,7 +21,7 @@ GitHub PR의 Vercel 봇 댓글에서 **Preview**를 엽니다. 왼쪽 **PR 제�
 
 ```sql
 select f.id, f.branch_name, f.item_id, f.commit_sha, f.body,
-       f.created_at, p.display_name as author
+       f.created_at, f.author_id, p.display_name as author
 from public.submission_feedback f
 join public.profiles p on p.id = f.author_id
 where f.branch_name = 'feat/legal-corpus-foundation'
