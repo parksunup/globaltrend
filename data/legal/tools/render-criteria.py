@@ -22,7 +22,7 @@ def render():
     filled = sum(cell["korean_summary"] != "미검토" for cell in cells)
     lines = [
         "# 국가·관할권별 조항 분류·요약표 — 한국·일본 비교 초안", "",
-        f"초안 작성일: 2026-10-07 · 수집·이용·제공 원문 재대조일: 2026-10-08 (한국 시각). **분류 초안 {filled}/119셀 · 사람 검수 완료 0셀.** "
+        f"초안 작성일: 2026-10-07 · 한국 수집·이용·제공 및 일본 17기준 관련 원문 재대조일: 2026-10-08 (한국 시각). **분류 초안 {filled}/119셀 · 사람 검수 완료 0셀.** "
         "기존 17개 기준을 행으로, 7개 법제를 열로 유지합니다. 다른 해외법의 미검토 셀은 규정이 없다는 뜻이 아닙니다.", "",
         "기준 출처: [architecture.md §6.0](../../architecture.md#60-첫-법제-범위와-비교-기준) 및 기존 seed. "
         "별도 원본 첨부파일 대신 사용자의 후속 지시에 따라 저장소에 확정된 기준을 사용하며 새 기준을 만들지 않았습니다.", "",
@@ -48,7 +48,7 @@ def render():
                   "article_numbers와 translation_links는 순서가 대응하는 JSON 문자열 배열입니다. "
                   "review_status=unreviewed는 사람이 확인하지 않았다는 뜻이며 내용 작성 여부는 요약의 미검토 표지로 구분합니다.", "",
                   "[법제 목록](./instruments.md) · [진행표](./translation-progress.md) · "
-                  "[한국·일본 추가 확인](./japan-comparison-review.md) · [이용조건·검토 메모](./review-notes.md)"])
+                  "[한국·일본 추가 확인](./japan-comparison-review.md) · [일본 사람 검수 안내](./japan-pre-review.md) · [이용조건·검토 메모](./review-notes.md)"])
     (BASE / "criteria-mapping.md").write_text("\n".join(lines) + "\n")
     print(f"분류 초안 {filled}/119셀; 사람 검수 완료 0셀")
 

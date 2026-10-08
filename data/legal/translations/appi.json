@@ -11249,7 +11249,7 @@
       "source_sha256": "bd70e513951cce76eed07c4ab45487865f9c609329a398f491b9cb2b51a18c8e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 제안은 개인정보보호위원회 규칙으로 정하는 바에 따라 다음에 열거하는 사항을 기재한 서면을 행정기관의 장 등에게 제출하여 하여야 한다.",
+      "korean_text": "전항의 제안은 개인정보보호위원회 규칙으로 정하는 바에 따라 다음에 열거하는 사항을 기재한 서면을 행정기관의 장 등에게 제출하는 방식으로 하여야 한다.",
       "markdown_anchor": "main-a112-p2",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"

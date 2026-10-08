@@ -258,6 +258,24 @@
       "byte_count": 0,
       "sha256": null,
       "note": "공식 조회 HTTP502; 일반 경로는 proxy tunnel403도 관측. 하위 본문·판본 미확보; 내용을 추정하지 않음."
+    },
+    {
+      "source_id": "ppc-country-notice-pre-review",
+      "url": "https://www.ppc.go.jp/files/pdf/h31kokuji1_rev2023April18.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 445080,
+      "sha256": "afef7fcfc039b4a563e32fb9ac5c5baf271ca3e89ffce9e0470bcdbfdf22e0e0",
+      "note": "사람 검수 전 관련 지정·질의응답 확인용; 법령 판본과 구분"
+    },
+    {
+      "source_id": "ppc-appi-qa-pre-review",
+      "url": "https://www.ppc.go.jp/personalinfo/faq/APPI_QA/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 740820,
+      "sha256": "6bab9f6bf654311ba8a6ca8a755a049d356a90483df75e2d3e7b038995161a13",
+      "note": "아동 동의능력 관련 Q&A 확인; 법정 일률연령으로 간주하지 않음"
     }
   ],
   "latest_failed_access": [
