@@ -1,0 +1,4 @@
+-- The live Supabase project applied this revision through the Supabase connector.
+-- The preceding 20261008043157_submission_feedback.sql creates the same schema
+-- on a fresh database and is idempotent if the live project receives it later.
+-- Keep this no-op file so local and remote migration histories share this version.
