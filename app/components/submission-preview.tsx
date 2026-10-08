@@ -31,7 +31,7 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
     </header>
     <div className="submission-notice">
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
-      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 의견 작성·조회는 등록된 팀 계정에만 허용됩니다.</span>
+      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 이 공개 화면에 표시되지 않습니다.</span>
     </div>
     <div className="document-tabs" role="group" aria-label="검수 화면 선택">
       {hasDocument && <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>{documents.legal.length ? "17개 기준 비교표" : "주간 동향 예시 호"}</button>}

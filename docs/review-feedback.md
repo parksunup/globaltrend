@@ -4,16 +4,15 @@
 
 GitHub PR의 Vercel 봇 댓글에서 **Preview**를 엽니다. 왼쪽 **PR 제출물**을 누르면 브랜치에 커밋된 결과가 나타납니다. 법제 브랜치는 17개 기준×7개 법제 비교표, 동향 브랜치는 목차와 기사 본문을 갖춘 주간 예시 호가 먼저 보입니다. 기존의 출처·번역 상태와 제출 파일 링크는 **제출 자료 목록**에서 볼 수 있습니다. 화면은 `.md`를 그대로 보여주는 대신 CSV·JSON 초안을 읽어 사람이 검수하기 쉬운 형태로 바꿉니다. 원문 파일과 공식 근거도 함께 대조해야 합니다.
 
-비교표의 한 셀 또는 예시 호의 한 기사를 선택해 **이 항목에 의견 남기기**에 수정 의견·질문을 자연어로 적습니다. 의견에는 브랜치, 항목 ID, 작성 당시 커밋 SHA, 작성자와 시각이 기록됩니다. 브랜치가 업데이트돼도 지난 의견은 유지됩니다. 의견은 검수 승인·발행이 아니며, 누구나 열 수 있는 Preview 화면에서 익명으로 보이지 않습니다.
+비교표의 한 셀 또는 예시 호의 한 기사를 선택해 **이 항목에 의견 남기기**에 수정 의견·질문을 자연어로 적습니다. 로그인은 필요 없습니다. 이름 또는 별칭은 선택 사항이며 본인 확인을 거친 이름이 아닙니다. 의견에는 브랜치, 항목 ID, 작성 당시 커밋 SHA, 입력한 이름과 시각이 기록됩니다. 브랜치가 업데이트돼도 지난 의견은 유지됩니다. 의견은 검수 승인·발행이 아니며, 공개 Preview에는 저장된 의견 목록이 보이지 않습니다.
 
 ## 프로젝트 리드가 한 번 준비할 것
 
-1. `supabase/migrations/*_submission_feedback.sql` 마이그레이션을 해당 Supabase 프로젝트에 적용하고, 팀원 권한·익명 쓰기 거부를 확인합니다. 새 테이블은 팀원에게 `SELECT`와 `INSERT`만 허용하며 수정·삭제는 허용하지 않습니다.
-2. 담당자별로 **Supabase Auth 계정**을 준비하고 `public.team_memberships`에 본인 `auth.users.id`를 `reviewer`, `editor` 또는 `admin`으로 활성 등록합니다. GitHub Collaborator나 Vercel Collaborator 등록만으로는 피드백 권한이 생기지 않습니다. Preview 페이지의 이메일 로그인은 등록된 계정에만 링크를 보내며 자동 가입을 허용하지 않습니다.
-3. Supabase **Authentication → URL Configuration → Redirect URLs**에 해당 Preview의 `https://<Preview 호스트>/auth/callback**`를 허용합니다. 여러 Preview를 운영하면 [Supabase 공식 안내](https://supabase.com/docs/guides/auth/redirect-urls)의 Vercel wildcard 규칙에 맞춰 범위를 제한해 등록합니다. 이메일 템플릿이 `redirectTo`를 사용하도록 설정돼 있는지도 확인합니다.
-4. 각 담당자 브랜치에 이 검수 화면의 최신 `main`을 반영해야 그 브랜치 Preview에서 새 화면이 나타납니다. Preview가 운영 DB를 사용 중이라면 피드백도 그 DB에 기록됩니다. 비밀키를 웹 브라우저에 넣지 않습니다.
+1. `supabase/migrations/*_submission_feedback.sql` 마이그레이션을 해당 Supabase 프로젝트에 적용합니다. 익명 방문자에게는 `INSERT`만, 활성 팀원에게는 `SELECT`를 허용하고 누구에게도 일반 `UPDATE`·`DELETE`는 허용하지 않습니다.
+2. 각 담당자 브랜치에 이 검수 화면의 최신 `main`을 반영해야 그 브랜치 Preview에서 새 화면이 나타납니다. Preview가 운영 DB를 사용 중이라면 피드백도 그 DB에 기록됩니다. 비밀키를 웹 브라우저에 넣지 않습니다.
+3. 로그아웃한 브라우저에서 실제 의견 한 건을 저장하고, Supabase에서 브랜치·항목·커밋·본문이 기록됐는지 확인합니다. 공개 Preview에는 저장된 의견이 다시 노출되지 않아야 합니다.
 
-현재 팀 계정이 없는 담당자는 읽기만 할 수 있습니다. 팀원 계정을 추가하기 전까지 피드백 입력이 작동한다고 안내하지 마세요.
+공개 입력이므로 스팸이나 다른 사람의 이름을 사칭한 의견이 들어올 수 있습니다. 이름을 신원 또는 승인 근거로 사용하지 말고, 담당자가 원본 근거와 대조해 반영 여부를 결정합니다. 의견에 비밀이나 개인정보를 적지 않도록 안내합니다.
 
 ## Codex가 피드백을 모아 반영하는 방법
 
@@ -21,9 +20,8 @@ GitHub PR의 Vercel 봇 댓글에서 **Preview**를 엽니다. 왼쪽 **PR 제�
 
 ```sql
 select f.id, f.branch_name, f.item_id, f.commit_sha, f.body,
-       f.created_at, p.display_name as author
+       f.created_at, f.author_name
 from public.submission_feedback f
-join public.profiles p on p.id = f.author_id
 where f.branch_name = 'feat/legal-corpus-foundation'
 order by f.created_at, f.id;
 ```
@@ -41,4 +39,4 @@ Codex에 전달할 프롬프트 예시:
 처리하지 못한 의견과 이유도 PR에 남겨 주세요.
 ```
 
-로그인에 실패하면 Auth 계정·팀 멤버십·Redirect URLs와 이메일 템플릿을 순서대로 확인합니다. 화면에 의견이 보이지 않으면 먼저 올바른 브랜치 Preview와 항목을 선택했는지 확인합니다.
+저장이 실패하면 먼저 해당 Preview의 Supabase 환경 변수와 피드백 테이블 마이그레이션 적용 여부를 확인합니다. 공개 화면은 의견 목록을 보여주지 않으므로, 저장 확인 문구를 본 뒤 실제 DB 기록은 연결된 Supabase에서 조회합니다. Codex가 읽을 때는 올바른 브랜치·항목·커밋을 확인합니다.
