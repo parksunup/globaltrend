@@ -213,6 +213,51 @@
       "byte_count": 505383,
       "sha256": "70c505dc867c972a94ba30db8b03f0c17daa21222f59c5368750797d1605d3a5",
       "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "ppc-legal-20261008",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 100353,
+      "sha256": "49777d588dd6198e7a3254b6525e712cf2d6e5dd46fe2590e39786354cd7780c",
+      "note": "공식 목록에서 시행규칙·정령 및 통칙 가이드라인 연결 확인; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "ppc-general-20261008",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 620228,
+      "sha256": "3e1d024042a6c4462edd6bff6a20e53c7fd154b68a492b57775c4000ed48380d",
+      "note": "취득·목적·제공 관련 절만 원문 대조; 전체 지침 검수 아님; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "appi-rule-20261008",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/428M60020000003_20260614_508M60020000002",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 202145,
+      "sha256": "2279081e633808287112859192d373539051dab58499def8c555d1b21bca42c6",
+      "note": "CurrentEnforced; 2026-06-14 시행; 제6조 확인, 제7조는 유출보고 위임이라 취득 예외 근거에서 구분; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "appi-decree-20261008",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415CO0000000507_20260731_508CO0000000234",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 149131,
+      "sha256": "37c53861b0a74afe7e3a33588660446f973774ca9cbf3b087b5f19796618b9c2",
+      "note": "CurrentEnforced; 2026-07-31 시행; 제9조 제1·2호를 통칙 가이드라인 인용과 대조; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "pipa-decree-20261008",
+      "url": "https://www.law.go.kr/법령/개인정보%20보호법%20시행령",
+      "retrieved_on": "2026-10-08",
+      "http_status": 502,
+      "byte_count": 0,
+      "sha256": null,
+      "note": "공식 조회 HTTP502; 일반 경로는 proxy tunnel403도 관측. 하위 본문·판본 미확보; 내용을 추정하지 않음."
     }
   ],
   "latest_failed_access": [
