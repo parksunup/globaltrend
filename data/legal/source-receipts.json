@@ -276,6 +276,105 @@
       "byte_count": 740820,
       "sha256": "6bab9f6bf654311ba8a6ca8a755a049d356a90483df75e2d3e7b038995161a13",
       "note": "아동 동의능력 관련 Q&A 확인; 법정 일률연령으로 간주하지 않음"
+    },
+    {
+      "source_id": "ppc-anonymous-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_anonymous/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 227669,
+      "sha256": "aca31f473b417d77820b7763e5fec29bf965801627833a8fcd5ab0f6efa83eae",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "ppc-offshore-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_offshore/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 233327,
+      "sha256": "9968bf1958c0bbc3d1974ecea50f8cd4bc5b35bee674ff06d67e107ab8e2bc1d",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "ppc-administrative-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_administrative/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 255374,
+      "sha256": "5699d39c06e6d66e4e3f5dc2469072ce1b213dec05781a65746d703f010994e5",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "jp-amend-507AC0000000070",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000070",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 173426,
+      "sha256": "ed3601b1f1adda85e677b0af505438cbadf926392ad1bb3d26ba2b2facaeb554",
+      "note": "日本学術会議法 공식 API: 2026-10-01 시행 판본 메타데이터·관련 부칙 확인용; 개정법 전체 의미검수 아님"
+    },
+    {
+      "source_id": "ppc-2026-amendment-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/r8kaiseihogohou/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 49595,
+      "sha256": "24ae415bc46f99e9a0efdf7bbe0ab0b42e6380652b4933582f22e881b475b330",
+      "note": "2026 개정 안내의 법률·시행 관계를 확인; 확정 시행일과 예정/기간 표기를 구별"
+    },
+    {
+      "source_id": "ppc-2026-amendment-pdf",
+      "url": "https://www.ppc.go.jp/files/pdf/260717_kaiseihounitsuite.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 2029089,
+      "sha256": "3b6721a0964c18199b3f2a055fe55e50e97a44d90f1da69365ddb041cdc4afbf",
+      "note": "PPC 개정 안내 슬라이드; 관련 내용만 확인. 법률 전문 PDF와 구별하고 선정 본칙에 합치지 않음"
+    },
+    {
+      "source_id": "ppc-2026-amendment-law",
+      "url": "https://www.ppc.go.jp/files/pdf/260717_houritsu.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 423208,
+      "sha256": "8a819a46ee0ba0ed5aaf27c69164ab57d1f96b1136e65aa0c8f035b9a752e415",
+      "note": "PPC 공식 개정법 전문 PDF; 관련 부칙·개정부분만 대조하고 선택 현행 판본과 분리"
+    },
+    {
+      "source_id": "ppc-decree-sept-diff",
+      "url": "https://www.ppc.go.jp/files/pdf/260930_sekourei_shinkyu.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 48825,
+      "sha256": "f59614692b02b6609f46573d1fe0bdfcb7d2c856380b30691dd7090aadee5331",
+      "note": "공식 개정문·개정대조표의 관련 부분 확인; 시행 전 개정과 선택 통합판본을 구분"
+    },
+    {
+      "source_id": "appi-decree-current-followup",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415CO0000000507",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 149131,
+      "sha256": "37c53861b0a74afe7e3a33588660446f973774ca9cbf3b087b5f19796618b9c2",
+      "note": "PPC 2026-09-30 개정대조표와 API 응답 판본의 차이를 확인하기 위한 재조회; 선정 판본을 조용히 바꾸지 않음"
+    },
+    {
+      "source_id": "jp-amend-508AC0000000056-api-attempt",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/508AC0000000056",
+      "retrieved_on": "2026-10-08",
+      "http_status": 404,
+      "byte_count": 0,
+      "sha256": null,
+      "note": "API 조회 HTTP404; 실패 응답 본문 미보관. 법률 부재를 의미하지 않으며 PPC 공식 전문 PDF를 확보해 관련 조문·부칙을 확인함"
+    },
+    {
+      "source_id": "appi-decree-revisions-followup",
+      "url": "https://laws.e-gov.go.jp/api/2/law_revisions/415CO0000000507",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 15790,
+      "sha256": "048e8958853408f16623a700795e52dc2ede7fa3eab2bd1d201153710f658a92",
+      "note": "정령 개정 이력 조회; 반환 목록에2026-07-31 이후 시행 판본 없음. PPC2026-09-30 자료와 차이 해소 안됨"
     }
   ],
   "latest_failed_access": [
