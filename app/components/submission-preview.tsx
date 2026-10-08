@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { SubmissionItem } from "../../lib/submission-preview";
+import type { SubmissionDocuments, SubmissionItem } from "../../lib/submission-preview";
+import SubmissionDocumentsView from "./submission-documents";
+import SubmissionFeedback from "./submission-feedback";
 
 const groupLabels = { all: "전체", legal: "법제 담당", trends: "동향 담당" } as const;
 const statusLabels: Record<string, string> = {
@@ -9,7 +11,9 @@ const statusLabels: Record<string, string> = {
   verified: "확인됨", reviewed: "검수됨", published: "공개",
 };
 
-export default function SubmissionPreview({ items, commitSha }: { items: SubmissionItem[]; commitSha?: string }) {
+export default function SubmissionPreview({ items, documents, branch, commitSha }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
+  const hasDocument = documents.legal.length > 0 || Boolean(documents.weekly);
+  const [showDocument, setShowDocument] = useState(hasDocument);
   const [group, setGroup] = useState<"all" | "legal" | "trends">("all");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
@@ -22,13 +26,18 @@ export default function SubmissionPreview({ items, commitSha }: { items: Submiss
 
   return <>
     <header className="topbar">
-      <div><p className="eyebrow">WORKSPACE / PR PREVIEW</p><h1>PR 제출물 확인</h1></div>
-      <div className="topbar-note">이 배포 브랜치의 파일 · 읽기 전용</div>
+      <div><p className="eyebrow">WORKSPACE / PR PREVIEW</p><h1>제출물 검수</h1></div>
+      <div className="topbar-note">이 배포 브랜치의 파일 · 검수 전 초안</div>
     </header>
     <div className="submission-notice">
-      <strong>팀원이 제출한 결과를 확인하는 화면입니다.</strong>
-      <span>표시된 내용은 검수·승인·DB 입력·실제 발행을 뜻하지 않습니다. 원문 링크와 검토 필요 상태를 확인해 주세요.</span>
+      <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
+      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 이 공개 화면에 표시되지 않습니다.</span>
     </div>
+    <div className="document-tabs" role="group" aria-label="검수 화면 선택">
+      {hasDocument && <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>{documents.legal.length ? "17개 기준 비교표" : "주간 동향 예시 호"}</button>}
+      <button type="button" className={!showDocument ? "selected" : ""} onClick={() => setShowDocument(false)}>제출 자료 목록</button>
+    </div>
+    {showDocument && hasDocument ? <SubmissionDocumentsView documents={documents} branch={branch} commitSha={commitSha} /> : <>
     <div className="toolbar">
       <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="제목·기관·자료 유형 검색" /></label>
       <div className="filter-group" role="group" aria-label="담당자 필터">
@@ -57,9 +66,10 @@ export default function SubmissionPreview({ items, commitSha }: { items: Submiss
           <div className="detail-block"><span className="detail-label">제출 파일</span>{selected.files.map((file) => safeSha
             ? <a key={file} href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/${file}`} target="_blank" rel="noopener noreferrer">{file}<span>↗</span></a>
             : <p key={file}>{file}</p>)}</div>
-          <p className="publish-warning">이 화면에서는 검수 상태를 변경하거나 자료를 공개하지 않습니다.</p>
+          <SubmissionFeedback key={selected.id} itemId={selected.id} branch={branch} commitSha={commitSha} />
         </> : <div className="empty detail-empty">{items.length === 0 ? "제출 자료가 있는 팀원 브랜치의 Preview에서 실제 내용을 확인해 주세요." : "조건에 맞는 제출물이 없습니다."}</div>}
       </aside>
     </div>
+    </>}
   </>;
 }

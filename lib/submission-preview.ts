@@ -16,6 +16,40 @@ export type SubmissionItem = {
 
 type JsonRecord = Record<string, unknown>;
 
+export type LegalComparisonCell = {
+  id: string;
+  criterionId: string;
+  criterionOrder: number;
+  criterionName: string;
+  jurisdiction: string;
+  articleNumbers: string[];
+  summary: string;
+  exceptions: string;
+  sourceUrl: string;
+  sourceVersion: string;
+  status: string;
+  pendingReason: string;
+};
+
+export type WeeklyReviewEntry = {
+  id: string;
+  title: string;
+  originalTitle: string;
+  publishedDate: string;
+  organization: string;
+  category: string;
+  facts: string;
+  keyPoints: string[];
+  significance: string;
+  requiredChecks: string[];
+  officialUrl: string;
+};
+
+export type SubmissionDocuments = {
+  legal: LegalComparisonCell[];
+  weekly: { title: string; notice: string; entries: WeeklyReviewEntry[] } | null;
+};
+
 function record(value: unknown): JsonRecord {
   return value && typeof value === "object" && !Array.isArray(value) ? value as JsonRecord : {};
 }
@@ -70,6 +104,71 @@ function parseCsv(text: string): string[][] {
   if (quoted) throw new Error("CSV 따옴표가 닫히지 않았습니다.");
   if (cell || row.length) { row.push(cell); rows.push(row); }
   return rows;
+}
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((part): part is string => typeof part === "string") : [];
+}
+
+function legalComparison(root: string): LegalComparisonCell[] {
+  const path = join(root, "data", "legal", "criteria-mapping.csv");
+  if (!existsSync(path)) return [];
+  try {
+    const [headings, ...rows] = parseCsv(readFileSync(path, "utf8"));
+    if (!headings?.includes("cell_id") || !headings.includes("korean_summary")) return [];
+    return rows.filter((row) => row.some(Boolean)).map((row) => {
+      const data = Object.fromEntries(headings.map((heading, index) => [heading, row[index] ?? ""]));
+      let articleNumbers: string[] = [];
+      try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
+      return {
+        id: `criteria-${data.cell_id}`,
+        criterionId: data.criterion_id,
+        criterionOrder: Number(data.criterion_order) || 0,
+        criterionName: data.criterion_name,
+        jurisdiction: data.jurisdiction_code,
+        articleNumbers,
+        summary: data.korean_summary,
+        exceptions: data.major_exceptions,
+        sourceUrl: officialLink(data.official_source_url)[0]?.url ?? "",
+        sourceVersion: data.source_version,
+        status: data.review_status,
+        pendingReason: data.pending_reason,
+      };
+    }).filter((cell) => cell.id !== "criteria-");
+  } catch { return []; }
+}
+
+function weeklyReview(root: string): SubmissionDocuments["weekly"] {
+  const data = readJson(root, "data/trends/weekly-sample.json");
+  if (!data || data.__parse_error) return null;
+  const entries = Array.isArray(data.entries) ? data.entries.map(record) : [];
+  return {
+    title: label(data.title, "주간 동향 예시 호"),
+    notice: label(data.coverage_notice),
+    entries: entries.map((entry, index) => {
+      const facts = record(entry.facts);
+      const significance = record(entry.privacy_significance);
+      const humanReview = record(entry.human_review);
+      return {
+        id: `weekly-${label(entry.entry_id, String(index))}`,
+        title: label(entry.korean_title),
+        originalTitle: label(entry.original_title),
+        publishedDate: label(entry.source_published_date),
+        organization: label(entry.organization),
+        category: label(entry.category),
+        facts: label(facts.summary_ko),
+        keyPoints: stringArray(entry.key_points_ko),
+        significance: label(significance.text_ko),
+        requiredChecks: stringArray(humanReview.required_checks),
+        officialUrl: officialLink(entry.official_url)[0]?.url ?? "",
+      };
+    }),
+  };
+}
+
+/** Render committed drafts in a reviewable, publication-like structure. */
+export function loadSubmissionDocuments(root = process.cwd()): SubmissionDocuments {
+  return { legal: legalComparison(root), weekly: weeklyReview(root) };
 }
 
 function legalItems(root: string): SubmissionItem[] {
