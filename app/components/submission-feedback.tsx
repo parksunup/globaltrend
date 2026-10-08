@@ -13,6 +13,7 @@ type FeedbackRow = {
 };
 
 export default function SubmissionFeedback({ itemId, branch, commitSha }: { itemId: string; branch?: string; commitSha?: string }) {
+  const qaOnly = branch === "codex/review-feedback-qa";
   const [email, setEmail] = useState("");
   const [body, setBody] = useState("");
   const [rows, setRows] = useState<FeedbackRow[]>([]);
@@ -20,7 +21,7 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
   const [canWrite, setCanWrite] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
-  const ready = Boolean(branch && /^[A-Za-z0-9._/-]{1,160}$/.test(branch) && commitSha && /^[a-f0-9]{40}$/i.test(commitSha));
+  const ready = !qaOnly && Boolean(branch && /^[A-Za-z0-9._/-]{1,160}$/.test(branch) && commitSha && /^[a-f0-9]{40}$/i.test(commitSha));
   const configured = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 
   const refresh = useCallback(async () => {
@@ -72,16 +73,17 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
   return <section className="feedback-panel" aria-label="항목 피드백">
     <h3>이 항목에 의견 남기기</h3>
     <p>의견은 항목·브랜치·커밋과 함께 DB에 기록됩니다. 승인이나 공개로 바뀌지 않습니다.</p>
-    {!ready && <p className="feedback-warning">피드백은 커밋 정보가 있는 PR Preview에서만 사용할 수 있습니다.</p>}
-    {ready && !configured && <p className="feedback-warning">Supabase 연결 설정이 없어 피드백을 사용할 수 없습니다.</p>}
-    {ready && configured && !userId && <div className="feedback-login">
+    {qaOnly && <p className="feedback-warning">이 화면은 두 PR의 자료를 합친 표시 확인용입니다. 실제 의견은 기능 적용 후 담당자의 #15 또는 #16 Preview에 남겨 주세요.</p>}
+    {!qaOnly && !ready && <p className="feedback-warning">피드백은 커밋 정보가 있는 PR Preview에서만 사용할 수 있습니다.</p>}
+    {!qaOnly && ready && !configured && <p className="feedback-warning">Supabase 연결 설정이 없어 피드백을 사용할 수 없습니다.</p>}
+    {!qaOnly && ready && configured && !userId && <div className="feedback-login">
       <label htmlFor="feedback-email">팀 계정 이메일</label>
       <input id="feedback-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" />
       <button type="button" onClick={sendLink} disabled={busy || !email.trim()}>로그인 링크 받기</button>
       <small>Preview 열람에는 로그인이 필요 없습니다. 의견 작성·조회에는 등록된 Supabase 팀 계정이 필요합니다.</small>
     </div>}
-    {ready && userId && !canWrite && <p className="feedback-warning">로그인한 계정에 팀 권한이 없습니다. 프로젝트 리드에게 팀 계정 등록을 요청해 주세요.</p>}
-    {ready && canWrite && <>
+    {!qaOnly && ready && userId && !canWrite && <p className="feedback-warning">로그인한 계정에 팀 권한이 없습니다. 프로젝트 리드에게 팀 계정 등록을 요청해 주세요.</p>}
+    {!qaOnly && ready && canWrite && <>
       <div className="feedback-list">
         {rows.length === 0 ? <p>아직 이 항목에 남긴 의견이 없습니다.</p> : rows.map((row) =>
           <article key={row.id}><div><strong>{row.profiles?.display_name || "팀원"}</strong><time>{new Date(row.created_at).toLocaleString("ko-KR")}</time></div><p>{row.body}</p></article>)}
