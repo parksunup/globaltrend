@@ -12,7 +12,7 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
   const selected = cells.find((cell) => cell.id === selectedId) ?? cells[0];
   const lookup = new Map(cells.map((cell) => [`${cell.criterionId}:${cell.jurisdiction}`, cell]));
   return <>
-    <div className="document-heading"><span className="panel-kicker">LEGAL COMPARISON · DRAFT</span><h2>개인정보 보호법 비교표</h2><p>17개 기준 × 7개 법제. 한국·일본 작성 셀도 사람 검수 전 초안입니다. ‘미검토’는 규정이 없다는 뜻이 아닙니다.</p></div>
+    <div className="document-heading"><span className="panel-kicker">LEGAL COMPARISON · DRAFT</span><h2>개인정보 보호법 비교표</h2><p>17개 기준 × 7개 법제. 한국·일본 작성 셀도 사람 검수 전 초안입니다. ‘미검토’는 규정이 없다는 뜻이 아닙니다.</p><p><a href="/legal-translation">일본 APPI 전체 번역 초안 읽고 조문별 피드백 남기기 →</a></p></div>
     <div className="comparison-scroll"><table className="comparison-table"><thead><tr><th scope="col">비교 기준</th>{jurisdictions.map((code) => <th scope="col" key={code}>{code}</th>)}</tr></thead><tbody>
       {criteria.map((criterion) => <tr key={criterion.id}><th scope="row">{criterion.order}. {criterion.name}</th>{jurisdictions.map((code) => {
         const cell = lookup.get(`${criterion.id}:${code}`);
