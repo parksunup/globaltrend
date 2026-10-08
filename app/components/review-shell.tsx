@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useTransition } from "react";
 import { kindLabels, statusLabels, type ReviewItem, type ReviewKind, type ReviewStatus } from "../sample-data";
 import { updateReviewState } from "../team/actions";
 import SubmissionPreview from "./submission-preview";
-import type { SubmissionItem } from "../../lib/submission-preview";
+import type { SubmissionDocuments, SubmissionItem } from "../../lib/submission-preview";
 
 const kinds: ReviewKind[] = ["sources", "laws", "criteria"];
 const statuses: Array<ReviewStatus | "all"> = ["all", "unreviewed", "in_review", "approved", "rejected", "published"];
@@ -13,7 +13,7 @@ function StatusBadge({ status }: { status: ReviewStatus }) {
   return <span className={"status status-" + status}>{statusLabels[status]}</span>;
 }
 
-export default function ReviewShell({ initialItems, dataSource, teamMode = false, publicReviewMode = false, canReview = false, teamRole, showSubmissionPreview = false, submissions = [], submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; publicReviewMode?: boolean; canReview?: boolean; teamRole?: string; showSubmissionPreview?: boolean; submissions?: SubmissionItem[]; submissionCommitSha?: string }) {
+export default function ReviewShell({ initialItems, dataSource, teamMode = false, publicReviewMode = false, canReview = false, teamRole, showSubmissionPreview = false, submissions = [], submissionDocuments = { legal: [], weekly: null }, submissionBranch, submissionCommitSha }: { initialItems: ReviewItem[]; dataSource: "supabase" | "sample"; teamMode?: boolean; publicReviewMode?: boolean; canReview?: boolean; teamRole?: string; showSubmissionPreview?: boolean; submissions?: SubmissionItem[]; submissionDocuments?: SubmissionDocuments; submissionBranch?: string; submissionCommitSha?: string }) {
   const [reviewItems, setReviewItems] = useState(initialItems);
   const [showSubmissions, setShowSubmissions] = useState(showSubmissionPreview);
   const [kind, setKind] = useState<ReviewKind>("sources");
@@ -88,7 +88,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
       </aside>
 
       <section className="content">
-        {showSubmissions ? <SubmissionPreview items={submissions} commitSha={submissionCommitSha} /> : <>
+        {showSubmissions ? <SubmissionPreview items={submissions} documents={submissionDocuments} branch={submissionBranch} commitSha={submissionCommitSha} /> : <>
         <header className="topbar">
           <div><p className="eyebrow">WORKSPACE / REVIEW</p><h1>{kindLabels[kind]}</h1></div>
           <div className="topbar-note"><span className="lock">◈</span> {publicReviewMode ? "검수 자료 열람" : teamMode ? "팀 검수 단계" : "공개 전 단계"} <b>{teamMode ? "로그인됨" : "읽기 전용"}</b></div>

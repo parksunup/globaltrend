@@ -3,5 +3,17 @@
   "publication_status": "draft",
   "is_published": false,
   "human_review_status": "unreviewed",
-  "entries": [{ "korean_title": "한국어 제목" }]
+  "entries": [{
+    "entry_id": "entry-1",
+    "korean_title": "한국어 제목",
+    "original_title": "Original title",
+    "source_published_date": "2026-10-01",
+    "organization": ["공식 기관"],
+    "category": "정책",
+    "facts": { "summary_ko": "원문에서 확인한 사실" },
+    "key_points_ko": ["첫째 항목"],
+    "privacy_significance": { "text_ko": "편집 의견" },
+    "human_review": { "required_checks": ["사람 검수 필요"] },
+    "official_url": "https://example.org/"
+  }]
 }
