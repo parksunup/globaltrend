@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { join } from "node:path";
-import { loadSubmissionPreview } from "../lib/submission-preview.ts";
+import { loadSubmissionDocuments, loadSubmissionPreview } from "../lib/submission-preview.ts";
 
 const root = join(import.meta.dirname, "fixtures", "submission-preview");
 
@@ -19,4 +19,15 @@ test("PR branch deliverables are visible without a database import", () => {
 
 test("missing submitted files do not create fake entries", () => {
   assert.deepEqual(loadSubmissionPreview(join(import.meta.dirname, "fixtures", "missing")), []);
+  assert.deepEqual(loadSubmissionDocuments(join(import.meta.dirname, "fixtures", "missing")), { legal: [], weekly: null });
+});
+
+test("committed comparison cells and weekly entries become readable review documents", () => {
+  const documents = loadSubmissionDocuments(root);
+  assert.equal(documents.legal.length, 2);
+  assert.equal(documents.legal[0].criterionName, "개인정보 범위");
+  assert.deepEqual(documents.legal[0].articleNumbers, ["제2조", "제58조의2"]);
+  assert.equal(documents.weekly?.entries.length, 1);
+  assert.equal(documents.weekly?.entries[0].facts, "원문에서 확인한 사실");
+  assert.equal(documents.weekly?.entries[0].id, "weekly-entry-1");
 });

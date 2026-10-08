@@ -84,7 +84,7 @@ export default function GuidePage() {
         </section>
       </div>
 
-      <section className="guide-card"><h2>4. 검사하고 PR로 제출하기</h2><p>Codex가 파일을 만들면 <code>pnpm validate:data</code>를 실행합니다. 그다음 공식 URL이 있는지, 추정한 내용이 섞이지 않았는지, 지정된 폴더 밖의 파일을 수정하지 않았는지 확인합니다.</p><pre>{prPrompt}</pre><p>PR이 올라오면 담당자는 자기 Vercel Preview 첫 화면의 <strong>PR 제출물</strong> 탭에서 제출 내용과 상태를 확인합니다. 이 화면은 브랜치 파일을 읽기 전용으로 보여주며 검수 승인이나 실제 발행이 아닙니다. 프로젝트 리드는 Markdown 원본·공식 근거·검토 필요 항목·자동 검사와 Preview 표시를 함께 확인한 뒤 main에 merge합니다. 팀원은 main에 직접 push하거나 merge하지 않습니다.</p></section>
+      <section className="guide-card"><h2>4. 검사하고 PR로 제출하기</h2><p>Codex가 파일을 만들면 <code>pnpm validate:data</code>를 실행합니다. 그다음 공식 URL이 있는지, 추정한 내용이 섞이지 않았는지, 지정된 폴더 밖의 파일을 수정하지 않았는지 확인합니다.</p><pre>{prPrompt}</pre><p>PR이 올라오면 담당자는 자기 Vercel Preview 첫 화면의 <strong>PR 제출물</strong> 탭을 엽니다. 법제 비교표와 주간 동향 예시 호는 문서처럼 읽고, 셀·기사별로 로그인 없이 자연어 피드백을 남길 수 있습니다. 이름은 선택 사항이며 신원이 확인된 이름이 아닙니다. 저장된 의견은 공개 Preview에 표시되지 않고 DB에 남으며 검수 승인이나 실제 발행도 아닙니다. 프로젝트 리드는 원본·공식 근거·남은 피드백·자동 검사를 함께 확인한 뒤 main에 merge합니다. 팀원은 main에 직접 push하거나 merge하지 않습니다.</p></section>
 
       <section className="guide-card"><h2>프로젝트 리드가 PR에서 확인할 것</h2><ul><li>요청한 결과 파일이 실제로 들어 있는가</li><li>법률별 번역 전문이 원문 조·항·호·부칙과 빠짐없이 대응하는가</li><li>17개 기준표의 조항 링크가 해당 법률 전문과 공식 판본을 가리키는가</li><li><strong>Markdown 표를 먼저 읽고 내용을 이해할 수 있는가</strong></li><li>Markdown 표와 CSV·JSON의 행·항목 수가 서로 맞는가</li><li>공식 원문 URL을 직접 열 수 있는가</li><li>확인하지 못한 내용이 `검토 필요`로 표시되어 있는가</li><li>앱 코드·Supabase·환경변수를 불필요하게 수정하지 않았는가</li><li>PR에 검증 방법과 남은 문제가 적혀 있는가</li><li>기존 자료를 삭제하거나 덮어쓰지 않았는가</li></ul></section>
 
