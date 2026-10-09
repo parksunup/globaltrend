@@ -183,3 +183,12 @@
 .searchSubmit{min-width:118px;border:0!important;border-radius:30px!important;padding:14px 24px!important;background:#65c9ed!important;color:#0b2637!important;font:600 15px "Noto Sans KR",sans-serif!important;cursor:pointer}
 .searchSubmit:hover{background:#83dcf8!important}
 @media(max-width:620px){.searchSubmit{min-width:0;padding:10px 15px!important;font-size:12px!important}}
+
+.countryCard:disabled,.countryCardSelected:disabled{cursor:not-allowed;opacity:.45}
+.compareCardsThree{grid-template-columns:repeat(3,minmax(0,1fr))}
+.compareCardsThree .articlePreview{grid-column:1/-1;min-height:0}
+.lawEmptyState{margin-top:13px;padding:18px 14px;border:1px solid rgba(151,180,199,.16);border-radius:5px;background:#0c1926}
+.lawEmptyState strong{font-size:13px;color:#dbe8ee}
+.lawEmptyState p{margin:7px 0 0;color:#9fb0bc;font-size:12px;line-height:1.7}
+@media(max-width:1180px){.compareCardsThree{grid-template-columns:repeat(2,minmax(0,1fr))}.compareCardsThree .articlePreview{grid-column:1/-1}}
+@media(max-width:620px){.compareCardsThree{grid-template-columns:1fr}.lawEmptyState{padding:14px 11px}.lawEmptyState p{font-size:11px}}

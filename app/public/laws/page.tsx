@@ -27,12 +27,20 @@ export default function PublicLawComparePage() {
   const [view, setView] = useState<"summary" | "full">("summary");
   const selectedLaws = laws.filter((law) => selected.includes(law.code));
   const toggle = (code:string) => {
-    setSelected((current) => {
-      if (current.includes(code)) return current.length > 1 ? current.filter((item) => item !== code) : current;
-      return current.length < 3 ? [...current, code] : current;
-    });
+    if (selected.includes(code)) {
+      if (selected.length === 1) return;
+      const next = selected.filter((item) => item !== code);
+      setSelected(next);
+      if (previewCode === code) setPreviewCode(next[0]);
+      return;
+    }
+    if (selected.length >= 3) return;
+    setSelected([...selected, code]);
     setPreviewCode(code);
   };
+  const compareCardsClass = selected.length === 3
+    ? `${styles.compareCards} ${styles.compareCardsThree}`
+    : styles.compareCards;
   const previewLaw = laws.find((law) => law.code === previewCode) ?? laws[0];
   return <main className={styles.lawPage}>
     <header className={styles.lawHeader}>
@@ -53,7 +61,7 @@ export default function PublicLawComparePage() {
       <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>17개 기준으로 비교하기</h2></div><p>선택한 국가의 개인정보 보호법을 동일한 기준으로 비교할 수 있습니다.</p><span className={styles.selectCount}>{selected.length}개 국가 선택</span></div>
       <div className={styles.compareGrid}>
         <aside className={styles.criteriaList}><h3>비교 기준 <small>17</small></h3><ol>{criteria.map((criterion,index)=><li key={criterion}><button type="button" onClick={()=>setActiveCriterion(index)} className={activeCriterion===index?styles.criteriaActive:""}><span>{String(index+1).padStart(2,"0")}</span>{criterion}<i>›</i></button></li>)}</ol></aside>
-        <div className={styles.compareCards}>
+        <div className={compareCardsClass}>
           {selectedLaws.map((law) => <article className={styles.lawCompareCard} key={law.code}>
             <header><span className={styles.flag}>{law.flag}</span><div><h3>{law.country}</h3><p>{law.law}</p></div></header>
             <section><strong>주요 내용</strong><p>기준별 조항을 정리한 검수 자료가 등록되면 여기에서 확인할 수 있습니다.</p><span className={styles.draftLabel}>법제 자료 준비 중</span></section>
@@ -65,7 +73,7 @@ export default function PublicLawComparePage() {
             <span className={styles.versionBadge}>판본·검수 상태 표시 예정</span>
             <div className={styles.previewTabs}><button type="button" onClick={()=>setView("summary")} className={view==="summary"?styles.previewTabActive:""}>조항 요약</button><button type="button" onClick={()=>setView("full")} className={view==="full"?styles.previewTabActive:""}>번역 전문</button></div>
             <p className={styles.previewNotice}>{view==="summary" ? `‘${criteria[activeCriterion]}’ 기준의 조항 요약이 준비되면 조문 번호와 함께 보여드립니다.` : "해당 법률의 전체 한국어 번역이 등록되면 조문 순서대로 읽고 검색할 수 있습니다."}</p>
-            <div className={styles.previewSkeleton}><i/><i/><i/><i/><i/><i/><i/></div>
+            <div className={styles.lawEmptyState}><strong>검수 자료 준비 중</strong><p>한국어 번역 전문과 기준별 조항을 등록하면 이 영역에서 읽을 수 있습니다.</p></div>
           </aside>
         </div>
       </div>
