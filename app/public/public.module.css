@@ -76,4 +76,72 @@
 @media(max-width:620px){.header,.lawHeader{height:auto;min-height:64px;flex-wrap:wrap;gap:0 12px;padding:8px 15px}.brand,.lawBrand{font-size:17px}.brandTagline{display:none}.brandSerif,.lawBrand .brandSerif{font-size:20px}.searchIcon,.lawSearch{margin-left:auto}.nav,.lawNav{order:3;width:100%;justify-content:space-between;gap:9px}.nav a,.lawNav a{padding:12px 0 9px;font-size:12px}.hero{height:190px;padding:26px 18px}.hero h1{font-size:31px}.heroTitle>p:last-child{font-size:12px}.overline{font-size:8px}.edition{font-size:8px}.globe{right:-18%;width:90vw;opacity:.35}.observatoryGrid{padding:14px 12px}.timelinePanel,.featured,.topicPanel{padding-left:3px;padding-right:3px}.featured{padding-top:17px;padding-bottom:17px}.featured h2{font-size:29px}.featured h3{font-size:17px}.topicNetwork{height:290px;transform:scale(.94);transform-origin:top center;margin-bottom:-15px}.topicNetwork>a{min-width:76px;height:76px;font-size:11px}.topicNetwork>a.topicCenter{min-width:102px!important;height:102px!important}.weeklyStrip{padding:13px;grid-template-columns:1fr 1fr}.weeklyLead{grid-column:1/-1;align-items:flex-start;flex-direction:column;gap:3px}.weekCard,.weekCardActive{min-height:56px;padding-left:8px}.demoBanner{font-size:9px;text-align:left;padding:10px 15px}.footer{padding:15px;gap:10px;flex-wrap:wrap}.footer p{order:3;flex-basis:100%}
 .searchPage{padding:24px 14px 35px}.searchIntro{margin-bottom:12px}.searchIntro h1{font-size:24px}.searchIntro>p:last-child{font-size:12px}.searchBox{height:58px;padding:0 8px 0 13px;gap:8px}.searchBox input{font-size:16px}.searchBox kbd{padding:10px 12px;font-size:11px}.searchControls{align-items:flex-start;flex-direction:column;gap:8px;margin-bottom:14px}.modeSwitch button{font-size:11px;padding:8px 10px}.modeHint{font-size:10px}.searchLayout{grid-template-columns:1fr;gap:10px}.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:10px}.filterHeading{grid-column:1/-1}.filters>p,.filterFoot{display:none}.filterGroup{border:0;padding:0}.filterGroup{grid-column:1/-1}.filters>button{padding:8px 4px;font-size:10px}.storyCard{padding:14px 8px}.storyCard>strong{font-size:14px}.storyCard>p{font-size:12px}.storyMeta{font-size:9px;gap:5px}.resultHeader strong{font-size:17px}.resultHeader strong small{font-size:10px}
 .lawHero{height:165px;padding:25px 17px}.lawHero h1{font-size:29px}.lawHero>div:first-child>p:last-child{font-size:11px;max-width:270px}.lawOrbit{position:absolute;right:-78px;opacity:.48}.lawOrbit>p{display:none}.countryGrid{grid-template-columns:repeat(2,minmax(0,1fr));padding:11px;gap:7px}.countryCard,.countryCardSelected{min-height:100px}.countryCard small,.countryCardSelected small{font-size:9px}.compareSection{padding:20px 12px 30px}.compareTitle{gap:10px}.compareTitle>div{flex-basis:100%}.compareTitle h2{font-size:25px}.compareTitle>p{font-size:11px}.selectCount{font-size:10px}.compareGrid{grid-template-columns:1fr}.criteriaList ol{display:flex;max-height:none;overflow:auto}.criteriaList li{flex:0 0 auto}.criteriaList li button{min-height:42px;width:auto;grid-template-columns:20px auto;padding:7px 8px;font-size:10px}.criteriaList li button i{display:none}.criteriaList h3{font-size:12px}.compareCards{grid-template-columns:1fr}.lawCompareCard,.articlePreview{padding:13px}.articlePreview{min-height:340px}.lawFooter{padding:15px;flex-wrap:wrap;gap:10px}.lawFooter span{flex-basis:100%;order:3}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){.site *, .lawPage *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Readability pass: follow the supplied observatory search hierarchy. */
+.searchPage{padding:30px clamp(24px,3.2vw,54px) 46px}
+.searchIntro{max-width:1240px;margin-bottom:20px}
+.searchIntro .eyebrow{font-size:11px;color:#9eb2c1;letter-spacing:.18em}
+.searchIntro h1{font-size:36px;line-height:1.25;letter-spacing:-.045em;margin:10px 0 7px}
+.searchIntro>p:last-child{font-size:16px;line-height:1.65;color:#b4c2cc}
+.searchBox{max-width:1240px;height:74px;border-radius:40px;padding:0 12px 0 25px;gap:17px;box-shadow:0 12px 34px rgba(0,0,0,.2)}
+.searchBox>span{font-size:34px;color:#718898}
+.searchBox input{font-size:24px;font-weight:600;letter-spacing:-.035em}
+.searchBox kbd{min-width:118px;border-radius:30px;padding:14px 24px;font-size:15px}
+.searchControls{max-width:1240px;margin:0 auto 25px;min-height:38px}
+.modeSwitch,.sortSwitch{border-radius:24px}
+.modeSwitch button,.sortSwitch button{font-size:13px}
+.searchLayout{max-width:1480px;grid-template-columns:238px minmax(0,1fr);gap:28px;align-items:start}
+.filters,.preview{border-radius:8px}
+.filters{padding:19px 16px}
+.filterHeading{font-size:16px;padding-bottom:15px}
+.filterHeading button{font-size:12px}
+.filterGroup{padding-top:16px}
+.filterGroup summary{font-size:14px;padding-bottom:8px}
+.filters>button{padding:10px 9px;font-size:13px}
+.filters>button span+span{font-size:11px}
+.filterFoot{font-size:12px}
+.resultHeader{padding:2px 0 16px}
+.resultHeader .eyebrow{font-size:10px}
+.resultHeader strong{font-size:23px}
+.resultHeader strong small{font-size:14px}
+.sortSwitch button{font-size:12px;padding:8px 13px}
+.storyCard{padding:19px 16px 18px}
+.storyMeta{font-size:12px;gap:9px}
+.storyMeta time{font-size:12px}
+.storyCard>strong{font-size:18px;line-height:1.55;margin:8px 0 6px}
+.storyCard>p{font-size:14px;line-height:1.75;max-width:900px}
+.tagList{gap:8px;margin-top:12px}
+.tagList span{font-size:11px;padding:5px 9px}
+.preview{grid-column:2;position:static;top:auto;margin-top:14px;padding:22px}
+.previewTop,.previewCountry{font-size:13px}
+.preview h2{font-size:23px;line-height:1.5}
+.previewText{font-size:14px;line-height:1.8}
+.previewLabel{font-size:12px}
+.sourcePending{font-size:13px}
+.demoNote{font-size:12px}
+.lawHero{height:205px}
+.lawHero h1{font-size:42px}
+.lawHero>div:first-child>p:last-child{font-size:16px}
+.countryGrid{gap:12px;padding-top:17px;padding-bottom:17px}
+.countryCard,.countryCardSelected{min-height:126px;border-radius:7px}
+.countryCard strong,.countryCardSelected strong{font-size:16px}
+.countryCard small,.countryCardSelected small{font-size:12px;line-height:1.5}
+.compareSection{padding-top:32px}
+.compareTitle h2{font-size:34px}
+.compareTitle>p{font-size:14px}
+.criteriaList li button{min-height:43px;font-size:13px}
+.criteriaList li button span{font-size:11px}
+.lawCompareCard>header h3{font-size:19px}
+.lawCompareCard>header p{font-size:13px}
+.lawCompareCard>section strong{font-size:14px}
+.lawCompareCard>section p,.lawCompareCard>section li{font-size:13px;line-height:1.75}
+.draftLabel{font-size:11px}
+.readLaw{font-size:13px}
+.previewLawHeader h3{font-size:15px}
+.previewTabs button{font-size:12px}
+.previewNotice{font-size:13px;line-height:1.75}
+.lawDisclaimer{font-size:11px}
+@media(max-width:1180px){.searchLayout{grid-template-columns:220px minmax(0,1fr);gap:20px}.preview{grid-column:2;display:block}}
+@media(max-width:850px){.searchIntro h1{font-size:32px}.searchIntro>p:last-child{font-size:14px}.searchLayout{grid-template-columns:190px minmax(0,1fr);gap:14px}.preview{grid-column:2}.lawHero{height:195px}.lawHero h1{font-size:36px}.countryCard strong,.countryCardSelected strong{font-size:14px}.countryCard small,.countryCardSelected small{font-size:11px}}
+@media(max-width:620px){.searchPage{padding:23px 14px 35px}.searchIntro h1{font-size:28px}.searchIntro>p:last-child{font-size:13px}.searchBox{height:60px;border-radius:32px}.searchBox input{font-size:17px}.searchBox kbd{min-width:0;padding:10px 15px;font-size:12px}.searchLayout{grid-template-columns:1fr;gap:10px}.preview{grid-column:1;margin-top:0;padding:16px}.filterHeading{font-size:14px}.filterGroup summary{font-size:12px}.filters>button{font-size:11px}.storyCard{padding:15px 10px}.storyCard>strong{font-size:16px}.storyCard>p{font-size:13px}.storyMeta,.storyMeta time{font-size:10px}.resultHeader strong{font-size:19px}.resultHeader strong small{font-size:11px}.lawHero h1{font-size:29px}.lawHero>div:first-child>p:last-child{font-size:12px}.compareTitle h2{font-size:27px}.criteriaList li button{font-size:11px}}
