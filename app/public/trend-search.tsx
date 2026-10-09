@@ -25,6 +25,8 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
   const [query, setQuery] = useState(initialQuery);
   const [mode, setMode] = useState<"keyword" | "concept">("keyword");
   const [country, setCountry] = useState("전체");
+  const [period, setPeriod] = useState("전체");
+  const [kind, setKind] = useState("전체");
   const [sort, setSort] = useState<"관련도순" | "최신순">("관련도순");
   const [selected, setSelected] = useState(0);
   const terms = useMemo(() => {
@@ -39,22 +41,26 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
   const results = useMemo(() => {
     const filtered = stories.filter((story) => {
       const countryMatch = country === "전체" || story.country === country;
+      const kindMatch = kind === "전체" || story.kind === kind;
       const searchable = [story.title, story.summary, story.institution, ...story.tags].join(" ").toLocaleLowerCase();
       const queryMatch = !terms.length || terms.some((term) => searchable.includes(term));
-      return countryMatch && queryMatch;
+      const ageInMonths = period === "최근 1개월" ? 1 : period === "최근 6개월" ? 6 : period === "최근 1년" ? 12 : 0;
+      const published = new Date(story.date.replaceAll(".", "-"));
+      const periodMatch = !ageInMonths || published >= new Date(new Date().setMonth(new Date().getMonth() - ageInMonths));
+      return countryMatch && kindMatch && queryMatch && periodMatch;
     });
     return sort === "최신순" ? filtered.slice().sort((a, b) => b.date.localeCompare(a.date)) : filtered.slice().sort((a, b) => {
       const score = (story: Story) => terms.reduce((total, term) => total + (story.title.toLocaleLowerCase().includes(term) ? 3 : story.tags.join(" ").toLocaleLowerCase().includes(term) ? 2 : story.summary.toLocaleLowerCase().includes(term) ? 1 : 0), 0);
       return score(b) - score(a) || b.date.localeCompare(a.date);
     });
-  }, [country, sort, terms]);
+  }, [country, kind, period, sort, terms]);
   const active = results[Math.min(selected, Math.max(results.length - 1, 0))];
 
   return <section className={styles.searchPage}>
     <div className={styles.searchIntro}>
       <p className={styles.eyebrow}><span /> SEARCH THE SIGNALS</p>
-      <h1>필요한 흐름만<br /><em>골라서 살펴보세요.</em></h1>
-      <p>국가와 주제를 넘나들며 검수된 개인정보 보호 동향을 찾습니다.</p>
+      <h1>동향 검색</h1>
+      <p>키워드와 관련 개념으로 관심 있는 개인정보 보호 동향을 찾아보세요.</p>
     </div>
     <div className={styles.searchBox}>
       <span aria-hidden="true">⌕</span>
@@ -71,10 +77,11 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
     </div>
     <div className={styles.searchLayout}>
       <aside className={styles.filters}>
-        <div className={styles.filterHeading}><span>검색 필터</span><button type="button" onClick={() => { setCountry("전체"); setSort("관련도순"); }}>초기화</button></div>
-        <p>국가·지역</p>
-        {["전체", "EU", "일본", "영국", "미국", "OECD"].map((value) => <button key={value} type="button" className={country === value ? styles.filterSelected : ""} onClick={() => { setCountry(value); setSelected(0); }}><span>{value === "전체" ? "전 세계" : value}</span><span>{country === value ? "●" : "○"}</span></button>)}
-        <div className={styles.filterFoot}><span className={styles.statusDot} /> 출처 연결 준비 중</div>
+        <div className={styles.filterHeading}><span>검색 필터</span><button type="button" onClick={() => { setCountry("전체"); setPeriod("전체"); setKind("전체"); setSort("관련도순"); setSelected(0); }}>초기화</button></div>
+        <details open className={styles.filterGroup}><summary>기간</summary>{["전체", "최근 1개월", "최근 6개월", "최근 1년"].map((value) => <button key={value} type="button" className={period === value ? styles.filterSelected : ""} onClick={() => { setPeriod(value); setSelected(0); }}><span>{value}</span><span>{period === value ? "●" : "○"}</span></button>)}</details>
+        <details open className={styles.filterGroup}><summary>국가·지역</summary>{["전체", "EU", "일본", "영국", "미국", "OECD"].map((value) => <button key={value} type="button" className={country === value ? styles.filterSelected : ""} onClick={() => { setCountry(value); setSelected(0); }}><span>{value === "전체" ? "전 세계" : value}</span><span>{country === value ? "●" : "○"}</span></button>)}</details>
+        <details open className={styles.filterGroup}><summary>자료 유형</summary>{["전체", ...Array.from(new Set(stories.map((story) => story.kind)))].map((value) => <button key={value} type="button" className={kind === value ? styles.filterSelected : ""} onClick={() => { setKind(value); setSelected(0); }}><span>{value === "전체" ? "전체 유형" : value}</span><span>{kind === value ? "●" : "○"}</span></button>)}</details>
+        <div className={styles.filterFoot}><span className={styles.statusDot} /> 화면 예시 데이터</div>
       </aside>
       <div className={styles.results}>
         <div className={styles.resultHeader}><div><p className={styles.eyebrow}>CURATED INTELLIGENCE</p><strong>{results.length}<small>건의 예시 결과</small></strong></div><div className={styles.sortSwitch}><button type="button" className={sort === "관련도순" ? styles.sortActive : ""} onClick={() => setSort("관련도순")}>관련도순</button><button type="button" className={sort === "최신순" ? styles.sortActive : ""} onClick={() => setSort("최신순")}>최신순</button></div></div>

@@ -6,7 +6,7 @@ export default async function PublicSearchPage({ searchParams }: { searchParams:
   const { q } = await searchParams;
   return <main className={styles.site}>
     <header className={styles.header}>
-      <Link className={styles.brand} href="/public" aria-label="GlobalTrend 홈"><span className={styles.brandMark}>G</span><span>GLOBAL<span className={styles.brandAccent}>TREND</span></span></Link>
+      <Link className={styles.brand} href="/public" aria-label="GlobalTrend 홈"><span className={styles.brandText}>Global<span>Trend</span></span><small className={styles.brandTagline}>세계의 개인정보 보호 동향을 한눈에</small></Link>
       <nav className={styles.nav} aria-label="주요 메뉴"><Link href="/public">글로벌 동향</Link><Link className={styles.navActive} href="/public/search">동향 검색</Link><Link href="/public/laws">법제 비교</Link></nav>
       <span className={styles.headerNote}><i /> PRIVACY POLICY OBSERVATORY</span>
     </header>

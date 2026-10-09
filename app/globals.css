@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Gowun+Batang:wght@400;700&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap');
 
 :root { --ink:#16231f; --muted:#708078; --line:#dce5df; --panel:#f7faf8; --mint:#d9f6e8; --green:#167c54; --lime:#b7e96d; --cream:#f5f3ea; }
 * { box-sizing:border-box; }
