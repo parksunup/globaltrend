@@ -1,14 +1,9 @@
 import Link from "next/link";
 import styles from "./public.module.css";
 
-const stories = [
-  { date: "예시", area: "EU", title: "생성형 AI와 개인정보 처리에 관한 가이드라인", tag: "인공지능" },
-  { date: "예시", area: "미국", title: "아동 데이터 보호를 위한 정책 논의", tag: "아동·청소년" },
-  { date: "예시", area: "일본", title: "개인정보 보호법 개정 동향", tag: "법제" },
-  { date: "예시", area: "브라질", title: "생체정보 처리에 관한 감독기구 발표", tag: "생체정보" },
-  { date: "예시", area: "싱가포르", title: "공공부문 데이터 활용 정책", tag: "데이터 이용" },
-  { date: "예시", area: "영국", title: "자동화된 의사결정에 관한 감독 원칙", tag: "AI" },
-];
+import { stories } from "./demo-data";
+import { PublicHeader, PublicFooter } from "./public-navigation";
+
 const topics = [
   { label: "국가", query: "국가별 개인정보 보호", className: "topicCountry" },
   { label: "법제", query: "개인정보 법제", className: "topicLaw" },
@@ -24,11 +19,7 @@ const topics = [
 
 export default function PublicHome() {
   return <main className={styles.site}>
-    <header className={styles.header}>
-      <Link className={styles.brand} href="/public" aria-label="GlobalTrend 홈"><span className={styles.brandSerif}>GlobalTrend</span><i>•</i><small>GLOBAL PRIVACY LAW &amp; TREND</small></Link>
-      <nav className={styles.nav} aria-label="주요 메뉴"><Link className={styles.navActive} href="/public">동향</Link><Link href="/public#weekly">주간호</Link><Link href="/public/laws">법제</Link><Link href="/public/laws">비교</Link></nav>
-      <Link href="/public/search" className={styles.searchIcon} aria-label="검색">⌕</Link>
-    </header>
+    <PublicHeader active="/public" />
 
     <section className={styles.hero}>
       <div className={styles.heroTitle}>
@@ -58,7 +49,7 @@ export default function PublicHome() {
       <div className={styles.timelinePanel}>
         <div className={styles.panelTitle}><h2>주요 동향</h2><span /><Link href="/public/search">더보기 →</Link></div>
         <ol className={styles.timeline}>{stories.map((story, index) => <li key={story.title} className={index === 0 ? styles.timelineActive : ""}>
-          <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/search?q=${encodeURIComponent(story.tag)}`}>{story.area}, {story.title}</Link>
+          <span className={styles.timelineDot} /><time>{story.date} · 예시</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
         </li>)}</ol>
       </div>
 
@@ -76,7 +67,7 @@ export default function PublicHome() {
         <div className={styles.panelTitle}><h2>주요 토픽</h2><span /><Link href="/public/search">전체 보기 →</Link></div>
         <div className={styles.topicNetwork}>
           <svg viewBox="0 0 440 370" aria-hidden="true"><g fill="none" stroke="#29445c" strokeWidth="1" strokeDasharray="3 5"><path d="M55 88 205 35 357 90 220 180 55 88"/><path d="m55 88 18 190 147-98 140 110  -3-200"/><path d="m205 35 15 145 137-90"/><path d="M73 278 220 180 357 290"/><path d="m73 278 140 60 144-48"/></g><g fill="#73cde8"><circle cx="205" cy="35" r="3"/><circle cx="357" cy="90" r="3"/><circle cx="220" cy="180" r="4"/><circle cx="73" cy="278" r="3"/><circle cx="357" cy="290" r="3"/></g></svg>
-          {topics.map((topic) => <Link key={topic.label} className={styles[topic.className as keyof typeof styles]} href={`/public/search?q=${encodeURIComponent(topic.query)}`}>{topic.label}</Link>)}
+          {topics.map((topic) => <Link key={topic.label} className={styles[topic.className as keyof typeof styles]} href={topic.label === "법제" ? "/public/laws" : topic.label === "국가" ? "/public/search#country-filter" : `/public/search?q=${encodeURIComponent(topic.query)}`}>{topic.label}</Link>)}
         </div>
       </aside>
     </section>
@@ -84,8 +75,9 @@ export default function PublicHome() {
     <section className={styles.weeklyStrip} id="weekly">
       <div className={styles.weeklyLead}><h2>주간호</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
       {[0,1,2,3].map((index) => <div className={index === 0 ? styles.weekCardActive : styles.weekCard} key={index}><span>WEEKLY BRIEFING</span><strong>{index === 0 ? "첫 번째 호 준비 중" : "자료 검수 후 공개"}</strong><small>검수 완료된 주간 자료가 게시됩니다.</small></div>)}
-      <Link href="/public/search">주간호 전체 보기 →</Link>
+      <Link href="/public/weekly">주간호 전체 보기 →</Link>
     </section>
+    <PublicFooter />
     <p className={styles.demoBanner}>이 화면은 공개 사이트 디자인 시안입니다. 실제 동향 자료는 검수·발행 후 표시됩니다.</p>
   </main>;
 }
