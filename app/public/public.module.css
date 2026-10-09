@@ -86,7 +86,7 @@
 .previewDivider{height:1px;background:var(--line);margin:16px 0}.previewLabel{font-size:9px;color:#8199a5}.sourcePending{font-size:9px;line-height:1.65;color:#92a6b0}
 .emptyState{padding:65px 15px;text-align:center;border-bottom:1px solid var(--line);color:#90a5b1}.emptyState>span{display:block;font-size:30px}.emptyState strong{display:block;margin:9px;font-size:12px}.emptyState p{font-size:10px}
 .demoNote{max-width:1250px;margin:17px auto 0;color:#718792;font-size:9px}
-.lawPage{min-height:100vh;background:#f1f4f2;color:#152a33;font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--lawline:#d8e1df;--teal:#168c91;--lawmuted:#60757c}
+.lawPage{min-height:100vh;background:#f1f4f2;color:#152a33;font-family:Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--lawline:#d8e1df;--line:#d8e1df;--cyan:#168c91;--teal:#168c91;--lawmuted:#60757c}
 .lawHeader{height:72px;padding:0 clamp(22px,6vw,92px);display:flex;align-items:center;justify-content:space-between;background:#10222d;color:#e9f3f4}
 .lawBrand{display:flex;align-items:center;gap:9px;color:#e9f3f4;text-decoration:none;font-size:12px;font-weight:800;letter-spacing:.12em}.lawBrand .brandAccent{margin-left:-8px}
 .lawPage .headerNote{color:#90a8b1}

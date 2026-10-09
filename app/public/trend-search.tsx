@@ -21,8 +21,8 @@ const relatedTerms: Record<string, string[]> = {
   "제재": ["제재", "과징금", "집행", "벌금"],
 };
 
-export default function TrendSearch() {
-  const [query, setQuery] = useState("아동 개인정보");
+export default function TrendSearch({ initialQuery }: { initialQuery: string }) {
+  const [query, setQuery] = useState(initialQuery);
   const [mode, setMode] = useState<"keyword" | "concept">("keyword");
   const [country, setCountry] = useState("전체");
   const [sort, setSort] = useState<"관련도순" | "최신순">("관련도순");
