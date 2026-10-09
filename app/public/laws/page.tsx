@@ -53,12 +53,12 @@ export default function PublicLawComparePage() {
       <div className={styles.lawOrbit} aria-hidden="true"><div className={styles.lawOrbitRing}><span>KR</span><i>JP</i><b>EU</b><em>UK</em><strong>CN</strong></div><p>GLOBAL PRIVACY LAW ATLAS</p></div>
     </section>
     <section className={styles.countryGrid} aria-label="비교 국가 선택">
-      {laws.map((law) => <button key={law.code} type="button" className={selected.includes(law.code) ? styles.countryCardSelected : styles.countryCard} onClick={() => toggle(law.code)} aria-pressed={selected.includes(law.code)}>
+      {laws.map((law) => <button key={law.code} type="button" className={selected.includes(law.code) ? styles.countryCardSelected : styles.countryCard} onClick={() => toggle(law.code)} aria-pressed={selected.includes(law.code)} disabled={!selected.includes(law.code) && selected.length >= 3}>
         <span className={styles.flag}>{law.flag}</span><strong>{law.country}</strong><small>{law.law}</small>
       </button>)}
     </section>
     <section id="comparison" className={styles.compareSection}>
-      <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>17개 기준으로 비교하기</h2></div><p>선택한 국가의 개인정보 보호법을 동일한 기준으로 비교할 수 있습니다.</p><span className={styles.selectCount}>{selected.length}개 국가 선택</span></div>
+      <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>17개 기준으로 비교하기</h2></div><p>선택한 국가의 개인정보 보호법을 동일한 기준으로 비교할 수 있습니다.</p><span className={styles.selectCount}>{selected.length}/3개 국가 선택</span></div>
       <div className={styles.compareGrid}>
         <aside className={styles.criteriaList}><h3>비교 기준 <small>17</small></h3><ol>{criteria.map((criterion,index)=><li key={criterion}><button type="button" onClick={()=>setActiveCriterion(index)} className={activeCriterion===index?styles.criteriaActive:""}><span>{String(index+1).padStart(2,"0")}</span>{criterion}<i>›</i></button></li>)}</ol></aside>
         <div className={compareCardsClass}>
