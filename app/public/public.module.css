@@ -179,3 +179,7 @@
 .weeklyStrip>a{font-size:13px}
 @media(max-width:850px){.brandSerif{font-size:25px}.nav a{font-size:14px}.hero h1{font-size:42px}.heroTitle>p:last-child{font-size:15px}.timeline a{font-size:14px}.featured h2{font-size:36px}.featured h3{font-size:20px}.featureBody{font-size:14px}.topicNetwork>a{font-size:13px}}
 @media(max-width:620px){.brandSerif{font-size:22px}.hero h1{font-size:32px}.heroTitle>p:last-child{font-size:13px}.panelTitle h2{font-size:18px}.timeline time{font-size:11px}.timeline a{font-size:13px}.featured h2{font-size:30px}.featured h3{font-size:17px}.featureBody{font-size:13px}.weeklyLead h2{font-size:18px}.weekCard strong,.weekCardActive strong{font-size:11px}}
+
+.searchSubmit{min-width:118px;border:0!important;border-radius:30px!important;padding:14px 24px!important;background:#65c9ed!important;color:#0b2637!important;font:600 15px "Noto Sans KR",sans-serif!important;cursor:pointer}
+.searchSubmit:hover{background:#83dcf8!important}
+@media(max-width:620px){.searchSubmit{min-width:0;padding:10px 15px!important;font-size:12px!important}}

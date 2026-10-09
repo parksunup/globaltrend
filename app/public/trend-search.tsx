@@ -62,12 +62,12 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
       <h1>동향 검색</h1>
       <p>키워드와 관련 개념으로 관심 있는 개인정보 보호 동향을 찾아보세요.</p>
     </div>
-    <div className={styles.searchBox}>
+    <form className={styles.searchBox} role="search" onSubmit={(event) => { event.preventDefault(); setSelected(0); }}>
       <span aria-hidden="true">⌕</span>
       <input value={query} onChange={(event) => { setQuery(event.target.value); setSelected(0); }} aria-label="동향 검색어" placeholder="예: 아동 개인정보" />
       {query && <button type="button" onClick={() => setQuery("")} aria-label="검색어 지우기">×</button>}
-      <kbd>ENTER</kbd>
-    </div>
+      <button className={styles.searchSubmit} type="submit">검색</button>
+    </form>
     <div className={styles.searchControls}>
       <div className={styles.modeSwitch} aria-label="검색 방식">
         <button type="button" className={mode === "keyword" ? styles.modeActive : ""} onClick={() => { setMode("keyword"); setSelected(0); }}>키워드 검색</button>
