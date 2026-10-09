@@ -145,3 +145,37 @@
 @media(max-width:1180px){.searchLayout{grid-template-columns:220px minmax(0,1fr);gap:20px}.preview{grid-column:2;display:block}}
 @media(max-width:850px){.searchIntro h1{font-size:32px}.searchIntro>p:last-child{font-size:14px}.searchLayout{grid-template-columns:190px minmax(0,1fr);gap:14px}.preview{grid-column:2}.lawHero{height:195px}.lawHero h1{font-size:36px}.countryCard strong,.countryCardSelected strong{font-size:14px}.countryCard small,.countryCardSelected small{font-size:11px}}
 @media(max-width:620px){.searchPage{padding:23px 14px 35px}.searchIntro h1{font-size:28px}.searchIntro>p:last-child{font-size:13px}.searchBox{height:60px;border-radius:32px}.searchBox input{font-size:17px}.searchBox kbd{min-width:0;padding:10px 15px;font-size:12px}.searchLayout{grid-template-columns:1fr;gap:10px}.preview{grid-column:1;margin-top:0;padding:16px}.filterHeading{font-size:14px}.filterGroup summary{font-size:12px}.filters>button{font-size:11px}.storyCard{padding:15px 10px}.storyCard>strong{font-size:16px}.storyCard>p{font-size:13px}.storyMeta,.storyMeta time{font-size:10px}.resultHeader strong{font-size:19px}.resultHeader strong small{font-size:11px}.lawHero h1{font-size:29px}.lawHero>div:first-child>p:last-child{font-size:12px}.compareTitle h2{font-size:27px}.criteriaList li button{font-size:11px}}
+
+/* Observatory home typography: preserve the reference's strong editorial hierarchy. */
+.brandSerif{font-size:28px;font-weight:700;letter-spacing:-.06em}
+.brand small{font-size:11px}
+.nav{gap:clamp(30px,4.2vw,64px)}
+.nav a{font-size:16px;font-weight:550}
+.hero h1{font-size:52px;line-height:1.22}
+.overline{font-size:12px;letter-spacing:.2em}
+.heroTitle>p:last-child{font-size:18px;line-height:1.6}
+.panelTitle{height:40px}
+.panelTitle h2{font-size:21px}
+.panelTitle a{font-size:13px}
+.timeline li{min-height:62px}
+.timeline time{font-size:13px}
+.timeline a{font-size:15px;line-height:1.55}
+.featureMeta{font-size:14px}
+.featureKicker{font-size:14px}
+.featured h2{font-size:42px;line-height:1.35}
+.featured h3{font-size:23px;line-height:1.55}
+.featureSource{font-size:13px}
+.featureSource b{font-size:13px}
+.featureBody{font-size:15px;line-height:1.8}
+.featureLink{font-size:15px}
+.topicNetwork>a{font-size:15px}
+.topicNetwork>a.topicCenter{font-size:19px!important}
+.topicNetwork>a.topicAI,.topicNetwork>a.topicBio,.topicNetwork>a.topicTransfer,.topicNetwork>a.topicPlatform,.topicNetwork>a.topicChildren,.topicNetwork>a.topicRights,.topicNetwork>a.topicGovernance{font-size:12px!important}
+.weeklyLead h2{font-size:21px}
+.weeklyLead p{font-size:13px}
+.weekCard span,.weekCardActive span{font-size:9px}
+.weekCard strong,.weekCardActive strong{font-size:13px}
+.weekCard small,.weekCardActive small{font-size:11px}
+.weeklyStrip>a{font-size:13px}
+@media(max-width:850px){.brandSerif{font-size:25px}.nav a{font-size:14px}.hero h1{font-size:42px}.heroTitle>p:last-child{font-size:15px}.timeline a{font-size:14px}.featured h2{font-size:36px}.featured h3{font-size:20px}.featureBody{font-size:14px}.topicNetwork>a{font-size:13px}}
+@media(max-width:620px){.brandSerif{font-size:22px}.hero h1{font-size:32px}.heroTitle>p:last-child{font-size:13px}.panelTitle h2{font-size:18px}.timeline time{font-size:11px}.timeline a{font-size:13px}.featured h2{font-size:30px}.featured h3{font-size:17px}.featureBody{font-size:13px}.weeklyLead h2{font-size:18px}.weekCard strong,.weekCardActive strong{font-size:11px}}
