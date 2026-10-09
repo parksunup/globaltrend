@@ -151,3 +151,8 @@ h1 { margin:8px 0 0; font-size:32px; letter-spacing:-.06em; }
 .guide-card pre { white-space:pre-wrap; background:#14201b; color:#eaf7ef; border-radius:10px; padding:15px; font:12px/1.75 'DM Mono',monospace; overflow:auto; }.guide-back { display:inline-block; color:var(--green); margin-top:24px; font-size:13px; text-decoration:none; }
 .guide-note { margin-top:18px; padding:14px 16px; border-left:3px solid var(--green); background:#f1f7f2; color:#52635a; font-size:13px; line-height:1.8; }.guide-note strong { color:var(--ink); }
 @media (max-width:760px) { .guide-steps,.guide-columns { grid-template-columns:1fr; } .guide-page { padding:34px 18px 60px; } }
+
+/* Keep worker navigation available and contained on small screens. */
+.sidebar,.content{min-width:0}.sidebar-foot{flex-wrap:wrap}
+@media(max-width:900px){.sidebar-foot{display:flex;margin-top:18px}.nav-list{max-width:100%}.detail-block a{overflow-wrap:anywhere}}
+.list-panel,.detail-panel,.item-list,.item-card{min-width:0}.item-card-head{flex-wrap:wrap}.item-type{overflow-wrap:anywhere}@media(max-width:900px){.app-frame,.workspace-grid{grid-template-columns:minmax(0,1fr)}}
