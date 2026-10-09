@@ -24,7 +24,7 @@ const relatedTerms: Record<string, string[]> = {
 export default function TrendSearch({ initialQuery }: { initialQuery: string }) {
   const [query, setQuery] = useState(initialQuery);
   const [mode, setMode] = useState<"keyword" | "concept">("keyword");
-  const [country, setCountry] = useState("전체");
+  const [countries, setCountries] = useState<string[]>([]);
   const [period, setPeriod] = useState("전체");
   const [kind, setKind] = useState("전체");
   const [sort, setSort] = useState<"관련도순" | "최신순">("관련도순");
@@ -40,7 +40,7 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
   }, [query, mode]);
   const results = useMemo(() => {
     const filtered = stories.filter((story) => {
-      const countryMatch = country === "전체" || story.country === country;
+      const countryMatch = countries.length === 0 || countries.includes(story.country);
       const kindMatch = kind === "전체" || story.kind === kind;
       const searchable = [story.title, story.summary, story.institution, ...story.tags].join(" ").toLocaleLowerCase();
       const queryMatch = !terms.length || terms.some((term) => searchable.includes(term));
@@ -53,7 +53,7 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
       const score = (story: Story) => terms.reduce((total, term) => total + (story.title.toLocaleLowerCase().includes(term) ? 3 : story.tags.join(" ").toLocaleLowerCase().includes(term) ? 2 : story.summary.toLocaleLowerCase().includes(term) ? 1 : 0), 0);
       return score(b) - score(a) || b.date.localeCompare(a.date);
     });
-  }, [country, kind, period, sort, terms]);
+  }, [countries, kind, period, sort, terms]);
   const active = results[Math.min(selected, Math.max(results.length - 1, 0))];
 
   return <section className={styles.searchPage}>
@@ -77,9 +77,15 @@ export default function TrendSearch({ initialQuery }: { initialQuery: string }) 
     </div>
     <div className={styles.searchLayout}>
       <aside className={styles.filters}>
-        <div className={styles.filterHeading}><span>검색 필터</span><button type="button" onClick={() => { setCountry("전체"); setPeriod("전체"); setKind("전체"); setSort("관련도순"); setSelected(0); }}>초기화</button></div>
+        <div className={styles.filterHeading}><span>검색 필터</span><button type="button" onClick={() => { setCountries([]); setPeriod("전체"); setKind("전체"); setSort("관련도순"); setSelected(0); }}>초기화</button></div>
         <details open className={styles.filterGroup}><summary>기간</summary>{["전체", "최근 1개월", "최근 6개월", "최근 1년"].map((value) => <button key={value} type="button" className={period === value ? styles.filterSelected : ""} onClick={() => { setPeriod(value); setSelected(0); }}><span>{value}</span><span>{period === value ? "●" : "○"}</span></button>)}</details>
-        <details open className={styles.filterGroup}><summary>국가·지역</summary>{["전체", "EU", "일본", "영국", "미국", "OECD"].map((value) => <button key={value} type="button" className={country === value ? styles.filterSelected : ""} onClick={() => { setCountry(value); setSelected(0); }}><span>{value === "전체" ? "전 세계" : value}</span><span>{country === value ? "●" : "○"}</span></button>)}</details>
+        <details open className={styles.filterGroup}><summary>국가·지역</summary>{["전체", "EU", "일본", "영국", "미국", "OECD"].map((value) => {
+          const checked = value === "전체" ? countries.length === 0 : countries.includes(value);
+          return <button key={value} type="button" className={checked ? styles.countryFilterSelected : styles.countryFilter} aria-pressed={checked} onClick={() => {
+            setCountries((current) => value === "전체" ? [] : current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+            setSelected(0);
+          }}><span>{value === "전체" ? "전 세계" : value}</span><span className={checked ? styles.countryCheckboxChecked : styles.countryCheckbox} aria-hidden="true">{checked && value !== "전체" ? "✓" : ""}</span></button>;
+        })}</details>
         <details open className={styles.filterGroup}><summary>자료 유형</summary>{["전체", ...Array.from(new Set(stories.map((story) => story.kind)))].map((value) => <button key={value} type="button" className={kind === value ? styles.filterSelected : ""} onClick={() => { setKind(value); setSelected(0); }}><span>{value === "전체" ? "전체 유형" : value}</span><span>{kind === value ? "●" : "○"}</span></button>)}</details>
         <div className={styles.filterFoot}><span className={styles.statusDot} /> 화면 예시 데이터</div>
       </aside>

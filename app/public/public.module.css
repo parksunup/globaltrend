@@ -192,3 +192,8 @@
 .lawEmptyState p{margin:7px 0 0;color:#9fb0bc;font-size:12px;line-height:1.7}
 @media(max-width:1180px){.compareCardsThree{grid-template-columns:repeat(2,minmax(0,1fr))}.compareCardsThree .articlePreview{grid-column:1/-1}}
 @media(max-width:620px){.compareCardsThree{grid-template-columns:1fr}.lawEmptyState{padding:14px 11px}.lawEmptyState p{font-size:11px}}
+
+.countryFilter,.countryFilterSelected{border-radius:5px!important}
+.countryFilter span.countryCheckbox,.countryFilterSelected span.countryCheckboxChecked{display:grid;place-items:center;width:17px;height:17px;border:1px solid #718a99;border-radius:3px;color:#082031;font-size:12px;line-height:1}
+.countryFilterSelected span.countryCheckboxChecked{background:#68d5f3;border-color:#68d5f3;font-weight:700}
+.countryFilterSelected:not(:has(.countryCheckboxChecked)){border-color:rgba(104,213,243,.55);background:#102a3c;color:#e2f6fb}
