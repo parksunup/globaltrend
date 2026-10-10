@@ -17,10 +17,10 @@ PR16의 동향 자료가 `main`에 병합되어 `data/trends/weekly-sample.json`
 - 관리자(`admin`): 편집 기능에 더해 승인·발행. DB 트리거가 직접 Data API 요청도 검사합니다.
 - 익명 방문자: 발행된 보고서와 그 원문 항목만 읽기. `/team`의 출처·법제 목록·비교 기준 목록 공개 열람 정책은 별도로 유지됩니다.
 
-기존 Supabase 프로젝트에는 활성 편집자가 1명이고 관리자 멤버십은 아직 없습니다. 운영자가 그 계정의 소유자를 확인한 뒤 `team_memberships.role`을 `admin`으로 정해야 발행할 수 있습니다. 암호나 서비스 역할 키를 GitHub 또는 클라이언트에 넣지 않습니다.
+운영 Supabase 프로젝트의 기존 팀 계정 1건은 2026-10-10에 사용자의 명시적 승인에 따라 `admin`으로 변경했고, 활성 관리자 1명으로 재확인했습니다. 암호나 서비스 역할 키를 GitHub 또는 클라이언트에 넣지 않습니다.
 
 ## 배포·검증
 
-마이그레이션 `20261010015611_editorial_publication_pipeline.sql`을 앱 코드와 함께 배포합니다. Preview와 운영이 같은 Supabase 프로젝트를 바라보더라도 **Preview의 작성·검수·발행 서버 액션은 DB 쓰기를 차단**합니다. Preview는 화면과 읽기 동작을 확인하고, 실제 초안 등록과 발행은 운영 화면에서 실행합니다.
+마이그레이션 `20261010015611_editorial_publication_pipeline.sql`을 앱 코드와 함께 배포합니다. 2026-10-10 현재 GitHub CI의 마이그레이션·권한 검사는 통과했지만, 연결된 Supabase 적용 도구가 `Invalid or expired requestState`를 반환해 **운영 DB에는 아직 적용되지 않았습니다**. 적용 기록과 `create_report_draft` 함수가 확인되기 전에는 운영에서 초안 등록을 시도하지 않습니다. Preview와 운영이 같은 Supabase 프로젝트를 바라보더라도 **Preview의 작성·검수·발행 서버 액션은 DB 쓰기를 차단**합니다. Preview는 화면과 읽기 동작을 확인하고, 실제 초안 등록과 발행은 운영 화면에서 실행합니다.
 
 PR의 CI는 로컬 Supabase에 모든 마이그레이션을 재생한 뒤 `editorial_publication.test.sql`로 편집자·관리자·익명 방문자 권한을 검사합니다. 프런트엔드는 `pnpm test`, `pnpm validate:data`, `pnpm typecheck`, `pnpm build`를 통과해야 합니다. 실제 발행 시험은 권한이 확인된 계정과 검증용 원문 자료로 실행해야 합니다. 공개 검색은 현재 최대 최근 100건을 읽어 브라우저에서 필터링합니다. 자료가 많아지면 서버 페이지네이션과 DB 검색으로 바꿔야 합니다.
