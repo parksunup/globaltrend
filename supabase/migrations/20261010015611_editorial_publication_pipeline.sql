@@ -51,6 +51,10 @@ create trigger guard_report_publication
   for each row execute function private.guard_report_publication();
 
 -- Keep creation of the source record and Korean draft atomic.
+-- The invoker needs schema USAGE to call the narrowly granted membership helper.
+-- This does not grant access to the publication trigger function.
+grant usage on schema private to authenticated;
+
 create or replace function public.create_report_draft(
   p_source_id uuid,
   p_canonical_url text,

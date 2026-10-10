@@ -19,6 +19,6 @@
 
 ## 배포·검증
 
-마이그레이션 `20261010015611_editorial_publication_pipeline.sql`을 앱 코드와 함께 배포합니다. Preview와 운영이 같은 Supabase 프로젝트를 바라보면 Preview의 작성 버튼도 운영 DB에 쓰게 되므로, Preview에서 실제 자료를 제출하거나 발행하지 않습니다. 먼저 로컬 또는 분리된 DB로 테스트하고, 운영에서 미리보기를 확인할 때는 읽기 검사를 수행합니다.
+마이그레이션 `20261010015611_editorial_publication_pipeline.sql`을 앱 코드와 함께 배포합니다. Preview와 운영이 같은 Supabase 프로젝트를 바라보더라도 **Preview의 작성·검수·발행 서버 액션은 DB 쓰기를 차단**합니다. Preview는 화면과 읽기 동작을 확인하고, 실제 초안 등록과 발행은 운영 화면에서 실행합니다.
 
 PR의 CI는 로컬 Supabase에 모든 마이그레이션을 재생한 뒤 `editorial_publication.test.sql`로 편집자·관리자·익명 방문자 권한을 검사합니다. 프런트엔드는 `pnpm test`, `pnpm validate:data`, `pnpm typecheck`, `pnpm build`를 통과해야 합니다. 실제 발행 시험은 권한이 확인된 계정과 검증용 원문 자료로 실행해야 합니다. 공개 검색은 현재 최대 최근 100건을 읽어 브라우저에서 필터링합니다. 자료가 많아지면 서버 페이지네이션과 DB 검색으로 바꿔야 합니다.

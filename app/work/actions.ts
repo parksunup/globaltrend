@@ -7,6 +7,10 @@ import { createClient } from "../../lib/supabase/server";
 const isUuid = (value: string) => /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
 const words = (value: FormDataEntryValue | null) => String(value ?? "").split(",").map((part) => part.trim()).filter(Boolean).slice(0, 12);
 
+function requireWritableDeployment() {
+  if (process.env.VERCEL_ENV === "preview") redirect("/work?notice=preview_readonly");
+}
+
 async function requireTeam(required: "editor" | "admin") {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -39,6 +43,7 @@ export async function signOut() {
 }
 
 export async function createDraft(formData: FormData) {
+  requireWritableDeployment();
   const supabase = await requireTeam("editor");
   const sourceId = String(formData.get("source_id") ?? "");
   const canonicalUrl = String(formData.get("canonical_url") ?? "").trim();
@@ -70,6 +75,7 @@ export async function createDraft(formData: FormData) {
 }
 
 export async function saveDraft(formData: FormData) {
+  requireWritableDeployment();
   const supabase = await requireTeam("editor");
   const id = String(formData.get("id") ?? "");
   const title = String(formData.get("title_ko") ?? "").trim();
@@ -90,6 +96,7 @@ export async function saveDraft(formData: FormData) {
 }
 
 export async function advanceReport(formData: FormData) {
+  requireWritableDeployment();
   const next = String(formData.get("next") ?? "");
   const id = String(formData.get("id") ?? "");
   if (!isUuid(id) || !["in_review", "approved", "published"].includes(next)) {
