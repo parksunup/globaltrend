@@ -293,3 +293,28 @@
 .themeLight .lawOrbitRing strong{color:#516c8e}
 .themeLight .lawPage :is(button,a):focus-visible,.themeLight .site :is(button,a):focus-visible{outline:2px solid #176b5e;outline-offset:3px}
 @media (min-width:621px) and (max-width:850px){.header .nav{order:3;width:100%}.header .themeToggle{order:2;margin-left:auto}}
+
+
+/* Artwork pass: use the approved observatory/atlas compositions instead of placeholder diagrams. */
+.brandText{font-family:Georgia,"Noto Serif KR",serif;font-size:27px;font-weight:600;letter-spacing:-.055em}
+.hero .globe{right:10%;top:-58px;width:min(62vw,900px);height:335px;opacity:.82;background:url("/images/observatory-globe.png") center bottom/contain no-repeat}
+.topicNetwork>svg{position:absolute;inset:0;width:100%;height:100%}
+.topicNetwork>a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:linear-gradient(145deg,#10263a,#0b1b2b);box-shadow:inset 0 0 0 1px rgba(111,177,205,.09);color:#e2eff4}
+.topicNetwork>a.topicCountry,.topicNetwork>a.topicLaw{min-width:112px;height:112px}
+.topicNetwork>a.topicCenter{min-width:142px!important;height:142px!important}
+.topicNetwork>a.topicLaw{box-shadow:inset 0 0 0 1px rgba(229,183,102,.18)!important}
+.topicNetwork>a .topicGlyph{position:static;inset:auto;display:block;width:27px;height:27px;flex:none;color:#72d7f2}
+.topicNetwork>a.topicLaw .topicGlyph{color:#e5b766}
+.topicNetwork>a.topicCenter .topicGlyph{width:31px;height:31px}
+.lawHero{background-image:linear-gradient(90deg,#0b1724 0%,rgba(11,23,36,.96) 40%,rgba(11,23,36,.48) 100%),url("/images/law-books-hero.png");background-position:center;background-size:cover}
+.lawHero h1{font-size:clamp(36px,3.5vw,58px)}
+.themeLight .hero,.themeLight .lawHero{background-image:url("/images/law-books-hero.png");background-position:center;background-size:cover}
+.themeLight .hero::before,.themeLight .lawHero::before{display:none}
+.themeLight .globe,.themeLight .heroMotto{display:none}
+.themeLight .topicNetwork>a{background:linear-gradient(145deg,#fff,#e8f0e8);box-shadow:0 5px 18px rgba(36,74,51,.08)}
+.themeLight .topicNetwork>a.topicLaw{box-shadow:0 5px 18px rgba(92,70,37,.09)!important}
+.themeLight .topicNetwork>a .topicGlyph{color:#176b5e}
+.themeLight .topicNetwork>a.topicLaw .topicGlyph{color:#8a5b2c}
+.themeLight .brandText{color:#172b24}
+@media(max-width:850px){.hero .globe{right:-4%;width:75vw;top:-31px;opacity:.52}.brandText{font-size:24px}}
+@media(max-width:620px){.hero .globe{right:-28%;width:110vw;opacity:.28}.brandText{font-size:22px}.lawHero h1{font-size:30px}.themeLight .hero,.themeLight .lawHero{background-image:linear-gradient(90deg,rgba(249,249,245,.98),rgba(249,249,245,.87) 62%,rgba(249,249,245,.12)),url("/images/law-books-hero.png")}.topicNetwork>a.topicCountry,.topicNetwork>a.topicLaw{min-width:85px;height:85px}.topicNetwork>a.topicCenter{min-width:108px!important;height:108px!important}.topicNetwork>a .topicGlyph{width:22px;height:22px}}
