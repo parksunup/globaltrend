@@ -84,6 +84,7 @@ export default function ReviewShell({ initialItems, dataSource, teamMode = false
           <span className="dot" /> {publicReviewMode ? "공개 전 목록 포함 · 읽기 전용" : "실제 공개 전 검수 전용"}
           <a className="guide-link" href="/guide">팀 가이드</a>
           <a className="guide-link" href="/public">공개 사이트 보기</a>
+          <a className="guide-link" href="/work">동향 작성·발행</a>
           <a className="guide-link" href={teamMode || publicReviewMode ? "/" : "/team"}>{teamMode || publicReviewMode ? "작업자 홈" : "검수 자료 보기"}</a>
         </div>
       </aside>

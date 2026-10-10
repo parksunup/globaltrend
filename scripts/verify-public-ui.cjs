@@ -1,23 +1,83 @@
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE_PATH || 'playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 (async () => {
- const base = process.env.AUDIT_BASE_URL || 'http://localhost:3100';
- const browser = await chromium.launch({executablePath: process.env.CHROME_PATH, headless:true});
- const page = await browser.newPage({viewport:{width:1440,height:1000}}); page.setDefaultTimeout(12000);
- const results=[], errors=[]; page.on('pageerror', e=>errors.push(e.message));
- async function go(path){const r=await page.goto(base+path,{waitUntil:'networkidle'});assert.equal(r.status(),200)}
- async function test(name,fn){try{await fn();results.push({name,pass:true})}catch(e){results.push({name,pass:false,error:e.message})}console.log(JSON.stringify(results.at(-1)))}
- async function link(name,path){await page.getByRole('link',{name,exact:true}).first().click();await page.waitForURL(u=>u.pathname===path);await page.waitForLoadState('networkidle')}
- const cards=()=>page.locator('[class*="storyCard"]');
- await test('Every public navigation and worker return link',async()=>{for(const route of ['/public','/public/search','/public/laws','/public/weekly']){await go(route);for(const [name,path] of [['동향','/public'],['주간호','/public/weekly'],['동향 검색','/public/search'],['법제 비교','/public/laws']]){await link(name,path)}await link('작업자용 페이지','/');await link('공개 사이트 보기','/public');await link('검수 자료 보기','/team');await link('공개 사이트 보기','/public')}});
- await test('Every home story opens its own detail and returns',async()=>{await go('/public');const links=await page.locator('ol[class*="timeline"] a').evaluateAll(es=>es.map(e=>({href:e.getAttribute('href'),title:e.textContent})));assert.equal(links.length,6);for(const l of links){await go('/public');await page.locator('a[href="'+l.href+'"]').first().click();await page.waitForURL(u=>u.pathname===l.href);assert(await page.locator('h1').textContent());assert(await page.getByText('예시',{exact:false}).count()>0);await link('동향','/public')}});
- await test('Every topic link, weekly all link and search more',async()=>{await go('/public');const topics=await page.locator('[class*="topicNetwork"] a').evaluateAll(es=>es.map(e=>({href:e.getAttribute('href'),title:e.textContent})));for(const l of topics){await go('/public');await page.getByRole('link',{name:l.title,exact:true}).click();await page.waitForURL(u=>u.pathname+u.search+u.hash===l.href);await page.waitForLoadState('networkidle')}await go('/public');await link('주간호 전체 보기 →','/public/weekly');assert(await page.getByText('발행된 주간호가 없습니다').count());await go('/public');await link('더보기 →','/public/search')});
- await test('Query submit, reload, back, clear and all-token no match',async()=>{await go('/public/search');assert.equal(await cards().count(),6);const input=page.getByRole('textbox',{name:'동향 검색어'});await input.fill('연령');assert.equal(await cards().count(),6);await page.getByRole('button',{name:'검색',exact:true}).click();await page.waitForURL(u=>u.searchParams.get('q')==='연령');await page.reload({waitUntil:'networkidle'});assert.equal(await input.inputValue(),'연령');await input.fill('아동 없는단어');await page.getByRole('button',{name:'검색',exact:true}).click();await page.waitForURL(u=>u.searchParams.get('q')==='아동 없는단어');assert.equal(await cards().count(),0);await page.goBack({waitUntil:'networkidle'});await page.waitForFunction(()=>document.querySelector('input[aria-label="동향 검색어"]').value==='연령');assert.equal(await input.inputValue(),'연령');await page.getByRole('button',{name:'검색어 지우기'}).click();await page.waitForURL(u=>!u.search);assert.equal(await cards().count(),6)});
- await test('All period, country and document filters, reset, concept, sorting, detail',async()=>{await go('/public/search');const groups=page.locator('details');for(const index of [0,1,2]){const texts=await groups.nth(index).locator('button').allTextContents();for(let i=0;i<texts.length;i++){await groups.nth(index).locator('button').nth(i).click();await page.getByRole('button',{name:'초기화',exact:true}).click();assert.equal(await cards().count(),6)}}await groups.nth(1).getByRole('button',{name:'EU',exact:false}).click();assert.equal(await cards().count(),2);await groups.nth(1).getByRole('button',{name:'일본',exact:false}).click();assert.equal(await cards().count(),3);await groups.nth(1).getByRole('button',{name:'EU',exact:false}).click();assert.equal(await cards().count(),1);await page.getByRole('button',{name:'초기화',exact:true}).click();await page.getByRole('button',{name:'관련 개념까지',exact:true}).click();await page.getByRole('button',{name:'키워드 검색',exact:true}).click();await cards().last().click();await page.waitForTimeout(600);const title=await page.locator('[class*="preview"] h2').textContent();await page.getByRole('button',{name:'최신순',exact:true}).click();assert.equal(await page.locator('[class*="preview"] h2').textContent(),title);await page.getByRole('button',{name:'관련도순',exact:true}).click();await page.getByRole('link',{name:'예시 상세 보기 →',exact:true}).click();await page.waitForURL(/\/public\/trends\/sample-/);assert.equal(await page.locator('h1').textContent(),title)});
- await test('All 17 law criteria, all 7 countries, selection constraints and tabs',async()=>{await go('/public/laws');const criteria=page.locator('[class*="criteriaList"] button');assert.equal(await criteria.count(),17);for(let i=0;i<17;i++){await criteria.nth(i).click();assert.equal(await criteria.nth(i).getAttribute('aria-pressed'),'true');const label=(await criteria.nth(i).textContent()).replace(/^\d+/, '').replace('›','');for(const c of await page.locator('[class*="lawCompareCard"] section').all()){if(await c.locator('strong').textContent()!=='핵심 포인트')assert.equal(await c.locator('strong').textContent(),label)}}const country=page.locator('[aria-label="비교 국가 선택"] button');await country.nth(1).click();await country.nth(0).click();assert.equal(await country.nth(0).getAttribute('aria-pressed'),'true');for(let i=1;i<7;i++){await country.nth(i).click();await page.locator('[class*="lawCompareCard"]').last().getByRole('button',{name:/번역 전문 보기/}).click();assert(await page.locator('[class*="previewNotice"]').textContent().then(t=>t.includes('전체 한국어 번역')));await criteria.first().click();assert(await page.locator('[class*="previewNotice"]').textContent().then(t=>t.includes('개인정보 범위')));await country.nth(i).click()}await country.nth(1).click();await country.nth(2).click();assert.equal(await country.nth(3).isDisabled(),true);assert.equal(await page.locator('[class*="lawCompareCard"]').count(),3);await page.getByRole('button',{name:'번역 전문',exact:true}).click();await page.getByRole('button',{name:'조항 요약',exact:true}).click()});
- await test('Worker categories, status filters, search and guide paths are usable',async()=>{for(const route of ['/','/team']){await go(route);const nav=page.locator('.nav-list button');for(let i=0;i<await nav.count();i++){await nav.nth(i).click();for(const b of await page.locator('.filter-group button').all())await b.click();if(await page.locator('input[placeholder="항목명, 설명, 국가로 검색"]').count()){await page.locator('input[placeholder="항목명, 설명, 국가로 검색"]').fill('없는자료');assert.equal(await page.locator('.item-card').count(),0);await page.locator('input[placeholder="항목명, 설명, 국가로 검색"]').fill('')}}await link('팀 가이드','/guide');await go('/legal-translation')}});
- await test('Mobile/tablet/desktop routes have no horizontal overflow',async()=>{for(const width of [390,768,1024,1440]){await page.setViewportSize({width,height:900});for(const r of ['/public','/public/search','/public/laws','/public/weekly','/public/trends/sample-1','/','/team','/guide','/legal-translation']){await go(r);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),width+' '+r+' horizontal overflow');if(r==='/public/search'&&width===390){const toggle=page.getByRole('button',{name:'검색 필터 펼치기'});assert.equal(await page.locator('details').first().isVisible(),false);await toggle.click();assert.equal(await page.locator('details').first().isVisible(),true);await page.getByRole('button',{name:'검색 필터 접기'}).click()}if(r==='/public/laws'){const c=page.locator('[aria-label="비교 국가 선택"] button');await c.nth(1).click();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await c.nth(1).click();await c.nth(2).click();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1))}}}});
- await test('No browser runtime errors',async()=>assert.deepEqual(errors,[]));
- await browser.close();fs.writeFileSync(process.env.AUDIT_REPORT || require('node:path').join(require('node:os').tmpdir(),'globaltrend-ui-audit.json'),JSON.stringify({base,results,errors},null,2));process.exitCode=results.some(r=>!r.pass)?1:0;
-})().catch(e=>{console.error(e);process.exit(1)});
+  const base = process.env.AUDIT_BASE_URL || 'http://localhost:3000';
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true });
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+  page.setDefaultTimeout(15000);
+  const results = [], errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  async function visit(route) { const response = await page.goto(base + route, { waitUntil: 'networkidle' }); assert.equal(response.status(), 200, route); }
+  async function check(name, fn) { try { await fn(); results.push({ name, pass: true }); } catch (error) { results.push({ name, pass: false, error: error.message }); } process.stdout.write(JSON.stringify(results.at(-1)) + '\n'); }
+  async function clickRoute(name, route) { await page.getByRole('link', { name, exact: true }).first().click(); await page.waitForURL(url => url.pathname === route); }
+
+  await check('Public menu and worker navigation', async () => {
+    for (const route of ['/public', '/public/search', '/public/laws', '/public/weekly']) {
+      await visit(route);
+      for (const [name, target] of [['동향', '/public'], ['주간호', '/public/weekly'], ['동향 검색', '/public/search'], ['법제 비교', '/public/laws']]) await clickRoute(name, target);
+      await clickRoute('작업자용 페이지', '/');
+      await clickRoute('공개 사이트 보기', '/public');
+    }
+  });
+  await check('Only published home items have detail links', async () => {
+    await visit('/public');
+    const links = await page.locator('ol[class*="timeline"] a').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
+    if (!links.length) assert(await page.getByText(/발행된 동향이 없습니다|자료를 불러오지 못했습니다/).count());
+    for (const href of links) {
+      await visit('/public'); await page.locator('a[href="' + href + '"]').first().click(); await page.waitForURL(url => url.pathname === href);
+      assert(await page.locator('h1').textContent()); assert(await page.getByRole('link', { name: /공식 원문 보기/ }).count());
+    }
+  });
+  await check('Search URL, filters, sorting and detail', async () => {
+    await visit('/public/search');
+    const input = page.getByRole('textbox', { name: '동향 검색어' });
+    await input.fill('아동 개인정보'); await page.getByRole('button', { name: '검색', exact: true }).click();
+    await page.waitForURL(url => url.searchParams.get('q') === '아동 개인정보');
+    await page.reload({ waitUntil: 'networkidle' }); assert.equal(await input.inputValue(), '아동 개인정보');
+    await page.getByRole('button', { name: '검색어 지우기' }).click(); await page.waitForURL(url => !url.search);
+    const groups = page.locator('details[class*="filterGroup"]');
+    for (let group = 0; group < 3; group++) {
+      const count = await groups.nth(group).locator('button').count();
+      for (let index = 0; index < count; index++) {
+        await groups.nth(group).locator('button').nth(index).click();
+        await page.getByRole('button', { name: '초기화', exact: true }).click();
+      }
+    }
+    await page.getByRole('button', { name: '최신순' }).click(); await page.getByRole('button', { name: '관련도순' }).click();
+    if (await page.locator('[class*="storyCard"]').count()) {
+      await page.locator('[class*="storyCard"]').last().click();
+      const title = await page.locator('[class*="preview"] h2').textContent();
+      await page.getByRole('link', { name: '상세 보기 →' }).click();
+      await page.waitForURL(/\/public\/trends\/[0-9a-f-]{36}$/);
+      assert.equal(await page.locator('h1').textContent(), title);
+    }
+  });
+  await check('Law comparison and editorial login', async () => {
+    await visit('/public/laws');
+    assert.equal(await page.locator('[class*="criteriaList"] button').count(), 17);
+    assert.equal(await page.locator('[aria-label="비교 국가 선택"] button').count(), 7);
+    await visit('/'); await clickRoute('동향 작성·발행', '/work');
+    assert(await page.getByRole('button', { name: '로그인' }).count());
+    await visit('/team'); await clickRoute('동향 작성·발행', '/work');
+  });
+  await check('Public and worker pages fit common widths', async () => {
+    for (const width of [390, 768, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      for (const route of ['/', '/team', '/work', '/public', '/public/search', '/public/laws', '/public/weekly']) {
+        await visit(route);
+        assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1), width + 'px ' + route);
+        if (route === '/public/search' && width === 390) {
+          await page.getByRole('button', { name: '검색 필터 펼치기' }).click();
+          assert(await page.locator('details').first().isVisible());
+        }
+      }
+    }
+  });
+  await check('No browser runtime errors', async () => assert.deepEqual(errors, []));
+  await browser.close();
+  fs.writeFileSync(process.env.AUDIT_REPORT || path.join(os.tmpdir(), 'globaltrend-ui-audit.json'), JSON.stringify({ base, results, errors }, null, 2));
+  process.exitCode = results.some(row => !row.pass) ? 1 : 0;
+})().catch(error => { console.error(error); process.exit(1); });

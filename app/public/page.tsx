@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "./public.module.css";
 
-import { stories } from "./demo-data";
+import { loadPublishedStories } from "../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "./public-navigation";
 
 const topics = [
@@ -17,7 +17,14 @@ const topics = [
   { label: "데이터 거버넌스", query: "데이터 거버넌스", className: "topicGovernance" },
 ];
 
-export default function PublicHome() {
+export const dynamic = "force-dynamic";
+
+export default async function PublicHome() {
+  let allStories: Awaited<ReturnType<typeof loadPublishedStories>> = [];
+  let loadError = false;
+  try { allStories = await loadPublishedStories(); } catch (error) { console.error(error); loadError = true; }
+  const stories = allStories.slice(0, 6);
+  const featured = stories[0];
   return <main className={styles.site}>
     <PublicHeader active="/public" />
 
@@ -48,19 +55,19 @@ export default function PublicHome() {
     <section className={styles.observatoryGrid}>
       <div className={styles.timelinePanel}>
         <div className={styles.panelTitle}><h2>주요 동향</h2><span /><Link href="/public/search">더보기 →</Link></div>
-        <ol className={styles.timeline}>{stories.map((story, index) => <li key={story.title} className={index === 0 ? styles.timelineActive : ""}>
-          <span className={styles.timelineDot} /><time>{story.date} · 예시</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
-        </li>)}</ol>
+        {stories.length ? <ol className={styles.timeline}>{stories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
+          <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
+        </li>)}</ol> : <p className={styles.homeEmpty}>{loadError ? "자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "발행된 동향이 없습니다. 팀 검수를 마친 자료가 공개되면 이곳에 표시됩니다."}</p>}
       </div>
 
       <article className={styles.featured}>
-        <div className={styles.featureMeta}><span>EU</span><i>·</i><span>인공지능</span></div>
+        <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span></div>
         <p className={styles.featureKicker}>이번 주 주목할 흐름</p>
-        <h2>새로운 동향을<br />살펴보세요</h2>
-        <h3>각국의 개인정보 보호 정책과<br />감독기구 발표를 한눈에 모읍니다.</h3>
-        <div className={styles.featureSource}><span>초기 관측 출처</span><b>EDPB</b><b>OECD</b><b>CURIA</b></div>
-        <p className={styles.featureBody}>검수된 자료가 공개되면 핵심 내용과 원문 출처, 관련 법 조항을 함께 확인할 수 있습니다. 검색과 주간호를 통해 관심 있는 흐름을 이어서 살펴보세요.</p>
-        <Link className={styles.featureLink} href="/public/search">동향 검색 열기 <span>→</span></Link>
+        <h2>{featured ? featured.title : "새로운 동향을 살펴보세요"}</h2>
+        <h3>{featured ? featured.summary : "각국의 개인정보 보호 정책과 감독기구 발표를 한눈에 모읍니다."}</h3>
+        <div className={styles.featureSource}><span>{featured ? "공식 출처" : "초기 관측 출처"}</span><b>{featured?.institution ?? "EDPB"}</b>{!featured && <><b>OECD</b><b>CURIA</b></>}</div>
+        <p className={styles.featureBody}>{featured?.details || "검수된 자료가 공개되면 핵심 내용과 공식 원문 출처를 함께 확인할 수 있습니다."}</p>
+        <Link className={styles.featureLink} href={featured ? `/public/trends/${featured.id}` : "/public/search"}>{featured ? "동향 자세히 보기" : "동향 검색 열기"} <span>→</span></Link>
       </article>
 
       <aside className={styles.topicPanel}>
@@ -74,10 +81,10 @@ export default function PublicHome() {
 
     <section className={styles.weeklyStrip} id="weekly">
       <div className={styles.weeklyLead}><h2>주간호</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
-      {[0,1,2,3].map((index) => <div className={index === 0 ? styles.weekCardActive : styles.weekCard} key={index}><span>WEEKLY BRIEFING</span><strong>{index === 0 ? "첫 번째 호 준비 중" : "자료 검수 후 공개"}</strong><small>검수 완료된 주간 자료가 게시됩니다.</small></div>)}
+      <div className={styles.weekCardActive}><span>WEEKLY BRIEFING</span><strong>주간호 준비 중</strong><small>발행된 주간호가 아직 없습니다.</small></div>
       <Link href="/public/weekly">주간호 전체 보기 →</Link>
     </section>
     <PublicFooter />
-    <p className={styles.demoBanner}>이 화면은 공개 사이트 디자인 시안입니다. 실제 동향 자료는 검수·발행 후 표시됩니다.</p>
+    <p className={styles.demoBanner}>공개 동향은 관리자 검수와 발행을 마친 자료만 표시합니다.</p>
   </main>;
 }

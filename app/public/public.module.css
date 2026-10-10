@@ -213,3 +213,6 @@
 
 .mobileFilterToggle{display:none}
 @media(max-width:620px){.mobileFilterToggle{display:block;width:100%;padding:12px;border:1px solid #49647a;border-radius:5px;background:#10283a;color:#cfeffc;font:inherit;text-align:left;cursor:pointer}.filtersClosed .filterGroup,.filtersClosed .filterFoot{display:none}.filtersClosed .filterHeading{margin-top:14px}}
+.homeEmpty{color:#aebfcb;font-size:13px;line-height:1.8;padding:20px 8px}
+.weeklyStrip{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto}
+@media(max-width:620px){.weeklyStrip{grid-template-columns:1fr 1fr}.weeklyLead{grid-column:1/-1}.weeklyStrip>a{grid-column:1/-1}}
