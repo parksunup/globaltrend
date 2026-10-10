@@ -1,0 +1,311 @@
+# APPI 누락·순서·사람 검수 상태 목록
+
+판본: `415AC0000000057_20261001_507AC0000000070`. 본칙 번역 초안 제1조~제185조; 선택 공식 판본 전체 번역 초안·사람 검수 미완료. 원문 전체 목록은 appi.json의 provisions 및 coverage.missing_node_ids에 있습니다. 숫자 대조는 구조 검증이며 번역 정확성 검수는 아닙니다.
+
+| 단위 | 원문 수 | 번역 초안 수 | 남은 수 |
+| --- | ---: | ---: | ---: |
+| Chapter | 8 | 8 | 0 |
+| Section | 20 | 20 | 0 |
+| Subsection | 8 | 8 | 0 |
+| Article | 250 | 250 | 0 |
+| Paragraph | 523 | 523 | 0 |
+| Item | 282 | 282 | 0 |
+| Subitem1 | 16 | 16 | 0 |
+| SupplProvision | 22 | 22 | 0 |
+| AppdxTable | 2 | 2 | 0 |
+| TableRow | 54 | 54 | 0 |
+| TableColumn | 129 | 129 | 0 |
+
+장·절·관의 위 숫자는 **제목을 번역한 수**이며 해당 단위 전체 작성 수가 아닙니다. 아래 표는 원문 상위 관계로 계산한 각 장의 실제 조문 범위입니다. 전체 작성도 사람 검수 완료를 뜻하지 않습니다.
+
+| 장 | 원문 조문 범위 | 번역 조문 수 / 원문 수 | 장 전체 작성 상태 | 사람 검수 |
+| --- | --- | ---: | --- | --- |
+| 第一章　総則 | 제1조~제3조 | 3 / 3 | 전체 초안 작성 | 미착수 |
+| 第二章　国及び地方公共団体の責務等 | 제4조~제6조 | 3 / 3 | 전체 초안 작성 | 미착수 |
+| 第三章　個人情報の保護に関する施策等 | 제7조~제15조 | 9 / 9 | 전체 초안 작성 | 미착수 |
+| 第四章　個人情報取扱事業者等の義務等 | 제16조~제59조 | 44 / 44 | 전체 초안 작성 | 미착수 |
+| 第五章　行政機関等の義務等 | 제60조~제129조 | 70 / 70 | 전체 초안 작성 | 미착수 |
+| 第六章　個人情報保護委員会 | 제130조~제170조 | 41 / 41 | 전체 초안 작성 | 미착수 |
+| 第七章　雑則 | 제171조~제175조 | 5 / 5 | 전체 초안 작성 | 미착수 |
+| 第八章　罰則 | 제176조~제185조 | 10 / 10 | 전체 초안 작성 | 미착수 |
+
+## 조문별 상태
+
+같은 조 번호가 반복되는 본칙(main)·부칙 묶음(suppl1~suppl22)을 구분합니다. 부칙의 가지 번호는 원문 Num 값을 유지합니다.
+
+| 원문 식별자 | 조문·부칙·별표 | 번역 상태 | 사람 검수 |
+| --- | --- | --- | --- |
+| `main-a1` | 第一条 | [초안](./appi.md#main-a1) | 미착수 |
+| `main-a2` | 第二条 | [초안](./appi.md#main-a2) | 미착수 |
+| `main-a3` | 第三条 | [초안](./appi.md#main-a3) | 미착수 |
+| `main-a4` | 第四条 | [초안](./appi.md#main-a4) | 미착수 |
+| `main-a5` | 第五条 | [초안](./appi.md#main-a5) | 미착수 |
+| `main-a6` | 第六条 | [초안](./appi.md#main-a6) | 미착수 |
+| `main-a7` | 第七条 | [초안](./appi.md#main-a7) | 미착수 |
+| `main-a8` | 第八条 | [초안](./appi.md#main-a8) | 미착수 |
+| `main-a9` | 第九条 | [초안](./appi.md#main-a9) | 미착수 |
+| `main-a10` | 第十条 | [초안](./appi.md#main-a10) | 미착수 |
+| `main-a11` | 第十一条 | [초안](./appi.md#main-a11) | 미착수 |
+| `main-a12` | 第十二条 | [초안](./appi.md#main-a12) | 미착수 |
+| `main-a13` | 第十三条 | [초안](./appi.md#main-a13) | 미착수 |
+| `main-a14` | 第十四条 | [초안](./appi.md#main-a14) | 미착수 |
+| `main-a15` | 第十五条 | [초안](./appi.md#main-a15) | 미착수 |
+| `main-a16` | 第十六条 | [초안](./appi.md#main-a16) | 미착수 |
+| `main-a17` | 第十七条 | [초안](./appi.md#main-a17) | 미착수 |
+| `main-a18` | 第十八条 | [초안](./appi.md#main-a18) | 미착수 |
+| `main-a19` | 第十九条 | [초안](./appi.md#main-a19) | 미착수 |
+| `main-a20` | 第二十条 | [초안](./appi.md#main-a20) | 미착수 |
+| `main-a21` | 第二十一条 | [초안](./appi.md#main-a21) | 미착수 |
+| `main-a22` | 第二十二条 | [초안](./appi.md#main-a22) | 미착수 |
+| `main-a23` | 第二十三条 | [초안](./appi.md#main-a23) | 미착수 |
+| `main-a24` | 第二十四条 | [초안](./appi.md#main-a24) | 미착수 |
+| `main-a25` | 第二十五条 | [초안](./appi.md#main-a25) | 미착수 |
+| `main-a26` | 第二十六条 | [초안](./appi.md#main-a26) | 미착수 |
+| `main-a27` | 第二十七条 | [초안](./appi.md#main-a27) | 미착수 |
+| `main-a28` | 第二十八条 | [초안](./appi.md#main-a28) | 미착수 |
+| `main-a29` | 第二十九条 | [초안](./appi.md#main-a29) | 미착수 |
+| `main-a30` | 第三十条 | [초안](./appi.md#main-a30) | 미착수 |
+| `main-a31` | 第三十一条 | [초안](./appi.md#main-a31) | 미착수 |
+| `main-a32` | 第三十二条 | [초안](./appi.md#main-a32) | 미착수 |
+| `main-a33` | 第三十三条 | [초안](./appi.md#main-a33) | 미착수 |
+| `main-a34` | 第三十四条 | [초안](./appi.md#main-a34) | 미착수 |
+| `main-a35` | 第三十五条 | [초안](./appi.md#main-a35) | 미착수 |
+| `main-a36` | 第三十六条 | [초안](./appi.md#main-a36) | 미착수 |
+| `main-a37` | 第三十七条 | [초안](./appi.md#main-a37) | 미착수 |
+| `main-a38` | 第三十八条 | [초안](./appi.md#main-a38) | 미착수 |
+| `main-a39` | 第三十九条 | [초안](./appi.md#main-a39) | 미착수 |
+| `main-a40` | 第四十条 | [초안](./appi.md#main-a40) | 미착수 |
+| `main-a41` | 第四十一条 | [초안](./appi.md#main-a41) | 미착수 |
+| `main-a42` | 第四十二条 | [초안](./appi.md#main-a42) | 미착수 |
+| `main-a43` | 第四十三条 | [초안](./appi.md#main-a43) | 미착수 |
+| `main-a44` | 第四十四条 | [초안](./appi.md#main-a44) | 미착수 |
+| `main-a45` | 第四十五条 | [초안](./appi.md#main-a45) | 미착수 |
+| `main-a46` | 第四十六条 | [초안](./appi.md#main-a46) | 미착수 |
+| `main-a47` | 第四十七条 | [초안](./appi.md#main-a47) | 미착수 |
+| `main-a48` | 第四十八条 | [초안](./appi.md#main-a48) | 미착수 |
+| `main-a49` | 第四十九条 | [초안](./appi.md#main-a49) | 미착수 |
+| `main-a50` | 第五十条 | [초안](./appi.md#main-a50) | 미착수 |
+| `main-a51` | 第五十一条 | [초안](./appi.md#main-a51) | 미착수 |
+| `main-a52` | 第五十二条 | [초안](./appi.md#main-a52) | 미착수 |
+| `main-a53` | 第五十三条 | [초안](./appi.md#main-a53) | 미착수 |
+| `main-a54` | 第五十四条 | [초안](./appi.md#main-a54) | 미착수 |
+| `main-a55` | 第五十五条 | [초안](./appi.md#main-a55) | 미착수 |
+| `main-a56` | 第五十六条 | [초안](./appi.md#main-a56) | 미착수 |
+| `main-a57` | 第五十七条 | [초안](./appi.md#main-a57) | 미착수 |
+| `main-a58` | 第五十八条 | [초안](./appi.md#main-a58) | 미착수 |
+| `main-a59` | 第五十九条 | [초안](./appi.md#main-a59) | 미착수 |
+| `main-a60` | 第六十条 | [초안](./appi.md#main-a60) | 미착수 |
+| `main-a61` | 第六十一条 | [초안](./appi.md#main-a61) | 미착수 |
+| `main-a62` | 第六十二条 | [초안](./appi.md#main-a62) | 미착수 |
+| `main-a63` | 第六十三条 | [초안](./appi.md#main-a63) | 미착수 |
+| `main-a64` | 第六十四条 | [초안](./appi.md#main-a64) | 미착수 |
+| `main-a65` | 第六十五条 | [초안](./appi.md#main-a65) | 미착수 |
+| `main-a66` | 第六十六条 | [초안](./appi.md#main-a66) | 미착수 |
+| `main-a67` | 第六十七条 | [초안](./appi.md#main-a67) | 미착수 |
+| `main-a68` | 第六十八条 | [초안](./appi.md#main-a68) | 미착수 |
+| `main-a69` | 第六十九条 | [초안](./appi.md#main-a69) | 미착수 |
+| `main-a70` | 第七十条 | [초안](./appi.md#main-a70) | 미착수 |
+| `main-a71` | 第七十一条 | [초안](./appi.md#main-a71) | 미착수 |
+| `main-a72` | 第七十二条 | [초안](./appi.md#main-a72) | 미착수 |
+| `main-a73` | 第七十三条 | [초안](./appi.md#main-a73) | 미착수 |
+| `main-a74` | 第七十四条 | [초안](./appi.md#main-a74) | 미착수 |
+| `main-a75` | 第七十五条 | [초안](./appi.md#main-a75) | 미착수 |
+| `main-a76` | 第七十六条 | [초안](./appi.md#main-a76) | 미착수 |
+| `main-a77` | 第七十七条 | [초안](./appi.md#main-a77) | 미착수 |
+| `main-a78` | 第七十八条 | [초안](./appi.md#main-a78) | 미착수 |
+| `main-a79` | 第七十九条 | [초안](./appi.md#main-a79) | 미착수 |
+| `main-a80` | 第八十条 | [초안](./appi.md#main-a80) | 미착수 |
+| `main-a81` | 第八十一条 | [초안](./appi.md#main-a81) | 미착수 |
+| `main-a82` | 第八十二条 | [초안](./appi.md#main-a82) | 미착수 |
+| `main-a83` | 第八十三条 | [초안](./appi.md#main-a83) | 미착수 |
+| `main-a84` | 第八十四条 | [초안](./appi.md#main-a84) | 미착수 |
+| `main-a85` | 第八十五条 | [초안](./appi.md#main-a85) | 미착수 |
+| `main-a86` | 第八十六条 | [초안](./appi.md#main-a86) | 미착수 |
+| `main-a87` | 第八十七条 | [초안](./appi.md#main-a87) | 미착수 |
+| `main-a88` | 第八十八条 | [초안](./appi.md#main-a88) | 미착수 |
+| `main-a89` | 第八十九条 | [초안](./appi.md#main-a89) | 미착수 |
+| `main-a90` | 第九十条 | [초안](./appi.md#main-a90) | 미착수 |
+| `main-a91` | 第九十一条 | [초안](./appi.md#main-a91) | 미착수 |
+| `main-a92` | 第九十二条 | [초안](./appi.md#main-a92) | 미착수 |
+| `main-a93` | 第九十三条 | [초안](./appi.md#main-a93) | 미착수 |
+| `main-a94` | 第九十四条 | [초안](./appi.md#main-a94) | 미착수 |
+| `main-a95` | 第九十五条 | [초안](./appi.md#main-a95) | 미착수 |
+| `main-a96` | 第九十六条 | [초안](./appi.md#main-a96) | 미착수 |
+| `main-a97` | 第九十七条 | [초안](./appi.md#main-a97) | 미착수 |
+| `main-a98` | 第九十八条 | [초안](./appi.md#main-a98) | 미착수 |
+| `main-a99` | 第九十九条 | [초안](./appi.md#main-a99) | 미착수 |
+| `main-a100` | 第百条 | [초안](./appi.md#main-a100) | 미착수 |
+| `main-a101` | 第百一条 | [초안](./appi.md#main-a101) | 미착수 |
+| `main-a102` | 第百二条 | [초안](./appi.md#main-a102) | 미착수 |
+| `main-a103` | 第百三条 | [초안](./appi.md#main-a103) | 미착수 |
+| `main-a104` | 第百四条 | [초안](./appi.md#main-a104) | 미착수 |
+| `main-a105` | 第百五条 | [초안](./appi.md#main-a105) | 미착수 |
+| `main-a106` | 第百六条 | [초안](./appi.md#main-a106) | 미착수 |
+| `main-a107` | 第百七条 | [초안](./appi.md#main-a107) | 미착수 |
+| `main-a108` | 第百八条 | [초안](./appi.md#main-a108) | 미착수 |
+| `main-a109` | 第百九条 | [초안](./appi.md#main-a109) | 미착수 |
+| `main-a110` | 第百十条 | [초안](./appi.md#main-a110) | 미착수 |
+| `main-a111` | 第百十一条 | [초안](./appi.md#main-a111) | 미착수 |
+| `main-a112` | 第百十二条 | [초안](./appi.md#main-a112) | 미착수 |
+| `main-a113` | 第百十三条 | [초안](./appi.md#main-a113) | 미착수 |
+| `main-a114` | 第百十四条 | [초안](./appi.md#main-a114) | 미착수 |
+| `main-a115` | 第百十五条 | [초안](./appi.md#main-a115) | 미착수 |
+| `main-a116` | 第百十六条 | [초안](./appi.md#main-a116) | 미착수 |
+| `main-a117` | 第百十七条 | [초안](./appi.md#main-a117) | 미착수 |
+| `main-a118` | 第百十八条 | [초안](./appi.md#main-a118) | 미착수 |
+| `main-a119` | 第百十九条 | [초안](./appi.md#main-a119) | 미착수 |
+| `main-a120` | 第百二十条 | [초안](./appi.md#main-a120) | 미착수 |
+| `main-a121` | 第百二十一条 | [초안](./appi.md#main-a121) | 미착수 |
+| `main-a122` | 第百二十二条 | [초안](./appi.md#main-a122) | 미착수 |
+| `main-a123` | 第百二十三条 | [초안](./appi.md#main-a123) | 미착수 |
+| `main-a124` | 第百二十四条 | [초안](./appi.md#main-a124) | 미착수 |
+| `main-a125` | 第百二十五条 | [초안](./appi.md#main-a125) | 미착수 |
+| `main-a126` | 第百二十六条 | [초안](./appi.md#main-a126) | 미착수 |
+| `main-a127` | 第百二十七条 | [초안](./appi.md#main-a127) | 미착수 |
+| `main-a128` | 第百二十八条 | [초안](./appi.md#main-a128) | 미착수 |
+| `main-a129` | 第百二十九条 | [초안](./appi.md#main-a129) | 미착수 |
+| `main-a130` | 第百三十条 | [초안](./appi.md#main-a130) | 미착수 |
+| `main-a131` | 第百三十一条 | [초안](./appi.md#main-a131) | 미착수 |
+| `main-a132` | 第百三十二条 | [초안](./appi.md#main-a132) | 미착수 |
+| `main-a133` | 第百三十三条 | [초안](./appi.md#main-a133) | 미착수 |
+| `main-a134` | 第百三十四条 | [초안](./appi.md#main-a134) | 미착수 |
+| `main-a135` | 第百三十五条 | [초안](./appi.md#main-a135) | 미착수 |
+| `main-a136` | 第百三十六条 | [초안](./appi.md#main-a136) | 미착수 |
+| `main-a137` | 第百三十七条 | [초안](./appi.md#main-a137) | 미착수 |
+| `main-a138` | 第百三十八条 | [초안](./appi.md#main-a138) | 미착수 |
+| `main-a139` | 第百三十九条 | [초안](./appi.md#main-a139) | 미착수 |
+| `main-a140` | 第百四十条 | [초안](./appi.md#main-a140) | 미착수 |
+| `main-a141` | 第百四十一条 | [초안](./appi.md#main-a141) | 미착수 |
+| `main-a142` | 第百四十二条 | [초안](./appi.md#main-a142) | 미착수 |
+| `main-a143` | 第百四十三条 | [초안](./appi.md#main-a143) | 미착수 |
+| `main-a144` | 第百四十四条 | [초안](./appi.md#main-a144) | 미착수 |
+| `main-a145` | 第百四十五条 | [초안](./appi.md#main-a145) | 미착수 |
+| `main-a146` | 第百四十六条 | [초안](./appi.md#main-a146) | 미착수 |
+| `main-a147` | 第百四十七条 | [초안](./appi.md#main-a147) | 미착수 |
+| `main-a148` | 第百四十八条 | [초안](./appi.md#main-a148) | 미착수 |
+| `main-a149` | 第百四十九条 | [초안](./appi.md#main-a149) | 미착수 |
+| `main-a150` | 第百五十条 | [초안](./appi.md#main-a150) | 미착수 |
+| `main-a151` | 第百五十一条 | [초안](./appi.md#main-a151) | 미착수 |
+| `main-a152` | 第百五十二条 | [초안](./appi.md#main-a152) | 미착수 |
+| `main-a153` | 第百五十三条 | [초안](./appi.md#main-a153) | 미착수 |
+| `main-a154` | 第百五十四条 | [초안](./appi.md#main-a154) | 미착수 |
+| `main-a155` | 第百五十五条 | [초안](./appi.md#main-a155) | 미착수 |
+| `main-a156` | 第百五十六条 | [초안](./appi.md#main-a156) | 미착수 |
+| `main-a157` | 第百五十七条 | [초안](./appi.md#main-a157) | 미착수 |
+| `main-a158` | 第百五十八条 | [초안](./appi.md#main-a158) | 미착수 |
+| `main-a159` | 第百五十九条 | [초안](./appi.md#main-a159) | 미착수 |
+| `main-a160` | 第百六十条 | [초안](./appi.md#main-a160) | 미착수 |
+| `main-a161` | 第百六十一条 | [초안](./appi.md#main-a161) | 미착수 |
+| `main-a162` | 第百六十二条 | [초안](./appi.md#main-a162) | 미착수 |
+| `main-a163` | 第百六十三条 | [초안](./appi.md#main-a163) | 미착수 |
+| `main-a164` | 第百六十四条 | [초안](./appi.md#main-a164) | 미착수 |
+| `main-a165` | 第百六十五条 | [초안](./appi.md#main-a165) | 미착수 |
+| `main-a166` | 第百六十六条 | [초안](./appi.md#main-a166) | 미착수 |
+| `main-a167` | 第百六十七条 | [초안](./appi.md#main-a167) | 미착수 |
+| `main-a168` | 第百六十八条 | [초안](./appi.md#main-a168) | 미착수 |
+| `main-a169` | 第百六十九条 | [초안](./appi.md#main-a169) | 미착수 |
+| `main-a170` | 第百七十条 | [초안](./appi.md#main-a170) | 미착수 |
+| `main-a171` | 第百七十一条 | [초안](./appi.md#main-a171) | 미착수 |
+| `main-a172` | 第百七十二条 | [초안](./appi.md#main-a172) | 미착수 |
+| `main-a173` | 第百七十三条 | [초안](./appi.md#main-a173) | 미착수 |
+| `main-a174` | 第百七十四条 | [초안](./appi.md#main-a174) | 미착수 |
+| `main-a175` | 第百七十五条 | [초안](./appi.md#main-a175) | 미착수 |
+| `main-a176` | 第百七十六条 | [초안](./appi.md#main-a176) | 미착수 |
+| `main-a177` | 第百七十七条 | [초안](./appi.md#main-a177) | 미착수 |
+| `main-a178` | 第百七十八条 | [초안](./appi.md#main-a178) | 미착수 |
+| `main-a179` | 第百七十九条 | [초안](./appi.md#main-a179) | 미착수 |
+| `main-a180` | 第百八十条 | [초안](./appi.md#main-a180) | 미착수 |
+| `main-a181` | 第百八十一条 | [초안](./appi.md#main-a181) | 미착수 |
+| `main-a182` | 第百八十二条 | [초안](./appi.md#main-a182) | 미착수 |
+| `main-a183` | 第百八十三条 | [초안](./appi.md#main-a183) | 미착수 |
+| `main-a184` | 第百八十四条 | [초안](./appi.md#main-a184) | 미착수 |
+| `main-a185` | 第百八十五条 | [초안](./appi.md#main-a185) | 미착수 |
+| `suppl1` | 附　則 제정법 | [초안](./appi.md#suppl1) | 미착수 |
+| `suppl1-a1` | 第一条 | [초안](./appi.md#suppl1-a1) | 미착수 |
+| `suppl1-a2` | 第二条 | [초안](./appi.md#suppl1-a2) | 미착수 |
+| `suppl1-a3` | 第三条 | [초안](./appi.md#suppl1-a3) | 미착수 |
+| `suppl1-a4` | 第四条 | [초안](./appi.md#suppl1-a4) | 미착수 |
+| `suppl1-a5` | 第五条 | [초안](./appi.md#suppl1-a5) | 미착수 |
+| `suppl1-a6` | 第六条 | [초안](./appi.md#suppl1-a6) | 미착수 |
+| `suppl1-a7` | 第七条 | [초안](./appi.md#suppl1-a7) | 미착수 |
+| `suppl2` | 附　則 平成一五年五月三〇日法律第六一号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl2) | 미착수 |
+| `suppl2-a1` | 第一条 | [초안](./appi.md#suppl2-a1) | 미착수 |
+| `suppl2-a4` | 第四条 | [초안](./appi.md#suppl2-a4) | 미착수 |
+| `suppl3` | 附　則 平成一五年七月一六日法律第一一九号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl3) | 미착수 |
+| `suppl3-a1` | 第一条 | [초안](./appi.md#suppl3-a1) | 미착수 |
+| `suppl3-a6` | 第六条 | [초안](./appi.md#suppl3-a6) | 미착수 |
+| `suppl4` | 附　則 平成二一年六月五日法律第四九号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl4) | 미착수 |
+| `suppl4-a1` | 第一条 | [초안](./appi.md#suppl4-a1) | 미착수 |
+| `suppl4-a4` | 第四条 | [초안](./appi.md#suppl4-a4) | 미착수 |
+| `suppl4-a5` | 第五条 | [초안](./appi.md#suppl4-a5) | 미착수 |
+| `suppl4-a8` | 第八条 | [초안](./appi.md#suppl4-a8) | 미착수 |
+| `suppl4-a9` | 第九条 | [초안](./appi.md#suppl4-a9) | 미착수 |
+| `suppl5` | 附　則 平成二七年九月九日法律第六五号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl5) | 미착수 |
+| `suppl5-a1` | 第一条 | [초안](./appi.md#suppl5-a1) | 미착수 |
+| `suppl5-a2` | 第二条 | [초안](./appi.md#suppl5-a2) | 미착수 |
+| `suppl5-a3` | 第三条 | [초안](./appi.md#suppl5-a3) | 미착수 |
+| `suppl5-a4` | 第四条 | [초안](./appi.md#suppl5-a4) | 미착수 |
+| `suppl5-a7` | 第七条 | [초안](./appi.md#suppl5-a7) | 미착수 |
+| `suppl5-a9` | 第九条 | [초안](./appi.md#suppl5-a9) | 미착수 |
+| `suppl5-a10` | 第十条 | [초안](./appi.md#suppl5-a10) | 미착수 |
+| `suppl5-a11` | 第十一条 | [초안](./appi.md#suppl5-a11) | 미착수 |
+| `suppl5-a12` | 第十二条 | [초안](./appi.md#suppl5-a12) | 미착수 |
+| `suppl6` | 附　則 平成二八年五月二七日法律第五一号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl6) | 미착수 |
+| `suppl6-a1` | 第一条 | [초안](./appi.md#suppl6-a1) | 미착수 |
+| `suppl7` | 附　則 平成二九年五月二四日法律第三六号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl7) | 미착수 |
+| `suppl7-a1` | 第一条 | [초안](./appi.md#suppl7-a1) | 미착수 |
+| `suppl8` | 附　則 平成三〇年七月二七日法律第八〇号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl8) | 미착수 |
+| `suppl8-a1` | 第一条 | [초안](./appi.md#suppl8-a1) | 미착수 |
+| `suppl9` | 附　則 令和元年五月三一日法律第一六号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl9) | 미착수 |
+| `suppl9-a1` | 第一条 | [초안](./appi.md#suppl9-a1) | 미착수 |
+| `suppl10` | 附　則 令和二年六月一二日法律第四四号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl10) | 미착수 |
+| `suppl10-a1` | 第一条 | [초안](./appi.md#suppl10-a1) | 미착수 |
+| `suppl10-a2` | 第二条 | [초안](./appi.md#suppl10-a2) | 미착수 |
+| `suppl10-a3` | 第三条 | [초안](./appi.md#suppl10-a3) | 미착수 |
+| `suppl10-a4` | 第四条 | [초안](./appi.md#suppl10-a4) | 미착수 |
+| `suppl10-a5` | 第五条 | [초안](./appi.md#suppl10-a5) | 미착수 |
+| `suppl10-a6` | 第六条 | [초안](./appi.md#suppl10-a6) | 미착수 |
+| `suppl10-a8` | 第八条 | [초안](./appi.md#suppl10-a8) | 미착수 |
+| `suppl10-a9` | 第九条 | [초안](./appi.md#suppl10-a9) | 미착수 |
+| `suppl10-a10` | 第十条 | [초안](./appi.md#suppl10-a10) | 미착수 |
+| `suppl11` | 附　則 令和三年五月一九日法律第三七号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl11) | 미착수 |
+| `suppl11-a1` | 第一条 | [초안](./appi.md#suppl11-a1) | 미착수 |
+| `suppl11-a7` | 第七条 | [초안](./appi.md#suppl11-a7) | 미착수 |
+| `suppl11-a8` | 第八条 | [초안](./appi.md#suppl11-a8) | 미착수 |
+| `suppl11-a9` | 第九条 | [초안](./appi.md#suppl11-a9) | 미착수 |
+| `suppl11-a10` | 第十条 | [초안](./appi.md#suppl11-a10) | 미착수 |
+| `suppl11-a71` | 第七十一条 | [초안](./appi.md#suppl11-a71) | 미착수 |
+| `suppl11-a72` | 第七十二条 | [초안](./appi.md#suppl11-a72) | 미착수 |
+| `suppl11-a73` | 第七十三条 | [초안](./appi.md#suppl11-a73) | 미착수 |
+| `suppl12` | 附　則 令和四年五月二五日法律第四八号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl12) | 미착수 |
+| `suppl12-a1` | 第一条 | [초안](./appi.md#suppl12-a1) | 미착수 |
+| `suppl12-a124` | 第百二十四条 | [초안](./appi.md#suppl12-a124) | 미착수 |
+| `suppl12-a125` | 第百二十五条 | [초안](./appi.md#suppl12-a125) | 미착수 |
+| `suppl13` | 附　則 令和四年五月二七日法律第五四号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl13) | 미착수 |
+| `suppl13-a1` | 第一条 | [초안](./appi.md#suppl13-a1) | 미착수 |
+| `suppl14` | 附　則 令和四年六月一七日法律第六八号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl14) | 미착수 |
+| `suppl15` | 附　則 令和五年五月一九日法律第三二号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl15) | 미착수 |
+| `suppl15-a1` | 第一条 | [초안](./appi.md#suppl15-a1) | 미착수 |
+| `suppl16` | 附　則 令和五年六月七日法律第四七号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl16) | 미착수 |
+| `suppl16-a1` | 第一条 | [초안](./appi.md#suppl16-a1) | 미착수 |
+| `suppl16-a4` | 第四条 | [초안](./appi.md#suppl16-a4) | 미착수 |
+| `suppl16-a5` | 第五条 | [초안](./appi.md#suppl16-a5) | 미착수 |
+| `suppl17` | 附　則 令和五年一一月二九日法律第七九号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl17) | 미착수 |
+| `suppl17-a1` | 第一条 | [초안](./appi.md#suppl17-a1) | 미착수 |
+| `suppl17-a67` | 第六十七条 | [초안](./appi.md#suppl17-a67) | 미착수 |
+| `suppl17-a68` | 第六十八条 | [초안](./appi.md#suppl17-a68) | 미착수 |
+| `suppl18` | 附　則 令和六年六月七日法律第四六号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl18) | 미착수 |
+| `suppl18-a1` | 第一条 | [초안](./appi.md#suppl18-a1) | 미착수 |
+| `suppl19` | 附　則 令和七年六月一八日法律第七〇号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl19) | 미착수 |
+| `suppl19-a1` | 第一条 | [초안](./appi.md#suppl19-a1) | 미착수 |
+| `suppl20` | 附　則 令和八年六月二四日法律第四六号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl20) | 미착수 |
+| `suppl20-a1` | 第一条 | [초안](./appi.md#suppl20-a1) | 미착수 |
+| `suppl20-a5` | 第五条 | [초안](./appi.md#suppl20-a5) | 미착수 |
+| `suppl21` | 附　則 令和八年七月一七日法律第五六号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl21) | 미착수 |
+| `suppl21-a1` | 第一条 | [초안](./appi.md#suppl21-a1) | 미착수 |
+| `suppl21-a13` | 第十三条 | [초안](./appi.md#suppl21-a13) | 미착수 |
+| `suppl22` | 附　則 令和八年七月一七日法律第六二号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl22) | 미착수 |
+| `suppl22-a1` | 第一条 | [초안](./appi.md#suppl22-a1) | 미착수 |
+| `suppl22-a8` | 第八条 | [초안](./appi.md#suppl22-a8) | 미착수 |
+| `law-table1` | 別表第一 | [초안](./appi.md#law-table1) | 미착수 |
+| `law-table2` | 別表第二 | [초안](./appi.md#law-table2) | 미착수 |

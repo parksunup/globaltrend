@@ -1,0 +1,313 @@
+"""법제 자료 구조 검사. 번역 정확성이나 법적 검수를 대신하지 않는다.
+
+python data/legal/validate-corpus.py
+python data/legal/validate-corpus.py --appi-source /path/to/e-gov-response.json
+"""
+
+import argparse
+import collections
+import csv
+import hashlib
+import json
+import re
+from pathlib import Path
+from tools.criteria_format import read_list, render_cell
+from tools.pipa_index import extract as extract_pipa
+
+
+BASE = Path(__file__).resolve().parent
+ROOT = BASE.parent.parent
+
+
+def check(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def walk(node):
+    if isinstance(node, dict):
+        yield node
+        for child in node.get("children", []):
+            yield from walk(child)
+
+
+def validate(source_path=None, pipa_source_path=None):
+    document = json.loads((BASE / "translations/appi.json").read_text())
+    nodes = document["provisions"]
+    by_id = {node["node_id"]: node for node in nodes}
+    check(len(by_id) == len(nodes), "APPI 원문 노드 ID 중복")
+    check([node["source_order"] for node in nodes] == list(range(len(nodes))),
+          "APPI 원문 노드 순서가 연속하지 않음")
+    for node in nodes:
+        check(node["parent_id"] in by_id or node["parent_id"] in {"main", "law"},
+              f"상위 노드 누락: {node['node_id']}")
+        check(re.fullmatch(r"[0-9a-f]{64}", node["source_sha256"]), "원문 노드 해시 오류")
+        check(node["human_review_status"] == "not_started", "검수 미착수 상태와 불일치")
+
+    counts = collections.Counter(node["tag"] for node in nodes)
+    draft_counts = collections.Counter(node["tag"] for node in nodes
+                                       if node["translation_status"] == "draft")
+    check(dict(counts) == document["coverage"]["source_counts"], "APPI 원문 수 불일치")
+    check(dict(draft_counts) == document["coverage"]["draft_counts"], "APPI 초안 수 불일치")
+    missing = [node["node_id"] for node in nodes if node["translation_status"] == "not_started"]
+    check(missing == document["coverage"]["missing_node_ids"], "미번역 노드 목록 불일치")
+    check(document["translation"]["complete"] == (not missing)
+          and document["translation"]["status"] == ("partial_draft" if missing else "full_draft"),
+          "원문 범위 작성 상태와 완료 표시 불일치")
+    check(document["coverage"]["full_order_verified"] == (not missing)
+          and document["coverage"]["semantic_completeness_verified"] is False,
+          "구조 완료와 의미 검수 구분 불일치")
+
+    markdown = (BASE / "translations/appi.md").read_text()
+    anchors = re.findall(r'<a id="([^"]+)"></a>', markdown)
+    expected = [node["markdown_anchor"] for node in nodes if node["markdown_anchor"]]
+    check(anchors == expected, "Markdown 앵커 누락·중복·순서 불일치")
+    for node in nodes:
+        if node["korean_text"]:
+            check(node["korean_text"] in markdown, f"번역 본문 불일치: {node['node_id']}")
+    main_articles = [node for node in nodes if node["tag"] == "Article" and node["scope"] == "main"]
+    drafts = [node for node in main_articles if node["translation_status"] == "draft"]
+    check(len(main_articles) == document["translation"]["total_main_articles"], "본칙 분모 불일치")
+    check(len(drafts) == document["translation"]["translated_main_articles"], "번역 본칙 수 불일치")
+    check(drafts == main_articles[:len(drafts)], "번역 조문이 원문 첫 구간과 불일치")
+    for article in [n for n in nodes if n["tag"] == "Article" and n["translation_status"] == "draft"]:
+        children = [node for node in nodes if node["node_id"].startswith(article["node_id"] + "-")
+                    and node["tag"] in {"Paragraph", "Item", "Subitem1", "Subitem2", "Subitem3"}]
+        check(all(node["korean_text"] for node in children), f"번역 조문 내부 누락: {article['node_id']}")
+        tables = [node for node in nodes if node["node_id"].startswith(article["node_id"] + "-")
+                  and node["tag"] in {"Table", "TableRow", "TableColumn"}]
+        check(all(node["translation_status"] == "draft" for node in tables),
+              f"작성 완료 조문 내부 표 미번역: {article['node_id']}")
+        for cell in [n for n in tables if n["tag"] == "TableColumn"]:
+            empty = cell["source_sha256"] == hashlib.sha256(b"").hexdigest()
+            check(empty == bool(cell.get("source_cell_empty")) == (cell["korean_text"] == ""),
+                  f"표 셀의 원문 빈 값·번역 누락 구분 오류: {cell['node_id']}")
+
+    groups = document["coverage"]["heading_groups"]
+    headings = [node for node in nodes if node["tag"] in {"Chapter", "Section", "Subsection"}]
+    check([group["node_id"] for group in groups] == [node["node_id"] for node in headings],
+          "장·절·관 작성 범위 목록 누락·순서 불일치")
+    for group, heading in zip(groups, headings):
+        descendants = []
+        for node in nodes:
+            parent = node["parent_id"]
+            while parent in by_id:
+                if parent == heading["node_id"]:
+                    descendants.append(node)
+                    break
+                parent = by_id[parent]["parent_id"]
+        articles = [node for node in descendants if node["tag"] == "Article"]
+        check(group["first_article"] == articles[0]["number"]
+              and group["last_article"] == articles[-1]["number"]
+              and group["total_articles"] == len(articles), "장·절·관 원문 조문 범위 불일치")
+        check(group["drafted_articles"] == sum(n["translation_status"] == "draft" for n in articles)
+              and group["heading_translated"] == (heading["translation_status"] == "draft")
+              and group["all_nodes_drafted"] == all(n["translation_status"] == "draft"
+                                                    for n in [heading, *descendants]),
+              "제목 번역을 장·절·관 전체 작성으로 잘못 표시함")
+
+    if source_path:
+        source = json.loads(Path(source_path).read_bytes())
+        check(source["revision_info"]["law_revision_id"] == document["source"]["version_id"],
+              "입력 원문 판본 불일치")
+        canonical = json.dumps(source["law_full_text"], ensure_ascii=False, sort_keys=True,
+                               separators=(",", ":")).encode()
+        check(hashlib.sha256(canonical).hexdigest() == document["source"]["law_full_text_sha256"],
+              "입력 원문 전체 해시 불일치")
+        body = next(node for node in source["law_full_text"]["children"]
+                    if isinstance(node, dict) and node["tag"] == "LawBody")
+        original = [node for child in body["children"]
+                    if child["tag"] in {"MainProvision", "SupplProvision", "AppdxTable"}
+                    for node in walk(child)]
+        original_counts = collections.Counter(node["tag"] for node in original
+                                             if node["tag"] in counts)
+        check(original_counts == counts, "공식 원문과 저장된 구조 수 불일치")
+        def flatten(n):
+            return n if isinstance(n, str) else "".join(flatten(c) for c in n.get("children", []))
+        structural = [node for node in original if node["tag"] in counts]
+        source_ids = {id(raw): saved["node_id"] for raw, saved in zip(structural, nodes)}
+        def check_parents(raw, parent):
+            if not isinstance(raw, dict):
+                return
+            if id(raw) in source_ids:
+                saved = by_id[source_ids[id(raw)]]
+                check(saved["parent_id"] == parent, f"공식 원문 상위 관계 불일치: {saved['node_id']}")
+                parent = saved["node_id"]
+            for child in raw.get("children", []):
+                check_parents(child, parent)
+        for child in body["children"]:
+            if child["tag"] in {"MainProvision", "SupplProvision", "AppdxTable"}:
+                check_parents(child, "main" if child["tag"] == "MainProvision" else "law")
+        for raw, saved in zip(structural, nodes):
+            check(raw["tag"] == saved["tag"]
+                  and hashlib.sha256(flatten(raw).encode()).hexdigest() == saved["source_sha256"],
+                  f"공식 원문 전체 노드 순서·내용 해시 불일치: {saved['node_id']}")
+            if raw["attr"].get("Num"):
+                check(raw["attr"]["Num"] == saved["number"],
+                      f"공식 원문 번호 불일치: {saved['node_id']}")
+            if raw["tag"] == "SupplProvision":
+                check(saved.get("amendment_law_number") == raw["attr"].get("AmendLawNum")
+                      and saved.get("source_extract") == (raw["attr"].get("Extract") == "true"),
+                      "부칙 개정법 식별자·발췌 표지 불일치")
+            for child in raw.get("children", []):
+                if not isinstance(child, dict):
+                    continue
+                extra = {"ParagraphCaption": ("source_caption", "korean_caption"),
+                         "RelatedArticleNum": ("source_related_articles", "korean_related_articles")}.get(child["tag"])
+                if extra and saved["translation_status"] == "draft":
+                    check(saved.get(extra[0]) == flatten(child) and bool(saved.get(extra[1])),
+                          f"원문 추가 제목·관련 조문 표시 누락: {saved['node_id']}")
+                    check(saved[extra[1]] in markdown, "추가 표시 번역 출력 누락")
+            if raw["tag"] == "TableColumn" and saved["translation_status"] == "draft":
+                check(raw["attr"] == saved["source_attributes"], "전체 표 셀 속성 불일치")
+        source_headings = [node for node in original if node["tag"] in {"Chapter", "Section", "Subsection"}]
+        toc = next(child for child in body["children"] if child["tag"] == "TOC")
+        toc_groups = [n for n in walk(toc) if n["tag"] in {"TOCChapter", "TOCSection", "TOCSubsection"}]
+        check(len(toc_groups) == len(source_headings), "원문 목차 제목 수와 본문 불일치")
+        for toc_group, source_heading in zip(toc_groups, source_headings):
+            title_tag = source_heading["tag"] + "Title"
+            toc_title = next(c for c in toc_group["children"] if c["tag"] == title_tag)
+            actual_title = next(c for c in source_heading["children"] if c["tag"] == title_tag)
+            check(flatten(toc_title) == flatten(actual_title), "원문 목차 제목·순서 불일치")
+            ranges = [c for c in toc_group["children"] if c["tag"] == "ArticleRange"]
+            articles = [c for c in walk(source_heading) if c["tag"] == "Article"]
+            labels = [flatten(next(c for c in a["children"] if c["tag"] == "ArticleTitle"))
+                      for a in (articles[0], articles[-1])]
+            expected_range = "（" + (labels[0] if labels[0] == labels[1] else "―".join(labels)) + "）"
+            allowed_ranges = {expected_range}
+            if len(articles) == 2:
+                allowed_ranges.add("（" + "・".join(labels) + "）")
+            check(not ranges or flatten(ranges[0]) in allowed_ranges, "원문 목차 조문 범위 불일치")
+        for source_heading, group in zip(source_headings, groups):
+            source_numbers = [node["attr"]["Num"] for node in walk(source_heading) if node["tag"] == "Article"]
+            check(source_numbers[0] == group["first_article"]
+                  and source_numbers[-1] == group["last_article"]
+                  and len(source_numbers) == group["total_articles"],
+                  f"공식 원문 장·절·관 경계 불일치: {group['node_id']}")
+        for article in drafts:
+            source_article = next(node for child in body["children"]
+                                  if child["tag"] == "MainProvision" for node in walk(child)
+                                  if node["tag"] == "Article" and node["attr"]["Num"] == article["number"])
+            paragraph_ids = [node["attr"]["Num"] for node in source_article["children"]
+                             if isinstance(node, dict) and node["tag"] == "Paragraph"]
+            saved = [node["number"] for node in nodes
+                     if node["tag"] == "Paragraph" and node["parent_id"] == article["node_id"]]
+            check(paragraph_ids == saved, f"공식 원문 항 번호·순서 불일치: {article['node_id']}")
+            original_cells = [n for n in walk(source_article) if n["tag"] == "TableColumn"]
+            saved_cells = [n for n in nodes if n["node_id"].startswith(article["node_id"] + "-")
+                           and n["tag"] == "TableColumn"]
+            check(len(original_cells) == len(saved_cells), "공식 원문 표 셀 누락")
+            def flatten(n):
+                return n if isinstance(n, str) else "".join(flatten(c) for c in n.get("children", []))
+            for original_cell, saved_cell in zip(original_cells, saved_cells):
+                check(hashlib.sha256(flatten(original_cell).encode()).hexdigest() == saved_cell["source_sha256"]
+                      and original_cell["attr"] == saved_cell["source_attributes"],
+                      f"공식 원문 표 셀 순서·내용 해시·속성 불일치: {saved_cell['node_id']}")
+
+    with (BASE / "criteria-mapping.csv").open() as stream:
+        cells = list(csv.DictReader(stream))
+    pipa_index = json.loads((BASE / "sources/pipa-index.json").read_text())
+    pipa_nodes = pipa_index["articles"]
+    pipa_ids = [n["node_id"] for n in pipa_nodes]
+    check(len(set(pipa_ids)) == len(pipa_ids), "한국 색인 ID 중복")
+    pipa_markdown = (BASE / "sources/pipa-index.md").read_text()
+    check(re.findall(r'<a id="([^"]+)"></a>', pipa_markdown) == pipa_ids, "한국 색인 앵커·순서 불일치")
+    check(pipa_index["source_body_in_repository"] is False
+          and pipa_index["human_review_status"] == "not_started", "한국 본문 공개·검수 상태 불일치")
+    check(sum(n["scope"] == "main" for n in pipa_nodes) == pipa_index["article_labels_observed"],
+          "한국 본칙 표제 관측 수 불일치")
+    if pipa_source_path:
+        pipa_raw = Path(pipa_source_path).read_bytes()
+        check(hashlib.sha256(pipa_raw).hexdigest() == pipa_index["source_body_sha256"], "한국 입력 원문 해시 불일치")
+        observed = extract_pipa(pipa_raw.decode("utf-8").replace("\r\n", "\n").replace("\r", "\n"))
+        saved = [{"article_label": n["article_label"], "html_char_offset": n["source_html_char_offset"],
+                  "line": n["source_line"], "deleted_marker": n["deleted_marker_observed"], "scope": n["scope"]}
+                 for n in pipa_nodes]
+        check(saved == observed, "한국 실제 선두 표제·번호·삭제 표지·원문 위치·순서 불일치")
+    with (BASE / "instruments.csv").open() as stream:
+        laws = list(csv.DictReader(stream))
+    seed = (ROOT / "supabase/migrations/20260927140000_p1_seed_sources_criteria.sql").read_text()
+    criteria = [(key, label, int(order)) for key, label, order in
+                re.findall(r"\('([^']+)', '([^']+)', (\d+)\)", seed)]
+    check(len(criteria) == 17 and len(laws) == 7, "기존 비교 기준·법제 범위 불일치")
+    pairs = [(key, law["jurisdiction_code"]) for key, _, _ in criteria for law in laws]
+    check([(cell["criterion_id"], cell["jurisdiction_code"]) for cell in cells] == pairs,
+          "17×7 셀 누락·중복·순서 불일치")
+    comparison = (BASE / "criteria-mapping.md").read_text()
+    table_rows = [line for line in comparison.splitlines() if re.match(r"\| \d+\. ", line)]
+    check(len(table_rows) == 17, "Markdown 비교 행 누락")
+    for (key, label, order), line in zip(criteria, table_rows):
+        group = [cell for cell in cells if cell["criterion_id"] == key]
+        check(line == "| " + str(order) + ". " + label + " | " + " | ".join(render_cell(c) for c in group) + " |",
+              "Markdown과 CSV 분류 내용·링크 불일치")
+        check(all(cell["criterion_name"] == label and int(cell["criterion_order"]) == order
+                  for cell in group), "CSV 기준명·번호 불일치")
+    for cell in cells:
+        check(cell["review_status"] == "unreviewed", "사람 미검수 분류를 검수 완료로 표시함")
+        law = next(law for law in laws if law["record_id"] == cell["instrument_id"])
+        check(cell["official_source_url"] == law["official_url"], "셀 공식 URL과 법제 목록 불일치")
+        check(cell["source_version"] == law["version_label"], "셀 판본 상태와 법제 목록 불일치")
+        if cell["korean_summary"] == "미검토":
+            check(cell["major_exceptions"] == "미검토" and not cell["article_numbers"]
+                  and not cell["translation_links"], "미검토 셀에 확정되지 않은 근거를 입력함")
+            continue
+        check(cell["jurisdiction_code"] in {"KR", "JP"}, "후순위 법제의 미완성 번역으로 비교 입력")
+        check(cell["major_exceptions"] not in {"", "미검토"} and cell["pending_reason"], "예외·검수 필요 항목 누락")
+        references = read_list(cell["article_numbers"])
+        links = read_list(cell["translation_links"])
+        check(len(references) == len(links) and bool(links), "복수 조항·링크 대응 누락")
+        if cell["jurisdiction_code"] == "JP":
+            check(document["translation"]["complete"] and cell["translation_status"] == "full_draft",
+                  "일본 전체 초안 작성 전 분류 입력")
+            prefix, targets = "./translations/appi.md#", anchors
+        else:
+            check(cell["translation_status"] == "official_original_indexed", "한국 공식 원문과 번역 상태 혼동")
+            check(pipa_index["official_url"] == cell["official_source_url"], "한국 색인 공식 판본 불일치")
+            prefix, targets = "./sources/pipa-index.md#", pipa_ids
+        check(all(link.startswith(prefix) and link[len(prefix):] in targets for link in links),
+              "분류 조항 링크가 해당 법제 문서의 조항을 가리키지 않음")
+        for label, link in zip(references, links):
+            target_id = link[len(prefix):]
+            if cell["jurisdiction_code"] == "KR":
+                target = next(n for n in pipa_nodes if n["node_id"] == target_id)
+                numbers = re.findall(r"제\d+조(?:의\d+)?", label)
+                check(numbers == [target["article_label"]], "한국 표시 조 번호와 읽기 링크 불일치")
+                check(("부칙" in label) == target["scope"].startswith("suppl-"), "한국 본칙·부칙 링크 혼동")
+                if target["scope"].startswith("suppl-"):
+                    check("법률 제" + target["scope"].split("-")[1] + "호" in label, "한국 부칙 개정법 번호 불일치")
+                continue
+            target = by_id[target_id]
+            chain = [target]
+            while chain[-1]["parent_id"] in by_id:
+                chain.append(by_id[chain[-1]["parent_id"]])
+            check(("부칙" in label) == target["scope"].startswith("suppl"), "일본 본칙·부칙 링크 혼동")
+            for tag, suffix in [("Article", "조"), ("Paragraph", "항"), ("Item", "호")]:
+                numbers = re.findall(r"제(\d+)" + suffix + r"(?:의(\d+))?", label)
+                if not numbers:
+                    continue
+                ancestor = next((n for n in chain if n["tag"] == tag), None)
+                expected = numbers[-1][0] + ("_" + numbers[-1][1] if numbers[-1][1] else "")
+                if tag == "Item" and re.search(r"법률\s*제\d+호", label) and len(numbers) == 1:
+                    continue
+                check(ancestor and ancestor["number"] == expected, "일본 표시 조·항·호와 링크 불일치")
+            if target["tag"] == "AppdxTable":
+                check(re.findall(r"별표\s*제?(\d+)", label) == [target["number"]], "일본 별표 번호 링크 불일치")
+    review = (BASE / "japan-comparison-review.md").read_text()
+    review_rows = [line for line in review.splitlines() if re.match(r"\| \d+\. ", line)]
+    check(len(review_rows) == 17, "한국·일본 점검 기준 수 불일치")
+    for (_, label, order), line in zip(criteria, review_rows):
+        check(line.startswith(f"| {order}. {label} |"), "한국·일본 점검 기준명·순서 불일치")
+    review_anchors = re.findall(r"\./translations/appi\.md#([^\)]+)", review)
+    check(all(anchor in anchors for anchor in review_anchors), "한국·일본 점검 링크 대상 미번역·누락")
+    print(f"구조 검사 통과: APPI {len(nodes)}개 원문 노드, {len(drafts)}개 본칙 초안, "
+          f"{len(anchors)}개 앵커, 한국 색인 {len(pipa_ids)}개, "
+          f"분류 초안 {sum(c['korean_summary'] != '미검토' for c in cells)}/{len(cells)}셀. "
+          f"선택 원문 번역 누락 {len(missing)}개; 사람 번역·비교 검수는 미완료.")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--appi-source", type=Path)
+    parser.add_argument("--pipa-source", type=Path)
+    args = parser.parse_args()
+    validate(args.appi_source, args.pipa_source)

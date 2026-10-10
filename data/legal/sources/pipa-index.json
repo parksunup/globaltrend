@@ -1,0 +1,1176 @@
+{
+  "schema_version": 1,
+  "law": "개인정보 보호법",
+  "jurisdiction_code": "KR",
+  "source_version": "법률 제21445호; 2026-03-10 일부개정; 대표 시행일 2026-09-11",
+  "official_url": "https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
+  "source_body_url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+  "source_body_sha256": "70c505dc867c972a94ba30db8b03f0c17daa21222f59c5368750797d1605d3a5",
+  "index_scope": "observed main article labels including branch/deletion labels and supplementary article titles of Acts 19234, 20897 and 21445; not full statutory text",
+  "article_labels_observed": 127,
+  "human_review_status": "not_started",
+  "source_body_in_repository": false,
+  "notes": [
+    "본칙 표제 127개는 HTML 관측 수이며 유효 조문 수가 아니다.",
+    "부칙·항·호 전체 구조 검수 및 개정별 시행 관계는 미완료.",
+    "법률 제21445호 부칙상 제32조의2 제1항 단서·제75조 제2항 제15호 개정규정은 2027-07-01 시행.",
+    "공식 한국어 본문 재배포 조건 미확정으로 원문 본문을 저장소에 넣지 않는다.",
+    "조문 인용 링크 대신 실제 p 선두 표제로 위치를 재검증했다. 제64조 위치를 바로잡았다."
+  ],
+  "articles": [
+    {
+      "node_id": "pipa-a1",
+      "article_label": "제1조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 9191,
+      "source_line": 162
+    },
+    {
+      "node_id": "pipa-a2",
+      "article_label": "제2조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 10209,
+      "source_line": 172
+    },
+    {
+      "node_id": "pipa-a3",
+      "article_label": "제3조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 13460,
+      "source_line": 199
+    },
+    {
+      "node_id": "pipa-a4",
+      "article_label": "제4조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 15503,
+      "source_line": 217
+    },
+    {
+      "node_id": "pipa-a5",
+      "article_label": "제5조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 17018,
+      "source_line": 235
+    },
+    {
+      "node_id": "pipa-a6",
+      "article_label": "제6조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 18798,
+      "source_line": 250
+    },
+    {
+      "node_id": "pipa-a7",
+      "article_label": "제7조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 20283,
+      "source_line": 266
+    },
+    {
+      "node_id": "pipa-a7-2",
+      "article_label": "제7조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 23043,
+      "source_line": 286
+    },
+    {
+      "node_id": "pipa-a7-3",
+      "article_label": "제7조의3",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 25362,
+      "source_line": 304
+    },
+    {
+      "node_id": "pipa-a7-4",
+      "article_label": "제7조의4",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 26529,
+      "source_line": 318
+    },
+    {
+      "node_id": "pipa-a7-5",
+      "article_label": "제7조의5",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 27429,
+      "source_line": 330
+    },
+    {
+      "node_id": "pipa-a7-6",
+      "article_label": "제7조의6",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 28630,
+      "source_line": 345
+    },
+    {
+      "node_id": "pipa-a7-7",
+      "article_label": "제7조의7",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 29932,
+      "source_line": 361
+    },
+    {
+      "node_id": "pipa-a7-8",
+      "article_label": "제7조의8",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 34008,
+      "source_line": 377
+    },
+    {
+      "node_id": "pipa-a7-9",
+      "article_label": "제7조의9",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 35727,
+      "source_line": 398
+    },
+    {
+      "node_id": "pipa-a7-10",
+      "article_label": "제7조의10",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 40333,
+      "source_line": 433
+    },
+    {
+      "node_id": "pipa-a7-11",
+      "article_label": "제7조의11",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 41314,
+      "source_line": 446
+    },
+    {
+      "node_id": "pipa-a7-12",
+      "article_label": "제7조의12",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 42740,
+      "source_line": 464
+    },
+    {
+      "node_id": "pipa-a7-13",
+      "article_label": "제7조의13",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 43789,
+      "source_line": 478
+    },
+    {
+      "node_id": "pipa-a7-14",
+      "article_label": "제7조의14",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 44969,
+      "source_line": 490
+    },
+    {
+      "node_id": "pipa-a8",
+      "article_label": "제8조",
+      "scope": "main",
+      "deleted_marker_observed": true,
+      "source_html_char_offset": 46562,
+      "source_line": 508
+    },
+    {
+      "node_id": "pipa-a8-2",
+      "article_label": "제8조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 47309,
+      "source_line": 517
+    },
+    {
+      "node_id": "pipa-a9",
+      "article_label": "제9조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 48733,
+      "source_line": 531
+    },
+    {
+      "node_id": "pipa-a10",
+      "article_label": "제10조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 50162,
+      "source_line": 550
+    },
+    {
+      "node_id": "pipa-a11",
+      "article_label": "제11조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 51575,
+      "source_line": 563
+    },
+    {
+      "node_id": "pipa-a11-2",
+      "article_label": "제11조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 53504,
+      "source_line": 578
+    },
+    {
+      "node_id": "pipa-a12",
+      "article_label": "제12조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 55613,
+      "source_line": 595
+    },
+    {
+      "node_id": "pipa-a13",
+      "article_label": "제13조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 57643,
+      "source_line": 614
+    },
+    {
+      "node_id": "pipa-a13-2",
+      "article_label": "제13조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 59086,
+      "source_line": 631
+    },
+    {
+      "node_id": "pipa-a14",
+      "article_label": "제14조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 60011,
+      "source_line": 643
+    },
+    {
+      "node_id": "pipa-a15",
+      "article_label": "제15조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 61892,
+      "source_line": 664
+    },
+    {
+      "node_id": "pipa-a16",
+      "article_label": "제16조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 64288,
+      "source_line": 688
+    },
+    {
+      "node_id": "pipa-a17",
+      "article_label": "제17조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 66175,
+      "source_line": 702
+    },
+    {
+      "node_id": "pipa-a18",
+      "article_label": "제18조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 69229,
+      "source_line": 725
+    },
+    {
+      "node_id": "pipa-a19",
+      "article_label": "제19조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 73527,
+      "source_line": 761
+    },
+    {
+      "node_id": "pipa-a20",
+      "article_label": "제20조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 74954,
+      "source_line": 776
+    },
+    {
+      "node_id": "pipa-a20-2",
+      "article_label": "제20조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 78077,
+      "source_line": 796
+    },
+    {
+      "node_id": "pipa-a21",
+      "article_label": "제21조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 79582,
+      "source_line": 809
+    },
+    {
+      "node_id": "pipa-a22",
+      "article_label": "제22조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 81338,
+      "source_line": 824
+    },
+    {
+      "node_id": "pipa-a22-2",
+      "article_label": "제22조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 88045,
+      "source_line": 855
+    },
+    {
+      "node_id": "pipa-a23",
+      "article_label": "제23조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 90002,
+      "source_line": 874
+    },
+    {
+      "node_id": "pipa-a24",
+      "article_label": "제24조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 92729,
+      "source_line": 890
+    },
+    {
+      "node_id": "pipa-a24-2",
+      "article_label": "제24조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 95902,
+      "source_line": 908
+    },
+    {
+      "node_id": "pipa-a25",
+      "article_label": "제25조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 98875,
+      "source_line": 927
+    },
+    {
+      "node_id": "pipa-a25-2",
+      "article_label": "제25조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 104243,
+      "source_line": 957
+    },
+    {
+      "node_id": "pipa-a26",
+      "article_label": "제26조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 107216,
+      "source_line": 976
+    },
+    {
+      "node_id": "pipa-a27",
+      "article_label": "제27조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 114034,
+      "source_line": 997
+    },
+    {
+      "node_id": "pipa-a28",
+      "article_label": "제28조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 115830,
+      "source_line": 1013
+    },
+    {
+      "node_id": "pipa-a28-2",
+      "article_label": "제28조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 117169,
+      "source_line": 1028
+    },
+    {
+      "node_id": "pipa-a28-3",
+      "article_label": "제28조의3",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 118112,
+      "source_line": 1040
+    },
+    {
+      "node_id": "pipa-a28-4",
+      "article_label": "제28조의4",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 119818,
+      "source_line": 1054
+    },
+    {
+      "node_id": "pipa-a28-5",
+      "article_label": "제28조의5",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 122451,
+      "source_line": 1068
+    },
+    {
+      "node_id": "pipa-a28-6",
+      "article_label": "제28조의6",
+      "scope": "main",
+      "deleted_marker_observed": true,
+      "source_html_char_offset": 124251,
+      "source_line": 1081
+    },
+    {
+      "node_id": "pipa-a28-7",
+      "article_label": "제28조의7",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 125487,
+      "source_line": 1092
+    },
+    {
+      "node_id": "pipa-a28-8",
+      "article_label": "제28조의8",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 128766,
+      "source_line": 1110
+    },
+    {
+      "node_id": "pipa-a28-9",
+      "article_label": "제28조의9",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 133229,
+      "source_line": 1148
+    },
+    {
+      "node_id": "pipa-a28-10",
+      "article_label": "제28조의10",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 135246,
+      "source_line": 1164
+    },
+    {
+      "node_id": "pipa-a28-11",
+      "article_label": "제28조의11",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 136481,
+      "source_line": 1176
+    },
+    {
+      "node_id": "pipa-a29",
+      "article_label": "제29조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 138644,
+      "source_line": 1193
+    },
+    {
+      "node_id": "pipa-a30",
+      "article_label": "제30조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 140056,
+      "source_line": 1204
+    },
+    {
+      "node_id": "pipa-a30-2",
+      "article_label": "제30조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 143895,
+      "source_line": 1230
+    },
+    {
+      "node_id": "pipa-a30-3",
+      "article_label": "제30조의3",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 145663,
+      "source_line": 1246
+    },
+    {
+      "node_id": "pipa-a31",
+      "article_label": "제31조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 146786,
+      "source_line": 1258
+    },
+    {
+      "node_id": "pipa-a31-2",
+      "article_label": "제31조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 151372,
+      "source_line": 1291
+    },
+    {
+      "node_id": "pipa-a32",
+      "article_label": "제32조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 155267,
+      "source_line": 1314
+    },
+    {
+      "node_id": "pipa-a32-2",
+      "article_label": "제32조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 159237,
+      "source_line": 1343
+    },
+    {
+      "node_id": "pipa-a33",
+      "article_label": "제33조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 162393,
+      "source_line": 1367
+    },
+    {
+      "node_id": "pipa-a34",
+      "article_label": "제34조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 167413,
+      "source_line": 1398
+    },
+    {
+      "node_id": "pipa-a34-2",
+      "article_label": "제34조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 171394,
+      "source_line": 1421
+    },
+    {
+      "node_id": "pipa-a35",
+      "article_label": "제35조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 173401,
+      "source_line": 1439
+    },
+    {
+      "node_id": "pipa-a35-2",
+      "article_label": "제35조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 177014,
+      "source_line": 1464
+    },
+    {
+      "node_id": "pipa-a35-3",
+      "article_label": "제35조의3",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 184858,
+      "source_line": 1501
+    },
+    {
+      "node_id": "pipa-a35-4",
+      "article_label": "제35조의4",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 188073,
+      "source_line": 1531
+    },
+    {
+      "node_id": "pipa-a36",
+      "article_label": "제36조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 190535,
+      "source_line": 1550
+    },
+    {
+      "node_id": "pipa-a37",
+      "article_label": "제37조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 192651,
+      "source_line": 1567
+    },
+    {
+      "node_id": "pipa-a37-2",
+      "article_label": "제37조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 195383,
+      "source_line": 1587
+    },
+    {
+      "node_id": "pipa-a38",
+      "article_label": "제38조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 197899,
+      "source_line": 1603
+    },
+    {
+      "node_id": "pipa-a39",
+      "article_label": "제39조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 200750,
+      "source_line": 1618
+    },
+    {
+      "node_id": "pipa-a39-2",
+      "article_label": "제39조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 202771,
+      "source_line": 1640
+    },
+    {
+      "node_id": "pipa-a39-3",
+      "article_label": "제39조의3",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 204888,
+      "source_line": 1658
+    },
+    {
+      "node_id": "pipa-a39-4",
+      "article_label": "제39조의4",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 207118,
+      "source_line": 1674
+    },
+    {
+      "node_id": "pipa-a39-5",
+      "article_label": "제39조의5",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 209673,
+      "source_line": 1699
+    },
+    {
+      "node_id": "pipa-a39-6",
+      "article_label": "제39조의6",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 211480,
+      "source_line": 1715
+    },
+    {
+      "node_id": "pipa-a39-7",
+      "article_label": "제39조의7",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 213888,
+      "source_line": 1729
+    },
+    {
+      "node_id": "pipa-a40",
+      "article_label": "제40조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 217278,
+      "source_line": 1750
+    },
+    {
+      "node_id": "pipa-a41",
+      "article_label": "제41조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 219957,
+      "source_line": 1773
+    },
+    {
+      "node_id": "pipa-a42",
+      "article_label": "제42조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 220697,
+      "source_line": 1782
+    },
+    {
+      "node_id": "pipa-a43",
+      "article_label": "제43조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 222766,
+      "source_line": 1800
+    },
+    {
+      "node_id": "pipa-a44",
+      "article_label": "제44조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 223736,
+      "source_line": 1812
+    },
+    {
+      "node_id": "pipa-a45",
+      "article_label": "제45조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 225357,
+      "source_line": 1825
+    },
+    {
+      "node_id": "pipa-a45-2",
+      "article_label": "제45조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 227561,
+      "source_line": 1841
+    },
+    {
+      "node_id": "pipa-a46",
+      "article_label": "제46조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 228373,
+      "source_line": 1852
+    },
+    {
+      "node_id": "pipa-a47",
+      "article_label": "제47조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 229825,
+      "source_line": 1863
+    },
+    {
+      "node_id": "pipa-a48",
+      "article_label": "제48조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 231339,
+      "source_line": 1880
+    },
+    {
+      "node_id": "pipa-a49",
+      "article_label": "제49조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 232268,
+      "source_line": 1891
+    },
+    {
+      "node_id": "pipa-a50",
+      "article_label": "제50조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 234615,
+      "source_line": 1908
+    },
+    {
+      "node_id": "pipa-a50-2",
+      "article_label": "제50조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 236050,
+      "source_line": 1920
+    },
+    {
+      "node_id": "pipa-a51",
+      "article_label": "제51조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 237228,
+      "source_line": 1935
+    },
+    {
+      "node_id": "pipa-a52",
+      "article_label": "제52조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 239779,
+      "source_line": 1955
+    },
+    {
+      "node_id": "pipa-a53",
+      "article_label": "제53조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 240651,
+      "source_line": 1966
+    },
+    {
+      "node_id": "pipa-a54",
+      "article_label": "제54조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 241343,
+      "source_line": 1975
+    },
+    {
+      "node_id": "pipa-a55",
+      "article_label": "제55조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 242585,
+      "source_line": 1991
+    },
+    {
+      "node_id": "pipa-a56",
+      "article_label": "제56조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 243655,
+      "source_line": 2004
+    },
+    {
+      "node_id": "pipa-a57",
+      "article_label": "제57조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 244768,
+      "source_line": 2017
+    },
+    {
+      "node_id": "pipa-a58",
+      "article_label": "제58조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 246692,
+      "source_line": 2034
+    },
+    {
+      "node_id": "pipa-a58-2",
+      "article_label": "제58조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 249984,
+      "source_line": 2051
+    },
+    {
+      "node_id": "pipa-a59",
+      "article_label": "제59조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 251292,
+      "source_line": 2064
+    },
+    {
+      "node_id": "pipa-a60",
+      "article_label": "제60조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 252624,
+      "source_line": 2079
+    },
+    {
+      "node_id": "pipa-a61",
+      "article_label": "제61조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 254979,
+      "source_line": 2097
+    },
+    {
+      "node_id": "pipa-a62",
+      "article_label": "제62조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 256683,
+      "source_line": 2111
+    },
+    {
+      "node_id": "pipa-a63",
+      "article_label": "제63조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 259335,
+      "source_line": 2130
+    },
+    {
+      "node_id": "pipa-a63-2",
+      "article_label": "제63조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 262946,
+      "source_line": 2160
+    },
+    {
+      "node_id": "pipa-a64",
+      "article_label": "제64조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 266474,
+      "source_line": 2184
+    },
+    {
+      "node_id": "pipa-a64-2",
+      "article_label": "제64조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 268182,
+      "source_line": 2200
+    },
+    {
+      "node_id": "pipa-a65",
+      "article_label": "제65조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 280401,
+      "source_line": 2251
+    },
+    {
+      "node_id": "pipa-a66",
+      "article_label": "제66조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 282266,
+      "source_line": 2265
+    },
+    {
+      "node_id": "pipa-a67",
+      "article_label": "제67조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 285084,
+      "source_line": 2278
+    },
+    {
+      "node_id": "pipa-a68",
+      "article_label": "제68조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 286678,
+      "source_line": 2296
+    },
+    {
+      "node_id": "pipa-a69",
+      "article_label": "제69조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 288457,
+      "source_line": 2309
+    },
+    {
+      "node_id": "pipa-a70",
+      "article_label": "제70조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 290136,
+      "source_line": 2325
+    },
+    {
+      "node_id": "pipa-a71",
+      "article_label": "제71조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 291443,
+      "source_line": 2339
+    },
+    {
+      "node_id": "pipa-a72",
+      "article_label": "제72조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 298910,
+      "source_line": 2361
+    },
+    {
+      "node_id": "pipa-a73",
+      "article_label": "제73조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 301178,
+      "source_line": 2376
+    },
+    {
+      "node_id": "pipa-a74",
+      "article_label": "제74조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 304681,
+      "source_line": 2393
+    },
+    {
+      "node_id": "pipa-a74-2",
+      "article_label": "제74조의2",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 306051,
+      "source_line": 2404
+    },
+    {
+      "node_id": "pipa-a75",
+      "article_label": "제75조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 307309,
+      "source_line": 2416
+    },
+    {
+      "node_id": "pipa-a76",
+      "article_label": "제76조",
+      "scope": "main",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 336406,
+      "source_line": 2481
+    },
+    {
+      "node_id": "pipa-suppl-19234-a1",
+      "article_label": "제1조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 362272,
+      "source_line": 2657
+    },
+    {
+      "node_id": "pipa-suppl-19234-a2",
+      "article_label": "제2조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 362691,
+      "source_line": 2661
+    },
+    {
+      "node_id": "pipa-suppl-19234-a3",
+      "article_label": "제3조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 362835,
+      "source_line": 2662
+    },
+    {
+      "node_id": "pipa-suppl-19234-a4",
+      "article_label": "제4조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 362997,
+      "source_line": 2663
+    },
+    {
+      "node_id": "pipa-suppl-19234-a5",
+      "article_label": "제5조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 363174,
+      "source_line": 2664
+    },
+    {
+      "node_id": "pipa-suppl-19234-a6",
+      "article_label": "제6조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 363298,
+      "source_line": 2665
+    },
+    {
+      "node_id": "pipa-suppl-19234-a7",
+      "article_label": "제7조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 363519,
+      "source_line": 2666
+    },
+    {
+      "node_id": "pipa-suppl-19234-a8",
+      "article_label": "제8조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 363642,
+      "source_line": 2667
+    },
+    {
+      "node_id": "pipa-suppl-19234-a9",
+      "article_label": "제9조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 363903,
+      "source_line": 2669
+    },
+    {
+      "node_id": "pipa-suppl-19234-a10",
+      "article_label": "제10조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 364112,
+      "source_line": 2670
+    },
+    {
+      "node_id": "pipa-suppl-19234-a11",
+      "article_label": "제11조",
+      "scope": "suppl-19234",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 364348,
+      "source_line": 2671
+    },
+    {
+      "node_id": "pipa-suppl-20897-a1",
+      "article_label": "제1조",
+      "scope": "suppl-20897",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 368176,
+      "source_line": 2703
+    },
+    {
+      "node_id": "pipa-suppl-20897-a2",
+      "article_label": "제2조",
+      "scope": "suppl-20897",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 368300,
+      "source_line": 2705
+    },
+    {
+      "node_id": "pipa-suppl-21445-a1",
+      "article_label": "제1조",
+      "scope": "suppl-21445",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 369590,
+      "source_line": 2711
+    },
+    {
+      "node_id": "pipa-suppl-21445-a2",
+      "article_label": "제2조",
+      "scope": "suppl-21445",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 369772,
+      "source_line": 2713
+    },
+    {
+      "node_id": "pipa-suppl-21445-a3",
+      "article_label": "제3조",
+      "scope": "suppl-21445",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 370103,
+      "source_line": 2716
+    },
+    {
+      "node_id": "pipa-suppl-21445-a4",
+      "article_label": "제4조",
+      "scope": "suppl-21445",
+      "deleted_marker_observed": false,
+      "source_html_char_offset": 370495,
+      "source_line": 2719
+    }
+  ],
+  "supplementary_article_labels_observed": 17,
+  "source_location_unit": "UTF-8 decoded HTML character offsets after CRLF/CR to LF normalization; offsets point to the <p> start whose text begins with the article title; source_line is 1-based"
+}
