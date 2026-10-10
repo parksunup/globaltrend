@@ -283,3 +283,13 @@
 .themeLight .lawEmptyState{background:#f4f7f1;border-color:#dce6d9}.themeLight .lawEmptyState strong{color:#254438}.themeLight .lawEmptyState p,.themeLight .lawDisclaimer{color:#607366}
 @media(max-width:850px){.themeToggle{margin-left:auto}.themeLight .nav{border-top:1px solid var(--line)}}
 @media(max-width:620px){.themeToggle{min-width:72px;padding:6px 8px;font-size:11px}.themeLight .hero h1{font-size:32px}}
+
+/* Light-theme audit fixes: legible controls and stable tablet navigation. */
+.themeLight .searchBox>span,.themeLight .searchBox button{color:#466f5e}
+.themeLight .searchBox input{color:#1b3528}.themeLight .searchBox input::placeholder{color:#6d8373}
+.themeLight .topicNetwork svg g:first-child{stroke:#8eaa9a}.themeLight .topicNetwork svg g:last-child{fill:#287e68}
+.themeLight .criteriaList li button span,.themeLight .criteriaList li button i{color:#5b7565}
+.themeLight .criteriaList li button.criteriaActive span{color:#0d5946}
+.themeLight .lawOrbitRing strong{color:#516c8e}
+.themeLight .lawPage :is(button,a):focus-visible,.themeLight .site :is(button,a):focus-visible{outline:2px solid #176b5e;outline-offset:3px}
+@media (min-width:621px) and (max-width:850px){.header .nav{order:3;width:100%}.header .themeToggle{order:2;margin-left:auto}}
