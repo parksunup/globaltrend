@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createClient } from "../../lib/supabase/server";
+import { loadTrendImportCandidates } from "../../lib/trend-import";
 import { advanceReport, createDraft, saveDraft, signIn, signOut } from "./actions";
 import styles from "./work.module.css";
 
@@ -23,8 +24,8 @@ const statusText: Record<string, string> = {
   draft: "초안", in_review: "검수 대기", approved: "승인됨", published: "발행됨", excluded: "제외",
 };
 
-export default async function WorkPage({ searchParams }: { searchParams: Promise<{ notice?: string }> }) {
-  const { notice } = await searchParams;
+export default async function WorkPage({ searchParams }: { searchParams: Promise<{ notice?: string; candidate?: string }> }) {
+  const { notice, candidate: candidateId } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const { data: membership } = user
@@ -41,6 +42,10 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   ]) : [{ data: [] }, { data: [] }];
   const sources = sourcesResult.data ?? [];
   const reports = reportsResult.data ?? [];
+  const candidates = canEdit ? loadTrendImportCandidates() : [];
+  const candidate = candidates.find((item) => item.id === candidateId);
+  const sourceHint = candidate?.source === "curia" ? "CJEU" : candidate?.source.toUpperCase();
+  const candidateSource = sourceHint ? sources.find((source) => source.name.toUpperCase().includes(sourceHint)) : null;
   const sourceIds = reports.map((report) => report.source_item_id);
   const { data: sourceItems } = sourceIds.length
     ? await supabase.from("source_items").select("id,title_original,canonical_url,published_at").in("id", sourceIds)
@@ -62,18 +67,22 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
       </section> : <>
         <div className={styles.identity}><span>{user.email} · {role ? `권한: ${role}` : "팀 권한 없음"}</span><form action={signOut}><button type="submit">로그아웃</button></form></div>
         {!canEdit ? <section className={styles.card}><h2>작성 권한이 없습니다</h2><p>관리자 또는 편집자 권한이 있는 팀 계정으로 접속해 주세요.</p></section> : <>
-          <section className={styles.card}>
-            <h2>새 동향 초안 등록</h2><p>공식 원문을 확인한 뒤 작성해 주세요. 저장해도 곧바로 공개되지 않습니다.</p>
-            <form action={createDraft} className={styles.form}>
-              <label>수집 출처<select name="source_id" required>{sources.map((source) => <option key={source.id} value={source.id}>{source.name}</option>)}</select></label>
+          {candidates.length > 0 && <section className={styles.card}>
+            <h2>팀 제출 자료에서 시작</h2><p>주간 예시 호에 선정된 자료를 입력창에 채웁니다. 파일의 내용은 미검수 초안이며, 원문과 날짜를 다시 확인한 뒤 저장해 주세요.</p>
+            <div className={styles.candidates}>{candidates.map((item) => <Link key={item.id} href={`/work?candidate=${encodeURIComponent(item.id)}#new-draft`}>{item.title} · {item.source.toUpperCase()}</Link>)}</div>
+          </section>}
+          <section className={styles.card} id="new-draft">
+            <h2>새 동향 초안 등록</h2><p>{candidate ? `제출 자료 ${candidate.id}의 내용을 채웠습니다. 원문과 한국어 표현을 확인해 주세요.` : "공식 원문을 확인한 뒤 작성해 주세요. 저장해도 곧바로 공개되지 않습니다."}</p>
+            <form action={createDraft} className={styles.form} key={candidate?.id ?? "manual"}>
+              <label>수집 출처<select name="source_id" key={candidateSource?.id ?? "manual"} defaultValue={candidateSource?.id ?? ""} required><option value="">출처를 선택하세요</option>{sources.map((source) => <option key={source.id} value={source.id}>{source.name}</option>)}</select></label>
               {sources.length === 0 && <p>활성 수집 출처가 없습니다. 출처를 먼저 등록해야 합니다.</p>}
-              <label>공식 원문 주소<input name="canonical_url" type="url" placeholder="https://…" required /></label>
-              <label>원문 제목<input name="original_title" maxLength={500} required /></label>
-              <label>한국어 제목<input name="title_ko" maxLength={500} required /></label>
-              <label>한국어 한 줄 요약<textarea name="summary_ko" maxLength={3000} required rows={3} /></label>
-              <label>상세 내용<textarea name="details_ko" maxLength={20000} rows={5} /></label>
-              <div className={styles.fields}><label>원문 게시일<input name="source_published_date" type="date" /></label><label>국가·지역 (쉼표로 구분)<input name="jurisdictions" placeholder="EU, 영국" /></label></div>
-              <label>주제 (쉼표로 구분)<input name="topics" placeholder="아동, 인공지능" /></label>
+              <label>공식 원문 주소<input name="canonical_url" type="url" placeholder="https://…" defaultValue={candidate?.officialUrl} required /></label>
+              <label>원문 제목<input name="original_title" maxLength={500} defaultValue={candidate?.originalTitle} required /></label>
+              <label>한국어 제목<input name="title_ko" maxLength={500} defaultValue={candidate?.title} required /></label>
+              <label>한국어 한 줄 요약<textarea name="summary_ko" maxLength={3000} defaultValue={candidate?.summary} required rows={3} /></label>
+              <label>상세 내용<textarea name="details_ko" maxLength={20000} defaultValue={candidate?.details} rows={5} /></label>
+              <div className={styles.fields}><label>원문 게시일<input name="source_published_date" type="date" defaultValue={candidate?.publishedDate} /></label><label>국가·지역 (쉼표로 구분)<input name="jurisdictions" placeholder="EU, 영국" defaultValue={candidate?.jurisdictions.join(", ")} /></label></div>
+              <label>주제 (쉼표로 구분)<input name="topics" placeholder="아동, 인공지능" defaultValue={candidate?.topics.join(", ")} /></label>
               <button type="submit" disabled={sources.length === 0 || readOnlyPreview}>초안 저장</button>
             </form>
           </section>
