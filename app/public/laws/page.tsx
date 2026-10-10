@@ -50,7 +50,7 @@ export default function PublicLawComparePage() {
     <PublicHeader active="/public/laws" />
     <section className={styles.lawHero}>
       <div><p className={styles.lawOverline}>GLOBAL PRIVACY LAW ATLAS</p><h1>국가별 개인정보 보호법</h1><p>주요 국가와 지역의 개인정보 보호법을 한눈에 비교해 보세요.</p></div>
-      <div className={styles.lawOrbit} aria-hidden="true"><div className={styles.lawOrbitRing}><span>KR</span><i>JP</i><b>EU</b><em>UK</em><strong>CN</strong></div><p>GLOBAL PRIVACY LAW ATLAS</p></div>
+      
     </section>
     <section className={styles.countryGrid} aria-label="비교 국가 선택">
       {laws.map((law) => <button key={law.code} type="button" className={selected.includes(law.code) ? styles.countryCardSelected : styles.countryCard} onClick={() => toggle(law.code)} aria-pressed={selected.includes(law.code)} disabled={!selected.includes(law.code) && selected.length >= 3}>
