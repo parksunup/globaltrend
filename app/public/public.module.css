@@ -218,3 +218,68 @@
 .homeEmpty{color:#aebfcb;font-size:13px;line-height:1.8;padding:20px 8px}
 .weeklyStrip{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto}
 @media(max-width:620px){.weeklyStrip{grid-template-columns:1fr 1fr}.weeklyLead{grid-column:1/-1}.weeklyStrip>a{grid-column:1/-1}}
+
+
+/* Public theme switch: C law-atlas inspired paper and forest palette. */
+.themeRoot{min-height:100vh}
+.themeToggle{display:flex;align-items:center;justify-content:center;gap:7px;flex:none;min-width:86px;padding:8px 11px;border:1px solid var(--line);border-radius:100px;background:transparent;color:#d9e7ee;font:600 12px "Noto Sans KR",sans-serif;white-space:nowrap;cursor:pointer}
+.themeToggle span{font-size:17px;line-height:1}.themeToggle:hover{border-color:var(--cyan);color:var(--cyan)}.themeToggle:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.themeLight .site,.themeLight .lawPage{--line:#d5ddd8;--cyan:#11695f;--gold:#8a5b2c;--muted:#66736e;--panel:#fff;--panel2:#f4f5f0;background:#f7f7f3;color:#192722}
+.themeLight .header{background:#fff;border-bottom-color:#d8dfd9;box-shadow:0 2px 16px rgba(33,55,48,.04)}
+.themeLight .brand,.themeLight .brandText,.themeLight .brandSerif{color:#142b27}.themeLight .brandText span,.themeLight .brandAccent{color:#176c62}
+.themeLight .brandTagline,.themeLight .brand small{color:#687771}.themeLight .nav a{color:#30433d}.themeLight .nav a:hover,.themeLight .nav a.navActive{color:#0b5d54;border-color:#0b5d54}
+.themeLight .themeToggle{color:#23473e;background:#f5f7f3;border-color:#cad9d0}.themeLight .themeToggle:hover{background:#e9f2ec;color:#0c5d52}
+.themeLight .hero,.themeLight .lawHero{background:radial-gradient(ellipse at 78% 70%,rgba(194,205,193,.34),transparent 45%),linear-gradient(110deg,#f9f9f5 12%,#ebece5 64%,#d8dfd7);border-bottom-color:#d0d9d1}
+.themeLight .hero::before,.themeLight .lawHero::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0 75px,rgba(31,75,61,.022) 76px 77px)}
+.themeLight .hero h1,.themeLight .lawHero h1{color:#142823}.themeLight .overline,.themeLight .lawOverline{color:#42675a}
+.themeLight .heroTitle>p:last-child,.themeLight .lawHero>div:first-child>p:last-child{color:#5c6c65}
+.themeLight .edition,.themeLight .heroMotto{color:#697b71}.themeLight .heroMotto b{color:#476458}.themeLight .globe{opacity:.42;filter:sepia(.45) saturate(.58) hue-rotate(65deg)}
+.themeLight .observatoryGrid,.themeLight .countryGrid{background:#f7f7f3}
+.themeLight .panelTitle h2,.themeLight .featured h2,.themeLight .featured h3{color:#172923}.themeLight .panelTitle a,.themeLight .timeline a{color:#334941}
+.themeLight .timeline:before{background:#c2d2c8}.themeLight .timelineDot{background:#91a99d;border-color:#f7f7f3}
+.themeLight .timeline li.timelineActive{background:#e9f1ea;border-color:#146a5c}.themeLight .timelineActive .timelineDot{background:#167568;box-shadow:0 0 0 4px #d9eae0}
+.themeLight .timeline time,.themeLight .featureKicker{color:#65776d}.themeLight .featureMeta{color:#8c6336}.themeLight .featureMeta i{color:#94a69a}
+.themeLight .featureSource,.themeLight .featureBody{color:#54695e}.themeLight .featureSource span{color:#6a7e71}.themeLight .featureLink{color:#0c6558}
+.themeLight .topicNetwork>a{color:#1d463d;background:radial-gradient(circle at 40% 35%,#fff,#e5eee7 80%);border-color:#79a995;box-shadow:0 4px 22px rgba(43,83,65,.09)}.themeLight .topicNetwork>a:hover{background:#d9e9df;color:#123f34}
+.themeLight .topicNetwork>a.topicAI,.themeLight .topicNetwork>a.topicBio,.themeLight .topicNetwork>a.topicTransfer,.themeLight .topicNetwork>a.topicPlatform,.themeLight .topicNetwork>a.topicChildren,.themeLight .topicNetwork>a.topicRights,.themeLight .topicNetwork>a.topicGovernance{color:#52695d!important}
+.themeLight .topicLaw{border-color:#ae895d!important;box-shadow:0 4px 22px rgba(143,101,48,.12)!important}
+.themeLight .weeklyStrip{background:#eef1eb}.themeLight .weeklyLead p,.themeLight .weekCard span,.themeLight .weekCardActive span,.themeLight .weekCard small,.themeLight .weekCardActive small{color:#64766b}
+.themeLight .weekCard strong,.themeLight .weekCardActive strong,.themeLight .weeklyStrip>a{color:#254339}.themeLight .weekCardActive{background:#fff;border-color:#7ca694}
+.themeLight .footer{background:#f6f7f2;color:#64756c}.themeLight .footer a{color:#285c4d}.themeLight .demoBanner{background:#edf1ec;color:#63756b}
+.themeLight .searchPage{background:radial-gradient(ellipse at 50% 0,rgba(208,219,207,.42),transparent 45%),#f7f7f3}
+.themeLight .searchIntro h1,.themeLight .searchIntro h1 em{color:#172923}.themeLight .searchIntro .eyebrow,.themeLight .searchIntro>p:last-child,.themeLight .modeHint{color:#62766b}
+.themeLight .searchBox{background:#fff;border-color:#c9d3ca;box-shadow:0 10px 30px rgba(33,54,42,.09)}
+.themeLight .searchBox kbd,.themeLight .searchSubmit{background:#176b5e!important;color:#fff!important}.themeLight .searchSubmit:hover{background:#0c5149!important}
+.themeLight .modeSwitch,.themeLight .sortSwitch{background:#fff;border-color:#d0dbd1}.themeLight .modeSwitch button,.themeLight .sortSwitch button{color:#526b5b}
+.themeLight .modeSwitch button.modeActive,.themeLight .sortSwitch button.sortActive{background:#e1efe5;color:#0f594d;box-shadow:inset 0 0 0 1px #92b7a1}
+.themeLight .filters,.themeLight .preview,.themeLight .trendDetail{background:#fff;border-color:#d5ddd6;box-shadow:0 4px 20px rgba(31,61,44,.035)}
+.themeLight .filterHeading,.themeLight .resultHeader,.themeLight .preview h2{color:#20332a}
+.themeLight .filterHeading button,.themeLight .filterGroup>button span+span,.themeLight .filterFoot{color:#667b6d}.themeLight .filterGroup{border-bottom-color:#e2e8df}
+.themeLight .filterGroup summary,.themeLight .filters>p,.themeLight .filterGroup>button{color:#344d3e}
+.themeLight .filterGroup>button:hover,.themeLight .filterGroup>button.filterSelected,.themeLight .filterGroup>button.countryFilterSelected{background:#e9f3eb;border-color:#8bb4a0;color:#0d5148}
+.themeLight .countryFilterSelected:not(:has(.countryCheckboxChecked)){background:#e9f3eb;border-color:#8bb4a0;color:#0d5148}
+.themeLight .countryFilter span.countryCheckbox,.themeLight .countryFilterSelected span.countryCheckboxChecked{border-color:#799487}
+.themeLight .countryFilterSelected span.countryCheckboxChecked{background:#176b5e;border-color:#176b5e;color:#fff}
+.themeLight .resultHeader .eyebrow,.themeLight .resultHeader strong small{color:#667b70}.themeLight .storyCard{color:#21342a}
+.themeLight .storyCard:hover,.themeLight .storyCard.storySelected{background:#edf4ed;border-left-color:#176b5e}
+.themeLight .storyMeta,.themeLight .storyMeta time,.themeLight .storyCard>p{color:#586b60}.themeLight .tagList span{color:#1c6659;background:#edf6ef;border-color:#c9ded1}
+.themeLight .tagList a,.themeLight .trendDetail>a{color:#0e6558}
+.themeLight .previewTop,.themeLight .previewCountry,.themeLight .previewText,.themeLight .previewLabel,.themeLight .sourcePending,.themeLight .emptyState,.themeLight .demoNote,.themeLight .homeEmpty{color:#596e60}
+.themeLight .previewTop span+span{border-color:#91b6a2;color:#0f6759}.themeLight .trendDetail>p:not(.featureMeta){color:#405b4b}
+.themeLight .mobileFilterToggle{background:#eaf1ea;border-color:#9bb6a2;color:#1f5545}
+.themeLight .lawOrbit:before{border-color:rgba(26,101,79,.3)}.themeLight .lawOrbit:after{border-color:rgba(148,108,55,.3)}
+.themeLight .lawOrbitRing{background:#f6f8f3;color:#1a5748;border-color:#8caf9d;box-shadow:0 12px 34px rgba(56,90,68,.12)}.themeLight .lawOrbit>p{color:#617767}
+.themeLight .countryCard,.themeLight .countryCardSelected{background:#fff;color:#1a3025;border-color:#d6ddd5;box-shadow:0 3px 13px rgba(30,52,39,.025)}
+.themeLight .countryCard:hover,.themeLight .countryCardSelected{background:#eff5ee;border-color:#246b56;box-shadow:inset 0 0 0 1px #246b56,0 5px 20px rgba(28,74,53,.08)}
+.themeLight .countryCard small,.themeLight .countryCardSelected small{color:#68796d}.themeLight .flag{border-color:#c8d2cb;box-shadow:0 1px 5px rgba(20,48,34,.1)}
+.themeLight .compareSection{background:#f7f7f3}.themeLight .compareTitle h2{color:#152a20}.themeLight .compareTitle>p,.themeLight .selectCount{color:#5c7063}
+.themeLight .criteriaList,.themeLight .lawCompareCard,.themeLight .articlePreview{background:#fff;color:#1b3025;border-color:#d5ddd5;box-shadow:0 4px 18px rgba(22,49,31,.035)}
+.themeLight .criteriaList h3{color:#1e3c2e}.themeLight .criteriaList li button{color:#405647;border-bottom-color:#e7ece6}
+.themeLight .criteriaList li button:hover,.themeLight .criteriaList li button.criteriaActive{background:#e8f2e9;color:#0d5946}
+.themeLight .lawCompareCard>header p,.themeLight .lawCompareCard>section p,.themeLight .lawCompareCard>section li,.themeLight .previewNotice{color:#586b5d}
+.themeLight .draftLabel{background:#fbf4e8;border-color:#e1cfab;color:#79552b}.themeLight .docIcon{background:#e6f0e8;color:#176b5e}
+.themeLight .previewLawHeader small,.themeLight .versionBadge,.themeLight .previewTabs button{color:#68796d}.themeLight .versionBadge{background:#eef2ec}
+.themeLight .previewTabs button.previewTabActive{color:#0f5b4d;border-color:#176b5e}
+.themeLight .lawEmptyState{background:#f4f7f1;border-color:#dce6d9}.themeLight .lawEmptyState strong{color:#254438}.themeLight .lawEmptyState p,.themeLight .lawDisclaimer{color:#607366}
+@media(max-width:850px){.themeToggle{margin-left:auto}.themeLight .nav{border-top:1px solid var(--line)}}
+@media(max-width:620px){.themeToggle{min-width:72px;padding:6px 8px;font-size:11px}.themeLight .hero h1{font-size:32px}}
