@@ -1,19 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import styles from "../public.module.css";
 
 import { PublicHeader, PublicFooter } from "../public-navigation";
 
 const laws = [
-  { code:"KR", flag:"🇰🇷", country:"한국", law:"개인정보 보호법" },
-  { code:"JP", flag:"🇯🇵", country:"일본", law:"개인정보보호법" },
-  { code:"CN", flag:"🇨🇳", country:"중국", law:"개인정보 보호법" },
-  { code:"EU", flag:"🇪🇺", country:"EU", law:"일반개인정보보호규정 (GDPR)" },
-  { code:"UK", flag:"🇬🇧", country:"영국", law:"데이터보호법·UK GDPR" },
-  { code:"CA", flag:"🇺🇸", country:"캘리포니아", law:"소비자 개인정보 보호법 (CCPA)" },
-  { code:"SG", flag:"🇸🇬", country:"싱가포르", law:"개인정보보호법 (PDPA)" },
+  { code:"KR", flag:"/flags/kr.svg", country:"한국", law:"개인정보 보호법" },
+  { code:"JP", flag:"/flags/jp.svg", country:"일본", law:"개인정보보호법" },
+  { code:"CN", flag:"/flags/cn.svg", country:"중국", law:"개인정보 보호법" },
+  { code:"EU", flag:"/flags/eu.svg", country:"EU", law:"일반개인정보보호규정 (GDPR)" },
+  { code:"UK", flag:"/flags/gb.svg", country:"영국", law:"데이터보호법·UK GDPR" },
+  { code:"CA", flag:"/flags/us-ca.svg", country:"캘리포니아", law:"소비자 개인정보 보호법 (CCPA)" },
+  { code:"SG", flag:"/flags/sg.svg", country:"싱가포르", law:"개인정보보호법 (PDPA)" },
 ];
 const criteria = [
   "개인정보 범위", "법 적용 대상", "개인정보보호 원칙", "정보주체 권리",
@@ -53,7 +54,7 @@ export default function PublicLawComparePage() {
     </section>
     <section className={styles.countryGrid} aria-label="비교 국가 선택">
       {laws.map((law) => <button key={law.code} type="button" className={selected.includes(law.code) ? styles.countryCardSelected : styles.countryCard} onClick={() => toggle(law.code)} aria-pressed={selected.includes(law.code)} disabled={!selected.includes(law.code) && selected.length >= 3}>
-        <span className={styles.flag}>{law.code}</span><strong>{law.country}</strong><small>{law.law}</small>
+        <Image className={styles.flag} src={law.flag} width={42} height={28} alt="" aria-hidden="true" /><strong>{law.country}</strong><small>{law.law}</small>
       </button>)}
     </section>
     <section id="comparison" className={styles.compareSection}>
@@ -62,7 +63,7 @@ export default function PublicLawComparePage() {
         <aside className={styles.criteriaList}><h3>비교 기준 <small>17</small></h3><ol>{criteria.map((criterion,index)=><li key={criterion}><button type="button" onClick={()=>{setActiveCriterion(index);setView("summary");}} aria-pressed={activeCriterion===index} className={activeCriterion===index?styles.criteriaActive:""}><span>{String(index+1).padStart(2,"0")}</span>{criterion}<i>›</i></button></li>)}</ol></aside>
         <div className={compareCardsClass}>
           {selectedLaws.map((law) => <article className={styles.lawCompareCard} key={law.code}>
-            <header><span className={styles.flag}>{law.code}</span><div><h3>{law.country}</h3><p>{law.law}</p></div></header>
+            <header><Image className={styles.flag} src={law.flag} width={42} height={28} alt="" aria-hidden="true" /><div><h3>{law.country}</h3><p>{law.law}</p></div></header>
             <section><strong>{criteria[activeCriterion]}</strong><p>기준별 조항을 정리한 검수 자료가 등록되면 여기에서 확인할 수 있습니다.</p><span className={styles.draftLabel}>법제 자료 준비 중</span></section>
             <section><strong>핵심 포인트</strong><ul><li>검수 완료된 비교 요약이 표시됩니다.</li><li>원문 조항과 번역 전문을 연결합니다.</li></ul></section>
             <button type="button" onClick={()=>{setPreviewCode(law.code);setView("full");requestAnimationFrame(() => previewRef.current?.scrollIntoView({behavior:"smooth",block:"start"}));}} className={styles.readLaw}>번역 전문 보기 <span>→</span></button>

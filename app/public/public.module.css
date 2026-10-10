@@ -202,7 +202,9 @@
 .filterGroup>button:hover,.filterGroup>button.filterSelected,.filterGroup>button.countryFilterSelected{background:#102a3c;border-color:rgba(104,213,243,.5);color:#e2f6fb}
 .preview,.articlePreview{scroll-margin-top:22px}
 .compareCardsOne{grid-template-columns:minmax(0,1fr) minmax(270px,1fr)}
-.flag{background:#173246;color:#dbf4ff;font-family:inherit;font-size:12px;font-weight:700;border:1px solid #34596e}
+.flag{display:block;object-fit:contain;background:#fff;border:1px solid #34596e;padding:0;box-shadow:0 1px 5px rgba(0,0,0,.2)}
+.countryGrid .flag{width:50px;height:34px}
+.lawCompareCard>header .flag{width:44px;height:30px}
 .tagList a{color:var(--cyan);padding:6px 9px;border:1px solid var(--line);border-radius:15px;text-decoration:none;font-size:13px}
 .trendDetail{max-width:920px;margin:0 auto;padding:30px;background:#101f2d;border:1px solid var(--line);border-radius:8px}
 .trendDetail>a{color:var(--cyan);text-decoration:none;font-size:14px}
