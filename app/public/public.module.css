@@ -318,3 +318,10 @@
 .themeLight .brandText{color:#172b24}
 @media(max-width:850px){.hero .globe{right:-4%;width:75vw;top:-31px;opacity:.52}.brandText{font-size:24px}}
 @media(max-width:620px){.hero .globe{right:-28%;width:110vw;opacity:.28}.brandText{font-size:22px}.lawHero h1{font-size:30px}.themeLight .hero,.themeLight .lawHero{background-image:linear-gradient(90deg,rgba(249,249,245,.98),rgba(249,249,245,.87) 62%,rgba(249,249,245,.12)),url("/images/law-books-hero.png")}.topicNetwork>a.topicCountry,.topicNetwork>a.topicLaw{min-width:85px;height:85px}.topicNetwork>a.topicCenter{min-width:108px!important;height:108px!important}.topicNetwork>a .topicGlyph{width:22px;height:22px}}
+
+
+/* Hero subjects stay tied to their sections in both palettes. */
+.themeLight .hero{background:radial-gradient(ellipse at 72% 85%,rgba(187,210,194,.25),transparent 48%),linear-gradient(110deg,#f9faf6,#eef2ed 58%,#e6eee7)}
+.themeLight .hero .globe{display:block;filter:none;opacity:.78;background-image:url("/images/observatory-globe-light.png")}
+@media(max-width:850px){.themeLight .hero .globe{opacity:.56}}
+@media(max-width:620px){.themeLight .hero .globe{opacity:.3}}
