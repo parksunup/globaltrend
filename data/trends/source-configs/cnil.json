@@ -7,19 +7,19 @@
   ],
   "candidate_status": "proposed_not_enabled",
   "start_url": "https://www.cnil.fr/fr/actualites",
-  "start_url_status": "candidate_not_verified_due_to_proxy_block",
+  "start_url_status": "http_200_official_listing_inspected",
   "document_types": [
     "official_news",
     "regulatory_decision",
     "guidance"
   ],
-  "document_types_status": "requested_scope_not_site_verified",
-  "collection_method": "검토 필요: 공식 RSS/API 우선 여부와 HTML/PDF 방식 모두 실사 전입니다. HTTPS 프록시 CONNECT 403으로 응답 본문을 읽지 못했습니다.",
+  "document_types_status": "news_and_guidance_html_inspected_decision_scope_limited",
+  "collection_method": "실제 HTML 목록·상세 수집; ICO는 사이트 내부 검색 POST도 확인. 자동 수집기는 구현하지 않음. 확인 범위·제한은 verification/discovery 참고.",
   "field_locations": {
-    "title": "검토 필요: 공식 목록·상세 페이지 응답 미확보. 위치·선택자·표시 여부를 추정하지 않습니다.",
-    "published_at": "검토 필요: 공식 목록·상세 페이지 응답 미확보. 위치·선택자·표시 여부를 추정하지 않습니다.",
-    "content": "검토 필요: 공식 목록·상세 페이지 응답 미확보. 위치·선택자·표시 여부를 추정하지 않습니다.",
-    "official_url": "검토 필요: 공식 목록·상세 페이지 응답 미확보. 위치·선택자·표시 여부를 추정하지 않습니다."
+    "title": "main h1",
+    "published_at": "main .ctn-gen-auteur (프랑스어 표시 날짜)",
+    "content": "main .page-introduction + main .ctn-gen-body; .ctn-gen-after 관련 기사 및 도구/푸터 제외",
+    "official_url": "목록 main .ctn-gen-liste-titre a[href] → 절대 URL → GET 최종 URL; canonical은 별도 검토"
   },
   "exclude_rules": [
     "개인정보 보호와 직접 관련 없는 자료는 본문 확인 후 제외합니다.",
@@ -30,32 +30,41 @@
   ],
   "exclude_rules_status": "editorial_proposal_not_applied_to_source_material",
   "terms_status": "unreviewed",
-  "sample_urls": [],
-  "review_status": "blocked",
-  "checked_at": "2026-10-11T16:39:49+09:00",
+  "sample_urls": [
+    "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+    "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+    "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux"
+  ],
+  "review_status": "unreviewed",
+  "checked_at": "2026-10-11T17:25:34+09:00",
   "verification": {
-    "status": "blocked",
-    "listing_checked": false,
-    "detail_checked": false,
-    "selectors_verified": false,
-    "blocker": "https_proxy_connect_403"
+    "status": "official_pages_inspected_human_review_pending",
+    "listing_checked": true,
+    "detail_checked": true,
+    "selectors_verified": "news_sample_scope_only",
+    "limitations": [
+      "정책/법률/번역은 사람 검수 전",
+      "PDF·다른 템플릿·모든 페이지에서의 추출은 미검증",
+      "RSS 및 공식 공개 API 제공 여부는 미확정"
+    ]
   },
   "discovery": {
-    "homepage": "https://www.cnil.fr/",
-    "homepage_verified": false,
-    "news_list_candidate": "https://www.cnil.fr/fr/actualites",
-    "decision_list_url": null,
-    "guidance_list_url": null,
+    "news_list": "https://www.cnil.fr/fr/actualites",
+    "decision_list_url": "https://www.cnil.fr/fr/tag/Sanction",
+    "decision_list_note": "제재 관련 기사 목록이며 결정 전문 아카이브가 아님. EXTIA 결정 링크는 Légifrance로 연결되어 403 미확인.",
+    "guidance_list_url": "https://www.cnil.fr/fr/mediatheque?field_scald_collection_tid=29",
+    "guidance_detail_checked": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+    "pagination_note": "뉴스 목록의 ?page=1 / ?page=31 링크 확인. 다음 페이지 응답은 미검증.",
     "rss": {
-      "status": "unreviewed",
+      "status": "not_discovered_in_inspected_pages",
       "url": null,
-      "reason": "링크·응답·본문 포함 여부 미확인. 미제공으로 단정하지 않습니다."
+      "reason": "열람한 페이지의 link alternate/푸터에서 공식 피드 안내를 확인하지 못함. 미제공으로 단정하지 않음."
     },
     "api": {
       "status": "unreviewed",
-      "documentation_url": null,
       "endpoint_url": null,
-      "reason": "공식 안내·엔드포인트·이용조건 미확인. 미제공으로 단정하지 않습니다."
+      "documentation_url": null,
+      "reason": "공식 공개 API 안내·엔드포인트 미확인. 존재 여부를 추정하지 않음."
     }
   },
   "access_failures": [
@@ -74,32 +83,91 @@
       "proxy_status": 403,
       "body_received": false,
       "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000054810440",
+      "stage": "https_proxy_connect",
+      "proxy_status": 403,
+      "http_status": null,
+      "body_received": false,
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "error": "Tunnel connection failed: 403 Forbidden"
     }
   ],
   "content_missing_cases": {
-    "status": "not_checked",
-    "reason": "응답 본문 미수신으로 빈 본문·날짜 누락 등을 검사할 수 없습니다."
+    "status": "observed_with_limitations",
+    "cases": [
+      "뉴스 표시 날짜는 확인. 지침/결정 날짜 종류는 유형별 확인 필요"
+    ]
   },
   "terms_checks": {
-    "robots_url": null,
-    "policy_url": null,
     "status": "unreviewed",
-    "operations": {
-      "collection": "검토 필요",
-      "storage": "검토 필요",
-      "codex_processing": "검토 필요",
-      "summary": "검토 필요",
-      "translation": "검토 필요",
-      "public_excerpt": "검토 필요",
-      "full_text_redistribution": "검토 필요"
-    },
-    "note": "이용조건·robots.txt 미확인. 사이트 접근과 콘텐츠 이용허가는 다릅니다. 전문은 저장소에 넣지 않습니다."
+    "robots_url": "https://www.cnil.fr/robots.txt",
+    "policy_url": "https://www.cnil.fr/fr/mentions-legales",
+    "other_url": "https://www.cnil.fr/fr/informations-publiques",
+    "observed": "Mentions légales의 Réutilisation des contenus: 텍스트 CC-BY-ND 4.0 FR, 출처·라이선스·추출일 표기와 수정 금지. 하단은 같은 조건의 번역 허용을 명시함. 이미지 CC-BY-NC-ND와 오픈데이터 Licence ouverte는 텍스트와 구분. 한국어 독자 요약/발췌·가공의 적용 조건은 사람 검토 필요. 결정/법령은 별도 공식 판본 확인 필요.",
+    "robots_note": "robots.txt HTTP 200; /admin/, /search/, /user/ 등 제한과 리소스 허용 확인. 전문 재배포 허가로 해석하지 않음."
   },
   "next_checks": [
-    "네트워크 초안의 런타임 적용 뒤 시작 URL 및 최종 URL·응답을 다시 확인합니다.",
-    "실제 링크로 뉴스·결정·지침 목록과 상세를 확인하고 제목·게시일·본문·canonical/공식 링크 위치를 기록합니다.",
-    "확인한 구조에 한해서만 선택자를 기록하고 서로 다른 자료 유형에서 동작을 대조합니다.",
-    "RSS/API 공식 안내, 피드 응답, 페이지 순회, robots.txt·이용조건을 확인합니다.",
-    "공식 개인정보 보호 자료 최대 5건을 근거 위치와 함께 선정하고 사건 기준으로 중복을 연결합니다."
+    "출처별 실제 이용조건과 한국어 요약·공개 발췌 범위를 사람 검토합니다.",
+    "상세 선택자와 날짜 파싱을 다른 자료 유형 및 다음 목록 페이지에서 검증합니다.",
+    "공식 RSS/공개 API 지원 안내, 요청 한도·갱신 정책을 추가 확인합니다.",
+    "연결 결정/PDF 전문과 불복·정정 상태는 필요한 경우 별도 검토합니다."
+  ],
+  "access_results": [
+    {
+      "requested_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+      "final_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+      "final_url": "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+      "final_url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/tag/Sanction",
+      "final_url": "https://www.cnil.fr/fr/tag/Sanction",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/mentions-legales",
+      "final_url": "https://www.cnil.fr/fr/mentions-legales",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/informations-publiques",
+      "final_url": "https://www.cnil.fr/fr/informations-publiques",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/robots.txt",
+      "final_url": "https://www.cnil.fr/robots.txt",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/mediatheque?field_scald_collection_tid=29",
+      "final_url": "https://www.cnil.fr/fr/mediatheque?field_scald_collection_tid=29",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/actualites",
+      "http_status": 200,
+      "body_received": true,
+      "evidence": "직접 GET한 뉴스 목록 HTML"
+    }
   ]
 }
