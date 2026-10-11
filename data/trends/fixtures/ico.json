@@ -1,0 +1,30 @@
+{
+  "source_id": "ico",
+  "checked_at": "2026-10-11T16:39:49+09:00",
+  "selection_status": "blocked_official_source_access",
+  "selected_count": 0,
+  "counting_unit": "one_event_per_record; related documents are not separate samples",
+  "items": [],
+  "selection_reason": "공식 목록·상세 본문을 확인하지 못해 실제 자료를 선정하지 않습니다. 원제목·게시일·요약·법적 결론을 추정하지 않습니다.",
+  "blocker": "https_proxy_connect_403",
+  "review_status": "blocked",
+  "access_failures": [
+    {
+      "requested_url": "https://ico.org.uk/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "is_published": false
+}

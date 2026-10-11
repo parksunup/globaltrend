@@ -33,3 +33,22 @@ README.md, architecture.md, docs/team-onboarding.md, data/의 양식과 자동 �
 ## 검증 해석
 
 pnpm validate:data는 파일 대응·필수 값·ID·URL·상태를 검사합니다. 통과해도 공식 페이지 확인·선택자 동작·원문 이용조건 확인이 완료된 것은 아닙니다. 이 조사표는 blocked 상태를 유지합니다.
+
+
+## CNIL·ICO·아일랜드 DPC 후보 추가 — 2026-10-11
+
+- 확인 시각: 2026-10-11T16:39:49+09:00 (한국시간). 담당: 동향 담당. 배정된 feat/trend-source-contracts 및 기존 PR #16에 후보 자료를 추가합니다.
+- 요청된 뉴스·결정·지침의 공식 목록·상세 실사는 **미완료**입니다. 세 기관 홈·시작 목록 후보 모두 HTTPS 프록시 CONNECT 403이며 원문 본문·원문 서버 상태·경로 유효성을 확인하지 못했습니다.
+
+| 출처 | 홈 후보 | 목록 후보 | 실제 표본 | 상태 |
+| --- | --- | --- | --- | --- |
+| cnil | https://www.cnil.fr/ | https://www.cnil.fr/fr/actualites | 0건 | blocked |
+| ico | https://ico.org.uk/ | https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/ | 0건 | blocked |
+| dpc | https://www.dataprotection.ie/ | https://www.dataprotection.ie/en/news-media/latest-news | 0건 | blocked |
+
+- 원제목·게시일·본문·공식 상세 URL·선택자·RSS/API·이용조건은 추정하지 않고 검토 필요/null/빈 배열로 기록했습니다. 뉴스·결정·지침은 요청 범위이며 사이트 제공 여부를 확인한 결과가 아닙니다.
+- 선정 보류 이유: 사실 확인의 선행 조건인 공식 원문 접근이 실패했습니다. 0건은 자료 부족·부재 판단이 아닙니다. 실제 자료를 읽지 않아 개별 제외·사건 중복 판정은 수행하지 않았습니다. 같은 사건의 결정문·보도자료를 한 번만 세는 것은 향후 적용할 원칙입니다.
+- 기존 EDPB 5건·OECD 2건·CURIA 2건, 예시 호 8건과 실제 발행 상태는 변경하지 않았습니다. 신규 후보를 예시 호에 삽입하지 않았습니다.
+- 네트워크 초안에 www.cnil.fr, ico.org.uk, www.dataprotection.ie를 추가하고 기존 api.github.com·curia.europa.eu·www.edpb.europa.eu·www.oecd.org 허용을 보존했습니다. 초안 저장은 현재 런타임 적용을 뜻하지 않습니다. 저장 후 및 별도 실행 권한 재시도도 동일 403이었습니다. 접근 제한을 우회하거나 TLS 검증을 끄지 않았습니다.
+- 이용정책·robots.txt·공개 요약 및 재배포 조건을 읽지 못했습니다. 원문·무허가 번역 전문은 저장소에 넣지 않았습니다.
+- 후속 작업: 네트워크 변경 적용 → 실제 목록·상세·지침·결정 링크 확인 → RSS/API·이용조건·필드 위치 검증 → 출처별 최대 5건 선정 및 Markdown/JSON 대응 검증 → 같은 PR에 보완. 현재 상태를 실사 완료/수집기 사용 가능/법률 검수 완료로 승인하면 안 됩니다.
