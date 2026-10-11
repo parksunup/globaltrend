@@ -1,0 +1,23 @@
+{
+  "source_id": "pdpc",
+  "checked_at": "2026-10-11T21:55:45+09:00",
+  "selection_status": "blocked_official_source_access",
+  "selected_count": 0,
+  "counting_unit": "one_event_per_record; related documents are not separate samples",
+  "items": [],
+  "review_status": "blocked",
+  "is_published": false,
+  "selection_reason": "공식 원문 접근이 실패해 실제 자료 선정 보류. 제목·게시일·요약·법적 결론을 추정하지 않습니다. 0건은 관련 자료가 없다는 뜻이 아닙니다.",
+  "blocker": "https_proxy_connect_403",
+  "access_failures": [
+    {
+      "requested_url": "https://www.pdpc.gov.sg/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-10-11T21:55:45+09:00"
+    }
+  ]
+}
