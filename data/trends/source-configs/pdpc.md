@@ -1,37 +1,41 @@
 # Personal Data Protection Commission (Singapore) 수집 출처 후보 조사표
 
 - ID: `pdpc`
-- 관할권: SG
-- 시작 URL 후보: [https://www.pdpc.gov.sg/](https://www.pdpc.gov.sg/)
-- 확인 시각: 2026-10-11T21:55:45+09:00 (한국시간)
-- 상태: **blocked — 공식 페이지 실사 미완료**. 후보 기록이며 자동 수집 활성화가 아닙니다.
+- 확인 시각: 2026-10-11T22:28:54+09:00 (한국시간)
+- 시작 URL: https://www.pdpc.gov.sg/ — HTTP 200
+- 상태: 공식 페이지 확인, 사람 검수 전 unreviewed. 후보이며 자동 수집 미활성화.
 
-## 조사 범위와 확인 상태
+## 직접 확인한 목록·상세 범위
 
-PDPA 집행 결정·지침·개인정보 보호 관련 소식을 조사합니다. 결정일과 게시일, 과징금과 시정명령을 구분합니다.
+- https://www.pdpc.gov.sg/media-events
+- https://www.pdpc.gov.sg/organisations/regulations-decisions/enforcement-decisions
 
-뉴스·결정·지침은 조사 대상으로 지정한 유형이며 실제 사이트 제공 여부를 확인한 결과가 아닙니다. 홈페이지의 본문·리디렉션을 읽지 못했으므로 목록·상세 URL은 null, 표본 URL은 빈 배열입니다. 경로를 임의로 만들지 않았습니다.
+표본 상세:
 
-| 필드 | 얻는 방법·확인 상태 |
+- https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa
+
+## 추출 방법
+
+| 필드 | 직접 확인한 방법 |
 | --- | --- |
-| 제목 | 검토 필요: DOM/PDF 위치와 선택자 미확인 |
-| 원문 게시일 | 검토 필요: 게시일·결정일·수정일·수집일 구분, 표시 위치·값 미확인 |
-| 본문 | 검토 필요: HTML/PDF 방식·본문 범위·선택자 미확인 |
-| 공식 링크 | 검토 필요: 실제 목록 링크·최종 URL·canonical 미확인 |
+| title | h1 |
+| published_at | .page-banner__date의 Published on (Last updated와 구분) |
+| content | 공지 self.__next_f.push의 기사 data.content를 직접 디코드해 확인. 일반 HTML 본문은 빈 상태. 범용 RSC 파서·렌더링 후 본문 선택자는 검토 필요 |
+| official_url | 서버 내장 메뉴 데이터의 실제 URL → GET 최종 URL |
+
+확인한 표본 범위에 한정합니다. 다른 페이지 구조나 선택자를 추정하지 않습니다.
 
 ## RSS·API
 
-공식 피드/API 안내·URL·응답·본문 포함 여부·지원 계약을 확인하지 못했습니다. 미제공으로 단정하지 않습니다.
+공식 RSS 피드 안내는 확인하지 못했습니다. 미제공으로 단정하지 않으며 추가 검토가 필요합니다.
 
-## 접근 실패
+공식 공개 API 안내·지원 계약 미확인. 동적 렌더링을 공개 API 제공으로 해석하지 않음.
 
-| 요청 URL | 단계 | 관찰 결과 | 원문 서버 상태 |
-| --- | --- | --- | --- |
-| https://www.pdpc.gov.sg/ | HTTPS 프록시 CONNECT | Tunnel connection failed: 403 Forbidden | 미확인 |
+## 유형·본문·날짜의 한계
 
-Python urllib HTTPS GET, Mozilla/5.0·HTML Accept 헤더, TLS·플랫폼 프록시 유지, 20초 제한으로 재확인했습니다. 네트워크 초안 저장만으로 런타임이 바뀌지 않아 동일 오류였습니다. 원문 서버 HTTP 403·페이지 부재·사이트 자체 차단으로 단정하지 않습니다. 원문 응답이 없어 본문 누락 사례도 검사하지 못했습니다.
+Media & Events 목록은 Loading 상태입니다. 내장 메뉴 데이터의 실제 상세 링크를 따라 공지 1건의 제목·게시일·기사 data.content를 확인했습니다. 연결 공동 안내와 결정 목록은 읽기 접근/제목 구조를 확인했지만 전문/전체 목록 수집은 추가 검토 필요입니다. 2024 결정 묶음 공지는 복수 사건이고 제목일과 표시 게시일도 달라 이번 표본에서 제외했습니다.
 
-## 제외·중복 기준 제안
+## 제외·중복 기준
 
 - 개인정보 보호와 직접 관련 없는 자료는 실제 본문 확인 후 제외합니다.
 - 채용·입찰·행사 일정만 있는 단순 공지는 내용 확인 후 제외합니다.
@@ -39,17 +43,21 @@ Python urllib HTTPS GET, Mozilla/5.0·HTML Accept 헤더, TLS·플랫폼 프록�
 - 같은 사건의 보도자료·결정문·언어판·HTML/PDF는 연결하고 중복 집계하지 않습니다.
 - 게시일 불명·빈 본문·접근 실패는 검토 대기로 기록하고 자료 부재로 해석하지 않습니다.
 
-위 기준은 편집 제안이며 실제 자료에 적용한 결과가 아닙니다. 같은 사건인지 확인할 근거가 부족하면 사람 검토로 남깁니다.
+실제 선정·제외·중복의 한계는 fixtures 검토 메모에 기록했습니다.
 
-## 이용조건
+## 이용조건·로봇 정책
 
-정책·robots.txt·수집·저장·Codex 처리·요약·번역·공개 발췌·전문 재배포 조건은 모두 검토 필요입니다. 접근 허용과 콘텐츠 재사용 허가는 다릅니다. 원문 전문·무허가 번역은 넣지 않았습니다.
+- 정책: https://www.pdpc.gov.sg/terms-and-conditions
+- Terms §§4–8의 저작권·사용 목적 제한·attribution/조건 링크·외부 공개/수정의 허용 범위를 직접 읽음. 독자 요약·번역·Codex 처리·공개 저장 조건은 사람 검토 필요.
+- robots.txt: https://www.pdpc.gov.sg/robots.txt — HTTP 200, 접근 제한 확인. 접근 성공은 저작권 허가가 아님.
 
-## 후속 확인
+## 실패 이력 및 후속 검토
 
-1. 네트워크 초안 적용 후 홈페이지의 실제 뉴스·결정·지침 목록 링크와 최종 URL을 확인합니다.
-2. 공식 상세의 제목·게시일·본문·원문 링크를 확인하고 자료 유형별 날짜 의미를 구분합니다.
-3. RSS/API 안내·응답, 페이지 순회·요청 제한과 이용조건을 확인합니다.
-4. 실제 개인정보 보호 자료를 출처별 최대 5건까지 고르고 근거 위치·관련 문서·중복·검토 상태를 기록합니다.
+기존 프록시 CONNECT 403은 과거 관찰로 JSON에 보존했습니다. 사용자 네트워크 게시 후 이번 홈페이지·열람 목록·상세 HTTP 200을 확인했습니다. 실사 성공은 자료 권리/법률/한국어 검수 완료가 아닙니다.
 
-대응 JSON: [pdpc.json](pdpc.json). 표본: [fixtures/pdpc.md](../fixtures/pdpc.md). [검토 메모](../fixtures/review-notes.md).
+- 한국어 요약·자료 이용조건과 권리 범위를 사람 검토합니다.
+- 연결 결정/안내 전문과 시행·불복·정정 상태를 필요 시 추가 확인합니다.
+- 동적 목록·다른 템플릿·다음 페이지에서 수집 방법을 검증합니다.
+- RSS/API 공식 안내와 요청 한도·안정성 계약을 추가 확인합니다.
+
+[대응 JSON](pdpc.json) · [표본](../fixtures/pdpc.md) · [검토 메모](../fixtures/review-notes.md)
