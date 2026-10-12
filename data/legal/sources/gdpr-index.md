@@ -3,19 +3,19 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~34조·고려사항1~60의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~43조·고려사항1~75의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 60 |
+| Recital | 173 | 75 |
 | Chapter | 11 | 4 |
-| Article | 99 | 34 |
-| Paragraph | 372 | 114 |
-| Item | 389 | 180 |
+| Article | 99 | 43 |
+| Paragraph | 372 | 179 |
+| Item | 389 | 223 |
 | Text | 25 | 11 |
-| Section | 15 | 7 |
+| Section | 15 | 10 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
@@ -59,15 +59,15 @@ Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행
 | <a id="main-a32"></a>제32조 | Security of processing | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a33"></a>제33조 | Notification of a personal data breach to the supervisory authority | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a34"></a>제34조 | Communication of a personal data breach to the data subject | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a35"></a>제35조 | Data protection impact assessment | 미번역·사람 미검수 |
-| <a id="main-a36"></a>제36조 | Prior consultation | 미번역·사람 미검수 |
-| <a id="main-a37"></a>제37조 | Designation of the data protection officer | 미번역·사람 미검수 |
-| <a id="main-a38"></a>제38조 | Position of the data protection officer | 미번역·사람 미검수 |
-| <a id="main-a39"></a>제39조 | Tasks of the data protection officer | 미번역·사람 미검수 |
-| <a id="main-a40"></a>제40조 | Codes of conduct | 미번역·사람 미검수 |
-| <a id="main-a41"></a>제41조 | Monitoring of approved codes of conduct | 미번역·사람 미검수 |
-| <a id="main-a42"></a>제42조 | Certification | 미번역·사람 미검수 |
-| <a id="main-a43"></a>제43조 | Certification bodies | 미번역·사람 미검수 |
+| <a id="main-a35"></a>제35조 | Data protection impact assessment | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a36"></a>제36조 | Prior consultation | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a37"></a>제37조 | Designation of the data protection officer | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a38"></a>제38조 | Position of the data protection officer | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a39"></a>제39조 | Tasks of the data protection officer | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a40"></a>제40조 | Codes of conduct | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a41"></a>제41조 | Monitoring of approved codes of conduct | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a42"></a>제42조 | Certification | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a43"></a>제43조 | Certification bodies | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a44"></a>제44조 | General principle for transfers | 미번역·사람 미검수 |
 | <a id="main-a45"></a>제45조 | Transfers on the basis of an adequacy decision | 미번역·사람 미검수 |
 | <a id="main-a46"></a>제46조 | Transfers subject to appropriate safeguards | 미번역·사람 미검수 |
