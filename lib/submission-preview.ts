@@ -31,23 +31,9 @@ export type LegalComparisonCell = {
   pendingReason: string;
 };
 
-export type WeeklyReviewEntry = {
-  id: string;
-  title: string;
-  originalTitle: string;
-  publishedDate: string;
-  organization: string;
-  category: string;
-  facts: string;
-  keyPoints: string[];
-  significance: string;
-  requiredChecks: string[];
-  officialUrl: string;
-};
-
 export type SubmissionDocuments = {
   legal: LegalComparisonCell[];
-  weekly: { title: string; notice: string; entries: WeeklyReviewEntry[] } | null;
+  weekly: null;
 };
 
 function record(value: unknown): JsonRecord {
@@ -148,37 +134,9 @@ function legalComparison(root: string): LegalComparisonCell[] {
   } catch { return []; }
 }
 
-function weeklyReview(root: string): SubmissionDocuments["weekly"] {
-  const data = readJson(root, "data/trends/weekly-sample.json");
-  if (!data || data.__parse_error) return null;
-  const entries = Array.isArray(data.entries) ? data.entries.map(record) : [];
-  return {
-    title: label(data.title, "주간 동향 예시 호"),
-    notice: label(data.coverage_notice),
-    entries: entries.map((entry, index) => {
-      const facts = record(entry.facts);
-      const significance = record(entry.privacy_significance);
-      const humanReview = record(entry.human_review);
-      return {
-        id: `weekly-${label(entry.entry_id, String(index))}`,
-        title: label(entry.korean_title),
-        originalTitle: label(entry.original_title),
-        publishedDate: label(entry.source_published_date),
-        organization: label(entry.organization),
-        category: label(entry.category),
-        facts: label(facts.summary_ko),
-        keyPoints: stringArray(entry.key_points_ko),
-        significance: label(significance.text_ko),
-        requiredChecks: stringArray(humanReview.required_checks),
-        officialUrl: officialLink(entry.official_url)[0]?.url ?? "",
-      };
-    }),
-  };
-}
-
 /** Render committed drafts in a reviewable, publication-like structure. */
 export function loadSubmissionDocuments(root = process.cwd()): SubmissionDocuments {
-  return { legal: legalComparison(root), weekly: weeklyReview(root) };
+  return { legal: legalComparison(root), weekly: null };
 }
 
 function legalItems(root: string): SubmissionItem[] {
@@ -295,30 +253,9 @@ function fixtureItems(root: string): SubmissionItem[] {
   });
 }
 
-function weeklyItem(root: string): SubmissionItem[] {
-  const path = "data/trends/weekly-sample.json";
-  const data = readJson(root, path);
-  if (!data) return [];
-  if (data.__parse_error) return [{ id: "weekly-error", group: "trends", kind: "주간 예시 호", title: "주간 예시 호를 읽을 수 없습니다", subtitle: path,
-    summary: "JSON 파싱 오류", status: "error", fields: [], links: [], files: [path] }];
-  const entries = Array.isArray(data.entries) ? data.entries.map(record) : [];
-  return [{
-    id: "weekly-sample", group: "trends", kind: "주간 예시 호", title: label(data.title, "주간 동향 예시 호"),
-    subtitle: "실제 발행물이 아닌 편집 예시",
-    summary: label(data.coverage_notice, `${entries.length}건 수록`), status: label(data.publication_status, "draft"),
-    fields: [
-      { label: "수록 항목", value: entries.map((entry, index) => `${index + 1}. ${label(entry.korean_title, label(entry.original_title))}`).join("\n") || "없음" },
-      { label: "사람 검수", value: label(data.human_review_status) },
-      { label: "실제 공개", value: label(data.is_published) },
-      { label: "제외 항목", value: Array.isArray(data.excluded_items) ? `${data.excluded_items.length}건` : label(data.excluded_items) },
-    ],
-    links: [], files: presentFiles(root, [path, "data/trends/weekly-sample.md", "data/trends/fixtures/review-notes.md"]),
-  }];
-}
-
 /** Reads committed team deliverables from this deployment's checkout. No DB writes. */
 export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
-  return [...legalItems(root), ...appiItem(root), ...sourceConfigItems(root), ...fixtureItems(root), ...weeklyItem(root)];
+  return [...legalItems(root), ...appiItem(root), ...sourceConfigItems(root), ...fixtureItems(root)];
 }
 
 export function submissionPreviewEnabled() {
