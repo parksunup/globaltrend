@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import SubmissionFeedback from "../../../components/submission-feedback";
 import { loadSubmittedStories, publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
 import { loadPublishedStory } from "../../../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
@@ -18,8 +17,6 @@ export default async function TrendDetail({ params, searchParams }: {
   const story = draftMode ? loadSubmittedStories().find((item) => item.id === id) : await loadPublishedStory(id);
   if (!story) notFound();
   const returnTo = back?.startsWith("/public/search?") ? back : "/public/search";
-  const branch = draftMode ? "feat/trend-source-contracts" : "main";
-  const commitSha = process.env.VERCEL_GIT_COMMIT_SHA;
   return <main className={styles.site}>
     <PublicHeader active="/public" />
     <section className={styles.searchPage}>
@@ -32,7 +29,6 @@ export default async function TrendDetail({ params, searchParams }: {
         {story.details && <section className={styles.trendBody}><h2>자세히 보기</h2><p>{story.details}</p></section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>
         <div className={styles.lawEmptyState}><strong>공식 원문</strong><p>{story.originalTitle}</p><a href={story.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a></div>
-        <details className={styles.publicFeedback}><summary>이 자료에 의견 남기기 · 저장된 의견 보기</summary><SubmissionFeedback itemId={`fixture-${story.id}`} branch={branch} commitSha={commitSha} /></details>
       </article>
     </section>
     <PublicFooter />

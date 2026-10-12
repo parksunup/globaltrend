@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
-import SubmissionFeedback from "../../components/submission-feedback";
+import { useState } from "react";
 import type { LegalTranslationDocument } from "../../../lib/legal-translation-review";
 import styles from "../public.module.css";
 
@@ -12,13 +11,10 @@ const groups = [
   { id: "appendix", label: "별표" },
 ] as const;
 
-export default function PublicLawReader({ law, returnTo, commitSha }: { law: LegalTranslationDocument; returnTo: string; commitSha?: string }) {
+export default function PublicLawReader({ law, returnTo }: { law: LegalTranslationDocument; returnTo: string }) {
   const [articleQuery, setArticleQuery] = useState("");
   const [fontSize, setFontSize] = useState(16);
   const [tocOpen, setTocOpen] = useState(false);
-  const [feedbackSection, setFeedbackSection] = useState<string | null>(null);
-  const feedbackRef = useRef<HTMLDivElement>(null);
-  const openFeedback = (id: string) => { setFeedbackSection(id); requestAnimationFrame(() => feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })); };
   const query = articleQuery.trim().toLocaleLowerCase();
   const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
@@ -60,7 +56,7 @@ export default function PublicLawReader({ law, returnTo, commitSha }: { law: Leg
               <h2>{group.label}</h2>
               {sections.map((section) => <article key={section.id} id={section.id} className={styles.lawTextArticle}>
                 <small>{section.context} · {section.reviewStatus === "not_started" ? "사람 검수 전" : section.reviewStatus}</small>
-                <h3>{section.title}</h3><button type="button" className={styles.lawSectionFeedbackButton} onClick={() => openFeedback(section.id)}>이 조문에 의견 남기기</button>
+                <h3>{section.title}</h3>
                 {section.lines.length ? section.lines.map((line) => <p key={line.id} id={line.id}><strong>{line.label ? `${line.label}. ` : ""}</strong>{line.text}</p>)
                   : <p>이 항목에는 번역 본문이 없습니다.</p>}
               </article>)}
@@ -69,7 +65,6 @@ export default function PublicLawReader({ law, returnTo, commitSha }: { law: Leg
         </div>
       </div>
     </div>
-    <div ref={feedbackRef} className={styles.publicFeedback}>{feedbackSection && <SubmissionFeedback key={feedbackSection} itemId={`translation-${law.id}-${feedbackSection}`} branch="feat/legal-corpus-foundation" commitSha={commitSha} />}</div>
     <div className={styles.lawMobileReaderTools}><button type="button" onClick={() => setTocOpen(true)}>목차·조문 찾기</button><button type="button" disabled={fontSize <= 14} onClick={() => setFontSize((size) => Math.max(14, size - 2))} aria-label="본문 글자 작게">가−</button><button type="button" disabled={fontSize >= 20} onClick={() => setFontSize((size) => Math.min(20, size + 2))} aria-label="본문 글자 크게">가＋</button></div>
   </section>;
 }

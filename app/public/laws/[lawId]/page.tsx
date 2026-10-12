@@ -16,7 +16,7 @@ export default async function PublicLawTextPage({ params, searchParams }: { para
   if (!law) notFound();
   return <main className={styles.site}>
     <PublicHeader active="/public/laws" />
-    <PublicLawReader law={law} returnTo={returnTo} commitSha={process.env.VERCEL_GIT_COMMIT_SHA} />
+    <PublicLawReader law={law} returnTo={returnTo} />
     <PublicFooter />
   </main>;
 }

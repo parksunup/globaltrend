@@ -18,6 +18,13 @@ try {
       const bodyWidth = await page.evaluate(() => document.documentElement.scrollWidth);
       assert(bodyWidth <= width + 2, route + " overflows at " + width + "px: " + bodyWidth);
     }
+    await page.goto(new URL("/public", base).href);
+    assert.equal(await page.getByRole("navigation", { name: "주요 메뉴" }).getByRole("link", { name: "피드백" }).count(), 0, "Public menu must not link to feedback");
+    assert.equal(await page.locator('footer a[href="/feedback"]').count(), 0, "Public footer must not link to feedback");
+    await page.locator('a[href^="/public/trends/"]').first().click();
+    assert.equal(await page.getByText("이 자료에 의견 남기기", { exact: false }).count(), 0, "Public trend detail must not show review feedback");
+    await page.goto(new URL("/feedback", base).href);
+    assert.equal(await page.getByRole("link", { name: "← 검수 화면으로" }).getAttribute("href"), "/team");
     if (width < 600) {
       await page.goto(new URL("/public", base).href);
       await page.getByRole("button", { name: "메뉴" }).click();
@@ -27,6 +34,7 @@ try {
       await page.getByRole("button", { name: /건 결과 보기/ }).click();
     }
     await page.goto(new URL("/public/laws/appi", base).href);
+    assert.equal(await page.getByRole("button", { name: "이 조문에 의견 남기기" }).count(), 0, "Public law reader must not show review feedback");
     const search = page.getByRole("searchbox", { name: "조문 검색" });
     await search.fill("개인정보");
     const countText = await page.getByText(/^검색 결과 \d+개$/).innerText();
