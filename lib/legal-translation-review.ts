@@ -14,6 +14,7 @@ type Provision = {
   human_review_status?: string;
 };
 type Corpus = {
+  jurisdiction_code?: string;
   official_name?: string;
   korean_title?: string;
   source?: { original_url?: string; selected_revision_enforcement_date?: string; scope_note?: string };
@@ -23,6 +24,7 @@ type Corpus = {
 
 export type LegalTranslationSummary = {
   id: string;
+  jurisdiction: string;
   title: string;
   officialName: string;
   version: string;
@@ -75,6 +77,7 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   const provisions = corpus.provisions ?? [];
   return {
     id,
+    jurisdiction: typeof corpus.jurisdiction_code === "string" ? corpus.jurisdiction_code : "",
     title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역 초안`,
     officialName: typeof corpus.official_name === "string" && corpus.official_name.trim() ? corpus.official_name.trim() : id.toUpperCase(),
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
