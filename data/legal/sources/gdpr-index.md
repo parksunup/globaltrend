@@ -3,19 +3,19 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~50조·고려사항1~90의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~59조·고려사항1~105의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 90 |
-| Chapter | 11 | 5 |
-| Article | 99 | 50 |
-| Paragraph | 372 | 202 |
-| Item | 389 | 262 |
-| Text | 25 | 16 |
-| Section | 15 | 10 |
+| Recital | 173 | 105 |
+| Chapter | 11 | 6 |
+| Article | 99 | 59 |
+| Paragraph | 372 | 237 |
+| Item | 389 | 320 |
+| Text | 25 | 17 |
+| Section | 15 | 12 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
@@ -75,15 +75,15 @@ Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행
 | <a id="main-a48"></a>제48조 | Transfers or disclosures not authorised by Union law | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a49"></a>제49조 | Derogations for specific situations | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a50"></a>제50조 | International cooperation for the protection of personal data | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a51"></a>제51조 | Supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a52"></a>제52조 | Independence | 미번역·사람 미검수 |
-| <a id="main-a53"></a>제53조 | General conditions for the members of the supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a54"></a>제54조 | Rules on the establishment of the supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a55"></a>제55조 | Competence | 미번역·사람 미검수 |
-| <a id="main-a56"></a>제56조 | Competence of the lead supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a57"></a>제57조 | Tasks | 미번역·사람 미검수 |
-| <a id="main-a58"></a>제58조 | Powers | 미번역·사람 미검수 |
-| <a id="main-a59"></a>제59조 | Activity reports | 미번역·사람 미검수 |
+| <a id="main-a51"></a>제51조 | Supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a52"></a>제52조 | Independence | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a53"></a>제53조 | General conditions for the members of the supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a54"></a>제54조 | Rules on the establishment of the supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a55"></a>제55조 | Competence | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a56"></a>제56조 | Competence of the lead supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a57"></a>제57조 | Tasks | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a58"></a>제58조 | Powers | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a59"></a>제59조 | Activity reports | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a60"></a>제60조 | Cooperation between the lead supervisory authority and the other supervisory authorities concerned | 미번역·사람 미검수 |
 | <a id="main-a61"></a>제61조 | Mutual assistance | 미번역·사람 미검수 |
 | <a id="main-a62"></a>제62조 | Joint operations of supervisory authorities | 미번역·사람 미검수 |
