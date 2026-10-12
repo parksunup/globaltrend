@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PublicHeader, PublicFooter } from "../public/public-navigation";
+import { PublicThemeProvider } from "../public/public-theme";
 import publicStyles from "../public/public.module.css";
 import { loadSubmittedStories } from "../../lib/public-submission-preview";
 import FeedbackList from "../components/feedback-list";
@@ -26,7 +27,7 @@ export default async function FeedbackPage({ searchParams }: { searchParams: Pro
     return `/feedback?${next}`;
   }
   const labels = Object.fromEntries(loadSubmittedStories().map((story) => [`fixture-${story.id}`, story.title]));
-  return <main className={publicStyles.site}><PublicHeader active="/feedback" /><div className={styles.page}>
+  return <PublicThemeProvider><main className={publicStyles.site}><PublicHeader active="/feedback" /><div className={styles.page}>
     <Link href="/public">← 첫 화면으로</Link>
     <h1>저장된 피드백</h1>
     <p className={styles.note}>로그인이나 Supabase 권한 없이 의견을 읽을 수 있습니다. 같은 브랜치의 과거 버전에 남긴 의견도 함께 표시합니다.</p>
@@ -51,5 +52,5 @@ export default async function FeedbackPage({ searchParams }: { searchParams: Pro
         {data.nextOffset !== null && <Link href={pageHref(data.nextOffset)}>다음 의견</Link>}
       </nav>
     </>}
-  </div><PublicFooter /></main>;
+  </div><PublicFooter /></main></PublicThemeProvider>;
 }
