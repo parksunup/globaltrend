@@ -1,0 +1,165 @@
+{
+  "record_id": "ftc",
+  "organization": "Federal Trade Commission (United States)",
+  "jurisdictions": [
+    "US"
+  ],
+  "candidate_status": "proposed_not_enabled",
+  "start_url": "https://www.ftc.gov/",
+  "start_url_status": "homepage_http_200",
+  "document_types": [
+    "official_news",
+    "regulatory_decision",
+    "guidance"
+  ],
+  "document_types_status": "inspected_scope_limited",
+  "scope_note": "개인정보·보안·아동정보·AI 관련 집행·정책을 조사합니다. 소장 주장, 제안된 합의, 최종 명령, 법원 판단을 구분합니다.",
+  "collection_method": "공식 HTML 및 공개 RSS 직접 확인; 자동 수집기 미구현.",
+  "field_locations": {
+    "title": "h1",
+    "published_at": "article.node--view-mode-banner time의 표시 날짜와 datetime; 사이트 메뉴에 있는 다른 time을 쓰지 않음",
+    "content": "main article.node--view-mode-full .field--name-body; 담당자 biography 본문 제외",
+    "official_url": "목록 실제 a[href] 또는 RSS item/link → GET 최종 URL"
+  },
+  "exclude_rules": [
+    "개인정보 보호와 직접 관련 없는 자료는 실제 본문 확인 후 제외합니다.",
+    "채용·입찰·행사 일정만 있는 단순 공지는 내용 확인 후 제외합니다.",
+    "메뉴·쿠키 안내·푸터·공유 링크는 본문으로 저장하지 않습니다.",
+    "같은 사건의 보도자료·결정문·언어판·HTML/PDF는 연결하고 중복 집계하지 않습니다.",
+    "게시일 불명·빈 본문·접근 실패는 검토 대기로 기록하고 자료 부재로 해석하지 않습니다.",
+    "경쟁법·소비자보호 일반 자료는 개인정보/데이터 보안과 직접 관련되는지 본문 확인 후 제외합니다. 소장 주장을 확정 위반 판단으로 쓰지 않습니다."
+  ],
+  "exclude_rules_status": "editorial_proposal_not_applied",
+  "terms_status": "unreviewed",
+  "sample_urls": [
+    "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+    "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students"
+  ],
+  "review_status": "unreviewed",
+  "checked_at": "2026-10-11T22:28:54+09:00",
+  "verification": {
+    "status": "official_pages_inspected_human_review_pending",
+    "listing_checked": true,
+    "detail_checked": true,
+    "selectors_verified": "observed_news_scope_only",
+    "limitations": [
+      "다른 템플릿·페이지 순회·PDF/동적 목록의 범용 파서 미검증",
+      "연결 결정 전문/불복 상태/권리·한국어는 사람 검토 필요"
+    ]
+  },
+  "discovery": {
+    "inspected_lists": [
+      "https://www.ftc.gov/news-events/news/press-releases?field_consumer_protection_topics=1420",
+      "https://www.ftc.gov/business-guidance/privacy-security",
+      "https://www.ftc.gov/legal-library/browse/cases-proceedings/222-3105-illuminate-education-inc-matter"
+    ],
+    "rss": {
+      "status": "http_200_xml_items_checked",
+      "url": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "note": "FTC RSS 안내와 실제 XML 확인. PDPC/PPC 피드 안내 미확인, 미제공으로 단정하지 않음."
+    },
+    "api": {
+      "status": "unreviewed",
+      "url": null,
+      "note": "공식 공개 API 안내·지원 계약 미확인. 동적 렌더링을 공개 API 제공으로 해석하지 않음."
+    }
+  },
+  "access_failures": [
+    {
+      "requested_url": "https://www.ftc.gov/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-10-11T21:55:45+09:00"
+    }
+  ],
+  "content_missing_cases": {
+    "status": "observed",
+    "cases": [
+      "페이지 유형별 날짜를 구분하고 빈 본문은 검토 대기로 처리한다."
+    ]
+  },
+  "terms_checks": {
+    "status": "unreviewed",
+    "policy_url": "https://www.ftc.gov/policy-notices/website-policy",
+    "observed": "Copyright Permission은 대부분의 연방정부 저작물을 public domain으로 설명하고 가능한 출처 표기를 요구함. 모든 제3자 자료까지 재사용 허가로 단정하지 않으며 예외·처리/공개 범위는 사람 검토 필요.",
+    "robots_url": "https://www.ftc.gov/robots.txt",
+    "robots_status": "http_200_read",
+    "note": "로봇 접근과 재사용 허가는 구분. 원문 전문은 공개 저장소에 넣지 않음."
+  },
+  "next_checks": [
+    "한국어 요약·자료 이용조건과 권리 범위를 사람 검토합니다.",
+    "연결 결정/안내 전문과 시행·불복·정정 상태를 필요 시 추가 확인합니다.",
+    "동적 목록·다른 템플릿·다음 페이지에서 수집 방법을 검증합니다.",
+    "RSS/API 공식 안내와 요청 한도·안정성 계약을 추가 확인합니다."
+  ],
+  "access_results": [
+    {
+      "url": "https://www.ftc.gov/",
+      "final_url": "https://www.ftc.gov/",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases",
+      "final_url": "https://www.ftc.gov/news-events/news/press-releases",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/business-guidance/privacy-security",
+      "final_url": "https://www.ftc.gov/business-guidance/privacy-security",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/robots.txt",
+      "final_url": "https://www.ftc.gov/robots.txt",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases?field_consumer_protection_topics=1420",
+      "final_url": "https://www.ftc.gov/news-events/news/press-releases?field_consumer_protection_topics=1420",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+      "final_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students",
+      "final_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/stay-connected",
+      "final_url": "https://www.ftc.gov/news-events/stay-connected",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/legal-library/browse/cases-proceedings/222-3105-illuminate-education-inc-matter",
+      "final_url": "https://www.ftc.gov/legal-library/browse/cases-proceedings/222-3105-illuminate-education-inc-matter",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/news-events/stay-connected/ftc-rss-feeds",
+      "final_url": "https://www.ftc.gov/news-events/stay-connected/ftc-rss-feeds",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/policy-notices",
+      "final_url": "https://www.ftc.gov/policy-notices",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "final_url": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "http_status": 200
+    },
+    {
+      "url": "https://www.ftc.gov/policy-notices/website-policy",
+      "final_url": "https://www.ftc.gov/policy-notices/website-policy",
+      "http_status": 200
+    }
+  ]
+}
