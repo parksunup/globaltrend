@@ -26,7 +26,7 @@
       "official_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
       "document_type": "official_news",
       "korean_title": "CNIL, 개인정보 삭제 요청 처리 문제로 EXTIA에 30만 유로 제재",
-      "summary_ko": "CNIL은 EXTIA의 삭제 요청 처리와 처리 결과 통지 의무 위반을 이유로 30만 유로의 과징금을 부과했다고 밝혔다. 자동으로 데이터를 삭제했더라도 요청자에게 처리 결과를 알려야 한다는 설명을 담았다.",
+      "summary_ko": "CNIL은 전 직원·채용 지원자의 삭제권 행사 관련 민원을 조사한 결과 EXTIA에 30만 유로의 과징금을 부과했다고 발표했다. 기사에 따르면 2024년 삭제 요청 265건 중 4분의 3 이상이 처리되지 않거나 적절히 처리되지 않았다. CNIL은 미처리 12건과 별도로 결과 미통지 166명·지연 통지 27명을 설명하며, 자동 삭제도 처리 결과 통지 의무를 대신하지 않는다고 밝혔다. 절차 중 삭제와 통지 등 시정 조치가 이뤄졌다는 내용도 담았다.",
       "evidence": [
         {
           "url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
@@ -53,7 +53,8 @@
       "review_status": "unreviewed",
       "review_notes": [
         "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
-        "게시일은 2026-09-09이고 본문 결정일은 2026-07-21입니다. Légifrance 결정 전문은 프록시 403으로 미확인입니다."
+        "게시일은 2026-09-09이고 본문 결정일은 2026-07-21입니다. Légifrance 결정 전문은 프록시 403으로 미확인입니다.",
+        "Preview 의견 2건을 공식 HTML과 대조해 배경·처리/통지 위반·시정 조치·근거 위치를 보완했습니다. 조사 표본 삭제와 발행 기사 선정을 구분하고, 현재 예시 호 미선정 상태를 명시합니다. 향후 국외이전·AI 등 특이 쟁점을 우선하는 기준은 제안이며 확정하지 않았습니다."
       ],
       "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
       "verification": {
@@ -61,7 +62,36 @@
         "final_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
         "title_and_date_checked": true,
         "summary_basis": "official_html_article"
-      }
+      },
+      "key_points_ko": [
+        {
+          "text": "배경: 정보기술·엔지니어링 컨설턴트 채용 기업의 전 직원·지원자 민원이 2024년 접수됐고, 삭제권 관련 공동 집행 활동과 함께 2025년 4월 점검이 실시됐다고 설명한다.",
+          "evidence_location": "Le contexte 첫째·둘째 문단",
+          "evidence_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia"
+        },
+        {
+          "text": "요청 처리: 2024년 삭제 요청 265건 중 4분의 3 이상이 미처리 또는 불충분하게 처리됐다고 설명하며, 제재 절에서는 GDPR 제12·17조 관련 미처리 요청 12건을 따로 제시한다.",
+          "evidence_location": "Le contexte 셋째 문단; Les manquements sanctionnés의 첫째 소제목",
+          "evidence_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia"
+        },
+        {
+          "text": "통지: 결과 미통지 166명과 지연 통지 27명을 제시한다. 자동 삭제된 지원자 정보도 처리 결과를 알려야 한다고 설명하며, 서로 다른 수치를 합산해 고유 피해자 수로 계산하지 않는다.",
+          "evidence_location": "Les manquements sanctionnés의 article 12 관련 둘째 소제목",
+          "evidence_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia"
+        },
+        {
+          "text": "시정·제재: 절차 중 삭제 및 처리 결과 통지가 이뤄졌음을 기록한다. 과징금 산정에는 권리 관련 원칙, 대상 인원 및 과거 두 차례 의무 안내를 고려했다고 발표한다.",
+          "evidence_location": "Le contexte 마지막 문단; 두 위반 소제목의 시정 조치 문단",
+          "evidence_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia"
+        }
+      ],
+      "weekly_editorial_selection": {
+        "status": "not_selected_for_existing_example",
+        "reason": "삭제 요청·통지 관련 조사 표본으로 보존하되, 현재 예시 호의 신규 기사로 선정하지 않습니다. 단순 제재 소식의 기사화 필요성에 대한 검토 의견을 반영했습니다. 국외이전·AI 관련 특이 쟁점은 확인한 기사에서 확인하지 못했습니다.",
+        "scope": "existing_example_only",
+        "broader_selection_policy": "proposal_human_review_pending"
+      },
+      "rechecked_at": "2026-10-12T21:50:29+09:00"
     },
     {
       "record_id": "cnil-hopital-loire-2026",
