@@ -26,8 +26,6 @@ jobs:
     env:
       PREVIEW_BASE_URL: https://globaltrend-git-codex-public-integration-preview-pipc-fairy.vercel.app
       PREVIEW_EXPECTED_SHA: ${{ github.sha }}
-      PLAYWRIGHT_MODULE: ${{ runner.temp }}/preview-browser/node_modules/playwright/index.mjs
-      PREVIEW_ARTIFACT_DIR: ${{ runner.temp }}/preview-check-artifacts
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -40,6 +38,9 @@ jobs:
           npm install --prefix "$RUNNER_TEMP/preview-browser" --no-package-lock --no-audit --no-fund playwright@1.64.0
           node "$RUNNER_TEMP/preview-browser/node_modules/playwright/cli.js" install --with-deps chromium
       - name: Check anonymous feedback and article previews
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/preview-browser/node_modules/playwright/index.mjs
+          PREVIEW_ARTIFACT_DIR: ${{ runner.temp }}/preview-check-artifacts
         run: node scripts/check-public-preview.mjs
       - name: Upload browser evidence
         if: always()
