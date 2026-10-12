@@ -14,6 +14,7 @@ type Provision = {
   human_review_status?: string;
 };
 type Corpus = {
+  jurisdiction_code?: string;
   official_name?: string;
   korean_title?: string;
   source?: { original_url?: string; selected_revision_enforcement_date?: string; scope_note?: string };
@@ -23,6 +24,7 @@ type Corpus = {
 
 export type LegalTranslationSummary = {
   id: string;
+  jurisdiction: string;
   title: string;
   officialName: string;
   version: string;
@@ -75,6 +77,7 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   const provisions = corpus.provisions ?? [];
   return {
     id,
+    jurisdiction: typeof corpus.jurisdiction_code === "string" ? corpus.jurisdiction_code : "",
     title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역 초안`,
     officialName: typeof corpus.official_name === "string" && corpus.official_name.trim() ? corpus.official_name.trim() : id.toUpperCase(),
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
@@ -147,4 +150,35 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
     scopeNote: corpus.source?.scope_note || "",
     sections: [...sectionById.values()],
   };
+}
+
+
+export type LegalArticlePreview = { text: string; anchorId: string };
+
+function excerpt(lines: TranslationSection["lines"], anchorId: string): LegalArticlePreview | null {
+  const text = lines.map((line) => `${line.label ? `${line.label} ` : ""}${line.text.trim()}`).filter(Boolean).join("\n");
+  if (!text) return null;
+  return { text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text, anchorId };
+}
+
+export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string, translationLink?: string): LegalArticlePreview | null {
+  const linkedId = translationLink?.match(/#([a-z0-9-]+)$/)?.[1];
+  if (linkedId) {
+    const linkedSection = law.sections.find((item) => item.id === linkedId);
+    if (linkedSection) return excerpt(linkedSection.lines, linkedId);
+    const section = law.sections.find((item) => item.lines.some((line) => line.id === linkedId));
+    if (!section) return null;
+    return excerpt(section.lines.filter((line) => line.id === linkedId || line.id.startsWith(`${linkedId}-`)), linkedId);
+  }
+  // Supplementary provisions and appendices need their explicit location; do not substitute a main article.
+  if (/부칙|별표/.test(citation)) return null;
+  const match = citation.match(/제(\d+)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
+  if (!match) return null;
+  const articleId = `main-a${match[1]}${match[2] ? `-${match[2]}` : ""}`;
+  const section = law.sections.find((item) => item.group === "main" && item.id === articleId);
+  if (!section) return null;
+  if (!match[3] && !match[4]) return excerpt(section.lines, articleId);
+  const requestedId = `${articleId}${match[3] ? `-p${match[3]}` : ""}${match[4] ? `-i${match[4]}` : ""}`;
+  if (!section.lines.some((line) => line.id === requestedId)) return null;
+  return excerpt(section.lines.filter((line) => line.id === requestedId || line.id.startsWith(`${requestedId}-`)), requestedId);
 }

@@ -1,0 +1,54 @@
+name: Public preview browser check
+on:
+  push:
+    branches: [codex/public-integration-preview]
+    paths:
+      - 'app/api/feedback/**'
+      - 'app/feedback/**'
+      - 'app/components/feedback*'
+      - 'lib/public-feedback*'
+      - 'app/public/laws/**'
+      - 'app/public/public.module.css'
+      - 'lib/legal-translation-review.ts'
+      - 'middleware.ts'
+      - 'supabase/migrations/**'
+      - 'scripts/check-public-preview.mjs'
+      - '.github/workflows/preview-browser-check.yml'
+permissions:
+  contents: read
+concurrency:
+  group: public-preview-browser-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    env:
+      PREVIEW_BASE_URL: https://globaltrend-git-codex-public-integration-preview-pipc-fairy.vercel.app
+      PREVIEW_EXPECTED_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify the active Preview contains this application's source
+        run: node scripts/check-public-preview.mjs --deployed-snapshot --wait-only
+      - name: Install isolated browser tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/preview-browser" --no-package-lock --no-audit --no-fund playwright@1.64.0
+          node "$RUNNER_TEMP/preview-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Check anonymous feedback and article previews
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/preview-browser/node_modules/playwright/index.mjs
+          PREVIEW_ARTIFACT_DIR: ${{ runner.temp }}/preview-check-artifacts
+        run: node scripts/check-public-preview.mjs --deployed-snapshot
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-preview-browser-${{ github.sha }}
+          path: ${{ runner.temp }}/preview-check-artifacts
+          if-no-files-found: ignore
+          retention-days: 7

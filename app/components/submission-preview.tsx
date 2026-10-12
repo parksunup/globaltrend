@@ -37,7 +37,7 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
     </header>
     <div className="submission-notice">
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
-      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 이 공개 화면에 표시되지 않습니다.</span>
+      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 항목 아래 목록과 공개 피드백 목록에서 읽을 수 있습니다.</span>
       {hasTrends && <span>동향 제출물은 수집 출처와 동향 표본으로 나누어 확인할 수 있습니다. 조사 표본은 발행 전 검수 자료입니다.</span>}
     </div>
     {hasDocument && <div className="document-tabs" role="group" aria-label="검수 화면 선택">
