@@ -61,8 +61,32 @@ function containsRecordId(markdown, recordId) {
   return new RegExp(`(^|[^A-Za-z0-9_-])${escaped}([^A-Za-z0-9_-]|$)`, "m").test(markdown);
 }
 
-export async function validateLegalData(rootDir) {
+async function validateLegalTranslations(rootDir) {
   const errors = [];
+  const directory = path.join(rootDir, "data", "legal", "translations");
+  let names;
+  try { names = await readdir(directory); } catch { return errors; }
+  for (const name of names.filter((file) => /^[a-z0-9][a-z0-9-]*\.json$/.test(file))) {
+    let data;
+    try {
+      data = JSON.parse(await readFile(path.join(directory, name), "utf8"));
+    } catch {
+      errors.push(`번역 파일 ${name}의 JSON 문법을 읽을 수 없습니다.`);
+      continue;
+    }
+    if (!data || typeof data !== "object" || Array.isArray(data) ||
+        !Array.isArray(data.provisions) || data.provisions.length === 0 ||
+        !data.provisions.every((node) => node && typeof node.node_id === "string" &&
+          node.node_id.trim() && typeof node.tag === "string" && node.tag.trim() &&
+          Number.isFinite(node.source_order))) {
+      errors.push(`번역 파일 ${name}의 조문 배열(provisions) 형식이 올바르지 않습니다.`);
+    }
+  }
+  return errors;
+}
+
+export async function validateLegalData(rootDir) {
+  const errors = await validateLegalTranslations(rootDir);
   const directory = path.join(rootDir, "data", "legal");
   const files = {
     markdown: path.join(directory, "instruments.md"),
