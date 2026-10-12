@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { listLegalTranslations } from "../../lib/legal-translation-review";
+import { listLegalTranslationEntries } from "../../lib/legal-translation-review";
 import { submissionPreviewEnabled } from "../../lib/submission-preview";
 import styles from "../components/translation-review.module.css";
 
 export default function LegalTranslationsPage() {
-  const documents = submissionPreviewEnabled() ? listLegalTranslations() : [];
+  const entries = submissionPreviewEnabled() ? listLegalTranslationEntries() : [];
   return <main className={styles.page}>
     <header className={styles.header}>
       <Link href="/">← 제출물 검수로 돌아가기</Link>
@@ -12,8 +12,8 @@ export default function LegalTranslationsPage() {
       <h1>법률별 한국어 번역 초안</h1>
       <p>법률을 선택해 전체 조문을 읽고 조문별 수정 의견을 남겨 주세요. 번역 초안의 존재는 사람 검수나 공개 승인을 뜻하지 않습니다.</p>
     </header>
-    {documents.length ? <div className={styles.documentList}>
-      {documents.map((document) => <Link key={document.id} href={`/legal-translation/${document.id}`} className={styles.documentCard}>
+    {entries.length ? <div className={styles.documentList}>
+      {entries.map((document) => "error" in document ? <div key={document.id} className={styles.documentCard}><strong>{document.id.toUpperCase()} 번역 파일 오류</strong><span>{document.error}</span><small>data/legal/translations/{document.id}.json을 확인해 주세요.</small></div> : <Link key={document.id} href={`/legal-translation/${document.id}`} className={styles.documentCard}>
         <strong>{document.title}</strong>
         <span>{document.officialName}</span>
         <small>선택 판본 시행일: {document.version} · 조문 {document.articleCount}개 · 사람 검수: {document.reviewStatus === "not_started" ? "미착수" : document.reviewStatus}</small>
