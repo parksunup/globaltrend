@@ -31,32 +31,7 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
   </>;
 }
 
-function WeeklyDocument({ document, branch, commitSha }: { document: NonNullable<SubmissionDocuments["weekly"]>; branch?: string; commitSha?: string }) {
-  const [selectedId, setSelectedId] = useState(document.entries[0]?.id ?? "");
-  const selected = document.entries.find((entry) => entry.id === selectedId) ?? document.entries[0];
-  return <>
-    <div className="document-heading"><span className="panel-kicker">WEEKLY TRENDS · EXAMPLE</span><h2>{document.title}</h2><p>{document.notice}</p></div>
-    <div className="weekly-layout"><nav className="weekly-toc" aria-label="예시 호 목차"><h3>목차</h3>{document.entries.map((entry, index) => <button type="button" key={entry.id} className={selected?.id === entry.id ? "selected" : ""} onClick={() => setSelectedId(entry.id)}><small>{String(index + 1).padStart(2, "0")} · {entry.category}</small><strong>{entry.title}</strong><span>{entry.organization} · {entry.publishedDate}</span></button>)}</nav>
-      {selected && <article className="weekly-article"><span className="panel-kicker">{selected.category} · {selected.publishedDate}</span><h3>{selected.title}</h3><p className="document-original">{selected.originalTitle}</p><p className="document-byline">{selected.organization}</p>
-        <div className="detail-block"><span className="detail-label">사실 요약</span><p>{selected.facts}</p></div>
-        {selected.keyPoints.length > 0 && <div className="detail-block"><span className="detail-label">주요 내용</span><ul>{selected.keyPoints.map((point, index) => <li key={index}>{point}</li>)}</ul></div>}
-        <div className="detail-block"><span className="detail-label">개인정보 보호상 의미 · 편집 의견</span><p>{selected.significance}</p></div>
-        {selected.officialUrl && <div className="detail-block"><span className="detail-label">공식 근거</span><a href={selected.officialUrl} target="_blank" rel="noopener noreferrer">원문 보기 ↗</a></div>}
-        <div className="detail-block"><span className="detail-label">사람이 확인할 부분</span><ul>{selected.requiredChecks.map((check, index) => <li key={index}>{check}</li>)}</ul></div>
-        <SubmissionFeedback key={selected.id} itemId={selected.id} branch={branch} commitSha={commitSha} />
-      </article>}
-    </div>
-  </>;
-}
-
 export default function SubmissionDocumentsView({ documents, branch, commitSha }: { documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
-  const [kind, setKind] = useState<"legal" | "weekly">(documents.legal.length ? "legal" : "weekly");
-  if (!documents.legal.length && !documents.weekly) return null;
-  return <>
-    {documents.legal.length > 0 && documents.weekly && <div className="document-tabs" role="group" aria-label="문서 선택">
-      <button type="button" className={kind === "legal" ? "selected" : ""} onClick={() => setKind("legal")}>법제 비교표</button>
-      <button type="button" className={kind === "weekly" ? "selected" : ""} onClick={() => setKind("weekly")}>주간 동향 예시 호</button>
-    </div>}
-    {kind === "legal" && documents.legal.length > 0 ? <LegalDocument cells={documents.legal} branch={branch} commitSha={commitSha} /> : documents.weekly ? <WeeklyDocument document={documents.weekly} branch={branch} commitSha={commitSha} /> : null}
-  </>;
+  if (!documents.legal.length) return null;
+  return <LegalDocument cells={documents.legal} branch={branch} commitSha={commitSha} />;
 }
