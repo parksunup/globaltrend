@@ -12,15 +12,21 @@ const statusLabels: Record<string, string> = {
 };
 
 export default function SubmissionPreview({ items, documents, branch, commitSha }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
-  const hasDocument = documents.legal.length > 0 || Boolean(documents.weekly);
-  const [showDocument, setShowDocument] = useState(hasDocument);
-  const [group, setGroup] = useState<"all" | "legal" | "trends">("all");
+  const hasDocument = documents.legal.length > 0;
+  const hasTrends = items.some((item) => item.group === "trends");
+  const hasLegal = items.some((item) => item.group === "legal");
+  const sourceCount = items.filter((item) => item.group === "trends" && item.kind === "수집 출처").length;
+  const sampleCount = items.filter((item) => item.group === "trends" && item.kind === "동향 표본").length;
+  const [showDocument, setShowDocument] = useState(false);
+  const [group, setGroup] = useState<"all" | "legal" | "trends">(hasTrends ? "trends" : "all");
+  const [trendKind, setTrendKind] = useState<"source" | "sample">(sampleCount ? "sample" : "source");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
   const visible = useMemo(() => items.filter((item) =>
     (group === "all" || item.group === group) &&
+    (group !== "trends" || item.kind === (trendKind === "source" ? "수집 출처" : "동향 표본")) &&
     [item.title, item.subtitle, item.summary, item.kind].join(" ").toLowerCase().includes(query.toLowerCase())
-  ), [group, items, query]);
+  ), [group, items, query, trendKind]);
   const selected = visible.find((item) => item.id === selectedId) ?? visible[0];
   const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
 
@@ -32,22 +38,27 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
     <div className="submission-notice">
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
       <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 이 공개 화면에 표시되지 않습니다.</span>
+      {hasTrends && <span>동향 제출물은 수집 출처와 동향 표본으로 나누어 확인할 수 있습니다. 조사 표본은 발행 전 검수 자료입니다.</span>}
     </div>
-    <div className="document-tabs" role="group" aria-label="검수 화면 선택">
-      {hasDocument && <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>{documents.legal.length ? "17개 기준 비교표" : "주간 동향 예시 호"}</button>}
+    {hasDocument && <div className="document-tabs" role="group" aria-label="검수 화면 선택">
+      <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>17개 기준 비교표</button>
       <button type="button" className={!showDocument ? "selected" : ""} onClick={() => setShowDocument(false)}>제출 자료 목록</button>
-    </div>
+    </div>}
     {showDocument && hasDocument ? <SubmissionDocumentsView documents={documents} branch={branch} commitSha={commitSha} /> : <>
     <div className="toolbar">
       <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="제목·기관·자료 유형 검색" /></label>
-      <div className="filter-group" role="group" aria-label="담당자 필터">
+      {hasTrends && hasLegal && <div className="filter-group" role="group" aria-label="담당자 필터">
         {(Object.keys(groupLabels) as Array<keyof typeof groupLabels>).map((value) =>
           <button key={value} className={group === value ? "selected" : ""} onClick={() => { setGroup(value); setSelectedId(""); }}>{groupLabels[value]}</button>)}
-      </div>
+      </div>}
     </div>
+    {group === "trends" && <div className="document-tabs" role="group" aria-label="동향 제출물 종류">
+      <button type="button" className={trendKind === "source" ? "selected" : ""} onClick={() => { setTrendKind("source"); setSelectedId(""); }}>수집 출처 {sourceCount}곳</button>
+      <button type="button" className={trendKind === "sample" ? "selected" : ""} onClick={() => { setTrendKind("sample"); setSelectedId(""); }}>동향 표본 {sampleCount}건</button>
+    </div>}
     <div className="workspace-grid">
       <section className="list-panel">
-        <div className="panel-heading"><div><span className="panel-kicker">COMMITTED FILES</span><h2>{visible.length}개 항목</h2></div><span className="muted">현재 Preview 기준</span></div>
+        <div className="panel-heading"><div><span className="panel-kicker">COMMITTED FILES</span><h2>{group === "trends" ? trendKind === "source" ? `수집 출처 ${visible.length}곳` : `동향 표본 ${visible.length}건` : `${visible.length}개 항목`}</h2></div><span className="muted">현재 Preview 기준</span></div>
         <div className="item-list">
           {visible.map((item) => <button key={item.id} className={`item-card ${selected?.id === item.id ? "selected" : ""}`} onClick={() => setSelectedId(item.id)}>
             <div className="item-card-head"><span className={`submission-status ${item.status === "error" ? "submission-error" : ""}`}>{statusLabels[item.status] ?? item.status}</span><span className="item-type">{item.kind}</span></div>
