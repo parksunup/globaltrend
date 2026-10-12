@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { PublishedStory } from "./published-trends";
-import { jurisdictionName } from "./jurisdictions";
+import { jurisdictionName } from "./jurisdictions.ts";
 
 const kindNames: Record<string, string> = {
   official_news: "기관 소식", official_advisory: "기관 안내", press_release: "보도자료",

@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { jurisdictionName } from "./jurisdictions";
+import { jurisdictionName } from "./jurisdictions.ts";
 
 export type PublishedStory = {
   id: string;
