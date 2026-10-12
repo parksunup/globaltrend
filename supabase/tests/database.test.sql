@@ -136,7 +136,7 @@ select throws_ok(
   'authenticated non-members cannot insert legal instruments'
 );
 select throws_ok(
-  $$$select public.set_review_state('laws', (select id from public.legal_instruments limit 1), 'approved', 'no access')$$$,
+  $$select public.set_review_state('laws', (select id from public.legal_instruments limit 1), 'approved', 'no access')$$,
   '42501',
   'Active reviewer membership is required',
   'authenticated non-members cannot save a review'
@@ -149,7 +149,7 @@ select lives_ok(
   'reviewer can write feedback'
 );
 select results_eq(
-  $$$select count(*)::bigint from public.submission_feedback where branch_name = 'feat/test' and item_id = 'criteria-scope--KR'$$$,
+  $$select count(*)::bigint from public.submission_feedback where branch_name = 'feat/test' and item_id = 'criteria-scope--KR'$$,
   array[3::bigint], 'reviewer can read saved anonymous and signed-in feedback'
 );
 select ok(
@@ -178,21 +178,21 @@ select throws_ok(
   'reviewers cannot insert legal instruments'
 );
 select lives_ok(
-  $$$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'APPI'), 'approved', 'official source checked')$$$,
+  $$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'APPI'), 'approved', 'official source checked')$$,
   'reviewers can approve an existing item'
 );
 select results_eq(
-  $$$select status from public.review_states where entity_type = 'laws' and entity_id = (select id from public.legal_instruments where short_name = 'APPI')$$$,
+  $$select status from public.review_states where entity_type = 'laws' and entity_id = (select id from public.legal_instruments where short_name = 'APPI')$$,
   array['approved'::text],
   'the latest review state is stored'
 );
 select results_eq(
-  $$$select count(*)::bigint from public.review_events where entity_type = 'laws' and entity_id = (select id from public.legal_instruments where short_name = 'APPI') and action = 'approved'$$$,
+  $$select count(*)::bigint from public.review_events where entity_type = 'laws' and entity_id = (select id from public.legal_instruments where short_name = 'APPI') and action = 'approved'$$,
   array[1::bigint],
   'an immutable review event is recorded'
 );
 select throws_ok(
-  $$$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'APPI'), 'rejected', null)$$$,
+  $$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'APPI'), 'rejected', null)$$,
   '22023',
   'A rejection note is required',
   'a rejection requires a note'
@@ -205,7 +205,7 @@ select lives_ok(
   'editors can insert legal instruments'
 );
 select lives_ok(
-  $$$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'EDITOR-OK'), 'in_review', 'editor started review')$$$,
+  $$select public.set_review_state('laws', (select id from public.legal_instruments where short_name = 'EDITOR-OK'), 'in_review', 'editor started review')$$,
   'editors can save a review state'
 );
 
