@@ -1,0 +1,428 @@
+{
+  "schema_version": "1.0",
+  "scope": "access receipts; not human verification or republication permission",
+  "sources": [
+    {
+      "source_id": "appi",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "현행 판본 전체 법문 확보; 정확한 revision_id는 appi.json"
+    },
+    {
+      "source_id": "appi-pinned",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "고정 판본 동일 반환 확인"
+    },
+    {
+      "source_id": "egov-copyright",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/345AC0000000048",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 890783,
+      "sha256": "62cb548beb0a9b3cda78933b942c2df3e1456adc6911290b21aa137b74c73deb",
+      "note": "본칙 제13조 제1호 법령 권리 대상 제외 확인"
+    },
+    {
+      "source_id": "pdl",
+      "url": "https://www.digital.go.jp/resources/open_data/public_data_license_v1.0",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 59198,
+      "sha256": "7f5b09b92a3b7fa2f34aa770d0fc66d5c2eb2e5cd4a3cb2d1b8b3b1c02dbc1cd",
+      "note": "PDL1.0 본문 확인; e-Gov 적용 여부와 구분"
+    },
+    {
+      "source_id": "ukgdpr",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1675157,
+      "sha256": "d041959993a42b6aaddff53031a681b48d7d05d46923e67205102a89d2d830fe",
+      "note": "revised XML; 미반영 개정 5건 확인"
+    },
+    {
+      "source_id": "gdpr-original-xml",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/2016-05-04/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 676598,
+      "sha256": "6d8634509c696c30891b90674ddc924e285be2a496eb0539b5ae281599be02d4",
+      "note": "영국 사이트의 과거 시점 제공본; EU 현행 통합본으로 사용하지 않음"
+    },
+    {
+      "source_id": "ccpa-pdf",
+      "url": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 453310,
+      "sha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1",
+      "note": "CPPA PDF effective 01/01/2026; AB 137·AB 566 update"
+    },
+    {
+      "source_id": "ccpa-textpdf",
+      "url": "https://cppa.ca.gov/regulations/pdf/ccpa_statute_eff_20260101.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 615548,
+      "sha256": "8d57eba97a7fe13346b7827d0131e1ab84dc110c6ff20daa6fa6ec4a4329d0fe",
+      "note": "별도 PDF; 주 의회 법전 대조 미완료"
+    },
+    {
+      "source_id": "pdpa",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 263893,
+      "sha256": "f78c2527cc84fb7a67c3e3353fc3d7afe0a5a5f3c2a48a5e90dbc391af55cb2e",
+      "note": "HTML 현재판 표기; 전체 조문 범위 검토 필요; 이후 자동취득은 시간 조건 준수"
+    },
+    {
+      "source_id": "pdpa-terms",
+      "url": "https://sso.agc.gov.sg/Terms-of-Use",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 42663,
+      "sha256": "50162014682ad7034125b5fc1976d01fcf7932e26ac2273feca5523f0a6f903d",
+      "note": "제5·7·8·13조 등 확인; 자동취득 싱가포르 시각 03~07시 조건"
+    },
+    {
+      "source_id": "dpa2018",
+      "url": "https://www.legislation.gov.uk/ukpga/2018/12/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 5919263,
+      "sha256": "525e8300e3be65844da0ecc834aab8cb458572b897cae8fdcb5e6a3c32ecfc3a",
+      "note": "UK GDPR 보완 법률; 별도 비교 기준 추가하지 않음"
+    },
+    {
+      "source_id": "duaa2025",
+      "url": "https://www.legislation.gov.uk/ukpga/2025/18/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1793657,
+      "sha256": "20101adfc8d2d8c40e516549b82eddd5a6c82775aec42b639663ce35e4b1f8f1",
+      "note": "UK GDPR 개정 관련 법률; 적용·시행 관계 검토 필요"
+    },
+    {
+      "source_id": "appi-recheck",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 554241,
+      "sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
+      "note": "새 환경에서 고정 판본 재확보; 법문 정규화 해시 대조 통과"
+    },
+    {
+      "source_id": "uk-recheck",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 1675157,
+      "sha256": "d041959993a42b6aaddff53031a681b48d7d05d46923e67205102a89d2d830fe",
+      "note": "새 환경에서 XML 재확보; 현행성·권리 조건 검토 상태 유지"
+    },
+    {
+      "source_id": "ccpa-recheck",
+      "url": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "retrieved_on": "2026-10-06",
+      "http_status": 200,
+      "byte_count": 453310,
+      "sha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1",
+      "note": "새 환경에서 감독기관 PDF 재확보; 주 의회 대조·권리 확인 미완료"
+    },
+    {
+      "source_id": "gdpr-op-pdf",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=pdfa1a&language=en&productionSystem=cellar&part=",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 982296,
+      "sha256": "bd84e63f5b622b739a83389afc3b30d240f792bb88d8eb03a816c9a82b0c2499",
+      "note": "EU 출판국 관보 원판 PDF; 정오표·현행 통합본 검토 미완료"
+    },
+    {
+      "source_id": "gdpr-op-xhtml",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 806864,
+      "sha256": "962539af03738bf552319ff4ce42d69e5f95a576307c4dfed7bf87e81b646b9d",
+      "note": "EU 출판국 관보 원판 XHTML; 제1~99조 순서·11장·15절·173개 고려사항 확인"
+    },
+    {
+      "source_id": "npc-search-exact",
+      "url": "https://flk.npc.gov.cn/law-search/search/list",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 1279,
+      "sha256": "ba26697f896de041c9c91fc27e3ac9a05924ee1c5be1c82ac4e5fcaf94a907b7",
+      "note": "NPC 정확 제목 검색; 유효 법률 1건; 법문 자체 아님"
+    },
+    {
+      "source_id": "pipl-details",
+      "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 13699,
+      "sha256": "684e21366f78fa136818cceb14380a278d498046c185e272ba58d72ff7759daa",
+      "note": "PIPL bbbs·제목·공포·시행 메타데이터와 74개 조 목차 확인; 조문 본문 파일 미확보"
+    },
+    {
+      "source_id": "eu-copyright",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "retrieved_on": "2026-10-06",
+      "retrieved_on_timezone": "UTC",
+      "http_status": 200,
+      "byte_count": 378575,
+      "sha256": "a26bf0dd5bc5158179640c80b9981a6ac83866dee824b73cd15d8bc594f9b601",
+      "note": "EU 출판국 편집 콘텐츠 CC BY 4.0; 개별 출판물·EUR-Lex는 별도 저작권 고지 확인을 요구"
+    },
+    {
+      "source_id": "pipa-spaced",
+      "url": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%20%EB%B3%B4%ED%98%B8%EB%B2%95",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 1280,
+      "sha256": "9a800715a3960628b3b955fe46cc3c2bae5c09cb11210e0607b9d3ba966a9fdc",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "pipa-frame",
+      "url": "https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 145011,
+      "sha256": "09b59ea6c54e4b4279b506acececee55b7bb78a92f00c0a7267965c473bd9cd8",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "pipa-body",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "retrieved_on": "2026-10-07",
+      "http_status": 200,
+      "byte_count": 505383,
+      "sha256": "70c505dc867c972a94ba30db8b03f0c17daa21222f59c5368750797d1605d3a5",
+      "note": "공식 법률명 경로·선택 판본 페이지·본문 HTML 구분; 전체 구조·시행표지·이용조건 검토 미완료"
+    },
+    {
+      "source_id": "ppc-legal-20261008",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 100353,
+      "sha256": "49777d588dd6198e7a3254b6525e712cf2d6e5dd46fe2590e39786354cd7780c",
+      "note": "공식 목록에서 시행규칙·정령 및 통칙 가이드라인 연결 확인; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "ppc-general-20261008",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 620228,
+      "sha256": "3e1d024042a6c4462edd6bff6a20e53c7fd154b68a492b57775c4000ed48380d",
+      "note": "취득·목적·제공 관련 절만 원문 대조; 전체 지침 검수 아님; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "appi-rule-20261008",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/428M60020000003_20260614_508M60020000002",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 202145,
+      "sha256": "2279081e633808287112859192d373539051dab58499def8c555d1b21bca42c6",
+      "note": "CurrentEnforced; 2026-06-14 시행; 제6조 확인, 제7조는 유출보고 위임이라 취득 예외 근거에서 구분; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "appi-decree-20261008",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415CO0000000507_20260731_508CO0000000234",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 149131,
+      "sha256": "37c53861b0a74afe7e3a33588660446f973774ca9cbf3b087b5f19796618b9c2",
+      "note": "CurrentEnforced; 2026-07-31 시행; 제9조 제1·2호를 통칙 가이드라인 인용과 대조; 원문 본문은 저장소 미포함"
+    },
+    {
+      "source_id": "pipa-decree-20261008",
+      "url": "https://www.law.go.kr/법령/개인정보%20보호법%20시행령",
+      "retrieved_on": "2026-10-08",
+      "http_status": 502,
+      "byte_count": 0,
+      "sha256": null,
+      "note": "공식 조회 HTTP502; 일반 경로는 proxy tunnel403도 관측. 하위 본문·판본 미확보; 내용을 추정하지 않음."
+    },
+    {
+      "source_id": "ppc-country-notice-pre-review",
+      "url": "https://www.ppc.go.jp/files/pdf/h31kokuji1_rev2023April18.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 445080,
+      "sha256": "afef7fcfc039b4a563e32fb9ac5c5baf271ca3e89ffce9e0470bcdbfdf22e0e0",
+      "note": "사람 검수 전 관련 지정·질의응답 확인용; 법령 판본과 구분"
+    },
+    {
+      "source_id": "ppc-appi-qa-pre-review",
+      "url": "https://www.ppc.go.jp/personalinfo/faq/APPI_QA/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 740820,
+      "sha256": "6bab9f6bf654311ba8a6ca8a755a049d356a90483df75e2d3e7b038995161a13",
+      "note": "아동 동의능력 관련 Q&A 확인; 법정 일률연령으로 간주하지 않음"
+    },
+    {
+      "source_id": "ppc-anonymous-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_anonymous/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 227669,
+      "sha256": "aca31f473b417d77820b7763e5fec29bf965801627833a8fcd5ab0f6efa83eae",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "ppc-offshore-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_offshore/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 233327,
+      "sha256": "9968bf1958c0bbc3d1974ecea50f8cd4bc5b35bee674ff06d67e107ab8e2bc1d",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "ppc-administrative-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/guidelines_administrative/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 255374,
+      "sha256": "5699d39c06e6d66e4e3f5dc2469072ce1b213dec05781a65746d703f010994e5",
+      "note": "후속 지침의 관련 부분만 대조; 전체 법률·지침 사람 검수 아님"
+    },
+    {
+      "source_id": "jp-amend-507AC0000000070",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/507AC0000000070",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 173426,
+      "sha256": "ed3601b1f1adda85e677b0af505438cbadf926392ad1bb3d26ba2b2facaeb554",
+      "note": "日本学術会議法 공식 API: 2026-10-01 시행 판본 메타데이터·관련 부칙 확인용; 개정법 전체 의미검수 아님"
+    },
+    {
+      "source_id": "ppc-2026-amendment-followup",
+      "url": "https://www.ppc.go.jp/personalinfo/legal/r8kaiseihogohou/",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 49595,
+      "sha256": "24ae415bc46f99e9a0efdf7bbe0ab0b42e6380652b4933582f22e881b475b330",
+      "note": "2026 개정 안내의 법률·시행 관계를 확인; 확정 시행일과 예정/기간 표기를 구별"
+    },
+    {
+      "source_id": "ppc-2026-amendment-pdf",
+      "url": "https://www.ppc.go.jp/files/pdf/260717_kaiseihounitsuite.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 2029089,
+      "sha256": "3b6721a0964c18199b3f2a055fe55e50e97a44d90f1da69365ddb041cdc4afbf",
+      "note": "PPC 개정 안내 슬라이드; 관련 내용만 확인. 법률 전문 PDF와 구별하고 선정 본칙에 합치지 않음"
+    },
+    {
+      "source_id": "ppc-2026-amendment-law",
+      "url": "https://www.ppc.go.jp/files/pdf/260717_houritsu.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 423208,
+      "sha256": "8a819a46ee0ba0ed5aaf27c69164ab57d1f96b1136e65aa0c8f035b9a752e415",
+      "note": "PPC 공식 개정법 전문 PDF; 관련 부칙·개정부분만 대조하고 선택 현행 판본과 분리"
+    },
+    {
+      "source_id": "ppc-decree-sept-diff",
+      "url": "https://www.ppc.go.jp/files/pdf/260930_sekourei_shinkyu.pdf",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 48825,
+      "sha256": "f59614692b02b6609f46573d1fe0bdfcb7d2c856380b30691dd7090aadee5331",
+      "note": "공식 개정문·개정대조표의 관련 부분 확인; 시행 전 개정과 선택 통합판본을 구분"
+    },
+    {
+      "source_id": "appi-decree-current-followup",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415CO0000000507",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 149131,
+      "sha256": "37c53861b0a74afe7e3a33588660446f973774ca9cbf3b087b5f19796618b9c2",
+      "note": "PPC 2026-09-30 개정대조표와 API 응답 판본의 차이를 확인하기 위한 재조회; 선정 판본을 조용히 바꾸지 않음"
+    },
+    {
+      "source_id": "jp-amend-508AC0000000056-api-attempt",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/508AC0000000056",
+      "retrieved_on": "2026-10-08",
+      "http_status": 404,
+      "byte_count": 0,
+      "sha256": null,
+      "note": "API 조회 HTTP404; 실패 응답 본문 미보관. 법률 부재를 의미하지 않으며 PPC 공식 전문 PDF를 확보해 관련 조문·부칙을 확인함"
+    },
+    {
+      "source_id": "appi-decree-revisions-followup",
+      "url": "https://laws.e-gov.go.jp/api/2/law_revisions/415CO0000000507",
+      "retrieved_on": "2026-10-08",
+      "http_status": 200,
+      "byte_count": 15790,
+      "sha256": "048e8958853408f16623a700795e52dc2ede7fa3eab2bd1d201153710f658a92",
+      "note": "정령 개정 이력 조회; 반환 목록에2026-07-31 이후 시행 판본 없음. PPC2026-09-30 자료와 차이 해소 안됨"
+    }
+  ],
+  "latest_failed_access": [
+    {
+      "url": "https://www.npc.gov.cn/npc/c30834/202108/t20210820_313088.html",
+      "outcome": "HTTP 503",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679",
+      "outcome": "HTTP 202; zero-byte response",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://world.moleg.go.kr/",
+      "outcome": "HTTP 503",
+      "checked_on": "2026-10-06"
+    },
+    {
+      "url": "https://www.pipc.go.kr/",
+      "outcome": "HTTP 503; network domain published",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC"
+    },
+    {
+      "url": "https://argos-net.com/v1/translate-en_ko-1_1.argosmodel",
+      "outcome": "origin HTTP 403; Cloudflare 1010; model not obtained; no circumvention",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC"
+    },
+    {
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsNm=%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4+%EB%B3%B4%ED%98%B8%EB%B2%95",
+      "outcome": "HTTP 503; current PIPA text not obtained",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC",
+      "checked_on_kst": "2026-10-07"
+    },
+    {
+      "url": "https://www.law.go.kr/LSW/lsLinkProc.do?lsNm=%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EB%B3%B4%ED%98%B8%EB%B2%95&mode=20",
+      "outcome": "proxy tunnel HTTP 403",
+      "checked_on": "2026-10-06",
+      "checked_on_timezone": "UTC",
+      "checked_on_kst": "2026-10-07"
+    },
+    {
+      "url": "https://www.law.go.kr/법령/개인정보보호법",
+      "outcome": "HTTP 403; current PIPA text not obtained",
+      "checked_on": "2026-10-07"
+    }
+  ]
+}
