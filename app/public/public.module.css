@@ -438,8 +438,7 @@
 .articleLinks{position:relative}
 .articleReference{display:inline-flex}
 .articleReference>a:focus-visible,.articleReference>span:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
-.articleTooltip{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:4;width:100%;max-width:420px;padding:14px 16px;border:1px solid var(--cyan);border-radius:7px;background:#152b38;box-shadow:0 12px 32px #0008;color:#eef5f6;pointer-events:none}
-.articleReference:hover .articleTooltip,.articleReference:focus-within .articleTooltip{display:block}
+.articleTooltip{display:block;position:fixed;z-index:20;overflow:auto;padding:14px 16px;border:1px solid var(--cyan);border-radius:7px;background:#152b38;box-shadow:0 12px 32px #0008;color:#eef5f6;pointer-events:auto}
 .articleTooltip strong{display:block;font-size:12px;line-height:1.5}
 .articleTooltip p{margin:8px 0;color:#e1e9ed;font-size:13px;line-height:1.7;white-space:pre-wrap}
 .articleTooltip small{display:block;color:#a8bdc6;font-size:11px;line-height:1.5}

@@ -155,31 +155,30 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
 
 export type LegalArticlePreview = { text: string; anchorId: string };
 
+function excerpt(lines: TranslationSection["lines"], anchorId: string): LegalArticlePreview | null {
+  const text = lines.map((line) => `${line.label ? `${line.label} ` : ""}${line.text.trim()}`).filter(Boolean).join("\n");
+  if (!text) return null;
+  return { text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text, anchorId };
+}
+
 export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string, translationLink?: string): LegalArticlePreview | null {
   const linkedId = translationLink?.match(/#([a-z0-9-]+)$/)?.[1];
   if (linkedId) {
     const linkedSection = law.sections.find((item) => item.id === linkedId);
-    const linkedLine = linkedSection?.lines[0] ?? law.sections.flatMap((item) => item.lines).find((item) => item.id === linkedId);
-    if (!linkedLine?.text.trim()) return null;
-    const linkedText = linkedLine.text.trim();
-    return {
-      text: linkedText.length > 360 ? `${linkedText.slice(0, 360).trimEnd()}…` : linkedText,
-      anchorId: linkedSection?.id ?? linkedLine.id,
-    };
+    if (linkedSection) return excerpt(linkedSection.lines, linkedId);
+    const section = law.sections.find((item) => item.lines.some((line) => line.id === linkedId));
+    if (!section) return null;
+    return excerpt(section.lines.filter((line) => line.id === linkedId || line.id.startsWith(`${linkedId}-`)), linkedId);
   }
+  // Supplementary provisions and appendices need their explicit location; do not substitute a main article.
+  if (/부칙|별표/.test(citation)) return null;
   const match = citation.match(/제(\d+)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
   if (!match) return null;
   const articleId = `main-a${match[1]}${match[2] ? `-${match[2]}` : ""}`;
   const section = law.sections.find((item) => item.group === "main" && item.id === articleId);
   if (!section) return null;
+  if (!match[3] && !match[4]) return excerpt(section.lines, articleId);
   const requestedId = `${articleId}${match[3] ? `-p${match[3]}` : ""}${match[4] ? `-i${match[4]}` : ""}`;
-  const line = match[3] || match[4]
-    ? section.lines.find((item) => item.id === requestedId)
-    : section.lines[0];
-  if (!line?.text.trim()) return null;
-  const text = line.text.trim();
-  return {
-    text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text,
-    anchorId: match[3] || match[4] ? line.id : articleId,
-  };
+  if (!section.lines.some((line) => line.id === requestedId)) return null;
+  return excerpt(section.lines.filter((line) => line.id === requestedId || line.id.startsWith(`${requestedId}-`)), requestedId);
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import RelatedArticlePreview from "./related-article-preview";
 import { useEffect, useMemo, useState } from "react";
 import styles from "../public.module.css";
 import type { LegalComparisonCell, SubmissionItem } from "../../../lib/submission-preview";
@@ -122,17 +123,9 @@ export default function PublicLawCompare({ cells, instruments, translations, art
                   const destination = translation
                     ? relatedArticleUrl(translation.id, number, preview?.anchorId)
                     : cell.sourceUrl;
-                  return <div className={styles.articleReference} key={`${number}-${index}`}>
-                    {destination ? translation
-                      ? <Link href={destination} aria-describedby={tooltipId}>{number}</Link>
-                      : <a href={destination} target="_blank" rel="noopener noreferrer" aria-describedby={tooltipId}>{number}</a>
-                      : <span tabIndex={0} aria-describedby={tooltipId}>{number}</span>}
-                    <div className={styles.articleTooltip} id={tooltipId} role="tooltip">
-                      <strong>{number} · {preview ? "한국어 번역 초안 일부" : "조문 미리보기 준비 중"}</strong>
-                      <p>{preview?.text ?? "해당 조문의 한국어 전문이 아직 등록되지 않았습니다. 공식 원문에서 확인해 주세요."}</p>
-                      <small>{preview ? "사람 검수 전 초안 · 클릭하면 해당 조문으로 이동" : destination ? "클릭하면 공식 원문으로 이동" : "공식 원문 링크도 확인이 필요합니다."}</small>
-                    </div>
-                  </div>;
+                  return <RelatedArticlePreview key={`${number}-${index}`}
+                    citation={number} destination={destination} internal={Boolean(translation)}
+                    text={preview?.text} tooltipId={tooltipId} />;
                 })}</div> : <p>확인된 조항 없음</p>}</section>
               {cell?.exceptions && cell.exceptions !== "미검토" && <details className={styles.lawExceptions}><summary>주의·예외 보기</summary><p>{cell.exceptions}</p></details>}
               <div className={styles.lawCardLinks}>
