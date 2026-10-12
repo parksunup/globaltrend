@@ -17,7 +17,7 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
   const hasLegal = items.some((item) => item.group === "legal");
   const sourceCount = items.filter((item) => item.group === "trends" && item.kind === "수집 출처").length;
   const sampleCount = items.filter((item) => item.group === "trends" && item.kind === "동향 표본").length;
-  const [showDocument, setShowDocument] = useState(hasDocument && !hasTrends);
+  const [showDocument, setShowDocument] = useState(false);
   const [group, setGroup] = useState<"all" | "legal" | "trends">(hasTrends ? "trends" : "all");
   const [trendKind, setTrendKind] = useState<"source" | "sample">(sampleCount ? "sample" : "source");
   const [query, setQuery] = useState("");
