@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { listLegalTranslationEntries } from "./legal-translation-review";
+import { listLegalTranslationEntries } from "./legal-translation-review.ts";
 
 export type SubmissionItem = {
   id: string;
