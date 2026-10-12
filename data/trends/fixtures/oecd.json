@@ -48,12 +48,13 @@
         "국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.",
         "게시일 불일치: 화면 6 October 2026, time[datetime] 2026-10-05. 원문 게시일은 화면의 2026-10-06을 기록하되 공식 확인 전 검수 필요. 시간·시간대는 추정하지 않습니다."
       ],
-      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "selection_reason": "개인정보 보호 관련 공식 제목·초록·URL을 확인한 조사 표본입니다. 게시일 표시와 HTML 날짜 속성이 불일치하므로 확정 게시일로 사용하지 않으며 예시 호에서 제외합니다.",
       "date_observations": {
         "displayed_date": "6 October 2026",
         "html_datetime": "2026-10-05",
         "requires_review": true
-      }
+      },
+      "source_published_date_status": "displayed_date_only_conflict_unresolved"
     },
     {
       "checked_at": "2026-10-06T14:54:33+09:00",
@@ -96,14 +97,17 @@
       "review_notes": [
         "초록만 직접 확인하여 요약했습니다. 보고서 전문의 세부 내용·법적 효과를 추론하지 않았습니다.",
         "국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.",
-        "2025년 자료를 수집 방식·편집 형식 확인을 위한 표본으로 선정했습니다. 최신 주간호나 최근 90일 자료라고 표시하지 않습니다."
+        "2025년 자료를 수집 방식·편집 형식 확인을 위한 표본으로 선정했습니다. 최신 주간호나 최근 90일 자료라고 표시하지 않습니다.",
+        "게시일 불일치: 화면 17 June 2025, time[datetime] 2025-06-16. source_published_date는 화면의 관찰값 2025-06-17이며 확정 게시일이 아닙니다. 날짜 확정 전 예시 호에서 제외하며 시간대·차이의 원인은 추정하지 않습니다."
       ],
-      "selection_reason": "개인정보 보호와 직접 관련된 공식 자료이며 제목·날짜·요약 근거를 직접 확인했습니다.",
+      "selection_reason": "개인정보 보호 관련 공식 제목·초록·URL을 확인한 조사 표본입니다. 게시일 표시와 HTML 날짜 속성이 불일치하므로 확정 게시일로 사용하지 않으며 예시 호에서 제외합니다.",
       "date_observations": {
         "displayed_date": "17 June 2025",
         "html_datetime": "2025-06-16",
-        "requires_review": false
-      }
+        "requires_review": true
+      },
+      "rechecked_at": "2026-10-12T18:28:28+09:00",
+      "source_published_date_status": "displayed_date_only_conflict_unresolved"
     }
   ]
 }

@@ -3,9 +3,10 @@
 > **예시 자료이며 전체 출처를 망라하지 않습니다.** 여러 시기의 확인된 샘플을 구성 검토용으로 묶었습니다. 특정 주의 실제 동향이나 정식 발행호가 아니며, 사람 검수 전 초안입니다.
 
 - 작성일: 2026-10-06 (한국시간)
+- 기존 자료 수정일: 2026-10-12T18:28:28+09:00 — 조사 기간 추가 없음
 - 상태: 예시 초안 · 미발행 · 사람 검수 대기
-- 수록: 해외·국제 8건 / 국내 0건
-- 표본 원문 게시일 범위: 2025-06-17 ~ 2026-09-21 — 실제 보고 대상 주간이 아닙니다.
+- 수록: 해외·국제 7건 / 국내 0건
+- 표본 원문 게시일 범위: 2026-02-10 ~ 2026-09-21 — 실제 보고 대상 주간이 아닙니다.
 - 호수·주차·발행일: 지정하지 않음. 기준 PDF의 제36호·9월 4주를 이 예시의 번호·기간으로 사용하지 않습니다.
 
 ## 목차
@@ -21,7 +22,6 @@
 | 5 | 정책/제도 | EDPB·AMLA, 정보 공유 협력을 위한 공동 지침 개발<br>원제: EDPB and AMLA to develop Joint Guidelines on partnerships for information sharing | EDPB | [항목 5](#entry-5) |
 | 6 | 정책/제도 | 손해배상 청구 조건을 인위적으로 만들기 위한 개인정보 열람 요구의 남용 판단<br>원제: A request for access to one’s own personal data may be considered abusive and refused if it is made for the sole purpose of subsequently claiming compensation for an alleged infringement of the GDPR | CJEU/CURIA | [항목 6](#entry-6) |
 | 7 | 정책/제도 | WhatsApp의 EDPB 구속력 있는 결정 취소소송, 적법성 인정<br>원제: GDPR: the action brought by WhatsApp Ireland against Binding Decision 1/2021 of the European Data Protection Board is admissible | CJEU/CURIA | [항목 7](#entry-7) |
-| 8 | 데이터활용, AI, 신기술 | 개인정보 보호 강화 기술을 활용한 신뢰할 수 있는 AI 모델 공유<br>원제: Sharing trustworthy AI models with privacy‑enhancing technologies | OECD | [항목 8](#entry-8) |
 
 ### 국내
 
@@ -375,62 +375,10 @@ CURIA 보도자료에 따르면 사법재판소는 EDPB 결정이 소송으로 �
 
 검토 상태: `unreviewed`. 샘플 ID: `curia-c97-23p`. 항목 ID: `weekly-example-curia-c97-23p`. 같은 사건·자료 `C-97/23 P`는 한 번만 집계합니다.
 
-<a id="entry-8"></a>
-
-### 8. 개인정보 보호 강화 기술을 활용한 신뢰할 수 있는 AI 모델 공유
-
-**분류: 데이터활용, AI, 신기술**
-
-**핵심 요약 — 확인한 사실**
-
-OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다.
-
-**주요 내용 — 확인한 사실**
-
-- OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다.
-
-- 입력 데이터의 기밀성·최소 이용을 통한 성능 개선과 AI 모델의 기밀 공동 개발·공유를 구분하고, 효용·효율·사용성 간 균형이 여전히 과제라고 밝혔다.
-
-**기관·관할권·날짜**
-
-- 기관: Organisation for Economic Co-operation and Development
-- 국가·관할권: international:OECD
-- 원문 게시일: 2025-06-17
-- 자료 유형: `policy_paper`
-
-**개인정보 보호상 의미 — 편집 의견**
-
-편집 의견: AI 모델 협업에서 데이터 수집·공유를 줄이면서 보호 수준을 높이는 기술적 선택지를 검토할 자료입니다. 기술 도입 자체가 법적 준수나 개인정보 위험 해소를 보장한다고 해석하지 않아야 합니다.
-
-**공식 출처와 요약 근거**
-
-- 원제: Sharing trustworthy AI models with privacy‑enhancing technologies
-- 출처: OECD · 2025-06-17
-- 공식 근거 링크: [https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html](https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html)
-- 근거 위치: 공식 발간물 상세 페이지의 Abstract 문단; h1 제목; 상단 time의 표시 게시일
-
-**사람 검토가 필요한 부분**
-
-- 초록만 직접 확인하여 요약했습니다. 보고서 전문의 세부 내용·법적 효과를 추론하지 않았습니다.
-
-- 국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.
-
-- 2025년 자료를 수집 방식·편집 형식 확인을 위한 표본으로 선정했습니다. 최신 주간호나 최근 90일 자료라고 표시하지 않습니다.
-
-- 한국어 제목·사실 요약이 원문을 정확히 반영하는지 확인합니다.
-
-- 개인정보 보호상 의미는 편집 의견이며 사실이나 확정 법적 판단으로 읽히지 않는지 확인합니다.
-
-- 원문·요약의 이용조건과 공개 가능 범위를 사람이 검토합니다.
-
-- 목차의 편집 분류가 자료 성격에 맞는지 확인합니다.
-
-검토 상태: `unreviewed`. 샘플 ID: `oecd-pet-ai-sharing`. 항목 ID: `weekly-example-oecd-pet-ai-sharing`. 같은 사건·자료 `oecd-pet-ai-sharing`는 한 번만 집계합니다.
-
 ## 구성 참고·선정 범위
 
 첨부된 **2026년 제36호 PDF**의 표지(물리 1쪽), 전체 목차(2쪽), 지역별 목록표(3·9쪽), 본문 항목(4–8·10–13쪽)을 읽고 구성을 참고했습니다. 참고 PDF의 뉴스 내용·원문 제목·법적 설명·로고는 이 예시의 자료로 복사하지 않았습니다. 원본의 종이 페이지 번호는 본문 링크로 바꾸고, 사용자 요청에 따라 편집 의견과 사람 검토 사항을 구분했습니다.
 
-선정·제외·중복 판단은 [fixtures/review-notes.md](fixtures/review-notes.md)에 기록했습니다. 게시일이 불명확한 OECD 신경데이터 자료 1건은 제외했습니다. 모든 한국어 요약과 편집 의견은 사람 검수 전이며 실제 발행 상태를 변경하지 않았습니다.
+선정·제외·중복 판단은 [fixtures/review-notes.md](fixtures/review-notes.md)에 기록했습니다. 게시일 표시와 HTML 날짜 속성이 다른 OECD 신경데이터·AI 모델 공유 자료 2건은 날짜 확정 전 제외했습니다. 기존 표본 파일의 관찰값은 보존했습니다. 모든 한국어 요약과 편집 의견은 사람 검수 전이며 실제 발행 상태를 변경하지 않았습니다.
 
 대응 데이터: [weekly-sample.json](weekly-sample.json). 목차와 본문은 JSON 항목 ID 및 순서에 대응합니다.

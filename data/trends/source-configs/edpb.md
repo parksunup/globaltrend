@@ -1,43 +1,43 @@
 # EDPB 출처 조사표
 
 - ID: `edpb`
-- 기관명: European Data Protection Board (EDPB)
-- 공식 시작 주소: [https://www.edpb.europa.eu/news_en](https://www.edpb.europa.eu/news_en)
-- 기록 시각: 2026-10-06T14:33:38+09:00 (한국시간)
-- 검수 상태: `blocked` — 공식 페이지 실사 미완료
-- 이용조건 상태: `unreviewed`
+- 기관: European Data Protection Board (EDPB)
+- 시작 URL: https://www.edpb.europa.eu/news_en
+- 기존 자료 재대조 시각: 2026-10-12T18:28:28+09:00 (한국시간)
+- 상태: 공식 페이지/기존 표본 직접 확인, 사람 검수 전 `unreviewed`
+- 이용조건: `unreviewed`; 자동 수집 활성화·승인·발행 변경 없음
 
-## 이번에 확인한 사실
+## 확인 범위
 
-HTTPS 요청을 실제로 시도했지만 클라우드 프록시 CONNECT 단계에서 403으로 거부되었습니다. 목록·상세 HTML, 리디렉션, 피드 및 문서 본문을 읽지 못했습니다. **사이트 자체가 403을 반환했다거나 RSS/API가 없다는 뜻이 아닙니다.**
+목록/발견 페이지: https://www.edpb.europa.eu/news_en — HTTP 200. 목록 접속 확인은 전체 자료 유형·페이지 순회 검증이 아닙니다.
 
-## 자료 범위와 수집 방법
+기존 상세 표본(모두 HTTP 200):
 
-아래 범위는 저장소 설계 문서의 요구사항입니다. 이번 공식 페이지 확인으로 검증된 자료 유형이 아닙니다.
+- https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en
+- https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en
+- https://www.edpb.europa.eu/news/edpb-requires-belgian-dpa-to-handle-the-merits-of-noyb-cookie-banner-complaint_en
+- https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en
+- https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en
 
-- 예정 자료 유형: 뉴스, 의사결정·의견, 가이드라인, 보도자료
-- 포함 기준: 감독기구 결정·정책·집행에 직접 관련된 자료를 우선 검토합니다.
-- 확인된 수집 방법: 검토 필요: 이번 실행에서 확인된 수집 방법은 없습니다. 공식 API → RSS/Atom → HTML → 허용된 PDF 순으로 접근 방법을 검증할 예정입니다.
+검증한 유형: official_news입니다. 다른 예정 유형은 검토 필요.
 
-## 필드 위치와 선택자
+## 제목·게시일·본문·공식 링크
 
-| JSON 필드 | 확인 결과 | CSS/DOM 선택자 |
-|---|---|---|
-| `title` (제목) | 검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. | 미확인 (`null`) |
-| `published_at` (원문 게시일) | 검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. 원문 게시일·수정일·사건일을 구분하고 수집일로 대체하지 않습니다. | 미확인 (`null`) |
-| `content` (본문) | 검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. | 미확인 (`null`) |
-| `official_url` (공식 상세·원문 링크) | 검토 필요: 목록·상세 페이지 응답을 읽지 못해 실제 위치와 추출 방법을 확인하지 못했습니다. 목록의 상세 링크, 리디렉션 최종 URL 및 공식 원문/PDF 링크를 대조해야 합니다. | 미확인 (`null`) |
+| 필드 | 직접 확인한 방법 |
+| --- | --- |
+| title | .node-article-full__title (현재 확인한 상세에서는 h2) |
+| published_at | time.node-article-full__date 표시 날짜. 다른 메뉴·추천 기사의 time은 제외. 현재 datetime은 비어 있으므로 표시 날짜를 읽음. |
+| content | .node-article-full__body의 기사 문단·절. 연결 지침 전문은 별도 검토. |
+| official_url | 요청한 기존 표본 URL과 GET 최종 URL 대조. 기사 .node-article-full__body a[href]는 관련 문서 링크이며 별도 표본으로 집계하지 않음. |
 
-기존 seed의 `main`·`a` 선택자는 이번 조사에서 검증하지 않았으므로 확정 수집 규칙으로 옮기지 않았습니다. 상세 페이지 표본 URL은 확보하지 못했으며 JSON의 `sample_urls`는 빈 배열입니다.
+선택자와 추출 방법은 위 기존 표본 범위에 한정합니다. 확인하지 않은 구조는 추정하지 않습니다.
 
-## RSS·API
+## RSS·API 및 이용조건
 
-- RSS 상태: `unreviewed`. architecture.md §4.2에는 RSS 링크를 과거 확인했으나 피드 본문 조회가 실패했다고 적혀 있습니다. 이번 조사에서 RSS 링크·피드 URL·응답은 확인하지 못했습니다.
-- API 상태: `unreviewed`. 공식 문서·엔드포인트·인증·이용조건 미확인. 미제공으로 단정하지 않습니다.
+공식 RSS/API 안내·지원 계약·실제 피드는 이번 재대조에서 확인하지 않았습니다. 미제공으로 단정하지 않습니다. robots.txt·정책·수집·저장·Codex 처리·번역·요약 공개·재배포 조건은 검토 필요입니다. 접근 성공은 재사용 허가가 아닙니다.
 
-## 제외·보류 기준
+## 제외·보류 및 중복
 
-설계·편집 기준 제안이며 실제 사이트 자료에 적용한 결과가 아닙니다.
 - 개인정보 보호와 직접 관련 없는 자료는 제외합니다.
 - 채용·입찰·행사 일정 등 단순 공지는 내용 확인 후 제외합니다.
 - 메뉴·푸터·쿠키 안내는 본문으로 저장하지 않습니다.
@@ -45,32 +45,11 @@ HTTPS 요청을 실제로 시도했지만 클라우드 프록시 CONNECT 단계�
 - 빈 본문·게시일 불명·접근 실패는 조용히 제외하지 않고 검토 대기 상태로 기록합니다.
 - 로그인·유료벽·접근 제한을 우회하지 않으며, 이용조건 미확정 자료의 전문은 공개 저장소에 넣지 않습니다.
 
-## 접근 실패·본문 누락
+## 접근 실패 이력·남은 검토
 
-| 요청 주소 | 실패 단계 | 관찰 결과 | 원문 서버 상태 |
-|---|---|---|
-| [https://www.edpb.europa.eu/news_en](https://www.edpb.europa.eu/news_en) | HTTPS 프록시 CONNECT | `Tunnel connection failed: 403 Forbidden` | 미확인 |
+초기 2026-10-06T14:33:38+09:00 프록시 CONNECT 403은 과거 관찰로 JSON에 보존했습니다. 현재 위 기존 표본 접근은 HTTP 200이며, 초기 차단을 현재 실사 상태로 표시하지 않습니다. 원문 전문은 공개 저장소에 넣지 않습니다.
 
-응답 본문을 받지 못했으므로 본문 누락 사례는 아직 검사하지 못했습니다. 다음 재시도는 네트워크 설정이 실제 반영된 뒤 수행합니다.
+- 한국어 요약·자료 이용조건·관련 문서 전문은 사람 검토 필요.
+- 공식 RSS/API 안내, 다른 템플릿·날짜·페이지 순회는 검토 필요.
 
-## 원문 이용조건
-
-수집·저장·Codex 처리·번역·공개 발췌·파일 재배포 모두 `검토 필요`입니다. robots.txt와 정책 문서를 읽지 못했습니다. 접근 허용을 콘텐츠 재사용 허가로 보지 않습니다. 원문 전문은 이 결과물에 포함하지 않았습니다.
-
-## 다음 확인 순서
-
-1. 네트워크 허용 도메인의 런타임 적용 후 공식 시작 페이지를 다시 요청합니다.
-
-2. 실제 목록에서 개인정보 보호 관련 상세 페이지 URL을 선택하고 최종 URL·자료 유형·원문 식별자를 확인합니다.
-
-3. 제목·게시일·본문·공식 원문 링크의 실제 DOM 또는 PDF 근거와 검증한 선택자만 기록합니다.
-
-4. 공식 RSS/API 안내를 찾아 링크 존재와 실제 응답·본문 포함 여부를 각각 검증합니다.
-
-5. 이용조건·robots.txt·재배포 조건 및 페이지 순회·요청 간격을 확인합니다.
-
-## 근거와 대응 파일
-
-- 대응 JSON: [edpb.json](edpb.json)
-- 저장소 기준: [architecture.md](../../../architecture.md) §4.1–4.3, [README.md](../../../README.md), [팀 온보딩 안내서](../../../docs/team-onboarding.md) §5.
-- 시작 URL·자료 유형·제외 원칙은 저장소 기준이며 페이지 구조·선택자·RSS/API에 관한 실사 결과가 아닙니다.
+[대응 JSON](edpb.json) · [기존 표본](../fixtures/edpb.md) · [검토 메모](../fixtures/review-notes.md)

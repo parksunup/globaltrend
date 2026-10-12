@@ -66,11 +66,16 @@
   },
   "workflow_status": "example_issue_prepared_human_review_pending",
   "draft_order_rule": "해외/국제 섹션 안에서 원문 게시일 내림차순. 원본 목차 구조를 참고하되 원본 항목·순서를 복제하지 않습니다.",
-  "selected_count": 8,
+  "selected_count": 7,
   "excluded_items": [
     {
       "record_id": "oecd-neurodata-governance",
       "reason": "화면 게시일 2026-10-06과 HTML datetime 2026-10-05가 달라 게시일을 확정하지 못했습니다. 공식 링크는 확인했지만 이번 호의 선정 조건을 만족하지 않아 제외합니다."
+    },
+    {
+      "record_id": "oecd-pet-ai-sharing",
+      "reason": "게시일 불일치: 화면 17 June 2025, time[datetime] 2025-06-16. source_published_date는 화면의 관찰값 2025-06-17이며 확정 게시일이 아닙니다. 날짜 확정 전 예시 호에서 제외하며 시간대·차이의 원인은 추정하지 않습니다.",
+      "previous_entry_id": "weekly-example-oecd-pet-ai-sharing"
     }
   ],
   "entries": [
@@ -576,72 +581,9 @@
         "CURIA 보도자료에 따르면 사법재판소는 EDPB 결정이 소송으로 다툴 수 있는 행위이고 WhatsApp에 직접 관련된다고 판단했다.",
         "일반재판소의 각하 결정을 취소하고 본안 심사를 위해 사건을 돌려보냈으며, 이 단계에서 GDPR 위반 여부를 최종 판단한 것으로 쓰지 않는다."
       ]
-    },
-    {
-      "entry_id": "weekly-example-oecd-pet-ai-sharing",
-      "fixture_record_id": "oecd-pet-ai-sharing",
-      "fixture_file": "fixtures/oecd.json",
-      "source_id": "oecd",
-      "event_id": "oecd-pet-ai-sharing",
-      "original_title": "Sharing trustworthy AI models with privacy‑enhancing technologies",
-      "korean_title": "개인정보 보호 강화 기술을 활용한 신뢰할 수 있는 AI 모델 공유",
-      "source_published_date": "2025-06-17",
-      "organization": [
-        "Organisation for Economic Co-operation and Development"
-      ],
-      "jurisdictions": [
-        "international:OECD"
-      ],
-      "document_type": "policy_paper",
-      "facts": {
-        "summary_ko": "OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다. 입력 데이터의 기밀성·최소 이용을 통한 성능 개선과 AI 모델의 기밀 공동 개발·공유를 구분하고, 효용·효율·사용성 간 균형이 여전히 과제라고 밝혔다.",
-        "evidence": [
-          {
-            "url": "https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html",
-            "location": "공식 발간물 상세 페이지의 Abstract 문단; h1 제목; 상단 time의 표시 게시일"
-          }
-        ],
-        "basis_scope": "official_abstract"
-      },
-      "privacy_significance": {
-        "kind": "editorial_opinion",
-        "text_ko": "편집 의견: AI 모델 협업에서 데이터 수집·공유를 줄이면서 보호 수준을 높이는 기술적 선택지를 검토할 자료입니다. 기술 도입 자체가 법적 준수나 개인정보 위험 해소를 보장한다고 해석하지 않아야 합니다.",
-        "is_legal_conclusion": false
-      },
-      "official_url": "https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html",
-      "human_review": {
-        "status": "unreviewed",
-        "required_checks": [
-          "초록만 직접 확인하여 요약했습니다. 보고서 전문의 세부 내용·법적 효과를 추론하지 않았습니다.",
-          "국가·관할권은 OECD 국제기구 범위이며 프랑스 소재 기관이라는 이유로 프랑스 국내 정책으로 분류하지 않습니다.",
-          "2025년 자료를 수집 방식·편집 형식 확인을 위한 표본으로 선정했습니다. 최신 주간호나 최근 90일 자료라고 표시하지 않습니다.",
-          "한국어 제목·사실 요약이 원문을 정확히 반영하는지 확인합니다.",
-          "개인정보 보호상 의미는 편집 의견이며 사실이나 확정 법적 판단으로 읽히지 않는지 확인합니다.",
-          "원문·요약의 이용조건과 공개 가능 범위를 사람이 검토합니다.",
-          "목차의 편집 분류가 자료 성격에 맞는지 확인합니다."
-        ]
-      },
-      "duplicate_status": "one_event_counted_once",
-      "related_documents": [
-        {
-          "official_url": "https://www.oecd.org/content/dam/oecd/en/publications/reports/2025/06/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_5df6fd05/a266160b-en.pdf",
-          "relationship": "full_report_pdf",
-          "access_status": "not_checked",
-          "counted_as_separate_sample": false
-        }
-      ],
-      "draft_order": 8,
-      "section": "overseas",
-      "category": "데이터활용, AI, 신기술",
-      "category_status": "editorial_classification_human_review_pending",
-      "key_summary_ko": "OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다.",
-      "key_points_ko": [
-        "OECD는 AI 모델의 공동 개발·공유에서 개인정보 보호 강화 기술을 활용하는 두 유형을 설명한다.",
-        "입력 데이터의 기밀성·최소 이용을 통한 성능 개선과 AI 모델의 기밀 공동 개발·공유를 구분하고, 효용·효율·사용성 간 균형이 여전히 과제라고 밝혔다."
-      ]
     }
   ],
-  "updated_at": "2026-10-06T15:06:19+09:00",
+  "updated_at": "2026-10-12T18:28:28+09:00",
   "sections": [
     {
       "section_id": "overseas",
@@ -653,8 +595,7 @@
         "weekly-example-edpb-2026-07-08-4",
         "weekly-example-edpb-2026-07-01-5",
         "weekly-example-curia-c526-24",
-        "weekly-example-curia-c97-23p",
-        "weekly-example-oecd-pet-ai-sharing"
+        "weekly-example-curia-c97-23p"
       ]
     },
     {
@@ -741,17 +682,7 @@
       "entry_id": "weekly-example-curia-c97-23p",
       "anchor": "entry-7",
       "page_number": null
-    },
-    {
-      "number": 8,
-      "section": "overseas",
-      "category": "데이터활용, AI, 신기술",
-      "korean_title": "개인정보 보호 강화 기술을 활용한 신뢰할 수 있는 AI 모델 공유",
-      "original_title": "Sharing trustworthy AI models with privacy‑enhancing technologies",
-      "source_id": "oecd",
-      "entry_id": "weekly-example-oecd-pet-ai-sharing",
-      "anchor": "entry-8",
-      "page_number": null
     }
-  ]
+  ],
+  "revision_note": "기존 자료의 날짜 적격성 오류 수정. 신규 출처·표본·조사 기간 추가 없음. Preview 저장 피드백은 읽지 못했으며 피드백 반영 완료를 뜻하지 않음."
 }
