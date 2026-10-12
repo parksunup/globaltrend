@@ -13,7 +13,7 @@ const statusLabels: Record<string, string> = {
 
 export default function SubmissionPreview({ items, documents, branch, commitSha }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
   const hasDocument = documents.legal.length > 0 || Boolean(documents.weekly);
-  const [showDocument, setShowDocument] = useState(hasDocument);
+  const [showDocument, setShowDocument] = useState(documents.legal.length > 0);
   const [group, setGroup] = useState<"all" | "legal" | "trends">("all");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(items[0]?.id ?? "");
@@ -32,6 +32,7 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
     <div className="submission-notice">
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
       <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 이 공개 화면에 표시되지 않습니다.</span>
+      {documents.weekly && <span>새로 조사한 출처·표본은 ‘제출 자료 목록’에서 확인하세요. ‘주간 동향 예시 호’는 별도 초안이며 표본이 자동 편입되지는 않습니다.</span>}
     </div>
     <div className="document-tabs" role="group" aria-label="검수 화면 선택">
       {hasDocument && <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>{documents.legal.length ? "17개 기준 비교표" : "주간 동향 예시 호"}</button>}
