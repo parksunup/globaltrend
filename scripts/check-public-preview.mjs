@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -32,8 +33,24 @@ async function waitForDeployment() {
   }
   throw new Error(`Timed out waiting for the current Preview: ${last}`);
 }
-const feedback = await waitForDeployment();
-console.log(`Preview serves the expected commit ${expectedSha}`);
+const snapshotMode = process.argv.includes("--deployed-snapshot");
+async function verifiedDeployment() {
+  if (!snapshotMode) return waitForDeployment();
+  const active = await readFeedback();
+  assert(/^[a-f0-9]{40}$/.test(active.deploymentCommit ?? ""), "Active Preview must identify its source commit");
+  try {
+    execFileSync("git", ["diff", "--quiet", active.deploymentCommit, "HEAD", "--",
+      "app", "lib", "middleware.ts", "data", "public", "package.json", "pnpm-lock.yaml",
+      "next.config.*", "tsconfig.json", "vercel.json"], { stdio: "pipe" });
+  } catch {
+    throw new Error("Active Preview " + active.deploymentCommit + " differs from the checked-out application, or its source commit is unavailable. Snapshot verification cannot proceed.");
+  }
+  return active;
+}
+const feedback = await verifiedDeployment();
+console.log(snapshotMode
+  ? "Verified active Preview " + feedback.deploymentCommit + " has the same application sources as checkout " + expectedSha
+  : "Preview serves the expected commit " + expectedSha);
 if (process.argv.includes("--wait-only")) process.exit(0);
 assert.equal(feedback.branch, branch);
 assert(Array.isArray(feedback.feedback) && feedback.feedback.length > 0,
@@ -48,7 +65,7 @@ await mkdir(artifactDir, { recursive: true });
 assert(process.env.PLAYWRIGHT_MODULE, "PLAYWRIGHT_MODULE is required");
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
 const browser = await chromium.launch();
-const results = { deploymentCommit: expectedSha, feedbackCount: feedback.feedback.length, feedbackSSR: false, previews: [] };
+const results = { verificationMode: snapshotMode ? "deployed-snapshot" : "latest-deployment", deploymentCommit: feedback.deploymentCommit, checkoutCommit: expectedSha, applicationSourcesMatch: true, feedbackCount: feedback.feedback.length, feedbackSSR: false, previews: [] };
 let page;
 try {
   const feedbackContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });

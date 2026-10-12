@@ -28,11 +28,13 @@ jobs:
       PREVIEW_EXPECTED_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Wait for this commit's existing Preview
-        run: node scripts/check-public-preview.mjs --wait-only
+      - name: Verify the active Preview contains this application's source
+        run: node scripts/check-public-preview.mjs --deployed-snapshot --wait-only
       - name: Install isolated browser tools
         run: |
           npm install --prefix "$RUNNER_TEMP/preview-browser" --no-package-lock --no-audit --no-fund playwright@1.64.0
@@ -41,7 +43,7 @@ jobs:
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/preview-browser/node_modules/playwright/index.mjs
           PREVIEW_ARTIFACT_DIR: ${{ runner.temp }}/preview-check-artifacts
-        run: node scripts/check-public-preview.mjs
+        run: node scripts/check-public-preview.mjs --deployed-snapshot
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4
