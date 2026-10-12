@@ -176,3 +176,12 @@ test("동향 Markdown에 JSON의 record_id가 없으면 실패한다", async () 
 
   assert.ok(errors.some((error) => error.includes("edpb-news") && error.includes("Markdown")));
 });
+
+test("번역 파일의 JSON 및 조문 구조 오류를 검사 결과에 표시한다", async () => {
+  const root = await workspace();
+  await put(root, "data/legal/translations/appi.json", "{broken");
+  await put(root, "data/legal/translations/pipl.json", JSON.stringify({ provisions: [{ node_id: "a1", tag: "Article" }] }));
+  const errors = await validateLegalData(root);
+  assert.ok(errors.some((error) => error.includes("appi.json") && error.includes("JSON")));
+  assert.ok(errors.some((error) => error.includes("pipl.json") && error.includes("provisions")));
+});
