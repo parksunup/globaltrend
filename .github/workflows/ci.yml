@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, codex/public-integration-preview]
 
 permissions:
   contents: read
@@ -45,3 +45,43 @@ jobs:
       - name: Stop local database
         if: always()
         run: supabase stop --no-backup
+
+  public-browser:
+    if: github.ref == 'refs/heads/codex/public-integration-preview'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      VERCEL_ENV: preview
+      VERCEL_GIT_COMMIT_REF: codex/public-integration-preview
+      VERCEL_GIT_COMMIT_SHA: ${{ github.sha }}
+      NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: local-browser-test-key
+      PUBLIC_BASE_URL: http://127.0.0.1:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.25.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Install isolated browser tools
+        run: |
+          npm install --prefix "$RUNNER_TEMP/public-browser" --no-package-lock --no-audit --no-fund playwright@1.64.0
+          node "$RUNNER_TEMP/public-browser/node_modules/playwright/cli.js" install --with-deps chromium
+      - name: Start local Preview and test desktop and mobile
+        env:
+          PLAYWRIGHT_MODULE: ${{ runner.temp }}/public-browser/node_modules/playwright/index.mjs
+        run: |
+          pnpm start > "$RUNNER_TEMP/public-server.log" 2>&1 &
+          for attempt in $(seq 1 40); do
+            if curl --silent --fail "$PUBLIC_BASE_URL/public" > /dev/null; then break; fi
+            sleep 2
+          done
+          node scripts/check-public-local.mjs
+      - name: Show local server errors
+        if: failure()
+        run: tail -n 100 "$RUNNER_TEMP/public-server.log"
