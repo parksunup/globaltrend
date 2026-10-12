@@ -90,7 +90,7 @@ function trendSourceIds(root: string, kind: "source-configs" | "fixtures"): stri
   const directory = join(root, "data", "trends", kind);
   if (!existsSync(directory)) return [];
   return readdirSync(directory, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && /^[a-z0-9][a-z0-9-]*\\.json$/.test(entry.name))
+    .filter((entry) => entry.isFile() && /^[a-z0-9][a-z0-9-]*\.json$/.test(entry.name))
     .map((entry) => entry.name.slice(0, -5))
     .sort();
 }
