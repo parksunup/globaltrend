@@ -66,4 +66,8 @@ test("related article preview uses the cited paragraph and never substitutes ano
   });
   assert.equal(findLegalArticlePreview(law, "제2조 제3항"), null);
   assert.equal(findLegalArticlePreview(law, "제3조 제1항"), null);
+  assert.deepEqual(findLegalArticlePreview(law, "부칙 제1조", "./translations/appi.md#main-a2-p2"), {
+    text: "두 번째 항의 한국어 번역", anchorId: "main-a2-p2",
+  });
+  assert.equal(findLegalArticlePreview(law, "제2조 제1항", "./translations/appi.md#unknown"), null);
 });

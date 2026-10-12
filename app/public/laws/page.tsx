@@ -15,8 +15,8 @@ export default async function PublicLawComparePage({ searchParams }: { searchPar
     const law = loadLegalTranslation(translation.id);
     if (!law) continue;
     for (const cell of cells.filter((item) => item.jurisdiction === translation.jurisdiction)) {
-      for (const citation of cell.articleNumbers) {
-        const preview = findLegalArticlePreview(law, citation);
+      for (const [index, citation] of cell.articleNumbers.entries()) {
+        const preview = findLegalArticlePreview(law, citation, cell.translationLinks[index]);
         if (preview) articlePreviews[`${translation.id}:${citation}`] = preview;
       }
     }

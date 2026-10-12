@@ -155,7 +155,18 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
 
 export type LegalArticlePreview = { text: string; anchorId: string };
 
-export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string): LegalArticlePreview | null {
+export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string, translationLink?: string): LegalArticlePreview | null {
+  const linkedId = translationLink?.match(/#([a-z0-9-]+)$/)?.[1];
+  if (linkedId) {
+    const linkedSection = law.sections.find((item) => item.id === linkedId);
+    const linkedLine = linkedSection?.lines[0] ?? law.sections.flatMap((item) => item.lines).find((item) => item.id === linkedId);
+    if (!linkedLine?.text.trim()) return null;
+    const linkedText = linkedLine.text.trim();
+    return {
+      text: linkedText.length > 360 ? `${linkedText.slice(0, 360).trimEnd()}…` : linkedText,
+      anchorId: linkedSection?.id ?? linkedLine.id,
+    };
+  }
   const match = citation.match(/제(\d+)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
   if (!match) return null;
   const articleId = `main-a${match[1]}${match[2] ? `-${match[2]}` : ""}`;
