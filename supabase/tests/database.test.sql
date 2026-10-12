@@ -1,6 +1,6 @@
 begin;
 
-select plan(38);
+select plan(41);
 
 select has_table('public', 'sources', 'sources table exists');
 select has_table('public', 'legal_instruments', 'legal instruments table exists');
@@ -57,8 +57,8 @@ values
 set local role anon;
 
 select ok(
-  not has_table_privilege('anon', 'public.submission_feedback', 'select'),
-  'anonymous visitors cannot read feedback'
+  has_table_privilege('anon', 'public.submission_feedback', 'select'),
+  'anonymous visitors can read public feedback'
 );
 select ok(
   has_column_privilege('anon', 'public.submission_feedback', 'body', 'insert'),
@@ -67,6 +67,19 @@ select ok(
 select lives_ok(
   $$insert into public.submission_feedback (branch_name, item_id, commit_sha, author_name, body) values ('feat/test', 'criteria-scope--KR', repeat('a', 40), 'Visitor', 'Please check the date')$$,
   'anonymous visitor can save feedback without logging in'
+);
+select results_eq(
+  $select body from public.submission_feedback where branch_name = 'feat/test' and item_id = 'criteria-scope--KR'$,
+  array['Please check the date'::text],
+  'anonymous reader can retrieve saved feedback content without team access'
+);
+select ok(
+  not has_table_privilege('anon', 'public.submission_feedback', 'update'),
+  'anonymous readers cannot edit feedback'
+);
+select ok(
+  not has_table_privilege('anon', 'public.submission_feedback', 'delete'),
+  'anonymous readers cannot delete feedback'
 );
 
 select results_eq(
@@ -102,9 +115,10 @@ select throws_ok(
 set local role authenticated;
 select set_config('request.jwt.claim.sub', '10000000-0000-0000-0000-000000000003', true);
 
-select is_empty(
-  'select id from public.submission_feedback',
-  'authenticated non-members cannot read feedback'
+select results_eq(
+  $select count(*)::bigint from public.submission_feedback where branch_name = 'feat/test'$,
+  array[1::bigint],
+  'signed-in non-members can read publicly visible feedback'
 );
 select lives_ok(
   $$insert into public.submission_feedback (branch_name, item_id, commit_sha, body) values ('feat/test', 'criteria-scope--KR', repeat('a', 40), 'Feedback from a non-member')$$,
