@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { listLegalTranslations, loadLegalTranslation } from "../lib/legal-translation-review.ts";
+import { listLegalTranslationEntries, listLegalTranslations, loadLegalTranslation } from "../lib/legal-translation-review.ts";
 
 test("one review UI discovers multiple law translations and keeps their text separate", () => {
   const root = mkdtempSync(join(tmpdir(), "globaltrend-legal-review-"));
@@ -25,6 +25,24 @@ test("one review UI discovers multiple law translations and keeps their text sep
     assert.equal(loadLegalTranslation("appi", root)?.sections[0].lines[0].text, "appi 번역 본문");
     assert.equal(loadLegalTranslation("pipl", root)?.sections[0].lines[0].text, "pipl 번역 본문");
     assert.equal(loadLegalTranslation("../appi", root), null);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("invalid law file is visible as an error while valid laws remain readable", () => {
+  const root = mkdtempSync(join(tmpdir(), "globaltrend-legal-errors-"));
+  try {
+    const dir = join(root, "data", "legal", "translations");
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(join(dir, "gdpr.json"), "{broken");
+    writeFileSync(join(dir, "pipl.json"), JSON.stringify({
+      provisions: [{ node_id: "a1", tag: "Article", scope: "main", source_order: 1, korean_text: "본문" }]
+    }));
+    const entries = listLegalTranslationEntries(root);
+    assert.deepEqual(entries.map((entry) => entry.id), ["gdpr", "pipl"]);
+    assert.match(entries[0].error, /JSON/);
+    assert.deepEqual(listLegalTranslations(root).map((entry) => entry.id), ["pipl"]);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
