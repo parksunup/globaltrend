@@ -102,7 +102,7 @@ try {
         else await page.getByRole("button", { name: /법 적용 대상/ }).click();
       }
       const japan = page.locator("article").filter({ has: page.getByRole("heading", { name: "일본", exact: true }) });
-      const links = japan.locator('a[href^="/public/laws/appi"]:visible');
+      const links = japan.locator('a[href^="/public/laws/appi"][href*="#"]:visible');
       const count = await links.count();
       assert(count > 0, "Japanese related-article links must exist");
       for (const index of [...new Set([0, count - 1])]) {
