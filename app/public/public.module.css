@@ -325,3 +325,25 @@
 .themeLight .hero .globe{display:block;filter:none;opacity:.78;background-image:url("/images/observatory-globe-light.png")}
 @media(max-width:850px){.themeLight .hero .globe{opacity:.56}}
 @media(max-width:620px){.themeLight .hero .globe{opacity:.3}}
+
+
+/* Isolated preview of team submissions in the public design. */
+.draftNotice{margin:16px clamp(24px,4vw,68px);padding:12px 18px;border:1px solid rgba(229,183,102,.5);border-radius:10px;background:rgba(229,183,102,.12);color:#f3d8a0;font-size:13px;line-height:1.7}
+.draftNotice a{color:inherit;font-weight:700;margin-left:10px}
+.submissionStats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:18px clamp(24px,4vw,68px);background:#0b1724}
+.submissionStats a{display:flex;flex-direction:column;gap:4px;padding:15px 18px;border:1px solid var(--line);border-radius:10px;background:var(--panel);color:#d8e9f0;text-decoration:none}
+.submissionStats strong{color:var(--cyan);font-size:25px}.submissionStats span{font-size:12px;color:var(--muted)}
+.sourcesPage,.fullLawPage{max-width:1200px;margin:auto;padding:44px clamp(24px,4vw,68px) 90px}
+.sourcesPage h1,.fullLawPage h1{font:600 42px/1.3 "Noto Serif KR",serif;margin:8px 0 16px}
+.sourcesPage>p,.fullLawPage>p{color:var(--muted);line-height:1.8}
+.sourceGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:28px}
+.sourceCard{padding:22px;border:1px solid var(--line);border-radius:12px;background:var(--panel);min-width:0}
+.sourceCard small{color:var(--cyan)}.sourceCard h2{font-size:19px;line-height:1.5;margin:10px 0}.sourceCard p{color:var(--muted);font-size:13px;line-height:1.7;overflow-wrap:anywhere}.sourceCard a,.fullLawPage a{display:inline-block;margin:8px 14px 0 0;color:var(--gold);text-decoration:none}
+.lawGroupLinks{display:flex;gap:14px;flex-wrap:wrap;margin:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0}
+.lawGroupLinks a{margin:0;padding:8px 12px;border-radius:7px;background:var(--panel2)}
+.lawTextGroup{margin:40px 0}.lawTextGroup h2{font-size:26px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.lawTextArticle{padding:24px 0;border-bottom:1px solid var(--line);scroll-margin-top:24px}
+.lawTextArticle small{color:var(--cyan)}.lawTextArticle h3{font-size:19px;margin:9px 0 16px}
+.lawTextArticle p{white-space:pre-wrap;line-height:1.9;color:#dce6ed;margin:10px 0}
+@media(max-width:900px){.sourceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.submissionStats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.sourceGrid{grid-template-columns:1fr}.submissionStats{grid-template-columns:repeat(2,minmax(0,1fr))}.sourcesPage h1,.fullLawPage h1{font-size:32px}}
