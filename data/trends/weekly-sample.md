@@ -43,9 +43,15 @@ EDPB는 GDPR 과징금 부과 여부를 판단하는 지침과 DSA–GDPR 상호
 
 **주요 내용 — 확인한 사실**
 
-- EDPB는 GDPR 과징금 부과 여부를 판단하는 지침과 DSA–GDPR 상호작용에 관한 최종 지침을 채택했다고 밝혔다.
+- 상태·대상: EDPB는 과징금 부과 여부와 다른 시정권한의 관계를 다루는 지침을 채택하고 2026년 11월 13일까지 의견을 받는다고 발표했다. DSA–GDPR 상호작용 지침은 의견수렴을 거친 최종본으로 별도 구분한다. 근거: [기사 도입; public consultation until 13 November 2026; Guidelines on DSA and GDPR finalised after public consultation](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en)
 
-- 과징금 관련 새 지침은 2026년 11월 13일까지 공개 의견수렴 대상이며, DSA–GDPR 지침은 의견수렴 후 최종화되었다.
+- 판단 절차: 기사에 소개된 5단계는 과징금 부과 근거, 해당 의무를 부담하는 책임 주체, 고의·과실, 가중·감경 요소, 제재의 실효성·비례성·억지력을 차례로 검토하는 방식이다. 과징금 액수의 산정 방법과는 구분한다. 근거: [five-step methodology 목록; Note to editors](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en)
+
+- 경미한 위반: 기사상 일반적으로 과징금 대신 견책을 할 수 있고, 경미하지 않은 경우에는 과징금 부과의 강한 추정이 있다고 설명한다. 마지막 단계에서 구체적 사건의 사유에 따라 일반적인 접근에서 벗어날 수 있는지도 검토한다고 안내한다. 근거: [five-step methodology의 넷째·다섯째 항목](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en)
+
+- 시정 수단: 경고·견책·명령·처리 제한 또는 금지·인증 철회 등을 함께 설명하며 어떤 시정 수단을 사용할지 판단하는 실무 예시 14개를 제시했다고 밝혔다. 근거: [corrective powers 및 14 practical examples 문단](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en)
+
+- DSA와 GDPR: 최종 지침은 중개서비스 제공자의 개인정보 처리와 GDPR 개념을 참조하는 DSA 조항의 접점에서 두 법의 일관된 적용을 지원한다고 설명한다. 모든 디지털서비스 처리에 대한 적법성 승인으로 일반화하지 않는다. 근거: [Guidelines on DSA and GDPR finalised after public consultation](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en)
 
 **기관·관할권·날짜**
 
@@ -56,7 +62,7 @@ EDPB는 GDPR 과징금 부과 여부를 판단하는 지침과 DSA–GDPR 상호
 
 **개인정보 보호상 의미 — 편집 의견**
 
-편집 의견: 과징금 부과 여부의 판단 기준과 디지털서비스 규율의 접점을 함께 검토할 자료입니다. 의견수렴 지침과 최종 지침의 상태를 구분해 정책 검토에 활용할 필요가 있습니다.
+편집 의견: 과징금 액수 산정과 부과 여부 판단을 분리해 볼 자료입니다. 의견수렴 지침을 확정된 집행 기준으로 읽지 않도록 단계 구분이 필요합니다.
 
 **공식 출처와 요약 근거**
 
@@ -91,9 +97,13 @@ EDPB는 유럽연합 집행위원회에 서로 다른 분야의 규제기관이 
 
 **주요 내용 — 확인한 사실**
 
-- EDPB는 유럽연합 집행위원회에 서로 다른 분야의 규제기관이 집행 관련 정보를 공유할 수 있도록 법적 근거를 제안할 것을 촉구했다.
+- 발표 배경: 2026년 7월 16–17일 더블린 회의에서 EDPB는 서로 다른 분야의 규제기관이 협력할 법적 기반이 필요하다고 밝혔다. EU 집행위원회에 제안을 요청한 것이며 새 권한이 이미 시행됐다는 발표는 아니다. 근거: [기사 도입; A clear legal basis for efficient cross-regulatory cooperation](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
 
-- 감독기구 간 자원 공유와 공동 집행 협력 강화도 논의했다고 밝혔다.
+- 공유 범위: 요청된 법적 근거는 기관별 집행 업무와 관련된 정보, 비밀정보를 포함한 정보를 교환할 수 있도록 하는 목적이다. 기밀정보를 제한 없이 공개하자는 내용으로 해석하지 않는다. 근거: [legal basis for cross-regulatory information sharing 문단](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
+
+- 집행 여건: AI 이용 증가 등으로 민원의 수와 복잡성이 늘어 감독기구의 자원 부담이 커졌다고 설명하고, 다수에게 영향을 미치는 사건 등에 실무적·필요시 입법적 대응을 논의했다고 밝혔다. 근거: [Strengthening consistency and boosting efficient enforcement](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
+
+- 협력 방식: 민원을 접수한 기관이 수석감독기구에 자원을 제공하는 방안, 공동 작업 확대, 집행 절차와 국가별 관행에 관한 워크숍을 논의했다. 기사에 소개된 방향이며 개별 사건의 의무적인 처리 절차로 확정하지 않는다. 근거: [To further boost cross-border enforcement 문단 및 공동 작업 설명](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
 
 **기관·관할권·날짜**
 
@@ -104,7 +114,7 @@ EDPB는 유럽연합 집행위원회에 서로 다른 분야의 규제기관이 
 
 **개인정보 보호상 의미 — 편집 의견**
 
-편집 의견: 개인정보 감독과 다른 디지털 규제의 협력에서 정보 공유의 법적 근거가 중요한 쟁점임을 보여줍니다. 정보 공유의 확대를 주장하는 것과 실제 공유 권한이 부여된 것은 구분해야 합니다.
+편집 의견: 개인정보 감독과 다른 디지털 규제의 협력에서 공유 목적·비밀유지·권한의 근거를 함께 검토할 자료입니다.
 
 **공식 출처와 요약 근거**
 
@@ -189,9 +199,17 @@ EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을
 
 **주요 내용 — 확인한 사실**
 
-- EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을 채택하고, 블록체인 개인정보 처리 지침을 최종화했다고 밝혔다.
+- 지침 단계: 익명화·생성형 AI 웹 스크래핑 지침은 2026년 10월 30일까지 의견수렴 대상이고, 블록체인 지침은 의견수렴 후 최종본으로 채택됐다고 발표했다. 근거: [기사 도입; 두 public consultation 문단; Blockchains guidelines finalised after public consultation](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
-- 앞의 두 지침은 공개 의견수렴 대상으로 안내되어 있어 최종 지침과 구분해야 한다.
+- 익명성 판단: 기사상 데이터가 개인과 관련되는지는 내용·목적·효과에 따라 판단하며, 합리적으로 이용될 수 있는 식별 수단은 관련 주체의 관점과 객관적 요소를 고려한다. 동일한 데이터도 주체별 판단이 달라질 수 있다고 설명한다. 근거: [Understanding anonymous data](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+
+- 평가 틀: 주체별 식별 능력 차이를 고려하는 맥락적 접근과 그 차이를 고려하지 않는 단순화 접근을 제시한다. 개별 기록 분리·연결·추론을 할 수 없는지의 세 기준을 충족하면 익명으로 볼 수 있고, 충족하지 못하면 추가 분석이 필요하다고 설명한다. 근거: [practical framework 및 3 criteria 문단](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+
+- 웹 수집 원칙: 개인정보를 수집·저장·조직·검색하는 웹 스크래핑에는 GDPR이 적용되며 목적 제한·투명성·정확성·최소화가 쟁점이라고 설명한다. 신뢰할 수 있는 출처, 수집 시점 기록, 학습 전 데이터 검증을 권고했다고 밝혔다. 근거: [Clarifying data protection implications of web scraping for AI development](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+
+- 민감정보: 웹 수집에 특별 범주 정보가 포함되면 GDPR 제6조 근거와 제9조 제2항의 예외가 모두 필요하다는 설명을 담는다. 우발적 수집에 관한 판례 적용도 개별 검토 대상이며 제9조의 일반 면제가 없다고 강조한다. 근거: [processing special categories 및 no general exemption 문단](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+
+- 블록체인: 최종 지침은 구조별 개인정보 처리 영향을 설명하며, 의견수렴 결과 보고서와 변경 표시본도 공개했다고 밝혔다. 여기서는 기사 내용을 확인했으며 지침 전문의 세부 의무는 검토 필요다. 근거: [Blockchains guidelines finalised after public consultation](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
 **기관·관할권·날짜**
 
@@ -202,7 +220,7 @@ EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을
 
 **개인정보 보호상 의미 — 편집 의견**
 
-편집 의견: 익명화, AI 학습 데이터 수집, 블록체인 활용 과정에서 개인정보 보호 검토 지점이 달라질 수 있음을 보여줍니다. 공개된 데이터나 신기술이라는 이유만으로 GDPR 적용에서 제외된다고 일반화하지 않아야 합니다.
+편집 의견: 익명성 판단과 AI 학습용 수집에서 식별 관점·법적 근거·민감정보 예외를 분리해 점검하는 데 참고할 수 있습니다.
 
 **공식 출처와 요약 근거**
 
@@ -237,9 +255,13 @@ EDPB와 AMLA는 금융범죄 대응을 위한 정보 공유와 개인정보 보�
 
 **주요 내용 — 확인한 사실**
 
-- EDPB와 AMLA는 금융범죄 대응을 위한 정보 공유와 개인정보 보호를 함께 다루는 공동 지침을 개발할 예정이라고 밝혔다.
+- 추진 배경: EDPB와 AMLA는 금융범죄 대응을 위한 정보 공유와 개인정보 보호를 함께 설명하는 공동 지침을 개발한다고 발표했다. 이미 확정·시행된 지침을 발표한 것은 아니다. 근거: [기사 도입](https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en)
 
-- 기사에 따르면 관련 정보 공유 가능성은 2027년 7월 10일부터 적용되며, 지침 초안 의견수렴은 2027년 상반기로 계획되어 있다.
+- 법적 접점: 기사상 자금세탁방지 규정 제75조는 적용 대상 기업·전문가 간 및 공공기관과의 정보 공유를 한계 안에서 허용하고, 새 공유 가능성은 2027년 7월 10일부터 적용될 예정이라고 설명한다. 근거: [Why information sharing matters](https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en)
+
+- 지침의 목적: 기업, 감독기구, 금융정보분석기구와 개인정보 감독기구가 협력 관계를 설계할 때 정보 공유와 보호장치를 함께 고려하도록 실무적 명확성을 제공하려는 계획이다. 근거: [Clearer rules for industry and authorities](https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en)
+
+- 향후 절차: 이해관계자의 초기 의견을 듣는 행사를 계획하고, 2027년 상반기에 지침 초안의 공개 의견수렴을 추진한다고 밝혔다. 발표 당시의 계획이며 이후 완료 여부는 확인하지 않았다. 근거: [Share your perspective](https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en)
 
 **기관·관할권·날짜**
 
@@ -250,7 +272,7 @@ EDPB와 AMLA는 금융범죄 대응을 위한 정보 공유와 개인정보 보�
 
 **개인정보 보호상 의미 — 편집 의견**
 
-편집 의견: 금융범죄 대응을 위한 정보 공유에도 개인정보 보호 안전장치를 함께 설계해야 한다는 정책 논의를 보여줍니다. 향후 공동 지침의 범위와 적용 시점을 계속 확인할 필요가 있습니다.
+편집 의견: 금융범죄 대응의 필요성이 개인정보 보호장치를 대체하지 않도록 협력 설계와 적용 시점을 함께 볼 자료입니다.
 
 **공식 출처와 요약 근거**
 

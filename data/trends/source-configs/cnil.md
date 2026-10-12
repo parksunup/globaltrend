@@ -21,7 +21,7 @@
 | --- | --- |
 | title | main h1 |
 | published_at | main .ctn-gen-auteur (프랑스어 표시 날짜) |
-| content | main .page-introduction + main .ctn-gen-body; .ctn-gen-after 관련 기사 및 도구/푸터 제외 |
+| content | main .page-introduction + main .ctn-gen-body 및 전자 송장 안내의 .ctn-gen-after .ctn-gen-ascenseur 문답. 문답 제목·본문은 수집하고 .ctn-gen-after의 관련 기사·도구·푸터는 제외. 템플릿별 범위는 검토 필요. |
 | official_url | 목록 main .ctn-gen-liste-titre a[href] → 절대 URL → GET 최종 URL; canonical은 별도 검토 |
 
 이 위치/선택자는 읽은 표본에 한정합니다. 다른 유형·PDF·사이트 변경에 대한 보편적 선택자로 확정하지 않습니다. 게시일·결정일·수정일·수집일은 구분합니다.
