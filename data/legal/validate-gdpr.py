@@ -49,15 +49,21 @@ def validate(source=None, private_draft=None):
         missing = [n['node_id'] for n in provisions if n['translation_status'] != 'draft']
         check(missing == doc['coverage']['missing_node_ids'], '미작성 목록 불일치')
         check(all(n.get('korean_text') or n.get('korean_title') for n in drafted), '초안 내부 빈 번역')
-        for tag, count in [('Article', 11), ('Recital', 21)]:
-            check([n['number'] for n in drafted if n['tag'] == tag] == list(map(str, range(1, count + 1))), '작성된 첫 구간 번호 불일치')
         progress = index['private_draft_progress']
+        for tag, count in [('Article', progress['main_articles']), ('Recital', progress['recitals'])]:
+            check([n['number'] for n in drafted if n['tag'] == tag] == list(map(str, range(1, count + 1))), '작성된 첫 구간 번호 불일치')
+        for article in [n for n in drafted if n['tag'] == 'Article']:
+            check(all(n['translation_status'] == 'draft' for n in provisions
+                      if n['node_id'].startswith(article['node_id'] + '-')), '작성 조문 내부 미번역')
+        check(doc['translation']['translated_main_articles'] == progress['main_articles']
+              and doc['translation']['translated_recitals'] == progress['recitals'], '문서 작성 수 불일치')
         check(len(drafted) == progress['drafted_nodes'] and len(missing) == progress['missing_nodes'], '공개 진행률과 비공개 초안 불일치')
         private_md = path.with_suffix('.md').read_text()
         check(re.findall(r'<a id="([^"]+)"></a>', private_md) == [n['node_id'] for n in drafted], '비공개 번역 앵커 누락·순서 오류')
         check(all((n.get('korean_text') or n.get('korean_title')) in private_md for n in drafted), '비공개 JSON/Markdown 내용 불일치')
     print(f'GDPR 구조 검사 통과: 원판 색인 {len(nodes)}노드·99조·173고려사항; '
-          '비공개 부분 초안 11조/21고려사항. 공개 재배포·사람 의미 검수는 미확정.')
+          f'기록된 부분 초안 {index["private_draft_progress"]["main_articles"]}조/'
+          f'{index["private_draft_progress"]["recitals"]}고려사항. 공개 재배포·사람 의미 검수는 미확정.')
 
 
 if __name__ == '__main__':

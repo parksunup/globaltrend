@@ -3,23 +3,23 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~11조·고려사항1~21의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~23조·고려사항1~45의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 21 |
-| Chapter | 11 | 2 |
-| Article | 99 | 11 |
-| Paragraph | 372 | 29 |
-| Item | 389 | 68 |
-| Text | 25 | 5 |
-| Section | 15 | 0 |
+| Recital | 173 | 45 |
+| Chapter | 11 | 3 |
+| Article | 99 | 23 |
+| Paragraph | 372 | 72 |
+| Item | 389 | 148 |
+| Text | 25 | 8 |
+| Section | 15 | 5 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
-Item에는 원문 대시 항목도 포함합니다. 항 번호가 없는 도입·후행 문장은 Text로, 고려사항·서문·말미·각주는 별도로 기록합니다. 원문 부칙·별표 노드는0개이며 각주21개는 아직 미번역입니다.
+Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행 문장은 Text로,고려사항·서문·말미·각주는 별도로 기록합니다. 부칙·별표 노드는0개이며 각주21개는 아직 미번역입니다.
 
 ## 본칙 조문 색인
 
@@ -36,18 +36,18 @@ Item에는 원문 대시 항목도 포함합니다. 항 번호가 없는 도입�
 | <a id="main-a9"></a>제9조 | Processing of special categories of personal data | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a10"></a>제10조 | Processing of personal data relating to criminal convictions and offences | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a11"></a>제11조 | Processing which does not require identification | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a12"></a>제12조 | Transparent information, communication and modalities for the exercise of the rights of the data subject | 미번역·사람 미검수 |
-| <a id="main-a13"></a>제13조 | Information to be provided where personal data are collected from the data subject | 미번역·사람 미검수 |
-| <a id="main-a14"></a>제14조 | Information to be provided where personal data have not been obtained from the data subject | 미번역·사람 미검수 |
-| <a id="main-a15"></a>제15조 | Right of access by the data subject | 미번역·사람 미검수 |
-| <a id="main-a16"></a>제16조 | Right to rectification | 미번역·사람 미검수 |
-| <a id="main-a17"></a>제17조 | Right to erasure (‘right to be forgotten’) | 미번역·사람 미검수 |
-| <a id="main-a18"></a>제18조 | Right to restriction of processing | 미번역·사람 미검수 |
-| <a id="main-a19"></a>제19조 | Notification obligation regarding rectification or erasure of personal data or restriction of processing | 미번역·사람 미검수 |
-| <a id="main-a20"></a>제20조 | Right to data portability | 미번역·사람 미검수 |
-| <a id="main-a21"></a>제21조 | Right to object | 미번역·사람 미검수 |
-| <a id="main-a22"></a>제22조 | Automated individual decision-making, including profiling | 미번역·사람 미검수 |
-| <a id="main-a23"></a>제23조 | Restrictions | 미번역·사람 미검수 |
+| <a id="main-a12"></a>제12조 | Transparent information, communication and modalities for the exercise of the rights of the data subject | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a13"></a>제13조 | Information to be provided where personal data are collected from the data subject | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a14"></a>제14조 | Information to be provided where personal data have not been obtained from the data subject | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a15"></a>제15조 | Right of access by the data subject | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a16"></a>제16조 | Right to rectification | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a17"></a>제17조 | Right to erasure (‘right to be forgotten’) | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a18"></a>제18조 | Right to restriction of processing | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a19"></a>제19조 | Notification obligation regarding rectification or erasure of personal data or restriction of processing | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a20"></a>제20조 | Right to data portability | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a21"></a>제21조 | Right to object | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a22"></a>제22조 | Automated individual decision-making, including profiling | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a23"></a>제23조 | Restrictions | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a24"></a>제24조 | Responsibility of the controller | 미번역·사람 미검수 |
 | <a id="main-a25"></a>제25조 | Data protection by design and by default | 미번역·사람 미검수 |
 | <a id="main-a26"></a>제26조 | Joint controllers | 미번역·사람 미검수 |
@@ -125,4 +125,4 @@ Item에는 원문 대시 항목도 포함합니다. 항 번호가 없는 도입�
 | <a id="main-a98"></a>제98조 | Review of other Union legal acts on data protection | 미번역·사람 미검수 |
 | <a id="main-a99"></a>제99조 | Entry into force and application | 미번역·사람 미검수 |
 
-고려사항1~173의 번호·조항 하위 구조 전체는 [JSON 색인](./gdpr-index.json)을 참고합니다. 원문 자체는 공식 원판에서 읽습니다. 공개상태 및 남은 작업은 [GDPR 검토 메모](../translations/gdpr-review-notes.md)를 따릅니다.
+고려사항 및 하위 구조는 [JSON 색인](./gdpr-index.json),공개 상태·남은 작업은 [GDPR 검토 메모](../translations/gdpr-review-notes.md)를 따릅니다.
