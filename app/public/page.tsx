@@ -1,7 +1,9 @@
 import Link from "next/link";
 import styles from "./public.module.css";
 
-import { loadPublishedStories } from "../../lib/published-trends";
+import { loadPublicStories } from "../../lib/public-content";
+import { loadSubmittedSources, publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
+import { loadSubmissionDocuments, loadSubmissionPreview } from "../../lib/submission-preview";
 import { PublicHeader, PublicFooter } from "./public-navigation";
 
 const topics = [
@@ -26,13 +28,19 @@ function TopicGlyph({ label }: { label: string }) {
 export const dynamic = "force-dynamic";
 
 export default async function PublicHome() {
-  let allStories: Awaited<ReturnType<typeof loadPublishedStories>> = [];
+  const draftMode = publicSubmissionPreviewEnabled();
+  const sources = draftMode ? loadSubmittedSources() : [];
+  const legalItems = draftMode ? loadSubmissionPreview().filter((item) => item.kind === "법제 목록") : [];
+  const comparisonCount = draftMode ? loadSubmissionDocuments().legal.length : 0;
+  let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
-  try { allStories = await loadPublishedStories(); } catch (error) { console.error(error); loadError = true; }
+  try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
   const stories = allStories.slice(0, 6);
   const featured = stories[0];
   return <main className={styles.site}>
     <PublicHeader active="/public" />
+    {draftMode && <div className={styles.draftNotice}>통합 테스트 · 담당자 제출 자료 · 사람 검수 전 초안입니다. 발행된 기사나 확정 법률 해설이 아닙니다. <Link href="/team">검수 화면 보기 →</Link></div>}
+    {draftMode && <section className={styles.submissionStats} aria-label="담당자 제출 자료 현황"><Link href="/public/search"><strong>{allStories.length}건</strong><span>동향 표본</span></Link><Link href="/public/sources"><strong>{sources.length}곳</strong><span>수집 출처</span></Link><Link href="/public/laws"><strong>{legalItems.length}개</strong><span>조사한 법률</span></Link><Link href="/public/laws#comparison"><strong>{comparisonCount}칸</strong><span>17개 기준 비교표</span></Link></section>}
 
     <section className={styles.hero}>
       <div className={styles.heroTitle}>
@@ -54,7 +62,7 @@ export default async function PublicHome() {
 
       <article className={styles.featured}>
         <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span></div>
-        <p className={styles.featureKicker}>이번 주 주목할 흐름</p>
+        <p className={styles.featureKicker}>{draftMode ? "최근 제출된 동향 표본" : "이번 주 주목할 흐름"}</p>
         <h2>{featured ? featured.title : "새로운 동향을 살펴보세요"}</h2>
         <h3>{featured ? featured.summary : "각국의 개인정보 보호 정책과 감독기구 발표를 한눈에 모읍니다."}</h3>
         <div className={styles.featureSource}><span>{featured ? "공식 출처" : "초기 관측 출처"}</span><b>{featured?.institution ?? "EDPB"}</b>{!featured && <><b>OECD</b><b>CURIA</b></>}</div>
@@ -77,6 +85,6 @@ export default async function PublicHome() {
       <Link href="/public/weekly">주간호 전체 보기 →</Link>
     </section>
     <PublicFooter />
-    <p className={styles.demoBanner}>공개 동향은 관리자 검수와 발행을 마친 자료만 표시합니다.</p>
+    <p className={styles.demoBanner}>{draftMode ? "이 화면의 동향·법제 자료는 검수 전 초안이며 정식 공개 자료가 아닙니다." : "공개 동향은 관리자 검수와 발행을 마친 자료만 표시합니다."}</p>
   </main>;
 }
