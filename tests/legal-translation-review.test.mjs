@@ -3,7 +3,7 @@ import { test } from "node:test";
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { listLegalTranslationEntries, listLegalTranslations, loadLegalTranslation } from "../lib/legal-translation-review.ts";
+import { findLegalArticlePreview, listLegalTranslationEntries, listLegalTranslations, loadLegalTranslation } from "../lib/legal-translation-review.ts";
 
 test("one review UI discovers multiple law translations and keeps their text separate", () => {
   const root = mkdtempSync(join(tmpdir(), "globaltrend-legal-review-"));
@@ -46,4 +46,24 @@ test("invalid law file is visible as an error while valid laws remain readable",
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test("related article preview uses the cited paragraph and never substitutes another one", () => {
+  const law = {
+    sections: [{
+      id: "main-a2", group: "main", title: "제2조", context: "본칙", reviewStatus: "not_started",
+      lines: [
+        { id: "main-a2-p1", label: "1항", text: "첫 번째 항의 한국어 번역" },
+        { id: "main-a2-p2", label: "2항", text: "두 번째 항의 한국어 번역" },
+      ],
+    }],
+  };
+  assert.deepEqual(findLegalArticlePreview(law, "제2조 제2항"), {
+    text: "두 번째 항의 한국어 번역", anchorId: "main-a2-p2",
+  });
+  assert.deepEqual(findLegalArticlePreview(law, "제2조"), {
+    text: "첫 번째 항의 한국어 번역", anchorId: "main-a2",
+  });
+  assert.equal(findLegalArticlePreview(law, "제2조 제3항"), null);
+  assert.equal(findLegalArticlePreview(law, "제3조 제1항"), null);
 });

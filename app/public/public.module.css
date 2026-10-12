@@ -432,3 +432,17 @@
 @media(max-width:1180px){.compareCardsThree{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:850px){.lawReaderLayout{grid-template-columns:190px minmax(0,1fr);gap:18px}}
 @media(max-width:620px){.lawViewTabs{padding:13px 14px 0}.lawViewTabs button{min-width:0;flex:1;font-size:13px}.lawCatalog{padding:22px 14px 45px}.lawCatalogGrid,.compareCards,.compareCardsThree,.compareCardsOne{grid-template-columns:1fr}.lawCatalogCard{padding:18px}.lawReaderLayout{grid-template-columns:1fr}.lawToc{position:static;max-height:280px}.lawReaderTools{justify-content:flex-start}.fullLawPage{padding-left:14px;padding-right:14px}}
+
+/* Temporary related-article excerpt on hover and keyboard focus */
+.lawCompareCard:hover,.lawCompareCard:focus-within{position:relative;z-index:3}
+.articleLinks{position:relative}
+.articleReference{display:inline-flex}
+.articleReference>a:focus-visible,.articleReference>span:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.articleTooltip{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:4;width:100%;max-width:420px;padding:14px 16px;border:1px solid var(--cyan);border-radius:7px;background:#152b38;box-shadow:0 12px 32px #0008;color:#eef5f6;pointer-events:none}
+.articleReference:hover .articleTooltip,.articleReference:focus-within .articleTooltip{display:block}
+.articleTooltip strong{display:block;font-size:12px;line-height:1.5}
+.articleTooltip p{margin:8px 0;color:#e1e9ed;font-size:13px;line-height:1.7;white-space:pre-wrap}
+.articleTooltip small{display:block;color:#a8bdc6;font-size:11px;line-height:1.5}
+.themeLight .articleTooltip{background:#fff;color:#254236;box-shadow:0 12px 28px #233b2b33}
+.themeLight .articleTooltip p{color:#314d3d}
+.themeLight .articleTooltip small{color:#607366}

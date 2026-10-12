@@ -151,3 +151,24 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
     sections: [...sectionById.values()],
   };
 }
+
+
+export type LegalArticlePreview = { text: string; anchorId: string };
+
+export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string): LegalArticlePreview | null {
+  const match = citation.match(/제(\d+)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
+  if (!match) return null;
+  const articleId = `main-a${match[1]}${match[2] ? `-${match[2]}` : ""}`;
+  const section = law.sections.find((item) => item.group === "main" && item.id === articleId);
+  if (!section) return null;
+  const requestedId = `${articleId}${match[3] ? `-p${match[3]}` : ""}${match[4] ? `-i${match[4]}` : ""}`;
+  const line = match[3] || match[4]
+    ? section.lines.find((item) => item.id === requestedId)
+    : section.lines[0];
+  if (!line?.text.trim()) return null;
+  const text = line.text.trim();
+  return {
+    text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text,
+    anchorId: match[3] || match[4] ? line.id : articleId,
+  };
+}

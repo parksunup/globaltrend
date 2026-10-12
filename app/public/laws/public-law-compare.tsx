@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import styles from "../public.module.css";
 import type { LegalComparisonCell, SubmissionItem } from "../../../lib/submission-preview";
-import type { LegalTranslationSummary } from "../../../lib/legal-translation-review";
+import type { LegalArticlePreview, LegalTranslationSummary } from "../../../lib/legal-translation-review";
 import { PublicHeader, PublicFooter } from "../public-navigation";
 
 const countries = [
@@ -18,14 +18,14 @@ const countries = [
   { code: "SG", flag: "/flags/sg.svg", country: "싱가포르", law: "PDPA" },
 ];
 
-function relatedArticleUrl(translationId: string, article: string): string {
+function relatedArticleUrl(translationId: string, article: string, anchorId?: string): string {
   const match = article.match(/제(\d+)조(?:의(\d+))?/);
-  return `/public/laws/${translationId}${match ? `#main-a${match[1]}${match[2] ? `-${match[2]}` : ""}` : ""}`;
+  return `/public/laws/${translationId}${anchorId ? `#${anchorId}` : match ? `#main-a${match[1]}${match[2] ? `-${match[2]}` : ""}` : ""}`;
 }
 
-export default function PublicLawCompare({ cells, instruments, translations, draftMode, initialView }: {
+export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView }: {
   cells: LegalComparisonCell[]; instruments: SubmissionItem[];
-  translations: LegalTranslationSummary[]; draftMode: boolean; initialView: "full" | "compare";
+  translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare";
 }) {
   const criteria = useMemo(() => Array.from(new Map(cells.map((cell) =>
     [cell.criterionId, { id: cell.criterionId, name: cell.criterionName, order: cell.criterionOrder }]
@@ -116,9 +116,24 @@ export default function PublicLawCompare({ cells, instruments, translations, dra
                 <p>{drafted ? cell.summary : "이 기준의 조항 요약은 아직 검토 중입니다."}</p>
                 <span className={styles.draftLabel}>{drafted ? "사람 검수 전 초안" : "추가 조사 필요"}</span></section>
               <section><strong>관련 조항</strong>
-                {cell?.articleNumbers.length ? <div className={styles.articleLinks}>{cell.articleNumbers.map((number, index) =>
-                  translation ? <Link href={relatedArticleUrl(translation.id, number)} key={`${number}-${index}`}>{number}</Link>
-                    : <span key={`${number}-${index}`}>{number}</span>)}</div> : <p>확인된 조항 없음</p>}</section>
+                {cell?.articleNumbers.length ? <div className={styles.articleLinks}>{cell.articleNumbers.map((number, index) => {
+                  const preview = translation ? articlePreviews[`${translation.id}:${number}`] : undefined;
+                  const tooltipId = `article-${law.code}-${criterion?.id ?? "none"}-${index}`;
+                  const destination = translation
+                    ? relatedArticleUrl(translation.id, number, preview?.anchorId)
+                    : cell.sourceUrl;
+                  return <div className={styles.articleReference} key={`${number}-${index}`}>
+                    {destination ? translation
+                      ? <Link href={destination} aria-describedby={tooltipId}>{number}</Link>
+                      : <a href={destination} target="_blank" rel="noopener noreferrer" aria-describedby={tooltipId}>{number}</a>
+                      : <span tabIndex={0} aria-describedby={tooltipId}>{number}</span>}
+                    <div className={styles.articleTooltip} id={tooltipId} role="tooltip">
+                      <strong>{number} · {preview ? "한국어 번역 초안 일부" : "조문 미리보기 준비 중"}</strong>
+                      <p>{preview?.text ?? "해당 조문의 한국어 전문이 아직 등록되지 않았습니다. 공식 원문에서 확인해 주세요."}</p>
+                      <small>{preview ? "사람 검수 전 초안 · 클릭하면 해당 조문으로 이동" : destination ? "클릭하면 공식 원문으로 이동" : "공식 원문 링크도 확인이 필요합니다."}</small>
+                    </div>
+                  </div>;
+                })}</div> : <p>확인된 조항 없음</p>}</section>
               {cell?.exceptions && cell.exceptions !== "미검토" && <details className={styles.lawExceptions}><summary>주의·예외 보기</summary><p>{cell.exceptions}</p></details>}
               <div className={styles.lawCardLinks}>
                 {translation && <Link href={`/public/laws/${translation.id}`}>법률 전문 읽기 →</Link>}

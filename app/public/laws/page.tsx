@@ -1,5 +1,5 @@
 import PublicLawCompare from "./public-law-compare";
-import { listLegalTranslations } from "../../../lib/legal-translation-review";
+import { findLegalArticlePreview, listLegalTranslations, loadLegalTranslation, type LegalArticlePreview } from "../../../lib/legal-translation-review";
 import { loadSubmissionDocuments, loadSubmissionPreview } from "../../../lib/submission-preview";
 import { publicSubmissionPreviewEnabled } from "../../../lib/public-submission-preview";
 
@@ -8,10 +8,24 @@ export const dynamic = "force-dynamic";
 export default async function PublicLawComparePage({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
   const { view } = await searchParams;
   const draftMode = publicSubmissionPreviewEnabled();
+  const cells = draftMode ? loadSubmissionDocuments().legal : [];
+  const translations = draftMode ? listLegalTranslations() : [];
+  const articlePreviews: Record<string, LegalArticlePreview> = {};
+  for (const translation of translations) {
+    const law = loadLegalTranslation(translation.id);
+    if (!law) continue;
+    for (const cell of cells.filter((item) => item.jurisdiction === translation.jurisdiction)) {
+      for (const citation of cell.articleNumbers) {
+        const preview = findLegalArticlePreview(law, citation);
+        if (preview) articlePreviews[`${translation.id}:${citation}`] = preview;
+      }
+    }
+  }
   return <PublicLawCompare
-    cells={draftMode ? loadSubmissionDocuments().legal : []}
+    cells={cells}
     instruments={draftMode ? loadSubmissionPreview().filter((item) => item.kind === "법제 목록") : []}
-    translations={draftMode ? listLegalTranslations() : []}
+    translations={translations}
+    articlePreviews={articlePreviews}
     draftMode={draftMode}
     initialView={view === "compare" ? "compare" : "full"}
   />;
