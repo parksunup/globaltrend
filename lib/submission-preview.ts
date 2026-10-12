@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 export type SubmissionItem = {
@@ -83,6 +83,16 @@ function readJson(root: string, path: string): JsonRecord | null {
 
 function presentFiles(root: string, paths: string[]) {
   return paths.filter((path) => existsSync(join(root, ...path.split("/"))));
+}
+
+/** Discover only top-level, committed source JSON files in this deployment. */
+function trendSourceIds(root: string, kind: "source-configs" | "fixtures"): string[] {
+  const directory = join(root, "data", "trends", kind);
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && /^[a-z0-9][a-z0-9-]*\.json$/.test(entry.name))
+    .map((entry) => entry.name.slice(0, -5))
+    .sort();
 }
 
 function parseCsv(text: string): string[][] {
@@ -233,7 +243,7 @@ function appiItem(root: string): SubmissionItem[] {
 }
 
 function sourceConfigItems(root: string): SubmissionItem[] {
-  return ["edpb", "oecd", "curia"].flatMap((source) => {
+  return trendSourceIds(root, "source-configs").flatMap((source) => {
     const path = `data/trends/source-configs/${source}.json`;
     const data = readJson(root, path);
     if (!data) return [];
@@ -256,7 +266,7 @@ function sourceConfigItems(root: string): SubmissionItem[] {
 }
 
 function fixtureItems(root: string): SubmissionItem[] {
-  return ["edpb", "oecd", "curia"].flatMap((source) => {
+  return trendSourceIds(root, "fixtures").flatMap((source) => {
     const path = `data/trends/fixtures/${source}.json`;
     const data = readJson(root, path);
     if (!data) return [];
@@ -306,7 +316,7 @@ function weeklyItem(root: string): SubmissionItem[] {
   }];
 }
 
-/** Reads only known, committed team deliverable paths from this deployment's checkout. No DB writes. */
+/** Reads committed team deliverables from this deployment's checkout. No DB writes. */
 export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
   return [...legalItems(root), ...appiItem(root), ...sourceConfigItems(root), ...fixtureItems(root), ...weeklyItem(root)];
 }

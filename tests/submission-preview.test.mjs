@@ -1,6 +1,8 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { join } from "node:path";
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { loadSubmissionDocuments, loadSubmissionPreview } from "../lib/submission-preview.ts";
 
 const root = join(import.meta.dirname, "fixtures", "submission-preview");
@@ -30,4 +32,37 @@ test("committed comparison cells and weekly entries become readable review docum
   assert.equal(documents.weekly?.entries.length, 1);
   assert.equal(documents.weekly?.entries[0].facts, "원문에서 확인한 사실");
   assert.equal(documents.weekly?.entries[0].id, "weekly-entry-1");
+});
+
+test("new official source files and every sample appear without changing the UI code", () => {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "trend-preview-"));
+  try {
+    const configs = join(fixtureRoot, "data", "trends", "source-configs");
+    const fixtures = join(fixtureRoot, "data", "trends", "fixtures");
+    mkdirSync(configs, { recursive: true });
+    mkdirSync(fixtures, { recursive: true });
+    writeFileSync(join(configs, "cnil.json"), JSON.stringify({
+      source_id: "cnil", organization: "CNIL", review_status: "unreviewed",
+      start_url: "https://www.cnil.fr/fr/actualites"
+    }));
+    writeFileSync(join(fixtures, "cnil.json"), JSON.stringify({
+      source_id: "cnil", items: [
+        { record_id: "one", korean_title: "첫째", official_url: "https://www.cnil.fr/fr/one" },
+        { record_id: "two", korean_title: "둘째", official_url: "https://www.cnil.fr/fr/two" }
+      ]
+    }));
+    writeFileSync(join(fixtures, "ftc.json"), JSON.stringify({
+      source_id: "ftc", items: [
+        { record_id: "three", korean_title: "셋째", official_url: "https://www.ftc.gov/three" }
+      ]
+    }));
+    const items = loadSubmissionPreview(fixtureRoot);
+    assert.equal(items.filter((item) => item.kind === "수집 출처").length, 1);
+    assert.equal(items.filter((item) => item.kind === "동향 표본").length, 3);
+    assert.deepEqual(items.filter((item) => item.kind === "동향 표본").map((item) => item.id), [
+      "fixture-cnil-one", "fixture-cnil-two", "fixture-ftc-three"
+    ]);
+  } finally {
+    rmSync(fixtureRoot, { recursive: true, force: true });
+  }
 });
