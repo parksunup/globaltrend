@@ -42,18 +42,33 @@ function translationsDir(root: string) {
   return join(root, "data", "legal", "translations");
 }
 
-function readCorpus(root: string, id: string): Corpus | null {
-  if (!validId.test(id)) return null;
+export type LegalTranslationEntry = LegalTranslationSummary | { id: string; error: string };
+
+function inspectCorpus(root: string, id: string): { corpus: Corpus | null; error: string } {
+  if (!validId.test(id)) return { corpus: null, error: "파일 이름이 올바르지 않습니다." };
   const path = join(translationsDir(root), `${id}.json`);
-  if (!existsSync(path)) return null;
+  if (!existsSync(path)) return { corpus: null, error: "번역 파일이 없습니다." };
+  let data: unknown;
   try {
-    const data = JSON.parse(readFileSync(path, "utf8")) as Corpus;
-    return Array.isArray(data.provisions) && data.provisions.every((node) =>
-      typeof node.node_id === "string" && typeof node.tag === "string" && typeof node.source_order === "number"
-    ) ? data : null;
+    data = JSON.parse(readFileSync(path, "utf8"));
   } catch {
-    return null;
+    return { corpus: null, error: "JSON 문법을 읽을 수 없습니다." };
   }
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return { corpus: null, error: "법률 데이터는 객체여야 합니다." };
+  }
+  const corpus = data as Corpus;
+  if (!Array.isArray(corpus.provisions) || corpus.provisions.length === 0 ||
+      !corpus.provisions.every((node) => node && typeof node.node_id === "string" &&
+        node.node_id.trim() && typeof node.tag === "string" && node.tag.trim() &&
+        Number.isFinite(node.source_order))) {
+    return { corpus: null, error: "조문 배열(provisions)의 형식이 올바르지 않습니다." };
+  }
+  return { corpus, error: "" };
+}
+
+function readCorpus(root: string, id: string): Corpus | null {
+  return inspectCorpus(root, id).corpus;
 }
 
 function summary(id: string, corpus: Corpus): LegalTranslationSummary {
@@ -68,19 +83,23 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   };
 }
 
-export function listLegalTranslations(root = process.cwd()): LegalTranslationSummary[] {
+export function listLegalTranslationEntries(root = process.cwd()): LegalTranslationEntry[] {
   const dir = translationsDir(root);
   if (!existsSync(dir)) return [];
   let names: string[];
   try { names = readdirSync(dir); } catch { return []; }
   return names
     .filter((name) => name.endsWith(".json") && validId.test(name.slice(0, -5)))
-    .flatMap((name) => {
+    .map((name) => {
       const id = name.slice(0, -5);
-      const corpus = readCorpus(root, id);
-      return corpus ? [summary(id, corpus)] : [];
+      const result = inspectCorpus(root, id);
+      return result.corpus ? summary(id, result.corpus) : { id, error: result.error };
     })
     .sort((a, b) => a.id.localeCompare(b.id));
+}
+
+export function listLegalTranslations(root = process.cwd()): LegalTranslationSummary[] {
+  return listLegalTranslationEntries(root).filter((entry): entry is LegalTranslationSummary => !("error" in entry));
 }
 
 export function loadLegalTranslation(id: string, root = process.cwd()): LegalTranslationDocument | null {

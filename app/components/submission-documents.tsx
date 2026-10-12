@@ -22,6 +22,12 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
     </tbody></table></div>
     {selected && <article id="comparison-detail" className="document-detail"><span className="panel-kicker">선택한 비교 셀 · {selected.jurisdiction} · {selected.status}</span><h3>{selected.criterionName}</h3><p className="document-lede">{selected.summary}</p>
       {selected.articleNumbers.length > 0 && <div className="detail-block"><span className="detail-label">관련 조항</span><p>{selected.articleNumbers.join(" · ")}</p></div>}
+      {selected.translationLinks.length > 0 && <div className="detail-block"><span className="detail-label">조문·번역 근거</span>{selected.translationLinks.map((link) => {
+        const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
+        const [path, anchor] = link.slice(2).split("#");
+        const url = safeSha ? `https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/${path}${anchor ? `#${anchor}` : ""}` : null;
+        return url ? <a key={link} href={url} target="_blank" rel="noopener noreferrer">{path}{anchor ? ` · ${anchor}` : ""} ↗</a> : <p key={link}>{path}{anchor ? ` · ${anchor}` : ""}</p>;
+      })}</div>}
       {selected.exceptions && selected.exceptions !== "미검토" && <div className="detail-block"><span className="detail-label">주요 예외·주의</span><p>{selected.exceptions}</p></div>}
       <div className="detail-block"><span className="detail-label">판본</span><p>{selected.sourceVersion}</p></div>
       {selected.sourceUrl && <div className="detail-block"><span className="detail-label">공식 원문</span><a href={selected.sourceUrl} target="_blank" rel="noopener noreferrer">공식 사이트에서 보기 ↗</a></div>}
