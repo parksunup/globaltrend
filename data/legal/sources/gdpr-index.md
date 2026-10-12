@@ -3,19 +3,19 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~23조·고려사항1~45의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~34조·고려사항1~60의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 45 |
-| Chapter | 11 | 3 |
-| Article | 99 | 23 |
-| Paragraph | 372 | 72 |
-| Item | 389 | 148 |
-| Text | 25 | 8 |
-| Section | 15 | 5 |
+| Recital | 173 | 60 |
+| Chapter | 11 | 4 |
+| Article | 99 | 34 |
+| Paragraph | 372 | 114 |
+| Item | 389 | 180 |
+| Text | 25 | 11 |
+| Section | 15 | 7 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
@@ -48,17 +48,17 @@ Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행
 | <a id="main-a21"></a>제21조 | Right to object | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a22"></a>제22조 | Automated individual decision-making, including profiling | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a23"></a>제23조 | Restrictions | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a24"></a>제24조 | Responsibility of the controller | 미번역·사람 미검수 |
-| <a id="main-a25"></a>제25조 | Data protection by design and by default | 미번역·사람 미검수 |
-| <a id="main-a26"></a>제26조 | Joint controllers | 미번역·사람 미검수 |
-| <a id="main-a27"></a>제27조 | Representatives of controllers or processors not established in the Union | 미번역·사람 미검수 |
-| <a id="main-a28"></a>제28조 | Processor | 미번역·사람 미검수 |
-| <a id="main-a29"></a>제29조 | Processing under the authority of the controller or processor | 미번역·사람 미검수 |
-| <a id="main-a30"></a>제30조 | Records of processing activities | 미번역·사람 미검수 |
-| <a id="main-a31"></a>제31조 | Cooperation with the supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a32"></a>제32조 | Security of processing | 미번역·사람 미검수 |
-| <a id="main-a33"></a>제33조 | Notification of a personal data breach to the supervisory authority | 미번역·사람 미검수 |
-| <a id="main-a34"></a>제34조 | Communication of a personal data breach to the data subject | 미번역·사람 미검수 |
+| <a id="main-a24"></a>제24조 | Responsibility of the controller | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a25"></a>제25조 | Data protection by design and by default | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a26"></a>제26조 | Joint controllers | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a27"></a>제27조 | Representatives of controllers or processors not established in the Union | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a28"></a>제28조 | Processor | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a29"></a>제29조 | Processing under the authority of the controller or processor | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a30"></a>제30조 | Records of processing activities | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a31"></a>제31조 | Cooperation with the supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a32"></a>제32조 | Security of processing | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a33"></a>제33조 | Notification of a personal data breach to the supervisory authority | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a34"></a>제34조 | Communication of a personal data breach to the data subject | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a35"></a>제35조 | Data protection impact assessment | 미번역·사람 미검수 |
 | <a id="main-a36"></a>제36조 | Prior consultation | 미번역·사람 미검수 |
 | <a id="main-a37"></a>제37조 | Designation of the data protection officer | 미번역·사람 미검수 |
