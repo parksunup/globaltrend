@@ -15,7 +15,11 @@ const legalReviewPrompt = `저는 법제 담당입니다. 기존 feat/legal-corp
 기존 브랜치와 PR에 수정 결과를 반영하고 PR 설명·댓글에 수정 내용, 사람 검수 범위, 미검수 범위, 최신 Preview 링크를 직접 작성하세요. 링크는 실제로 확인하고 추측하지 마세요. 앱 화면·Supabase·인증·환경변수는 수정하지 말고 PR도 병합하지 마세요.`;
 const trendSourcePrompt = `동향 담당입니다. README.md, architecture.md와 온보딩 문서를 먼저 읽으세요.\nEDPB, OECD, CJEU/CURIA의 공식 자료 목록과 상세 페이지를 실제로 확인하세요.\n각 출처의 시작 URL, 자료 유형, 제목·게시일·본문·공식 링크를 얻는 방법,\nRSS·API 제공 여부, 수집 제외 대상, 접근 실패 사례를 기록하세요.\nCURIA는 사건번호·ECLI·선고일이 보이는지도 확인하세요.\n\n출처별로 사람이 읽는 data/trends/source-configs/edpb.md, oecd.md, curia.md와\n대응하는 edpb.json, oecd.json, curia.json을 만드세요.\n확인하지 못한 페이지 구조나 선택자는 추정하지 말고 검토 필요로 적으세요.\n앱 코드, Supabase, 인증, 환경변수는 수정하지 마세요.`;
 const trendSamplePrompt = `동향 담당의 다음 작업입니다. EDPB, OECD, CJEU/CURIA에서 개인정보 보호와\n직접 관련된 실제 자료를 출처별로 최대 5건씩 고르세요. 부족하면 건수를 채우려고 꾸미지 마세요.\n각 건의 원제목, 기관, 국가·관할권, 원문 게시일, 공식 URL, 자료 유형,\n한국어 제목·짧은 요약, 요약의 근거 위치, 주제 태그, 중복·검토 상태를 기록하세요.\n판결문·보도자료 등 같은 사건의 문서는 연결하고 중복 건수로 세지 마세요.\n원문에서 확인할 수 없는 법적 결론은 쓰지 마세요.\n\n출처별 data/trends/fixtures/edpb.md·edpb.json, oecd.md·oecd.json,\ncuria.md·curia.json을 만들고 선택·제외 이유를 review-notes.md에 적으세요.\nMarkdown 표의 한 행과 JSON의 한 항목이 대응해야 합니다.\n원문 전문이나 무허가 번역문을 공개 저장소에 넣지 마세요.`;
-const trendWeeklyPrompt = `동향 담당의 다음 작업입니다. 수집한 샘플 중 공식 링크와 게시일을\n확인한 건만 사용해 주간 동향 '예시 호'를 만드세요.\n제공된 2026년 제36호 PDF의 목차·항목 구성은 참고하되 내용을 복사하지 마세요.\n표지에는 예시 자료이며 전체 출처를 망라하지 않는다고 표시하세요.\n각 항목에 한국어 제목, 게시일, 기관·관할권, 사실 요약, 개인정보 보호상 의미,\n공식 근거 링크와 사람 검토가 필요한 부분을 구분해 적으세요.\n\ndata/trends/weekly-sample.md와 대응하는 weekly-sample.json을 작성하고\n제외·중복 판단은 data/trends/fixtures/review-notes.md에 남기세요.\n실제 발행 상태로 바꾸거나 앱 코드·Supabase를 수정하지 마세요.`;
+const trendReviewPrompt = `저는 동향 담당입니다. 기존 feat/trend-source-contracts 브랜치와 PR #16에서 작업하세요. 새 브랜치를 만들지 마세요.
+현재 PR Preview의 '수집 출처'와 '동향 표본' 두 화면에서 제출 내용과 피드백을 확인하세요. 저장된 피드백을 읽을 수 없다면 읽었다고 하지 말고 알려 주세요.
+피드백을 공식 원문과 대조해 data/trends/source-configs/와 data/trends/fixtures/의 필요한 내용을 수정하세요. 확인하지 못한 사실은 추정하지 말고 검토 필요로 표시하세요. 이 검수 작업에서는 새 조사 기간이나 출처를 추가하지 마세요.
+앱 화면, Supabase, 인증, 환경변수는 수정하지 마세요. 검사를 실행한 뒤 기존 브랜치와 PR에 결과를 반영하고, PR 설명이나 댓글에 수정 내용과 남은 확인 사항을 직접 적으세요.
+최신 Vercel Preview 링크를 실제로 확인해 알려 주세요. PR은 병합하지 마세요.`;
 const prPrompt = `작업 결과를 검토 가능한 PR로 만들어 주세요.\nPR 제목에는 작업 목적을 적고, 본문에는 변경 파일, 확인한 공식 URL,\n사람이 추가로 확인해야 하는 부분, 실행한 검증을 적으세요.\nmain 브랜치에는 직접 merge하지 마세요.`;
 
 export default function GuidePage() {
@@ -81,13 +85,13 @@ export default function GuidePage() {
         </section>
         <section className="guide-card">
           <h2>3-B. 동향 담당</h2>
-          <p>공식 출처 조사 → 근거가 있는 샘플 자료 → 주간 자료 예시 호 순서로 진행합니다. 첫 조사에서 수집기의 입력 규칙을 마련합니다.</p>
+          <p>공식 출처 조사 → 근거가 있는 동향 표본 → Preview에서 출처·표본 검수 순서로 진행합니다. 기존 예시 호 파일은 보존하지만 새로 만들지 않으며, 검수 화면에는 표시하지 않습니다.</p>
           <h3>첫 작업 · EDPB·OECD·CURIA 출처 확인</h3>
           <pre>{trendSourcePrompt}</pre>
           <h3>둘째 작업 · 샘플 동향 자료</h3>
           <pre>{trendSamplePrompt}</pre>
-          <h3>셋째 작업 · 주간 자료 예시 호</h3>
-          <pre>{trendWeeklyPrompt}</pre>
+          <h3>셋째 작업 · 수집 출처와 동향 표본 검수</h3>
+          <pre>{trendReviewPrompt}</pre>
         </section>
       </div>
 
