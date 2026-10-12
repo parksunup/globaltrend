@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { listLegalTranslationEntries } from "./legal-translation-review";
 
 export type SubmissionItem = {
   id: string;
@@ -23,6 +24,7 @@ export type LegalComparisonCell = {
   criterionName: string;
   jurisdiction: string;
   articleNumbers: string[];
+  translationLinks: string[];
   summary: string;
   exceptions: string;
   sourceUrl: string;
@@ -115,7 +117,12 @@ function legalComparison(root: string): LegalComparisonCell[] {
     return rows.filter((row) => row.some(Boolean)).map((row) => {
       const data = Object.fromEntries(headings.map((heading, index) => [heading, row[index] ?? ""]));
       let articleNumbers: string[] = [];
+      let translationLinks: string[] = [];
       try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
+      try {
+        translationLinks = stringArray(JSON.parse(data.translation_links || "[]"))
+          .filter((link) => /^\.\/(?:translations|sources)\/[a-z0-9-]+\.md(?:#[a-z0-9-]+)?$/.test(link));
+      } catch { /* Keep the cell readable. */ }
       return {
         id: `criteria-${data.cell_id}`,
         criterionId: data.criterion_id,
@@ -123,6 +130,7 @@ function legalComparison(root: string): LegalComparisonCell[] {
         criterionName: data.criterion_name,
         jurisdiction: data.jurisdiction_code,
         articleNumbers,
+        translationLinks,
         summary: data.korean_summary,
         exceptions: data.major_exceptions,
         sourceUrl: officialLink(data.official_source_url)[0]?.url ?? "",
@@ -172,34 +180,42 @@ function legalItems(root: string): SubmissionItem[] {
   }
 }
 
-function appiItem(root: string): SubmissionItem[] {
-  const path = "data/legal/translations/appi.json";
-  const data = readJson(root, path);
-  if (!data) return [];
-  if (data.__parse_error) return [{ id: "appi-error", group: "legal", kind: "번역 진행", title: "APPI 상태를 읽을 수 없습니다", subtitle: path,
-    summary: "JSON 파싱 오류", status: "error", fields: [], links: [], files: [path] }];
-  const source = record(data.source);
-  const translation = record(data.translation);
-  const coverage = record(data.coverage);
-  const translatedArticles = translation.translated_main_articles ?? translation.translated_articles;
-  const totalArticles = translation.total_main_articles ?? coverage.main_articles;
-  return [{
-    id: "legal-appi-translation", group: "legal", kind: "번역 진행",
-    title: `APPI · ${label(data.korean_title, "한국어 번역")}`,
-    subtitle: label(data.official_name),
-    summary: `본칙 번역 ${label(translatedArticles)}${totalArticles == null ? "" : `/${label(totalArticles)}`}조 · ${label(translation.status)}`,
-    status: label(translation.public_release_status, "unreviewed"),
-    fields: [
-      { label: "원문 판본", value: label(source.version_status) },
-      { label: "원문 확보", value: label(source.full_text_obtained) },
-      { label: "누락·순서 대조", value: label(coverage.comparison_status) },
-      { label: "공개 보류 사유", value: label(translation.withheld_reasons) },
-    ],
-    links: officialLink(source.original_url),
-    files: presentFiles(root, [path, "data/legal/translations/appi.md", "data/legal/translations/appi-status.md", "data/legal/translations/appi-review-notes.md"]),
-  }];
+function translationItems(root: string): SubmissionItem[] {
+  return listLegalTranslationEntries(root).map((entry) => {
+    const id = entry.id;
+    const path = `data/legal/translations/${id}.json`;
+    if ("error" in entry) return {
+      id: `legal-${id}-translation-error`, group: "legal" as const, kind: "번역 진행",
+      title: `${id.toUpperCase()} 번역을 읽을 수 없습니다`, subtitle: path,
+      summary: entry.error, status: "error", fields: [], links: [], files: [path],
+    };
+    const data = readJson(root, path) ?? {};
+    const source = record(data.source);
+    const translation = record(data.translation);
+    const coverage = record(data.coverage);
+    const translatedArticles = translation.translated_main_articles ?? translation.translated_articles;
+    const totalArticles = translation.total_main_articles ?? coverage.main_articles;
+    return {
+      id: `legal-${id}-translation`, group: "legal" as const, kind: "번역 진행",
+      title: `${id.toUpperCase()} · ${entry.title}`,
+      subtitle: entry.officialName,
+      summary: `본칙 번역 ${label(translatedArticles)}${totalArticles == null ? "" : `/${label(totalArticles)}`}조 · ${label(translation.status)}`,
+      status: label(translation.public_release_status, "unreviewed"),
+      fields: [
+        { label: "원문 판본", value: label(source.version_status) },
+        { label: "원문 확보", value: label(source.full_text_obtained) },
+        { label: "누락·순서 대조", value: label(coverage.comparison_status) },
+        { label: "공개 보류 사유", value: label(translation.withheld_reasons) },
+      ],
+      links: [{ label: "한국어 번역 전문", url: `/legal-translation/${id}` }, ...officialLink(source.original_url)],
+      files: presentFiles(root, [
+        path, `data/legal/translations/${id}.md`,
+        `data/legal/translations/${id}-status.md`,
+        `data/legal/translations/${id}-review-notes.md`,
+      ]),
+    };
+  });
 }
-
 function sourceConfigItems(root: string): SubmissionItem[] {
   return trendSourceIds(root, "source-configs").flatMap((source) => {
     const path = `data/trends/source-configs/${source}.json`;
@@ -255,7 +271,7 @@ function fixtureItems(root: string): SubmissionItem[] {
 
 /** Reads committed team deliverables from this deployment's checkout. No DB writes. */
 export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
-  return [...legalItems(root), ...appiItem(root), ...sourceConfigItems(root), ...fixtureItems(root)];
+  return [...legalItems(root), ...translationItems(root), ...sourceConfigItems(root), ...fixtureItems(root)];
 }
 
 export function submissionPreviewEnabled() {
