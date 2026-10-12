@@ -1,5 +1,6 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { listLegalTranslationEntries } from "./legal-translation-review.ts";
 
 export type SubmissionItem = {
   id: string;
@@ -23,6 +24,7 @@ export type LegalComparisonCell = {
   criterionName: string;
   jurisdiction: string;
   articleNumbers: string[];
+  translationLinks: string[];
   summary: string;
   exceptions: string;
   sourceUrl: string;
@@ -31,23 +33,9 @@ export type LegalComparisonCell = {
   pendingReason: string;
 };
 
-export type WeeklyReviewEntry = {
-  id: string;
-  title: string;
-  originalTitle: string;
-  publishedDate: string;
-  organization: string;
-  category: string;
-  facts: string;
-  keyPoints: string[];
-  significance: string;
-  requiredChecks: string[];
-  officialUrl: string;
-};
-
 export type SubmissionDocuments = {
   legal: LegalComparisonCell[];
-  weekly: { title: string; notice: string; entries: WeeklyReviewEntry[] } | null;
+  weekly: null;
 };
 
 function record(value: unknown): JsonRecord {
@@ -85,6 +73,16 @@ function presentFiles(root: string, paths: string[]) {
   return paths.filter((path) => existsSync(join(root, ...path.split("/"))));
 }
 
+/** Discover only top-level, committed source JSON files in this deployment. */
+function trendSourceIds(root: string, kind: "source-configs" | "fixtures"): string[] {
+  const directory = join(root, "data", "trends", kind);
+  if (!existsSync(directory)) return [];
+  return readdirSync(directory, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && /^[a-z0-9][a-z0-9-]*\.json$/.test(entry.name))
+    .map((entry) => entry.name.slice(0, -5))
+    .sort();
+}
+
 function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];
@@ -119,7 +117,12 @@ function legalComparison(root: string): LegalComparisonCell[] {
     return rows.filter((row) => row.some(Boolean)).map((row) => {
       const data = Object.fromEntries(headings.map((heading, index) => [heading, row[index] ?? ""]));
       let articleNumbers: string[] = [];
+      let translationLinks: string[] = [];
       try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
+      try {
+        translationLinks = stringArray(JSON.parse(data.translation_links || "[]"))
+          .filter((link) => /^\.\/(?:translations|sources)\/[a-z0-9-]+\.md(?:#[a-z0-9-]+)?$/.test(link));
+      } catch { /* Keep the cell readable. */ }
       return {
         id: `criteria-${data.cell_id}`,
         criterionId: data.criterion_id,
@@ -127,6 +130,7 @@ function legalComparison(root: string): LegalComparisonCell[] {
         criterionName: data.criterion_name,
         jurisdiction: data.jurisdiction_code,
         articleNumbers,
+        translationLinks,
         summary: data.korean_summary,
         exceptions: data.major_exceptions,
         sourceUrl: officialLink(data.official_source_url)[0]?.url ?? "",
@@ -138,37 +142,9 @@ function legalComparison(root: string): LegalComparisonCell[] {
   } catch { return []; }
 }
 
-function weeklyReview(root: string): SubmissionDocuments["weekly"] {
-  const data = readJson(root, "data/trends/weekly-sample.json");
-  if (!data || data.__parse_error) return null;
-  const entries = Array.isArray(data.entries) ? data.entries.map(record) : [];
-  return {
-    title: label(data.title, "주간 동향 예시 호"),
-    notice: label(data.coverage_notice),
-    entries: entries.map((entry, index) => {
-      const facts = record(entry.facts);
-      const significance = record(entry.privacy_significance);
-      const humanReview = record(entry.human_review);
-      return {
-        id: `weekly-${label(entry.entry_id, String(index))}`,
-        title: label(entry.korean_title),
-        originalTitle: label(entry.original_title),
-        publishedDate: label(entry.source_published_date),
-        organization: label(entry.organization),
-        category: label(entry.category),
-        facts: label(facts.summary_ko),
-        keyPoints: stringArray(entry.key_points_ko),
-        significance: label(significance.text_ko),
-        requiredChecks: stringArray(humanReview.required_checks),
-        officialUrl: officialLink(entry.official_url)[0]?.url ?? "",
-      };
-    }),
-  };
-}
-
 /** Render committed drafts in a reviewable, publication-like structure. */
 export function loadSubmissionDocuments(root = process.cwd()): SubmissionDocuments {
-  return { legal: legalComparison(root), weekly: weeklyReview(root) };
+  return { legal: legalComparison(root), weekly: null };
 }
 
 function legalItems(root: string): SubmissionItem[] {
@@ -204,36 +180,44 @@ function legalItems(root: string): SubmissionItem[] {
   }
 }
 
-function appiItem(root: string): SubmissionItem[] {
-  const path = "data/legal/translations/appi.json";
-  const data = readJson(root, path);
-  if (!data) return [];
-  if (data.__parse_error) return [{ id: "appi-error", group: "legal", kind: "번역 진행", title: "APPI 상태를 읽을 수 없습니다", subtitle: path,
-    summary: "JSON 파싱 오류", status: "error", fields: [], links: [], files: [path] }];
-  const source = record(data.source);
-  const translation = record(data.translation);
-  const coverage = record(data.coverage);
-  const translatedArticles = translation.translated_main_articles ?? translation.translated_articles;
-  const totalArticles = translation.total_main_articles ?? coverage.main_articles;
-  return [{
-    id: "legal-appi-translation", group: "legal", kind: "번역 진행",
-    title: `APPI · ${label(data.korean_title, "한국어 번역")}`,
-    subtitle: label(data.official_name),
-    summary: `본칙 번역 ${label(translatedArticles)}${totalArticles == null ? "" : `/${label(totalArticles)}`}조 · ${label(translation.status)}`,
-    status: label(translation.public_release_status, "unreviewed"),
-    fields: [
-      { label: "원문 판본", value: label(source.version_status) },
-      { label: "원문 확보", value: label(source.full_text_obtained) },
-      { label: "누락·순서 대조", value: label(coverage.comparison_status) },
-      { label: "공개 보류 사유", value: label(translation.withheld_reasons) },
-    ],
-    links: officialLink(source.original_url),
-    files: presentFiles(root, [path, "data/legal/translations/appi.md", "data/legal/translations/appi-status.md", "data/legal/translations/appi-review-notes.md"]),
-  }];
+function translationItems(root: string): SubmissionItem[] {
+  return listLegalTranslationEntries(root).map((entry) => {
+    const id = entry.id;
+    const path = `data/legal/translations/${id}.json`;
+    if ("error" in entry) return {
+      id: `legal-${id}-translation-error`, group: "legal" as const, kind: "번역 진행",
+      title: `${id.toUpperCase()} 번역을 읽을 수 없습니다`, subtitle: path,
+      summary: entry.error, status: "error", fields: [], links: [], files: [path],
+    };
+    const data = readJson(root, path) ?? {};
+    const source = record(data.source);
+    const translation = record(data.translation);
+    const coverage = record(data.coverage);
+    const translatedArticles = translation.translated_main_articles ?? translation.translated_articles;
+    const totalArticles = translation.total_main_articles ?? coverage.main_articles;
+    return {
+      id: `legal-${id}-translation`, group: "legal" as const, kind: "번역 진행",
+      title: `${id.toUpperCase()} · ${entry.title}`,
+      subtitle: entry.officialName,
+      summary: `본칙 번역 ${label(translatedArticles)}${totalArticles == null ? "" : `/${label(totalArticles)}`}조 · ${label(translation.status)}`,
+      status: label(translation.public_release_status, "unreviewed"),
+      fields: [
+        { label: "원문 판본", value: label(source.version_status) },
+        { label: "원문 확보", value: label(source.full_text_obtained) },
+        { label: "누락·순서 대조", value: label(coverage.comparison_status) },
+        { label: "공개 보류 사유", value: label(translation.withheld_reasons) },
+      ],
+      links: [{ label: "한국어 번역 전문", url: `/legal-translation/${id}` }, ...officialLink(source.original_url)],
+      files: presentFiles(root, [
+        path, `data/legal/translations/${id}.md`,
+        `data/legal/translations/${id}-status.md`,
+        `data/legal/translations/${id}-review-notes.md`,
+      ]),
+    };
+  });
 }
-
 function sourceConfigItems(root: string): SubmissionItem[] {
-  return ["edpb", "oecd", "curia"].flatMap((source) => {
+  return trendSourceIds(root, "source-configs").flatMap((source) => {
     const path = `data/trends/source-configs/${source}.json`;
     const data = readJson(root, path);
     if (!data) return [];
@@ -256,7 +240,7 @@ function sourceConfigItems(root: string): SubmissionItem[] {
 }
 
 function fixtureItems(root: string): SubmissionItem[] {
-  return ["edpb", "oecd", "curia"].flatMap((source) => {
+  return trendSourceIds(root, "fixtures").flatMap((source) => {
     const path = `data/trends/fixtures/${source}.json`;
     const data = readJson(root, path);
     if (!data) return [];
@@ -285,30 +269,9 @@ function fixtureItems(root: string): SubmissionItem[] {
   });
 }
 
-function weeklyItem(root: string): SubmissionItem[] {
-  const path = "data/trends/weekly-sample.json";
-  const data = readJson(root, path);
-  if (!data) return [];
-  if (data.__parse_error) return [{ id: "weekly-error", group: "trends", kind: "주간 예시 호", title: "주간 예시 호를 읽을 수 없습니다", subtitle: path,
-    summary: "JSON 파싱 오류", status: "error", fields: [], links: [], files: [path] }];
-  const entries = Array.isArray(data.entries) ? data.entries.map(record) : [];
-  return [{
-    id: "weekly-sample", group: "trends", kind: "주간 예시 호", title: label(data.title, "주간 동향 예시 호"),
-    subtitle: "실제 발행물이 아닌 편집 예시",
-    summary: label(data.coverage_notice, `${entries.length}건 수록`), status: label(data.publication_status, "draft"),
-    fields: [
-      { label: "수록 항목", value: entries.map((entry, index) => `${index + 1}. ${label(entry.korean_title, label(entry.original_title))}`).join("\n") || "없음" },
-      { label: "사람 검수", value: label(data.human_review_status) },
-      { label: "실제 공개", value: label(data.is_published) },
-      { label: "제외 항목", value: Array.isArray(data.excluded_items) ? `${data.excluded_items.length}건` : label(data.excluded_items) },
-    ],
-    links: [], files: presentFiles(root, [path, "data/trends/weekly-sample.md", "data/trends/fixtures/review-notes.md"]),
-  }];
-}
-
-/** Reads only known, committed team deliverable paths from this deployment's checkout. No DB writes. */
+/** Reads committed team deliverables from this deployment's checkout. No DB writes. */
 export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
-  return [...legalItems(root), ...appiItem(root), ...sourceConfigItems(root), ...fixtureItems(root), ...weeklyItem(root)];
+  return [...legalItems(root), ...translationItems(root), ...sourceConfigItems(root), ...fixtureItems(root)];
 }
 
 export function submissionPreviewEnabled() {
