@@ -119,6 +119,7 @@ try {
           results.previews.push({ viewport: viewport.width, criterion, index, citation, touchSheet: true });
         } else {
           await link.hover();
+          console.log("Hover case", viewport.width, criterion, index, citation, "pointer", await page.evaluate(() => ({ coarse: matchMedia("(pointer: coarse)").matches, none: matchMedia("(hover: none)").matches })));
           await page.waitForFunction(() => document.querySelectorAll('[role="tooltip"]').length === 1, { timeout: 15000 });
           const tooltip = page.getByRole("tooltip");
           await tooltip.waitFor({ state: "visible" });

@@ -25,7 +25,6 @@ export default function RelatedArticlePreview({ citation, destination, internal,
   };
   const close = () => { cancelClose(); setPosition(null); };
   const show = () => {
-    if (coarsePointer()) return;
     cancelClose();
     const bounds = trigger.current?.getBoundingClientRect();
     if (!bounds) return;
