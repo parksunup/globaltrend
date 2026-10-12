@@ -5,8 +5,8 @@ import { publicSubmissionPreviewEnabled } from "../../../lib/public-submission-p
 
 export const dynamic = "force-dynamic";
 
-export default async function PublicLawComparePage({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
-  const { view } = await searchParams;
+export default async function PublicLawComparePage({ searchParams }: { searchParams: Promise<{ view?: string; countries?: string; criterion?: string }> }) {
+  const { view, countries, criterion } = await searchParams;
   const draftMode = publicSubmissionPreviewEnabled();
   const cells = draftMode ? loadSubmissionDocuments().legal : [];
   const translations = draftMode ? listLegalTranslations() : [];
@@ -28,5 +28,7 @@ export default async function PublicLawComparePage({ searchParams }: { searchPar
     articlePreviews={articlePreviews}
     draftMode={draftMode}
     initialView={view === "compare" ? "compare" : "full"}
+    initialSelected={countries?.split(",").filter(Boolean)}
+    initialCriterion={criterion}
   />;
 }

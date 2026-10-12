@@ -16,8 +16,8 @@ export default async function PublicHome() {
   let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
   try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
-  const stories = allStories.slice(0, 6);
-  const featured = stories[0];
+  const stories = allStories.slice(0, 3);
+  const featured = allStories[3] ?? stories[0];
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
@@ -28,7 +28,7 @@ export default async function PublicHome() {
       <div className={styles.heroTitle}>
         <p className={styles.overline}>GLOBAL PRIVACY OBSERVATORY</p>
         <h1>글로벌 개인정보 동향</h1>
-        <p>세계의 개인정보 이슈를 한눈에, 법과 정책의 변화를 깊이 있게.</p>
+        <p>세계의 개인정보 이슈를 한눈에, 법과 정책의 변화를 깊이 있게.</p><div className={styles.mobileHeroActions}><Link href="/public/search">동향 찾기</Link><Link href="/public/laws">국가별 법제 보기</Link></div>
       </div>
       <div className={styles.globe} aria-hidden="true" />
       <div className={styles.heroMotto}>PEOPLE<br />LAW<br />SOCIETY<br /><b>A SAFER DIGITAL TOMORROW</b></div>

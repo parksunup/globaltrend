@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import SubmissionFeedback from "../../components/submission-feedback";
 import type { LegalTranslationDocument } from "../../../lib/legal-translation-review";
 import styles from "../public.module.css";
 
@@ -11,12 +12,17 @@ const groups = [
   { id: "appendix", label: "별표" },
 ] as const;
 
-export default function PublicLawReader({ law }: { law: LegalTranslationDocument }) {
+export default function PublicLawReader({ law, returnTo, commitSha }: { law: LegalTranslationDocument; returnTo: string; commitSha?: string }) {
   const [articleQuery, setArticleQuery] = useState("");
   const [fontSize, setFontSize] = useState(16);
+  const [tocOpen, setTocOpen] = useState(false);
+  const [feedbackSection, setFeedbackSection] = useState<string | null>(null);
+  const feedbackRef = useRef<HTMLDivElement>(null);
+  const openFeedback = (id: string) => { setFeedbackSection(id); requestAnimationFrame(() => feedbackRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })); };
   const query = articleQuery.trim().toLocaleLowerCase();
+  const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
-    <Link href="/public/laws?view=full">← 국가별 법제로 돌아가기</Link>
+    <Link href={returnTo}>← {returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
     <p className={styles.lawOverline}>KOREAN TRANSLATION DRAFT</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
@@ -24,20 +30,22 @@ export default function PublicLawReader({ law }: { law: LegalTranslationDocument
     <p>선택 판본 시행일: {law.version} · 조문 {law.articleCount}개 · 사람 검수: {law.reviewStatus === "not_started" ? "검수 전" : law.reviewStatus}</p>
     {law.scopeNote && <details className={styles.lawScopeNote}><summary>번역 범위와 판본 안내</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
+    <div className={styles.lawSearchBar}><label htmlFor="law-article-search">조문 검색</label><input id="law-article-search" type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="조문 번호나 단어를 입력하세요 (예: 제2조, 개인정보)" />{articleQuery && <button type="button" onClick={() => setArticleQuery("")}>검색 지우기</button>}</div>
+    {query && <div className={styles.lawSearchResults} role="status"><strong>검색 결과 {matchingSections.length}개</strong>{matchingSections.length ? <div>{matchingSections.slice(0, 20).map((section) => <a href={`#${section.id}`} key={section.id} onClick={() => setTocOpen(false)}>{section.title}</a>)}{matchingSections.length > 20 && <span>처음 20개를 표시했습니다. 목차에서 나머지도 확인할 수 있습니다.</span>}</div> : <p>일치하는 조문이 없습니다. 다른 단어나 조문 번호로 검색해 보세요.</p>}</div>}
     <div className={styles.lawReaderLayout}>
-      <aside className={styles.lawToc}>
+      {tocOpen && <button type="button" className={styles.lawTocBackdrop} aria-label="목차 닫기" onClick={() => setTocOpen(false)} />}
+      <aside className={`${styles.lawToc} ${tocOpen ? styles.lawTocOpen : ""}`}><button type="button" className={styles.lawTocClose} onClick={() => setTocOpen(false)}>목차 닫기 ×</button>
         <h2>조문 목차</h2>
-        <label>조문 찾기<input type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="예: 제2조, 개인정보" /></label>
+        <p className={styles.lawTocHint}>위의 조문 검색으로 목차를 좁힐 수 있습니다.</p>
         {groups.map((group) => {
-          const sections = law.sections.filter((section) => section.group === group.id &&
-            (!query || `${section.title} ${section.context}`.toLocaleLowerCase().includes(query)));
+          const sections = law.sections.filter((section) => section.group === group.id && (!query || matchingSections.includes(section)));
           if (!sections.length) return null;
           return <details key={group.id} open={Boolean(query) || group.id === "main"}>
             <summary>{group.label} <span>{sections.length}</span></summary>
-            <div>{sections.map((section) => <a key={section.id} href={`#${section.id}`}>{section.title}</a>)}</div>
+            <div>{sections.map((section) => <a key={section.id} href={`#${section.id}`} onClick={() => setTocOpen(false)}>{section.title}</a>)}</div>
           </details>;
         })}
-        {query && !law.sections.some((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query)) && <p>일치하는 조문이 없습니다.</p>}
+        {query && matchingSections.length === 0 && <p>일치하는 조문이 없습니다.</p>}
       </aside>
       <div className={styles.lawReaderBody}>
         <div className={styles.lawReaderTools}><span>본문 글자 크기</span>
@@ -52,7 +60,7 @@ export default function PublicLawReader({ law }: { law: LegalTranslationDocument
               <h2>{group.label}</h2>
               {sections.map((section) => <article key={section.id} id={section.id} className={styles.lawTextArticle}>
                 <small>{section.context} · {section.reviewStatus === "not_started" ? "사람 검수 전" : section.reviewStatus}</small>
-                <h3>{section.title}</h3>
+                <h3>{section.title}</h3><button type="button" className={styles.lawSectionFeedbackButton} onClick={() => openFeedback(section.id)}>이 조문에 의견 남기기</button>
                 {section.lines.length ? section.lines.map((line) => <p key={line.id} id={line.id}><strong>{line.label ? `${line.label}. ` : ""}</strong>{line.text}</p>)
                   : <p>이 항목에는 번역 본문이 없습니다.</p>}
               </article>)}
@@ -61,6 +69,7 @@ export default function PublicLawReader({ law }: { law: LegalTranslationDocument
         </div>
       </div>
     </div>
-    <Link href={`/legal-translation/${law.id}`}>조문별 피드백 남기기 →</Link>
+    <div ref={feedbackRef} className={styles.publicFeedback}>{feedbackSection && <SubmissionFeedback key={feedbackSection} itemId={`translation-${law.id}-${feedbackSection}`} branch="feat/legal-corpus-foundation" commitSha={commitSha} />}</div>
+    <div className={styles.lawMobileReaderTools}><button type="button" onClick={() => setTocOpen(true)}>목차·조문 찾기</button><button type="button" disabled={fontSize <= 14} onClick={() => setFontSize((size) => Math.max(14, size - 2))} aria-label="본문 글자 작게">가−</button><button type="button" disabled={fontSize >= 20} onClick={() => setFontSize((size) => Math.min(20, size + 2))} aria-label="본문 글자 크게">가＋</button></div>
   </section>;
 }

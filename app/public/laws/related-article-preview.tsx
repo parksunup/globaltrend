@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 import styles from "../public.module.css";
 
 type Props = {
@@ -17,12 +17,15 @@ export default function RelatedArticlePreview({ citation, destination, internal,
   const trigger = useRef<HTMLAnchorElement | HTMLSpanElement | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [position, setPosition] = useState<CSSProperties | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const coarsePointer = () => window.matchMedia("(hover: none), (pointer: coarse)").matches;
   const cancelClose = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = null;
   };
   const close = () => { cancelClose(); setPosition(null); };
   const show = () => {
+    if (coarsePointer()) return;
     cancelClose();
     const bounds = trigger.current?.getBoundingClientRect();
     if (!bounds) return;
@@ -63,18 +66,37 @@ export default function RelatedArticlePreview({ citation, destination, internal,
     };
   }, [position]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape") setMobileOpen(false); };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen]);
+
   const events = {
     onMouseEnter: show,
     onMouseLeave: scheduleClose,
     onFocus: show,
     onBlur: close,
     "aria-describedby": position ? tooltipId : undefined,
+    onClick: (event: MouseEvent<HTMLAnchorElement | HTMLSpanElement>) => {
+      if (!coarsePointer()) return;
+      event.preventDefault(); close(); setMobileOpen(true);
+    },
   };
   return <div className={styles.articleReference}>
     {destination ? internal
       ? <Link href={destination} ref={(node) => { trigger.current = node; }} {...events}>{citation}</Link>
       : <a href={destination} target="_blank" rel="noopener noreferrer" ref={(node) => { trigger.current = node; }} {...events}>{citation}</a>
       : <span tabIndex={0} ref={(node) => { trigger.current = node; }} {...events}>{citation}</span>}
+    {mobileOpen && <div className={styles.articleSheetBackdrop} onClick={() => setMobileOpen(false)}>
+      <div className={styles.articleSheet} role="dialog" aria-modal="true" aria-label={`${citation} 조문 미리보기`} onClick={(event) => event.stopPropagation()}>
+        <div className={styles.articleSheetHeader}><strong>{citation} · {text ? "한국어 번역 초안 일부" : "조문 미리보기 준비 중"}</strong><button type="button" onClick={() => setMobileOpen(false)} aria-label="조문 미리보기 닫기">닫기</button></div>
+        <p>{text ?? "해당 조문의 한국어 전문이 아직 등록되지 않았습니다. 공식 원문에서 확인해 주세요."}</p>
+        <small>{text ? "사람 검수 전 초안" : "원문을 확인해 주세요."}</small>
+        {destination && <div className={styles.articleSheetActions}>{internal ? <Link href={destination} onClick={() => setMobileOpen(false)}>전문에서 보기 →</Link> : <a href={destination} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>공식 원문 보기 ↗</a>}</div>}
+      </div>
+    </div>}
     {position && <div className={styles.articleTooltip} style={position} id={tooltipId} role="tooltip"
       onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
       <strong>{citation} · {text ? "한국어 번역 초안 일부" : "조문 미리보기 준비 중"}</strong>

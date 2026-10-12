@@ -19,23 +19,26 @@ const countries = [
   { code: "SG", flag: "/flags/sg.svg", country: "싱가포르", law: "PDPA" },
 ];
 
-function relatedArticleUrl(translationId: string, article: string, anchorId?: string): string {
+function relatedArticleUrl(translationId: string, article: string, anchorId?: string, back?: string): string {
   const match = article.match(/제(\d+)조(?:의(\d+))?/);
-  return `/public/laws/${translationId}${anchorId ? `#${anchorId}` : match ? `#main-a${match[1]}${match[2] ? `-${match[2]}` : ""}` : ""}`;
+  return `/public/laws/${translationId}${back ? `?back=${encodeURIComponent(back)}` : ""}${anchorId ? `#${anchorId}` : match ? `#main-a${match[1]}${match[2] ? `-${match[2]}` : ""}` : ""}`;
 }
 
-export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView }: {
+export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView, initialSelected, initialCriterion }: {
   cells: LegalComparisonCell[]; instruments: SubmissionItem[];
-  translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare";
+  translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare"; initialSelected?: string[]; initialCriterion?: string;
 }) {
   const criteria = useMemo(() => Array.from(new Map(cells.map((cell) =>
     [cell.criterionId, { id: cell.criterionId, name: cell.criterionName, order: cell.criterionOrder }]
   )).values()).sort((a, b) => a.order - b.order), [cells]);
   const [view, setView] = useState<"full" | "compare">(initialView);
-  const [selected, setSelected] = useState(["KR", "JP"]);
+  const [selected, setSelected] = useState(() => { const valid = initialSelected?.filter((code) => countries.some((country) => country.code === code)).slice(0, 3); return valid?.length ? valid : ["KR", "JP"]; });
+  const [countryPickerOpen, setCountryPickerOpen] = useState(false);
+  const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
   const [activeCountry, setActiveCountry] = useState("JP");
-  const [activeCriterion, setActiveCriterion] = useState(criteria[0]?.id ?? "");
+  const [activeCriterion, setActiveCriterion] = useState(criteria.some((item) => item.id === initialCriterion) ? initialCriterion! : criteria[0]?.id ?? "");
   useEffect(() => setView(initialView), [initialView]);
+  useEffect(() => { const params = new URLSearchParams({ view }); if (view === "compare") { params.set("countries", selected.join(",")); if (activeCriterion) params.set("criterion", activeCriterion); } window.history.replaceState(null, "", `/public/laws?${params}`); }, [view, selected, activeCriterion]);
 
   const selectedLaws = countries.filter((law) => selected.includes(law.code));
   const criterion = criteria.find((item) => item.id === activeCriterion) ?? criteria[0];
@@ -51,9 +54,12 @@ export default function PublicLawCompare({ cells, instruments, translations, art
   };
   const setSection = (next: "full" | "compare") => {
     setView(next);
-    window.history.replaceState(null, "", `/public/laws?view=${next}`);
+
   };
   const activeLaw = countries.find((law) => law.code === activeCountry) ?? countries[1];
+  const currentPath = view === "compare" ? `/public/laws?view=compare&countries=${encodeURIComponent(selected.join(","))}&criterion=${encodeURIComponent(activeCriterion)}` : "/public/laws?view=full";
+  const selectedNames = view === "compare" ? selectedLaws.map((law) => law.country).join(" · ") : activeLaw.country;
+  const criterionIndex = criteria.findIndex((item) => item.id === criterion?.id);
 
   return <main className={styles.lawPage}>
     <PublicHeader active="/public/laws" />
@@ -66,11 +72,12 @@ export default function PublicLawCompare({ cells, instruments, translations, art
       <button type="button" aria-current={view === "full" ? "page" : undefined} className={view === "full" ? styles.lawViewActive : ""} onClick={() => setSection("full")}>법률 전문</button>
       <button type="button" aria-current={view === "compare" ? "page" : undefined} className={view === "compare" ? styles.lawViewActive : ""} onClick={() => setSection("compare")}>법제 비교</button>
     </nav>
-    <section className={styles.countryGrid} aria-label={view === "full" ? "법률을 읽을 국가·지역 선택" : "비교할 국가·지역 선택"}>
+    <button type="button" className={styles.mobileCountryToggle} aria-expanded={countryPickerOpen} onClick={() => setCountryPickerOpen((open) => !open)}>선택 국가: {selectedNames} · {countryPickerOpen ? "선택 닫기" : "국가 변경"}</button>
+    <section className={`${styles.countryGrid} ${countryPickerOpen ? styles.countryGridOpen : ""}`} aria-label={view === "full" ? "법률을 읽을 국가·지역 선택" : "비교할 국가·지역 선택"}>
       {countries.map((law) => {
         const chosen = view === "full" ? activeCountry === law.code : selected.includes(law.code);
         return <button key={law.code} type="button" className={chosen ? styles.countryCardSelected : styles.countryCard}
-          onClick={() => toggle(law.code)} aria-pressed={chosen}
+          onClick={() => { toggle(law.code); if (view === "full") setCountryPickerOpen(false); }} aria-pressed={chosen}
           disabled={view === "compare" && !chosen && selected.length >= 3}>
           <Image className={styles.flag} src={law.flag} width={42} height={28} alt="" aria-hidden="true" />
           <strong>{law.country}</strong><small>{recordsFor(law.code)[0]?.title ?? law.law}</small>
@@ -89,7 +96,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
             <h3>{record.title}</h3><p>{record.subtitle}</p>
             {translation ? <>
               <small>한국어 전문 초안 · {translation.articleCount}개 조문 · 시행일 {translation.version} · 사람 검수: {translation.reviewStatus}</small>
-              <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}`}>제1조부터 전문 읽기 →</Link>
+              <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
             </> : <><small>한국어 전문 준비 중</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
           </article>;
@@ -99,7 +106,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
       <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>17개 기준으로 비교하기</h2></div>
         <p>선택한 국가·지역의 요약과 관련 조항을 같은 순서로 비교합니다.</p>
         <span className={styles.selectCount}>{selected.length}/3개 국가·지역 선택</span></div>
-      {criteria.length ? <div className={styles.compareGrid}>
+      {criteria.length ? <><div className={styles.mobileCriterion}><label htmlFor="mobile-criterion">비교 기준</label><select id="mobile-criterion" value={criterion?.id ?? ""} onChange={(event) => setActiveCriterion(event.target.value)}>{criteria.map((item, index) => <option key={item.id} value={item.id}>{index + 1}. {item.name}</option>)}</select><div><button type="button" disabled={criterionIndex <= 0} onClick={() => setActiveCriterion(criteria[criterionIndex - 1].id)}>← 이전</button><button type="button" disabled={criterionIndex >= criteria.length - 1} onClick={() => setActiveCriterion(criteria[criterionIndex + 1].id)}>다음 →</button></div></div><div className={styles.compareGrid}>
         <aside className={styles.criteriaList}><h3>비교 기준 <small>{criteria.length}</small></h3><ol>{criteria.map((item, index) =>
           <li key={item.id}><button type="button" onClick={() => setActiveCriterion(item.id)}
             aria-pressed={criterion?.id === item.id} className={criterion?.id === item.id ? styles.criteriaActive : ""}>
@@ -119,23 +126,24 @@ export default function PublicLawCompare({ cells, instruments, translations, art
               <section><strong>관련 조항</strong>
                 {cell?.articleNumbers.length ? <div className={styles.articleLinks}>{cell.articleNumbers.map((number, index) => {
                   const preview = translation ? articlePreviews[`${translation.id}:${number}`] : undefined;
+                  const articleKey = `${law.code}:${criterion?.id ?? ""}`;
                   const tooltipId = `article-${law.code}-${criterion?.id ?? "none"}-${index}`;
                   const destination = translation
-                    ? relatedArticleUrl(translation.id, number, preview?.anchorId)
+                    ? relatedArticleUrl(translation.id, number, preview?.anchorId, currentPath)
                     : cell.sourceUrl;
-                  return <RelatedArticlePreview key={`${number}-${index}`}
+                  return <span key={`${number}-${index}`} className={index >= 4 && !expandedArticles[articleKey] ? styles.articleExtra : undefined}><RelatedArticlePreview
                     citation={number} destination={destination} internal={Boolean(translation)}
-                    text={preview?.text} tooltipId={tooltipId} />;
-                })}</div> : <p>확인된 조항 없음</p>}</section>
+                    text={preview?.text} tooltipId={tooltipId} /></span>;
+                })}{cell.articleNumbers.length > 4 && !expandedArticles[`${law.code}:${criterion?.id ?? ""}`] && <button type="button" className={styles.mobileArticleMore} onClick={() => setExpandedArticles((current) => ({ ...current, [`${law.code}:${criterion?.id ?? ""}`]: true }))}>관련 조항 {cell.articleNumbers.length - 4}개 더 보기</button>}</div> : <p>확인된 조항 없음</p>}</section>
               {cell?.exceptions && cell.exceptions !== "미검토" && <details className={styles.lawExceptions}><summary>주의·예외 보기</summary><p>{cell.exceptions}</p></details>}
               <div className={styles.lawCardLinks}>
-                {translation && <Link href={`/public/laws/${translation.id}`}>법률 전문 읽기 →</Link>}
+                {translation && <Link href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>법률 전문 읽기 →</Link>}
                 {cell?.sourceUrl && <a href={cell.sourceUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
               </div>
             </article>;
           })}
         </div>
-      </div> : <p className={styles.lawCatalogEmpty}>비교 자료가 아직 준비되지 않았습니다.</p>}
+      </div></> : <p className={styles.lawCatalogEmpty}>비교 자료가 아직 준비되지 않았습니다.</p>}
       <p className={styles.lawDisclaimer}>비교 요약과 한국어 번역은 공식 원문을 대조하는 사람 검수 전 초안입니다.</p>
     </section>}
     <PublicFooter />

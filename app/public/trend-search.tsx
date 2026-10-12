@@ -9,8 +9,10 @@ import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
 import { inCustomDateRange } from "../../lib/public-search-filters";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 
+type InitialFilters = { country?: string; period?: string; from?: string; to?: string; mode?: string; sort?: string; restore?: string };
+const allowedPeriods = ["전체", "최근 1개월", "최근 6개월", "최근 1년", "직접 설정"];
 const relatedTerms: Record<string, string[]> = {
   "아동": ["아동", "미성년", "청소년", "연령 확인", "아동 대상"],
   "아동 개인정보": ["아동", "미성년", "청소년", "연령 확인", "아동 대상"],
@@ -19,21 +21,21 @@ const relatedTerms: Record<string, string[]> = {
   "제재": ["제재", "과징금", "집행", "벌금"],
 };
 
-export default function TrendSearch({ initialQuery, initialTopic, stories, loadError, draftMode = false }: { initialQuery: string; initialTopic: string; stories: PublishedStory[]; loadError: boolean; draftMode?: boolean }) {
+export default function TrendSearch({ initialQuery, initialTopic, initialFilters = {}, stories, loadError, draftMode = false }: { initialQuery: string; initialTopic: string; initialFilters?: InitialFilters; stories: PublishedStory[]; loadError: boolean; draftMode?: boolean }) {
   const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
-  const previewRef = useRef<HTMLElement>(null);
-  const [mode, setMode] = useState<"keyword" | "concept">("keyword");
+  const [mode, setMode] = useState<"keyword" | "concept">(initialFilters.mode === "concept" ? "concept" : "keyword");
   const [filtersExpanded, setFiltersExpanded] = useState(false);
-  const [countries, setCountries] = useState<string[]>([]);
-  const [period, setPeriod] = useState("전체");
-  const [customStart, setCustomStart] = useState("");
-  const [customEnd, setCustomEnd] = useState("");
+  const [countries, setCountries] = useState<string[]>(initialFilters.country ? initialFilters.country.split(",").filter(Boolean) : []);
+  const [period, setPeriod] = useState(allowedPeriods.includes(initialFilters.period ?? "") ? initialFilters.period! : "전체");
+  const [customStart, setCustomStart] = useState(initialFilters.from ?? "");
+  const [customEnd, setCustomEnd] = useState(initialFilters.to ?? "");
   const [topicId, setTopicId] = useState(initialTopic);
   useEffect(() => { setQuery(initialQuery); setSubmittedQuery(initialQuery); setTopicId(initialTopic); }, [initialQuery, initialTopic]);
-  const [sort, setSort] = useState<"관련도순" | "최신순">("관련도순");
+  const [sort, setSort] = useState<"관련도순" | "최신순">(initialFilters.sort === "최신순" ? "최신순" : "관련도순");
   const [selected, setSelected] = useState<string | null>(null);
+  useEffect(() => { if (initialFilters.restore !== "1") return; try { const position = Number(sessionStorage.getItem("globaltrend-search-scroll")); if (Number.isFinite(position)) requestAnimationFrame(() => window.scrollTo(0, position)); } catch { /* optional scroll memory */ } }, [initialFilters.restore]);
   const countryOptions = useMemo(() => Array.from(new Set(stories.flatMap((story) => story.jurisdictions?.length ? story.jurisdictions : [story.country]))).sort((a, b) => jurisdictionName(a).localeCompare(jurisdictionName(b), "ko")), [stories]);
   const activeTopic = publicTopics.find((topic) => topic.id === topicId);
   const terms = useMemo(() => {
@@ -64,6 +66,17 @@ export default function TrendSearch({ initialQuery, initialTopic, stories, loadE
     });
   }, [countries, topicId, period, customStart, customEnd, sort, terms, mode, stories]);
   const active = results.find((story) => story.id === selected) ?? results[0];
+  const returnParams = new URLSearchParams();
+  if (submittedQuery.trim()) returnParams.set("q", submittedQuery.trim());
+  if (topicId) returnParams.set("topic", topicId);
+  if (countries.length) returnParams.set("country", countries.join(","));
+  if (period !== "전체") returnParams.set("period", period);
+  if (customStart) returnParams.set("from", customStart);
+  if (customEnd) returnParams.set("to", customEnd);
+  if (mode !== "keyword") returnParams.set("mode", mode);
+  if (sort !== "관련도순") returnParams.set("sort", sort);
+  returnParams.set("restore", "1");
+  const returnTo = `/public/search?${returnParams.toString()}`;
   function submitQuery(value: string) {
     setSubmittedQuery(value);
     setSelected(null);
@@ -105,16 +118,16 @@ export default function TrendSearch({ initialQuery, initialTopic, stories, loadE
             setSelected(null);
           }}><span>{value === "전체" ? "전 세계" : jurisdictionName(value)}</span><span className={checked ? styles.countryCheckboxChecked : styles.countryCheckbox} aria-hidden="true">{checked && value !== "전체" ? "✓" : ""}</span></button>;
         })}</details>
-        <div className={styles.filterFoot}><span className={styles.statusDot} /> {draftMode ? "담당자 제출 표본 · 검수 전" : "검수·발행된 자료"}</div>
+        <div className={styles.filterFoot}><span className={styles.statusDot} /> {draftMode ? "담당자 제출 표본 · 검수 전" : "검수·발행된 자료"}</div><button type="button" className={styles.mobileFilterDone} onClick={() => setFiltersExpanded(false)}>{results.length}건 결과 보기</button>
       </aside>
-      <div className={styles.results}>
+      <div className={styles.results}><div className={styles.mobileAppliedFilters}>{period !== "전체" && <button type="button" onClick={() => setPeriod("전체")}>{period} ×</button>}{countries.map((country) => <button type="button" key={country} onClick={() => setCountries((current) => current.filter((item) => item !== country))}>{jurisdictionName(country)} ×</button>)}{activeTopic && <button type="button" onClick={() => setTopicId("")}>{activeTopic.label} ×</button>}</div>
         <div className={styles.resultHeader}><div><p className={styles.eyebrow}>CURATED INTELLIGENCE</p><strong>{results.length}<small>건의 동향</small></strong></div><div className={styles.sortSwitch}><button type="button" className={sort === "관련도순" ? styles.sortActive : ""} onClick={() => setSort("관련도순")}>관련도순</button><button type="button" className={sort === "최신순" ? styles.sortActive : ""} onClick={() => setSort("최신순")}>최신순</button></div></div>
-        {results.length ? <div className={styles.resultList}>{results.map((story) => <button type="button" key={story.id} onClick={() => { setSelected(story.id); requestAnimationFrame(() => previewRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })); }} className={`${styles.storyCard} ${active?.id === story.id ? styles.storySelected : ""}`}>
+        {results.length ? <div className={styles.resultList}>{results.map((story) => <Link key={story.id} href={`/public/trends/${encodeURIComponent(story.id)}?back=${encodeURIComponent(returnTo)}`} onMouseEnter={() => setSelected(story.id)} onFocus={() => setSelected(story.id)} onClick={() => { try { sessionStorage.setItem("globaltrend-search-scroll", String(window.scrollY)); } catch { /* optional scroll memory */ } }} className={`${styles.storyCard} ${active?.id === story.id ? styles.storySelected : ""}`}>
           <div className={styles.storyMeta}><span>{story.region}</span><i>·</i><span>{story.institution}</span><i>·</i><time>{story.date}</time></div>
           <strong>{story.title}</strong><p>{story.summary}</p><div className={styles.tagList}>{story.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
-        </button>)}</div> : <div className={styles.emptyState}><span>⌕</span><strong>{loadError ? "자료를 불러오지 못했습니다" : stories.length ? "검색 결과가 없습니다" : draftMode ? "제출된 동향 표본이 없습니다" : "발행된 동향이 없습니다"}</strong><p>{loadError ? "잠시 후 다시 확인해 주세요." : stories.length ? "검색어를 바꾸거나 국가 필터를 초기화해 보세요." : draftMode ? "담당자 제출 파일이 연결되면 이곳에 나타납니다." : "팀 검수를 거쳐 발행된 자료가 이곳에 표시됩니다."}</p></div>}
+        </Link>)}</div> : <div className={styles.emptyState}><span>⌕</span><strong>{loadError ? "자료를 불러오지 못했습니다" : stories.length ? "검색 결과가 없습니다" : draftMode ? "제출된 동향 표본이 없습니다" : "발행된 동향이 없습니다"}</strong><p>{loadError ? "잠시 후 다시 확인해 주세요." : stories.length ? "검색어를 바꾸거나 국가 필터를 초기화해 보세요." : draftMode ? "담당자 제출 파일이 연결되면 이곳에 나타납니다." : "팀 검수를 거쳐 발행된 자료가 이곳에 표시됩니다."}</p></div>}
       </div>
-      {active && <aside className={styles.preview} ref={previewRef} aria-live="polite">
+      {active && <aside className={styles.preview} aria-live="polite">
         <div className={styles.previewTop}><span>선택한 동향</span><span>{draftMode ? "검수 전 초안" : "발행됨"}</span></div>
         <p className={styles.previewCountry}>{active.region} <i>·</i> {active.institution}</p>
         <h2>{active.title}</h2><p className={styles.previewText}>{active.summary}</p>
