@@ -1,8 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
+import { jurisdictionName } from "./jurisdictions";
 
 export type PublishedStory = {
   id: string;
   country: string;
+  jurisdictions?: string[];
   region: string;
   institution: string;
   title: string;
@@ -61,7 +63,8 @@ export async function loadPublishedStories(limit = 100, id?: string): Promise<Pu
     return [{
       id: report.id,
       country: report.jurisdictions?.[0] ?? "기타",
-      region: report.jurisdictions?.join(" · ") || "국제",
+      jurisdictions: report.jurisdictions ?? [],
+      region: report.jurisdictions?.map(jurisdictionName).join(" · ") || "국제",
       institution: sourceNames.get(item.source_id) ?? "공식 출처",
       title: report.title_ko,
       originalTitle: item.title_original,

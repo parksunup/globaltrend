@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./public.module.css";
 import { usePublicTheme } from "./public-theme";
-const entries = [["/public", "동향"], ["/public/weekly", "주간호"], ["/public/search", "동향 검색"], ["/public/sources", "수집 출처"], ["/public/laws", "법제 비교"]];
+const entries = [["/public", "동향"], ["/public/weekly", "주간호"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
 export function PublicHeader({ active }: { active: string }) {
  const { theme, toggleTheme } = usePublicTheme();
  return <header className={styles.header}>

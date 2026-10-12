@@ -1,11 +1,8 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { PublishedStory } from "./published-trends";
+import { jurisdictionName } from "./jurisdictions";
 
-const regionNames: Record<string, string> = {
-  KR: "한국", JP: "일본", CN: "중국", EU: "유럽연합", GB: "영국",
-  "US-CA": "미국 캘리포니아", SG: "싱가포르",
-};
 const kindNames: Record<string, string> = {
   official_news: "기관 소식", official_advisory: "기관 안내", press_release: "보도자료",
   guidance: "가이드라인", decision: "결정", judgment: "판례", report: "보고서",
@@ -58,7 +55,7 @@ export function loadSubmittedStories(root = process.cwd()): PublishedStory[] {
         ? item.key_points_ko.map((point) => value(row(point).text)).filter(Boolean).join("\n\n")
         : "";
       return [{
-        id: recordId, country, region: regionNames[country] || country,
+        id: recordId, country, jurisdictions: countries, region: countries.map(jurisdictionName).join(" · ") || jurisdictionName(country),
         institution: source.toUpperCase(), title, originalTitle: value(item.original_title),
         summary, details: keyPoints, kind: kindNames[value(item.document_type)] || value(item.document_type) || "공식 자료",
         tags: strings(item.topic_tags), date: date.replaceAll("-", "."),
