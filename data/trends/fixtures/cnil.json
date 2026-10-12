@@ -1,0 +1,199 @@
+{
+  "source_id": "cnil",
+  "checked_at": "2026-10-11T17:25:34+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 3,
+  "counting_unit": "one article or event per record; related documents are not separate samples",
+  "items": [
+    {
+      "record_id": "cnil-extia-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "Non-respect des droits des personnes : sanction de 300 000 euros à l’encontre de la société EXTIA",
+      "organization": [
+        "Commission nationale de l’informatique et des libertés (CNIL)"
+      ],
+      "jurisdictions": [
+        "FR",
+        "EU"
+      ],
+      "source_published_date": "2026-09-09",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "09 septembre 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+      "document_type": "official_news",
+      "korean_title": "CNIL, 개인정보 삭제 요청 처리 문제로 EXTIA에 30만 유로 제재",
+      "summary_ko": "CNIL은 EXTIA의 삭제 요청 처리와 처리 결과 통지 의무 위반을 이유로 30만 유로의 과징금을 부과했다고 밝혔다. 자동으로 데이터를 삭제했더라도 요청자에게 처리 결과를 알려야 한다는 설명을 담았다.",
+      "evidence": [
+        {
+          "url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+          "location": "main h1; main .ctn-gen-auteur; .page-introduction; .ctn-gen-body의 Le contexte 및 Les manquements sanctionnés / 정보 통지 의무 소제목"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "삭제권",
+        "정보주체권리",
+        "과징금"
+      ],
+      "event_id": "cnil-extia-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000054810440",
+          "original_title": "Délibération de la formation restreinte n° SAN – 2026-010 du 21 juillet 2026 concernant la société EXTIA",
+          "relationship": "same_case_regulatory_decision",
+          "access_status": "proxy_connect_403_not_read",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "게시일은 2026-09-09이고 본문 결정일은 2026-07-21입니다. Légifrance 결정 전문은 프록시 403으로 미확인입니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      }
+    },
+    {
+      "record_id": "cnil-hopital-loire-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "Violation de données en matière de santé : sanction de 500 000 euros à l’encontre de l’HÔPITAL PRIVÉ DE LA LOIRE",
+      "organization": [
+        "Commission nationale de l’informatique et des libertés (CNIL)"
+      ],
+      "jurisdictions": [
+        "FR",
+        "EU"
+      ],
+      "source_published_date": "2026-09-03",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "03 septembre 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+      "document_type": "official_news",
+      "korean_title": "CNIL, 환자정보 보안·유출 통지 문제로 루아르 민간병원에 50만 유로 제재",
+      "summary_ko": "CNIL은 환자정보 접근 통제와 보안조치, 유출 정보 통지 문제로 루아르 민간병원에 50만 유로의 과징금을 부과했다고 밝혔다. 기사에서는 외부 접속 인증, 접근 권한 제한, 의심 활동 탐지와 환자가 지정한 연락 대상자에 대한 통지 문제를 설명한다.",
+      "evidence": [
+        {
+          "url": "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+          "location": "main h1; main .ctn-gen-auteur; .page-introduction; .ctn-gen-body의 articles 32 et 34 관련 소제목"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "건강정보",
+        "보안",
+        "침해통지"
+      ],
+      "event_id": "cnil-hopital-loire-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://www.legifrance.gouv.fr/cnil/id/CNILTEXT000054790100",
+          "original_title": "Délibération de la formation restreinte n°SAN-2026-009 du 21 juillet 2026 concernant la société HOPITAL PRIVE DE LA LOIRE",
+          "relationship": "same_case_regulatory_decision",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "게시일은 2026-09-03입니다. 도입은 제재일을 9월 3일로 설명하지만 연결 결정 제목은 7월 21일을 표시하므로 결정일은 확정하지 않습니다. 전문 대조와 사람 검토가 필요합니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.cnil.fr/fr/sanction-hopital-prive-loire",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      },
+      "decision_date_observations": {
+        "article_intro_date": "2026-09-03",
+        "linked_decision_title_date": "2026-07-21",
+        "confirmed_decision_date": null,
+        "requires_review": true
+      }
+    },
+    {
+      "record_id": "cnil-electronic-invoicing-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "Facturation électronique : quels enjeux pour la protection des données personnelles ?",
+      "organization": [
+        "Commission nationale de l’informatique et des libertés (CNIL)"
+      ],
+      "jurisdictions": [
+        "FR",
+        "EU"
+      ],
+      "source_published_date": "2026-09-10",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "10 septembre 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+      "document_type": "guidance_article",
+      "korean_title": "전자 송장의 개인정보와 데이터 최소화: CNIL 안내",
+      "summary_ko": "CNIL은 전자 송장에 포함될 수 있는 개인 식별정보와 민감정보의 처리에 주의를 요구했다. 자연인의 정보와 법인 정보의 구분, 송장 항목의 데이터 최소화, 발행 기업과 플랫폼의 역할에 따른 책임을 설명한다.",
+      "evidence": [
+        {
+          "url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+          "location": "main h1; main .ctn-gen-auteur; .ctn-gen-body의 Quelles sont les données personnelles concernées ? 및 Quelles sont les responsabilités des différents acteurs ? 절"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "데이터최소화",
+        "전자송장",
+        "처리자"
+      ],
+      "event_id": "cnil-electronic-invoicing-2026-event",
+      "related_documents": [],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.cnil.fr/fr/facturation-electronique-quels-enjeux",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      }
+    }
+  ],
+  "is_published": false,
+  "historical_access_failures": [
+    {
+      "requested_url": "https://www.cnil.fr/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://www.cnil.fr/fr/actualites",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ]
+}
