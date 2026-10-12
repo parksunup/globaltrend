@@ -95,6 +95,9 @@ try {
         await link.scrollIntoViewIfNeeded();
         const citation = await link.innerText();
         await link.hover();
+        // Each reference keeps a 150ms grace period so the pointer can enter its popup.
+        // Wait for that exit transition; fail if multiple popups remain open.
+        await page.waitForFunction(() => document.querySelectorAll('[role="tooltip"]').length === 1, { timeout: 15000 });
         const tooltip = page.getByRole("tooltip");
         await tooltip.waitFor({ state: "visible" });
         assert.equal(await tooltip.count(), 1, "Only the active reference should have a tooltip");
