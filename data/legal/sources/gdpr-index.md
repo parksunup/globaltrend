@@ -3,19 +3,19 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~59조·고려사항1~105의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~67조·고려사항1~120의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 105 |
-| Chapter | 11 | 6 |
-| Article | 99 | 59 |
-| Paragraph | 372 | 237 |
-| Item | 389 | 320 |
-| Text | 25 | 17 |
-| Section | 15 | 12 |
+| Recital | 173 | 120 |
+| Chapter | 11 | 7 |
+| Article | 99 | 67 |
+| Paragraph | 372 | 283 |
+| Item | 389 | 333 |
+| Text | 25 | 20 |
+| Section | 15 | 14 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
@@ -84,14 +84,14 @@ Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행
 | <a id="main-a57"></a>제57조 | Tasks | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a58"></a>제58조 | Powers | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a59"></a>제59조 | Activity reports | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a60"></a>제60조 | Cooperation between the lead supervisory authority and the other supervisory authorities concerned | 미번역·사람 미검수 |
-| <a id="main-a61"></a>제61조 | Mutual assistance | 미번역·사람 미검수 |
-| <a id="main-a62"></a>제62조 | Joint operations of supervisory authorities | 미번역·사람 미검수 |
-| <a id="main-a63"></a>제63조 | Consistency mechanism | 미번역·사람 미검수 |
-| <a id="main-a64"></a>제64조 | Opinion of the Board | 미번역·사람 미검수 |
-| <a id="main-a65"></a>제65조 | Dispute resolution by the Board | 미번역·사람 미검수 |
-| <a id="main-a66"></a>제66조 | Urgency procedure | 미번역·사람 미검수 |
-| <a id="main-a67"></a>제67조 | Exchange of information | 미번역·사람 미검수 |
+| <a id="main-a60"></a>제60조 | Cooperation between the lead supervisory authority and the other supervisory authorities concerned | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a61"></a>제61조 | Mutual assistance | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a62"></a>제62조 | Joint operations of supervisory authorities | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a63"></a>제63조 | Consistency mechanism | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a64"></a>제64조 | Opinion of the Board | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a65"></a>제65조 | Dispute resolution by the Board | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a66"></a>제66조 | Urgency procedure | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a67"></a>제67조 | Exchange of information | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a68"></a>제68조 | European Data Protection Board | 미번역·사람 미검수 |
 | <a id="main-a69"></a>제69조 | Independence | 미번역·사람 미검수 |
 | <a id="main-a70"></a>제70조 | Tasks of the Board | 미번역·사람 미검수 |
