@@ -3,19 +3,19 @@
 이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.
 
 공식 영어 원판: [EU 출판국](https://op.europa.eu/en/publication-detail/-/publication/3e485e15-11bd-11e6-ba9a-01aa75ed71a1/language-en) · 발효2016-05-24 · 적용2018-05-25.
-최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~67조·고려사항1~120의 비공개 부분 초안만 작성했습니다.
+최신 통합판·정오표·사람 의미 검수는 미확정입니다. 제1~76조·고려사항1~135의 비공개 부분 초안만 작성했습니다.
 
 | 구조 | 원문 수 | 비공개 초안 작성 수 |
 | --- | ---: | ---: |
 | Title | 1 | 0 |
 | Preamble | 9 | 0 |
-| Recital | 173 | 120 |
+| Recital | 173 | 135 |
 | Chapter | 11 | 7 |
-| Article | 99 | 67 |
-| Paragraph | 372 | 283 |
-| Item | 389 | 333 |
+| Article | 99 | 76 |
+| Paragraph | 372 | 311 |
+| Item | 389 | 368 |
 | Text | 25 | 20 |
-| Section | 15 | 14 |
+| Section | 15 | 15 |
 | Closing | 8 | 0 |
 | Footnote | 21 | 0 |
 
@@ -92,15 +92,15 @@ Item에는 원문 대시 항목도 포함합니다. 번호 없는 도입·후행
 | <a id="main-a65"></a>제65조 | Dispute resolution by the Board | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a66"></a>제66조 | Urgency procedure | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a67"></a>제67조 | Exchange of information | 비공개 부분 초안·사람 미검수 |
-| <a id="main-a68"></a>제68조 | European Data Protection Board | 미번역·사람 미검수 |
-| <a id="main-a69"></a>제69조 | Independence | 미번역·사람 미검수 |
-| <a id="main-a70"></a>제70조 | Tasks of the Board | 미번역·사람 미검수 |
-| <a id="main-a71"></a>제71조 | Reports | 미번역·사람 미검수 |
-| <a id="main-a72"></a>제72조 | Procedure | 미번역·사람 미검수 |
-| <a id="main-a73"></a>제73조 | Chair | 미번역·사람 미검수 |
-| <a id="main-a74"></a>제74조 | Tasks of the Chair | 미번역·사람 미검수 |
-| <a id="main-a75"></a>제75조 | Secretariat | 미번역·사람 미검수 |
-| <a id="main-a76"></a>제76조 | Confidentiality | 미번역·사람 미검수 |
+| <a id="main-a68"></a>제68조 | European Data Protection Board | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a69"></a>제69조 | Independence | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a70"></a>제70조 | Tasks of the Board | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a71"></a>제71조 | Reports | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a72"></a>제72조 | Procedure | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a73"></a>제73조 | Chair | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a74"></a>제74조 | Tasks of the Chair | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a75"></a>제75조 | Secretariat | 비공개 부분 초안·사람 미검수 |
+| <a id="main-a76"></a>제76조 | Confidentiality | 비공개 부분 초안·사람 미검수 |
 | <a id="main-a77"></a>제77조 | Right to lodge a complaint with a supervisory authority | 미번역·사람 미검수 |
 | <a id="main-a78"></a>제78조 | Right to an effective judicial remedy against a supervisory authority | 미번역·사람 미검수 |
 | <a id="main-a79"></a>제79조 | Right to an effective judicial remedy against a controller or processor | 미번역·사람 미검수 |
