@@ -1,0 +1,156 @@
+{
+  "record_id": "dpc",
+  "organization": "Data Protection Commission (Ireland)",
+  "jurisdictions": [
+    "IE",
+    "EU"
+  ],
+  "candidate_status": "proposed_not_enabled",
+  "start_url": "https://www.dataprotection.ie/en/news-media/latest-news",
+  "start_url_status": "http_200_official_listing_inspected",
+  "document_types": [
+    "official_news",
+    "regulatory_decision",
+    "guidance"
+  ],
+  "document_types_status": "news_and_guidance_html_inspected_decision_scope_limited",
+  "collection_method": "실제 HTML 목록·상세 수집; ICO는 사이트 내부 검색 POST도 확인. 자동 수집기는 구현하지 않음. 확인 범위·제한은 verification/discovery 참고.",
+  "field_locations": {
+    "title": "h1",
+    "published_at": "뉴스 main p.date (01st 등 서수 제거 후 파싱); 결정 Decision Date는 별도 사건일; 지침 FAQ는 게시일 미표시",
+    "content": "뉴스 .field--name-body; 결정·FAQ 본문 구조는 아래 확인 범위 참고, 범용 선택자는 검토 필요",
+    "official_url": "뉴스 main article.node--view-mode-teaser h2 a[href] 및 결정/지침 실제 링크 → GET 최종 URL; canonical은 별도 검토"
+  },
+  "exclude_rules": [
+    "개인정보 보호와 직접 관련 없는 자료는 본문 확인 후 제외합니다.",
+    "채용·입찰·행사 일정만 있는 단순 공지는 내용 확인 후 제외합니다.",
+    "메뉴·푸터·쿠키 배너·SNS 링크는 본문으로 저장하지 않습니다.",
+    "같은 사건의 결정문·보도자료·후속 문서는 연결하고 같은 사건을 중복 집계하지 않습니다.",
+    "게시일 불명·본문 누락·접근 실패·이용조건 미확정은 검토 대기로 기록하며 누락이나 미제공으로 단정하지 않습니다."
+  ],
+  "exclude_rules_status": "editorial_proposal_not_applied_to_source_material",
+  "terms_status": "unreviewed",
+  "sample_urls": [
+    "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+    "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location"
+  ],
+  "review_status": "unreviewed",
+  "checked_at": "2026-10-11T17:25:34+09:00",
+  "verification": {
+    "status": "official_pages_inspected_human_review_pending",
+    "listing_checked": true,
+    "detail_checked": true,
+    "selectors_verified": "news_sample_scope_only",
+    "limitations": [
+      "정책/법률/번역은 사람 검수 전",
+      "PDF·다른 템플릿·모든 페이지에서의 추출은 미검증",
+      "RSS 및 공식 공개 API 제공 여부는 미확정"
+    ]
+  },
+  "discovery": {
+    "news_list": "https://www.dataprotection.ie/en/news-media/latest-news",
+    "decision_list_url": "https://www.dataprotection.ie/en/dpc-guidance/decisions",
+    "guidance_list_url": "https://www.dataprotection.ie/en/dpc-guidance",
+    "decision_detail_checked": "https://www.dataprotection.ie/en/dpc-guidance/decisions/inquiry-midlands-regional-hospital-tullamore",
+    "guidance_detail_checked": "https://www.dataprotection.ie/en/dpc-guidance/data-subject-access-requests-faq",
+    "pagination_note": "목록 HTML의 실제 다음 링크만 사용; 페이지 순회 응답 미검증.",
+    "rss": {
+      "status": "not_discovered_in_inspected_pages",
+      "url": null,
+      "reason": "열람한 페이지의 link alternate/푸터에서 공식 피드 안내를 확인하지 못함. 미제공으로 단정하지 않음."
+    },
+    "api": {
+      "status": "unreviewed",
+      "endpoint_url": null,
+      "documentation_url": null,
+      "reason": "공식 공개 API 안내·엔드포인트 미확인. 존재 여부를 추정하지 않음."
+    }
+  },
+  "access_failures": [
+    {
+      "requested_url": "https://www.dataprotection.ie/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/news-media/latest-news",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "content_missing_cases": {
+    "status": "observed_with_limitations",
+    "cases": [
+      "뉴스 표시 날짜는 확인. 지침/결정 날짜 종류는 유형별 확인 필요"
+    ]
+  },
+  "terms_checks": {
+    "status": "unreviewed",
+    "robots_url": "https://www.dataprotection.ie/robots.txt",
+    "policy_url": null,
+    "observed": "확인한 뉴스·결정·지침 및 푸터에서 명시적 저작권/재사용 정책 링크를 확보하지 못함. Data Protection Statement/Cookie Policy는 개인정보·쿠키 정책이며 저작권 허가로 쓰지 않음. 수집·저장·Codex 처리·요약·번역·재배포 모두 검토 필요.",
+    "robots_note": "robots.txt HTTP 200; /admin/, /search/, /user/ 등 제한 확인. 공개 기사 접근 허가와 저작권/재배포 허가는 구분."
+  },
+  "next_checks": [
+    "출처별 실제 이용조건과 한국어 요약·공개 발췌 범위를 사람 검토합니다.",
+    "상세 선택자와 날짜 파싱을 다른 자료 유형 및 다음 목록 페이지에서 검증합니다.",
+    "공식 RSS/공개 API 지원 안내, 요청 한도·갱신 정책을 추가 확인합니다.",
+    "연결 결정/PDF 전문과 불복·정정 상태는 필요한 경우 별도 검토합니다."
+  ],
+  "access_results": [
+    {
+      "requested_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+      "final_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location",
+      "final_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/dpc-guidance/decisions",
+      "final_url": "https://www.dataprotection.ie/en/dpc-guidance/decisions",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/dpc-guidance",
+      "final_url": "https://www.dataprotection.ie/en/dpc-guidance",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/robots.txt",
+      "final_url": "https://www.dataprotection.ie/robots.txt",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/dpc-guidance/decisions/inquiry-midlands-regional-hospital-tullamore",
+      "final_url": "https://www.dataprotection.ie/en/dpc-guidance/decisions/inquiry-midlands-regional-hospital-tullamore",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/dpc-guidance/data-subject-access-requests-faq",
+      "final_url": "https://www.dataprotection.ie/en/dpc-guidance/data-subject-access-requests-faq",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/news-media/latest-news",
+      "http_status": 200,
+      "body_received": true,
+      "evidence": "직접 GET한 뉴스 목록 HTML"
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "record_id": "ico",
+  "organization": "Information Commission’s Office (ICO)",
+  "jurisdictions": [
+    "UK"
+  ],
+  "candidate_status": "proposed_not_enabled",
+  "start_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+  "start_url_status": "http_200_official_listing_inspected",
+  "document_types": [
+    "official_news",
+    "enforcement_decision",
+    "guidance"
+  ],
+  "document_types_status": "news_and_guidance_html_inspected_decision_scope_limited",
+  "collection_method": "실제 HTML 목록·상세 수집; ICO는 사이트 내부 검색 POST도 확인. 자동 수집기는 구현하지 않음. 확인 범위·제한은 verification/discovery 참고.",
+  "field_locations": {
+    "title": "h1; 목록 JSON results[].title",
+    "published_at": "main li에서 span 텍스트 Date의 형제 strong; 목록 filterItemMetaData 표시 날짜와 대조. createdDateTime은 게시일로 사용하지 않음",
+    "content": "뉴스 main .rich-text .prose (구간별 수집, Notes to editors 구분); 집행 main 본문; 복합 지침 페이지 자동 추출은 검토 필요",
+    "official_url": "POST /api/search의 results[].url을 https://ico.org.uk와 결합하고 GET 최종 URL 확인"
+  },
+  "exclude_rules": [
+    "개인정보 보호와 직접 관련 없는 자료는 본문 확인 후 제외합니다.",
+    "채용·입찰·행사 일정만 있는 단순 공지는 내용 확인 후 제외합니다.",
+    "메뉴·푸터·쿠키 배너·SNS 링크는 본문으로 저장하지 않습니다.",
+    "같은 사건의 결정문·보도자료·후속 문서는 연결하고 같은 사건을 중복 집계하지 않습니다.",
+    "게시일 불명·본문 누락·접근 실패·이용조건 미확정은 검토 대기로 기록하며 누락이나 미제공으로 단정하지 않습니다.",
+    "FOI/EIR만 다루는 자료는 개인정보 보호와 직접 관련된 내용이 있는지 확인 후 제외합니다."
+  ],
+  "exclude_rules_status": "editorial_proposal_not_applied_to_source_material",
+  "terms_status": "unreviewed",
+  "sample_urls": [
+    "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+    "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/"
+  ],
+  "review_status": "unreviewed",
+  "checked_at": "2026-10-11T17:25:34+09:00",
+  "verification": {
+    "status": "official_pages_inspected_human_review_pending",
+    "listing_checked": true,
+    "detail_checked": true,
+    "selectors_verified": "news_sample_scope_only",
+    "limitations": [
+      "정책/법률/번역은 사람 검수 전",
+      "PDF·다른 템플릿·모든 페이지에서의 추출은 미검증",
+      "RSS 및 공식 공개 API 제공 여부는 미확정"
+    ]
+  },
+  "discovery": {
+    "news_list": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+    "decision_list_url": "https://ico.org.uk/action-weve-taken/enforcement/",
+    "guidance_list_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+    "guidance_detail_checked": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/building-trust-and-transparency-into-generative-ai-development-our-work-to-create-regulatory-certainty/",
+    "pagination_note": "/api/search 응답 pagination(totalResults/perPage/showingPageNumber/totalPages/hasMore) 확인. pageNumber 2 호출은 미검증.",
+    "api": {
+      "status": "observed_site_internal_endpoint_not_documented_public_api",
+      "endpoint_url": "https://ico.org.uk/api/search",
+      "method": "POST",
+      "documentation_url": null,
+      "evidence": "목록 #filter-page-container data-node-id 및 /js/search.js의 fetch 호출 직접 확인",
+      "verified_requests": [
+        {
+          "filters": [],
+          "pageNumber": 1,
+          "order": "newest",
+          "rootPageId": 2816
+        },
+        {
+          "filters": [],
+          "pageNumber": 1,
+          "order": "newest",
+          "rootPageId": 17222
+        }
+      ],
+      "response_fields": [
+        "results[].title",
+        "results[].url",
+        "results[].filterItemMetaData",
+        "results[].createdDateTime",
+        "pagination"
+      ],
+      "warning": "집행 rootPageId는 실제 HTML 확인값으로 아래 별도 기록. 내부 엔드포인트의 안정성·이용허가·공식 지원 API 계약 미확인."
+    },
+    "rss": {
+      "status": "not_discovered_in_inspected_pages",
+      "url": null,
+      "reason": "열람한 페이지의 link alternate/푸터에서 공식 피드 안내를 확인하지 못함. 미제공으로 단정하지 않음."
+    }
+  },
+  "access_failures": [
+    {
+      "requested_url": "https://ico.org.uk/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "content_missing_cases": {
+    "status": "observed_with_limitations",
+    "cases": [
+      "ICO 목록 GET은 Loading...만 보임; 실제 JS 검색 POST로 보완"
+    ]
+  },
+  "terms_checks": {
+    "status": "unreviewed",
+    "robots_url": "https://ico.org.uk/robots.txt",
+    "policy_url": "https://ico.org.uk/global/copyright-and-re-use-of-materials/",
+    "observed": "본문: 별도 표시가 없는 텍스트는 OGL v3.0. 기관·문서명·발행일·라이선스 attribution 요구; 이미지·로고 및 Data Protection Essentials 콘텐츠는 예외. OGL 원문 링크는 다른 호스트이며 이번 확인 범위에서 미열람. 자료별 예외·AI 처리·재배포 조건은 검토 필요.",
+    "robots_note": "robots.txt HTTP 200; User-agent * Crawl-delay 6, /private 및 /restricted 제외. 확인 후 ICO 후속 요청은 6초 간격을 적용. 안정적 수집 주기·한도는 별도 검토."
+  },
+  "next_checks": [
+    "출처별 실제 이용조건과 한국어 요약·공개 발췌 범위를 사람 검토합니다.",
+    "상세 선택자와 날짜 파싱을 다른 자료 유형 및 다음 목록 페이지에서 검증합니다.",
+    "공식 RSS/공개 API 지원 안내, 요청 한도·갱신 정책을 추가 확인합니다.",
+    "연결 결정/PDF 전문과 불복·정정 상태는 필요한 경우 별도 검토합니다."
+  ],
+  "organization_note": "8 October 뉴스 Notes to editors가 현재 명칭과 2026년 전환을 설명. 과거 자료의 Information Commissioner’s Office 명칭은 fixture에 보존.",
+  "access_results": [
+    {
+      "requested_url": "https://ico.org.uk/js/search.js",
+      "final_url": "https://ico.org.uk/js/search.js",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/action-weve-taken/enforcement/",
+      "final_url": "https://ico.org.uk/action-weve-taken/enforcement/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+      "final_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/global/copyright-and-re-use-of-materials/",
+      "final_url": "https://ico.org.uk/global/copyright-and-re-use-of-materials/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/robots.txt",
+      "final_url": "https://ico.org.uk/robots.txt",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+      "final_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/",
+      "final_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/action-weve-taken/enforcement/2026/05/thermotech-wall-and-loft-surveys-ltd-mpn/",
+      "final_url": "https://ico.org.uk/action-weve-taken/enforcement/2026/05/thermotech-wall-and-loft-surveys-ltd-mpn/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/action-weve-taken/enforcement/2026/05/thermotech-wall-and-loft-surveys-ltd-en/",
+      "final_url": "https://ico.org.uk/action-weve-taken/enforcement/2026/05/thermotech-wall-and-loft-surveys-ltd-en/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/building-trust-and-transparency-into-generative-ai-development-our-work-to-create-regulatory-certainty/",
+      "final_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/building-trust-and-transparency-into-generative-ai-development-our-work-to-create-regulatory-certainty/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/action-weve-taken/enforcement/2023/05/tiktok/",
+      "final_url": "https://ico.org.uk/action-weve-taken/enforcement/2023/05/tiktok/",
+      "http_status": 200,
+      "body_received": true
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "http_status": 200,
+      "body_received": true,
+      "evidence": "직접 GET한 뉴스 목록 HTML"
+    }
+  ]
+}
