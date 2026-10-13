@@ -1,0 +1,277 @@
+{
+  "document_id": "gdpr-related-procedural-law-and-procedure-check",
+  "checked_on_kst": "2026-10-13",
+  "source_receipts": [
+    {
+      "id": "law2518-en",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "checked_at": "2026-10-13T10:22:59.466081+00:00",
+      "status": 200,
+      "bytes": 254204,
+      "sha256": "4d44c822cf33a37affea50b56019117889f3505946b1cac049b7fdfe31733d65",
+      "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part="
+    },
+    {
+      "id": "law2518-rdf",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=96d99c7a-d704-11f0-8da2-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T10:22:59.465483+00:00",
+      "status": 200,
+      "bytes": 87210,
+      "sha256": "223f84f34d3084291537f36825f9e3e27e20be1b0d7f0e72de8687f4072289db",
+      "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=96d99c7a-d704-11f0-8da2-01aa75ed71a1&nonInferred=false"
+    },
+    {
+      "id": "procedure130",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=81578e29-3639-11f0-8a44-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T10:23:29.853387+00:00",
+      "status": 200,
+      "bytes": 683021,
+      "sha256": "735473fe616f9ca9b984035fabec0dab7c05ba6bd0bab31456d2a584116988ca"
+    },
+    {
+      "id": "procedure360",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=290baa93-c56e-11f0-8da2-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T10:23:29.853849+00:00",
+      "status": 200,
+      "bytes": 794210,
+      "sha256": "f087a39fe6c36f362202d4b477a405fda820afc9a458fa3b2357c4c4be55c859"
+    }
+  ],
+  "supplementary_law": {
+    "official_name": "Regulation (EU) 2025/2518 of the European Parliament and of the Council of 26 November 2025 laying down additional procedural rules on the enforcement of Regulation (EU) 2016/679",
+    "jurisdiction": "European Union",
+    "celex": "32025R2518",
+    "eli": "http://data.europa.eu/eli/reg/2025/2518/oj",
+    "official_english_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+    "source_version": "OJ L series 2025/2518, 12.12.2025; selected original English text",
+    "document_date": "2025-11-26",
+    "publication_date": "2025-12-12",
+    "entry_into_force": "2026-01-01",
+    "entry_into_force_method": "Article37(1): twentieth day following publication; datetime date arithmetic; RDF also contains this value",
+    "application_date": "2027-04-02",
+    "application_source_article": "art_37",
+    "transitional_source_article": "art_36",
+    "article_ids": [
+      "art_1",
+      "art_2",
+      "art_3",
+      "art_4",
+      "art_5",
+      "art_6",
+      "art_7",
+      "art_8",
+      "art_9",
+      "art_10",
+      "art_11",
+      "art_12",
+      "art_13",
+      "art_14",
+      "art_15",
+      "art_16",
+      "art_17",
+      "art_18",
+      "art_19",
+      "art_20",
+      "art_21",
+      "art_22",
+      "art_23",
+      "art_24",
+      "art_25",
+      "art_26",
+      "art_27",
+      "art_28",
+      "art_29",
+      "art_30",
+      "art_31",
+      "art_32",
+      "art_33",
+      "art_34",
+      "art_35",
+      "art_36",
+      "art_37"
+    ],
+    "article_count": 37,
+    "source_review_actor": "assistant",
+    "selected_articles_read": [
+      1,
+      2,
+      3,
+      15,
+      34,
+      36,
+      37
+    ],
+    "selected_article_receipts": [
+      {
+        "article_id": "art_1",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_1",
+        "normalized_text_sha256": "e81967af183454a00b07fb0a41dea49203e3fde9a579e086e946942355dbeb11"
+      },
+      {
+        "article_id": "art_2",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_2",
+        "normalized_text_sha256": "7e9bad4794cac6f784b3b64aa00ae39b88ae4a4d1518c87169cd5ac245d561e9"
+      },
+      {
+        "article_id": "art_3",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_3",
+        "normalized_text_sha256": "252cce9efc09f52eea2ff3733108eeb2d63f754f874cac3f118a653b3bb528cf"
+      },
+      {
+        "article_id": "art_15",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_15",
+        "normalized_text_sha256": "cf82b8f83067f782fd98dc66d47bcd6993e8565396f6ce0ae5cb97891c816720"
+      },
+      {
+        "article_id": "art_34",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_34",
+        "normalized_text_sha256": "3340e045f342557e90e8bc0b9d734ffaffb4354bc64a04e0979b2af703101591"
+      },
+      {
+        "article_id": "art_36",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_36",
+        "normalized_text_sha256": "69c83e0b4d5f7bdd14fb2432874ddb075bebcd14492c35b756e403e977f7debb"
+      },
+      {
+        "article_id": "art_37",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_37",
+        "normalized_text_sha256": "69f2b1bad8c17a630ad2f913bd24102bf8889e9a8e3370bbd2bd582b8b7e28fd"
+      }
+    ],
+    "source_review_is_whole_law_semantic_review": false,
+    "translation_document_created": false,
+    "human_review_status": "not_started",
+    "added_to_gdpr_99_articles": false,
+    "applied_to_comparison_cells": false,
+    "new_comparison_criterion_created": false
+  },
+  "proposals_procedure_observations": [
+    {
+      "procedure_identifier": "2025_130",
+      "proposal_celex": "52025PC0501",
+      "event_identifiers_observed": [
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-05-21_ADP_PROPLEG_byCOM",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-05-27_DIS_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-06-04_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-06-10_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-06-13_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-06-16_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-06-25_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-07-02_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-07-04_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-07-10_REF_OF_byEP",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-07-18_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-07-24_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-01_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-11_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-17_ADP_MAND_NGT_INST_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-17_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-18_OPI_byEESC",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-09-24_ADP_MAND_NGT_INST_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-10-15_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-10-21_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-11-07_REP_R1_byEP_CMT",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-12-02_OPI_R1_byEP_CMT",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-12-05_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-12-12_TABLAMEND_byEP_CMT",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2025-12-16_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-01-09_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-04-17_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-05-11_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-05-12_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-05-27_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-05-29_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-03_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-12_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-12_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-16_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-24_ENDORSE_AGRPROV_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-26_ENDORSE_AGRPROV_COREPER_byCONSIL"
+      ],
+      "event_count_observed": 37,
+      "latest_event_identifier_observed": "http://publications.europa.eu/resource/procedure-event/2025_130.2026-06-26_ENDORSE_AGRPROV_COREPER_byCONSIL",
+      "complete_procedure_status_verified": false,
+      "adopted_successor_verified": false,
+      "event_codes_decoded_from_official_vocabulary": false,
+      "applied_to_draft": false
+    },
+    {
+      "procedure_identifier": "2025_360",
+      "proposal_celex": "52025PC0837",
+      "event_identifiers_observed": [
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2025-11-19_ADP_PROPLEG_byCOM",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2025-12-01_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2025-12-05_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2025-12-12_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2025-12-16_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-01-09_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-01-16_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-01-19_REF_OF_byEP",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-02-13_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-02-18_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-02-27_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-03-10_OPI_byECB",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-03-18_OPI_byEESC",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-04-24_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-05-07_OPI_byCOR",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-05-08_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-05-27_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-08_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-09_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-10_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-12_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-15_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-16_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-22_REP_R1_byEP_CMT",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-06-26_ADP_MAND_NGT_INST_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-07-01_DELIB_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-07-14_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-07-16_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-09-11_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-09-22_DELIB_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-09-25_DELIB_WP_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-10-07_ADP_MAND_NGT_INST_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-10-11_ADP_MAND_NGT_INST_COREPER_byCONSIL",
+        "http://publications.europa.eu/resource/procedure-event/2025_360.2026-10-13_DELIB_byCONSIL"
+      ],
+      "event_count_observed": 34,
+      "latest_event_identifier_observed": "http://publications.europa.eu/resource/procedure-event/2025_360.2026-10-13_DELIB_byCONSIL",
+      "complete_procedure_status_verified": false,
+      "adopted_successor_verified": false,
+      "event_codes_decoded_from_official_vocabulary": false,
+      "applied_to_draft": false
+    }
+  ],
+  "access_recheck_receipts": [
+    {
+      "url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+      "checked_at": "2026-10-13T10:22:03.228359+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://www.europarl.europa.eu/legal-notice/en/",
+      "checked_at": "2026-10-13T10:22:03.228953+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://publications.europa.eu/resource/celex/32017D1870",
+      "checked_at": "2026-10-13T10:22:03.229360+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "selected_gdpr_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "translation_body_changed": false,
+  "comparison_body_changed": false,
+  "human_reviewed_gdpr_nodes": 0,
+  "human_reviewed_eu_cells": 0,
+  "public_release_status": "withheld",
+  "publication_permission_verified": false,
+  "current_2026_completeness_verified": false,
+  "remaining": [
+    "Publication legal notices still inaccessible.",
+    "Complete legislative procedures and adopted successors not verified from event identifiers alone.",
+    "Complete effects of other separate legislation/national law/guidance/case law not verified.",
+    "Related law 2025/2518 full Korean translation and whole-law semantic review not done.",
+    "Human review deferred."
+  ]
+}
