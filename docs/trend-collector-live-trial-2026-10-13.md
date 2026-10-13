@@ -26,6 +26,20 @@ DB ID: 자료 `2ab4476e-b632-4794-a403-576078c26a77`, 판본 `9c87d3d7-3ee9-42d1
 
 ## 운영 시험의 남은 연결
 
+### 설정 등록 후 운영 연결 진단 — 2026-10-13 18:30 KST
+
+PR #32 head `d73fd4f9e937a5460f4fa9ba3b5532cc7d76a498`에서 이어갔습니다. 아래 서버키 부재·초안 저장 실패는 이전 시험 당시의 기록입니다. 이번에는 기존 설정을 유지하면서 `SUPABASE_URL`과 `COLLECTOR_SUPABASE_SECRET_KEY → SUPABASE_SECRET_KEY`를 저장했습니다. 허용 목적지는 `emlgwhkgaihhrirhdpnp.supabase.co`입니다. 설정 재조회에서 `has_saved_binding=true`, 미입력 요구사항 없음으로 확인했습니다.
+
+- 환경 revision 8에서는 변수와 시크릿이 `ready`였습니다. 프로세스에는 보안 프록시 대체값이 제공됩니다. 이를 실제 키의 부재나 잘못된 형식으로 판단하지 않았습니다. 마지막 revision 9에서는 변수·시크릿·네트워크 상태가 `unknown`으로 현재 반영 완료를 주장하지 않습니다.
+- 기존 HTTP/HTTPS 프록시와 TLS 검증을 유지한 Python 및 curl로 진단했습니다. 무인증 REST 요청은 `No API key found in request`, 인증된 용량 RPC·출처/자료/일일 claim 조회·Auth settings 요청은 HTTP 401 `Invalid API key`였습니다. `apikey` 단독, Bearer 병행, 헤더 대소문자 비교에서도 같은 결과입니다. 키 값·인증 헤더를 출력하거나 파일에 저장하지 않았습니다.
+- 이 응답만으로 입력한 키의 오류를 단정할 수 없습니다. 실제 저장 키나 프록시 치환 결과를 확인하는 지원 도구가 없어 자격 증명과 프록시 전달 중 실패 지점은 미확정입니다. 운영 함수·용량·무료 사용량·원문·초안은 확인하지 못했고 운영 쓰기는 수행하지 않았습니다.
+- 기존 작업 공간에 Python 의존성을 설치한 뒤 수집기 검사 46개를 모두 통과했습니다. 실제 EDPB 본문을 robots-aware 파서로 다시 읽어 3,903자, 게시일 2026-07-17, 이전 시험과 동일한 SHA-256을 확인했습니다. 요청 2회·42,496바이트이며 원문/PDF 파일을 저장소에 추가하지 않았습니다.
+- PR의 `collector/database/verify`와 Vercel 배포 검사는 모두 pass였습니다. 배포 Preview의 `/work`, `/public`은 HTTP 200이며, 비로그인 `/work`에는 로그인 폼이 있고 수집 검수 패널은 보이지 않았습니다. reviewer 로그인 후 원문·초안 표시나 운영 전 과정 통과는 미검증입니다.
+
+인증 정상화 후 읽기 전용 용량·출처·중복 조회부터 재개합니다. 기존 무료 사용량·출처 승인 조건 충족 전 원문 쓰기/claim/submit을 하지 않습니다. 새 환경·유료 서비스·정기 실행·main 병합은 추가하지 않았습니다.
+
+### 이전 로컬 시험 당시의 연결 상태
+
 현재 관리 환경의 secrets/runtime_variables/outbound_identities는 비어 있고 실제 프로세스에도 운영 Supabase 서버키가 없습니다. `.env.local`은 로컬 API와 공개 클라이언트 키만 가지고 있습니다. GitHub Actions Secrets/Variables 목록은 연결 권한 부족으로 HTTP 403이었습니다. 기존 운영 연결을 시험할 수 있는 서버 권한이 제공되지 않은 상태입니다.
 
 기존 프로젝트 `emlgwhkgaihhrirhdpnp`의 서버 자격 증명과 현재 무료 사용량 확인이 필요합니다. 환경 설정 초안에 `SUPABASE_URL` 및 `COLLECTOR_SUPABASE_SECRET_KEY → SUPABASE_SECRET_KEY`의 해당 HTTPS 호스트 한정 바인딩을 저장하려 했지만 `draft_not_editable`로 거부됐습니다. 다시 읽어도 바인딩은 없으며 **저장은 확인되지 않았습니다.** 게시된 환경 설정에서 새 설정 대화를 열어 필요한 바인딩을 연결해야 합니다. 비밀값을 공개 파일이나 채팅에 넣는 방식은 사용하지 않습니다. 제안한 설정은 현재 작업의 무비밀 `work/production-trial-environment-requirements.json`에 보존했습니다.
