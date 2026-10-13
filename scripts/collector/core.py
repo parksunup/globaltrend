@@ -66,6 +66,8 @@ class HttpClient:
                 raise FetchError('http_'+str(e.code)) from None
             except (urllib.error.URLError,TimeoutError,OSError,ValueError) as e:
                 # Do not include credentials or proxy URLs in logs.
+                if isinstance(e,urllib.error.URLError) and 'Tunnel connection failed: 403' in str(e.reason):
+                    raise FetchError('network_policy_denied_403') from None
                 raise FetchError('network_or_redirect_failure:'+type(e).__name__) from None
     def get(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname

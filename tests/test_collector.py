@@ -57,6 +57,17 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(self.core.retry_delay('99999'),60)
         self.assertEqual(self.core.retry_delay('garbage'),2)
 
+    def test_proxy_policy_denial_is_distinct_from_site_http_denial(self):
+        import urllib.error
+        from unittest.mock import patch
+        client=self.core.HttpClient(['www.ftc.gov'],interval=0)
+        with patch.object(client.opener,'open',side_effect=urllib.error.URLError(OSError('Tunnel connection failed: 403 Forbidden'))):
+            with self.assertRaisesRegex(self.core.FetchError,'^network_policy_denied_403$'):
+                client.request('https://www.ftc.gov/robots.txt')
+        with patch.object(client.opener,'open',side_effect=urllib.error.HTTPError('https://www.ftc.gov/a',403,'Forbidden',{},None)):
+            with self.assertRaisesRegex(self.core.FetchError,'^http_403$'):
+                client.request('https://www.ftc.gov/a')
+
     def test_size_limit_streaming_and_429_distinct(self):
         import io
         with self.assertRaises(self.core.FetchError): self.core.read_limited(io.BytesIO(b'123456'),5)
