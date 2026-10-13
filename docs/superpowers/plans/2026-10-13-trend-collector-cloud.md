@@ -96,3 +96,11 @@ Files: app/components/collector-review.tsx, app/work/page.tsx, docs/trend-collec
 - 검증: 신규 회귀 검사의 실패를 확인한 뒤 수정했고 최종 Python collector 62/62 통과(기존46+신규16), 앱28/28, validate:data, typecheck 통과. 기존 의존성 경로를 재사용했고 새 환경은 만들지 않았습니다. YAML cron/default/all-four gates·문서 JSON 계약/상한/근거 인덱스/번호문단·git diff --check 통과. 현재 CLI 9-source write preflight 및 scheduled-disabled 둘 다 exit2/blocked/requests0/run-log skipped를 실증했습니다.
 - 운영 read-only 확인: DB13,347,987바이트 can_write=true; 출처 초기3 모두 승인null. Actions variables/secrets 조회는 HTTP403 Resource not accessible by integration여서 Actions credential readiness는 미확인으로 기록했습니다. 기존 관리 환경 secret을 Actions에 자동 전달된 것으로 취급하지 않았습니다.
 - 독립 통합 검토: Critical/Important/Minor 지적 없음. 검토 에이전트가 Python62개와 diff검사를 별도 재실행했고 gate순서·재개·실패offset·정기비활성·지침계약을 확인했습니다. 실제9출처운영/전기간완전성은 남은 제한으로 기록합니다.
+
+## 품질 참고 범위의 보완 — 2026-10-13
+
+- 사용자 지적: 동향 담당의 검토 산출물과 피드백을 함께 참고하라는 지시를 피드백4건 중심으로 좁혀 이전 품질기준 반영이 부족했습니다. 일부 자료와 일반 규칙만으로 전체 산출물 반영을 대신하지 않습니다.
+- PR16 고정 c42db8b의 9기관 출처 조사표 및 전체21표본(JSON/Markdown), 주간7/날짜제외2, README와 두 검토 기록, 양식 확인 기록, PR댓글과 수정 이력을 다시 대조합니다. 현재 개수는 해당 커밋의 검토자료 범위이며 향후 작업량이나 참고대상의 상한이 아닙니다.
+- 정책 판단 방법·판례 입증조건/환송과 본안·제재 대상/금액/명령/기한·PPC의무와 기술예시·PDPC공지범위·첨부와 판본·선정/제외/후속문서·목차/본문/출처 대응의 실제 기준을 지침과 전체 산출물 대응표에 함께 반영합니다. unreviewed 표시는 기존 상태 정보로 보존하고 담당자가 검토·수정한 결과를 품질 참고에서 제외하는 이유로 쓰지 않습니다.
+- 이번 보완은 지침과 근거 기록의 완성본에 적용하며 수집기 코드·운영 초안·DB·정기 실행 설정을 변경하지 않습니다.
+- 검증: 전체21표본 Markdown/JSON 서술·ID대응, 주간7의 원제/URL/날짜/사건연결, 출처9 대응, 제출JSON계약 유지와 diff검사 통과. 독립검토가 전체 자료별 실제 품질쟁점→작성규칙 대응을 확인했고 Critical/Important 지적 없음. 이전 코드 검사를 문서 변경에서 다시 실행한 것으로 표시하지 않습니다.
