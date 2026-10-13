@@ -1,0 +1,169 @@
+{
+  "source_id": "ftc",
+  "checked_at": "2026-10-11T22:28:54+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 2,
+  "counting_unit": "one article/event per record; related documents are not separate samples",
+  "items": [
+    {
+      "record_id": "ftc-cox-active-listening-2026",
+      "original_title": "FTC Finalizes Orders with Cox Media Group, Two Other Firms Settling Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service",
+      "organization": [
+        "Federal Trade Commission (United States)"
+      ],
+      "jurisdictions": [
+        "US"
+      ],
+      "source_published_date": "2026-08-27",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+      "document_type": "official_press_release",
+      "korean_title": "FTC, 음성정보 기반 AI 광고 관련 기만 주장 합의 명령 최종 승인",
+      "summary_ko": "FTC는 Cox Media Group과 두 업체가 음성 데이터를 이용한 AI 광고 서비스를 제공한다고 고객을 기만했다는 주장에 관한 합의 명령을 최종 승인했다고 밝혔다. 발표는 총 93만 달러 지급과 광고 서비스·음성 데이터 수집 및 동의 등에 관한 허위 표시 금지를 설명한다.",
+      "key_points_ko": [
+        {
+          "text": "발표는 소비자 대화에서 수집된 음성 데이터로 지역 광고를 표적화할 수 있다고 허위 주장했다는 혐의를 설명한다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body 도입",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about"
+        },
+        {
+          "text": "명령은 서비스 기능, 음성정보의 수집·이용·동의 및 지역 표적화 능력에 대한 허위 표시를 금지한다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body Under the FTC’s orders 문단",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about"
+        },
+        {
+          "text": "의견수렴 후 위원회가 합의에 최종 승인을 부여했다고 발표했다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body 승인 문단",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about"
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+          "location": "h1; article.node--view-mode-banner time의 August 27, 2026; main article.node--view-mode-full .field--name-body"
+        }
+      ],
+      "topic_tags": [
+        "AI",
+        "음성정보",
+        "소비자프라이버시",
+        "집행"
+      ],
+      "event_id": "ftc-cox-active-listening-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://www.ftc.gov/system/files/ftc_gov/pdf/2423029c4838cmgfinalorder.pdf",
+          "original_title": "CMG",
+          "relationship": "same_case_final_order",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.ftc.gov/legal-library/browse/cases-proceedings/242-3029-cmg-media-corporation-matter",
+          "original_title": "CMG Media Corporation, In the Matter of",
+          "relationship": "same_case_docket",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "checked_at": "2026-10-11T22:28:54+09:00",
+      "review_notes": [
+        "확인한 공식 본문에 근거한 독자 요약이며 사람 검수 전입니다. 연결 전문·불복 상태·다른 사건의 결론은 추정하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호에 직접 관련되고 원제목·게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about",
+        "body_scope": "official_HTML"
+      }
+    },
+    {
+      "record_id": "ftc-illuminate-student-data-2026",
+      "original_title": "FTC Gives Final Approval to Order Against Illuminate Settling Allegations It Failed to Secure Students’ Personal Data",
+      "organization": [
+        "Federal Trade Commission (United States)"
+      ],
+      "jurisdictions": [
+        "US"
+      ],
+      "source_published_date": "2026-06-05",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students",
+      "document_type": "official_press_release",
+      "korean_title": "FTC, Illuminate 학생정보 보안 사건의 수정된 합의 명령 최종 승인",
+      "summary_ko": "FTC는 Illuminate의 학생 개인정보 보안 실패에 관한 주장에 대해 수정된 합의 명령을 최종 승인했다고 밝혔다. 명령은 불필요한 정보 삭제와 수집·보유 제한, 공개 보유 일정 및 포괄적인 정보보안 프로그램 등을 요구한다고 설명한다.",
+      "key_points_ko": [
+        {
+          "text": "학생 1,010만 명 정보에 영향을 미친 유출과 보안 실패는 발표에서 소장에 담긴 주장으로 설명한다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body In its complaint 문단",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students"
+        },
+        {
+          "text": "요청된 제품·서비스 제공에 필요하지 않은 정보를 삭제하고 불필요한 수집·처리·보유를 제한한다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body 명령 요구사항 목록",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students"
+        },
+        {
+          "text": "공개 보유 일정과 정보보안 프로그램을 마련하도록 명령 내용을 설명한다.",
+          "evidence_location": "main article.node--view-mode-full .field--name-body 명령 요구사항 목록",
+          "evidence_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students"
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students",
+          "location": "h1; article.node--view-mode-banner time의 June 5, 2026; main article.node--view-mode-full .field--name-body"
+        }
+      ],
+      "topic_tags": [
+        "학생정보",
+        "보안",
+        "데이터최소화",
+        "보유기간"
+      ],
+      "event_id": "ftc-illuminate-student-data-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://www.ftc.gov/system/files/ftc_gov/pdf/2223105c4833illuminatefinalorder.pdf",
+          "original_title": "the order",
+          "relationship": "same_case_final_order",
+          "access_status": "not_checked",
+          "counted_as_separate_sample": false
+        },
+        {
+          "official_url": "https://www.ftc.gov/legal-library/browse/cases-proceedings/222-3105-illuminate-education-inc-matter",
+          "original_title": "Illuminate Education, Inc., In the Matter of",
+          "relationship": "same_case_docket",
+          "access_status": "http_200_link_structure_checked_full_docket_not_reviewed",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "checked_at": "2026-10-11T22:28:54+09:00",
+      "review_notes": [
+        "확인한 공식 본문에 근거한 독자 요약이며 사람 검수 전입니다. 연결 전문·불복 상태·다른 사건의 결론은 추정하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호에 직접 관련되고 원제목·게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students",
+        "body_scope": "official_HTML"
+      }
+    }
+  ],
+  "is_published": false,
+  "historical_access_failures": [
+    {
+      "requested_url": "https://www.ftc.gov/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-10-11T21:55:45+09:00"
+    }
+  ]
+}

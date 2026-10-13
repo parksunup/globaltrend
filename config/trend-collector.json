@@ -1,0 +1,158 @@
+{
+  "pr16_commit": "547a83611cad948439598e2974e7ce8afd10781d",
+  "sources": [
+    {
+      "source": "edpb",
+      "source_id": "a23ccfc6-4ad0-4ae7-bc85-0da35cfd2c1e",
+      "listing": "https://www.edpb.europa.eu/news_en",
+      "hosts": [
+        "www.edpb.europa.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "oecd",
+      "source_id": "50ec0b84-7c04-4f85-895e-50bf43219a98",
+      "listing": "https://www.oecd.org/en/topics/privacy-and-data-protection.html",
+      "hosts": [
+        "www.oecd.org"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "curia",
+      "source_id": "9a15e0d8-d980-41e2-8613-309a566de227",
+      "listing": "https://curia.europa.eu/site/jcms/d2_5158/en/press-releases",
+      "hosts": [
+        "curia.europa.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "held_dynamic_or_pdf_listing"
+    },
+    {
+      "source": "cnil",
+      "source_id": null,
+      "listing": "https://www.cnil.fr/fr/actualites",
+      "hosts": [
+        "www.cnil.fr"
+      ],
+      "language": "fr",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "ico",
+      "source_id": null,
+      "listing": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "hosts": [
+        "ico.org.uk"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "held_dynamic_or_pdf_listing"
+    },
+    {
+      "source": "dpc",
+      "source_id": null,
+      "listing": "https://www.dataprotection.ie/en/news-media/latest-news",
+      "hosts": [
+        "www.dataprotection.ie"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "pdpc",
+      "source_id": null,
+      "listing": "https://www.pdpc.gov.sg/media-events",
+      "hosts": [
+        "www.pdpc.gov.sg"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "held_dynamic_or_pdf_listing"
+    },
+    {
+      "source": "ppc",
+      "source_id": null,
+      "listing": "https://www.ppc.go.jp/news/press/",
+      "hosts": [
+        "www.ppc.go.jp"
+      ],
+      "language": "ja",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "ftc",
+      "source_id": null,
+      "listing": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "hosts": [
+        "www.ftc.gov"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "adapter_scope": "limited_html_or_rss"
+    }
+  ]
+}
