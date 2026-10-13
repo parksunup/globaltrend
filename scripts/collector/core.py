@@ -6,7 +6,7 @@ import time
 import urllib.error
 import urllib.request
 import urllib.robotparser
-from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode
+from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 
 MAX_BYTES=2_000_000
@@ -39,7 +39,9 @@ class SafeRedirect(urllib.request.HTTPRedirectHandler):
     def __init__(self,hosts): self.hosts=set(hosts)
     def redirect_request(self,req,fp,code,msg,headers,newurl):
         canonical_url(newurl,self.hosts)
-        return super().redirect_request(req,fp,code,msg,headers,newurl)
+        # Return the redirect to HttpClient so robots, rate and request limits
+        # apply to each hop instead of urllib following it inside one open().
+        return None
 
 class HttpClient:
     def __init__(self,hosts,interval=2,budget=None):
@@ -47,7 +49,7 @@ class HttpClient:
         self.opener=urllib.request.build_opener(SafeRedirect(self.hosts))
         self.started=time.monotonic()
         self.budget=budget if budget is not None else {'requests':0,'bytes':0,'started':self.started}
-    def request(self,url,method='GET',payload=None,headers=None):
+    def request(self,url,method='GET',payload=None,headers=None,enforce_robots=False,_redirects=0):
         url=canonical_url(url,self.hosts)
         for attempt in range(3):
             if self.budget['requests']>=MAX_REQUESTS or time.monotonic()-self.budget['started']>600: raise FetchError('request_or_runtime_limit')
@@ -61,6 +63,17 @@ class HttpClient:
                     data=read_limited(response);self.budget['bytes']+=len(data)
                     return data,response.url,response.headers.get_content_type()
             except urllib.error.HTTPError as e:
+                if e.code in (301,302,303,307,308):
+                    if _redirects>=5 or not e.headers.get('Location'):
+                        e.close(); raise FetchError('redirect_limit_or_location_missing') from None
+                    try: target=canonical_url(urljoin(url,e.headers['Location']),self.hosts)
+                    except ValueError:
+                        e.close(); raise FetchError('network_or_redirect_failure:ValueError') from None
+                    status=e.code; e.close()
+                    if enforce_robots: self.check_robots(target)
+                    if status==303 and method!='HEAD' or status in (301,302) and method=='POST':
+                        method='GET'; payload=None
+                    return self.request(target,method,payload,headers,enforce_robots,_redirects+1)
                 if e.code in (429,500,502,503,504) and attempt<2:
                     time.sleep(retry_delay(e.headers.get('Retry-After'))); continue
                 raise FetchError('http_'+str(e.code)) from None
@@ -69,7 +82,7 @@ class HttpClient:
                 if isinstance(e,urllib.error.URLError) and 'Tunnel connection failed: 403' in str(e.reason):
                     raise FetchError('network_policy_denied_403') from None
                 raise FetchError('network_or_redirect_failure:'+type(e).__name__) from None
-    def get(self,url):
+    def check_robots(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname
         if origin not in self.robots:
             data,_,_=self.request(origin+'/robots.txt')
@@ -77,28 +90,45 @@ class HttpClient:
             self.robots[origin]=robot
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
         if not self.robots[origin].can_fetch('GlobalTrendResearch',url): raise FetchError('robots_disallowed')
-        return self.request(url)
+        return url
+    def get(self,url):
+        url=self.check_robots(url)
+        return self.request(url,enforce_robots=True)
+    def post(self,url,payload,headers):
+        url=self.check_robots(url)
+        return self.request(url,'POST',payload,headers,enforce_robots=True)
+
+def fetch_listing(source,client,page):
+    def fetch(url,method='GET',payload=None):
+        return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
+    data,final,ctype=fetch(page)
+    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+        raise ValueError('unsupported_listing_type')
+    return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 
 def collect(config,client,store,since,until,max_pages=10,max_items=30):
     result={'source':config['source'],'status':'held','reason':None,'coverage_complete':False,'since':since,'until':until,
             'discovered':0,'new':0,'changed':0,'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,'pages':0}
     if not config.get('enabled') or not all(config.get('permissions',{}).get(k) for k in ('collect','store','ai')):
         result['reason']='source_permissions_or_operation_unapproved'; return result
-    if config['source'] in ('pdpc','ico','curia'):
-        result['reason']='adapter_pending_live_verification'; return result
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
-    seen_pages=set(); seen_items=set(); page=(cursor or {}).get('page') or config['listing']; next_page=None
+    seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
+    page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0)
     result['status']='partial'
     try:
         while page:
             page=canonical_url(page,set(config['hosts']))
             if page in seen_pages or result['pages']>=max_pages: raise FetchError('pagination_cycle_or_page_limit')
-            seen_pages.add(page); data,final,_=client.get(page); result['pages']+=1
-            rows,next_page=parsers.discover(config['source'],data.decode('utf-8','replace'),final)
+            seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
             if not rows: raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
             fingerprint=hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest()
+            listing_urls=[canonical_url(row['url'],set(config['hosts'])) for row in rows]
+            if fingerprint in seen_fingerprints or config['source'] in ('ico','pdpc') and (
+                len(set(listing_urls))!=len(listing_urls) or seen_listing_urls.intersection(listing_urls)):
+                raise FetchError('listing_repeated_or_duplicate_items')
+            seen_fingerprints.add(fingerprint); seen_listing_urls.update(listing_urls)
             start=(cursor or {}).get('offset',0) if (cursor or {}).get('fingerprint')==fingerprint else 0
             for index,row in enumerate(rows):
                 if index<start: continue
@@ -108,8 +138,7 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                 seen_items.add(url); result['discovered']+=1
                 try:
                     body,detail,ctype=client.get(url)
-                    if ctype not in ('text/html','application/xhtml+xml'): raise ValueError('unsupported_document_type')
-                    item=parsers.extract(config['source'],body.decode('utf-8','replace'),detail)
+                    item=parsers.extract_document(config['source'],body,detail,ctype,row)
                     date=item['published_date']
                     if date and not since<=date<=until:
                         result['out_of_range']+=1

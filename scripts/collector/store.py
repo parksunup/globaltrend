@@ -29,7 +29,9 @@ class SupabaseStore:
     def ingest(self,config,url,item):
         p={'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':item['title_original'],
            'p_published_at':item['published_date']+'T00:00:00Z' if item['published_date'] else None,'p_event_date':None,'p_fetched_at':None,
-           'p_language_code':config.get('language','en'),'p_document_type':'news','p_content_text':item['content_text'],
+           'p_language_code':config.get('language','en'),
+           'p_document_type':'press_release' if item['metadata'].get('read_scope')=='press_release_pdf_not_judgment' else 'news',
+           'p_content_text':item['content_text'],
            'p_content_hash':item['content_hash'],'p_raw_storage_path':None,'p_metadata':item['metadata'],'p_instruction_version':'trend-ko-v1'}
         # Read-only mode and conservative storage cap are checked before each body write.
         if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_storage_cap')

@@ -15,7 +15,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -32,7 +32,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -49,8 +49,8 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
-      "adapter_scope": "held_dynamic_or_pdf_listing"
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "adapter_scope": "english_press_release_listing_and_pdf"
     },
     {
       "source": "cnil",
@@ -66,7 +66,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -83,8 +83,8 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
-      "adapter_scope": "held_dynamic_or_pdf_listing"
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "adapter_scope": "observed_internal_search_and_news_html"
     },
     {
       "source": "dpc",
@@ -100,7 +100,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -117,8 +117,8 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
-      "adapter_scope": "held_dynamic_or_pdf_listing"
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "adapter_scope": "observed_listing_json_and_embedded_rsc_article"
     },
     {
       "source": "ppc",
@@ -134,7 +134,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -151,7 +151,7 @@
         "store": false,
         "ai": false
       },
-      "hold_reason": "current_network_and_terms_and_free_limits_not_verified",
+      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
       "adapter_scope": "limited_html_or_rss"
     }
   ]
