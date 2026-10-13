@@ -36,13 +36,13 @@
     "Footnote": 21
   },
   "private_draft_progress": {
-    "main_articles": 76,
+    "main_articles": 84,
     "total_main_articles": 99,
-    "recitals": 135,
+    "recitals": 150,
     "total_recitals": 173,
-    "drafted_nodes": 932,
+    "drafted_nodes": 1005,
     "total_nodes": 1123,
-    "missing_nodes": 191,
+    "missing_nodes": 118,
     "human_review_status": "not_started"
   },
   "nodes": [
