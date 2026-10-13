@@ -1,6 +1,8 @@
-name: Trend collector (manual, held until verified)
+name: Trend collector (gated automation)
 
 on:
+  schedule:
+    - cron: '17 22 * * *' # Next day 07:17 Asia/Seoul; default branch only.
   workflow_dispatch:
     inputs:
       mode:
@@ -15,22 +17,30 @@ on:
         description: 'Optional end YYYY-MM-DD; default today in Korea'
         type: string
 
-# No schedule is activated in this PR. After true end-to-end testing, add
-# schedule: [{cron: '17 22 * * *'}] on main (07:17 next day, Asia/Seoul).
-# GitHub schedule events use the default branch and may be delayed/skipped.
+# The scheduled job is blocked before runner allocation unless every runtime
+# switch is explicitly true. Defining cron on this PR branch does not activate
+# it: GitHub schedules use the default branch. No variable is changed here.
 permissions:
   contents: read
 
 concurrency:
-  group: trend-collector-${{ github.ref }}
+  group: trend-collector-existing-project
   cancel-in-progress: false
 
 jobs:
   collect:
+    if: >-
+      github.event_name != 'schedule' ||
+      (vars.SCHEDULE_ENABLED == 'true' &&
+       vars.COLLECTION_ENABLED == 'true' &&
+       vars.FREE_LIMITS_VERIFIED == 'true' &&
+       vars.CLOUD_PIPELINE_VERIFIED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      REQUESTED_MODE: ${{ inputs.mode }}
+      REQUESTED_MODE: ${{ github.event_name == 'schedule' && 'write' || inputs.mode || 'dry-run' }}
+      RUN_EVENT: ${{ github.event_name }}
+      SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
       RANGE_START: ${{ inputs.since }}
       RANGE_END: ${{ inputs.until }}
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
@@ -50,6 +60,7 @@ jobs:
         run: |
           args=(--output work/collector-result.json)
           if [ "$REQUESTED_MODE" = "write" ]; then args+=(--write); fi
+          if [ "$RUN_EVENT" = "schedule" ]; then args+=(--scheduled); fi
           if [ "$REQUESTED_MODE" = "probe" ]; then args+=(--probe); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
           if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi

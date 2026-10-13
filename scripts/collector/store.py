@@ -26,6 +26,28 @@ class SupabaseStore:
                 {'apikey':self.key,'Authorization':'Bearer '+self.key,'Content-Type':'application/json'})
             return json.loads(data)
         except Exception as e: raise FetchError('database_rpc_failure:'+name) from None
+    def preflight(self,config):
+        # Static registry eligibility is checked before this DB client is created.
+        if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}):
+            return {'allowed':False,'reason':'database_source_approval_missing'}
+        capacity=self.rpc('collector_capacity',{})
+        return {'allowed':bool(capacity.get('can_write')),
+                'reason':None if capacity.get('can_write') else 'database_storage_cap',
+                'database_bytes':capacity.get('database_bytes'),'stop_bytes':capacity.get('stop_bytes')}
+    def scheduled_range(self,config,until):
+        import datetime as dt
+        data=self.rpc('collector_get_progress',{'p_source_id':config['source_id']})
+        since=data.get('range_start'); end=data.get('range_end')
+        if since and end and data.get('cursor') is not None:
+            if dt.date.fromisoformat(since)>dt.date.fromisoformat(end): raise FetchError('database_progress_range_invalid')
+            return since,end
+        return self._range_start(data,until),until
+    @staticmethod
+    def _range_start(data,until):
+        import datetime as dt
+        end=dt.date.fromisoformat(until); last=data.get('last_success_date')
+        start=dt.date.fromisoformat(last)-dt.timedelta(days=3) if last else end-dt.timedelta(days=7)
+        return min(start,end).isoformat()
     def ingest(self,config,url,item):
         p={'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':item['title_original'],
            'p_published_at':item['published_date']+'T00:00:00Z' if item['published_date'] else None,'p_event_date':None,'p_fetched_at':None,
@@ -53,9 +75,8 @@ class SupabaseStore:
         data=self.rpc('collector_get_progress',{'p_source_id':config['source_id']})
         return data.get('cursor') if data.get('range_start')==since and data.get('range_end')==until else None
     def range_start(self,config,until):
-        import datetime as dt
         data=self.rpc('collector_get_progress',{'p_source_id':config['source_id']})
-        last=data.get('last_success_date')
-        return (dt.date.fromisoformat(last)-dt.timedelta(days=3)).isoformat() if last else (dt.date.fromisoformat(until)-dt.timedelta(days=7)).isoformat()
+        return self._range_start(data,until)
     def record_run(self,result):
+        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_storage_cap')
         self.rpc('collector_record_run',{'p_run_id':self.run_id,'p_result':result})

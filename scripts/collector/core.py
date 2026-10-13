@@ -114,7 +114,7 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
     page=(cursor or {}).get('page') or config['listing']; next_page=None
-    had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0)
+    had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     result['status']='partial'
     try:
         while page:
@@ -155,16 +155,23 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     if str(e).startswith('database_'): raise
                     result['failed']+=1
                     store.discovery_failure(config,url,row.get('title'),str(e))
+                    # Persist the failing item's position, then stop. A future run
+                    # retries it; advancing the offset would silently skip it.
+                    if hasattr(store,'progress'):
+                        store.progress(config,since,until,{'page':page,'offset':index,'fingerprint':fingerprint,
+                            'had_pagination':had_pagination,'failures':prior_failures,
+                            'unknown_dates':prior_unknown_dates+result['unknown_date']})
+                    raise FetchError('detail_failure:'+str(e)) from None
                 if hasattr(store,'progress'):
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
-                        'had_pagination':had_pagination,'failures':prior_failures+result['failed']})
+                        'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date']})
             page=next_page
             cursor=None
             if hasattr(store,'progress'):
-                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed']} if page else None)
-        result['coverage_complete']=had_pagination and result['failed']==0 and prior_failures==0
+                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date']} if page else None)
+        result['coverage_complete']=had_pagination and result['failed']==0 and prior_failures==0 and result['unknown_date']==0 and prior_unknown_dates==0
         result['status']='success' if result['coverage_complete'] else 'partial'
-        result['reason']=None if result['coverage_complete'] else 'listing_exhaustiveness_unverified_or_detail_failure'
+        result['reason']=None if result['coverage_complete'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
         if result['coverage_complete']: store.checkpoint(config,until)
     except (FetchError,ValueError) as e:
         result['status']='failed'; result['reason']=str(e); result['coverage_complete']=False

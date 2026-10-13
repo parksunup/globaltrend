@@ -84,3 +84,15 @@ Files: app/components/collector-review.tsx, app/work/page.tsx, docs/trend-collec
 - 실제 운영 ingest·동일 입력 반복·claim 1회·정확한 판본/해시/지침/인용 4개 대조·submit 통과. 보고서는 draft/human_reviewed=false/published_at=null이며 최종 DB 13,347,987바이트입니다.
 - 배포 reviewer 로그인·원문/초안/근거/한계·새로고침·익명 조회 차단(401)·reviewer submit 차단(403)·공개 목록 미표시/상세 404·로그아웃을 확인했습니다. 브라우저 오류 0개, 임시 계정 삭제와 출처 복원을 재조회했습니다.
 - 이번에는 제품 코드·migration·수집 설정을 변경하지 않았습니다. 기존 수집기 검사 46개는 이 세션에서 통과했고 문서 diff를 별도로 검증합니다. 새 환경·유료 API/서비스·정기 실행·공개 발행·main 병합 없음.
+
+## 품질 지침과 정기 수집 구축 후속 기록 — 2026-10-13
+
+- 사용자는 PR #16의 검수 산출물·피드백 기반 지침 개선과 9개 출처 정기 수집 구축 시작을 멀티 에이전트로 요청했습니다. 별도 응답으로 실제 정기 실행은 보류하고 구축·검증까지만 진행하도록 범위를 확정했습니다. 지침/근거 문서 에이전트와 collector/workflow/test 에이전트는 소유 파일을 나누어 병렬 진행했고 독립 에이전트가 통합 변경을 검토했습니다.
+- Ruling: 기존 수집·검수 구조와 제출 계약을 유지하는 확장으로 진행했습니다. 기존 PR 설계·사용자 변경 요청에 따라 문서와 가역적 구현을 수행하며 새 환경·유료 서비스·main 병합·원격 실행 설정 변경을 추가하지 않았습니다.
+- 지침: PR16 최신 c42db8b와 실제 피드백 4건(id2/3/4/5)을 대조했습니다. 자료는 unreviewed이며 표시 작성자를 검증된 신원/검수 승인으로 단정하지 않았습니다. 짧은 요약·번호/빈 줄 상세·유형별 깊이·법적 단계·날짜/수치·근거 대응을 개선하고 실제 EDPB 검수 전 작성 예시를 추가했습니다. DB 계약 trend-ko-v1은 유지하고 편집 개정일을 별도 표시했습니다. 기존 운영 초안은 변경하지 않았습니다.
+- 수집: 정적 source gate 뒤에만 DB client/preflight/range를 사용합니다. held/partial/failed를 blocked2/partial3/failed1로 구분하며 DB오류/용량 중단 뒤 추가 DB쓰기를 차단합니다. 실패 문서 cursor를 전진하지 않고 중단/재시도하며 예약 미완료 범위를 다음날 먼저 재개합니다. unknown date에는 완전 수집/checkpoint를 허용하지 않습니다.
+- Ruling: 07:17 KST cron은 비활성 실행 정의로 준비하되 job gate와 CLI gate에 SCHEDULE_ENABLED 및 기존 활성 조건을 요구합니다. 기본 브랜치 병합과 원격 변수를 설정하지 않아 실제 정기 실행은 활성화하지 않았습니다. 기본 manual mode는 dry-run입니다. 반복 AI 편집 예약은 별도 연결이며 생성하지 않았습니다.
+- Ruling: 현재 페이지 전체성에 대한 had_pagination 한계는 이번 수정을 통해 전체 기간 완전 수집으로 재해석하지 않습니다. 실제 source별 범위 증거 확장과 6개 운영 출처 등록/조건 승인은 후속 운영 범위로 남겼습니다. 저장소 9개 출처 승인false·6 source_id null·운영 초기3 terms_reviewed_at null은 유지했습니다.
+- 검증: 신규 회귀 검사의 실패를 확인한 뒤 수정했고 최종 Python collector 62/62 통과(기존46+신규16), 앱28/28, validate:data, typecheck 통과. 기존 의존성 경로를 재사용했고 새 환경은 만들지 않았습니다. YAML cron/default/all-four gates·문서 JSON 계약/상한/근거 인덱스/번호문단·git diff --check 통과. 현재 CLI 9-source write preflight 및 scheduled-disabled 둘 다 exit2/blocked/requests0/run-log skipped를 실증했습니다.
+- 운영 read-only 확인: DB13,347,987바이트 can_write=true; 출처 초기3 모두 승인null. Actions variables/secrets 조회는 HTTP403 Resource not accessible by integration여서 Actions credential readiness는 미확인으로 기록했습니다. 기존 관리 환경 secret을 Actions에 자동 전달된 것으로 취급하지 않았습니다.
+- 독립 통합 검토: Critical/Important/Minor 지적 없음. 검토 에이전트가 Python62개와 diff검사를 별도 재실행했고 gate순서·재개·실패offset·정기비활성·지침계약을 확인했습니다. 실제9출처운영/전기간완전성은 남은 제한으로 기록합니다.
