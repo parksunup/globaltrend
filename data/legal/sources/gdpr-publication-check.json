@@ -1,0 +1,86 @@
+{
+  "checked_at_utc": "2026-10-13T05:32:38.642065+00:00",
+  "publication_request": "verify_conditions_then_publish",
+  "decision": "withheld_pending_verified_reuse_conditions",
+  "prohibition_found": false,
+  "reuse_permission_verified": false,
+  "third_party_korean_translation_republication_authorized": false,
+  "public_body_files_added": false,
+  "scope": {
+    "articles": 99,
+    "recitals": 173,
+    "provisions": 1123,
+    "eu_comparison_cells": 17,
+    "human_reviewed_provisions": 0,
+    "human_reviewed_comparison_cells": 0
+  },
+  "local_candidate_check": {
+    "article_count": 99,
+    "provision_count": 1123,
+    "displayed_body_lines": 997,
+    "english_body_fields_removed": true,
+    "human_review_status": "not_started",
+    "published": false
+  },
+  "receipts": [
+    {
+      "id": "gdpr-followup-op-copyright",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "content_type": "text/html;charset=UTF-8",
+      "byte_count": 378556,
+      "sha256": "ef0c7a1fd673e4e03e4533b5a86c6001195d8c2610c77b76e5a3af0aad4efe38"
+    },
+    {
+      "id": "gdpr-release-op-dissemination",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/general-conditions-of-dissemination",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/en/web/about-us/legal-notices/general-conditions-of-dissemination",
+      "content_type": "text/html;charset=UTF-8",
+      "byte_count": 364607,
+      "sha256": "e698acc177ace2702e531b3697f8cbbf3a2312ef996b193fc3bdb862ec4831f9"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html?locale=fr",
+      "status": 202,
+      "bytes": 0,
+      "final_url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html?locale=fr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html?print=true",
+      "status": 202,
+      "bytes": 0,
+      "final_url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html?print=true",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017D1870",
+      "status": 202,
+      "bytes": 0,
+      "final_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32017D1870",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "url": "https://consilium.europa.eu/en/about-site/copyright/",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ],
+  "remaining": [
+    "EUR-Lex 법령 본문·자체 번역의 재사용 조건 확인",
+    "확인된 허용 조건에 맞는 출처·번역 변경 표시",
+    "2026년 현행성 전체 확인",
+    "번역 및 비교표 각각의 사람 의미·법률 검수"
+  ],
+  "network_domain_additions_for_settings": [
+    "www.consilium.europa.eu",
+    "www.europarl.europa.eu",
+    "publications.europa.eu"
+  ],
+  "network_note": "기존 허용 목록은 읽을 수 없어 교체하지 않음. EUR-Lex HTTP202는 도메인 추가만으로 해결된다고 보장하지 않음."
+}
