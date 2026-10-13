@@ -40,3 +40,7 @@ Council Decision (EU) 2017/1870의 적용 범위와 번역 조건도 공식 본�
 ## 환경 재시작 후 재확인
 
 2026-10-13 새 실행환경에서 공식 고지를 다시 조회했습니다. OP 저작권 고지 HTTP200, EUR-Lex 법적 고지/재사용 상세 HTTP202·0바이트, 이사회·의회 고지 프록시 연결403입니다. `sources/gdpr-publication-check.json`의 `latest_retry_receipts`에 조회 시각·URL·응답 해시를 추가했습니다. 공개 허용 조건은 여전히 미확정으로 본문/비교 셀의 공개 보류를 유지합니다. 이후 [네 비교 기준의 선택 조건/예외 후속 대조](./gdpr-four-cell-review.md)를 진행했습니다.
+
+## GDPR 남은13개 기준 후속 작업
+
+이번13기준후속작업에서도공식고지를재조회했습니다. EUR-Lex 법적고지/재사용상세HTTP202·0바이트,이사회/의회고지프록시403입니다. `sources/gdpr-publication-check.json`의 `remaining_criteria_pass_receipts`에조회증거를추가했습니다. 공개허가조건은미확정이며사람미검수상태와별개입니다.

@@ -123,5 +123,37 @@
       "bytes": 378554,
       "sha256": "7dbf825d31e78f3a51e1d6b5ce30807c706e6956cf9be917154535f5416f3c4d"
     }
+  ],
+  "remaining_criteria_pass_receipts": [
+    {
+      "id": "eurlex-notice",
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "checked_at_utc": "2026-10-13T07:36:02.109888+00:00",
+      "status": 202,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "final_url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+    },
+    {
+      "id": "eurlex-reuse",
+      "url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+      "checked_at_utc": "2026-10-13T07:36:02.110702+00:00",
+      "status": 202,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "final_url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html"
+    },
+    {
+      "id": "council-copyright",
+      "url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+      "checked_at_utc": "2026-10-13T07:36:02.111221+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "parliament-notice",
+      "url": "https://www.europarl.europa.eu/legal-notice/en/",
+      "checked_at_utc": "2026-10-13T07:36:02.111548+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
   ]
 }
