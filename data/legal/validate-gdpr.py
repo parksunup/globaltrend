@@ -42,11 +42,19 @@ def validate(source=None, private_draft=None):
         doc = json.loads(path.read_text())
         provisions = doc['provisions']
         check(public_nodes(provisions) == nodes, '비공개 초안의 고정 원문 메타데이터 변경')
-        check(doc['translation']['status'] == 'partial_draft' and not doc['translation']['complete'], '부분 초안의 전문 완료 오표시')
+        check(all(hashlib.sha256((n['source_text'] or n['source_title']).encode()).hexdigest()
+                  == n['source_sha256'] for n in provisions), '비공개 원문 본문 해시 불일치')
         check(doc['translation']['public_release_status'] == 'withheld', '번역 본문 공개 보류 상태 불일치')
+        check(doc['translation']['human_review_status'] == 'not_started'
+              and not doc['coverage']['semantic_completeness_verified'], '사람 의미 검수 오표시')
         check(all(n['human_review_status'] == 'not_started' for n in provisions), '사람 미검수 상태 변경')
         drafted = [n for n in provisions if n['translation_status'] == 'draft']
         missing = [n['node_id'] for n in provisions if n['translation_status'] != 'draft']
+        complete = not missing
+        check(doc['translation']['complete'] == complete
+              and doc['translation']['status'] == ('draft' if complete else 'partial_draft'), '원판 작성 완료/부분 초안 상태 불일치')
+        check(dict(collections.Counter(n['tag'] for n in drafted)) == doc['coverage']['draft_counts'], '작성 단위 수 불일치')
+        check(doc['coverage']['source_counts'] == index['source_counts'], '비공개 원문 단위 수 불일치')
         check(missing == doc['coverage']['missing_node_ids'], '미작성 목록 불일치')
         check(all(n.get('korean_text') or n.get('korean_title') for n in drafted), '초안 내부 빈 번역')
         progress = index['private_draft_progress']
@@ -58,11 +66,17 @@ def validate(source=None, private_draft=None):
         check(doc['translation']['translated_main_articles'] == progress['main_articles']
               and doc['translation']['translated_recitals'] == progress['recitals'], '문서 작성 수 불일치')
         check(len(drafted) == progress['drafted_nodes'] and len(missing) == progress['missing_nodes'], '공개 진행률과 비공개 초안 불일치')
+        status = json.loads((BASE / 'sources/gdpr-draft-status.json').read_text())
+        check(status['nodes'] == [dict(node_id=n['node_id'], tag=n['tag'],
+                                      translation_status=n['translation_status'],
+                                      human_review_status=n['human_review_status']) for n in provisions], '공개 항목별 검수 목록 불일치')
+        check(status['missing_node_ids'] == missing and status['selected_original_draft_complete'] == complete
+              and not status['semantic_completeness_verified'] and status['public_release_status'] == 'withheld', '공개 검수 목록 완료/보류 상태 불일치')
         private_md = path.with_suffix('.md').read_text()
         check(re.findall(r'<a id="([^"]+)"></a>', private_md) == [n['node_id'] for n in drafted], '비공개 번역 앵커 누락·순서 오류')
         check(all((n.get('korean_text') or n.get('korean_title')) in private_md for n in drafted), '비공개 JSON/Markdown 내용 불일치')
     print(f'GDPR 구조 검사 통과: 원판 색인 {len(nodes)}노드·99조·173고려사항; '
-          f'기록된 부분 초안 {index["private_draft_progress"]["main_articles"]}조/'
+          f'기록된 초안 {index["private_draft_progress"]["main_articles"]}조/'
           f'{index["private_draft_progress"]["recitals"]}고려사항. 공개 재배포·사람 의미 검수는 미확정.')
 
 
