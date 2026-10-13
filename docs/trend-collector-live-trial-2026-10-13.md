@@ -38,6 +38,23 @@ PR #32 head `d73fd4f9e937a5460f4fa9ba3b5532cc7d76a498`에서 이어갔습니다.
 
 인증 정상화 후 읽기 전용 용량·출처·중복 조회부터 재개합니다. 기존 무료 사용량·출처 승인 조건 충족 전 원문 쓰기/claim/submit을 하지 않습니다. 새 환경·유료 서비스·정기 실행·main 병합은 추가하지 않았습니다.
 
+### 최신 게시 설정으로 시작한 작업의 운영 인증 성공 — 2026-10-13 20:04 KST
+
+원격 브랜치와 PR #32 head는 모두 `ef2ef63f283c6b434df3021bc07bebf132a11e9f`였습니다. 시작 작업 공간에는 미커밋 변경이 없었고, 해당 head에서 기존 `codex/trend-collector-cloud` 작업을 이어갔습니다.
+
+- 현재 연결 환경: `ccarenv_b64_Y2NhcmVudl9kYjNmZmUwYTM0M2M4MTkxOGYzYjA4YzgwYWIwM2NlOA`. 설정 버전은 `cecfgver_6ace0ca4288081a08a4a46c539410d73`로, 이전 작업의 `cecfgver_6acdf76b6bc481a081d5fd525f8c9419`와 다릅니다. spec/observed revision은 모두 7, `observations_current=true`, running/connected입니다. 두 번 조회한 시크릿·변수·네트워크 상태는 여전히 `unknown`으로, 도구가 `ready` 또는 `enforced`를 보고했다고 주장하지 않습니다.
+- 설정 바인딩은 `COLLECTOR_SUPABASE_SECRET_KEY → SUPABASE_SECRET_KEY`, 허용 호스트는 `emlgwhkgaihhrirhdpnp.supabase.co`입니다. 프로세스에는 변수 존재 여부와 공개 URL 일치만 확인했습니다. 실제 키 값·형식·인증 헤더는 출력하거나 파일에 저장하지 않았습니다. 키를 다시 등록하거나 설정을 수정하지 않았습니다.
+- 기존 HTTPS 프록시와 기본 TLS 검증을 유지한 Python 요청에서 `collector_capacity`가 **apikey 단독과 apikey + Bearer 모두 HTTP 200**이었습니다. `sb_secret_`의 apikey 단독 사용 비교 요청을 포함한 결과이며 키 내용을 확인한 결과가 아닙니다. 이전 401은 이번 작업에서 재현되지 않았습니다. 과거 실패가 키 자체와 프록시 전달 중 어느 쪽 때문인지는 이 성공만으로 소급 단정하지 않습니다.
+- 운영 용량: `database_bytes=13175955`, `stop_bytes=400000000`, `can_write=true`. 이것은 DB 크기·읽기 전용 상태 확인이며 현재 무료 요금제·월 전송량 잔량 확인을 대신하지 않습니다.
+- 운영 `sources`는 기존 3건이며 모두 `is_active=true`, `terms_reviewed_at=null`입니다. EDPB 출처 `a23ccfc6-4ad0-4ae7-bc85-0da35cfd2c1e`의 `collector_source_allowed`도 HTTP 200 / `false`입니다. 승인값을 임의로 변경하지 않았습니다.
+- 해당 EDPB 공식 URL의 `source_items` 조회와 기존 SHA-256의 `source_item_revisions` 조회는 모두 HTTP 200 / 0건입니다. `draft_jobs`와 `collector_draft_daily_usage`도 0건입니다. URL·동일 본문 기준 중복이 없다는 결과이며 다른 기사 전체의 의미상 중복을 조사했다는 뜻은 아닙니다.
+- 현재 제공된 도구에는 Supabase 관리 API·조직 Usage, Vercel Billing, Codex 구독 잔량을 조회할 기능/인증이 없습니다. DB 서버 자격 증명을 다른 목적지로 보내거나 관리 API 자격 증명으로 전용하지 않았습니다. 현재 무료 사용량 확인 결과와 해당 기사 1건의 운영 시험용 승인 기록 여부만 사용자에게 요청했습니다.
+- 임시 의존성 경로 `/tmp/globaltrend-collector-deps`에 저장소의 고정 Python requirements를 설치한 후 `PYTHONPATH=/tmp/globaltrend-collector-deps python -m unittest discover -s tests -p 'test_collector*.py'`로 **46개 통과**했습니다. 초기 실행의 `bs4` 미설치 오류는 의존성 설치로 해소했습니다. 수집기 코드는 변경하지 않았습니다.
+- robots-aware 파서로 같은 EDPB 원문을 다시 읽어 3,903자·게시일 2026-07-17·기존 SHA-256 일치를 확인했습니다. 해당 확인 요청은 robots 포함 2회·42,496바이트입니다. 저작권 페이지도 별도로 읽어 상업/비상업 재사용·출처 표기·원래 의미 유지 조건을 재확인했습니다. 원문 응답 파일은 저장소에 넣지 않았습니다.
+- 기존 head의 collector/database/verify CI와 Vercel 상태는 성공입니다. 배포 Preview `https://globaltrend-git-codex-trend-collector-cloud-pipc-fairy.vercel.app`의 `/work`, `/public`은 HTTP 200, 비로그인 `/work`에는 로그인 폼이 있고 수집 검수 패널은 보이지 않습니다. reviewer 로그인·운영 초안 표시는 미시험입니다.
+
+**현재 중단 지점은 인증이 아니라 출처 승인과 현재 무료 사용량 확인입니다.** 사용자 조건에 따라 운영 ingest/claim/submit, 승인 변경, 계정 생성은 수행하지 않았습니다. 조건이 충족되면 용량·출처·중복을 다시 읽고 위 기사 1건의 운영 저장→미검수 초안→배포 reviewer 검수 시험을 이어갑니다. 새 환경·유료 서비스·정기 실행·공개 발행·main 병합은 하지 않았습니다.
+
 ### 이전 로컬 시험 당시의 연결 상태
 
 현재 관리 환경의 secrets/runtime_variables/outbound_identities는 비어 있고 실제 프로세스에도 운영 Supabase 서버키가 없습니다. `.env.local`은 로컬 API와 공개 클라이언트 키만 가지고 있습니다. GitHub Actions Secrets/Variables 목록은 연결 권한 부족으로 HTTP 403이었습니다. 기존 운영 연결을 시험할 수 있는 서버 권한이 제공되지 않은 상태입니다.
