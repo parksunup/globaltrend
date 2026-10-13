@@ -6,6 +6,7 @@ import json
 import re
 from pathlib import Path
 from tools.gdpr_index import extract, public_nodes
+from tools.gdpr_corrected import apply_correction
 
 BASE = Path(__file__).resolve().parent
 
@@ -15,7 +16,7 @@ def check(condition, message):
         raise ValueError(message)
 
 
-def validate(source=None, private_draft=None):
+def validate(source=None, private_draft=None, consolidated=None, corrigendum=None):
     index = json.loads((BASE / 'sources/gdpr-index.json').read_text())
     nodes = index['nodes']
     ids = [n['node_id'] for n in nodes]
@@ -36,7 +37,13 @@ def validate(source=None, private_draft=None):
     if source:
         raw = Path(source).read_bytes()
         check(hashlib.sha256(raw).hexdigest() == index['source']['response_sha256'], '선정 원판 응답 해시 불일치')
-        check(public_nodes(extract(source)) == nodes, '선정 원판과 공개 구조·번호·위치·해시 불일치')
+        observed = extract(source)
+        if index['source'].get('correction_sources'):
+            check(consolidated and corrigendum, '보정판 검사는 공식 통합본문·정오표 입력이 모두 필요')
+            for path, receipt in zip([consolidated, corrigendum], index['source']['correction_sources']):
+                check(hashlib.sha256(Path(path).read_bytes()).hexdigest() == receipt['sha256'], '보정 공식 응답 해시 불일치')
+            observed = apply_correction(observed, consolidated, corrigendum)
+        check(public_nodes(observed) == nodes, '선정 판본과 공개 구조·번호·위치·해시 불일치')
     if private_draft:
         path = Path(private_draft)
         doc = json.loads(path.read_text())
@@ -84,5 +91,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--source')
     parser.add_argument('--private-draft')
+    parser.add_argument('--consolidated')
+    parser.add_argument('--corrigendum')
     args = parser.parse_args()
-    validate(args.source, args.private_draft)
+    validate(args.source, args.private_draft, args.consolidated, args.corrigendum)

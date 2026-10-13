@@ -247,6 +247,15 @@ def validate(source_path=None, pipa_source_path=None):
         law = next(law for law in laws if law["record_id"] == cell["instrument_id"])
         check(cell["official_source_url"] == law["official_url"], "셀 공식 URL과 법제 목록 불일치")
         check(cell["source_version"] == law["version_label"], "셀 판본 상태와 법제 목록 불일치")
+        if cell["korean_summary"] == "공개 보류":
+            check(cell["jurisdiction_code"] == "EU"
+                  and cell["translation_status"] == "full_draft_withheld"
+                  and cell["major_exceptions"] == "공개 보류" and cell["pending_reason"]
+                  and not cell["article_numbers"] and not cell["translation_links"], "보류 셀 상태·본문 링크 불일치")
+            gdpr_status = json.loads((BASE / "sources/gdpr-draft-status.json").read_text())
+            check(gdpr_status['selected_original_draft_complete'] and not gdpr_status['missing_node_ids']
+                  and gdpr_status['public_release_status'] == 'withheld', "EU 전체 초안·본문 보류 근거 불일치")
+            continue
         if cell["korean_summary"] == "미검토":
             check(cell["major_exceptions"] == "미검토" and not cell["article_numbers"]
                   and not cell["translation_links"], "미검토 셀에 확정되지 않은 근거를 입력함")
@@ -301,7 +310,8 @@ def validate(source_path=None, pipa_source_path=None):
     check(all(anchor in anchors for anchor in review_anchors), "한국·일본 점검 링크 대상 미번역·누락")
     print(f"구조 검사 통과: APPI {len(nodes)}개 원문 노드, {len(drafts)}개 본칙 초안, "
           f"{len(anchors)}개 앵커, 한국 색인 {len(pipa_ids)}개, "
-          f"분류 초안 {sum(c['korean_summary'] != '미검토' for c in cells)}/{len(cells)}셀. "
+          f"공개 분류 초안 {sum(c['korean_summary'] not in {'미검토', '공개 보류'} for c in cells)}/{len(cells)}셀, "
+          f"공개 보류 {sum(c['korean_summary'] == '공개 보류' for c in cells)}셀. "
           f"선택 원문 번역 누락 {len(missing)}개; 사람 번역·비교 검수는 미완료.")
 
 

@@ -1,0 +1,568 @@
+{
+  "record_id": "eu-gdpr",
+  "reviewed_at_utc": "2026-10-13T02:10:54.298900+00:00",
+  "summary": "공식 OP 추론포함 RDF로 GDPR 정오표·통합본문 식별자를 확보하고 영어000.002통합본문·2018영어정오표를 확보.2016원판에실질수정17노드 확인.2026현행성 및 공개권리조건 확정은 별도 미완료.",
+  "scope": "출처·판본·정오표·권리조건 읽기전용검토. 저장소·2016원판캐시·기존번역초안 변경 없음. 모든 법문의 사람 실질검수 완료 아님.",
+  "source_selection": "기존2016관보원판고정자료는보존. 새확보영어통합본문은정오표반영비교자료이며 자동으로 기존번역의 기준판본을바꾸지않음.",
+  "english_consolidated": {
+    "receipt": {
+      "id": "gdpr-followup-consolidated-base",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "content_type": "application/xhtml+xml",
+      "byte_count": 462324,
+      "sha256": "a681ff22f32f125749af6e96947224369efc132edb8a95b12637e357df1056de",
+      "receipt_path": "/workspace/scratch/gdpr-followup-consolidated-base.receipt.json",
+      "source_path": "/workspace/scratch/gdpr-followup-consolidated-base.source"
+    },
+    "celex": "02016R0679-20160504",
+    "displayed_header": "02016R0679 — EN — 04.05.2016 — 000.002",
+    "cellar_id": "5f2552c2-cc45-11e6-ad7c-01aa75ed71a1",
+    "official_detail_url": "https://op.europa.eu/en/publication-detail/-/publication/5f2552c2-cc45-11e6-ad7c-01aa75ed71a1/language-en",
+    "corrected_by_display": "C1 Corrigendum, OJ L127,23.5.2018,p.2",
+    "legal_status_notice": "문서상순수문서화도구이며법적효력없음. 진정한본은관련법적행위의관보원문이며전문포함.",
+    "article_count": 99,
+    "recital_count": 0,
+    "structure_limitation": "통합본문은고려사항173개·원판서문등전체1123노드를포함하지않음. 기존원판고려사항은2018정오표를별도로대조해야함.",
+    "version_date_interpretation": "04.05.2016은통합본문표지의기준일.2018정오표가반영된000.002이고그날이마지막수정일이라는주장아님.2021_0000030의식별자말단숫자를법적시행일로읽지않음.",
+    "latest_version_as_of_2026_confirmed": false,
+    "remaining_currentness_check": "EUR-Lex 최신판선택UI·전체개정이력직접확인미완료.이번공식RDF의세정오표와언어메타데이터에서는추가영어정오표가확인되지않았으나전체현행성확인완료로확대하지않음."
+  },
+  "corrigenda": [
+    {
+      "celex": "32016R0679R(01)",
+      "publication_date": "2016-11-22",
+      "oj_identifier": "JOL_2016_314_R_0011",
+      "eli": "http://data.europa.eu/eli/reg/2016/679/corrigendum/2016-11-22/oj",
+      "cellar_id": "c0c14e1e-b043-11e6-aab7-01aa75ed71a1",
+      "metadata": {
+        "id": "gdpr-followup-corr01-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 51849,
+        "sha256": "47a3701c34569bccf2b7afd486482613d5d2e356efde8e22a65642698f17795c",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr01-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr01-rdf.source"
+      },
+      "official_metadata_expression_languages": [
+        "DEU",
+        "EST",
+        "HUN",
+        "ITA"
+      ],
+      "english_expression_in_metadata": false,
+      "english_download": "HTTP200 errorpage;法文未取得",
+      "non_english_content_reviewed": false
+    },
+    {
+      "celex": "32016R0679R(02)",
+      "publication_date": "2018-05-23",
+      "oj": "OJ L127,p.2",
+      "eli": "http://data.europa.eu/eli/reg/2016/679/corrigendum/2018-05-23/oj",
+      "cellar_id": "683d5816-5e52-11e8-ab9c-01aa75ed71a1",
+      "english_source": {
+        "id": "gdpr-followup-corr02-op",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=683d5816-5e52-11e8-ab9c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=683d5816-5e52-11e8-ab9c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "content_type": "application/xhtml+xml",
+        "byte_count": 23861,
+        "sha256": "292bd10918681ec090f23eafbc53afd4dd3bbb7cb976f6748df4a6254f2be54a",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr02-op.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr02-op.source"
+      },
+      "english_content_obtained": true,
+      "grouped_correction_heading_count": 15,
+      "changed_existing_nodes_count": 17,
+      "english_coverage": "정오표영어본문15수정묶음전체대상읽기및기존노드대조. 본칙16노드의수정본문은통합판에서확인,고려사항71은정오표for구절의원판정확일치와read대체문확인."
+    },
+    {
+      "celex": "32016R0679R(03)",
+      "publication_date": "2021-03-04",
+      "oj_identifier": "JOL_2021_074_R_0005",
+      "eli": "http://data.europa.eu/eli/reg/2016/679/corrigendum/2021-03-04/oj",
+      "cellar_id": "1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1",
+      "metadata": {
+        "id": "gdpr-followup-corr03-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 172255,
+        "sha256": "846b5da8a16bb9015a158b9e83463fbe172fe3778e3bfe2cf7cd28bd993563fe",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr03-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr03-rdf.source"
+      },
+      "official_metadata_expression_languages": [
+        "CES",
+        "DEU",
+        "ELL",
+        "FIN",
+        "GLE",
+        "HRV",
+        "HUN",
+        "ITA",
+        "LIT",
+        "NLD",
+        "POL",
+        "POR",
+        "SLK",
+        "SPA",
+        "SWE"
+      ],
+      "english_expression_in_metadata": false,
+      "english_download": "HTTP200 errorpage;法文未取得",
+      "non_english_content_reviewed": false
+    }
+  ],
+  "latest_language_variant_observed": {
+    "consolidation_id": "2016R0679/20160504_0000030",
+    "cellar_id": "424e72d0-9c7b-11eb-b85c-01aa75ed71a1",
+    "metadata": {
+      "id": "gdpr-followup-consolidated0030-rdf",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=424e72d0-9c7b-11eb-b85c-01aa75ed71a1&nonInferred=true",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=424e72d0-9c7b-11eb-b85c-01aa75ed71a1&nonInferred=true",
+      "content_type": "application/rdf+xml;charset=UTF-8",
+      "byte_count": 134583,
+      "sha256": "9ed2e4b59a64b43d5580a7eee5a27b8af1bf44f4a179fcb1d57527f01211ae91",
+      "receipt_path": "/workspace/scratch/gdpr-followup-consolidated0030-rdf.receipt.json",
+      "source_path": "/workspace/scratch/gdpr-followup-consolidated0030-rdf.source"
+    },
+    "metadata_expression_languages": [
+      "CES",
+      "DEU",
+      "ELL",
+      "FIN",
+      "GLE",
+      "HRV",
+      "HUN",
+      "ITA",
+      "LIT",
+      "NLD",
+      "POL",
+      "POR",
+      "SLK",
+      "SPA",
+      "SWE"
+    ],
+    "english_expression_in_metadata": false,
+    "interpretation": "2021年定誤표언어와일치하는15언어통합변형.영어000.003본문을다운로드했다고주장하지않음."
+  },
+  "difference_review": {
+    "article_comparison_path": "/workspace/scratch/gdpr-consolidated-diff.json",
+    "node_correction_path": "/workspace/scratch/gdpr-node-correction-diff.json",
+    "changed_articles": [
+      37,
+      41,
+      42,
+      43,
+      57,
+      64,
+      65,
+      69,
+      70
+    ],
+    "changed_nodes": [
+      {
+        "node_id": "recital-71",
+        "tag": "Recital",
+        "old_source_sha256": "86ca840b5d2ab835db301f9492e2ea84147dda17e8d5180b270fb384fc23f23b",
+        "new_source_sha256": "88e97c539c009856e6d4ec2c62e96df20112be8de63dd62778a1b99c244279d0"
+      },
+      {
+        "node_id": "main-a37-p1-ic",
+        "tag": "Item",
+        "old_source_sha256": "d803619d48db0c5c40e31f7fa374c4f6db7de1ec98f5855a5ec7d0b849a6c4f8",
+        "new_source_sha256": "d2b886ad827fd386a1e58ff769d0082f996a4d8455e7c1f034865658bd3d041c"
+      },
+      {
+        "node_id": "main-a41-p3",
+        "tag": "Paragraph",
+        "old_source_sha256": "c1d2bbb8f89b712f5d00c7c5b738ddb22d8327c279d5c54bb1de90840134f6f8",
+        "new_source_sha256": "5594937aacfdc4b8ed6450a7871c3e86257dbfc4a930f3429a69800c2d116a9c"
+      },
+      {
+        "node_id": "main-a41-p5",
+        "tag": "Paragraph",
+        "old_source_sha256": "9257754bfce3cac13632b604406913b2a9316d58a566f23c02f4b2d8dda4a176",
+        "new_source_sha256": "ffae39cec31fcde82bda5a3b35ba5ba7e9dc09e89714148028850fc4913b2eb2"
+      },
+      {
+        "node_id": "main-a42-p7",
+        "tag": "Paragraph",
+        "old_source_sha256": "72f4cc652d7aef225b936dd1c167ebc66b314f0caf128377a3ebba0a8f8b2da6",
+        "new_source_sha256": "d09dcd3faee07cbbb8d4166b7ca080cdc1911364e92e9ea78896043e7cb8d86c"
+      },
+      {
+        "node_id": "main-a43-p3",
+        "tag": "Paragraph",
+        "old_source_sha256": "fcde71c337a8d104b367b905e189d93d38f7b084664ab62664ef9be632183cc3",
+        "new_source_sha256": "a200359c88ffb46de362608c097ee8fa95c87a507035a02a4c68e91e3f402f30"
+      },
+      {
+        "node_id": "main-a43-p6",
+        "tag": "Paragraph",
+        "old_source_sha256": "6724fcc9f5cc1094b20a19a48de6a19544d9edaafd48066d286435170e7f2cef",
+        "new_source_sha256": "159f23e2bdbf38081eb0acaf1a5a2032b01c1c1323065761451de1cc36bba55a"
+      },
+      {
+        "node_id": "main-a57-p1-ip",
+        "tag": "Item",
+        "old_source_sha256": "48e91d540b45f4d5ed534661c23871dc9c64107b428de4ca2f3c494a2989a725",
+        "new_source_sha256": "4c7fb90ff1c0c4e29233a3189fcc62feca440106fbfcc1ee35ec848a3a713f63"
+      },
+      {
+        "node_id": "main-a64-p1-ic",
+        "tag": "Item",
+        "old_source_sha256": "7ac53eefa565ce9751f0cda6f98625e841de42a1419238d88a77e3383cb77fba",
+        "new_source_sha256": "0204c6a3e3f8aea5870cae1a0fbae4ebd670da56374600046380818af3c3ff52"
+      },
+      {
+        "node_id": "main-a64-p6",
+        "tag": "Paragraph",
+        "old_source_sha256": "b06e5bf66f9f5485d598afe2f0c687abbd7e8481d3804fc87482bbfaaf1ef8f4",
+        "new_source_sha256": "e43b17d6f275b410403dc973c727d4c14b0df4402e6e0e2bde94854c955516f2"
+      },
+      {
+        "node_id": "main-a64-p7",
+        "tag": "Paragraph",
+        "old_source_sha256": "0db10e41111c1a6610ebad65ca5d45064f2ba54dfc5ccd70a300d504b33fd2ba",
+        "new_source_sha256": "06f2afdcee46cec78778bb1c1a294cb966dbd63316d88a202d0be046ef6416ac"
+      },
+      {
+        "node_id": "main-a64-p8",
+        "tag": "Paragraph",
+        "old_source_sha256": "32fb658401bbfba040a4dd81d451cddb00b4bda68e9e3fe1340c3f62efad4130",
+        "new_source_sha256": "f9eee956d9d24cad309e3814fc6efb854d0e92ff47f9d092d766a4a214913f5a"
+      },
+      {
+        "node_id": "main-a65-p1-ia",
+        "tag": "Item",
+        "old_source_sha256": "1a05092aaae42deaad6c1719e7c2dc10ac52ffde7fd4ef74153773cf1ac821c8",
+        "new_source_sha256": "d97c7d181b6436ecb29518c090a196661b577780095d500ffba98fc4aab5e04a"
+      },
+      {
+        "node_id": "main-a69-p2",
+        "tag": "Paragraph",
+        "old_source_sha256": "8967058245de2863889fe53124d00c4f94068c46ef5dd5798f399ef35ad1d50f",
+        "new_source_sha256": "d2c35b337162b577a59852748f1c59b90fc187d518f34c56205bb5fbf699d609"
+      },
+      {
+        "node_id": "main-a70-p1-il",
+        "tag": "Item",
+        "old_source_sha256": "31504540d62e96afac08021da0da4eda57338c74d81a6335ef60ac4782ece8aa",
+        "new_source_sha256": "8264fb6c9ed29e7ad5de850f9af98b9da084e5456fffc033fb8ae4960da49f51"
+      },
+      {
+        "node_id": "main-a70-p1-io",
+        "tag": "Item",
+        "old_source_sha256": "dce5110a660c724643f590f520c4ebb4ee8414de4e13acab2a33affc3f920048",
+        "new_source_sha256": "7119c6c99af45dc365542eed462c9732810e27d590964f7960c6a154391d714f"
+      },
+      {
+        "node_id": "main-a70-p1-ip",
+        "tag": "Item",
+        "old_source_sha256": "d7eb0b38352689fccbf2717be54822057b97e06a26602a47102a55266f603943",
+        "new_source_sha256": "dbfc19d2f202cd5f4ebc1d94f90689c8882596bab37d67b2ea121d4d58fd2820"
+      }
+    ],
+    "not_changed": "기존private1123노드본문·번역/공개색인미수정",
+    "method": "조99개DOM일치및정규화문자열비교;정오표의17변경노드를기존노드에정확대응.본칙변경노드하위Text없음을기존색인에서확인.출력본문은scratch전용.",
+    "limitation": "정규화조비교는모든구조노드의동일성증명아님.인용각주/서문부재/렌더링변화를추가법률변경으로세지않음."
+  },
+  "rights_review": {
+    "official_op_copyright": {
+      "id": "gdpr-followup-op-copyright",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "content_type": "text/html;charset=UTF-8",
+      "byte_count": 378556,
+      "sha256": "ef0c7a1fd673e4e03e4533b5a86c6001195d8c2610c77b76e5a3af0aad4efe38",
+      "receipt_path": "/workspace/scratch/gdpr-followup-op-copyright.receipt.json",
+      "source_path": "/workspace/scratch/gdpr-followup-op-copyright.source"
+    },
+    "confirmed_permission_scope": "OP웹사이트EU소유편집콘텐츠에CCBY4.0고지.출처표기및변경표시요구.개별출판물은각copyrightnotice확인,EUR-Lex에는그별도고지확인요구.",
+    "publication_specific_copyright_notice_found": false,
+    "selected_metadata_explicit_rights_license_found": false,
+    "eurlex_notice_verified": false,
+    "eurlex_reuse_help_verified": false,
+    "eurlex_required_urls": [
+      "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html"
+    ],
+    "gdpr_legal_text_public_republication_permission_confirmed": false,
+    "own_korean_translation_public_republication_permission_confirmed": false,
+    "third_party_korean_translation_public_republication_permission_confirmed": false,
+    "decision": "이번자료만으로GDPR원문/자체한국어번역을공개PR에포함할수있다고확정하지못함.편집물CCBY를법령전문에자동확장하지않는다.기존private초안보관유지.",
+    "public_metadata_scope": "공식링크·판본/정오표식별정보·검토범위·해시등출처메타데이터제출은기존범위유지.본문파일공개허가결론과구별.",
+    "potential_notice_if_later_confirmed": "EU법문출처와기준관보/정오표/통합판명시,자체비공식한국어번역·변경범위·사람미검수표시.이는공개허가의대체근거가아님.",
+    "metadata_check_scope": "원판/통합판/정오표의확보RDF와본문내권리관련고지검색.별도EUR-Lex재사용상세본문미확보로조건판정불완전."
+  },
+  "network": {
+    "eurlex_direct": "HTTP202빈본문.승인된require_escalated읽기요청도x-amzn-waf-action:challenge,202,0bytes.빈본문또는curl0을내용확보로판정하지않음.",
+    "cellar_direct": "publications.europa.eu/resource/celex Tunnel connection failed403.",
+    "successful_official_alternative": "op.europa.eu의원판metadataRDF버튼 nonInferred=false에서공식관련graph확보후sameAs로발견한CELLAR UUID를동일OP공식download-handler/RDF버튼에사용.사이트WAF우회/챌린지해제없이공식제공경로이용.",
+    "automatic_approval_rejected": false,
+    "attempts": [
+      {
+        "id": "gdpr-followup-all",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32016R0679",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/legal-content/EN/ALL/?uri=CELEX:32016R0679",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-all.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-all.source"
+      },
+      {
+        "id": "gdpr-followup-cellar-consolidated",
+        "url": "https://publications.europa.eu/resource/celex/02016R0679-20160504",
+        "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+        "receipt_path": "/workspace/scratch/gdpr-followup-cellar-consolidated.receipt.json",
+        "source_path": null
+      },
+      {
+        "id": "gdpr-followup-consolidated-0030",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=424e72d0-9c7b-11eb-b85c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/errorpage",
+        "content_type": "text/html;charset=UTF-8",
+        "byte_count": 320293,
+        "sha256": "17c3dbbde994352493b47661c80e30eeabf5ea991ebe79e6271c4658eb7fff2f",
+        "receipt_path": "/workspace/scratch/gdpr-followup-consolidated-0030.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-consolidated-0030.source",
+        "successful_content": false
+      },
+      {
+        "id": "gdpr-followup-consolidated-base",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "content_type": "application/xhtml+xml",
+        "byte_count": 462324,
+        "sha256": "a681ff22f32f125749af6e96947224369efc132edb8a95b12637e357df1056de",
+        "receipt_path": "/workspace/scratch/gdpr-followup-consolidated-base.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-consolidated-base.source"
+      },
+      {
+        "id": "gdpr-followup-consolidated",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-consolidated.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-consolidated.source"
+      },
+      {
+        "id": "gdpr-followup-consolidated0030-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=424e72d0-9c7b-11eb-b85c-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=424e72d0-9c7b-11eb-b85c-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 134583,
+        "sha256": "9ed2e4b59a64b43d5580a7eee5a27b8af1bf44f4a179fcb1d57527f01211ae91",
+        "receipt_path": "/workspace/scratch/gdpr-followup-consolidated0030-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-consolidated0030-rdf.source"
+      },
+      {
+        "id": "gdpr-followup-consolidatedbase-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 235854,
+        "sha256": "4d5f317e35d38a09c415db5d3ba738ae9ba98c463263fe15d10d2d33f44ab51c",
+        "receipt_path": "/workspace/scratch/gdpr-followup-consolidatedbase-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-consolidatedbase-rdf.source"
+      },
+      {
+        "id": "gdpr-followup-corr01-op",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/errorpage",
+        "content_type": "text/html;charset=UTF-8",
+        "byte_count": 320293,
+        "sha256": "09055b9055725d6bca59da7d9a8b1d008ee1a6c29e934d8deba574d0486bb025",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr01-op.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr01-op.source",
+        "successful_content": false
+      },
+      {
+        "id": "gdpr-followup-corr01-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 51849,
+        "sha256": "47a3701c34569bccf2b7afd486482613d5d2e356efde8e22a65642698f17795c",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr01-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr01-rdf.source"
+      },
+      {
+        "id": "gdpr-followup-corr02-op",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=683d5816-5e52-11e8-ab9c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=683d5816-5e52-11e8-ab9c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "content_type": "application/xhtml+xml",
+        "byte_count": 23861,
+        "sha256": "292bd10918681ec090f23eafbc53afd4dd3bbb7cb976f6748df4a6254f2be54a",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr02-op.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr02-op.source"
+      },
+      {
+        "id": "gdpr-followup-corr02",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679R(02)",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679R(02)",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr02.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr02.source"
+      },
+      {
+        "id": "gdpr-followup-corr03-op",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/errorpage",
+        "content_type": "text/html;charset=UTF-8",
+        "byte_count": 320293,
+        "sha256": "f071a6c50fff84bc07bbdfe055ca3373fda65c38247a6eef3235d8e45cd8119b",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr03-op.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr03-op.source",
+        "successful_content": false
+      },
+      {
+        "id": "gdpr-followup-corr03-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&nonInferred=true",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&nonInferred=true",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 172255,
+        "sha256": "846b5da8a16bb9015a158b9e83463fbe172fe3778e3bfe2cf7cd28bd993563fe",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr03-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr03-rdf.source"
+      },
+      {
+        "id": "gdpr-followup-corr03",
+        "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679R(03)",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679R(03)",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-corr03.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-corr03.source"
+      },
+      {
+        "id": "gdpr-followup-eli",
+        "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-eli.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-eli.source"
+      },
+      {
+        "id": "gdpr-followup-legal-notice",
+        "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-legal-notice.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-legal-notice.source"
+      },
+      {
+        "id": "gdpr-followup-op-copyright",
+        "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+        "content_type": "text/html;charset=UTF-8",
+        "byte_count": 378556,
+        "sha256": "ef0c7a1fd673e4e03e4533b5a86c6001195d8c2610c77b76e5a3af0aad4efe38",
+        "receipt_path": "/workspace/scratch/gdpr-followup-op-copyright.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-op-copyright.source"
+      },
+      {
+        "id": "gdpr-followup-op-inferred-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=false",
+        "http_status": 200,
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=false",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "byte_count": 62783853,
+        "sha256": "9afc85a45c4f525d82b61980ad94bdcc41723a6bcc5f81415210ca2f0a265ca8",
+        "receipt_path": "/workspace/scratch/gdpr-followup-op-inferred-rdf.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-op-inferred-rdf.source"
+      },
+      {
+        "id": "gdpr-followup-reuse-help",
+        "url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+        "http_status": 202,
+        "final_url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+        "content_type": "text/html; charset=UTF-8",
+        "byte_count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "receipt_path": "/workspace/scratch/gdpr-followup-reuse-help.receipt.json",
+        "source_path": "/workspace/scratch/gdpr-followup-reuse-help.source"
+      }
+    ],
+    "escalated_headers_path": "/workspace/scratch/gdpr-followup-reuse-escalated.headers"
+  },
+  "graph_provenance": {
+    "receipt": {
+      "id": "gdpr-followup-op-inferred-rdf",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=false",
+      "http_status": 200,
+      "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=false",
+      "content_type": "application/rdf+xml;charset=UTF-8",
+      "byte_count": 62783853,
+      "sha256": "9afc85a45c4f525d82b61980ad94bdcc41723a6bcc5f81415210ca2f0a265ca8",
+      "receipt_path": "/workspace/scratch/gdpr-followup-op-inferred-rdf.receipt.json",
+      "source_path": "/workspace/scratch/gdpr-followup-op-inferred-rdf.source"
+    },
+    "relevant_triples_path": "/workspace/scratch/gdpr-inferred-relevant-expanded.json",
+    "limitations": "inferredgraph의subject/object방향및sameAs를읽어법령↔정오표↔통합관계를확인.최신판옵션UI를확인한것은아님."
+  },
+  "preserved_original_source": {
+    "id": "gdpr-op-xhtml",
+    "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+    "final_url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+    "http_status": 200,
+    "content_type": "application/xhtml+xml",
+    "byte_count": 806864,
+    "sha256": "962539af03738bf552319ff4ce42d69e5f95a576307c4dfed7bf87e81b646b9d",
+    "source_path": "/workspace/scratch/gdpr-op-xhtml.source",
+    "receipt_path": "/workspace/scratch/gdpr-op-xhtml.receipt.json"
+  },
+  "reproducible_scripts": {
+    "article_diff": "/workspace/scratch/gdpr-consolidated-diff.py",
+    "node_diff": "/workspace/scratch/gdpr-node-correction-diff.py",
+    "node_extractor_dependency": "/workspace/globaltrend/data/legal/tools/gdpr_index.py",
+    "command": "python /workspace/scratch/gdpr-node-correction-diff.py",
+    "private_translation_dependency": false
+  },
+  "integration": {
+    "selected_version": "32016R0679-OJ20160504-EN-CORR20180523",
+    "corrected_nodes": 17,
+    "original_preserved_files": [
+      "gdpr-2016-original.json",
+      "gdpr-2016-original.md"
+    ],
+    "marker_note": "►C1/◄ 통합본문편집표지 제외, 법문자체변경없음",
+    "public_body_status": "withheld",
+    "canonical_node_manifest": "gdpr-correction-manifest.json",
+    "semantic_review_status": "not_started"
+  }
+}

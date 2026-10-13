@@ -18,6 +18,9 @@ def escape(value):
 def render_cell(cell):
     if cell["korean_summary"] == "미검토":
         return "미검토"
+    if cell["korean_summary"] == "공개 보류":
+        return "<br>".join(["**공개 보류**", "**검수:** 사람 검수 전 초안",
+                             "**사유·진행:** " + escape(cell["pending_reason"])])
     articles = read_list(cell["article_numbers"])
     links = read_list(cell["translation_links"])
     if len(articles) != len(links) or not articles:

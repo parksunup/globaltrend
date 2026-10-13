@@ -19,7 +19,8 @@ def render():
         laws = list(csv.DictReader(stream))
     criteria = [(cell["criterion_id"], cell["criterion_order"], cell["criterion_name"])
                 for cell in cells if cell["jurisdiction_code"] == "KR"]
-    filled = sum(cell["korean_summary"] != "미검토" for cell in cells)
+    filled = sum(cell["korean_summary"] not in {"미검토", "공개 보류"} for cell in cells)
+    held = sum(cell["korean_summary"] == "공개 보류" for cell in cells)
     lines = [
         "# 국가·관할권별 조항 분류·요약표 — 한국·일본 비교 초안", "",
         f"초안 작성일: 2026-10-07 · 한국 수집·이용·제공 및 일본 17기준 관련 원문 재대조일: 2026-10-08 (한국 시각). **분류 초안 {filled}/119셀 · 사람 검수 완료 0셀.** "
@@ -37,6 +38,9 @@ def render():
         "각 셀은 연결한 조항을 중심으로 자체 요약한 초안입니다. 주제별 관련 조항의 법률적 완전성, "
         "부칙 적용 관계 및 시행령·규칙·지침의 추가 근거는 사람이 확인해야 합니다. "
         "일본의 배려가 필요한 개인정보·벌금·과료를 한국 민감정보·과징금과 동일하게 취급하지 않습니다.", "",
+        f"EU GDPR은 보정판 전체 번역과17개 기준의 비공개 비교 초안을 작성했습니다. 공개 보류 {held}셀은 규정 부재나 조사 미착수를 뜻하지 않습니다. "
+        "번역 본문 재배포 조건 미확정으로 실제 한국어 조문 링크를 공개할 수 없어 요약·예외·조문 링크를 이 공개 표에 넣지 않았습니다. "
+        "[EU 판본·비교 검토 메모](./gdpr-comparison-review.md)에 작성 범위와 보류 사유를 기록했습니다.", "",
         "| 기준 | 한국 PIPA | 일본 APPI | 중국 PIPL | EU GDPR | 영국 UK GDPR | 캘리포니아 CCPA | 싱가포르 PDPA |",
         "| --- | --- | --- | --- | --- | --- | --- | --- |",
     ]

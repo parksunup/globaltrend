@@ -30,7 +30,8 @@ def render(path):
         raise ValueError('작성 상태에 빈 번역이 있습니다.')
     if any(n['human_review_status'] != 'not_started' for n in nodes):
         raise ValueError('이 출력기는 사람 미검수 초안만 다룹니다.')
-    scope = '선택 2016관보 원판 전체 초안' if complete else '부분 초안'
+    scope = ('선택 보정판 전체 초안' if doc['source'].get('correction_sources')
+             else '선택 2016관보 원판 전체 초안') if complete else '부분 초안'
     doc['translation'].update(translated_main_articles=len(articles), translated_recitals=len(recitals),
                               status='draft' if complete else 'partial_draft', complete=complete)
     doc['korean_title'] = f'EU GDPR 한국어 번역 {scope} — 제1~{len(articles)}조·고려사항1~{len(recitals)}'
@@ -40,7 +41,7 @@ def render(path):
     lines = [f'# EU GDPR 한국어 번역 {scope} — 사람 검수 전', '',
              '법률명: ' + doc['official_name'], '관할권: 유럽연합(EU)',
              '공식 원문: ' + source['download_url'],
-             '판본: OJ L119,4.5.2016 영어 관보 원판; 최신 통합판·정오표 미확정',
+             '판본: ' + source['scope_note'],
              '발효: 2016-05-24 · 적용: 2018-05-25',
              f'번역 상태: {scope}. 사람 미검수·공개 재배포 보류. 최신 통합판 번역 완료가 아닙니다.', '',
              f'99조 중 {len(articles)}조,173개 고려사항 중 {len(recitals)}개를 작성했습니다. '
@@ -70,7 +71,7 @@ def render(path):
     index_path.write_text(json.dumps(index, ensure_ascii=False, indent=2) + '\n')
     review_status = dict(document_id='eu-gdpr-draft-review-status',
                         source_version=source['version_id'],
-                        scope='선택 2016 영어 관보 원판; 최신 통합판·정오표 미확정',
+                        scope=source['scope_note'],
                         selected_original_draft_complete=complete,
                         semantic_completeness_verified=False,
                         public_release_status='withheld',
@@ -80,9 +81,10 @@ def render(path):
                                     human_review_status=n['human_review_status']) for n in nodes])
     (BASE / 'sources/gdpr-draft-status.json').write_text(
         json.dumps(review_status, ensure_ascii=False, indent=2) + '\n')
-    public = ['# EU GDPR 원판 구조 색인 — 본문 미포함', '',
+    public = ['# EU GDPR 선택 판본 구조 색인 — 본문 미포함', '',
               '이 문서는 번역 전문이 아닙니다. 원문 위치·번호·목차·해시만 기록합니다. 한국어 본문은 공개 재배포 조건 미확정으로 Git에 넣지 않았습니다.', '',
               f'공식 영어 원판: [EU 출판국]({source["original_url"]}) · 발효2016-05-24 · 적용2018-05-25.',
+              '선택 판본: ' + source['scope_note'],
               f'최신 통합판·정오표·사람 의미 검수는 미확정입니다. 비공개 {scope}을 작성했습니다.', '',
               '| 구조 | 원문 수 | 비공개 초안 작성 수 |', '| --- | ---: | ---: |']
     for tag in counts:
