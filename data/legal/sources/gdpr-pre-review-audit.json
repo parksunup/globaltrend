@@ -1,0 +1,4750 @@
+{
+  "audited_on_kst": "2026-10-13",
+  "source_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "method": "explicit_article_numbers_and_ranges_only",
+  "audited_nodes": 1123,
+  "reference_nodes": 245,
+  "no_explicit_reference_nodes": [
+    "law-title",
+    "preface-1",
+    "preface-3",
+    "preface-4",
+    "preface-5",
+    "preface-6",
+    "preface-7",
+    "preface-8",
+    "recital-2",
+    "recital-3",
+    "recital-4",
+    "recital-5",
+    "recital-6",
+    "recital-7",
+    "recital-8",
+    "recital-9",
+    "recital-10",
+    "recital-11",
+    "recital-14",
+    "recital-15",
+    "recital-16",
+    "recital-17",
+    "recital-18",
+    "recital-19",
+    "recital-20",
+    "recital-22",
+    "recital-23",
+    "recital-24",
+    "recital-25",
+    "recital-26",
+    "recital-27",
+    "recital-28",
+    "recital-29",
+    "recital-30",
+    "recital-31",
+    "recital-32",
+    "recital-33",
+    "recital-34",
+    "recital-35",
+    "recital-36",
+    "recital-37",
+    "recital-38",
+    "recital-39",
+    "recital-40",
+    "recital-41",
+    "recital-42",
+    "recital-43",
+    "recital-44",
+    "recital-45",
+    "recital-46",
+    "recital-47",
+    "recital-48",
+    "recital-49",
+    "recital-50",
+    "recital-51",
+    "recital-52",
+    "recital-53",
+    "recital-54",
+    "recital-55",
+    "recital-56",
+    "recital-57",
+    "recital-58",
+    "recital-59",
+    "recital-60",
+    "recital-61",
+    "recital-62",
+    "recital-63",
+    "recital-64",
+    "recital-65",
+    "recital-66",
+    "recital-67",
+    "recital-68",
+    "recital-69",
+    "recital-70",
+    "recital-71",
+    "recital-72",
+    "recital-73",
+    "recital-74",
+    "recital-75",
+    "recital-76",
+    "recital-77",
+    "recital-78",
+    "recital-79",
+    "recital-80",
+    "recital-81",
+    "recital-82",
+    "recital-83",
+    "recital-84",
+    "recital-85",
+    "recital-86",
+    "recital-87",
+    "recital-88",
+    "recital-89",
+    "recital-90",
+    "recital-91",
+    "recital-92",
+    "recital-93",
+    "recital-94",
+    "recital-95",
+    "recital-96",
+    "recital-97",
+    "recital-98",
+    "recital-99",
+    "recital-100",
+    "recital-101",
+    "recital-102",
+    "recital-103",
+    "recital-104",
+    "recital-105",
+    "recital-107",
+    "recital-108",
+    "recital-109",
+    "recital-110",
+    "recital-111",
+    "recital-112",
+    "recital-113",
+    "recital-114",
+    "recital-115",
+    "recital-116",
+    "recital-117",
+    "recital-118",
+    "recital-119",
+    "recital-120",
+    "recital-121",
+    "recital-122",
+    "recital-123",
+    "recital-124",
+    "recital-125",
+    "recital-126",
+    "recital-127",
+    "recital-128",
+    "recital-129",
+    "recital-130",
+    "recital-131",
+    "recital-132",
+    "recital-133",
+    "recital-134",
+    "recital-135",
+    "recital-136",
+    "recital-137",
+    "recital-138",
+    "recital-139",
+    "recital-140",
+    "recital-142",
+    "recital-144",
+    "recital-145",
+    "recital-146",
+    "recital-147",
+    "recital-148",
+    "recital-149",
+    "recital-151",
+    "recital-152",
+    "recital-154",
+    "recital-155",
+    "recital-156",
+    "recital-157",
+    "recital-158",
+    "recital-160",
+    "recital-161",
+    "recital-162",
+    "recital-164",
+    "recital-167",
+    "recital-168",
+    "recital-169",
+    "recital-171",
+    "recital-173",
+    "preface-9",
+    "main-cI",
+    "main-a1",
+    "main-a1-p1",
+    "main-a1-p2",
+    "main-a1-p3",
+    "main-a2",
+    "main-a2-p1",
+    "main-a2-p2",
+    "main-a2-p2-ia",
+    "main-a2-p2-ib",
+    "main-a2-p2-ic",
+    "main-a2-p2-id",
+    "main-a3",
+    "main-a3-p1",
+    "main-a3-p2",
+    "main-a3-p2-ia",
+    "main-a3-p2-ib",
+    "main-a3-p3",
+    "main-a4",
+    "main-a4-t1",
+    "main-a4-i1",
+    "main-a4-i2",
+    "main-a4-i3",
+    "main-a4-i4",
+    "main-a4-i5",
+    "main-a4-i6",
+    "main-a4-i7",
+    "main-a4-i8",
+    "main-a4-i9",
+    "main-a4-i10",
+    "main-a4-i11",
+    "main-a4-i12",
+    "main-a4-i13",
+    "main-a4-i14",
+    "main-a4-i15",
+    "main-a4-i16",
+    "main-a4-i16-ia",
+    "main-a4-i16-ib",
+    "main-a4-i18",
+    "main-a4-i19",
+    "main-a4-i20",
+    "main-a4-i22",
+    "main-a4-i22-ia",
+    "main-a4-i22-ib",
+    "main-a4-i22-ic",
+    "main-a4-i23",
+    "main-a4-i23-ia",
+    "main-a4-i23-ib",
+    "main-a4-i24",
+    "main-a4-i26",
+    "main-cII",
+    "main-a5",
+    "main-a5-p1",
+    "main-a5-p1-ia",
+    "main-a5-p1-ic",
+    "main-a5-p1-id",
+    "main-a5-p1-if",
+    "main-a5-p2",
+    "main-a6",
+    "main-a6-p1",
+    "main-a6-p1-ia",
+    "main-a6-p1-ib",
+    "main-a6-p1-ic",
+    "main-a6-p1-id",
+    "main-a6-p1-ie",
+    "main-a6-p1-if",
+    "main-a6-p1-t1",
+    "main-a6-p2",
+    "main-a6-p3",
+    "main-a6-p3-ia",
+    "main-a6-p3-ib",
+    "main-a6-p3-t1",
+    "main-a6-p4-ia",
+    "main-a6-p4-ib",
+    "main-a6-p4-id",
+    "main-a6-p4-ie",
+    "main-a7",
+    "main-a7-p1",
+    "main-a7-p2",
+    "main-a7-p3",
+    "main-a7-p4",
+    "main-a8",
+    "main-a8-p1-t1",
+    "main-a8-p2",
+    "main-a8-p3",
+    "main-a9",
+    "main-a9-p1",
+    "main-a9-p2",
+    "main-a9-p2-ia",
+    "main-a9-p2-ib",
+    "main-a9-p2-ic",
+    "main-a9-p2-id",
+    "main-a9-p2-ie",
+    "main-a9-p2-if",
+    "main-a9-p2-ig",
+    "main-a9-p2-ih",
+    "main-a9-p2-ii",
+    "main-a9-p3",
+    "main-a9-p4",
+    "main-a10",
+    "main-a11",
+    "main-a11-p1",
+    "main-cIII",
+    "main-cIII-s1",
+    "main-a12",
+    "main-a12-p4",
+    "main-a12-p5-ia",
+    "main-a12-p5-ib",
+    "main-a12-p5-t1",
+    "main-cIII-s2",
+    "main-a13",
+    "main-a13-p1",
+    "main-a13-p1-ia",
+    "main-a13-p1-ib",
+    "main-a13-p1-ic",
+    "main-a13-p1-ie",
+    "main-a13-p2",
+    "main-a13-p2-ia",
+    "main-a13-p2-ib",
+    "main-a13-p2-id",
+    "main-a13-p2-ie",
+    "main-a13-p3",
+    "main-a13-p4",
+    "main-a14",
+    "main-a14-p1",
+    "main-a14-p1-ia",
+    "main-a14-p1-ib",
+    "main-a14-p1-ic",
+    "main-a14-p1-id",
+    "main-a14-p1-ie",
+    "main-a14-p2",
+    "main-a14-p2-ia",
+    "main-a14-p2-ic",
+    "main-a14-p2-ie",
+    "main-a14-p2-if",
+    "main-a14-p3",
+    "main-a14-p3-ia",
+    "main-a14-p3-ib",
+    "main-a14-p3-ic",
+    "main-a14-p4",
+    "main-a14-p5",
+    "main-a14-p5-ia",
+    "main-a14-p5-ic",
+    "main-a14-p5-id",
+    "main-a15",
+    "main-a15-p1",
+    "main-a15-p1-ia",
+    "main-a15-p1-ib",
+    "main-a15-p1-ic",
+    "main-a15-p1-id",
+    "main-a15-p1-ie",
+    "main-a15-p1-if",
+    "main-a15-p1-ig",
+    "main-a15-p3",
+    "main-a15-p4",
+    "main-cIII-s3",
+    "main-a16",
+    "main-a16-t1",
+    "main-a17",
+    "main-a17-p1",
+    "main-a17-p1-ia",
+    "main-a17-p1-id",
+    "main-a17-p1-ie",
+    "main-a17-p2",
+    "main-a17-p3",
+    "main-a17-p3-ia",
+    "main-a17-p3-ib",
+    "main-a17-p3-ie",
+    "main-a18",
+    "main-a18-p1",
+    "main-a18-p1-ia",
+    "main-a18-p1-ib",
+    "main-a18-p1-ic",
+    "main-a18-p2",
+    "main-a18-p3",
+    "main-a19",
+    "main-a20",
+    "main-a20-p1",
+    "main-a20-p1-ib",
+    "main-a20-p2",
+    "main-a20-p4",
+    "main-cIII-s4",
+    "main-a21",
+    "main-a21-p2",
+    "main-a21-p3",
+    "main-a21-p4",
+    "main-a21-p5",
+    "main-a22",
+    "main-a22-p1",
+    "main-a22-p2",
+    "main-a22-p2-ia",
+    "main-a22-p2-ib",
+    "main-a22-p2-ic",
+    "main-a22-p3",
+    "main-cIII-s5",
+    "main-a23",
+    "main-a23-p1-ia",
+    "main-a23-p1-ib",
+    "main-a23-p1-ic",
+    "main-a23-p1-id",
+    "main-a23-p1-ie",
+    "main-a23-p1-if",
+    "main-a23-p1-ig",
+    "main-a23-p1-ih",
+    "main-a23-p1-ii",
+    "main-a23-p1-ij",
+    "main-a23-p2",
+    "main-a23-p2-ia",
+    "main-a23-p2-ib",
+    "main-a23-p2-ic",
+    "main-a23-p2-id",
+    "main-a23-p2-ie",
+    "main-a23-p2-if",
+    "main-a23-p2-ig",
+    "main-a23-p2-ih",
+    "main-cIV",
+    "main-cIV-s1",
+    "main-a24",
+    "main-a24-p1",
+    "main-a24-p2",
+    "main-a25",
+    "main-a25-p1",
+    "main-a25-p2",
+    "main-a26",
+    "main-a26-p2",
+    "main-a26-p3",
+    "main-a27",
+    "main-a27-p2",
+    "main-a27-p2-ib",
+    "main-a27-p3",
+    "main-a27-p4",
+    "main-a27-p5",
+    "main-a28",
+    "main-a28-p1",
+    "main-a28-p2",
+    "main-a28-p3",
+    "main-a28-p3-ia",
+    "main-a28-p3-ib",
+    "main-a28-p3-id",
+    "main-a28-p3-ie",
+    "main-a28-p3-ig",
+    "main-a28-p3-ih",
+    "main-a28-p3-t1",
+    "main-a28-p4",
+    "main-a28-p9",
+    "main-a29",
+    "main-a29-t1",
+    "main-a30",
+    "main-a30-p1",
+    "main-a30-p1-ia",
+    "main-a30-p1-ib",
+    "main-a30-p1-ic",
+    "main-a30-p1-id",
+    "main-a30-p1-if",
+    "main-a30-p2",
+    "main-a30-p2-ia",
+    "main-a30-p2-ib",
+    "main-a30-p3",
+    "main-a30-p4",
+    "main-a31",
+    "main-a31-t1",
+    "main-cIV-s2",
+    "main-a32",
+    "main-a32-p1",
+    "main-a32-p1-ia",
+    "main-a32-p1-ib",
+    "main-a32-p1-ic",
+    "main-a32-p1-id",
+    "main-a32-p2",
+    "main-a32-p4",
+    "main-a33",
+    "main-a33-p2",
+    "main-a33-p3",
+    "main-a33-p3-ia",
+    "main-a33-p3-ib",
+    "main-a33-p3-ic",
+    "main-a33-p3-id",
+    "main-a33-p4",
+    "main-a33-p5",
+    "main-a34",
+    "main-a34-p1",
+    "main-a34-p3",
+    "main-a34-p3-ia",
+    "main-a34-p3-ib",
+    "main-a34-p3-ic",
+    "main-a34-p4",
+    "main-cIV-s3",
+    "main-a35",
+    "main-a35-p1",
+    "main-a35-p2",
+    "main-a35-p3",
+    "main-a35-p3-ia",
+    "main-a35-p3-ic",
+    "main-a35-p5",
+    "main-a35-p7",
+    "main-a35-p7-ia",
+    "main-a35-p7-ib",
+    "main-a35-p7-ic",
+    "main-a35-p7-id",
+    "main-a35-p9",
+    "main-a35-p11",
+    "main-a36",
+    "main-a36-p3",
+    "main-a36-p3-ia",
+    "main-a36-p3-ib",
+    "main-a36-p3-ic",
+    "main-a36-p3-id",
+    "main-a36-p3-if",
+    "main-a36-p4",
+    "main-a36-p5",
+    "main-cIV-s4",
+    "main-a37",
+    "main-a37-p1",
+    "main-a37-p1-ia",
+    "main-a37-p1-ib",
+    "main-a37-p2",
+    "main-a37-p3",
+    "main-a37-p4",
+    "main-a37-p6",
+    "main-a37-p7",
+    "main-a38",
+    "main-a38-p1",
+    "main-a38-p3",
+    "main-a38-p4",
+    "main-a38-p5",
+    "main-a38-p6",
+    "main-a39",
+    "main-a39-p1",
+    "main-a39-p1-ia",
+    "main-a39-p1-ib",
+    "main-a39-p1-id",
+    "main-a39-p2",
+    "main-cIV-s5",
+    "main-a40",
+    "main-a40-p1",
+    "main-a40-p2",
+    "main-a40-p2-ia",
+    "main-a40-p2-ib",
+    "main-a40-p2-ic",
+    "main-a40-p2-id",
+    "main-a40-p2-ie",
+    "main-a40-p2-if",
+    "main-a40-p2-ig",
+    "main-a40-p2-ii",
+    "main-a40-p2-ij",
+    "main-a40-p6",
+    "main-a40-p8",
+    "main-a40-p10",
+    "main-a40-p11",
+    "main-a41",
+    "main-a41-p2",
+    "main-a41-p2-ia",
+    "main-a41-p2-ib",
+    "main-a41-p2-ic",
+    "main-a41-p2-id",
+    "main-a41-p4",
+    "main-a41-p5",
+    "main-a41-p6",
+    "main-a42",
+    "main-a42-p1",
+    "main-a42-p3",
+    "main-a42-p8",
+    "main-a43",
+    "main-a43-p2",
+    "main-a43-p2-ia",
+    "main-a43-p2-ic",
+    "main-a43-p2-id",
+    "main-a43-p2-ie",
+    "main-a43-p4",
+    "main-a43-p5",
+    "main-a43-p7",
+    "main-cV",
+    "main-a44",
+    "main-a44-t1",
+    "main-a45",
+    "main-a45-p1",
+    "main-a45-p2",
+    "main-a45-p2-ia",
+    "main-a45-p2-ib",
+    "main-a45-p2-ic",
+    "main-a45-p6",
+    "main-a45-p8",
+    "main-a46",
+    "main-a46-p2",
+    "main-a46-p2-ia",
+    "main-a46-p3",
+    "main-a46-p3-ia",
+    "main-a46-p3-ib",
+    "main-a47",
+    "main-a47-p1-ia",
+    "main-a47-p1-ib",
+    "main-a47-p1-ic",
+    "main-a47-p2",
+    "main-a47-p2-ia",
+    "main-a47-p2-ib",
+    "main-a47-p2-ic",
+    "main-a47-p2-id",
+    "main-a47-p2-if",
+    "main-a47-p2-ii",
+    "main-a47-p2-ij",
+    "main-a47-p2-ik",
+    "main-a47-p2-il",
+    "main-a47-p2-im",
+    "main-a47-p2-in",
+    "main-a48",
+    "main-a48-t1",
+    "main-a49",
+    "main-a49-p1-ia",
+    "main-a49-p1-ib",
+    "main-a49-p1-ic",
+    "main-a49-p1-id",
+    "main-a49-p1-ie",
+    "main-a49-p1-if",
+    "main-a49-p1-ig",
+    "main-a49-p2",
+    "main-a49-p3",
+    "main-a49-p4",
+    "main-a49-p5",
+    "main-a50",
+    "main-a50-t1",
+    "main-a50-ia",
+    "main-a50-ib",
+    "main-a50-ic",
+    "main-a50-id",
+    "main-cVI",
+    "main-cVI-s1",
+    "main-a51",
+    "main-a51-p1",
+    "main-a51-p2",
+    "main-a51-p4",
+    "main-a52",
+    "main-a52-p1",
+    "main-a52-p2",
+    "main-a52-p3",
+    "main-a52-p4",
+    "main-a52-p5",
+    "main-a52-p6",
+    "main-a53",
+    "main-a53-p1",
+    "main-a53-p1-u1",
+    "main-a53-p1-u2",
+    "main-a53-p1-u3",
+    "main-a53-p1-u4",
+    "main-a53-p2",
+    "main-a53-p3",
+    "main-a53-p4",
+    "main-a54",
+    "main-a54-p1",
+    "main-a54-p1-ia",
+    "main-a54-p1-ib",
+    "main-a54-p1-ic",
+    "main-a54-p1-id",
+    "main-a54-p1-ie",
+    "main-a54-p1-if",
+    "main-a54-p2",
+    "main-cVI-s2",
+    "main-a55",
+    "main-a55-p1",
+    "main-a55-p3",
+    "main-a56",
+    "main-a56-p2",
+    "main-a56-p6",
+    "main-a57",
+    "main-a57-p1",
+    "main-a57-p1-ia",
+    "main-a57-p1-ib",
+    "main-a57-p1-ic",
+    "main-a57-p1-id",
+    "main-a57-p1-ie",
+    "main-a57-p1-ig",
+    "main-a57-p1-ih",
+    "main-a57-p1-ii",
+    "main-a57-p1-it",
+    "main-a57-p1-iv",
+    "main-a57-p2",
+    "main-a57-p3",
+    "main-a57-p4",
+    "main-a58",
+    "main-a58-p1",
+    "main-a58-p1-ia",
+    "main-a58-p1-ib",
+    "main-a58-p1-id",
+    "main-a58-p1-ie",
+    "main-a58-p1-if",
+    "main-a58-p2",
+    "main-a58-p2-ia",
+    "main-a58-p2-ib",
+    "main-a58-p2-ic",
+    "main-a58-p2-id",
+    "main-a58-p2-ie",
+    "main-a58-p2-if",
+    "main-a58-p2-ij",
+    "main-a58-p3",
+    "main-a58-p3-ib",
+    "main-a58-p4",
+    "main-a58-p5",
+    "main-a58-p6",
+    "main-a59",
+    "main-cVII",
+    "main-cVII-s1",
+    "main-a60",
+    "main-a60-p1",
+    "main-a60-p3",
+    "main-a60-p5",
+    "main-a60-p6",
+    "main-a60-p7",
+    "main-a60-p8",
+    "main-a60-p9",
+    "main-a60-p10",
+    "main-a60-p12",
+    "main-a61",
+    "main-a61-p1",
+    "main-a61-p2",
+    "main-a61-p3",
+    "main-a61-p4",
+    "main-a61-p4-ia",
+    "main-a61-p4-ib",
+    "main-a61-p5",
+    "main-a61-p6",
+    "main-a61-p7",
+    "main-a62",
+    "main-a62-p1",
+    "main-a62-p3",
+    "main-a62-p4",
+    "main-a62-p5",
+    "main-a62-p6",
+    "main-cVII-s2",
+    "main-a63",
+    "main-a63-t1",
+    "main-a64",
+    "main-a64-p1",
+    "main-a64-p3",
+    "main-a64-p4",
+    "main-a64-p5",
+    "main-a64-p5-ia",
+    "main-a64-p5-ib",
+    "main-a64-p6",
+    "main-a64-p7",
+    "main-a65",
+    "main-a65-p1",
+    "main-a65-p1-ib",
+    "main-a65-p2",
+    "main-a65-p3",
+    "main-a65-p4",
+    "main-a65-p5",
+    "main-a66",
+    "main-a66-p2",
+    "main-a66-p3",
+    "main-a67",
+    "main-cVII-s3",
+    "main-a68",
+    "main-a68-p1",
+    "main-a68-p2",
+    "main-a68-p3",
+    "main-a68-p4",
+    "main-a68-p5",
+    "main-a69",
+    "main-a70",
+    "main-a70-p1",
+    "main-a70-p1-ib",
+    "main-a70-p1-ic",
+    "main-a70-p1-ie",
+    "main-a70-p1-il",
+    "main-a70-p1-is",
+    "main-a70-p1-iu",
+    "main-a70-p1-iv",
+    "main-a70-p1-iw",
+    "main-a70-p1-iy",
+    "main-a70-p2",
+    "main-a71",
+    "main-a71-p1",
+    "main-a72",
+    "main-a72-p1",
+    "main-a72-p2",
+    "main-a73",
+    "main-a73-p1",
+    "main-a73-p2",
+    "main-a74",
+    "main-a74-p1",
+    "main-a74-p1-ia",
+    "main-a74-p2",
+    "main-a75",
+    "main-a75-p1",
+    "main-a75-p2",
+    "main-a75-p3",
+    "main-a75-p4",
+    "main-a75-p5",
+    "main-a75-p6",
+    "main-a75-p6-ia",
+    "main-a75-p6-ib",
+    "main-a75-p6-ic",
+    "main-a75-p6-id",
+    "main-a75-p6-ie",
+    "main-a75-p6-if",
+    "main-a75-p6-ig",
+    "main-a76",
+    "main-a76-p1",
+    "main-a76-p2",
+    "main-cVIII",
+    "main-a77",
+    "main-a77-p1",
+    "main-a78",
+    "main-a78-p1",
+    "main-a78-p3",
+    "main-a78-p4",
+    "main-a79",
+    "main-a79-p2",
+    "main-a80",
+    "main-a81",
+    "main-a81-p1",
+    "main-a81-p2",
+    "main-a81-p3",
+    "main-a82",
+    "main-a82-p1",
+    "main-a82-p2",
+    "main-a82-p3",
+    "main-a82-p4",
+    "main-a82-p5",
+    "main-a83",
+    "main-a83-p1",
+    "main-a83-p2-ia",
+    "main-a83-p2-ib",
+    "main-a83-p2-ic",
+    "main-a83-p2-ie",
+    "main-a83-p2-if",
+    "main-a83-p2-ig",
+    "main-a83-p2-ih",
+    "main-a83-p2-ik",
+    "main-a83-p3",
+    "main-a83-p4",
+    "main-a83-p5",
+    "main-a83-p5-id",
+    "main-a83-p8",
+    "main-a83-p9",
+    "main-a84",
+    "main-a84-p2",
+    "main-cIX",
+    "main-a85",
+    "main-a85-p1",
+    "main-a85-p2",
+    "main-a85-p3",
+    "main-a86",
+    "main-a86-t1",
+    "main-a87",
+    "main-a87-t1",
+    "main-a88",
+    "main-a88-p1",
+    "main-a88-p2",
+    "main-a88-p3",
+    "main-a89",
+    "main-a89-p1",
+    "main-a89-p4",
+    "main-a90",
+    "main-a90-p2",
+    "main-a91",
+    "main-a91-p1",
+    "main-a91-p2",
+    "main-cX",
+    "main-a92",
+    "main-a92-p1",
+    "main-a92-p4",
+    "main-a93",
+    "main-a93-p1",
+    "main-cXI",
+    "main-a94",
+    "main-a94-p1",
+    "main-a95",
+    "main-a95-t1",
+    "main-a96",
+    "main-a96-t1",
+    "main-a97",
+    "main-a97-p1",
+    "main-a97-p2",
+    "main-a97-p2-ib",
+    "main-a97-p3",
+    "main-a97-p4",
+    "main-a97-p5",
+    "main-a98",
+    "main-a98-t1",
+    "main-a99",
+    "main-a99-p1",
+    "main-a99-p2",
+    "closing-1",
+    "closing-2",
+    "closing-3",
+    "closing-4",
+    "closing-5",
+    "closing-6",
+    "closing-7",
+    "closing-8",
+    "footnote-1",
+    "footnote-2",
+    "footnote-3",
+    "footnote-4",
+    "footnote-5",
+    "footnote-6",
+    "footnote-7",
+    "footnote-8",
+    "footnote-9",
+    "footnote-10",
+    "footnote-11",
+    "footnote-12",
+    "footnote-13",
+    "footnote-14",
+    "footnote-15",
+    "footnote-16",
+    "footnote-17",
+    "footnote-18",
+    "footnote-19",
+    "footnote-20",
+    "footnote-21"
+  ],
+  "mismatched_node_ids": [],
+  "references": [
+    {
+      "node_id": "preface-2",
+      "source_sha256": "0aa21798ea07275867217225fbad73ae3923c96903c89691313c630ececc77d2",
+      "korean_sha256": "f333617887120ad6ff4f414869c70f0ed821df46c5e198ff73df6c94aa2c0ca7",
+      "status": "match",
+      "english_numbers": [
+        16
+      ],
+      "korean_numbers": [
+        16
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-1",
+      "source_sha256": "9388c4b7110f37e6264c171b2d0240c52642a9e95a9841505670a3fe9da73f7a",
+      "korean_sha256": "6ed39018cef333c47ea458e8322133cf45aa4b06dfb5eefd442d057e9604edc3",
+      "status": "match",
+      "english_numbers": [
+        8,
+        16
+      ],
+      "korean_numbers": [
+        8,
+        16
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-12",
+      "source_sha256": "5b468e901456ee16ac86d724be1d3a916d83bacbc3e813f2781fc5bec81ff0d2",
+      "korean_sha256": "30e9f53f233a16c0918823b32b87e0b4158491287bd1b88f6e5be90a60daae93",
+      "status": "match",
+      "english_numbers": [
+        16
+      ],
+      "korean_numbers": [
+        16
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-13",
+      "source_sha256": "4e5effe5f3fadeb335f3005df1c2b4d1552214b93fab2400184b327c912ea26e",
+      "korean_sha256": "aca53612100a045cbcf7303fe97c3de5ec7017fca8c456fde9c2e13b87f36a3d",
+      "status": "match",
+      "english_numbers": [
+        2
+      ],
+      "korean_numbers": [
+        2
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-21",
+      "source_sha256": "63ba747d0421cda28c9be2428f37f3a41efc8848932a29ceeaa195c4c7b78648",
+      "korean_sha256": "f38699876c93734a15e168806323d083c3542fbe1a2008dec336bd7c12ea3e26",
+      "status": "match",
+      "english_numbers": [
+        12,
+        15
+      ],
+      "korean_numbers": [
+        12,
+        15
+      ],
+      "english_ranges": [
+        [
+          12,
+          15
+        ]
+      ],
+      "korean_ranges": [
+        [
+          12,
+          15
+        ]
+      ]
+    },
+    {
+      "node_id": "recital-106",
+      "source_sha256": "3cc7fc27153ee8c3fb0f08172acda59dd385105d2092767cc4009680b9139414",
+      "korean_sha256": "64ed8a50cf84dae6933a4eb00739ae19a5b7a76a6389c95e7a6989672b217408",
+      "status": "match",
+      "english_numbers": [
+        25,
+        26
+      ],
+      "korean_numbers": [
+        25,
+        26
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-141",
+      "source_sha256": "8e521b66da2c5ef258bb20069d80c8ed8d47a4637d6ac39813787c9662f963d2",
+      "korean_sha256": "8008c1b677a25b4dd9d160891858cde04b8b2495c6c0e91db5fd9b27047c1445",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-143",
+      "source_sha256": "69dddd077cea4e5feada39eb05e7ca7d8a44f84b4ddbaaf4b2dc573f33f09ff9",
+      "korean_sha256": "83c5218c8d4cb85972e5fb1df1a735a60d854cbf889c4045a758466af016c6f7",
+      "status": "match",
+      "english_numbers": [
+        263,
+        267
+      ],
+      "korean_numbers": [
+        263,
+        267
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-150",
+      "source_sha256": "ad6a999ea470cddd426546d5449dab8d3b8b3fa5b3895d713abfd4889ea88eea",
+      "korean_sha256": "32b6394c25008da18c191f786a419e01d69bf7a3d3c959f59832ac58a5ff3988",
+      "status": "match",
+      "english_numbers": [
+        101,
+        102
+      ],
+      "korean_numbers": [
+        101,
+        102
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-153",
+      "source_sha256": "ad252fd83c2144d5c5ee16a33176201d7c19af9c8c63b9c6bc4e0a0d0be3fd67",
+      "korean_sha256": "7e987df18e4506ed2957f1622bd4d484259f81a1e688c5570953df6454364305",
+      "status": "match",
+      "english_numbers": [
+        11
+      ],
+      "korean_numbers": [
+        11
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-159",
+      "source_sha256": "a6e87fd111fce01c30b50866bd01913c7614785c2f377be3925082a257ad32c4",
+      "korean_sha256": "58a9b1e988e59b147b90c17f817329c901d707410d9ad06aa9bde706878b6868",
+      "status": "match",
+      "english_numbers": [
+        179
+      ],
+      "korean_numbers": [
+        179
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-163",
+      "source_sha256": "373b2ad79c15a0992f802e6d1dca3e609dd55683afaf76a50cd4aebc19a4c3aa",
+      "korean_sha256": "71bf2bc0fe9c65094dcb2b80b5cc75c0e1b62b3d96c8fff0cc3dd320d621f54b",
+      "status": "match",
+      "english_numbers": [
+        338
+      ],
+      "korean_numbers": [
+        338
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-165",
+      "source_sha256": "e6a8a2f5003067e601a2fd7abe15fe08c2efd513955b394787eb61eec5217197",
+      "korean_sha256": "ffccde2ee6f2a525d9342d1d61ba7e24a956b148bafef41d9df0890716499a82",
+      "status": "match",
+      "english_numbers": [
+        17
+      ],
+      "korean_numbers": [
+        17
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-166",
+      "source_sha256": "611c193e0daec2cdfa208b5e42b50de1c659aaccf848fcc6f5403b12f339e40f",
+      "korean_sha256": "8f7a33aec208499390181d5cdb0985a4ba248afa31db31955343580f9cb965c1",
+      "status": "match",
+      "english_numbers": [
+        290
+      ],
+      "korean_numbers": [
+        290
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-170",
+      "source_sha256": "59050e8acb1d8d13f7addbed09df41f00223c93df7c24bca7c70f653b0db83d2",
+      "korean_sha256": "0ba66b59098c69c30607dabc1cdf0c03e52ef4df4b06e2789d5806c10dd25fd1",
+      "status": "match",
+      "english_numbers": [
+        5
+      ],
+      "korean_numbers": [
+        5
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "recital-172",
+      "source_sha256": "0b5ed03b7d375dc67721746cb1a0eafb01e0556d1e20b55bd071dc908e993489",
+      "korean_sha256": "ea9d7e658e5bd72fb8b72f3cc5d20bd4427e835f101b03e5ba0dbb7041640b08",
+      "status": "match",
+      "english_numbers": [
+        28
+      ],
+      "korean_numbers": [
+        28
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a2-p3",
+      "source_sha256": "c7838f1a78c01a0edb2df87d775401eb9c46ffff34c03aa3e538bc605ebe7d69",
+      "korean_sha256": "23895c53cbe078e54fba60a0c5be1852d7e1b7efdbe77e1951103ccf13eb9d46",
+      "status": "match",
+      "english_numbers": [
+        98
+      ],
+      "korean_numbers": [
+        98
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a2-p4",
+      "source_sha256": "2cdc0977a702a640818e9fa3a0dca3db0daac36f841a41cf328b1f17f6dc46b3",
+      "korean_sha256": "e7ec281b0091c33b250a54172f1ba6cc1836947467982925bf88d20e00822fe7",
+      "status": "match",
+      "english_numbers": [
+        12,
+        15
+      ],
+      "korean_numbers": [
+        12,
+        15
+      ],
+      "english_ranges": [
+        [
+          12,
+          15
+        ]
+      ],
+      "korean_ranges": [
+        [
+          12,
+          15
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a4-i17",
+      "source_sha256": "92045adb1cb12644704efaa551800973f05f14167954e18542b770b2c3b29eaf",
+      "korean_sha256": "c48508ae7df7d8bcf0a3224c52a7d6ae81f287306820fc060b6e1e263b832d00",
+      "status": "match",
+      "english_numbers": [
+        27
+      ],
+      "korean_numbers": [
+        27
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a4-i21",
+      "source_sha256": "708ea3601dc0246ded291450646998628f01f907aa549a9fa664858eb183c9fc",
+      "korean_sha256": "69d9cc33f8d060ac57ae9e30501e75d8d6d1404e706e8f744fc35e3f1451cb87",
+      "status": "match",
+      "english_numbers": [
+        51
+      ],
+      "korean_numbers": [
+        51
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a4-i25",
+      "source_sha256": "26871f0db19f09e35378ffb28310cde5dab64a793b844c0b13dd1c7843d7df56",
+      "korean_sha256": "07923fd0cee85c9bf08e9be2118d7827729bdb01198a88b30b06ca802a6172e5",
+      "status": "match",
+      "english_numbers": [
+        1
+      ],
+      "korean_numbers": [
+        1
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a5-p1-ib",
+      "source_sha256": "f5550332afb6ac63b204a1b4ad6e4bdf02c6bf34918b7df975a2deb05cf85599",
+      "korean_sha256": "494f0fb69039e0999963bd767635f902c4bbb4b931a231a53b99344809aeccba",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a5-p1-ie",
+      "source_sha256": "bfddfe300f583693fec40c088fec733bd4d6a2f66132d0417cbf225b2ed4db59",
+      "korean_sha256": "b5ff587042e9b29151715662e05266ec0d31600df0592b359550b3df48bd33aa",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a6-p4",
+      "source_sha256": "47b24356d04b70feacbc6e3a535850a9dfce28fd9d531173e4fe8f54f1be7f53",
+      "korean_sha256": "d9a2b7870da7b65d949ace69d95bf41be22141e57c62797822052e55f102dd30",
+      "status": "match",
+      "english_numbers": [
+        23
+      ],
+      "korean_numbers": [
+        23
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a6-p4-ic",
+      "source_sha256": "291b194dbeb4ba4f648d9720b6b1c3ad3c9bda68a2ccd849bf214c685332ae47",
+      "korean_sha256": "3aeb7f4da856a03b9f7279babd7ec59b9b0ae17b4332e89749c14ce8b5956634",
+      "status": "match",
+      "english_numbers": [
+        9,
+        10
+      ],
+      "korean_numbers": [
+        9,
+        10
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a8-p1",
+      "source_sha256": "d05b48685177f8e606f9fb079e02605baeb690f5ad87b1e619e36b7032fbfb68",
+      "korean_sha256": "754067b4e890379b587ba2bd71a76fde33e7b0bd6a288300fb0ad0c1de23be4f",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a9-p2-ij",
+      "source_sha256": "3f626b1e516fb06c0722e2604be50872029708b30cc241b86a6495dd621b61c3",
+      "korean_sha256": "23363293399b7b4b49ee37e88fac2f219446989a37f64493320eef564b07a29b",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a10-t1",
+      "source_sha256": "c7e433dda80bd34db8fe713dd03432bd83c5329f00d6979bdbb8164ece785313",
+      "korean_sha256": "0a0077587d09391f587dd9d41a54542b9df2ca3d226663c51369081729224fb3",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a11-p2",
+      "source_sha256": "6a3bdde22bd638d2a5457d2af000c0d305d82406a80fc9a9002671def60d5fde",
+      "korean_sha256": "138eda8a915ff0a80581c0f47479da538294a2c5097e9c130c8c85188aa5ea67",
+      "status": "match",
+      "english_numbers": [
+        15,
+        20
+      ],
+      "korean_numbers": [
+        15,
+        20
+      ],
+      "english_ranges": [
+        [
+          15,
+          20
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          20
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p1",
+      "source_sha256": "73559a942c3bf8163138d6fdb069df449a7b3f7a1bd2636033936eca3788fa95",
+      "korean_sha256": "8eb31b0bf94642df6caed89ce99abdf82d2c4ad075cda0b290b942716870ff3e",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14,
+        15,
+        22,
+        34
+      ],
+      "korean_numbers": [
+        13,
+        14,
+        15,
+        22,
+        34
+      ],
+      "english_ranges": [
+        [
+          15,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p2",
+      "source_sha256": "0882c09c3a4a30c8220dedf2d2092a7850982a0fd5fb814c1002b448deb615aa",
+      "korean_sha256": "f622535ae842dedbf793b23e6606fd2cf5fec76ee1ff643b0e34814a35556bbc",
+      "status": "match",
+      "english_numbers": [
+        11,
+        15,
+        22
+      ],
+      "korean_numbers": [
+        11,
+        15,
+        22
+      ],
+      "english_ranges": [
+        [
+          15,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p3",
+      "source_sha256": "d5f20370ea3d4f9c91b26b0f0ab37ab0bb712f6bb2bbf9bcf291e1b8f1dbcb5c",
+      "korean_sha256": "46630233cc0ca794769a3e45ebb6e5d0e925f115a68f3ca0b6d39ed62cd22791",
+      "status": "match",
+      "english_numbers": [
+        15,
+        22
+      ],
+      "korean_numbers": [
+        15,
+        22
+      ],
+      "english_ranges": [
+        [
+          15,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p5",
+      "source_sha256": "d6aa6acc688119ac95f6d044ae1cbe71c3db564201d659c40870a5b7fc1d5c1d",
+      "korean_sha256": "2a1a8e1b3209f183acecfda93a8640e0ecba630b7d3138d07d31a418d605152d",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14,
+        15,
+        22,
+        34
+      ],
+      "korean_numbers": [
+        13,
+        14,
+        15,
+        22,
+        34
+      ],
+      "english_ranges": [
+        [
+          15,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p6",
+      "source_sha256": "e17f61041e22719acf6acd55654b1f84ac29904a682fc4a7f024d6edf81bcf37",
+      "korean_sha256": "604bdadab1ed5eb200a821394cb44fe2a1b23207ee835b84902ad3f324fb39cf",
+      "status": "match",
+      "english_numbers": [
+        11,
+        15,
+        21
+      ],
+      "korean_numbers": [
+        11,
+        15,
+        21
+      ],
+      "english_ranges": [
+        [
+          15,
+          21
+        ]
+      ],
+      "korean_ranges": [
+        [
+          15,
+          21
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a12-p7",
+      "source_sha256": "eff5421a796de7562435f702f15d3e3db1b486cd5a7ebadca83e8dd244d87a7e",
+      "korean_sha256": "8df918f7d80acb2c7d4a40d108201440f572a471be9a3e932d99fee723c8ec64",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14
+      ],
+      "korean_numbers": [
+        13,
+        14
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a12-p8",
+      "source_sha256": "439be38af6979d1b1a5eea66b225fe47df6b4882889a2906f4dc0148f8b6746c",
+      "korean_sha256": "38b1956d3c231d1e17bea250b511feb16d7448d7c6b970466060f59ac01d5e5b",
+      "status": "match",
+      "english_numbers": [
+        92
+      ],
+      "korean_numbers": [
+        92
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a13-p1-id",
+      "source_sha256": "470b9e64429e6ac5090b7b59b11dfee09e9159fd88686b4caa276d0251306df1",
+      "korean_sha256": "d190d83836956c92bf9fda16ab8b120c0cce8c261b6d8a410868494a5472c538",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a13-p1-if",
+      "source_sha256": "1d1541e2dc8c8656c56e274062631710aabfe85badbf8d47c92b056a5a038f6b",
+      "korean_sha256": "7542302529760e7314cddd753113992c34c90470c9415126b9beeb730534353c",
+      "status": "match",
+      "english_numbers": [
+        46,
+        47,
+        49
+      ],
+      "korean_numbers": [
+        46,
+        47,
+        49
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a13-p2-ic",
+      "source_sha256": "16eb913c70007c3324d24c63eace5cbc24229332ab86db021905e0c3f2b2b87b",
+      "korean_sha256": "deff51e72d61834d01c3d878bc4dd08b37ae49c9b418f3ce838719ab8932cdce",
+      "status": "match",
+      "english_numbers": [
+        6,
+        9
+      ],
+      "korean_numbers": [
+        6,
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a13-p2-if",
+      "source_sha256": "873c212a203fd2e56b6637ae56f293b3945373c1edabe0e50770e98d12409beb",
+      "korean_sha256": "564ef17733f505e0c940cc8e39a4bdf4646dca79110f2f9f7940f39a812a0671",
+      "status": "match",
+      "english_numbers": [
+        22
+      ],
+      "korean_numbers": [
+        22
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a14-p1-if",
+      "source_sha256": "a54d2cfa72b465aacfa40661b19f8538baa1a88d5c687a9e58dcbfc75b183c65",
+      "korean_sha256": "fcffa4297e5a36cef672339c162172bf1871457f8c19c70ae3e191a80bf7e219",
+      "status": "match",
+      "english_numbers": [
+        46,
+        47,
+        49
+      ],
+      "korean_numbers": [
+        46,
+        47,
+        49
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a14-p2-ib",
+      "source_sha256": "470b9e64429e6ac5090b7b59b11dfee09e9159fd88686b4caa276d0251306df1",
+      "korean_sha256": "d190d83836956c92bf9fda16ab8b120c0cce8c261b6d8a410868494a5472c538",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a14-p2-id",
+      "source_sha256": "f8d8c19bd9cba7e217159e1e527f000a111de733e3687dda54dc4315c7619d6c",
+      "korean_sha256": "deff51e72d61834d01c3d878bc4dd08b37ae49c9b418f3ce838719ab8932cdce",
+      "status": "match",
+      "english_numbers": [
+        6,
+        9
+      ],
+      "korean_numbers": [
+        6,
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a14-p2-ig",
+      "source_sha256": "873c212a203fd2e56b6637ae56f293b3945373c1edabe0e50770e98d12409beb",
+      "korean_sha256": "564ef17733f505e0c940cc8e39a4bdf4646dca79110f2f9f7940f39a812a0671",
+      "status": "match",
+      "english_numbers": [
+        22
+      ],
+      "korean_numbers": [
+        22
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a14-p5-ib",
+      "source_sha256": "15558c5d3ba2b7ace3649eb457e41bc51b27ee8490295155cbf530593959bbc2",
+      "korean_sha256": "8a54d816ce0f3cd512f0e530f183dedb0750f67040ce473955758fb0667b5a4a",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a15-p1-ih",
+      "source_sha256": "873c212a203fd2e56b6637ae56f293b3945373c1edabe0e50770e98d12409beb",
+      "korean_sha256": "564ef17733f505e0c940cc8e39a4bdf4646dca79110f2f9f7940f39a812a0671",
+      "status": "match",
+      "english_numbers": [
+        22
+      ],
+      "korean_numbers": [
+        22
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a15-p2",
+      "source_sha256": "473e53ffca9f146248ead57e9941de0bf1c3ecc1fc76b5a034d0aa302e972616",
+      "korean_sha256": "308e47ba72721efa6f6e32b40065efbbdb067f92bd064eb42b64b06b1c57fc8c",
+      "status": "match",
+      "english_numbers": [
+        46
+      ],
+      "korean_numbers": [
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a17-p1-ib",
+      "source_sha256": "1a72b705c5143d043055ade2a1d3cd9eca692590f1f946b1924744e445d91a9f",
+      "korean_sha256": "61ab27ae97a6d41193acf077fe6f935bcd6650baed810f91374be141c9677553",
+      "status": "match",
+      "english_numbers": [
+        6,
+        9
+      ],
+      "korean_numbers": [
+        6,
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a17-p1-ic",
+      "source_sha256": "fd0abc2c75eec1c33ed5e54c619136e6f7889245b9f150d2e93e4a6bb0abc68e",
+      "korean_sha256": "feba0e9122f023524c87b3116a91096a5ad778c37ca24492701f46fbf1c6ebb6",
+      "status": "match",
+      "english_numbers": [
+        21
+      ],
+      "korean_numbers": [
+        21
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a17-p1-if",
+      "source_sha256": "dd0e1ae1f29d08313044e0403650fa193404514c38fb2218d5ff87f184dd570d",
+      "korean_sha256": "3cda238f2f3ac0bf93a55aa412d20b157a03faef586a18f96e88a0eee8b03cde",
+      "status": "match",
+      "english_numbers": [
+        8
+      ],
+      "korean_numbers": [
+        8
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a17-p3-ic",
+      "source_sha256": "a1458825757f72923bbd8a30303ed71ee49ed851d91a6e6837650bac1b3a03af",
+      "korean_sha256": "53b9115182fc0e682455d9acc92f3fe9ce961e5acbde582d7f9a05a93ae62c12",
+      "status": "match",
+      "english_numbers": [
+        9
+      ],
+      "korean_numbers": [
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a17-p3-id",
+      "source_sha256": "dc313a58fdcfcd66485ae30bd29806eadff4f687b8fb95c49b6ea4266ecb75e9",
+      "korean_sha256": "3bc53ee05c3c24a28b8f4a613abadcfaa30385f8dc5256ea94dd306183abf3af",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a18-p1-id",
+      "source_sha256": "b0dce371a4334facc7b2c25ca3ca5be2ab843ed627d6218d8b8d5cbcfd2898bd",
+      "korean_sha256": "2b5fa364d5083941ca02832c1fb8bc224d122a44d95a1c3105227b573e95b768",
+      "status": "match",
+      "english_numbers": [
+        21
+      ],
+      "korean_numbers": [
+        21
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a19-t1",
+      "source_sha256": "7883cd9cbf5445cc214a17c540682d9b6b76b1f7ac8b11455f7310c0df91619c",
+      "korean_sha256": "b38d29014564fc21ef907753cdf370bd10e777d023a9aa5976db75139f077125",
+      "status": "match",
+      "english_numbers": [
+        16,
+        17,
+        18
+      ],
+      "korean_numbers": [
+        16,
+        17,
+        18
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a20-p1-ia",
+      "source_sha256": "a5a105ad85dc736d64b7f756e5bcfa6f9fdce24a54904a26f70ebb7dc0f770a0",
+      "korean_sha256": "76ad5c9c8a53263202c8123040bbd61185eceb30b4b0c518178365f674abd34d",
+      "status": "match",
+      "english_numbers": [
+        6,
+        9
+      ],
+      "korean_numbers": [
+        6,
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a20-p3",
+      "source_sha256": "8810edb43c7027dfc1a78d8f7d9122dfcd5da18fba1d1725f79220c2a310fffa",
+      "korean_sha256": "c161c7879c5cfa63ee45e0e70c3286f3c4f85d4d0c62e3cd5c7a0363e935476d",
+      "status": "match",
+      "english_numbers": [
+        17
+      ],
+      "korean_numbers": [
+        17
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a21-p1",
+      "source_sha256": "33c784c5e225b1861e52a0f19c7941c3a423eb710872b7a76b1c8ef25be55d0f",
+      "korean_sha256": "98e467e59b2cd30167c1c438c0d1e5232596628bb4254168a00f7e02890179e4",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a21-p6",
+      "source_sha256": "581dc7d52d07c24329727d5f4eadc850a0a52cdf547401eaef1e701e1979a3f0",
+      "korean_sha256": "85ec6d42c678197668cd4071beb0b5e3679434b1aa8316d6a316ad907057cca5",
+      "status": "match",
+      "english_numbers": [
+        89
+      ],
+      "korean_numbers": [
+        89
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a22-p4",
+      "source_sha256": "690d4c9cc637a3e4f865c381860e3ea027d4e32af4e44b7477d669add825f404",
+      "korean_sha256": "b6479075f9b6c4816cdaefa928445ebfb4b1ee4124ae9147d5e8f60455e12a4d",
+      "status": "match",
+      "english_numbers": [
+        9
+      ],
+      "korean_numbers": [
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a23-p1",
+      "source_sha256": "90176dd7d248031cb75c930790bc1dd4e66426ae835ac500984f9789f6cc1862",
+      "korean_sha256": "dc84777f7cbb3fe81c8ea7d8a6831ef9ab88addca2778d4a21d60c63b4373187",
+      "status": "match",
+      "english_numbers": [
+        5,
+        12,
+        22,
+        34
+      ],
+      "korean_numbers": [
+        5,
+        12,
+        22,
+        34
+      ],
+      "english_ranges": [
+        [
+          12,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          12,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a24-p3",
+      "source_sha256": "81016ea0642abd83a9589248360ebaffa4267f9cf4121f994b78cd0970303ad5",
+      "korean_sha256": "8ae037af8b529b8c93dd9454947867cd4ab5181ad6947f3f0edc9cd922b0d10b",
+      "status": "match",
+      "english_numbers": [
+        40,
+        42
+      ],
+      "korean_numbers": [
+        40,
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a25-p3",
+      "source_sha256": "e8051c2ccac2e3e589373850ddc5e3c7e45f225887309dd1001e44713f8c28c6",
+      "korean_sha256": "586bef1ed2d29ea891fb65c6fd1bbbf7550417a959bf46247c248c2c2a192e05",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a26-p1",
+      "source_sha256": "afba4b12bc49185c4489542c434b4f975c6cef753e0d11cb5c5b7c5e97899b37",
+      "korean_sha256": "fb02d8d3fe1dbec74c38a6593f5596cecac0a09a8944fd1184e897b9682c0b76",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14
+      ],
+      "korean_numbers": [
+        13,
+        14
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a27-p1",
+      "source_sha256": "14dbff28d90e70d8b21c8c84c02980de2c22c15fc25e2b6cb4c0ec3c1a8e6cc9",
+      "korean_sha256": "aafb41f91a613e4e0985f2b820ccd0f9f7402f1cce1f4aee23038a188fc9369f",
+      "status": "match",
+      "english_numbers": [
+        3
+      ],
+      "korean_numbers": [
+        3
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a27-p2-ia",
+      "source_sha256": "85ffd8b3eaea324749e1a188af5726136f5d293140787618f7626112d0233d74",
+      "korean_sha256": "96bc267e04e5fe9d3e5a0c8b8cc65e89a57878b23ccd5d9e301ba098e316c763",
+      "status": "match",
+      "english_numbers": [
+        9,
+        10
+      ],
+      "korean_numbers": [
+        9,
+        10
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p3-ic",
+      "source_sha256": "bc2b08fb86593210e82d7cf9e415fa78ad0a4204f491543ee95d0f8bee97bb23",
+      "korean_sha256": "a570ee758d20a228a799a9646a0641717855e4a24fa7908adb09a908bb0129bd",
+      "status": "match",
+      "english_numbers": [
+        32
+      ],
+      "korean_numbers": [
+        32
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p3-if",
+      "source_sha256": "2ceb44c893ba7ca8efaa4a228bc7c039a811e1f9a80013b4fc4a60a7d46449b7",
+      "korean_sha256": "4cd636a3a7440ea56832777d92c688a0c4242f12c31a9ab0cd0dc6aab97d3acf",
+      "status": "match",
+      "english_numbers": [
+        32,
+        36
+      ],
+      "korean_numbers": [
+        32,
+        36
+      ],
+      "english_ranges": [
+        [
+          32,
+          36
+        ]
+      ],
+      "korean_ranges": [
+        [
+          32,
+          36
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a28-p5",
+      "source_sha256": "61c039749e48fd57318edb15c5384db841ed83d40eda7b02f71b1feb708bcede",
+      "korean_sha256": "6ec77eaa3e80460e9f754c07172a12be76635c21ed68b53b143d4793e39ed71d",
+      "status": "match",
+      "english_numbers": [
+        40,
+        42
+      ],
+      "korean_numbers": [
+        40,
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p6",
+      "source_sha256": "d7fa8aa4138d7ef2c2bcbf779859915d922946b67c4fe746056dc4208498f648",
+      "korean_sha256": "9ef278620509a74553d9633d683cd9d43ae83352ec4f54ef7768123d037fcefa",
+      "status": "match",
+      "english_numbers": [
+        42,
+        43
+      ],
+      "korean_numbers": [
+        42,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p7",
+      "source_sha256": "7caa5dce15aad1052782024ef6e2234a442b8ce8b53b963d60fbf88a03febccd",
+      "korean_sha256": "b93ab82d90c7e5bc2ce6e9a0412464719a1958f627a356de1ce2939dac9cc84d",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p8",
+      "source_sha256": "c8439bbb80e4dd37723a4de9f3bf52853179568abdbc796cd4450645d0e02d29",
+      "korean_sha256": "adae326cb99339a2e1c880ae6d34d39f135478a621ba8e1ce8e255a56aeffb7e",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a28-p10",
+      "source_sha256": "b08b01e6c9b13815f19dbfdde408308ac6983d296ddcc5232f56fea1a92afa57",
+      "korean_sha256": "d13488f71243bfd3541b72cc2bba814670ea0923f998ce565ed30479ea4dba3b",
+      "status": "match",
+      "english_numbers": [
+        82,
+        83,
+        84
+      ],
+      "korean_numbers": [
+        82,
+        83,
+        84
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a30-p1-ie",
+      "source_sha256": "6cf32c30bdc77852f715e10d5481cfc6b573b785d4aea2486a1a8b1a4cc35aea",
+      "korean_sha256": "4b6500afdd22b68006fb4f2bc337e7b5f5c573707076d433626355a4b3197ae5",
+      "status": "match",
+      "english_numbers": [
+        49
+      ],
+      "korean_numbers": [
+        49
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a30-p1-ig",
+      "source_sha256": "4c2578fa2f99425d8b040c9cc59c5ae23b9471d9c54c489f0fc1d059f0fc1711",
+      "korean_sha256": "709a105e3c05ca367877ad684b2877e5ecda8e5954df416b9fc6ea8e00a8becd",
+      "status": "match",
+      "english_numbers": [
+        32
+      ],
+      "korean_numbers": [
+        32
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a30-p2-ic",
+      "source_sha256": "6cf32c30bdc77852f715e10d5481cfc6b573b785d4aea2486a1a8b1a4cc35aea",
+      "korean_sha256": "4b6500afdd22b68006fb4f2bc337e7b5f5c573707076d433626355a4b3197ae5",
+      "status": "match",
+      "english_numbers": [
+        49
+      ],
+      "korean_numbers": [
+        49
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a30-p2-id",
+      "source_sha256": "4c2578fa2f99425d8b040c9cc59c5ae23b9471d9c54c489f0fc1d059f0fc1711",
+      "korean_sha256": "709a105e3c05ca367877ad684b2877e5ecda8e5954df416b9fc6ea8e00a8becd",
+      "status": "match",
+      "english_numbers": [
+        32
+      ],
+      "korean_numbers": [
+        32
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a30-p5",
+      "source_sha256": "fc2cb455c9e96572695482eb81b1da8ae2bf396b9b34d8060d8689861ae265d0",
+      "korean_sha256": "7e8b2599849e99783b52746988768f7a40e615e2d48292411c57275bcf93859d",
+      "status": "match",
+      "english_numbers": [
+        9,
+        10
+      ],
+      "korean_numbers": [
+        9,
+        10
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a32-p3",
+      "source_sha256": "26740d68cc83dc128f559fdafd5117dc6f4ae010977503396d6b01197a2ecba9",
+      "korean_sha256": "ad2e78a62eab3fb4c4e1dc85d404acb702261a4b3b37f68f0c7645ad9d63416c",
+      "status": "match",
+      "english_numbers": [
+        40,
+        42
+      ],
+      "korean_numbers": [
+        40,
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a33-p1",
+      "source_sha256": "836e03a92e40cf608db957d9b494f8bfc3b0fafc0bbab8557b522e8e8e82eff6",
+      "korean_sha256": "82ae49b3bb8ae71a4e8a3c6ca1c40e5a9b514fc88e91ae6ee1eea8e60939f174",
+      "status": "match",
+      "english_numbers": [
+        55
+      ],
+      "korean_numbers": [
+        55
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a34-p2",
+      "source_sha256": "d4fffb5731bc634cc5911a424a8572e6d74a5a7d6559c001c0358d4dc4f811cc",
+      "korean_sha256": "ea358fb06053396beb48ee8eb58a3869e80efdbb57d78a969d3afd29b660a27d",
+      "status": "match",
+      "english_numbers": [
+        33
+      ],
+      "korean_numbers": [
+        33
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a35-p3-ib",
+      "source_sha256": "8ab8d9e7f49580bbd8a899202ed493b09a8f2729fb3cdb4976cf3dc4f3524e7c",
+      "korean_sha256": "0c2fd85016bf189bfa82a575b05c2c858c32bb56a2d64f2080b8b83ea0b267f9",
+      "status": "match",
+      "english_numbers": [
+        9,
+        10
+      ],
+      "korean_numbers": [
+        9,
+        10
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a35-p4",
+      "source_sha256": "9e4fd4a15100f87783c062ea5851b0e1870d0e9a679dd81842b05d63121ab054",
+      "korean_sha256": "558754629f8af6e7f268f6a45ae355869b1ce744cd963091e339655aaf0fa98c",
+      "status": "match",
+      "english_numbers": [
+        68
+      ],
+      "korean_numbers": [
+        68
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a35-p6",
+      "source_sha256": "f951cf7627a81142ddd91ca7ad1c339585f89c4f7ad26113e3f2e9e80fa257cc",
+      "korean_sha256": "d52403e2ac2e4d9cadd9bf537e3c861a053179f00ce8d721246b6f886df2e982",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a35-p8",
+      "source_sha256": "554564b463ef94255f42d8b49c866217938f7eeb6c7894cb8422b67c8f49b655",
+      "korean_sha256": "4accffb6a680c4205f0b113c1b394cd7bb5a35072f7e820300e72c9ec7ae89be",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a35-p10",
+      "source_sha256": "7ef1a144feef9d37071ca52c3776d9c544200086bcc1e21be0c6488d9b8c1be3",
+      "korean_sha256": "48f9fcf89ded98e24d42f43c5dd66c910996f29c3d01076744e3800307531cc8",
+      "status": "match",
+      "english_numbers": [
+        6
+      ],
+      "korean_numbers": [
+        6
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a36-p1",
+      "source_sha256": "e172a9fcd184e4571d10061a5128e3522a6ac0298d71957ddfcdbf9c83e1fa52",
+      "korean_sha256": "271320d57fc6b65ea3ded51609cbe990d5889064c48543bb0c4f2d14d27329f2",
+      "status": "match",
+      "english_numbers": [
+        35
+      ],
+      "korean_numbers": [
+        35
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a36-p2",
+      "source_sha256": "8c11603345fe89a22a26c1fa9c702847fa93c99b4ca11b19a0390a9e0e79045d",
+      "korean_sha256": "bb4895b95e856c70eea2230bb55953bfad4f59851b949d086664c5ce54125c89",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a36-p3-ie",
+      "source_sha256": "6696b0bb7607b696d5129aa4d0c5603534a53ae5eb4b983c5dae69d6b4653c04",
+      "korean_sha256": "52f9f76d505891315e60e409e2859b6ccb8b6a592ecb1b245aade9250210d5d6",
+      "status": "match",
+      "english_numbers": [
+        35
+      ],
+      "korean_numbers": [
+        35
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a37-p1-ic",
+      "source_sha256": "d2b886ad827fd386a1e58ff769d0082f996a4d8455e7c1f034865658bd3d041c",
+      "korean_sha256": "220df4fdab22c345e8e52bfff210dfd5cffdc1251a059e838155a6822db18d9f",
+      "status": "match",
+      "english_numbers": [
+        9,
+        10
+      ],
+      "korean_numbers": [
+        9,
+        10
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a37-p5",
+      "source_sha256": "3436b68bd6d748063a1570ce17d1b0cd0bc154bc33342c9fd6b0a7cd2ddf3edb",
+      "korean_sha256": "18a470de96aac5a3b1549c983bf844a24ee78cf047f5140567cb11c4efcf2fe2",
+      "status": "match",
+      "english_numbers": [
+        39
+      ],
+      "korean_numbers": [
+        39
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a38-p2",
+      "source_sha256": "4a90886bc22e525239e4b6beef7ce66931125cdedba5ef2633d1bcad1a5b602c",
+      "korean_sha256": "d6633478d72ae5384d4d259b3ac9297cf6069e7eb6c988fc087d6d834354a328",
+      "status": "match",
+      "english_numbers": [
+        39
+      ],
+      "korean_numbers": [
+        39
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a39-p1-ic",
+      "source_sha256": "7108c1209ec4064bda58aab2eb1fd5c99194a2e451721770bd20ac7ab7f47593",
+      "korean_sha256": "0a67598e160f6326bb4503ea6899df0f9930a70e7a5d9bfa105406047a550368",
+      "status": "match",
+      "english_numbers": [
+        35
+      ],
+      "korean_numbers": [
+        35
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a39-p1-ie",
+      "source_sha256": "cf3cfe8cd86c566cf2dc38a2fc683dad4300c636f10f16032b3a28fd370aaa78",
+      "korean_sha256": "5e7cd7bb6163f4350458209a5e8f7893f1a7868bbcb2558905f633045325d47a",
+      "status": "match",
+      "english_numbers": [
+        36
+      ],
+      "korean_numbers": [
+        36
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p2-ih",
+      "source_sha256": "946c1fcd1306e43aaedb24c9e0a0922c2f8e20a8a4942709de749accc52375b7",
+      "korean_sha256": "18d79adca1b4f83843de68ab5ba6867effef8b82ad95fd6781b54935a9d91d8b",
+      "status": "match",
+      "english_numbers": [
+        24,
+        25,
+        32
+      ],
+      "korean_numbers": [
+        24,
+        25,
+        32
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p2-ik",
+      "source_sha256": "607ff6095a69053f32f9accae7c81007d14dde6608d659e586723a429251a920",
+      "korean_sha256": "bf7b3348a2d119298d39caa82409b6f74b29129bc9a36c390738765c32eecd06",
+      "status": "match",
+      "english_numbers": [
+        77,
+        79
+      ],
+      "korean_numbers": [
+        77,
+        79
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p3",
+      "source_sha256": "df2ccd0988c7ed17f3260a49772e01738fb979df73aaa2dc94c5ebc7f0b21217",
+      "korean_sha256": "4891b5c286eb6bf86ad56a2b536f44539a8d0e82c555fbd800bccf278f82bffb",
+      "status": "match",
+      "english_numbers": [
+        3,
+        46
+      ],
+      "korean_numbers": [
+        3,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p4",
+      "source_sha256": "41eb8ccb1c658549ff3615e10ce96329fa8d213776cfed36bfc38eb7cba3c228",
+      "korean_sha256": "de316fd2556dcd298624fe697ec14379c5cf95420f61652866c85779b402dc95",
+      "status": "match",
+      "english_numbers": [
+        41,
+        55,
+        56
+      ],
+      "korean_numbers": [
+        41,
+        55,
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p5",
+      "source_sha256": "f712d0ea663557d2dc1276f54e8e65216b51b683e7b23a0f34b97ea9a3a5d197",
+      "korean_sha256": "89fe8594b8f45719ebaff9d7ae1dd818c8ea740f5b26f37a42633dca65889372",
+      "status": "match",
+      "english_numbers": [
+        55
+      ],
+      "korean_numbers": [
+        55
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p7",
+      "source_sha256": "91d1a82e534e9695c90d73d905e741f0e191d9251cb4532f7ab7cd66a5f8f0c6",
+      "korean_sha256": "86be4ae19e30b9e2a5dcff21827a4f6c29658728c1a7ce7053be8fde452fffcf",
+      "status": "match",
+      "english_numbers": [
+        55,
+        63
+      ],
+      "korean_numbers": [
+        55,
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a40-p9",
+      "source_sha256": "7e459da74b2a38e81f13b59f74aa41c9172cf620ad7251b84e84d8ffd49c186c",
+      "korean_sha256": "a1cbd240747a40d4223816e909d466c26f9852eea730769133d59b862e41ae7b",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a41-p1",
+      "source_sha256": "5e5b9519ab789f581bfe2f9c134f2b7432696496a88af3e6c7c587c250a8525f",
+      "korean_sha256": "8e1de85c1ac680bb01042d5ca35bbbfd6895d9fa4a154c047073d2dc71938e8c",
+      "status": "match",
+      "english_numbers": [
+        40,
+        57,
+        58
+      ],
+      "korean_numbers": [
+        40,
+        57,
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a41-p3",
+      "source_sha256": "5594937aacfdc4b8ed6450a7871c3e86257dbfc4a930f3429a69800c2d116a9c",
+      "korean_sha256": "513969cca042e93c98dac6ff757d93cdf45bbf139907d3f4954fc52d2f07bd10",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a42-p2",
+      "source_sha256": "8d0f9fdda2fe9ee545d2e5d917fb1c0a63d74654cbde3fc1dc0d9a2df58cfcc0",
+      "korean_sha256": "045ab39b84662586f58c3eadd62418c9d836225b0f1cf300a49a15d857ef8668",
+      "status": "match",
+      "english_numbers": [
+        3,
+        46
+      ],
+      "korean_numbers": [
+        3,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a42-p4",
+      "source_sha256": "1d7c02ee16d7f277d215e03e23e2a5950f249c6b788a29c88e7299388511ec45",
+      "korean_sha256": "0cb94c8807577ca4def2cc61a31e37c46cf0d25dcd47221f3a0777e1e7f30a46",
+      "status": "match",
+      "english_numbers": [
+        55,
+        56
+      ],
+      "korean_numbers": [
+        55,
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a42-p5",
+      "source_sha256": "b03154bd2ea092bef1b46c1cee0b38783436cb9cdd01d1bc403ad28617dd26a1",
+      "korean_sha256": "912b3a96444c82796fe0d594ea118b128acae7d7f414a34bb45b5f9633b16f6d",
+      "status": "match",
+      "english_numbers": [
+        43,
+        58,
+        63
+      ],
+      "korean_numbers": [
+        43,
+        58,
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a42-p6",
+      "source_sha256": "433a9a1d805fc2738be7c266deb2cdb490d9a16db927a4e258e3f0ce49ec777c",
+      "korean_sha256": "28bc797784175ed32259aee9c911d89a538e0dbba408c2019d755907c8ecad29",
+      "status": "match",
+      "english_numbers": [
+        43
+      ],
+      "korean_numbers": [
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a42-p7",
+      "source_sha256": "d09dcd3faee07cbbb8d4166b7ca080cdc1911364e92e9ea78896043e7cb8d86c",
+      "korean_sha256": "60c1b9bfa7f023208b6fda67c2c3054b9192035aca3b3e9b68a81d5952bc3404",
+      "status": "match",
+      "english_numbers": [
+        43
+      ],
+      "korean_numbers": [
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p1",
+      "source_sha256": "d55cfbe915a77a3a0f91aa6295c8abd9d98ecae50e0a18f00c2058ff33caf38d",
+      "korean_sha256": "d87349d507fe0c8ca886fdcca6e7713a05ec91951c12f773093d14d9be2fad93",
+      "status": "match",
+      "english_numbers": [
+        57,
+        58
+      ],
+      "korean_numbers": [
+        57,
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p1-ia",
+      "source_sha256": "29714f780c0af7a3a578442121c0020d967cfa892d53cebe1a68546c3c26be60",
+      "korean_sha256": "7cba52c62325ceb061f1e568f9303b04e19a6141142e0495c3842969a4a0bf42",
+      "status": "match",
+      "english_numbers": [
+        55,
+        56
+      ],
+      "korean_numbers": [
+        55,
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p1-ib",
+      "source_sha256": "cfd7cad43b4d25e1c8ffd6c2d1e5f7bc0229e8c1a9248cc43956960a17268768",
+      "korean_sha256": "9e1e641118597d6a13fa6749f6d8ccdec12c420ac51be3a8a4c0c4367f1fbbe7",
+      "status": "match",
+      "english_numbers": [
+        55,
+        56
+      ],
+      "korean_numbers": [
+        55,
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p2-ib",
+      "source_sha256": "5458043dc5cfb162e1686ec6d5d848230624068ffd880373c7f79bd83c5f9f40",
+      "korean_sha256": "981151c4bba7733d5274d06e1de166dfa8936271b3dbbcc9cd8f224e812ef3e8",
+      "status": "match",
+      "english_numbers": [
+        42,
+        55,
+        56,
+        63
+      ],
+      "korean_numbers": [
+        42,
+        55,
+        56,
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p3",
+      "source_sha256": "b806efe39a1629047cb39c20182d03c14deaadf9b624a86ef4436bac47bcd1fe",
+      "korean_sha256": "14116a614fc2667d42d6fef6499fe750644d5021d131e09981d03b85fcdf3a66",
+      "status": "match",
+      "english_numbers": [
+        55,
+        56,
+        63
+      ],
+      "korean_numbers": [
+        55,
+        56,
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p6",
+      "source_sha256": "159f23e2bdbf38081eb0acaf1a5a2032b01c1c1323065761451de1cc36bba55a",
+      "korean_sha256": "f345fd75c006e558296047541f9d5d109e974455ca0018d05c877718d734a05b",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p8",
+      "source_sha256": "6bc3216892f4e3ac2721d280de0ab04f86b02524668ae592bcb0925372f14304",
+      "korean_sha256": "a74ffd682d39dde9ec1ba08cde27c52378decb3524f5e0a79605fca551292b31",
+      "status": "match",
+      "english_numbers": [
+        42,
+        92
+      ],
+      "korean_numbers": [
+        42,
+        92
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a43-p9",
+      "source_sha256": "dfaa43e177249c8ed068481e5849ac36c320d096429f02ad68039a93f6f9d40a",
+      "korean_sha256": "28f656a847480d50d822db3c1c79bc05ad09af3eda0b69eb3810c99ea93c5f80",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a45-p3",
+      "source_sha256": "0553439e907d165cb22b055900545a9d7d17029f5406f2ec2837005bb78911e1",
+      "korean_sha256": "b5dc46df7d774be12ef3f4c785ccbe193e08ebb5a520c4c9228837454fce95ad",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a45-p4",
+      "source_sha256": "bfbf685ae83f2b9eb68de3b261db6afab2e7d7811dfa5d654459192b23194498",
+      "korean_sha256": "d788a99cc6c8d9e18bf33e6591b5de09aa91c041b1b9a7274397c6df713f3ca1",
+      "status": "match",
+      "english_numbers": [
+        25
+      ],
+      "korean_numbers": [
+        25
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a45-p5",
+      "source_sha256": "126c58321cfef78158ead40e39aa4874b14162246e4d317f178bfd02c0bf6fc3",
+      "korean_sha256": "512cbfc7501fccef8cfc610d39a6c0036bf6b8cf3c9b24daf3b537e8ec662b3d",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a45-p5-t1",
+      "source_sha256": "f1e71f6734f5374a858b8a3a2484139d1c76721fc01ae4e32c783ca0e9a4eba9",
+      "korean_sha256": "a881857be31df30f4acc9086effdd7994b6f8132f7a9dcc8ceed4fb6b617a93a",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a45-p7",
+      "source_sha256": "1d3c7b308141021820f1acfeb7d706685ae273edabd7317deaaaf8b7847aa7db",
+      "korean_sha256": "a2dcf726e21329368a27196a054f320aac34a53da78c6a0a923fe4a41531afc9",
+      "status": "match",
+      "english_numbers": [
+        46,
+        49
+      ],
+      "korean_numbers": [
+        46,
+        49
+      ],
+      "english_ranges": [
+        [
+          46,
+          49
+        ]
+      ],
+      "korean_ranges": [
+        [
+          46,
+          49
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a45-p9",
+      "source_sha256": "f1cf9430ad3abcd44a065b6029f18f19877a616ebea03424b82558830a6fa339",
+      "korean_sha256": "fcc13ca04be71eae05814d79917ae86205516040be2474939db449d8d0bc9c0e",
+      "status": "match",
+      "english_numbers": [
+        25
+      ],
+      "korean_numbers": [
+        25
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p1",
+      "source_sha256": "68625be7f91d2fa7cb07733536df2f193272e3a0752452a0afef449dec7f6783",
+      "korean_sha256": "70e1038e1c5330884eb84d0e6b3015404e6cf938709d51a9ce58a8662a52e376",
+      "status": "match",
+      "english_numbers": [
+        45
+      ],
+      "korean_numbers": [
+        45
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p2-ib",
+      "source_sha256": "31513335a571d94392127214942fc2c261510435320e3dd3049cded9e633d1b6",
+      "korean_sha256": "c0dc2605d65433098da0809be45bd4c1cde2150b495c52cc1e0e63d6d6d15cbe",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p2-ic",
+      "source_sha256": "e795855a4d3cb07bbbdf9e1e347dec759e803c295178851719cac6cb79fef7f3",
+      "korean_sha256": "473c838828611bf847f693435ad307b59ea5467626495a98c676a3bbda035d88",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p2-id",
+      "source_sha256": "33e39ff12a2ddaf6107a591cb4391e965b1c37d68e1db9911c58277df548ca3f",
+      "korean_sha256": "2653b32beca1baa0b16caa4ae0abcc80c0c6dbe96134c30f4a43df3f229c25a3",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p2-ie",
+      "source_sha256": "10f8b50ae41ea3128b98257757566f4c3307d6f990c92b5e1eabcaec6ec9fd5e",
+      "korean_sha256": "4b3341cd606a1cab01f676a2ce28ef87a71f055a86d3f457795e9e52401494a7",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p2-if",
+      "source_sha256": "5b2c26f833f972030d47c6cec8cb5854b3550ca955c743179defe32887bd66d8",
+      "korean_sha256": "c6214911eb56763338c5de0951545416e683f975bfc650521c4395baeb069a87",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p4",
+      "source_sha256": "aafd0d9dc6cb5d17abe98a98b72e5e57736d1c32b9a60ced31e317a5b64ea2e8",
+      "korean_sha256": "5b058d36bd6ca375eb43c2bb2d5afa635903c1052410bae910488094921f2c90",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a46-p5",
+      "source_sha256": "ceb1168c6b09027f87682fc46674579357a6bb5c492da52483d23a0a7f9077e7",
+      "korean_sha256": "04739f31e02f9c1e50045de09a52028f999f2ae05edc19f5e0f4ca8370b571f4",
+      "status": "match",
+      "english_numbers": [
+        26
+      ],
+      "korean_numbers": [
+        26
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a47-p1",
+      "source_sha256": "458131df8edf48bc2ae3c4e278d703724f4c5324486e471f0433d365672d2473",
+      "korean_sha256": "f7818bb17a3db77704f37028c050543bec1e11cdc75875399706bcd2e16cba9c",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a47-p2-ie",
+      "source_sha256": "16019cd5ab2827ba02d0b1e8a0aa7e39695fdba304802eb53ad196ff611cc3dd",
+      "korean_sha256": "54f9bfc4940916c8ddf95048db58c304314afdc1451bb974914002ef511ff4c6",
+      "status": "match",
+      "english_numbers": [
+        22,
+        79
+      ],
+      "korean_numbers": [
+        22,
+        79
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a47-p2-ig",
+      "source_sha256": "261005909bf86e75eb12bd0ffb99db2010c0270642d756a75268f411018ea6a3",
+      "korean_sha256": "7f280936e2df0c55c214a190ac51fb189ed0d3fff6c13a44039969fdbb657c1c",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14
+      ],
+      "korean_numbers": [
+        13,
+        14
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a47-p2-ih",
+      "source_sha256": "a4ceee128e0faebceeb93de5b7f84d7294c4441036f8a38c1a6c3254bd7df30a",
+      "korean_sha256": "ded451340ed13da23260e595b2cce71fc7d68cf1dd2a26ab02d6ef734b8b137d",
+      "status": "match",
+      "english_numbers": [
+        37
+      ],
+      "korean_numbers": [
+        37
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a47-p3",
+      "source_sha256": "b6e74b5aac8ab79a607e50796f8bf962aedcba52fda4148537d3f845089efd42",
+      "korean_sha256": "d5160596be80d9a0cad7c54e5b2024a2f0508ebc95f45a90720dd30b52cc10de",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a49-p1",
+      "source_sha256": "33f7b250ead328a28d6baf66591ab9e70f7dcea0724a3a92eeee06d6434fb350",
+      "korean_sha256": "ae4204e94dbd2ed1d369064d1cf007cb40af761db356d500e1afdc240c02cef4",
+      "status": "match",
+      "english_numbers": [
+        45,
+        46
+      ],
+      "korean_numbers": [
+        45,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a49-p1-t1",
+      "source_sha256": "62a813d04e52bae781ca78f8ee7a397c9bcba7653a59bf0288dfb5176f8d9fee",
+      "korean_sha256": "e39d45676ce0fca04d0a696ff248a78b0157093377ad57686640209f6c8d2217",
+      "status": "match",
+      "english_numbers": [
+        13,
+        14,
+        45,
+        46
+      ],
+      "korean_numbers": [
+        13,
+        14,
+        45,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a49-p6",
+      "source_sha256": "f45985529ca99d6c25f9543ab0639f77d3c4bec2ed4e51d90a586a8b4ca84957",
+      "korean_sha256": "2ede82c75a5e705ae2393c5ebb2bed50a274c15fdc3c55733ccc9bab890c5b87",
+      "status": "match",
+      "english_numbers": [
+        30
+      ],
+      "korean_numbers": [
+        30
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a51-p3",
+      "source_sha256": "3dc94557987b481a5f83e1221cecbd2eed3b4870e38562ac55ee1baf08eb7fd2",
+      "korean_sha256": "8420d26f6095fc00314567fb47c986e02e6d98148126bf3cc37d7ce561658081",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a55-p2",
+      "source_sha256": "abb71361b9998552f4df56b3c85d12877fb05074da4dbce31f5449657989d3b6",
+      "korean_sha256": "1c9ea62486e236589585af8d17530e2c095cda8e3365183abf718d8e2464029c",
+      "status": "match",
+      "english_numbers": [
+        6,
+        56
+      ],
+      "korean_numbers": [
+        6,
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a56-p1",
+      "source_sha256": "0be8efc26422c8393946d543e401260d1e07269bd869da761def50e5215c648c",
+      "korean_sha256": "ebcaccdabbbe260ec4f1889641d90e8507e125562d5ed37b07be6b92d32f6738",
+      "status": "match",
+      "english_numbers": [
+        55,
+        60
+      ],
+      "korean_numbers": [
+        55,
+        60
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a56-p3",
+      "source_sha256": "5927e4d391c5a854cc9b6a5a06ee5b45282f4a449ccf1c75baafd5512b51595e",
+      "korean_sha256": "6057ade954acf8b85c3bdd57780e5183c9c94ddd87a69edc20c00bf724590071",
+      "status": "match",
+      "english_numbers": [
+        60
+      ],
+      "korean_numbers": [
+        60
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a56-p4",
+      "source_sha256": "02ac00479aafa8d89c2fcc7ed70a9d48d4f0e77dede2eaba10c5b2767e8adc07",
+      "korean_sha256": "4753e3d88ce206f9375078192a8d13cddadd078ccdb63182c24a2201479d1fd7",
+      "status": "match",
+      "english_numbers": [
+        60
+      ],
+      "korean_numbers": [
+        60
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a56-p5",
+      "source_sha256": "cb1126e821d196319a04f870b8a39b9d9939df280abe6d74a8f16959442d2a28",
+      "korean_sha256": "564cd2f9f74607d6152033a52bb4f05c94f5152106f69a1f8900a09504f0b883",
+      "status": "match",
+      "english_numbers": [
+        61,
+        62
+      ],
+      "korean_numbers": [
+        61,
+        62
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-if",
+      "source_sha256": "902d42103f3b8736c53b538befeb878e853e242899c698825255c5ec0aee76b3",
+      "korean_sha256": "486b6cfea1df446ec7a3059a145588bedd92c1301d333e425bc27f34f0955935",
+      "status": "match",
+      "english_numbers": [
+        80
+      ],
+      "korean_numbers": [
+        80
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-ij",
+      "source_sha256": "7cdbee8d9572464e1c319db2a3a419cbcb4a010914417e4fe8d1ae4b296199b5",
+      "korean_sha256": "dd6ed7b10f45f0a7d9c8739eb0f99ced24e244b598c335c301147a1906ac2ef4",
+      "status": "match",
+      "english_numbers": [
+        28,
+        46
+      ],
+      "korean_numbers": [
+        28,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-ik",
+      "source_sha256": "ef40f4a8235521a65c819105d5e48ebc4a80efcfa0e603f2e0dd1809b534d95a",
+      "korean_sha256": "757645af5792756f273ad14dd22f19304b9f403f64aba97d372dcd1d243b8071",
+      "status": "match",
+      "english_numbers": [
+        35
+      ],
+      "korean_numbers": [
+        35
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-il",
+      "source_sha256": "fb170ee4cd66eefb8e83f4003fb156550129976eac6a0de50814427db453b2cb",
+      "korean_sha256": "630b6f4dec025d5bb9c1845a3b3d1f4311986262f3619c4e6bc56b50e7ffde79",
+      "status": "match",
+      "english_numbers": [
+        36
+      ],
+      "korean_numbers": [
+        36
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-im",
+      "source_sha256": "dbbba1881da138818c4f891f3cc0f392cbd6ae700b9cef019d62b9a4fd208d91",
+      "korean_sha256": "059a175a56727a0d60c1059fad542de045b7129492f7b9fb36c4ac502c180330",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-in",
+      "source_sha256": "abd329342d5a617b44610399cd5a12fb3e54102360085f4be31ab2dd6929cc2c",
+      "korean_sha256": "ca8a7feaa01adbf6f68a377db067191dbc4ea247983b2b98542cee1814e7eb04",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-io",
+      "source_sha256": "f89d66e8b68cde6456cd39998bb7a08bc5e66f9830ade0ac87c577d642580a96",
+      "korean_sha256": "40303e5eceaf64809501eec119c41a8841da882d9508218e4310c91a45fed1a7",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-ip",
+      "source_sha256": "4c7fb90ff1c0c4e29233a3189fcc62feca440106fbfcc1ee35ec848a3a713f63",
+      "korean_sha256": "fa306a64a6c8d2fabe103444411a2e2c90b0d6cdb166959db493921cb0fa53bb",
+      "status": "match",
+      "english_numbers": [
+        41,
+        43
+      ],
+      "korean_numbers": [
+        41,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-iq",
+      "source_sha256": "dbe4393dd6a0b420f2a9230b0b5b7a32c9cbd4b90a9ac90468135d51e06786a5",
+      "korean_sha256": "c38ffb045eae4af511cfdabd2adb66f5c41eca7e0394ea3058b0ece0ad598c05",
+      "status": "match",
+      "english_numbers": [
+        41,
+        43
+      ],
+      "korean_numbers": [
+        41,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-ir",
+      "source_sha256": "c428201045f06233d9c21612014324a9c220c1163ece25237536e1973d5af7c2",
+      "korean_sha256": "5d00ffba52444052b6ef989dab2b1b286fc6fb7a669e0e8734a978a64d76dd13",
+      "status": "match",
+      "english_numbers": [
+        46
+      ],
+      "korean_numbers": [
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-is",
+      "source_sha256": "a3604f5c8b9df2a47d55f7591c66a3a06fbf33ff0ac2b328162043b8ba2c587f",
+      "korean_sha256": "c983f27a067f80907a63e086289975dc92193cc0e4b5bffc5a57282078e9d4e4",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a57-p1-iu",
+      "source_sha256": "90dda296bed7875ac5ff7f95d5a553f5c8987958cc2adcdf3224de4868936615",
+      "korean_sha256": "d821449393533a0b3b9c1ab322c8f2ae16945e706a8dbe05ac2016cc18307ea9",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p1-ic",
+      "source_sha256": "97ff54e5c079a1e704df2d64223f93dd00828c476f2f7edc8c441152f7dcf118",
+      "korean_sha256": "31848adbd8a5c4fc32097a288dfbc795f1bd4f7c277d2fa7d8a51b4f0d8ed8c6",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p2-ig",
+      "source_sha256": "7f52babe98409590e297f68c72d7dd90c2b8f1adee34c7d74a7f66866cb7c1d6",
+      "korean_sha256": "0bf7e335c3652791d5dc5c4dd819748708df9e66032a4c80a20d4b51146e7e2f",
+      "status": "match",
+      "english_numbers": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "korean_numbers": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p2-ih",
+      "source_sha256": "9b5b7412ec3f6d546d49f517aa0c43739946843a7724efa1323151cf27138880",
+      "korean_sha256": "7b2898e35f64f584279cd95a5d7cb32f1dd54a34f3ad6c0cdb4264376fdf80aa",
+      "status": "match",
+      "english_numbers": [
+        42,
+        43
+      ],
+      "korean_numbers": [
+        42,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p2-ii",
+      "source_sha256": "c7001328459e5c1ac8418c41398d70905ef19aee79420d155dbf6c0dd30febed",
+      "korean_sha256": "f92f91f493a66bf6213287e0a6423ae5551dab9dae813c67a984f3a8b2b5f126",
+      "status": "match",
+      "english_numbers": [
+        83
+      ],
+      "korean_numbers": [
+        83
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ia",
+      "source_sha256": "34993c01d1bbe87cf157cea17e7ed01b82b14c5ace2dbc1835b58300b7c5d913",
+      "korean_sha256": "82d106cc05064c2892e00ed7c4b18491204acd59909aa77b45acb4bcb6748ee8",
+      "status": "match",
+      "english_numbers": [
+        36
+      ],
+      "korean_numbers": [
+        36
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ic",
+      "source_sha256": "3d0f723f1bf9b3df3117e659e123f3adc9727f111544ed299da5436c509d7a7a",
+      "korean_sha256": "29f1da2c33cfb0db30680321439bbcf402271574307c84d319bbe426d436a506",
+      "status": "match",
+      "english_numbers": [
+        36
+      ],
+      "korean_numbers": [
+        36
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-id",
+      "source_sha256": "2a8afffde8916722256ea98c9491a2b76d8060dca5b6a0e3deac552bdd85c2ab",
+      "korean_sha256": "aa26d83d1fec4371344d9abec9f5dac7152614994bdd1205ce3369953389c62a",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ie",
+      "source_sha256": "13852dfba1980ec1c8fcabaa66a8af581709116b03a9f6e2f91147d26e4e9d2c",
+      "korean_sha256": "8a631f452ffb3bbcd35aa5d717a1aa31ad6c3593a0a7e33754a55b12044ca33e",
+      "status": "match",
+      "english_numbers": [
+        43
+      ],
+      "korean_numbers": [
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-if",
+      "source_sha256": "3831377a3152f68a79a5b17e1a3ac574360891d6258b92c3645d7ac29a9b53ad",
+      "korean_sha256": "f25136b9940e9745457ee562d990b08418c68bd77ee485654e17cd8f9513c22e",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ig",
+      "source_sha256": "469ad29ebbd64161664af448143f0807f292ca6f004bbb7a16919591417f81d4",
+      "korean_sha256": "115dbd5a14291ff617afcee50606a9a0fcee2233bca3d382fbfadd90fd9297af",
+      "status": "match",
+      "english_numbers": [
+        28,
+        46
+      ],
+      "korean_numbers": [
+        28,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ih",
+      "source_sha256": "743e1d630be7b02c470ec9a8aaa3c0b26b26925062279f0e55bfaa0b83c5b9f4",
+      "korean_sha256": "905a8075696418d6076405743a8ba0cdb46d59dd85fec3733556e3ec52d10f3a",
+      "status": "match",
+      "english_numbers": [
+        46
+      ],
+      "korean_numbers": [
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ii",
+      "source_sha256": "28094a5723ded859e7051201acc22beb28922bc6178566c52c8eb4f92d9b2e99",
+      "korean_sha256": "4aae32a2d1fc4607a0fc910b99878856d472889f8a03117e41632600d06bd866",
+      "status": "match",
+      "english_numbers": [
+        46
+      ],
+      "korean_numbers": [
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a58-p3-ij",
+      "source_sha256": "9c21ce061275b47a474ccb2d06a899d288c6f48028799da7a690079004fff445",
+      "korean_sha256": "adcb9eaf61eb601e3d6b17d35071e2c090368c5e32d81a3d9e070e1b34b3ebc1",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a59-t1",
+      "source_sha256": "ada8e76c457aff8ff2455917383275071a2a4459e3512ec7a5bcc709d7dc960b",
+      "korean_sha256": "db5d0a2defb5e028b053aa8602799da050fd8721df14bcc04b1b04bbb7aee862",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a60-p2",
+      "source_sha256": "14770152c3095eaa72206a6d17baadb806d790eedaaf51f8063f6af5bcefe2e9",
+      "korean_sha256": "e8bbba413c6c112d9a7cba907ee385e7d876dcb96200ffb525477526421e46d3",
+      "status": "match",
+      "english_numbers": [
+        61,
+        62
+      ],
+      "korean_numbers": [
+        61,
+        62
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a60-p4",
+      "source_sha256": "111802cfd606dfa1b0aeb799b0c0c1c3ab3af281b16253aeff59cf537cf02bb6",
+      "korean_sha256": "9d207aac181ad1ca50a33f855d17889e65786f210fd1afe9ef0a52eaa39703e0",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a60-p11",
+      "source_sha256": "3ed3d499bb651fb4579860e2c8233774793200ac4e8aa417f3ca74e69264d815",
+      "korean_sha256": "52db65430dc16b83950c6a59ea4f1dcca109aea1c7e7bf932fbd3e22f6be964b",
+      "status": "match",
+      "english_numbers": [
+        66
+      ],
+      "korean_numbers": [
+        66
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a61-p8",
+      "source_sha256": "f640e6913244b81cefaec7eb9c2641cc7bb1c324ef3f4d57e37382bae143fd3f",
+      "korean_sha256": "e96158af5ed1dae5a9690aadc8f2045f5a0739f6de63b9bcec21a881a8f92c27",
+      "status": "match",
+      "english_numbers": [
+        55,
+        66
+      ],
+      "korean_numbers": [
+        55,
+        66
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a61-p9",
+      "source_sha256": "6d3712faaeac46d9cfefe3a63a7e9412348290892713579971bc744fd2a89ecc",
+      "korean_sha256": "cd1b51b77c1e5ce316c1eaa15bcd43fbf1c0201aaab6b2987c5e1210ef0a3dad",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a62-p2",
+      "source_sha256": "18b485ba249ea1519b9352267749e0d40065a8349916e9d184b85ab04706185b",
+      "korean_sha256": "bedf3491c4e58f06f897b65ccc372f50d627cacfacb3effcf508a1dc59099eb8",
+      "status": "match",
+      "english_numbers": [
+        56
+      ],
+      "korean_numbers": [
+        56
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a62-p7",
+      "source_sha256": "fcb1be4d12e7d3eaacef6b2d34c972d63983fe01ca71cfd3238b5a8325e49be2",
+      "korean_sha256": "c60680844cda0524823e4b719337932fad60d99f9f23ddde9b97a7cdacd18944",
+      "status": "match",
+      "english_numbers": [
+        55,
+        66
+      ],
+      "korean_numbers": [
+        55,
+        66
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-ia",
+      "source_sha256": "2c301fd9e502d009c5a3e002b8359b72bb552e4e271be8b5af66481bc3922b56",
+      "korean_sha256": "35c9c6cc99d00dd053ec7f2530febff4f456ab2492630b231a3a6c626380b065",
+      "status": "match",
+      "english_numbers": [
+        35
+      ],
+      "korean_numbers": [
+        35
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-ib",
+      "source_sha256": "33525ac1e85c86606b9491cfb6d5eafef3e6c3c3761548943aef86c5e5ab9d26",
+      "korean_sha256": "9291bdb624960819758f1fa4bddee71a6b846cd2886a8d13e26258d1ffd446bf",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-ic",
+      "source_sha256": "0204c6a3e3f8aea5870cae1a0fbae4ebd670da56374600046380818af3c3ff52",
+      "korean_sha256": "4bf0d37ef31aeabd2c587ca325195d5bdeb2c2150d142d4f0b143b069285b7e9",
+      "status": "match",
+      "english_numbers": [
+        41,
+        42,
+        43
+      ],
+      "korean_numbers": [
+        41,
+        42,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-id",
+      "source_sha256": "844989d465d66ce38de2ef845e3656ee03f81d2350ecf3e3ba6679408cb5e32c",
+      "korean_sha256": "e6a6af7b508b9c845bc297b8e2232d96611b073076da0acc93ca3b394b3db291",
+      "status": "match",
+      "english_numbers": [
+        28,
+        46
+      ],
+      "korean_numbers": [
+        28,
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-ie",
+      "source_sha256": "b7d13fd775999ec9e13ab509d266a2a9b416ed60b65902a2aa7d743374b6833d",
+      "korean_sha256": "e12873de8e7531c9f3faad3f03e6b37fe7f0443708fceabff6de26ecff6c3a74",
+      "status": "match",
+      "english_numbers": [
+        46
+      ],
+      "korean_numbers": [
+        46
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p1-if",
+      "source_sha256": "d9bee3aac62b168c7cf8710d73484ec03e90fc8db396eff02a6d9b34b16d8fef",
+      "korean_sha256": "923f2adc2f235d9da71e733c2685acc258ecff968c9df58b77cdc67bc79eca4a",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p2",
+      "source_sha256": "3644ed3fa982e79f368d16d8b786d33cb4d44a0bb4399a74fb031d18ea816583",
+      "korean_sha256": "2696643aadb427f68c242bccc4b6645d1b4f7e1a83f1a3ae377e6cb10c7cc400",
+      "status": "match",
+      "english_numbers": [
+        61,
+        62
+      ],
+      "korean_numbers": [
+        61,
+        62
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a64-p8",
+      "source_sha256": "f9eee956d9d24cad309e3814fc6efb854d0e92ff47f9d092d766a4a214913f5a",
+      "korean_sha256": "02281eca328d4ca9edd26dda7a95184f618efc8d47e0bfb439d30598dfc2245e",
+      "status": "match",
+      "english_numbers": [
+        65
+      ],
+      "korean_numbers": [
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a65-p1-ia",
+      "source_sha256": "5f8681e5b6b25d359a914afff48818b53eb14802297834b0d830ee3957e98407",
+      "korean_sha256": "2e2a3717a54e3923f59f884cacd3d83a3f2764369e85957d8f979fd26aca8aed",
+      "status": "match",
+      "english_numbers": [
+        60
+      ],
+      "korean_numbers": [
+        60
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a65-p1-ic",
+      "source_sha256": "72c926b032e19b035ebe8e59d53df1c4d71683a8c6e3870f0df554030f99f201",
+      "korean_sha256": "a0d2ad230826a58141db7b03531b1147797bfa9b5d043020a18e385b977ae629",
+      "status": "match",
+      "english_numbers": [
+        64
+      ],
+      "korean_numbers": [
+        64
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a65-p6",
+      "source_sha256": "95ece6a022ae3bdf1a86943cabeafcc3fb405eb1b3898e9adc8dc1f1f225bfc3",
+      "korean_sha256": "8ec233b8dfde911a87e2a763d2573e57e2af74f3f4658751b81418dc435893d5",
+      "status": "match",
+      "english_numbers": [
+        60
+      ],
+      "korean_numbers": [
+        60
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a66-p1",
+      "source_sha256": "27d2ec328d75d11c4686b9b6b083090153d1546fb0dafcef408dc07dfb848ca9",
+      "korean_sha256": "2c458d01fe5f39a0979d90ecd7fd26637c42b7b760b1f9d4a777403351e560de",
+      "status": "match",
+      "english_numbers": [
+        60,
+        63,
+        64,
+        65
+      ],
+      "korean_numbers": [
+        60,
+        63,
+        64,
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a66-p4",
+      "source_sha256": "458f3ad0d2d0c9055e96b7bc3e3f8dc73681b5a18590ac5dc2c88a13b178f1ee",
+      "korean_sha256": "557598daac03fb7a6ae75ae30f0888b9fafb8acd4cfd467180381e6d8bc87754",
+      "status": "match",
+      "english_numbers": [
+        64,
+        65
+      ],
+      "korean_numbers": [
+        64,
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a67-t1",
+      "source_sha256": "590028e26112539bc37708a871d91789b7e2b17d1693c6b1720cf8af4b816974",
+      "korean_sha256": "decebe76cad495f15b413faaad32afdda2cf8d422862b910d6eb25507bd9a876",
+      "status": "match",
+      "english_numbers": [
+        64
+      ],
+      "korean_numbers": [
+        64
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a67-t2",
+      "source_sha256": "672e2740a8983f6619d33b8c2c9ce3606f741bbdf0a70a96749c2870a0ab98c7",
+      "korean_sha256": "a31303c83f936b74e9c290b1b1a3d08b846afe39718630d3cdf010444f3d659d",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a68-p6",
+      "source_sha256": "0c726bdf3d04e35568b93decce0951eeb68fc50eafedbc267fbbd788155bd231",
+      "korean_sha256": "397e0389ce21656e93a12702d6fdbf7c1d3d39d8331a1006646219958349e36d",
+      "status": "match",
+      "english_numbers": [
+        65
+      ],
+      "korean_numbers": [
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a69-p1",
+      "source_sha256": "d007fa6b5049fdd83f084a0cde0aa913c4a6ecd716518d1097495f99afbce6d9",
+      "korean_sha256": "ea78a1d628e1838719f24687e946ec2dbd98aac4e10f26dbe2fbaef11863d32c",
+      "status": "match",
+      "english_numbers": [
+        70,
+        71
+      ],
+      "korean_numbers": [
+        70,
+        71
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a69-p2",
+      "source_sha256": "d2c35b337162b577a59852748f1c59b90fc187d518f34c56205bb5fbf699d609",
+      "korean_sha256": "58b1d22ff2d7cf69dec9bdf7f16f7d2d83d32b469bb0d5ee0cce02fa2443963b",
+      "status": "match",
+      "english_numbers": [
+        70
+      ],
+      "korean_numbers": [
+        70
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ia",
+      "source_sha256": "f537ad2fe969f61fd53e33add486c1a574d820fac57e00ef351743a49ea1187f",
+      "korean_sha256": "da399de02beb27bee4e242ce8bef602519523d79d0033ba83974a7bdbca79b69",
+      "status": "match",
+      "english_numbers": [
+        64,
+        65
+      ],
+      "korean_numbers": [
+        64,
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-id",
+      "source_sha256": "3762d9a66d8b751f4671fdae211a19817997a58470350b6116170a140a8a1dcc",
+      "korean_sha256": "0523d27645a09697dcbb065acf24681443efc4f037137053f9ad385a8d4ea574",
+      "status": "match",
+      "english_numbers": [
+        17
+      ],
+      "korean_numbers": [
+        17
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-if",
+      "source_sha256": "567181ef63944537a56fdfd6902c15f5522c712a440ebc3375b90849e1efd7c8",
+      "korean_sha256": "86a01541e5aa516d8f598608fb437115ff9822092a195dd7919e91e8c81a8ba8",
+      "status": "match",
+      "english_numbers": [
+        22
+      ],
+      "korean_numbers": [
+        22
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ig",
+      "source_sha256": "985272eeb02dd29a53edb5f83922320592ebca902786ad3a63a65ace19074409",
+      "korean_sha256": "fd6ba02dbf36344f6d2dcf38ed95bd5dba687d49ad3d0fb25dc030e58c1eb624",
+      "status": "match",
+      "english_numbers": [
+        33
+      ],
+      "korean_numbers": [
+        33
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ih",
+      "source_sha256": "8606e7ed95ce0af6ecbc271efa9d37f000681e22854ded4ca8c45706eac064fd",
+      "korean_sha256": "2d0bae68b381a2407cd78fdb91a2f41e932ea7cf8e4a52e3dc62a0d6afff3abd",
+      "status": "match",
+      "english_numbers": [
+        34
+      ],
+      "korean_numbers": [
+        34
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ii",
+      "source_sha256": "4ed2a786e49fcc76d416011e4abeb29e4af3fa685b9f386832aaa2999f417874",
+      "korean_sha256": "42e9c43a360cb2423ab17ef64fa9788850331c36a5fe633bc33fbb932f7b7638",
+      "status": "match",
+      "english_numbers": [
+        47
+      ],
+      "korean_numbers": [
+        47
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ij",
+      "source_sha256": "36f358b52577dee6db7eef0cb449acd0c4d07300927a42f514ab655955955860",
+      "korean_sha256": "23f9dc4197e2d051b689a4a0e248ffef338fde91a6ff1be97ca99d994c52876a",
+      "status": "match",
+      "english_numbers": [
+        49
+      ],
+      "korean_numbers": [
+        49
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ik",
+      "source_sha256": "8a7475a2f7541917590fa4a789a3024d1aaa0f97f74dab3dd95cc9aad7064b14",
+      "korean_sha256": "0f4d49211298db9970656dbe24649a4899498b17541b58eb842a22e43beb898d",
+      "status": "match",
+      "english_numbers": [
+        58,
+        83
+      ],
+      "korean_numbers": [
+        58,
+        83
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-im",
+      "source_sha256": "ba2141fbc097956fc4bc734067b65137fb5a952e706d1c03b587302277901536",
+      "korean_sha256": "256fa163db2b70bd82c53596a1760cbf1912a106887930f74f13cbb90e25e556",
+      "status": "match",
+      "english_numbers": [
+        54
+      ],
+      "korean_numbers": [
+        54
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-in",
+      "source_sha256": "d7903b2a7b236621eb07df2cd1b8162991b4f786d7a95996277776ad17ec7c2d",
+      "korean_sha256": "7ae2c10de6bfba33b508939b9c75a6250e969b951b3b3acbd025c3b7a51b5ff2",
+      "status": "match",
+      "english_numbers": [
+        40,
+        42
+      ],
+      "korean_numbers": [
+        40,
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-io",
+      "source_sha256": "7119c6c99af45dc365542eed462c9732810e27d590964f7960c6a154391d714f",
+      "korean_sha256": "446f2149ae726c6bf2873faca4900afd078eb8efde08cfcd258172f5ac8e74b2",
+      "status": "match",
+      "english_numbers": [
+        42
+      ],
+      "korean_numbers": [
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ip",
+      "source_sha256": "dbfc19d2f202cd5f4ebc1d94f90689c8882596bab37d67b2ea121d4d58fd2820",
+      "korean_sha256": "e2758a1ab38459074ad7baddbd31cf1f71d2e31d2f415a27b1df6bf5d5b4843f",
+      "status": "match",
+      "english_numbers": [
+        43
+      ],
+      "korean_numbers": [
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-iq",
+      "source_sha256": "20313ee2fb52e408bce43b7e1277bb8364726c44ce46ec8107ac6bac13eb8a6d",
+      "korean_sha256": "0b96ec8a1de83301d7e46461d4cae581e811a071eb44684f87eedd92edeebf90",
+      "status": "match",
+      "english_numbers": [
+        43
+      ],
+      "korean_numbers": [
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ir",
+      "source_sha256": "8a533ecaeccc410987d86b83acee00a9d63935753e052e76f9559bc943a4d73c",
+      "korean_sha256": "3bf088bbda1bcbe96ec7a883961c339de48b3e7507b1bdef73f513d91bd48e97",
+      "status": "match",
+      "english_numbers": [
+        12
+      ],
+      "korean_numbers": [
+        12
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-it",
+      "source_sha256": "36ae31b3115b8dd063971a7338a57c1eee397d8fbeff8958102c147e4b107242",
+      "korean_sha256": "ddc64daffc9561482bc8cfeccf52fa1eee45fdbd7963534e63cd71a708f5b089",
+      "status": "match",
+      "english_numbers": [
+        64,
+        65,
+        66
+      ],
+      "korean_numbers": [
+        64,
+        65,
+        66
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p1-ix",
+      "source_sha256": "b348075146786999dc006de18862bf4ac2b2c804d8ffcde73726ed167d02afc9",
+      "korean_sha256": "a3b6230876f954ba2907f5c245389ad9fa50c6de939bfdb360c58bd6c822fa76",
+      "status": "match",
+      "english_numbers": [
+        40
+      ],
+      "korean_numbers": [
+        40
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p3",
+      "source_sha256": "e6532dcb68c0dd225a18aceca8f57dbf2361747e4785f9c131ac11758fa367b2",
+      "korean_sha256": "df9f0bd0ecc4209423c14dcfe4e726de23ef8ed4e72427f35c863f81d480cac3",
+      "status": "match",
+      "english_numbers": [
+        93
+      ],
+      "korean_numbers": [
+        93
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a70-p4",
+      "source_sha256": "38f328b3b4f4587b8166a8916deb96aa805b88bfc7f632dc4023a45676fe96ae",
+      "korean_sha256": "2822ce177d2e041a550724b31eb86e9bea2ebefe17876bf2d26f180d92acc70c",
+      "status": "match",
+      "english_numbers": [
+        76
+      ],
+      "korean_numbers": [
+        76
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a71-p2",
+      "source_sha256": "7931053ea35d5613e734ac250b14606c0ad519ffb3d168651de7baff25adea54",
+      "korean_sha256": "e6b1eb1224048641fd0be23e0298583bf851e40dcaa5208aa03bee500a6ea67b",
+      "status": "match",
+      "english_numbers": [
+        65,
+        70
+      ],
+      "korean_numbers": [
+        65,
+        70
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a74-p1-ib",
+      "source_sha256": "a6a543c63ed73468d1023b4e81faa4712d137800d06024f7d4371ba110c2e9e7",
+      "korean_sha256": "d7f223b0133849cb34785b5fd057ac882e9d96ef6113a5dd8bee54e7477170ad",
+      "status": "match",
+      "english_numbers": [
+        65
+      ],
+      "korean_numbers": [
+        65
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a74-p1-ic",
+      "source_sha256": "d29799ff2bfc6553a501937b8e0648c2e0eab5b6650703e6d33417fec458ef86",
+      "korean_sha256": "7471c946e055b2df56572a00d7d9c14bad2839a78129d7d770743d12c61532ce",
+      "status": "match",
+      "english_numbers": [
+        63
+      ],
+      "korean_numbers": [
+        63
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a77-p2",
+      "source_sha256": "ac931755a60ea14a30de874fac494364b48d35588701bafac16722b609b2d16c",
+      "korean_sha256": "13bbf8bdddadf973bc4115479d9f244b1aa6a8869d87c7a8873c9b72dc158e2e",
+      "status": "match",
+      "english_numbers": [
+        78
+      ],
+      "korean_numbers": [
+        78
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a78-p2",
+      "source_sha256": "d1fd8865f42b55cef25e60b6a842d7d0cd496b39f25a58f8208d53b85e980312",
+      "korean_sha256": "3f50f7cb4a6cf2d8c8fd2e6933272981b0d1e2cf9786118aa7e774c7a0ee42c7",
+      "status": "match",
+      "english_numbers": [
+        55,
+        56,
+        77
+      ],
+      "korean_numbers": [
+        55,
+        56,
+        77
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a79-p1",
+      "source_sha256": "9c12e7a2e9a8728a6a4cb11fd288a1f4ebf477139916f92a4d8e80756543beef",
+      "korean_sha256": "f10e6127fc80be09d4872fe3394f62e13078cec6b9710f1a8e87284b2d0e7af1",
+      "status": "match",
+      "english_numbers": [
+        77
+      ],
+      "korean_numbers": [
+        77
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a80-p1",
+      "source_sha256": "7cf7b8a2df71e397328ebe4af2dc1f6cb03004931f36c3813bef0ff23a351549",
+      "korean_sha256": "3507e041ce548efb34141a207e235d89a2540d6893cd7af1fe94f16ce5cf88fc",
+      "status": "match",
+      "english_numbers": [
+        77,
+        78,
+        79,
+        82
+      ],
+      "korean_numbers": [
+        77,
+        78,
+        79,
+        82
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a80-p2",
+      "source_sha256": "e3b8ea3c7cc745176ed278e7aeb1f69a99872976e0679b5e8cf6d4015fdb1926",
+      "korean_sha256": "5d44b0b6dda284eb56b2687b3fceaf70e30db33599a53d1c4fb2907c4c88bfe8",
+      "status": "match",
+      "english_numbers": [
+        77,
+        78,
+        79
+      ],
+      "korean_numbers": [
+        77,
+        78,
+        79
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a82-p6",
+      "source_sha256": "9e8a29c6e1c5922859a5c3a12c9a49399fc521b7b8c35a4c8780e13ca0a1ae9d",
+      "korean_sha256": "800c71661be1bdd76504849ef8c1f69944920898909c7d56c68516a67aff352f",
+      "status": "match",
+      "english_numbers": [
+        79
+      ],
+      "korean_numbers": [
+        79
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p2",
+      "source_sha256": "61c944ed60a584632f2ae907fdead404fe720382950de96decbeb2c27a5af9c9",
+      "korean_sha256": "1f6e12dbdbab71abbd3a74fd9b80340bd42f41c51f1b173abbb8cd821e7c3d79",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p2-id",
+      "source_sha256": "c28cd7c8b99cc78fb633a4d8c1fd6f287ec2616764704c1c2cee2340ceb7d1ab",
+      "korean_sha256": "9e4089047efa5d75c79ac9e90e440eb91d2809268983d7cf2339182289459a97",
+      "status": "match",
+      "english_numbers": [
+        25,
+        32
+      ],
+      "korean_numbers": [
+        25,
+        32
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p2-ii",
+      "source_sha256": "758503b651d26ad247a72bfaf13b79bd9d7f5af1e6b3f5572e6277854ba4f50f",
+      "korean_sha256": "ecdd2c4776fcebd337a0aeb89de5fab72318ae0b02ebe4edb579ea74fab43e4f",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p2-ij",
+      "source_sha256": "3f89c3a923a62e10b07177607f5665180c61081a77ff4b2cd5dc19e551d98b04",
+      "korean_sha256": "997114f9139a6e4f5d781806ef092ba86c6c500de392b0e408764ee43151124d",
+      "status": "match",
+      "english_numbers": [
+        40,
+        42
+      ],
+      "korean_numbers": [
+        40,
+        42
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p4-ia",
+      "source_sha256": "043fa87b03cb1a5168ecf0fd234fc3ee0acf7c9a7d42b5b3531bf882157e5c8e",
+      "korean_sha256": "fba8d8a558ee767a2062a0ff9d83613f70a1f91be4a19ff5776af010dc3e7651",
+      "status": "match",
+      "english_numbers": [
+        8,
+        11,
+        25,
+        39,
+        42,
+        43
+      ],
+      "korean_numbers": [
+        8,
+        11,
+        25,
+        39,
+        42,
+        43
+      ],
+      "english_ranges": [
+        [
+          25,
+          39
+        ]
+      ],
+      "korean_ranges": [
+        [
+          25,
+          39
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a83-p4-ib",
+      "source_sha256": "18d9cac622d7ceca28d43186e2ab7d6a506593064a26f4a8003b6676fef0f9db",
+      "korean_sha256": "8b32e143ee54100025f810440cdbc42d3593f5e109d0487ce9c379acda26569c",
+      "status": "match",
+      "english_numbers": [
+        42,
+        43
+      ],
+      "korean_numbers": [
+        42,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p4-ic",
+      "source_sha256": "43bd70cf8696a13a240cf9d273cba7e79235d9febd62e4e279ef655005a3b8ac",
+      "korean_sha256": "789fcc528926429e2c5e41ee66a0277bad7d0a733cf1c64eaa64798d0e2c9d75",
+      "status": "match",
+      "english_numbers": [
+        41
+      ],
+      "korean_numbers": [
+        41
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p5-ia",
+      "source_sha256": "8b102906733d3f0f66baddd268fdcc7ac32e72288633f5716b9dfd14b58ac0c1",
+      "korean_sha256": "d64b41777c4f97506f5b03ea56fea27ce09017a6085c7175c455dc6c9a69df2e",
+      "status": "match",
+      "english_numbers": [
+        5,
+        6,
+        7,
+        9
+      ],
+      "korean_numbers": [
+        5,
+        6,
+        7,
+        9
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p5-ib",
+      "source_sha256": "f129940513cdec9ec49516764566e871a4215ebbc031ea10ea358c2fc6fde0ea",
+      "korean_sha256": "5431936c39639f263d6ed33586616b4206c818262bf7e6953c4a305c38ef89e6",
+      "status": "match",
+      "english_numbers": [
+        12,
+        22
+      ],
+      "korean_numbers": [
+        12,
+        22
+      ],
+      "english_ranges": [
+        [
+          12,
+          22
+        ]
+      ],
+      "korean_ranges": [
+        [
+          12,
+          22
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a83-p5-ic",
+      "source_sha256": "93e361b36b742421d34d2a2dd37a664fdd817af14c06d592588a2dd6c4d23bbd",
+      "korean_sha256": "ed36c0f38a3628ed102bfb19ce58d81806479b6292f024903908d7b41c33e224",
+      "status": "match",
+      "english_numbers": [
+        44,
+        49
+      ],
+      "korean_numbers": [
+        44,
+        49
+      ],
+      "english_ranges": [
+        [
+          44,
+          49
+        ]
+      ],
+      "korean_ranges": [
+        [
+          44,
+          49
+        ]
+      ]
+    },
+    {
+      "node_id": "main-a83-p5-ie",
+      "source_sha256": "f2c1a075ae8473fb3b2ac0cf6a62b74a8ff1b6957125c57c0395cec3659aa8e4",
+      "korean_sha256": "3ae33bba3bbcf7f107bfdf63909fff12e1dcd74acddd5bad85de3f53c42fc452",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p6",
+      "source_sha256": "1b4ab16a3f39f9466a88e46d1e2779c5497a5dcad83cd8ac4e1ee68a71e4ffe6",
+      "korean_sha256": "7acf2a308c5d7b0db9637578e6491acf0e8c3ddefc071dcad642299ceb36f7ad",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a83-p7",
+      "source_sha256": "eee7b31d9e2a0c4e01c86d8db2603de371e331e4846b4447109e7338ee967eef",
+      "korean_sha256": "ac1c956d91a57cf6bc4dbdfbf809b2aecd0143b3950a63cd40339022597dc452",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a84-p1",
+      "source_sha256": "b52fbf3904cc48753ecd5e596b90810088a65a67db3c75aee295f41b4973b5c2",
+      "korean_sha256": "b7ce465777762b4e87e6ccec32a20651482619f0e47c5383e1838b95a15e9123",
+      "status": "match",
+      "english_numbers": [
+        83
+      ],
+      "korean_numbers": [
+        83
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a89-p2",
+      "source_sha256": "1e376177cb308aa64d5a1f2de096bd2ac222430dbcc07cdb779cc173f328fff3",
+      "korean_sha256": "f4b1b3529d13fd926ae452ba55fcd72f5150f89a343bd9ef282bb6c3a82b3d8b",
+      "status": "match",
+      "english_numbers": [
+        15,
+        16,
+        18,
+        21
+      ],
+      "korean_numbers": [
+        15,
+        16,
+        18,
+        21
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a89-p3",
+      "source_sha256": "460b1d9c413969930162a3614fab6d078ac147f0ef4762c550c17d5ea4dfd6e3",
+      "korean_sha256": "0b0faff3144ee3cd2a803e503969e2bb017e868056e975a04520d898c731a8d8",
+      "status": "match",
+      "english_numbers": [
+        15,
+        16,
+        18,
+        19,
+        20,
+        21
+      ],
+      "korean_numbers": [
+        15,
+        16,
+        18,
+        19,
+        20,
+        21
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a90-p1",
+      "source_sha256": "88d2038ab521b073db9b0dcdf2804388e7b8e7795e954f6ed0a4fbe6647ed4f3",
+      "korean_sha256": "0205bff9372b858390255dcc42573eedfc9f544ad47bc9b99713a26cb67ceb87",
+      "status": "match",
+      "english_numbers": [
+        58
+      ],
+      "korean_numbers": [
+        58
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a92-p2",
+      "source_sha256": "e7c9fe3e73cd40ca0d6f91017989d6db97c35d22f9b3ffed63fb6f3dbde4a67d",
+      "korean_sha256": "0f23675413a8282bee5a3a64b283fd61e49b864a22560811202cdfe55c2acaa4",
+      "status": "match",
+      "english_numbers": [
+        12,
+        43
+      ],
+      "korean_numbers": [
+        12,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a92-p3",
+      "source_sha256": "446306125d08fb869db4d86e719337d7662e007f5059351d42825a35f9910329",
+      "korean_sha256": "e2d64cc0a62ca26422a1baccd087b7ba509757570207f6cbf5382a72c38a7bfc",
+      "status": "match",
+      "english_numbers": [
+        12,
+        43
+      ],
+      "korean_numbers": [
+        12,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a92-p5",
+      "source_sha256": "130da72870931de3f7c6d29ccaf4f88f4bb915bac9a04545d45bfca2986dd9f7",
+      "korean_sha256": "a83256c869f72317725d704038bd701c518f8f1908dc56a00b0c986a4901a6e1",
+      "status": "match",
+      "english_numbers": [
+        12,
+        43
+      ],
+      "korean_numbers": [
+        12,
+        43
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a93-p2",
+      "source_sha256": "884285217a174c68781989a9d6c15f714239e670507a33b75f5bdc2c6f562d52",
+      "korean_sha256": "4f6a4e36d952c5b7845a597a8f9cdc5d3f5352a44ed56e3e3c086d2e8a729815",
+      "status": "match",
+      "english_numbers": [
+        5
+      ],
+      "korean_numbers": [
+        5
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a93-p3",
+      "source_sha256": "38c446b67e57dac5817bb02a56fa958605cc1022ec21ec9fda0666659902df37",
+      "korean_sha256": "80961bace21b59f6185b5b558515862e3bd16b1030df0b63cd36a658444a5051",
+      "status": "match",
+      "english_numbers": [
+        5,
+        8
+      ],
+      "korean_numbers": [
+        5,
+        8
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a94-p2",
+      "source_sha256": "d8572c80baa5d91e9bbc9f454bc1e95f8fc556a40e15df217b6560c37c7c598c",
+      "korean_sha256": "bf474180223e33e05f9bf787473a322a3433bc5e88f35fde4e2cda7b0a38496d",
+      "status": "match",
+      "english_numbers": [
+        29
+      ],
+      "korean_numbers": [
+        29
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    },
+    {
+      "node_id": "main-a97-p2-ia",
+      "source_sha256": "80e3811a04e995046560851783d61e1a5165aa3b3f949f185da79b79dccc397d",
+      "korean_sha256": "689f3d2c832d4f2a6aeb5b5ecc527e4e394015a0cc6c39ead6f6924464d11339",
+      "status": "match",
+      "english_numbers": [
+        25,
+        45
+      ],
+      "korean_numbers": [
+        25,
+        45
+      ],
+      "english_ranges": [],
+      "korean_ranges": []
+    }
+  ],
+  "glossary_entries": 328,
+  "glossary_unique_english_keys": 320,
+  "glossary_alternatives": [],
+  "invalid_glossary_node_ids": [],
+  "human_review_status": "not_started",
+  "semantic_completeness_verified": false,
+  "public_release_status": "withheld",
+  "private_draft_sha256": "716c01064dd61a621f3483751bf0c89d52b96df36c0d2f72237761b6b3a5031e",
+  "scope_limits": [
+    "항·호 참조는 이 검사 대상 밖",
+    "외부법령의 조문 귀속 확인은 별도",
+    "집합/범위 일치는 전체 의미 일치를 보장하지 않음",
+    "부정·예외·의무/재량 및 조건의 의미는 사람 검수 필요"
+  ]
+}

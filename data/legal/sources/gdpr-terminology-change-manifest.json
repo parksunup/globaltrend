@@ -1,0 +1,60 @@
+{
+  "source_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "actor": "Codex model terminology alignment",
+  "human_review_status": "not_started",
+  "public_release_status": "withheld",
+  "english_term": "micro, small and medium-sized enterprises",
+  "previous_korean_term": "영세·중소기업",
+  "selected_korean_term": "초소형기업·소기업·중기업",
+  "selection_reason": "같은 세 규모 표현을 기존 고려사항/각주와 통일. 원문에 없는 기업 규모 정의를 본문에 추가하지 않음. 한국 법정 기업 정의와 동일시하지 않음.",
+  "support_nodes": [
+    {
+      "node_id": "recital-13",
+      "source_sha256": "4e5effe5f3fadeb335f3005df1c2b4d1552214b93fab2400184b327c912ea26e"
+    },
+    {
+      "node_id": "recital-98",
+      "source_sha256": "01697593fa40d7e087758f5c138e6adf53dc13e06c73ed4abc0ea5f5e285e962"
+    },
+    {
+      "node_id": "recital-132",
+      "source_sha256": "7effd118ef3177298d91ac520207c8d7446d60a5dccc94f6b2d9c68de4cfa748"
+    },
+    {
+      "node_id": "recital-167",
+      "source_sha256": "29189f09508ca03c01abc033495ac3e6e316c659a9548b629cc719b3ee0d1cfc"
+    },
+    {
+      "node_id": "footnote-5",
+      "source_sha256": "93751f26ef4899751f14696fb33ecc717191f50ef588eee87d8cb310e72acb44"
+    },
+    {
+      "node_id": "main-a40-p1",
+      "source_sha256": "e17d09c35917bdd67fb43dbbd81289c763b3cf33aaab04bacbfc388a201c5ab4"
+    },
+    {
+      "node_id": "main-a42-p1",
+      "source_sha256": "50e57651dcfd33d6ca87b73ac7beb41d84218e009a0162917045b6381db79fe8"
+    }
+  ],
+  "changed_nodes": [
+    {
+      "node_id": "main-a40-p1",
+      "source_sha256": "e17d09c35917bdd67fb43dbbd81289c763b3cf33aaab04bacbfc388a201c5ab4",
+      "before_korean_sha256": "5ff78f366c4feb799cfd934c9ed5b8eb4c6ff2a663a867e113966ba5e0dd855f",
+      "after_korean_sha256": "3f4302205d730effb73f8b5cb43ddd3797a9c02d9d9f75dddcc60ac056fb0128",
+      "decision": "동일한 세 기업 규모 표현을 기존 고려사항/각주의 선택 용어와 통일",
+      "human_review_status": "not_started"
+    },
+    {
+      "node_id": "main-a42-p1",
+      "source_sha256": "50e57651dcfd33d6ca87b73ac7beb41d84218e009a0162917045b6381db79fe8",
+      "before_korean_sha256": "4ed38e34400536701241899496e1c5ad504b005955d68ea379d286eb4eea9d5b",
+      "after_korean_sha256": "8df765eda81ea67e4ab1077f50dd7f9068c53118f7d060b32d71fdc210314045",
+      "decision": "동일한 세 기업 규모 표현을 기존 고려사항/각주의 선택 용어와 통일",
+      "human_review_status": "not_started"
+    }
+  ],
+  "unchanged_translation_nodes": 1121,
+  "source_and_structure_unchanged": true
+}
