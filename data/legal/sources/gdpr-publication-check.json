@@ -82,5 +82,46 @@
     "www.europarl.europa.eu",
     "publications.europa.eu"
   ],
-  "network_note": "기존 허용 목록은 읽을 수 없어 교체하지 않음. EUR-Lex HTTP202는 도메인 추가만으로 해결된다고 보장하지 않음."
+  "network_note": "기존 허용 목록은 읽을 수 없어 교체하지 않음. EUR-Lex HTTP202는 도메인 추가만으로 해결된다고 보장하지 않음.",
+  "latest_retry_receipts": [
+    {
+      "id": "eurlex-notice",
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "checked_at_utc": "2026-10-13T05:50:41.256715+00:00",
+      "status": 202,
+      "final_url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "eurlex-reuse",
+      "url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+      "checked_at_utc": "2026-10-13T05:50:41.257345+00:00",
+      "status": 202,
+      "final_url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "id": "council-copyright",
+      "url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+      "checked_at_utc": "2026-10-13T05:50:41.257794+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "parliament-notice",
+      "url": "https://www.europarl.europa.eu/legal-notice/en/",
+      "checked_at_utc": "2026-10-13T05:50:41.258391+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "id": "op-copyright",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "checked_at_utc": "2026-10-13T05:50:41.258779+00:00",
+      "status": 200,
+      "final_url": "https://op.europa.eu/en/web/about-us/legal-notices/publications-office-of-the-european-union-copyright",
+      "bytes": 378554,
+      "sha256": "7dbf825d31e78f3a51e1d6b5ce30807c706e6956cf9be917154535f5416f3c4d"
+    }
+  ]
 }
