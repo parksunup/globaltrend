@@ -143,7 +143,292 @@
     "human_review_status": "not_started",
     "added_to_gdpr_99_articles": false,
     "applied_to_comparison_cells": false,
-    "new_comparison_criterion_created": false
+    "new_comparison_criterion_created": false,
+    "followup_main_articles_read": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      35
+    ],
+    "all_main_articles_read_by_assistant": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ],
+    "full_semantic_completeness_verified": false,
+    "recitals_semantic_review_complete": false,
+    "followup_article_receipts": [
+      {
+        "article_id": "art_4",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_4",
+        "normalized_text_sha256": "9037446335f06731f6bbede1f788a72bf7a4ea02714098fb18a56e0bd5b301fd",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_5",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_5",
+        "normalized_text_sha256": "0fef6cec9aac5baeb602d4b8840e8d37fbc553ac00a94392865e035bb6882bff",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_6",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_6",
+        "normalized_text_sha256": "19b808763460486798f6717239aa9909a53375625ac9cf4f0d0b231380c542e1",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_7",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_7",
+        "normalized_text_sha256": "c7bb5a57f2eb78458580b401597a120899c8ccbab282bc2de0837f8983f3df97",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_8",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_8",
+        "normalized_text_sha256": "da9b7a199ac949c2b1c112990cc8d482c82a7cac318209811a6dd9e4f3a6412c",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_9",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_9",
+        "normalized_text_sha256": "884f6930b7dde45f601a840edea1c0504fc407a2713139cd311ea42250ab0a20",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_10",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_10",
+        "normalized_text_sha256": "88327115fa795dc903c6e75d76b7f14f444842a638d78fd523b9942b643f0c7a",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_11",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_11",
+        "normalized_text_sha256": "aa9065b9645453df3dec1ffe4f90e598f8d63bb23e2de47a2465d7ae7af5aa5f",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_12",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_12",
+        "normalized_text_sha256": "9ea3d8f85ff2ef22cfc8865f213163ce182206af801c2a1fdd3339b3dfa44150",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_13",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_13",
+        "normalized_text_sha256": "2f45547481129bed9567d4251b239ca48d0331dfb9fc59aefb499b685c0f78a0",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_14",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_14",
+        "normalized_text_sha256": "8ade7c6b35756148082819dd44aa6e87f09630601a8029ac12e6d5eb1d27b26e",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_16",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_16",
+        "normalized_text_sha256": "96d58f7657e698344dae403429234b4fc69c685e2243cf1067ab99793a8c065e",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_17",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_17",
+        "normalized_text_sha256": "2c1e6877704dfe6a43fc23bde2b2e9532c186198eac8a48876446b6c757cd5dd",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_18",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_18",
+        "normalized_text_sha256": "006cef25e3794aa5418841184e99c1774f1735f121cf1ad7fbacb6c942d7909c",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_19",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_19",
+        "normalized_text_sha256": "229ddd17f5642c1e4e5fd369f5f8070577404f529fb8e5f1e7a2d06df56f5fc7",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_20",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_20",
+        "normalized_text_sha256": "3dfbaf9203f41ac0c05a871d843c8a1f5db15288a89324c6121d8b8331670a5f",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_21",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_21",
+        "normalized_text_sha256": "bc3c0900e579bd7d4b5ed92abeaf0fe88ea5b8c43163d24dd894803b4aea2545",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_22",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_22",
+        "normalized_text_sha256": "2ab6c207b3618eecf3c4e23ce7659428a6038ec6074201a3df4e3d16fb95d88c",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_23",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_23",
+        "normalized_text_sha256": "998de74b24ab99cc194be399c2f59e9be0df5212fbf2babe87057eb8a2792095",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_24",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_24",
+        "normalized_text_sha256": "9d8c193df34b580f595304b5879d546c1509ee9f5ee6018f6274b6aa65500c62",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_25",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_25",
+        "normalized_text_sha256": "839d7f463424e0155a37291200da20df8357a0025fe63a01399b05a2313e69a1",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_26",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_26",
+        "normalized_text_sha256": "7d9d8757be25a631b6f4bdad446551675fa9ec699367a95dd25b97b42a1baa04",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_27",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_27",
+        "normalized_text_sha256": "2d0f33e036eb3e6181782e6da6a8d6fee025340d66df3b603a797d4e77dc370e",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_28",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_28",
+        "normalized_text_sha256": "21c1269c346daf615482473c5e9926b892c88082c4907c12f34eafca4f4659c3",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_29",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_29",
+        "normalized_text_sha256": "5aec10c4471776bfb9c066df514c0aa7461910bc68943c837f5a7ee6ab2d67d3",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_30",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_30",
+        "normalized_text_sha256": "1cad83cfc0de8a7f5e4d02f49c11c4c8e26ce2b3fbea3bc37558769503f228a4",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_31",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_31",
+        "normalized_text_sha256": "154b7094d1601f8d5f86ce3de310923e309d05c1ccd758b16056f7888df0fb3a",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_32",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_32",
+        "normalized_text_sha256": "fecacc5e37c97f2d82c4125dbd9d0089ccec7b412ebbb6a32b76d736e83b4699",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_33",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_33",
+        "normalized_text_sha256": "628929ea86c8e504c8e48131752e5ab0a27e91116eacc87268989c1aedd1c230",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      },
+      {
+        "article_id": "art_35",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=96d99c7a-d704-11f0-8da2-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=#art_35",
+        "normalized_text_sha256": "2715d78f9cc292ab186cbb29ddf627ee8d2e572fa3b025b1224af8f1b7c0c5be",
+        "source_read_actor": "assistant",
+        "human_review_status": "not_started"
+      }
+    ]
   },
   "proposals_procedure_observations": [
     {
@@ -273,5 +558,61 @@
     "Complete effects of other separate legislation/national law/guidance/case law not verified.",
     "Related law 2025/2518 full Korean translation and whole-law semantic review not done.",
     "Human review deferred."
-  ]
+  ],
+  "council_document_followup": {
+    "receipts": [
+      {
+        "id": "council130-add3-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=76030fc3-6e35-11f1-ae88-01aa75ed71a1&nonInferred=false",
+        "checked_at": "2026-10-13T11:11:05.482217+00:00",
+        "status": 200,
+        "bytes": 12374,
+        "sha256": "c9ab147c28ec0e5ba60fe021a240267b4b2e22a9254a8866b03d245824acff31",
+        "content_type": "application/rdf+xml;charset=UTF-8",
+        "final_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=76030fc3-6e35-11f1-ae88-01aa75ed71a1&nonInferred=false",
+        "requested_document_body_obtained": false,
+        "metadata_obtained": true
+      },
+      {
+        "id": "council360-rev1-rdf",
+        "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=ccab1f79-c686-11f1-bfcb-01aa75ed71a1&nonInferred=false",
+        "checked_at": "2026-10-13T11:11:38.315561+00:00",
+        "status": 200,
+        "bytes": 28924,
+        "sha256": "d8c543817b157aa7968b0efe6696c64d65a39804168c6b08766669a57080c88b",
+        "requested_document_body_obtained": false,
+        "metadata_obtained": true
+      },
+      {
+        "id": "council130-add3-pdf",
+        "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=76030fc3-6e35-11f1-ae88-01aa75ed71a1&format=pdf&language=en&productionSystem=cellar&part=",
+        "checked_at": "2026-10-13T11:11:05.482834+00:00",
+        "status": 200,
+        "bytes": 320293,
+        "sha256": "a9df899b68d1fc849f78a20d5293a41de54998004a939178aef78225d2480765",
+        "content_type": "text/html;charset=UTF-8",
+        "final_url_category": "OP errorpage redirect",
+        "requested_document_body_obtained": false,
+        "metadata_obtained": false
+      }
+    ],
+    "documents": [
+      {
+        "id": "ST_10482_2026_ADD_3",
+        "metadata_document_date": "2026-06-19",
+        "procedure_link": "2025_130",
+        "document_body_obtained": false,
+        "adopted_law_verified": false
+      },
+      {
+        "id": "ST_14082_2026_REV_1",
+        "metadata_document_date": "2026-10-12",
+        "procedure_link": "2025_360",
+        "also_linked_to_other_procedures": true,
+        "document_body_obtained": false,
+        "adopted_law_verified": false
+      }
+    ],
+    "conclusion": "Linked Council metadata and document dates do not establish enactment. A PDF request returned an HTML error page; no PDF was obtained."
+  }
 }
