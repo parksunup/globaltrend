@@ -1,12 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import styles from "./draft-viewer.module.css";
 
 type Bundle = { comparisonHtml: string; translationHtml: string; archiveBase64: string };
 type Manifest = { format: string; salt: string; iv: string; iterations: number; ciphertext: string; ciphertextSha256: string };
 const decode = (value: string) => Uint8Array.from(atob(value), (character) => character.charCodeAt(0));
 const hex = (buffer: ArrayBuffer) => Array.from(new Uint8Array(buffer), (value) => value.toString(16).padStart(2, "0")).join("");
+
+function embeddedDocument(html: string) {
+  const document = new DOMParser().parseFromString(html, "text/html");
+  let hasOfflineLinks = false;
+  document.querySelectorAll<HTMLAnchorElement>("a[href]").forEach((link) => {
+    const href = link.getAttribute("href") ?? "";
+    if (href.startsWith("#") || /^https?:\/\//i.test(href)) return;
+    const label = document.createElement("span");
+    label.textContent = link.textContent;
+    label.title = "전체 파일을 내려받아 확인해 주세요.";
+    link.replaceWith(label);
+    hasOfflineLinks = true;
+  });
+  if (hasOfflineLinks) {
+    const note = document.createElement("p");
+    note.textContent = "CSV·Markdown·참고 문서는 상단의 ‘전체 파일 다운로드’를 눌러 확인해 주세요.";
+    document.body.prepend(note);
+  }
+  return "<!doctype html>" + document.documentElement.outerHTML;
+}
 
 export default function DraftViewer() {
   const [password, setPassword] = useState("");
@@ -15,6 +35,7 @@ export default function DraftViewer() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [view, setView] = useState<"comparison" | "translation">("comparison");
+  const source = useMemo(() => bundle ? embeddedDocument(view === "comparison" ? bundle.comparisonHtml : bundle.translationHtml) : "", [bundle, view]);
 
   async function unlock(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError("");
@@ -65,7 +86,7 @@ export default function DraftViewer() {
         <button onClick={download}>전체 파일 다운로드</button>
         <button onClick={() => { setBundle(null); setView("comparison"); }}>열람 종료</button>
       </nav>
-      <iframe className={styles.document} title={view === "comparison" ? "전체 법제 비교 초안" : "GDPR 한국어 번역 초안"} srcDoc={view === "comparison" ? bundle.comparisonHtml : bundle.translationHtml} sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" referrerPolicy="no-referrer" />
+      <iframe className={styles.document} title={view === "comparison" ? "전체 법제 비교 초안" : "GDPR 한국어 번역 초안"} srcDoc={source} sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" referrerPolicy="no-referrer" />
     </>}
   </main>;
 }
