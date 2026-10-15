@@ -11,7 +11,13 @@ const evidenceLabels: Record<string, string> = {
   selected_official_statute_and_supplementary_law: "선택 법령·후속 법령 대조 초안",
   official_guidance: "공식 지침 근거 초안 · 법령 전문 대조 필요",
   official_legislative_summary_and_regulator_guidance: "공식 입법 요약·규제기관 지침 근거 초안 · 법령 전문 대조 필요",
+  official_summary_and_secondary_statute: "공식 채택 요약·비공식 법문 재게시본 대조 초안 · 공식 현행 조문 확인 필요",
 };
+
+function sourceLabel(url: string) {
+  const host = new URL(url).hostname;
+  return host === "legiscan.com" || host === "law.justia.com" ? "법문 재게시 자료" : "공식 근거";
+}
 
 function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCell[]; branch?: string; commitSha?: string }) {
   const criteria = useMemo(() => Array.from(new Map(cells.map((cell) => [cell.criterionId, { id: cell.criterionId, name: cell.criterionName, order: cell.criterionOrder }])).values()).sort((a, b) => a.order - b.order), [cells]);
@@ -40,7 +46,7 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
       })}</div>}
       {selected.exceptions && selected.exceptions !== "미검토" && <div className="detail-block"><span className="detail-label">주요 예외·주의</span><p>{selected.exceptions}</p></div>}
       <div className="detail-block"><span className="detail-label">판본</span><p>{selected.sourceVersion}</p></div>
-      {selectedSources.length > 0 && <div className="detail-block"><span className="detail-label">공식 근거</span>{selectedSources.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer">공식 근거 {index + 1} ↗</a>)}</div>}
+      {selectedSources.length > 0 && <div className="detail-block"><span className="detail-label">근거 자료</span>{selectedSources.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer">{sourceLabel(url)} {index + 1} ↗</a>)}</div>}
       {selected.pendingReason && <div className="detail-block"><span className="detail-label">검수 필요 사항</span><p>{selected.pendingReason}</p></div>}
       <SubmissionFeedback key={selected.id} itemId={selected.id} branch={branch} commitSha={commitSha} />
     </article>}
