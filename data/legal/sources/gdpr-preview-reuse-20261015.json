@@ -1,0 +1,22 @@
+{
+  "checked_date_kst": "2026-10-15",
+  "channel": "web tool: official EUR-Lex legal notice read successfully",
+  "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html?locale=en",
+  "section": "Copyright notice",
+  "verified": "Legal documents may be reused for commercial or non-commercial purposes unless otherwise specified. Editorial/consolidated-content CC BY terms treated separately.",
+  "scope": "Selected GDPR original legal act, own unofficial Korean rendering, own comparative summaries; third-party Korean PDFs and source archive excluded.",
+  "display_conditions": [
+    "source attribution",
+    "selected edition and corrections",
+    "translation and structural changes identified",
+    "unofficial status and no EU endorsement",
+    "human review not started",
+    "currentness limits retained"
+  ],
+  "excluded_from_release": [
+    "private complete source ZIP",
+    "third-party translation PDF",
+    "credentials and encrypted bundle keys"
+  ],
+  "decision": "prepare selected self-authored public Preview; does not certify all corpus rights or human/legal accuracy"
+}
