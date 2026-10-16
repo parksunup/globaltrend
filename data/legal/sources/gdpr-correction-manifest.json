@@ -1,0 +1,96 @@
+{
+  "base_version": "32016R0679-OJ-L119-20160504-EN",
+  "selected_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "source_note": "2016영어관보원판+2018-05-23 공식영어정오표; EN000.002 본칙대조. 고려사항은관보원판+정오표합성. 2026현행성전체·공개조건미확정.",
+  "editorial_markers_removed": [
+    "►C1",
+    "◄"
+  ],
+  "corrected_nodes": [
+    {
+      "node_id": "recital-71",
+      "before_sha256": "86ca840b5d2ab835db301f9492e2ea84147dda17e8d5180b270fb384fc23f23b",
+      "after_sha256": "88e97c539c009856e6d4ec2c62e96df20112be8de63dd62778a1b99c244279d0"
+    },
+    {
+      "node_id": "main-a37-p1-ic",
+      "before_sha256": "d803619d48db0c5c40e31f7fa374c4f6db7de1ec98f5855a5ec7d0b849a6c4f8",
+      "after_sha256": "d2b886ad827fd386a1e58ff769d0082f996a4d8455e7c1f034865658bd3d041c"
+    },
+    {
+      "node_id": "main-a41-p3",
+      "before_sha256": "c1d2bbb8f89b712f5d00c7c5b738ddb22d8327c279d5c54bb1de90840134f6f8",
+      "after_sha256": "5594937aacfdc4b8ed6450a7871c3e86257dbfc4a930f3429a69800c2d116a9c"
+    },
+    {
+      "node_id": "main-a41-p5",
+      "before_sha256": "9257754bfce3cac13632b604406913b2a9316d58a566f23c02f4b2d8dda4a176",
+      "after_sha256": "ffae39cec31fcde82bda5a3b35ba5ba7e9dc09e89714148028850fc4913b2eb2"
+    },
+    {
+      "node_id": "main-a42-p7",
+      "before_sha256": "72f4cc652d7aef225b936dd1c167ebc66b314f0caf128377a3ebba0a8f8b2da6",
+      "after_sha256": "d09dcd3faee07cbbb8d4166b7ca080cdc1911364e92e9ea78896043e7cb8d86c"
+    },
+    {
+      "node_id": "main-a43-p3",
+      "before_sha256": "fcde71c337a8d104b367b905e189d93d38f7b084664ab62664ef9be632183cc3",
+      "after_sha256": "b806efe39a1629047cb39c20182d03c14deaadf9b624a86ef4436bac47bcd1fe"
+    },
+    {
+      "node_id": "main-a43-p6",
+      "before_sha256": "6724fcc9f5cc1094b20a19a48de6a19544d9edaafd48066d286435170e7f2cef",
+      "after_sha256": "159f23e2bdbf38081eb0acaf1a5a2032b01c1c1323065761451de1cc36bba55a"
+    },
+    {
+      "node_id": "main-a57-p1-ip",
+      "before_sha256": "48e91d540b45f4d5ed534661c23871dc9c64107b428de4ca2f3c494a2989a725",
+      "after_sha256": "4c7fb90ff1c0c4e29233a3189fcc62feca440106fbfcc1ee35ec848a3a713f63"
+    },
+    {
+      "node_id": "main-a64-p1-ic",
+      "before_sha256": "7ac53eefa565ce9751f0cda6f98625e841de42a1419238d88a77e3383cb77fba",
+      "after_sha256": "0204c6a3e3f8aea5870cae1a0fbae4ebd670da56374600046380818af3c3ff52"
+    },
+    {
+      "node_id": "main-a64-p6",
+      "before_sha256": "b06e5bf66f9f5485d598afe2f0c687abbd7e8481d3804fc87482bbfaaf1ef8f4",
+      "after_sha256": "e43b17d6f275b410403dc973c727d4c14b0df4402e6e0e2bde94854c955516f2"
+    },
+    {
+      "node_id": "main-a64-p7",
+      "before_sha256": "0db10e41111c1a6610ebad65ca5d45064f2ba54dfc5ccd70a300d504b33fd2ba",
+      "after_sha256": "06f2afdcee46cec78778bb1c1a294cb966dbd63316d88a202d0be046ef6416ac"
+    },
+    {
+      "node_id": "main-a64-p8",
+      "before_sha256": "32fb658401bbfba040a4dd81d451cddb00b4bda68e9e3fe1340c3f62efad4130",
+      "after_sha256": "f9eee956d9d24cad309e3814fc6efb854d0e92ff47f9d092d766a4a214913f5a"
+    },
+    {
+      "node_id": "main-a65-p1-ia",
+      "before_sha256": "1a05092aaae42deaad6c1719e7c2dc10ac52ffde7fd4ef74153773cf1ac821c8",
+      "after_sha256": "5f8681e5b6b25d359a914afff48818b53eb14802297834b0d830ee3957e98407"
+    },
+    {
+      "node_id": "main-a69-p2",
+      "before_sha256": "8967058245de2863889fe53124d00c4f94068c46ef5dd5798f399ef35ad1d50f",
+      "after_sha256": "d2c35b337162b577a59852748f1c59b90fc187d518f34c56205bb5fbf699d609"
+    },
+    {
+      "node_id": "main-a70-p1-il",
+      "before_sha256": "31504540d62e96afac08021da0da4eda57338c74d81a6335ef60ac4782ece8aa",
+      "after_sha256": "8264fb6c9ed29e7ad5de850f9af98b9da084e5456fffc033fb8ae4960da49f51"
+    },
+    {
+      "node_id": "main-a70-p1-io",
+      "before_sha256": "dce5110a660c724643f590f520c4ebb4ee8414de4e13acab2a33affc3f920048",
+      "after_sha256": "7119c6c99af45dc365542eed462c9732810e27d590964f7960c6a154391d714f"
+    },
+    {
+      "node_id": "main-a70-p1-ip",
+      "before_sha256": "d7eb0b38352689fccbf2717be54822057b97e06a26602a47102a55266f603943",
+      "after_sha256": "dbfc19d2f202cd5f4ebc1d94f90689c8882596bab37d67b2ea121d4d58fd2820"
+    }
+  ]
+}

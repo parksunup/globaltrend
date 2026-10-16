@@ -1,13 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import SubmissionFeedback from "./submission-feedback";
 import styles from "./translation-review.module.css";
 
 export type TranslationSection = {
   id: string;
-  group: "main" | "supplementary" | "appendix";
+  group: "main" | "supplementary" | "appendix" | "reference";
   title: string;
   context: string;
   reviewStatus: string;
@@ -27,19 +27,32 @@ type Props = {
   commitSha?: string;
 };
 
-const groupNames = { main: "본칙", supplementary: "부칙", appendix: "별표" } as const;
+const groupNames = { main: "본칙", supplementary: "부칙", appendix: "별표·부속서", reference: "서문·고려사항·주석" } as const;
 
 export default function TranslationReview({ lawId, title, sections, officialName, officialUrl, version, scopeNote, reviewStatus, branch, commitSha }: Props) {
-  const [group, setGroup] = useState<"main" | "supplementary" | "appendix">(sections[0]?.group ?? "main");
+  const [group, setGroup] = useState<TranslationSection["group"]>(sections.some((section) => section.group === "main") ? "main" : sections[0]?.group ?? "main");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(sections.find((section) => section.group === "main")?.id ?? sections[0]?.id ?? "");
+  useEffect(() => {
+    const selectHash = () => {
+      const section = sections.find((item) => `#${item.id}` === window.location.hash);
+      if (!section) return;
+      setGroup(section.group);
+      setQuery("");
+      setSelectedId(section.id);
+    };
+    selectHash();
+    window.addEventListener("hashchange", selectHash);
+    return () => window.removeEventListener("hashchange", selectHash);
+  }, [sections]);
   const visible = useMemo(() => sections.filter((section) =>
     section.group === group && [section.title, section.context, ...section.lines.map((line) => line.text)].join(" ").toLowerCase().includes(query.toLowerCase())
   ), [group, query, sections]);
   const selected = visible.find((section) => section.id === selectedId) ?? visible[0];
   const counts = { main: sections.filter((section) => section.group === "main").length,
     supplementary: sections.filter((section) => section.group === "supplementary").length,
-    appendix: sections.filter((section) => section.group === "appendix").length };
+    appendix: sections.filter((section) => section.group === "appendix").length,
+    reference: sections.filter((section) => section.group === "reference").length };
   const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
 
   return <main className={styles.page}>
@@ -48,25 +61,25 @@ export default function TranslationReview({ lawId, title, sections, officialName
       <p className={styles.kicker}>법제 전문 · 사람 검수 전 초안</p>
       <h1>{title}</h1>
       <p>{officialName}의 조문을 순서대로 읽고 의견을 남길 수 있습니다. 이 번역은 비공식 초안이며 검수·공개 승인을 뜻하지 않습니다.</p>
-      <div className={styles.meta}><span>선택 판본 시행일: {version}</span><span>사람 검수: {reviewStatus === "not_started" ? "미착수" : reviewStatus}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표 {counts.appendix}항목</span></div>
+      <div className={styles.meta}><span>선택 판본: {version}</span><span>사람 검수: {reviewStatus === "not_started" ? "미착수" : reviewStatus}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
       {scopeNote && <p className={styles.caveat}>범위 주의: {scopeNote}</p>}
       {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
       {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">번역 초안 원본 파일 보기 ↗</a>}
     </header>
     <div className={styles.controls}>
       <div className={styles.tabs} role="group" aria-label="번역 범위">
-        {(["main", "supplementary", "appendix"] as const).map((value) => <button type="button" key={value} aria-pressed={group === value} onClick={() => { setGroup(value); setQuery(""); setSelectedId(sections.find((section) => section.group === value)?.id ?? ""); }}>{groupNames[value]} <span>{counts[value]}</span></button>)}
+        {(["main", "supplementary", "appendix", "reference"] as const).map((value) => <button type="button" key={value} aria-pressed={group === value} onClick={() => { setGroup(value); setQuery(""); setSelectedId(sections.find((section) => section.group === value)?.id ?? ""); }}>{groupNames[value]} <span>{counts[value]}</span></button>)}
       </div>
       <label className={styles.search}>조문 또는 본문 검색 <input value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(""); }} placeholder="예: 제2조, 개인정보" /></label>
     </div>
     <div className={styles.layout}>
       <nav className={styles.index} aria-label="조문 목록">
-        {visible.map((section) => <button type="button" key={section.id} className={selected?.id === section.id ? styles.active : ""} onClick={() => setSelectedId(section.id)}>
+        {visible.map((section) => <button type="button" key={section.id} className={selected?.id === section.id ? styles.active : ""} onClick={() => { setSelectedId(section.id); window.history.replaceState(window.history.state, "", `#${section.id}`); }}>
           <small>{section.context}</small><span>{section.title}</span>
         </button>)}
         {visible.length === 0 && <p>검색 결과가 없습니다.</p>}
       </nav>
-      <article className={styles.article}>
+      <article id={selected?.id} className={styles.article}>
         {selected ? <>
           <p className={styles.kicker}>{selected.context} · {selected.reviewStatus === "not_started" ? "사람 검수 전" : selected.reviewStatus}</p>
           <h2>{selected.title}</h2>

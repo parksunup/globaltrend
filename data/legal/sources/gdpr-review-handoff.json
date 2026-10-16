@@ -1,0 +1,75 @@
+{
+  "document_id": "gdpr-pre-human-review-handoff",
+  "source_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "status": "selected_draft_preparation_ready_with_unresolved_publication_and_currentness",
+  "translation_nodes": 1123,
+  "main_articles": 99,
+  "recitals": 173,
+  "missing_node_ids": [],
+  "eu_comparison_cells": 17,
+  "eu_translation_links": 243,
+  "human_reviewed_translation_nodes": 0,
+  "human_reviewed_eu_cells": 0,
+  "human_review_status": "not_started",
+  "human_review_timing": "later_together_with_other_laws",
+  "semantic_completeness_verified": false,
+  "public_release_status": "withheld",
+  "current_2026_completeness_verified": false,
+  "local_artifact_directory": "/workspace/legal-review-gdpr-20261013",
+  "local_archive": "/workspace/legal-review-gdpr-20261013.zip",
+  "local_artifact_is_public_url": false,
+  "local_artifact_permanent_storage_guaranteed": false,
+  "browser_check_method": "HTML set_content; managed file navigation blocked; no protection settings changed",
+  "publication_notice_receipts": [
+    {
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "checked_at": "2026-10-13T08:57:55.378106+00:00",
+      "http_status": 202,
+      "bytes": 0,
+      "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notice_read": false
+    },
+    {
+      "url": "https://eur-lex.europa.eu/content/help/data-reuse/reuse-contents-eurlex-details.html",
+      "checked_at": "2026-10-13T08:57:55.378894+00:00",
+      "http_status": 202,
+      "bytes": 0,
+      "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "notice_read": false
+    },
+    {
+      "url": "https://www.consilium.europa.eu/en/about-site/copyright/",
+      "checked_at": "2026-10-13T08:57:55.379618+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "notice_read": false
+    },
+    {
+      "url": "https://www.europarl.europa.eu/legal-notice/en/",
+      "checked_at": "2026-10-13T08:57:55.380157+00:00",
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "notice_read": false
+    }
+  ],
+  "checks": {
+    "gdpr_official_source_structure": "passed",
+    "appi_pipa_corpus": "passed",
+    "reference_numbers_and_ranges": "passed_with_documented_limits",
+    "team_data": "passed",
+    "existing_tests_passed": 22,
+    "existing_tests_failed": 0,
+    "local_html_translation_nodes": 1123,
+    "local_html_eu_cells": 17,
+    "local_html_eu_links": 243,
+    "local_html_korean_body_match": "passed",
+    "local_html_search_and_jump": "passed",
+    "local_html_automatic_network_requests": 0,
+    "zip_integrity": "passed"
+  },
+  "remaining": [
+    "Official reuse and own translation redistribution conditions not verified",
+    "Complete current-law status as of 2026 not verified",
+    "Human translation review deferred: 0/1123",
+    "Human EU comparison review deferred: 0/17",
+    "Other countries outside this follow-up scope"
+  ]
+}

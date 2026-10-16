@@ -28,6 +28,8 @@ export type LegalComparisonCell = {
   summary: string;
   exceptions: string;
   sourceUrl: string;
+  sourceLinks?: string[];
+  evidenceKind?: string;
   sourceVersion: string;
   status: string;
   pendingReason: string;
@@ -120,9 +122,18 @@ function legalComparison(root: string): LegalComparisonCell[] {
       let translationLinks: string[] = [];
       try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
       try {
-        translationLinks = stringArray(JSON.parse(data.translation_links || "[]"))
-          .filter((link) => /^\.\/(?:translations|sources)\/[a-z0-9-]+\.md(?:#[a-z0-9-]+)?$/.test(link));
+        translationLinks = stringArray(JSON.parse(data.translation_links || "[]")).flatMap((link) => {
+          const gdpr = /^\.\/gdpr\.md#([A-Za-z0-9-]+)$/.exec(link);
+          if (gdpr) return [`/review-drafts/gdpr.html#${gdpr[1]}`];
+          return /^\.\/(?:reference\/)?(?:translations|sources)\/[a-z0-9-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(link)
+            ? [link.replace("./reference/", "./")] : [];
+        });
       } catch { /* Keep the cell readable. */ }
+      let sourceLinks: string[] = [];
+      try {
+        sourceLinks = [...new Set(stringArray(JSON.parse(data.source_links || "[]"))
+          .flatMap((link) => officialLink(link).map((source) => source.url)))];
+      } catch { /* Keep the primary official source available. */ }
       return {
         id: `criteria-${data.cell_id}`,
         criterionId: data.criterion_id,
@@ -134,6 +145,8 @@ function legalComparison(root: string): LegalComparisonCell[] {
         summary: data.korean_summary,
         exceptions: data.major_exceptions,
         sourceUrl: officialLink(data.official_source_url)[0]?.url ?? "",
+        sourceLinks,
+        evidenceKind: data.evidence_kind || "",
         sourceVersion: data.source_version,
         status: data.review_status,
         pendingReason: data.pending_reason,
