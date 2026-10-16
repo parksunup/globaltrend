@@ -123,9 +123,9 @@ function legalComparison(root: string): LegalComparisonCell[] {
       try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
       try {
         translationLinks = stringArray(JSON.parse(data.translation_links || "[]")).flatMap((link) => {
-          const gdpr = /^\.\/gdpr\.md#([a-z0-9-]+)$/.exec(link);
+          const gdpr = /^\.\/gdpr\.md#([A-Za-z0-9-]+)$/.exec(link);
           if (gdpr) return [`/review-drafts/gdpr.html#${gdpr[1]}`];
-          return /^\.\/(?:reference\/)?(?:translations|sources)\/[a-z0-9-]+\.md(?:#[a-z0-9-]+)?$/.test(link)
+          return /^\.\/(?:reference\/)?(?:translations|sources)\/[a-z0-9-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(link)
             ? [link.replace("./reference/", "./")] : [];
         });
       } catch { /* Keep the cell readable. */ }

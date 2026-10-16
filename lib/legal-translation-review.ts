@@ -108,15 +108,15 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
   const nodes = [...corpus.provisions!].sort((a, b) => a.source_order - b.source_order);
   const byId = new Map(nodes.map((node) => [node.node_id, node]));
   const supplementary = new Map(nodes.filter((node) => node.tag === "SupplProvision").map((node) => [node.scope, node.korean_title ?? "부칙"]));
-  const roots = nodes.filter((node) => ["Article", "AppdxTable", "SupplProvision"].includes(node.tag));
+  const roots = nodes.filter((node) => ["Article", "AppdxTable", "SupplProvision", "Recital", "Preamble", "Footnote"].includes(node.tag));
   const sectionById = new Map<string, TranslationSection>();
   for (const node of roots) {
-    const group = node.tag === "AppdxTable" ? "appendix" : node.tag === "SupplProvision" || node.scope !== "main" ? "supplementary" : "main";
+    const group = ["Recital", "Preamble", "Footnote"].includes(node.tag) ? "reference" : node.tag === "AppdxTable" ? "appendix" : node.tag === "SupplProvision" || node.scope !== "main" ? "supplementary" : "main";
     sectionById.set(node.node_id, {
       id: node.node_id,
       group,
       title: node.korean_title || (node.tag === "Article" ? `제${node.number}조` : node.tag === "AppdxTable" ? `별표 ${node.number}` : "부칙"),
-      context: group === "supplementary" ? supplementary.get(node.scope) ?? "부칙" : group === "appendix" ? "별표" : "본칙",
+      context: group === "reference" ? "서문·고려사항·주석" : group === "supplementary" ? supplementary.get(node.scope) ?? "부칙" : group === "appendix" ? "별표·부속서" : "본칙",
       reviewStatus: node.human_review_status ?? "not_started",
       lines: [],
     });
