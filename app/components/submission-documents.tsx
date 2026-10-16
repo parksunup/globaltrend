@@ -39,6 +39,8 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
       {selected.articleNumbers.length > 0 && <div className="detail-block"><span className="detail-label">관련 조항</span><p>{selected.articleNumbers.join(" · ")}</p></div>}
       {selected.translationLinks.length > 0 && <div className="detail-block"><span className="detail-label">조문·번역 근거</span>{selected.translationLinks.map((link) => {
         if (link.startsWith("/review-drafts/gdpr.html#")) return <a key={link} href={link} target="_blank" rel="noopener noreferrer">GDPR 번역 · {link.split("#")[1]} ↗</a>;
+        const translation = /^\.\/translations\/([a-z0-9-]+)\.md#([a-z0-9-]+)$/.exec(link);
+        if (translation) return <a key={link} href={`/legal-translation/${translation[1]}#${translation[2]}`}>전문 번역 · {translation[2]} →</a>;
         const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
         const [path, anchor] = link.slice(2).split("#");
         const url = safeSha ? `https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/${path}${anchor ? `#${anchor}` : ""}` : null;

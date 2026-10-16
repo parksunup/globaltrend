@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import SubmissionFeedback from "./submission-feedback";
 import styles from "./translation-review.module.css";
@@ -33,6 +33,18 @@ export default function TranslationReview({ lawId, title, sections, officialName
   const [group, setGroup] = useState<"main" | "supplementary" | "appendix">(sections[0]?.group ?? "main");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(sections.find((section) => section.group === "main")?.id ?? sections[0]?.id ?? "");
+  useEffect(() => {
+    const selectHash = () => {
+      const section = sections.find((item) => `#${item.id}` === window.location.hash);
+      if (!section) return;
+      setGroup(section.group);
+      setQuery("");
+      setSelectedId(section.id);
+    };
+    selectHash();
+    window.addEventListener("hashchange", selectHash);
+    return () => window.removeEventListener("hashchange", selectHash);
+  }, [sections]);
   const visible = useMemo(() => sections.filter((section) =>
     section.group === group && [section.title, section.context, ...section.lines.map((line) => line.text)].join(" ").toLowerCase().includes(query.toLowerCase())
   ), [group, query, sections]);
@@ -61,12 +73,12 @@ export default function TranslationReview({ lawId, title, sections, officialName
     </div>
     <div className={styles.layout}>
       <nav className={styles.index} aria-label="조문 목록">
-        {visible.map((section) => <button type="button" key={section.id} className={selected?.id === section.id ? styles.active : ""} onClick={() => setSelectedId(section.id)}>
+        {visible.map((section) => <button type="button" key={section.id} className={selected?.id === section.id ? styles.active : ""} onClick={() => { setSelectedId(section.id); window.history.replaceState(window.history.state, "", `#${section.id}`); }}>
           <small>{section.context}</small><span>{section.title}</span>
         </button>)}
         {visible.length === 0 && <p>검색 결과가 없습니다.</p>}
       </nav>
-      <article className={styles.article}>
+      <article id={selected?.id} className={styles.article}>
         {selected ? <>
           <p className={styles.kicker}>{selected.context} · {selected.reviewStatus === "not_started" ? "사람 검수 전" : selected.reviewStatus}</p>
           <h2>{selected.title}</h2>
