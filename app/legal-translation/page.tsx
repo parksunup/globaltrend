@@ -10,6 +10,7 @@ export default function LegalTranslationsPage() {
       <Link href="/">← 제출물 검수로 돌아가기</Link>
       <p className={styles.kicker}>법제 전문 · 사람 검수 전 초안</p>
       <h1>법률별 한국어 번역 초안</h1>
+      {submissionPreviewEnabled() && <p><Link href="/legal-drafts">최신 전체 비교표와 GDPR 번역 초안 열기 →</Link></p>}
       <p>법률을 선택해 전체 조문을 읽고 조문별 수정 의견을 남겨 주세요. 번역 초안의 존재는 사람 검수나 공개 승인을 뜻하지 않습니다.</p>
     </header>
     {entries.length ? <div className={styles.documentList}>

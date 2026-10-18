@@ -1,0 +1,2491 @@
+{
+  "checked_at_utc": "2026-10-13T07:35:05.241262+00:00",
+  "actor": "Codex model; not human legal review",
+  "source_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "scope": "Remaining 13 EU criteria: selected direct grounds, conditions and exceptions only",
+  "reviewed_criterion_orders": [
+    1,
+    2,
+    3,
+    7,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "previously_reviewed_criterion_orders": [
+    4,
+    5,
+    6,
+    8
+  ],
+  "cumulative_criterion_orders": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "whole_cell_semantic_completeness_verified": false,
+  "human_review_status": "not_started",
+  "human_reviewed_translation_nodes": [],
+  "human_reviewed_eu_cells": [],
+  "translation_body_modified": false,
+  "public_release_status": "withheld",
+  "checked_node_count": 231,
+  "cumulative_checked_node_count": 290,
+  "checked_nodes": [
+    {
+      "node_id": "recital-14",
+      "tag": "Recital",
+      "source_sha256": "a81742a998f3fcf5e419a356d0ba2a978f762299ff08ed375841cc304af4fcf0"
+    },
+    {
+      "node_id": "recital-26",
+      "tag": "Recital",
+      "source_sha256": "1422795a5948a50b09199abf109d4e8120d990a3070e5371cab06fd8d40ddfec"
+    },
+    {
+      "node_id": "recital-27",
+      "tag": "Recital",
+      "source_sha256": "76fb15bc29a7a80bce897a24a03d53f62a4bc4b554bf1b71299e4c206fceea76"
+    },
+    {
+      "node_id": "recital-38",
+      "tag": "Recital",
+      "source_sha256": "21aa8d2874f938e9d6cb69283719f300b6b32ce39e790e35a140977c676b3f46"
+    },
+    {
+      "node_id": "recital-46",
+      "tag": "Recital",
+      "source_sha256": "56c46e863084fcd79213043287635cb4969a7da0256fc57cc4143577ce51be94"
+    },
+    {
+      "node_id": "recital-58",
+      "tag": "Recital",
+      "source_sha256": "01cb5ef8761cd93e75dc24c30882374f3ee3e1d2294f28fc30cface431c55174"
+    },
+    {
+      "node_id": "recital-65",
+      "tag": "Recital",
+      "source_sha256": "e079b4bbc843a7d4ff4d6af493c3d605811231a01984c660b5f4158b6f2abb3b"
+    },
+    {
+      "node_id": "recital-71",
+      "tag": "Recital",
+      "source_sha256": "88e97c539c009856e6d4ec2c62e96df20112be8de63dd62778a1b99c244279d0"
+    },
+    {
+      "node_id": "recital-148",
+      "tag": "Recital",
+      "source_sha256": "bbfcd6b1f03420093c30596d2ffb459ea512bbda5b79fec17c0dbda2187def17"
+    },
+    {
+      "node_id": "recital-149",
+      "tag": "Recital",
+      "source_sha256": "ce9e4f923170bb18f4a6d1f207137f1042017300a19a3b28924e5380da21bb15"
+    },
+    {
+      "node_id": "recital-150",
+      "tag": "Recital",
+      "source_sha256": "ad6a999ea470cddd426546d5449dab8d3b8b3fa5b3895d713abfd4889ea88eea"
+    },
+    {
+      "node_id": "recital-151",
+      "tag": "Recital",
+      "source_sha256": "eeea84a18f1a504312381cc060e8741eca7e82afea161488e4d6c680d8b4855e"
+    },
+    {
+      "node_id": "recital-156",
+      "tag": "Recital",
+      "source_sha256": "8fcaa7a89e92a1460aac51735049850c42849fab189ea78fb34198370b0404b2"
+    },
+    {
+      "node_id": "recital-157",
+      "tag": "Recital",
+      "source_sha256": "c3af3af48ac60de45d4556bd11ce7fc75d5f6c602eea83d68b8d7d46551cca6f"
+    },
+    {
+      "node_id": "recital-158",
+      "tag": "Recital",
+      "source_sha256": "c54ca23e0387a0463fd2877c140af34f0832040d4e9ad8d88b437fa6c02292df"
+    },
+    {
+      "node_id": "recital-159",
+      "tag": "Recital",
+      "source_sha256": "a6e87fd111fce01c30b50866bd01913c7614785c2f377be3925082a257ad32c4"
+    },
+    {
+      "node_id": "recital-160",
+      "tag": "Recital",
+      "source_sha256": "1bd41b5f08e86a7e68ce7d9bb790dcf91a3c97d889bd451b17a99d09368d1045"
+    },
+    {
+      "node_id": "recital-161",
+      "tag": "Recital",
+      "source_sha256": "053ec4f2c1563aab13662c483a4c6b470e0aeaf00e7c3ac58f03236d59e3ef9b"
+    },
+    {
+      "node_id": "recital-162",
+      "tag": "Recital",
+      "source_sha256": "7b8795d5e4a84c450560cb6e9cf8f78fff2ee92ad08b5665788a680412f1863a"
+    },
+    {
+      "node_id": "recital-163",
+      "tag": "Recital",
+      "source_sha256": "373b2ad79c15a0992f802e6d1dca3e609dd55683afaf76a50cd4aebc19a4c3aa"
+    },
+    {
+      "node_id": "main-a2-p1",
+      "tag": "Paragraph",
+      "source_sha256": "ecfa40291b8e45c02d51efd4bd423ebab56b541892f5e5bdc5b2e8318ce65cb4"
+    },
+    {
+      "node_id": "main-a2-p2",
+      "tag": "Paragraph",
+      "source_sha256": "8f19b441fd690e0dec2390e293aae9d5bf2c7fedac89772586ecf5a359672fd4"
+    },
+    {
+      "node_id": "main-a2-p2-ia",
+      "tag": "Item",
+      "source_sha256": "d845f7885e51fa9be970196e74564d7799da65ce41ea0ffd02f1ec7cd900b145"
+    },
+    {
+      "node_id": "main-a2-p2-ib",
+      "tag": "Item",
+      "source_sha256": "fc8afe42d4cd3ff1da8734a13e22254b305552aca1a24447eba502b8ca36aa3c"
+    },
+    {
+      "node_id": "main-a2-p2-ic",
+      "tag": "Item",
+      "source_sha256": "47f32f6248aa7e7ef0a5c5a2d9b4f2c88a1ada741b9e0fc8f482b3f6b58d70b5"
+    },
+    {
+      "node_id": "main-a2-p2-id",
+      "tag": "Item",
+      "source_sha256": "ad51f1f06d0e5471c043c0639c888c3e18195d26a6cdcecbcc316175e965d2e7"
+    },
+    {
+      "node_id": "main-a2-p3",
+      "tag": "Paragraph",
+      "source_sha256": "c7838f1a78c01a0edb2df87d775401eb9c46ffff34c03aa3e538bc605ebe7d69"
+    },
+    {
+      "node_id": "main-a3",
+      "tag": "Article",
+      "source_sha256": "e884c4af52e9464f678c4634229be481402d767333d14e705a785c1ad706bce2"
+    },
+    {
+      "node_id": "main-a3-p1",
+      "tag": "Paragraph",
+      "source_sha256": "2b6fe60841f9b9c5489cf1cbeb5deadaa9f0baaeeed8920865f0343c129e0ea6"
+    },
+    {
+      "node_id": "main-a3-p2",
+      "tag": "Paragraph",
+      "source_sha256": "c4e338e9f1a40759256f19130dafd607110e6d0e9599ee61fea73a98723ceede"
+    },
+    {
+      "node_id": "main-a3-p2-ia",
+      "tag": "Item",
+      "source_sha256": "9da16cad4c1283a28b2d461a41fb718796dcc78026c61066bcfdd75e9111fc66"
+    },
+    {
+      "node_id": "main-a3-p2-ib",
+      "tag": "Item",
+      "source_sha256": "d264f5144420b94fd5c6fecac39118e9eaf68b48f0574b373eff6012ba6e0205"
+    },
+    {
+      "node_id": "main-a3-p3",
+      "tag": "Paragraph",
+      "source_sha256": "0aa729f7a01cf9158cd4ac89bfa0af757ffb3766fe36c40bf857732edcc4f5d3"
+    },
+    {
+      "node_id": "main-a4-i1",
+      "tag": "Item",
+      "source_sha256": "cbab8ea9e248265de89de3b36fa15f2571a1fefa9f1aa133cae7961318903c1a"
+    },
+    {
+      "node_id": "main-a4-i2",
+      "tag": "Item",
+      "source_sha256": "4a149b2fe52750267bcab8064e57583a8c8a08824046fe1d8fe60064feef40ac"
+    },
+    {
+      "node_id": "main-a4-i5",
+      "tag": "Item",
+      "source_sha256": "35c421536ca45503d7ce253611641646c7d31f1407024cdd593ce3a63f46dc99"
+    },
+    {
+      "node_id": "main-a4-i6",
+      "tag": "Item",
+      "source_sha256": "c5227cd51a69b55c5e1605e342f655a53c65d7cd6175633338316f29b5c0142c"
+    },
+    {
+      "node_id": "main-a4-i9",
+      "tag": "Item",
+      "source_sha256": "872c2c6c9f1475f17262c42b3fca1997bdef9090be8c47db3d3bc09ed70a4ba6"
+    },
+    {
+      "node_id": "main-a4-i10",
+      "tag": "Item",
+      "source_sha256": "752b2356f3c2247f76d946d4541c35994767b57cfd9d24465a7a498b2b6e930b"
+    },
+    {
+      "node_id": "main-a4-i12",
+      "tag": "Item",
+      "source_sha256": "b68e7b0e1d6f65328e6949078074ba761ea0f92ac538d2e3da410dd7fef339c7"
+    },
+    {
+      "node_id": "main-a5-p1",
+      "tag": "Paragraph",
+      "source_sha256": "ea953497517956d6b95bb6912058bf8e82f078a5db156edc2bc0bfb76c8de2bc"
+    },
+    {
+      "node_id": "main-a5-p1-ia",
+      "tag": "Item",
+      "source_sha256": "22be9e2ef1ca59c1871ffd74951ed51f5c125a3ce34634fbf135ce3ea345bc13"
+    },
+    {
+      "node_id": "main-a5-p1-ib",
+      "tag": "Item",
+      "source_sha256": "f5550332afb6ac63b204a1b4ad6e4bdf02c6bf34918b7df975a2deb05cf85599"
+    },
+    {
+      "node_id": "main-a5-p1-ic",
+      "tag": "Item",
+      "source_sha256": "729ee4e785bbf7abb5d4bac14d2ee403c28110d04466c47d051c6df3dfddd198"
+    },
+    {
+      "node_id": "main-a5-p1-id",
+      "tag": "Item",
+      "source_sha256": "6845b4e2030deb56077cadfb8d051c1a2320063b41670090c96fd4eec9fb7309"
+    },
+    {
+      "node_id": "main-a5-p1-ie",
+      "tag": "Item",
+      "source_sha256": "bfddfe300f583693fec40c088fec733bd4d6a2f66132d0417cbf225b2ed4db59"
+    },
+    {
+      "node_id": "main-a5-p1-if",
+      "tag": "Item",
+      "source_sha256": "ac30be9598df9b7c28a02347bb901f1907003a22bc2abd80ca01ce8c97a63e02"
+    },
+    {
+      "node_id": "main-a5-p2",
+      "tag": "Paragraph",
+      "source_sha256": "bd6df694e6d82197e5180b1929c99b842d4d2743e53463167cf781e4398b8ee9"
+    },
+    {
+      "node_id": "main-a6-p1-if",
+      "tag": "Item",
+      "source_sha256": "1991e3dfd083c1289c30506742de1441d257ddbad92ddcc6350e3a422f65b26b"
+    },
+    {
+      "node_id": "main-a8",
+      "tag": "Article",
+      "source_sha256": "0d35f1c9a93e2e7c7244a46a883723f5be089d243fdd452ca28c2baa47a234b6"
+    },
+    {
+      "node_id": "main-a8-p1",
+      "tag": "Paragraph",
+      "source_sha256": "d05b48685177f8e606f9fb079e02605baeb690f5ad87b1e619e36b7032fbfb68"
+    },
+    {
+      "node_id": "main-a8-p1-t1",
+      "tag": "Text",
+      "source_sha256": "9eb34900e61daa2a16d19bb294dcbb648582b3b5a029be55bb3579525a90b41f"
+    },
+    {
+      "node_id": "main-a8-p2",
+      "tag": "Paragraph",
+      "source_sha256": "4a572b9fde1b8fd97666c3cb5925d2edd2527b4969b67ab65fb7fcf84124e267"
+    },
+    {
+      "node_id": "main-a8-p3",
+      "tag": "Paragraph",
+      "source_sha256": "d035667825e2476188fd3430beb95e114517367e123a59cec4847f0217c33ee3"
+    },
+    {
+      "node_id": "main-a9-p2-ij",
+      "tag": "Item",
+      "source_sha256": "3f626b1e516fb06c0722e2604be50872029708b30cc241b86a6495dd621b61c3"
+    },
+    {
+      "node_id": "main-a11",
+      "tag": "Article",
+      "source_sha256": "52f2c25019c8f8700389ce054fb413f912cc7184f141224441dbfab0723c4bcf"
+    },
+    {
+      "node_id": "main-a11-p1",
+      "tag": "Paragraph",
+      "source_sha256": "1c68e5dcf938cae9ad763e25dc7e3c2497c273902219ea7dddf9c6b50a03b731"
+    },
+    {
+      "node_id": "main-a11-p2",
+      "tag": "Paragraph",
+      "source_sha256": "6a3bdde22bd638d2a5457d2af000c0d305d82406a80fc9a9002671def60d5fde"
+    },
+    {
+      "node_id": "main-a12-p1",
+      "tag": "Paragraph",
+      "source_sha256": "73559a942c3bf8163138d6fdb069df449a7b3f7a1bd2636033936eca3788fa95"
+    },
+    {
+      "node_id": "main-a14-p5-ib",
+      "tag": "Item",
+      "source_sha256": "15558c5d3ba2b7ace3649eb457e41bc51b27ee8490295155cbf530593959bbc2"
+    },
+    {
+      "node_id": "main-a17-p1-if",
+      "tag": "Item",
+      "source_sha256": "dd0e1ae1f29d08313044e0403650fa193404514c38fb2218d5ff87f184dd570d"
+    },
+    {
+      "node_id": "main-a17-p3-id",
+      "tag": "Item",
+      "source_sha256": "dc313a58fdcfcd66485ae30bd29806eadff4f687b8fb95c49b6ea4266ecb75e9"
+    },
+    {
+      "node_id": "main-a19",
+      "tag": "Article",
+      "source_sha256": "3448149259ba350cc506bb323a54d522417b5df70014b45b7c337120dd2bf8ae"
+    },
+    {
+      "node_id": "main-a19-t1",
+      "tag": "Text",
+      "source_sha256": "7883cd9cbf5445cc214a17c540682d9b6b76b1f7ac8b11455f7310c0df91619c"
+    },
+    {
+      "node_id": "main-a20-p2",
+      "tag": "Paragraph",
+      "source_sha256": "170f622db8c7a49619e5c08aa097b5888bb24e74cfe2371461ce4d0da419ef50"
+    },
+    {
+      "node_id": "main-a21-p6",
+      "tag": "Paragraph",
+      "source_sha256": "581dc7d52d07c24329727d5f4eadc850a0a52cdf547401eaef1e701e1979a3f0"
+    },
+    {
+      "node_id": "main-a22",
+      "tag": "Article",
+      "source_sha256": "421c067f22477f8eefcb0d562f89125428124f261127f7228c90800a09ac92e5"
+    },
+    {
+      "node_id": "main-a22-p1",
+      "tag": "Paragraph",
+      "source_sha256": "bb790f71f3fb93814ca7fe7d01f304eaa82acadc867dbfc8bfd724fe1cb04e1e"
+    },
+    {
+      "node_id": "main-a22-p2",
+      "tag": "Paragraph",
+      "source_sha256": "4e83ecdd5a22df20dab04da49927cd13f5c2fd965b4f0e33c91e12a599e5be72"
+    },
+    {
+      "node_id": "main-a22-p2-ia",
+      "tag": "Item",
+      "source_sha256": "d0fb072c4d6c54741b934c95fe2813531f773d66d0e7965e942355d4d9643933"
+    },
+    {
+      "node_id": "main-a22-p2-ib",
+      "tag": "Item",
+      "source_sha256": "dad2bafeb12ecede80b3168da807f22482ac3698acc26283eabe392ffbe4ce1c"
+    },
+    {
+      "node_id": "main-a22-p2-ic",
+      "tag": "Item",
+      "source_sha256": "562b8bf4e63757ca1dc13a90ced90e7b3aecc8108d206f725607b7855da4d23f"
+    },
+    {
+      "node_id": "main-a22-p3",
+      "tag": "Paragraph",
+      "source_sha256": "f25a5cb8dee62cb457f918220a4ccc93bfabd88e42b4f46911c297d1637e3e5a"
+    },
+    {
+      "node_id": "main-a22-p4",
+      "tag": "Paragraph",
+      "source_sha256": "690d4c9cc637a3e4f865c381860e3ea027d4e32af4e44b7477d669add825f404"
+    },
+    {
+      "node_id": "main-a23-p1",
+      "tag": "Paragraph",
+      "source_sha256": "90176dd7d248031cb75c930790bc1dd4e66426ae835ac500984f9789f6cc1862"
+    },
+    {
+      "node_id": "main-a23-p1-ia",
+      "tag": "Item",
+      "source_sha256": "49db7f23abb821c9fb8c856cf9d42cfbd1afc944c87f60e922f663f902dbd80a"
+    },
+    {
+      "node_id": "main-a23-p1-ib",
+      "tag": "Item",
+      "source_sha256": "c8eeb1d816eb6a2e2a3055ce00b9cf3fcdf51641dfaabace387a607dc551cd08"
+    },
+    {
+      "node_id": "main-a23-p1-ic",
+      "tag": "Item",
+      "source_sha256": "e50acfc2b82683c2e6b2df99b4d88d4be2ca652e98a007c50a3f33748a82ae55"
+    },
+    {
+      "node_id": "main-a23-p1-id",
+      "tag": "Item",
+      "source_sha256": "3cd632890bb8f2cb48d0e268e493fbaa261ea6613b5ff40261ae29d08f860706"
+    },
+    {
+      "node_id": "main-a23-p1-ie",
+      "tag": "Item",
+      "source_sha256": "04807bf4a4a1ee06f776201b19795493b227408cecca60c88dfee78fb43201bb"
+    },
+    {
+      "node_id": "main-a23-p1-if",
+      "tag": "Item",
+      "source_sha256": "ea972fe13f53cc2bbe75728a18191f51f809ab5a94a31744d2308345311ba3af"
+    },
+    {
+      "node_id": "main-a23-p1-ig",
+      "tag": "Item",
+      "source_sha256": "48bb274ef611ac565f4caa233ae665b1997565b2bad07e320e839f70060ae18d"
+    },
+    {
+      "node_id": "main-a23-p1-ih",
+      "tag": "Item",
+      "source_sha256": "b44c7dbc1514ee7846b7ffcdea507baa2b7fa785ab8a2d0303e3516966dac902"
+    },
+    {
+      "node_id": "main-a23-p1-ii",
+      "tag": "Item",
+      "source_sha256": "a6395f214ed00fc087f90adbc84f386e6e6a094a408a9ec03e0419bc8af2c1e6"
+    },
+    {
+      "node_id": "main-a23-p1-ij",
+      "tag": "Item",
+      "source_sha256": "17e0c419e530fd5eb08492d1f2f37626f636ba8d915343ebc8430b32772e2474"
+    },
+    {
+      "node_id": "main-a27-p1",
+      "tag": "Paragraph",
+      "source_sha256": "14dbff28d90e70d8b21c8c84c02980de2c22c15fc25e2b6cb4c0ec3c1a8e6cc9"
+    },
+    {
+      "node_id": "main-a27-p2",
+      "tag": "Paragraph",
+      "source_sha256": "12ed8208b1308637ccfe2db3edd423d9bf06fe73cbdfa7eddff1cfdac620180c"
+    },
+    {
+      "node_id": "main-a27-p2-ia",
+      "tag": "Item",
+      "source_sha256": "85ffd8b3eaea324749e1a188af5726136f5d293140787618f7626112d0233d74"
+    },
+    {
+      "node_id": "main-a27-p2-ib",
+      "tag": "Item",
+      "source_sha256": "7387d48f3377e0215aa1100f2dd5032cca597c20d1bb0808ad9d2ef1b47c8552"
+    },
+    {
+      "node_id": "main-a28-p2",
+      "tag": "Paragraph",
+      "source_sha256": "34a7455057ae8c8c63cedd7e9a92eb0280a7b92e57c77ad07c657bc57b7958b0"
+    },
+    {
+      "node_id": "main-a28-p3",
+      "tag": "Paragraph",
+      "source_sha256": "f02397bd940362a08559d98330ab49f038ce99ddf9988b151afa07d19a9149e8"
+    },
+    {
+      "node_id": "main-a28-p3-ia",
+      "tag": "Item",
+      "source_sha256": "0ea92cff653d0fb704b98ec93f60ada7abeabaa23afe9d6045326f86ea121725"
+    },
+    {
+      "node_id": "main-a28-p3-ib",
+      "tag": "Item",
+      "source_sha256": "110bb43468f68ad3090a803f39737fd397a846e4bf2b64ea390e462721a4e302"
+    },
+    {
+      "node_id": "main-a28-p3-ic",
+      "tag": "Item",
+      "source_sha256": "bc2b08fb86593210e82d7cf9e415fa78ad0a4204f491543ee95d0f8bee97bb23"
+    },
+    {
+      "node_id": "main-a28-p3-id",
+      "tag": "Item",
+      "source_sha256": "bb4b263dfd92084eedec7f4f97477f799c6039cd4a975ee6264e67d0d9a53447"
+    },
+    {
+      "node_id": "main-a28-p3-ie",
+      "tag": "Item",
+      "source_sha256": "a71a0dbf378469721281169b88770b4fde3e756b48961a4ff8322f23ad7c6874"
+    },
+    {
+      "node_id": "main-a28-p3-if",
+      "tag": "Item",
+      "source_sha256": "2ceb44c893ba7ca8efaa4a228bc7c039a811e1f9a80013b4fc4a60a7d46449b7"
+    },
+    {
+      "node_id": "main-a28-p3-ig",
+      "tag": "Item",
+      "source_sha256": "2e82fe9568927821a3ee9bdfd6488a9487dacb276aa6de13a4f0a0c3c8e4a972"
+    },
+    {
+      "node_id": "main-a28-p3-ih",
+      "tag": "Item",
+      "source_sha256": "823f2122c1ecb20657f166e147c55cff4ebe8118f0fa9bb8ee660e38df87c606"
+    },
+    {
+      "node_id": "main-a28-p3-t1",
+      "tag": "Text",
+      "source_sha256": "3113e6d761f077aa10d8e45b5d41cf5a872fe3636744a2c2d0e8d252a9dfbc0e"
+    },
+    {
+      "node_id": "main-a28-p4",
+      "tag": "Paragraph",
+      "source_sha256": "026ee52a77243bbc84538a0fe43008c4b89a8382de248ee50b8c2a2837a1539e"
+    },
+    {
+      "node_id": "main-a28-p9",
+      "tag": "Paragraph",
+      "source_sha256": "0bf546ca08948921745e4e56331aeef6cfaa342d74c6483b012f1b68ae3f43ca"
+    },
+    {
+      "node_id": "main-a28-p10",
+      "tag": "Paragraph",
+      "source_sha256": "b08b01e6c9b13815f19dbfdde408308ac6983d296ddcc5232f56fea1a92afa57"
+    },
+    {
+      "node_id": "main-a30-p5",
+      "tag": "Paragraph",
+      "source_sha256": "fc2cb455c9e96572695482eb81b1da8ae2bf396b9b34d8060d8689861ae265d0"
+    },
+    {
+      "node_id": "main-a32",
+      "tag": "Article",
+      "source_sha256": "f97f261ccac3dbd4fb96bbe4e7815ad9aab2c8384e85e09362559cbcf84666fb"
+    },
+    {
+      "node_id": "main-a32-p1",
+      "tag": "Paragraph",
+      "source_sha256": "b5840ab7f612480755bbb198a17d1f209127610de50480b0978fc972dee3a865"
+    },
+    {
+      "node_id": "main-a32-p1-ia",
+      "tag": "Item",
+      "source_sha256": "a4b8f3626b1e9418948446119288c050867e262594c3b2e926469eeda12caedd"
+    },
+    {
+      "node_id": "main-a32-p1-ib",
+      "tag": "Item",
+      "source_sha256": "a3b601b38a57b1fffd75ef98590482266094bfd705b52d1bb9d19f04579efb0b"
+    },
+    {
+      "node_id": "main-a32-p1-ic",
+      "tag": "Item",
+      "source_sha256": "e383cea226597f360cd939a0ef776063ca1e804b242f473544c921fffb3e7f61"
+    },
+    {
+      "node_id": "main-a32-p1-id",
+      "tag": "Item",
+      "source_sha256": "77e4377eac12fb4fe468e66b8e682aec6362ac2b89823bad15d734aedc2a207c"
+    },
+    {
+      "node_id": "main-a32-p2",
+      "tag": "Paragraph",
+      "source_sha256": "d307782543b8a577f35f25bceb86396742fe218736fbc122d37a40a24169a9af"
+    },
+    {
+      "node_id": "main-a32-p3",
+      "tag": "Paragraph",
+      "source_sha256": "26740d68cc83dc128f559fdafd5117dc6f4ae010977503396d6b01197a2ecba9"
+    },
+    {
+      "node_id": "main-a32-p4",
+      "tag": "Paragraph",
+      "source_sha256": "b4eb199a1981e55f124df9ce2620678f7d2bdec0c7fef3550f101091ed55b2be"
+    },
+    {
+      "node_id": "main-a33",
+      "tag": "Article",
+      "source_sha256": "710e88605070d96271c8ae398be4f47a9eafdc6f37aa34a58900c43a62e3cace"
+    },
+    {
+      "node_id": "main-a33-p1",
+      "tag": "Paragraph",
+      "source_sha256": "836e03a92e40cf608db957d9b494f8bfc3b0fafc0bbab8557b522e8e8e82eff6"
+    },
+    {
+      "node_id": "main-a33-p2",
+      "tag": "Paragraph",
+      "source_sha256": "cdafa0c9267f2078a7fc65bf8093c7f6a7f5717ae244b55f5088fff98daaa7f2"
+    },
+    {
+      "node_id": "main-a33-p3",
+      "tag": "Paragraph",
+      "source_sha256": "9e2047430152c6caee99951cb249d193daf3f6434706456bc2b1ac59e05b7ae1"
+    },
+    {
+      "node_id": "main-a33-p3-ia",
+      "tag": "Item",
+      "source_sha256": "2238231ef4a5ddb0886c11ffca7310d57f9cef41db959bb91c8921bdd9df9599"
+    },
+    {
+      "node_id": "main-a33-p3-ib",
+      "tag": "Item",
+      "source_sha256": "584e53422fd831dc8ec803b6163fe405e58e610c61d69ca8fb5eea32a1fd7c5f"
+    },
+    {
+      "node_id": "main-a33-p3-ic",
+      "tag": "Item",
+      "source_sha256": "a809d00f50ccbe62670f90b75c7760ecaa8e3ba7c337290db0746ef84b28f615"
+    },
+    {
+      "node_id": "main-a33-p3-id",
+      "tag": "Item",
+      "source_sha256": "cb777ba985e482a7e20179127fe027397951e1ed42df6fd3dc1111bb23c5ac70"
+    },
+    {
+      "node_id": "main-a33-p4",
+      "tag": "Paragraph",
+      "source_sha256": "cd0f630f007aa93bee1c3dc85067883afbbfd55bfc90cd2435b69ad3de1f87e0"
+    },
+    {
+      "node_id": "main-a33-p5",
+      "tag": "Paragraph",
+      "source_sha256": "b42c1c4317e412b3d156226566d50b4aa5bebfceae50729b68c86e182a067c0d"
+    },
+    {
+      "node_id": "main-a34",
+      "tag": "Article",
+      "source_sha256": "ef5157f05e8207af5a3aea6dfb09a224d7ed28e02e082e1ab05034e0159c3d78"
+    },
+    {
+      "node_id": "main-a34-p1",
+      "tag": "Paragraph",
+      "source_sha256": "15fe84681e44264818adbcb9f11162c02d9696a581f77b0e8dff56b3eb09e5a5"
+    },
+    {
+      "node_id": "main-a34-p2",
+      "tag": "Paragraph",
+      "source_sha256": "d4fffb5731bc634cc5911a424a8572e6d74a5a7d6559c001c0358d4dc4f811cc"
+    },
+    {
+      "node_id": "main-a34-p3",
+      "tag": "Paragraph",
+      "source_sha256": "0ef4970281633aad088b7a937cf6e455c35fc85c91b85cf1193496a163eb0818"
+    },
+    {
+      "node_id": "main-a34-p3-ia",
+      "tag": "Item",
+      "source_sha256": "933dc4a3ee1080ed3772b1785b7ff9795c360a98ad6906a9758e028a31227e48"
+    },
+    {
+      "node_id": "main-a34-p3-ib",
+      "tag": "Item",
+      "source_sha256": "d78b65864920498ed54188d1c04de45bd9435c51b44764e72e838fc4ea30120f"
+    },
+    {
+      "node_id": "main-a34-p3-ic",
+      "tag": "Item",
+      "source_sha256": "71d39da898ee8ef0af1a787841d78b3ac79bb1f303a9fe02200fffb396b319d4"
+    },
+    {
+      "node_id": "main-a34-p4",
+      "tag": "Paragraph",
+      "source_sha256": "a99659a91b4029cbf44507562b20753bbdc8fbb7c61c5b79c6675a4a707df027"
+    },
+    {
+      "node_id": "main-a35-p1",
+      "tag": "Paragraph",
+      "source_sha256": "8bf5d2d1042a9e2b3d061189fe1ae63795027c4a4c099eaee60f6942d41fb74f"
+    },
+    {
+      "node_id": "main-a35-p10",
+      "tag": "Paragraph",
+      "source_sha256": "7ef1a144feef9d37071ca52c3776d9c544200086bcc1e21be0c6488d9b8c1be3"
+    },
+    {
+      "node_id": "main-a36-p1",
+      "tag": "Paragraph",
+      "source_sha256": "e172a9fcd184e4571d10061a5128e3522a6ac0298d71957ddfcdbf9c83e1fa52"
+    },
+    {
+      "node_id": "main-a36-p2",
+      "tag": "Paragraph",
+      "source_sha256": "8c11603345fe89a22a26c1fa9c702847fa93c99b4ca11b19a0390a9e0e79045d"
+    },
+    {
+      "node_id": "main-a37-p1",
+      "tag": "Paragraph",
+      "source_sha256": "2e3e7eca7bcbd9e7e1e82a8f116f5d54befd127b0c6eaff0b611ceaef8a4533f"
+    },
+    {
+      "node_id": "main-a37-p1-ia",
+      "tag": "Item",
+      "source_sha256": "ac79152fe2f65f778c4296d3b072fa1cc184a27c6497087e4228e21aafc06d39"
+    },
+    {
+      "node_id": "main-a37-p1-ib",
+      "tag": "Item",
+      "source_sha256": "a5cec0a1a812d5dfbac2c926364b10793384fe9fbb46d7f68e62fa850be79300"
+    },
+    {
+      "node_id": "main-a37-p1-ic",
+      "tag": "Item",
+      "source_sha256": "d2b886ad827fd386a1e58ff769d0082f996a4d8455e7c1f034865658bd3d041c"
+    },
+    {
+      "node_id": "main-a41-p6",
+      "tag": "Paragraph",
+      "source_sha256": "08d052669900db1e55bcc1302fe308afaa871dbe529a7c00adaeb5f740cb6d43"
+    },
+    {
+      "node_id": "main-a42-p4",
+      "tag": "Paragraph",
+      "source_sha256": "1d7c02ee16d7f277d215e03e23e2a5950f249c6b788a29c88e7299388511ec45"
+    },
+    {
+      "node_id": "main-a42-p7",
+      "tag": "Paragraph",
+      "source_sha256": "d09dcd3faee07cbbb8d4166b7ca080cdc1911364e92e9ea78896043e7cb8d86c"
+    },
+    {
+      "node_id": "main-a42-p8",
+      "tag": "Paragraph",
+      "source_sha256": "9ed1734d9b45124e1a4a371e53c9aa94f90ce93846001be1379ff6807c110392"
+    },
+    {
+      "node_id": "main-a43-p4",
+      "tag": "Paragraph",
+      "source_sha256": "872c2c7b951e4f7d240db60203733942b35d1f6628fbdbc117aa1c4a32b11450"
+    },
+    {
+      "node_id": "main-a43-p6",
+      "tag": "Paragraph",
+      "source_sha256": "159f23e2bdbf38081eb0acaf1a5a2032b01c1c1323065761451de1cc36bba55a"
+    },
+    {
+      "node_id": "main-a44",
+      "tag": "Article",
+      "source_sha256": "900345d5cabd892cde7ee218a78f6bcd9767267d18aa43b4a5a95c0161e87635"
+    },
+    {
+      "node_id": "main-a44-t1",
+      "tag": "Text",
+      "source_sha256": "b1c37da73b239ef7a027372fb064d08eeaad7b8b4435c9bf609a5788c364825b"
+    },
+    {
+      "node_id": "main-a45-p3",
+      "tag": "Paragraph",
+      "source_sha256": "0553439e907d165cb22b055900545a9d7d17029f5406f2ec2837005bb78911e1"
+    },
+    {
+      "node_id": "main-a45-p5",
+      "tag": "Paragraph",
+      "source_sha256": "126c58321cfef78158ead40e39aa4874b14162246e4d317f178bfd02c0bf6fc3"
+    },
+    {
+      "node_id": "main-a45-p5-t1",
+      "tag": "Text",
+      "source_sha256": "f1e71f6734f5374a858b8a3a2484139d1c76721fc01ae4e32c783ca0e9a4eba9"
+    },
+    {
+      "node_id": "main-a45-p7",
+      "tag": "Paragraph",
+      "source_sha256": "1d3c7b308141021820f1acfeb7d706685ae273edabd7317deaaaf8b7847aa7db"
+    },
+    {
+      "node_id": "main-a46-p1",
+      "tag": "Paragraph",
+      "source_sha256": "68625be7f91d2fa7cb07733536df2f193272e3a0752452a0afef449dec7f6783"
+    },
+    {
+      "node_id": "main-a46-p2",
+      "tag": "Paragraph",
+      "source_sha256": "ba7308f644da075cc5baeaa16b93e6b78f95247353774ae7b81ea8bc4c4d6dba"
+    },
+    {
+      "node_id": "main-a46-p2-ia",
+      "tag": "Item",
+      "source_sha256": "13fcd990aa5019c2faabe2d2a8a6fb8a4e36d6850ff1f30798e5e60c77ca6a2e"
+    },
+    {
+      "node_id": "main-a46-p2-ib",
+      "tag": "Item",
+      "source_sha256": "31513335a571d94392127214942fc2c261510435320e3dd3049cded9e633d1b6"
+    },
+    {
+      "node_id": "main-a46-p2-ic",
+      "tag": "Item",
+      "source_sha256": "e795855a4d3cb07bbbdf9e1e347dec759e803c295178851719cac6cb79fef7f3"
+    },
+    {
+      "node_id": "main-a46-p2-id",
+      "tag": "Item",
+      "source_sha256": "33e39ff12a2ddaf6107a591cb4391e965b1c37d68e1db9911c58277df548ca3f"
+    },
+    {
+      "node_id": "main-a46-p2-ie",
+      "tag": "Item",
+      "source_sha256": "10f8b50ae41ea3128b98257757566f4c3307d6f990c92b5e1eabcaec6ec9fd5e"
+    },
+    {
+      "node_id": "main-a46-p2-if",
+      "tag": "Item",
+      "source_sha256": "5b2c26f833f972030d47c6cec8cb5854b3550ca955c743179defe32887bd66d8"
+    },
+    {
+      "node_id": "main-a46-p3",
+      "tag": "Paragraph",
+      "source_sha256": "94ce6aa2b0296b107770add10227adf33214184342f3efc113e066b8eec2657f"
+    },
+    {
+      "node_id": "main-a46-p3-ia",
+      "tag": "Item",
+      "source_sha256": "f680fa266d137305731b7f3b5228b90a68f341b2189bd944304e8d8a4bcc8e45"
+    },
+    {
+      "node_id": "main-a46-p3-ib",
+      "tag": "Item",
+      "source_sha256": "48e7c81541061b727fc6ee7f705dc128b4f05c5467fe7ac72205bc2f7841aaea"
+    },
+    {
+      "node_id": "main-a46-p4",
+      "tag": "Paragraph",
+      "source_sha256": "aafd0d9dc6cb5d17abe98a98b72e5e57736d1c32b9a60ced31e317a5b64ea2e8"
+    },
+    {
+      "node_id": "main-a48",
+      "tag": "Article",
+      "source_sha256": "0edb6745bd57b9982eb966a619b1fe38a0a6c2f0c060ce4e019aba25984d57fe"
+    },
+    {
+      "node_id": "main-a48-t1",
+      "tag": "Text",
+      "source_sha256": "f54cb5b842adcf54508b10bef43fed32bdb565963ca55228f483a5af8d5830c6"
+    },
+    {
+      "node_id": "main-a49",
+      "tag": "Article",
+      "source_sha256": "a349669542b452164728cadca07e5a1db8dd46dadf93f1ad289618cc74fdf514"
+    },
+    {
+      "node_id": "main-a49-p1",
+      "tag": "Paragraph",
+      "source_sha256": "33f7b250ead328a28d6baf66591ab9e70f7dcea0724a3a92eeee06d6434fb350"
+    },
+    {
+      "node_id": "main-a49-p1-ia",
+      "tag": "Item",
+      "source_sha256": "8c193f03cca55c1585972f845e38de09a557d5d385b8bccdcce28082bb41d40a"
+    },
+    {
+      "node_id": "main-a49-p1-ib",
+      "tag": "Item",
+      "source_sha256": "5603d3129d81f8364b01a5d758f5b034434ce6bbc36e75013c9d5afc37c299de"
+    },
+    {
+      "node_id": "main-a49-p1-ic",
+      "tag": "Item",
+      "source_sha256": "a7d8016d2a05d66f7db6524d27293900ab712aa7e395dee200e25b63c9ceeb3a"
+    },
+    {
+      "node_id": "main-a49-p1-id",
+      "tag": "Item",
+      "source_sha256": "646f9c42a3126fd15246c716b253817f81022244f3b36d3657081a411a0d6d82"
+    },
+    {
+      "node_id": "main-a49-p1-ie",
+      "tag": "Item",
+      "source_sha256": "a5205abbd4ddc029a29389b5af7c19051f65def438f074cfdf7fb2915f00e8d9"
+    },
+    {
+      "node_id": "main-a49-p1-if",
+      "tag": "Item",
+      "source_sha256": "bc32581012ba169be84349a61145878243b7eff87b27a40b6061f64542f47199"
+    },
+    {
+      "node_id": "main-a49-p1-ig",
+      "tag": "Item",
+      "source_sha256": "293879aa95356165db35737b4c8a7eacf30dc2cbdff780fe957ec7f1f07f2f06"
+    },
+    {
+      "node_id": "main-a49-p1-t1",
+      "tag": "Text",
+      "source_sha256": "62a813d04e52bae781ca78f8ee7a397c9bcba7653a59bf0288dfb5176f8d9fee"
+    },
+    {
+      "node_id": "main-a49-p2",
+      "tag": "Paragraph",
+      "source_sha256": "3a06d429ac043cddb4f8325223c2eeb29ea3861ebc3a551dff544af04bc69d15"
+    },
+    {
+      "node_id": "main-a49-p3",
+      "tag": "Paragraph",
+      "source_sha256": "9f02300b2646f318496a0d613ceb8fe9628f45f57992ef2c9ed17edbe8c282e3"
+    },
+    {
+      "node_id": "main-a49-p4",
+      "tag": "Paragraph",
+      "source_sha256": "1ec2454266dd1191344f701015f3690cbc2ae8e6fd50e1e2ccecede9d966a16c"
+    },
+    {
+      "node_id": "main-a49-p5",
+      "tag": "Paragraph",
+      "source_sha256": "0e9fd4e76712cc717987c66f9af07172a6913c3fa3a4e27aa5b6eb475330782c"
+    },
+    {
+      "node_id": "main-a49-p6",
+      "tag": "Paragraph",
+      "source_sha256": "f45985529ca99d6c25f9543ab0639f77d3c4bec2ed4e51d90a586a8b4ca84957"
+    },
+    {
+      "node_id": "main-a55-p2",
+      "tag": "Paragraph",
+      "source_sha256": "abb71361b9998552f4df56b3c85d12877fb05074da4dbce31f5449657989d3b6"
+    },
+    {
+      "node_id": "main-a55-p3",
+      "tag": "Paragraph",
+      "source_sha256": "5ce087b96c511657e3692080e97154250a9b382d4e91f9a7a44d684b86380d86"
+    },
+    {
+      "node_id": "main-a56-p3",
+      "tag": "Paragraph",
+      "source_sha256": "5927e4d391c5a854cc9b6a5a06ee5b45282f4a449ccf1c75baafd5512b51595e"
+    },
+    {
+      "node_id": "main-a58-p2-ie",
+      "tag": "Item",
+      "source_sha256": "f51641faa665ea2e7144dd699202e5605fe7f88231da86364f6c7bf4569763ab"
+    },
+    {
+      "node_id": "main-a64-p3",
+      "tag": "Paragraph",
+      "source_sha256": "f4a28a4ecf02a0606d89a884b0cf8cb0cc5ad4c04dc153809d9f7cd974c46e73"
+    },
+    {
+      "node_id": "main-a64-p4",
+      "tag": "Paragraph",
+      "source_sha256": "670dbb2254cdc67b55c25a3bcaac566e93978449cc87d14b16087538c32e230c"
+    },
+    {
+      "node_id": "main-a64-p7",
+      "tag": "Paragraph",
+      "source_sha256": "06f2afdcee46cec78778bb1c1a294cb966dbd63316d88a202d0be046ef6416ac"
+    },
+    {
+      "node_id": "main-a64-p8",
+      "tag": "Paragraph",
+      "source_sha256": "f9eee956d9d24cad309e3814fc6efb854d0e92ff47f9d092d766a4a214913f5a"
+    },
+    {
+      "node_id": "main-a65-p1-ia",
+      "tag": "Item",
+      "source_sha256": "5f8681e5b6b25d359a914afff48818b53eb14802297834b0d830ee3957e98407"
+    },
+    {
+      "node_id": "main-a65-p2",
+      "tag": "Paragraph",
+      "source_sha256": "b05e49c1fe4ef06854378f0b164308e3a1326c220d8316d58e3694d6e2edec5a"
+    },
+    {
+      "node_id": "main-a65-p3",
+      "tag": "Paragraph",
+      "source_sha256": "3e3930317268e334ae470ef343c70c696b92392f1c6ba504d74f8bcd348f3474"
+    },
+    {
+      "node_id": "main-a65-p6",
+      "tag": "Paragraph",
+      "source_sha256": "95ece6a022ae3bdf1a86943cabeafcc3fb405eb1b3898e9adc8dc1f1f225bfc3"
+    },
+    {
+      "node_id": "main-a66-p1",
+      "tag": "Paragraph",
+      "source_sha256": "27d2ec328d75d11c4686b9b6b083090153d1546fb0dafcef408dc07dfb848ca9"
+    },
+    {
+      "node_id": "main-a66-p2",
+      "tag": "Paragraph",
+      "source_sha256": "080a8a321d29c58b9e068cb3884a7234a963099273c7012c1d8bdfe1706a8730"
+    },
+    {
+      "node_id": "main-a66-p4",
+      "tag": "Paragraph",
+      "source_sha256": "458f3ad0d2d0c9055e96b7bc3e3f8dc73681b5a18590ac5dc2c88a13b178f1ee"
+    },
+    {
+      "node_id": "main-a70-p1-io",
+      "tag": "Item",
+      "source_sha256": "7119c6c99af45dc365542eed462c9732810e27d590964f7960c6a154391d714f"
+    },
+    {
+      "node_id": "main-a70-p1-ip",
+      "tag": "Item",
+      "source_sha256": "dbfc19d2f202cd5f4ebc1d94f90689c8882596bab37d67b2ea121d4d58fd2820"
+    },
+    {
+      "node_id": "main-a78-p2",
+      "tag": "Paragraph",
+      "source_sha256": "d1fd8865f42b55cef25e60b6a842d7d0cd496b39f25a58f8208d53b85e980312"
+    },
+    {
+      "node_id": "main-a80",
+      "tag": "Article",
+      "source_sha256": "b7b2a1a8acc5075e3202b2bd9c264d90c2d79d759c2678d4cdffca3ea443fbc1"
+    },
+    {
+      "node_id": "main-a80-p1",
+      "tag": "Paragraph",
+      "source_sha256": "7cf7b8a2df71e397328ebe4af2dc1f6cb03004931f36c3813bef0ff23a351549"
+    },
+    {
+      "node_id": "main-a80-p2",
+      "tag": "Paragraph",
+      "source_sha256": "e3b8ea3c7cc745176ed278e7aeb1f69a99872976e0679b5e8cf6d4015fdb1926"
+    },
+    {
+      "node_id": "main-a81-p2",
+      "tag": "Paragraph",
+      "source_sha256": "856199f60fe1d7728db549922c80d85d4f64ea3c2971dfbed28314b16e9e549f"
+    },
+    {
+      "node_id": "main-a81-p3",
+      "tag": "Paragraph",
+      "source_sha256": "139647e998acc80ddac34b4aa87894170eec63d2d3cf9cefffd33fb4a396f246"
+    },
+    {
+      "node_id": "main-a82-p2",
+      "tag": "Paragraph",
+      "source_sha256": "3c54992be8a3d3e65caf7e98a28bbe01db840bfa0fa4d04dae35a31cb0bcc50b"
+    },
+    {
+      "node_id": "main-a82-p3",
+      "tag": "Paragraph",
+      "source_sha256": "e3c01109027f7fcc76b6d765031b515f16628df76f1236ea6ad5f8be7abf45a6"
+    },
+    {
+      "node_id": "main-a82-p4",
+      "tag": "Paragraph",
+      "source_sha256": "f6f519ac4e71c46873535a4143176b79c2103e8c721dad426614ffd97d48598e"
+    },
+    {
+      "node_id": "main-a82-p5",
+      "tag": "Paragraph",
+      "source_sha256": "dcb11fbd187fdb9ef1d499e8abdb1ecf056caf6fe5083973458b2b36b5886ea5"
+    },
+    {
+      "node_id": "main-a83-p1",
+      "tag": "Paragraph",
+      "source_sha256": "9eebe44a2ec58b4e61087b58a3400c5a87c48429791b3bae29bd273a438bbe14"
+    },
+    {
+      "node_id": "main-a83-p3",
+      "tag": "Paragraph",
+      "source_sha256": "1b4b6e6e9b1edcbeca16ce572bcea0c3d961eab3e6507293e236df031b3f0042"
+    },
+    {
+      "node_id": "main-a83-p4",
+      "tag": "Paragraph",
+      "source_sha256": "d08b3e1fd76390baafb96f58d1d51afce224bbefb40416af7ffd0624be3b6b0d"
+    },
+    {
+      "node_id": "main-a83-p4-ia",
+      "tag": "Item",
+      "source_sha256": "043fa87b03cb1a5168ecf0fd234fc3ee0acf7c9a7d42b5b3531bf882157e5c8e"
+    },
+    {
+      "node_id": "main-a83-p4-ib",
+      "tag": "Item",
+      "source_sha256": "18d9cac622d7ceca28d43186e2ab7d6a506593064a26f4a8003b6676fef0f9db"
+    },
+    {
+      "node_id": "main-a83-p4-ic",
+      "tag": "Item",
+      "source_sha256": "43bd70cf8696a13a240cf9d273cba7e79235d9febd62e4e279ef655005a3b8ac"
+    },
+    {
+      "node_id": "main-a83-p5",
+      "tag": "Paragraph",
+      "source_sha256": "7410c13b4624aa96e82a05ea79b194175412b9620e0057dbcc59a601165f82fe"
+    },
+    {
+      "node_id": "main-a83-p5-ia",
+      "tag": "Item",
+      "source_sha256": "8b102906733d3f0f66baddd268fdcc7ac32e72288633f5716b9dfd14b58ac0c1"
+    },
+    {
+      "node_id": "main-a83-p5-ib",
+      "tag": "Item",
+      "source_sha256": "f129940513cdec9ec49516764566e871a4215ebbc031ea10ea358c2fc6fde0ea"
+    },
+    {
+      "node_id": "main-a83-p5-ic",
+      "tag": "Item",
+      "source_sha256": "93e361b36b742421d34d2a2dd37a664fdd817af14c06d592588a2dd6c4d23bbd"
+    },
+    {
+      "node_id": "main-a83-p5-id",
+      "tag": "Item",
+      "source_sha256": "e2c87eb6150edc9ce9528874510e434d03c632d11928629918099326dcdbae9d"
+    },
+    {
+      "node_id": "main-a83-p5-ie",
+      "tag": "Item",
+      "source_sha256": "f2c1a075ae8473fb3b2ac0cf6a62b74a8ff1b6957125c57c0395cec3659aa8e4"
+    },
+    {
+      "node_id": "main-a83-p6",
+      "tag": "Paragraph",
+      "source_sha256": "1b4ab16a3f39f9466a88e46d1e2779c5497a5dcad83cd8ac4e1ee68a71e4ffe6"
+    },
+    {
+      "node_id": "main-a83-p7",
+      "tag": "Paragraph",
+      "source_sha256": "eee7b31d9e2a0c4e01c86d8db2603de371e331e4846b4447109e7338ee967eef"
+    },
+    {
+      "node_id": "main-a83-p8",
+      "tag": "Paragraph",
+      "source_sha256": "4854afc3bc11c3ffc5bed0035cdf05547a8b633de21c1a131f3e3e904875d703"
+    },
+    {
+      "node_id": "main-a83-p9",
+      "tag": "Paragraph",
+      "source_sha256": "6e14bbf1f191337cdb96f12849bf45828b02ec2c3ed5acb3bd5e220e6c2f41b1"
+    },
+    {
+      "node_id": "main-a84",
+      "tag": "Article",
+      "source_sha256": "444206375e2a9931b3ce97e7aaeb3ea960685ab2de3faa29bfb90969ef3da6a1"
+    },
+    {
+      "node_id": "main-a84-p1",
+      "tag": "Paragraph",
+      "source_sha256": "b52fbf3904cc48753ecd5e596b90810088a65a67db3c75aee295f41b4973b5c2"
+    },
+    {
+      "node_id": "main-a84-p2",
+      "tag": "Paragraph",
+      "source_sha256": "76d0a8aaab74296bc7f3e932f214fbe362deba59fa109d98de99c4162da74eb1"
+    },
+    {
+      "node_id": "main-a89",
+      "tag": "Article",
+      "source_sha256": "3bba5c71e94d0c75e4465f33bf5f411e575d6a7293a8dea17b5f33dcdf385c4a"
+    },
+    {
+      "node_id": "main-a89-p1",
+      "tag": "Paragraph",
+      "source_sha256": "11f9945e5e24428a035272cc8f1690e83d732e2d2b6b0b29c876000d3bba1b0e"
+    },
+    {
+      "node_id": "main-a89-p2",
+      "tag": "Paragraph",
+      "source_sha256": "1e376177cb308aa64d5a1f2de096bd2ac222430dbcc07cdb779cc173f328fff3"
+    },
+    {
+      "node_id": "main-a89-p3",
+      "tag": "Paragraph",
+      "source_sha256": "460b1d9c413969930162a3614fab6d078ac147f0ef4762c550c17d5ea4dfd6e3"
+    },
+    {
+      "node_id": "main-a89-p4",
+      "tag": "Paragraph",
+      "source_sha256": "3b83d2a55a2ffe0d1570ba00ec20314df69070e6aed40eeb723ccd6a1742f8e3"
+    }
+  ],
+  "outside_cumulative_followup_node_ids": [
+    "law-title",
+    "preface-1",
+    "preface-2",
+    "preface-3",
+    "preface-4",
+    "preface-5",
+    "preface-6",
+    "preface-7",
+    "preface-8",
+    "recital-1",
+    "recital-2",
+    "recital-3",
+    "recital-4",
+    "recital-5",
+    "recital-6",
+    "recital-7",
+    "recital-8",
+    "recital-9",
+    "recital-10",
+    "recital-11",
+    "recital-12",
+    "recital-13",
+    "recital-15",
+    "recital-16",
+    "recital-17",
+    "recital-18",
+    "recital-19",
+    "recital-20",
+    "recital-21",
+    "recital-22",
+    "recital-23",
+    "recital-24",
+    "recital-25",
+    "recital-28",
+    "recital-29",
+    "recital-30",
+    "recital-31",
+    "recital-32",
+    "recital-33",
+    "recital-34",
+    "recital-35",
+    "recital-36",
+    "recital-37",
+    "recital-39",
+    "recital-40",
+    "recital-41",
+    "recital-42",
+    "recital-43",
+    "recital-44",
+    "recital-45",
+    "recital-47",
+    "recital-48",
+    "recital-49",
+    "recital-51",
+    "recital-52",
+    "recital-53",
+    "recital-54",
+    "recital-55",
+    "recital-56",
+    "recital-57",
+    "recital-59",
+    "recital-60",
+    "recital-61",
+    "recital-62",
+    "recital-63",
+    "recital-64",
+    "recital-66",
+    "recital-67",
+    "recital-68",
+    "recital-69",
+    "recital-70",
+    "recital-72",
+    "recital-73",
+    "recital-74",
+    "recital-75",
+    "recital-76",
+    "recital-77",
+    "recital-78",
+    "recital-79",
+    "recital-80",
+    "recital-81",
+    "recital-82",
+    "recital-83",
+    "recital-84",
+    "recital-85",
+    "recital-86",
+    "recital-87",
+    "recital-88",
+    "recital-89",
+    "recital-90",
+    "recital-91",
+    "recital-92",
+    "recital-93",
+    "recital-94",
+    "recital-95",
+    "recital-96",
+    "recital-97",
+    "recital-98",
+    "recital-99",
+    "recital-100",
+    "recital-101",
+    "recital-102",
+    "recital-103",
+    "recital-104",
+    "recital-105",
+    "recital-106",
+    "recital-107",
+    "recital-108",
+    "recital-109",
+    "recital-110",
+    "recital-111",
+    "recital-112",
+    "recital-113",
+    "recital-114",
+    "recital-115",
+    "recital-116",
+    "recital-117",
+    "recital-118",
+    "recital-119",
+    "recital-120",
+    "recital-121",
+    "recital-122",
+    "recital-123",
+    "recital-124",
+    "recital-125",
+    "recital-126",
+    "recital-127",
+    "recital-128",
+    "recital-129",
+    "recital-130",
+    "recital-131",
+    "recital-132",
+    "recital-133",
+    "recital-134",
+    "recital-135",
+    "recital-136",
+    "recital-137",
+    "recital-138",
+    "recital-139",
+    "recital-140",
+    "recital-141",
+    "recital-142",
+    "recital-143",
+    "recital-144",
+    "recital-145",
+    "recital-146",
+    "recital-147",
+    "recital-152",
+    "recital-153",
+    "recital-154",
+    "recital-155",
+    "recital-164",
+    "recital-165",
+    "recital-166",
+    "recital-167",
+    "recital-168",
+    "recital-169",
+    "recital-170",
+    "recital-171",
+    "recital-172",
+    "recital-173",
+    "preface-9",
+    "main-cI",
+    "main-a1",
+    "main-a1-p1",
+    "main-a1-p2",
+    "main-a1-p3",
+    "main-a2",
+    "main-a2-p4",
+    "main-a4",
+    "main-a4-t1",
+    "main-a4-i3",
+    "main-a4-i4",
+    "main-a4-i7",
+    "main-a4-i8",
+    "main-a4-i13",
+    "main-a4-i14",
+    "main-a4-i15",
+    "main-a4-i16",
+    "main-a4-i16-ia",
+    "main-a4-i16-ib",
+    "main-a4-i17",
+    "main-a4-i18",
+    "main-a4-i19",
+    "main-a4-i20",
+    "main-a4-i21",
+    "main-a4-i22",
+    "main-a4-i22-ia",
+    "main-a4-i22-ib",
+    "main-a4-i22-ic",
+    "main-a4-i23",
+    "main-a4-i23-ia",
+    "main-a4-i23-ib",
+    "main-a4-i24",
+    "main-a4-i25",
+    "main-a4-i26",
+    "main-cII",
+    "main-a5",
+    "main-a6",
+    "main-a6-p2",
+    "main-a6-p3",
+    "main-a6-p3-ia",
+    "main-a6-p3-ib",
+    "main-a6-p3-t1",
+    "main-a7",
+    "main-a9",
+    "main-a10",
+    "main-cIII",
+    "main-cIII-s1",
+    "main-a12",
+    "main-a12-p2",
+    "main-a12-p6",
+    "main-a12-p7",
+    "main-a12-p8",
+    "main-cIII-s2",
+    "main-a13",
+    "main-a13-p1",
+    "main-a13-p1-ia",
+    "main-a13-p1-ib",
+    "main-a13-p1-ic",
+    "main-a13-p1-id",
+    "main-a13-p1-ie",
+    "main-a13-p1-if",
+    "main-a13-p2",
+    "main-a13-p2-ia",
+    "main-a13-p2-ib",
+    "main-a13-p2-ic",
+    "main-a13-p2-id",
+    "main-a13-p2-ie",
+    "main-a13-p2-if",
+    "main-a13-p3",
+    "main-a13-p4",
+    "main-a14",
+    "main-a14-p1",
+    "main-a14-p1-ia",
+    "main-a14-p1-ib",
+    "main-a14-p1-ic",
+    "main-a14-p1-id",
+    "main-a14-p1-ie",
+    "main-a14-p1-if",
+    "main-a14-p2",
+    "main-a14-p2-ia",
+    "main-a14-p2-ib",
+    "main-a14-p2-ic",
+    "main-a14-p2-id",
+    "main-a14-p2-ie",
+    "main-a14-p2-if",
+    "main-a14-p2-ig",
+    "main-a14-p3",
+    "main-a14-p3-ia",
+    "main-a14-p3-ib",
+    "main-a14-p3-ic",
+    "main-a14-p4",
+    "main-a14-p5",
+    "main-a14-p5-ia",
+    "main-a14-p5-ic",
+    "main-a14-p5-id",
+    "main-a15",
+    "main-a15-p1",
+    "main-a15-p1-ia",
+    "main-a15-p1-ib",
+    "main-a15-p1-ic",
+    "main-a15-p1-id",
+    "main-a15-p1-ie",
+    "main-a15-p1-if",
+    "main-a15-p1-ig",
+    "main-a15-p1-ih",
+    "main-a15-p2",
+    "main-cIII-s3",
+    "main-a16",
+    "main-a16-t1",
+    "main-a17",
+    "main-a17-p2",
+    "main-a18",
+    "main-a20",
+    "main-a20-p1",
+    "main-a20-p1-ia",
+    "main-a20-p1-ib",
+    "main-a20-p3",
+    "main-a20-p4",
+    "main-cIII-s4",
+    "main-a21",
+    "main-a21-p1",
+    "main-a21-p2",
+    "main-a21-p3",
+    "main-a21-p4",
+    "main-a21-p5",
+    "main-cIII-s5",
+    "main-a23",
+    "main-a23-p2",
+    "main-a23-p2-ia",
+    "main-a23-p2-ib",
+    "main-a23-p2-ic",
+    "main-a23-p2-id",
+    "main-a23-p2-ie",
+    "main-a23-p2-if",
+    "main-a23-p2-ig",
+    "main-a23-p2-ih",
+    "main-cIV",
+    "main-cIV-s1",
+    "main-a24",
+    "main-a24-p1",
+    "main-a24-p2",
+    "main-a24-p3",
+    "main-a25",
+    "main-a25-p1",
+    "main-a25-p2",
+    "main-a25-p3",
+    "main-a26",
+    "main-a26-p1",
+    "main-a26-p2",
+    "main-a26-p3",
+    "main-a27",
+    "main-a27-p3",
+    "main-a27-p4",
+    "main-a27-p5",
+    "main-a28",
+    "main-a28-p1",
+    "main-a28-p5",
+    "main-a28-p6",
+    "main-a28-p7",
+    "main-a28-p8",
+    "main-a29",
+    "main-a29-t1",
+    "main-a30",
+    "main-a30-p1",
+    "main-a30-p1-ia",
+    "main-a30-p1-ib",
+    "main-a30-p1-ic",
+    "main-a30-p1-id",
+    "main-a30-p1-ie",
+    "main-a30-p1-if",
+    "main-a30-p1-ig",
+    "main-a30-p2",
+    "main-a30-p2-ia",
+    "main-a30-p2-ib",
+    "main-a30-p2-ic",
+    "main-a30-p2-id",
+    "main-a30-p3",
+    "main-a30-p4",
+    "main-a31",
+    "main-a31-t1",
+    "main-cIV-s2",
+    "main-cIV-s3",
+    "main-a35",
+    "main-a35-p2",
+    "main-a35-p3",
+    "main-a35-p3-ia",
+    "main-a35-p3-ib",
+    "main-a35-p3-ic",
+    "main-a35-p4",
+    "main-a35-p5",
+    "main-a35-p6",
+    "main-a35-p7",
+    "main-a35-p7-ia",
+    "main-a35-p7-ib",
+    "main-a35-p7-ic",
+    "main-a35-p7-id",
+    "main-a35-p8",
+    "main-a35-p9",
+    "main-a35-p11",
+    "main-a36",
+    "main-a36-p3",
+    "main-a36-p3-ia",
+    "main-a36-p3-ib",
+    "main-a36-p3-ic",
+    "main-a36-p3-id",
+    "main-a36-p3-ie",
+    "main-a36-p3-if",
+    "main-a36-p4",
+    "main-a36-p5",
+    "main-cIV-s4",
+    "main-a37",
+    "main-a37-p2",
+    "main-a37-p3",
+    "main-a37-p4",
+    "main-a37-p5",
+    "main-a37-p6",
+    "main-a37-p7",
+    "main-a38",
+    "main-a38-p1",
+    "main-a38-p2",
+    "main-a38-p3",
+    "main-a38-p4",
+    "main-a38-p5",
+    "main-a38-p6",
+    "main-a39",
+    "main-a39-p1",
+    "main-a39-p1-ia",
+    "main-a39-p1-ib",
+    "main-a39-p1-ic",
+    "main-a39-p1-id",
+    "main-a39-p1-ie",
+    "main-a39-p2",
+    "main-cIV-s5",
+    "main-a40",
+    "main-a40-p1",
+    "main-a40-p2",
+    "main-a40-p2-ia",
+    "main-a40-p2-ib",
+    "main-a40-p2-ic",
+    "main-a40-p2-id",
+    "main-a40-p2-ie",
+    "main-a40-p2-if",
+    "main-a40-p2-ig",
+    "main-a40-p2-ih",
+    "main-a40-p2-ii",
+    "main-a40-p2-ij",
+    "main-a40-p2-ik",
+    "main-a40-p3",
+    "main-a40-p4",
+    "main-a40-p5",
+    "main-a40-p6",
+    "main-a40-p7",
+    "main-a40-p8",
+    "main-a40-p9",
+    "main-a40-p10",
+    "main-a40-p11",
+    "main-a41",
+    "main-a41-p1",
+    "main-a41-p2",
+    "main-a41-p2-ia",
+    "main-a41-p2-ib",
+    "main-a41-p2-ic",
+    "main-a41-p2-id",
+    "main-a41-p3",
+    "main-a41-p4",
+    "main-a41-p5",
+    "main-a42",
+    "main-a42-p1",
+    "main-a42-p2",
+    "main-a42-p3",
+    "main-a42-p5",
+    "main-a42-p6",
+    "main-a43",
+    "main-a43-p1",
+    "main-a43-p1-ia",
+    "main-a43-p1-ib",
+    "main-a43-p2",
+    "main-a43-p2-ia",
+    "main-a43-p2-ib",
+    "main-a43-p2-ic",
+    "main-a43-p2-id",
+    "main-a43-p2-ie",
+    "main-a43-p3",
+    "main-a43-p5",
+    "main-a43-p7",
+    "main-a43-p8",
+    "main-a43-p9",
+    "main-cV",
+    "main-a45",
+    "main-a45-p1",
+    "main-a45-p2",
+    "main-a45-p2-ia",
+    "main-a45-p2-ib",
+    "main-a45-p2-ic",
+    "main-a45-p4",
+    "main-a45-p6",
+    "main-a45-p8",
+    "main-a45-p9",
+    "main-a46",
+    "main-a46-p5",
+    "main-a47",
+    "main-a47-p1",
+    "main-a47-p1-ia",
+    "main-a47-p1-ib",
+    "main-a47-p1-ic",
+    "main-a47-p2",
+    "main-a47-p2-ia",
+    "main-a47-p2-ib",
+    "main-a47-p2-ic",
+    "main-a47-p2-id",
+    "main-a47-p2-ie",
+    "main-a47-p2-if",
+    "main-a47-p2-ig",
+    "main-a47-p2-ih",
+    "main-a47-p2-ii",
+    "main-a47-p2-ij",
+    "main-a47-p2-ik",
+    "main-a47-p2-il",
+    "main-a47-p2-im",
+    "main-a47-p2-in",
+    "main-a47-p3",
+    "main-a50",
+    "main-a50-t1",
+    "main-a50-ia",
+    "main-a50-ib",
+    "main-a50-ic",
+    "main-a50-id",
+    "main-cVI",
+    "main-cVI-s1",
+    "main-a51",
+    "main-a51-p1",
+    "main-a51-p2",
+    "main-a51-p3",
+    "main-a51-p4",
+    "main-a52",
+    "main-a52-p1",
+    "main-a52-p2",
+    "main-a52-p3",
+    "main-a52-p4",
+    "main-a52-p5",
+    "main-a52-p6",
+    "main-a53",
+    "main-a53-p1",
+    "main-a53-p1-u1",
+    "main-a53-p1-u2",
+    "main-a53-p1-u3",
+    "main-a53-p1-u4",
+    "main-a53-p2",
+    "main-a53-p3",
+    "main-a53-p4",
+    "main-a54",
+    "main-a54-p1",
+    "main-a54-p1-ia",
+    "main-a54-p1-ib",
+    "main-a54-p1-ic",
+    "main-a54-p1-id",
+    "main-a54-p1-ie",
+    "main-a54-p1-if",
+    "main-a54-p2",
+    "main-cVI-s2",
+    "main-a55",
+    "main-a55-p1",
+    "main-a56",
+    "main-a56-p1",
+    "main-a56-p2",
+    "main-a56-p4",
+    "main-a56-p5",
+    "main-a56-p6",
+    "main-a57",
+    "main-a57-p1",
+    "main-a57-p1-ia",
+    "main-a57-p1-ib",
+    "main-a57-p1-ic",
+    "main-a57-p1-id",
+    "main-a57-p1-ie",
+    "main-a57-p1-if",
+    "main-a57-p1-ig",
+    "main-a57-p1-ih",
+    "main-a57-p1-ii",
+    "main-a57-p1-ij",
+    "main-a57-p1-ik",
+    "main-a57-p1-il",
+    "main-a57-p1-im",
+    "main-a57-p1-in",
+    "main-a57-p1-io",
+    "main-a57-p1-ip",
+    "main-a57-p1-iq",
+    "main-a57-p1-ir",
+    "main-a57-p1-is",
+    "main-a57-p1-it",
+    "main-a57-p1-iu",
+    "main-a57-p1-iv",
+    "main-a57-p2",
+    "main-a57-p3",
+    "main-a57-p4",
+    "main-a58",
+    "main-a58-p1",
+    "main-a58-p1-ia",
+    "main-a58-p1-ib",
+    "main-a58-p1-ic",
+    "main-a58-p1-id",
+    "main-a58-p1-ie",
+    "main-a58-p1-if",
+    "main-a58-p2",
+    "main-a58-p2-ia",
+    "main-a58-p2-ib",
+    "main-a58-p2-ic",
+    "main-a58-p2-id",
+    "main-a58-p2-if",
+    "main-a58-p2-ig",
+    "main-a58-p2-ih",
+    "main-a58-p2-ii",
+    "main-a58-p2-ij",
+    "main-a58-p3",
+    "main-a58-p3-ia",
+    "main-a58-p3-ib",
+    "main-a58-p3-ic",
+    "main-a58-p3-id",
+    "main-a58-p3-ie",
+    "main-a58-p3-if",
+    "main-a58-p3-ig",
+    "main-a58-p3-ih",
+    "main-a58-p3-ii",
+    "main-a58-p3-ij",
+    "main-a58-p4",
+    "main-a58-p5",
+    "main-a58-p6",
+    "main-a59",
+    "main-a59-t1",
+    "main-cVII",
+    "main-cVII-s1",
+    "main-a60",
+    "main-a60-p1",
+    "main-a60-p2",
+    "main-a60-p3",
+    "main-a60-p4",
+    "main-a60-p5",
+    "main-a60-p6",
+    "main-a60-p7",
+    "main-a60-p8",
+    "main-a60-p9",
+    "main-a60-p10",
+    "main-a60-p11",
+    "main-a60-p12",
+    "main-a61",
+    "main-a61-p1",
+    "main-a61-p2",
+    "main-a61-p3",
+    "main-a61-p4",
+    "main-a61-p4-ia",
+    "main-a61-p4-ib",
+    "main-a61-p5",
+    "main-a61-p6",
+    "main-a61-p7",
+    "main-a61-p8",
+    "main-a61-p9",
+    "main-a62",
+    "main-a62-p1",
+    "main-a62-p2",
+    "main-a62-p3",
+    "main-a62-p4",
+    "main-a62-p5",
+    "main-a62-p6",
+    "main-a62-p7",
+    "main-cVII-s2",
+    "main-a63",
+    "main-a63-t1",
+    "main-a64",
+    "main-a64-p1",
+    "main-a64-p1-ia",
+    "main-a64-p1-ib",
+    "main-a64-p1-ic",
+    "main-a64-p1-id",
+    "main-a64-p1-ie",
+    "main-a64-p1-if",
+    "main-a64-p2",
+    "main-a64-p5",
+    "main-a64-p5-ia",
+    "main-a64-p5-ib",
+    "main-a64-p6",
+    "main-a65",
+    "main-a65-p1",
+    "main-a65-p1-ib",
+    "main-a65-p1-ic",
+    "main-a65-p4",
+    "main-a65-p5",
+    "main-a66",
+    "main-a66-p3",
+    "main-a67",
+    "main-a67-t1",
+    "main-a67-t2",
+    "main-cVII-s3",
+    "main-a68",
+    "main-a68-p1",
+    "main-a68-p2",
+    "main-a68-p3",
+    "main-a68-p4",
+    "main-a68-p5",
+    "main-a68-p6",
+    "main-a69",
+    "main-a69-p1",
+    "main-a69-p2",
+    "main-a70",
+    "main-a70-p1",
+    "main-a70-p1-ia",
+    "main-a70-p1-ib",
+    "main-a70-p1-ic",
+    "main-a70-p1-id",
+    "main-a70-p1-ie",
+    "main-a70-p1-if",
+    "main-a70-p1-ig",
+    "main-a70-p1-ih",
+    "main-a70-p1-ii",
+    "main-a70-p1-ij",
+    "main-a70-p1-ik",
+    "main-a70-p1-il",
+    "main-a70-p1-im",
+    "main-a70-p1-in",
+    "main-a70-p1-iq",
+    "main-a70-p1-ir",
+    "main-a70-p1-is",
+    "main-a70-p1-it",
+    "main-a70-p1-iu",
+    "main-a70-p1-iv",
+    "main-a70-p1-iw",
+    "main-a70-p1-ix",
+    "main-a70-p1-iy",
+    "main-a70-p2",
+    "main-a70-p3",
+    "main-a70-p4",
+    "main-a71",
+    "main-a71-p1",
+    "main-a71-p2",
+    "main-a72",
+    "main-a72-p1",
+    "main-a72-p2",
+    "main-a73",
+    "main-a73-p1",
+    "main-a73-p2",
+    "main-a74",
+    "main-a74-p1",
+    "main-a74-p1-ia",
+    "main-a74-p1-ib",
+    "main-a74-p1-ic",
+    "main-a74-p2",
+    "main-a75",
+    "main-a75-p1",
+    "main-a75-p2",
+    "main-a75-p3",
+    "main-a75-p4",
+    "main-a75-p5",
+    "main-a75-p6",
+    "main-a75-p6-ia",
+    "main-a75-p6-ib",
+    "main-a75-p6-ic",
+    "main-a75-p6-id",
+    "main-a75-p6-ie",
+    "main-a75-p6-if",
+    "main-a75-p6-ig",
+    "main-a76",
+    "main-a76-p1",
+    "main-a76-p2",
+    "main-cVIII",
+    "main-a77",
+    "main-a77-p1",
+    "main-a77-p2",
+    "main-a78",
+    "main-a78-p1",
+    "main-a78-p3",
+    "main-a78-p4",
+    "main-a79",
+    "main-a79-p1",
+    "main-a79-p2",
+    "main-a81",
+    "main-a81-p1",
+    "main-a82",
+    "main-a82-p1",
+    "main-a82-p6",
+    "main-a83",
+    "main-a83-p2",
+    "main-a83-p2-ia",
+    "main-a83-p2-ib",
+    "main-a83-p2-ic",
+    "main-a83-p2-id",
+    "main-a83-p2-ie",
+    "main-a83-p2-if",
+    "main-a83-p2-ig",
+    "main-a83-p2-ih",
+    "main-a83-p2-ii",
+    "main-a83-p2-ij",
+    "main-a83-p2-ik",
+    "main-cIX",
+    "main-a85",
+    "main-a85-p1",
+    "main-a85-p2",
+    "main-a85-p3",
+    "main-a86",
+    "main-a86-t1",
+    "main-a87",
+    "main-a87-t1",
+    "main-a88",
+    "main-a88-p1",
+    "main-a88-p2",
+    "main-a88-p3",
+    "main-a90",
+    "main-a90-p1",
+    "main-a90-p2",
+    "main-a91",
+    "main-a91-p1",
+    "main-a91-p2",
+    "main-cX",
+    "main-a92",
+    "main-a92-p1",
+    "main-a92-p2",
+    "main-a92-p3",
+    "main-a92-p4",
+    "main-a92-p5",
+    "main-a93",
+    "main-a93-p1",
+    "main-a93-p2",
+    "main-a93-p3",
+    "main-cXI",
+    "main-a94",
+    "main-a94-p1",
+    "main-a94-p2",
+    "main-a95",
+    "main-a95-t1",
+    "main-a96",
+    "main-a96-t1",
+    "main-a97",
+    "main-a97-p1",
+    "main-a97-p2",
+    "main-a97-p2-ia",
+    "main-a97-p2-ib",
+    "main-a97-p3",
+    "main-a97-p4",
+    "main-a97-p5",
+    "main-a98",
+    "main-a98-t1",
+    "main-a99",
+    "main-a99-p1",
+    "main-a99-p2",
+    "closing-1",
+    "closing-2",
+    "closing-3",
+    "closing-4",
+    "closing-5",
+    "closing-6",
+    "closing-7",
+    "closing-8",
+    "footnote-1",
+    "footnote-2",
+    "footnote-3",
+    "footnote-4",
+    "footnote-5",
+    "footnote-6",
+    "footnote-7",
+    "footnote-8",
+    "footnote-9",
+    "footnote-10",
+    "footnote-11",
+    "footnote-12",
+    "footnote-13",
+    "footnote-14",
+    "footnote-15",
+    "footnote-16",
+    "footnote-17",
+    "footnote-18",
+    "footnote-19",
+    "footnote-20",
+    "footnote-21"
+  ],
+  "changes": [
+    {
+      "cell_id": "personal_information_scope--EU",
+      "criterion_order": 1,
+      "criterion_name": "개인정보 범위",
+      "summary_changed": false,
+      "exceptions_changed": true,
+      "links_added": 3,
+      "before_content_sha256": "9f6b44eea3bc33d44316dce39c7c9942208743547cb3c2e94d99b643133bcbb8",
+      "after_content_sha256": "26205cf73d86783c7c1b0a5f62adea06ff46852a32af7a02d83003d6f77ac4cf",
+      "checked_node_ids": [
+        "recital-14",
+        "recital-26",
+        "recital-27",
+        "main-a2-p1",
+        "main-a4-i1",
+        "main-a4-i2",
+        "main-a4-i5",
+        "main-a4-i6"
+      ]
+    },
+    {
+      "cell_id": "law_application_scope--EU",
+      "criterion_order": 2,
+      "criterion_name": "법 적용 대상",
+      "summary_changed": true,
+      "exceptions_changed": false,
+      "links_added": 0,
+      "before_content_sha256": "3965f556d87487d02e5dadfdcedb58943aca3c343834e68e213fbfaeed58befa",
+      "after_content_sha256": "fa6e1bb17d01d63f6e9e4aef1c7e974b1537f1c5c8248090b5174fabc773f553",
+      "checked_node_ids": [
+        "main-a2-p2",
+        "main-a2-p2-ia",
+        "main-a2-p2-ib",
+        "main-a2-p2-ic",
+        "main-a2-p2-id",
+        "main-a2-p3",
+        "main-a3",
+        "main-a3-p1",
+        "main-a3-p2",
+        "main-a3-p2-ia",
+        "main-a3-p2-ib",
+        "main-a3-p3",
+        "main-a27-p1",
+        "main-a27-p2",
+        "main-a27-p2-ia",
+        "main-a27-p2-ib",
+        "main-a55-p2",
+        "main-a55-p3"
+      ]
+    },
+    {
+      "cell_id": "privacy_principles--EU",
+      "criterion_order": 3,
+      "criterion_name": "개인정보보호 원칙",
+      "summary_changed": true,
+      "exceptions_changed": false,
+      "links_added": 1,
+      "before_content_sha256": "0cb0bd594998688cbb8b0033a1b877012d9fb2f2956058d4a17718aaf735c2cd",
+      "after_content_sha256": "f4fe3428ba2f81ae81a9de76244a3c06f5c6e302821156ed010bb5ad25b402f0",
+      "checked_node_ids": [
+        "main-a5-p1",
+        "main-a5-p1-ia",
+        "main-a5-p1-ib",
+        "main-a5-p1-ic",
+        "main-a5-p1-id",
+        "main-a5-p1-ie",
+        "main-a5-p1-if",
+        "main-a5-p2",
+        "main-a23-p1",
+        "main-a23-p1-ia",
+        "main-a23-p1-ib",
+        "main-a23-p1-ic",
+        "main-a23-p1-id",
+        "main-a23-p1-ie",
+        "main-a23-p1-if",
+        "main-a23-p1-ig",
+        "main-a23-p1-ih",
+        "main-a23-p1-ii",
+        "main-a23-p1-ij",
+        "main-a89-p1",
+        "recital-71"
+      ]
+    },
+    {
+      "cell_id": "third_party_provision--EU",
+      "criterion_order": 7,
+      "criterion_name": "제공",
+      "summary_changed": false,
+      "exceptions_changed": false,
+      "links_added": 0,
+      "before_content_sha256": "f61ffbc6f619f5f011d63e612888cd3393799e1a839ffe0386d192a80114ba8e",
+      "after_content_sha256": "f61ffbc6f619f5f011d63e612888cd3393799e1a839ffe0386d192a80114ba8e",
+      "checked_node_ids": [
+        "main-a4-i9",
+        "main-a4-i10",
+        "main-a19",
+        "main-a19-t1",
+        "main-a20-p2",
+        "main-a49-p1-t1"
+      ]
+    },
+    {
+      "cell_id": "pseudonymous_anonymous_information--EU",
+      "criterion_order": 9,
+      "criterion_name": "가명·익명정보",
+      "summary_changed": false,
+      "exceptions_changed": false,
+      "links_added": 1,
+      "before_content_sha256": "76df0d4b51b5fe1f3299ddfc0e7e139d3268b1712e47b5acde2d5ce880ba0ccf",
+      "after_content_sha256": "90395fb6d91bf005932059238b0e89ee43a410987caaf70d976671d7138b574e",
+      "checked_node_ids": [
+        "recital-26",
+        "main-a4-i5",
+        "main-a11",
+        "main-a11-p1",
+        "main-a11-p2",
+        "main-a89",
+        "main-a89-p1",
+        "main-a89-p2",
+        "main-a89-p3",
+        "main-a89-p4"
+      ]
+    },
+    {
+      "cell_id": "children_information--EU",
+      "criterion_order": 10,
+      "criterion_name": "아동 개인정보",
+      "summary_changed": false,
+      "exceptions_changed": false,
+      "links_added": 4,
+      "before_content_sha256": "2fe5becfdaedcfab6c8f11119cd52c8f8b18385025e484ae2fa484ecb19bb809",
+      "after_content_sha256": "64e15384c5a0071049c8ddb945a022c126f0198f83f63df47e11d17d59638420",
+      "checked_node_ids": [
+        "recital-38",
+        "recital-58",
+        "recital-65",
+        "recital-71",
+        "main-a6-p1-if",
+        "main-a8",
+        "main-a8-p1",
+        "main-a8-p1-t1",
+        "main-a8-p2",
+        "main-a8-p3",
+        "main-a12-p1",
+        "main-a17-p1-if",
+        "main-a22",
+        "main-a22-p1",
+        "main-a22-p2",
+        "main-a22-p2-ia",
+        "main-a22-p2-ib",
+        "main-a22-p2-ic",
+        "main-a22-p3",
+        "main-a22-p4"
+      ]
+    },
+    {
+      "cell_id": "security_measures--EU",
+      "criterion_order": 11,
+      "criterion_name": "안전성 확보조치",
+      "summary_changed": true,
+      "exceptions_changed": false,
+      "links_added": 0,
+      "before_content_sha256": "c1e4d16696f91a15ebb36a56b417ffa40f2406bf30bacc50041126f92c581373",
+      "after_content_sha256": "755e01f536658a6c31292252e26c316cc49e4a32995f50adbba92652bca80dba",
+      "checked_node_ids": [
+        "main-a30-p5",
+        "main-a32",
+        "main-a32-p1",
+        "main-a32-p1-ia",
+        "main-a32-p1-ib",
+        "main-a32-p1-ic",
+        "main-a32-p1-id",
+        "main-a32-p2",
+        "main-a32-p3",
+        "main-a32-p4",
+        "main-a35-p1",
+        "main-a35-p10",
+        "main-a36-p1",
+        "main-a36-p2",
+        "main-a37-p1",
+        "main-a37-p1-ia",
+        "main-a37-p1-ib",
+        "main-a37-p1-ic"
+      ]
+    },
+    {
+      "cell_id": "processor_contracting--EU",
+      "criterion_order": 12,
+      "criterion_name": "처리 위탁",
+      "summary_changed": true,
+      "exceptions_changed": false,
+      "links_added": 0,
+      "before_content_sha256": "1ca59e21c812783383d32c110a9cffde2c8b8c297c41a928ed4701c6ec2168e2",
+      "after_content_sha256": "179210a3e4a11a072fb5f566f8d98415a1794e8c0421f87567359147f9fcec30",
+      "checked_node_ids": [
+        "main-a28-p2",
+        "main-a28-p3",
+        "main-a28-p3-ia",
+        "main-a28-p3-ib",
+        "main-a28-p3-ic",
+        "main-a28-p3-id",
+        "main-a28-p3-ie",
+        "main-a28-p3-if",
+        "main-a28-p3-ig",
+        "main-a28-p3-ih",
+        "main-a28-p3-t1",
+        "main-a28-p4",
+        "main-a28-p9",
+        "main-a28-p10",
+        "main-a33-p2",
+        "main-a82-p2",
+        "main-a82-p3",
+        "main-a82-p4",
+        "main-a82-p5"
+      ]
+    },
+    {
+      "cell_id": "cross_border_transfer--EU",
+      "criterion_order": 13,
+      "criterion_name": "국외이전",
+      "summary_changed": true,
+      "exceptions_changed": true,
+      "links_added": 1,
+      "before_content_sha256": "116d76663429900b19dfdb96fed632c78052dfe923478205d1c563b6e9af7428",
+      "after_content_sha256": "f15ec181578efcb217c675cac5e49a63c96bf9bb4b754f2a780c18df37d415ad",
+      "checked_node_ids": [
+        "main-a44",
+        "main-a44-t1",
+        "main-a45-p3",
+        "main-a45-p5",
+        "main-a45-p5-t1",
+        "main-a45-p7",
+        "main-a46-p1",
+        "main-a46-p2",
+        "main-a46-p2-ia",
+        "main-a46-p2-ib",
+        "main-a46-p2-ic",
+        "main-a46-p2-id",
+        "main-a46-p2-ie",
+        "main-a46-p2-if",
+        "main-a46-p3",
+        "main-a46-p3-ia",
+        "main-a46-p3-ib",
+        "main-a46-p4",
+        "main-a48",
+        "main-a48-t1",
+        "main-a49",
+        "main-a49-p1",
+        "main-a49-p1-ia",
+        "main-a49-p1-ib",
+        "main-a49-p1-ic",
+        "main-a49-p1-id",
+        "main-a49-p1-ie",
+        "main-a49-p1-if",
+        "main-a49-p1-ig",
+        "main-a49-p1-t1",
+        "main-a49-p2",
+        "main-a49-p3",
+        "main-a49-p4",
+        "main-a49-p5",
+        "main-a49-p6",
+        "recital-46"
+      ]
+    },
+    {
+      "cell_id": "administrative_fines--EU",
+      "criterion_order": 14,
+      "criterion_name": "과징금",
+      "summary_changed": false,
+      "exceptions_changed": true,
+      "links_added": 4,
+      "before_content_sha256": "5ec93b9e5e547b54320baaa878b23036f9979c86b6e8defcd36c21d494397dbe",
+      "after_content_sha256": "54c2f5e3f6b23afbc0c029d6dfd74f5c00befcfa6ec92d44471a0b0cc68666d1",
+      "checked_node_ids": [
+        "recital-148",
+        "recital-149",
+        "recital-151",
+        "main-a83-p1",
+        "main-a83-p3",
+        "main-a83-p4",
+        "main-a83-p4-ia",
+        "main-a83-p4-ib",
+        "main-a83-p4-ic",
+        "main-a83-p5",
+        "main-a83-p5-ia",
+        "main-a83-p5-ib",
+        "main-a83-p5-ic",
+        "main-a83-p5-id",
+        "main-a83-p5-ie",
+        "main-a83-p6",
+        "main-a83-p7",
+        "main-a83-p8",
+        "main-a83-p9",
+        "main-a84",
+        "main-a84-p1",
+        "main-a84-p2",
+        "recital-150"
+      ]
+    },
+    {
+      "cell_id": "corrective_measures--EU",
+      "criterion_order": 15,
+      "criterion_name": "시정조치 등",
+      "summary_changed": false,
+      "exceptions_changed": true,
+      "links_added": 0,
+      "before_content_sha256": "1a06531421695b2790326f10fa1446242d634531284bbff31c097fb980bdfcad",
+      "after_content_sha256": "839e9cccf06b5ea7f39da1080111637e37dd42c568b8d8f94e31101a14f5ce2b",
+      "checked_node_ids": [
+        "main-a55-p2",
+        "main-a55-p3",
+        "main-a56-p3",
+        "main-a64-p3",
+        "main-a64-p4",
+        "main-a64-p7",
+        "main-a64-p8",
+        "main-a65-p1-ia",
+        "main-a65-p2",
+        "main-a65-p3",
+        "main-a65-p6",
+        "main-a66-p1",
+        "main-a66-p2",
+        "main-a66-p4",
+        "main-a78-p2",
+        "main-a80",
+        "main-a80-p1",
+        "main-a80-p2",
+        "main-a81-p2",
+        "main-a81-p3"
+      ]
+    },
+    {
+      "cell_id": "breach_notification--EU",
+      "criterion_order": 16,
+      "criterion_name": "유출 등의 통지·신고",
+      "summary_changed": false,
+      "exceptions_changed": false,
+      "links_added": 0,
+      "before_content_sha256": "e6642e53822d1861494e4c22dc99cca70bed6078679a67a1f1ad4f03aec37e0b",
+      "after_content_sha256": "e6642e53822d1861494e4c22dc99cca70bed6078679a67a1f1ad4f03aec37e0b",
+      "checked_node_ids": [
+        "main-a4-i12",
+        "main-a23-p1",
+        "main-a23-p1-ia",
+        "main-a23-p1-ib",
+        "main-a23-p1-ic",
+        "main-a23-p1-id",
+        "main-a23-p1-ie",
+        "main-a23-p1-if",
+        "main-a23-p1-ig",
+        "main-a23-p1-ih",
+        "main-a23-p1-ii",
+        "main-a23-p1-ij",
+        "main-a33",
+        "main-a33-p1",
+        "main-a33-p2",
+        "main-a33-p3",
+        "main-a33-p3-ia",
+        "main-a33-p3-ib",
+        "main-a33-p3-ic",
+        "main-a33-p3-id",
+        "main-a33-p4",
+        "main-a33-p5",
+        "main-a34",
+        "main-a34-p1",
+        "main-a34-p2",
+        "main-a34-p3",
+        "main-a34-p3-ia",
+        "main-a34-p3-ib",
+        "main-a34-p3-ic",
+        "main-a34-p4",
+        "main-a58-p2-ie"
+      ]
+    },
+    {
+      "cell_id": "data_use_promotion--EU",
+      "criterion_order": 17,
+      "criterion_name": "데이터활용 촉진",
+      "summary_changed": false,
+      "exceptions_changed": false,
+      "links_added": 8,
+      "before_content_sha256": "542fbbb0983f01b36ea8343129312db2ae5c3ae5ce624fd43f2d9912fa06c6f2",
+      "after_content_sha256": "ba7d40574a267248273f0d3afe63b75530acd41c8fecf53542afca0fb5e9537f",
+      "checked_node_ids": [
+        "recital-156",
+        "recital-157",
+        "recital-158",
+        "recital-159",
+        "recital-160",
+        "recital-161",
+        "recital-162",
+        "recital-163",
+        "main-a5-p1-ib",
+        "main-a5-p1-ie",
+        "main-a9-p2-ij",
+        "main-a14-p5-ib",
+        "main-a17-p3-id",
+        "main-a21-p6",
+        "main-a41-p6",
+        "main-a42-p4",
+        "main-a42-p7",
+        "main-a42-p8",
+        "main-a43-p4",
+        "main-a43-p6",
+        "main-a70-p1-io",
+        "main-a70-p1-ip",
+        "main-a89",
+        "main-a89-p1",
+        "main-a89-p2",
+        "main-a89-p3",
+        "main-a89-p4"
+      ]
+    }
+  ],
+  "validation": {
+    "eu_link_count": 243,
+    "private_cells_outside_current_scope_unchanged": 106,
+    "criteria_count": 17,
+    "jurisdiction_count": 7,
+    "cell_count": 119,
+    "source_input_gdpr_validation": "passed",
+    "corpus_validation": "passed",
+    "selected_source_hashes": "passed",
+    "private_and_public_106_cells_preserved": true,
+    "all_eu_links_resolve": true,
+    "translation_json_and_markdown_unchanged": true,
+    "public_gdpr_body_absent": true,
+    "team_data_validation": "passed",
+    "tests": {
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0
+    },
+    "diff_check": "passed"
+  },
+  "completion_status": "not_complete",
+  "remaining_blockers": [
+    "public_reuse_conditions_not_verified"
+  ],
+  "remaining_human_or_legal_verifications": [
+    "human_review_not_started",
+    "current_2026_edition_not_fully_verified"
+  ],
+  "outside_cumulative_followup_note": "누적 선택 대조 밖 항목 목록. 미번역 목록이 아니며 추가 모델 대조를 공개 허가의 새 선행조건으로 만들지 않음."
+}

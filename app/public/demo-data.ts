@@ -7,4 +7,3 @@ export const stories: Story[] = [
   { id: "sample-5", country: "OECD", region: "국제기구", institution: "OECD", title: "아동의 디지털 환경과 개인정보 보호", summary: "아동의 권리와 데이터 보호를 함께 살펴보는 국제 정책 자료의 예시입니다.", kind: "정책 자료", tags: ["아동", "국제 기준"], date: "2026.09.12" },
   { id: "sample-6", country: "EU", region: "유럽연합", institution: "CURIA", title: "온라인 서비스와 개인정보 처리에 관한 판례 검색", summary: "온라인 서비스의 개인정보 처리와 관련된 판례를 찾아볼 때의 화면 예시입니다.", kind: "판례", tags: ["온라인 서비스", "법원"], date: "2026.09.05" },
 ];
-

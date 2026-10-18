@@ -375,6 +375,61 @@
       "byte_count": 15790,
       "sha256": "048e8958853408f16623a700795e52dc2ede7fa3eab2bd1d201153710f658a92",
       "note": "정령 개정 이력 조회; 반환 목록에2026-07-31 이후 시행 판본 없음. PPC2026-09-30 자료와 차이 해소 안됨"
+    },
+    {
+      "source_id": "op-original-rdf-20261012",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=true",
+      "retrieved_on": "2026-10-12",
+      "http_status": 200,
+      "byte_count": 258469,
+      "sha256": "8b8ec3d060d8bf2da5c514e34f691ffca0a2ff513ceeb1b1ac9865e1377a3fc5",
+      "note": "공식 원판 RDF; 날짜/CELEX 확인,효력메타데이터를 최신통합문구 확인으로 취급하지 않음"
+    },
+    {
+      "source_id": "op-dissemination-20261012",
+      "url": "https://op.europa.eu/en/web/about-us/legal-notices/general-conditions-of-dissemination",
+      "retrieved_on": "2026-10-12",
+      "http_status": 200,
+      "byte_count": 364624,
+      "sha256": "8e0746be0f9eb8f338a552610dd8f2c6f0b5af44fa4bddd2099942bceda61272",
+      "note": "일반배포조건; 출판물별/EUR-Lex 별도고지 확인 요구,번역본문 공개허용 미확정"
+    },
+    {
+      "source_id": "eurlex-copyright-20261012",
+      "url": "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html",
+      "retrieved_on": "2026-10-12",
+      "http_status": 202,
+      "byte_count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "HTTP202 빈본문; 저작권고지 본문 미확보"
+    },
+    {
+      "source_id": "gdpr-consolidated-02016-20261012",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "retrieved_on": "2026-10-12",
+      "http_status": 202,
+      "byte_count": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "note": "통합판 후보 조회; 성공 법문 미확보,판본/정오표 확정 아님"
+    },
+    {
+      "source_id": "gdpr-nanet-search-20261012",
+      "url": "https://dl.nanet.go.kr/search/searchInnerList.do?searchType=INNER_SEARCH&resultType=INNER_SEARCH_LIST&searchMehtod=F&queryText=EU+GDPR%3AALL_NI_TOC%3AAND&zone=ALL_NI_TOC&pageSize=10&orderBy=WEIGHT&topMainMenuCode=ASSM_ALL&topSubMenuCode=TLAW&searchQuery=EU+GDPR",
+      "retrieved_on": "2026-10-12",
+      "http_status": null,
+      "proxy_status": 403,
+      "byte_count": 0,
+      "sha256": null,
+      "note": "사용자 제공 검색 경로; 일반/승인 실행경로 proxy tunnel403으로 목록·서지 미확보. 번역본 부재/이용불가의 증거로 취급하지 않음"
+    },
+    {
+      "source_id": "gdpr-pipc-candidate-20261012",
+      "url": "https://pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS105&mCode=D060010000&nttId=5139",
+      "retrieved_on": "2026-10-12",
+      "http_status": 503,
+      "byte_count": 91,
+      "sha256": "2f85832e31ca57711e6107af6b142363351ae516adb71c69afc643fac26be7f6",
+      "note": "사용자 제공 공식기관 번역 후보; 일반/승인 경로 모두503·upstream connection timeout,게시물·첨부·이용조건 미확인"
     }
   ],
   "latest_failed_access": [

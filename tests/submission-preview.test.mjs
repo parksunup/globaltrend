@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { join } from "node:path";
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { loadSubmissionDocuments, loadSubmissionPreview } from "../lib/submission-preview.ts";
 
@@ -30,6 +30,51 @@ test("legal comparison remains readable while weekly example is removed from Pre
   assert.equal(documents.legal[0].criterionName, "개인정보 범위");
   assert.deepEqual(documents.legal[0].articleNumbers, ["제2조", "제58조의2"]);
   assert.equal(documents.weekly, null);
+});
+
+test("17-criterion review table uses the same complete draft as the 119-cell public view", () => {
+  const repo = join(import.meta.dirname, "..");
+  for (const format of ["csv", "md"]) {
+    assert.equal(readFileSync(join(repo, "data/legal", `criteria-mapping.${format}`), "utf8"),
+      readFileSync(join(repo, "public/review-drafts", `criteria-mapping.${format}`), "utf8"));
+  }
+  const cells = loadSubmissionDocuments(repo).legal;
+  assert.equal(cells.length, 119);
+  assert.equal(new Set(cells.map((cell) => cell.criterionId)).size, 17);
+  assert.equal(new Set(cells.map((cell) => cell.id)).size, 119);
+  for (const code of ["KR", "JP", "CN", "EU", "GB", "US-CA", "SG"]) {
+    const country = cells.filter((cell) => cell.jurisdiction === code);
+    assert.equal(country.length, 17);
+    assert.ok(country.every((cell) => cell.status === "unreviewed" && cell.summary && cell.summary !== "미검토"));
+    if (["CN", "GB", "US-CA", "SG"].includes(code)) assert.ok(country.every((cell) => cell.sourceLinks.length > 0));
+  }
+  assert.ok(cells.filter((cell) => cell.jurisdiction === "JP").every((cell) => cell.translationLinks.every((link) => link.startsWith("./translations/"))));
+  const gdpr = readFileSync(join(repo, "public/review-drafts/gdpr.html"), "utf8");
+  for (const cell of cells.filter((cell) => cell.jurisdiction === "EU")) {
+    assert.ok(cell.translationLinks.length > 0);
+    for (const link of cell.translationLinks) {
+      assert.ok(link.startsWith("/review-drafts/gdpr.html#"));
+      assert.ok(gdpr.includes(`id="${link.split("#")[1]}"`));
+    }
+  }
+});
+
+test("packaged evidence paths and supplemental official sources retain only supported links", () => {
+  const fixtureRoot = mkdtempSync(join(tmpdir(), "legal-packaged-links-"));
+  try {
+    const dir = join(fixtureRoot, "data", "legal");
+    mkdirSync(dir, { recursive: true });
+    const fields = ["cell_id", "criterion_id", "korean_summary", "translation_links", "source_links", "evidence_kind"];
+    const values = ["scope--EU", "scope", "번역 초안", JSON.stringify([
+      "./gdpr.md#main-a2", "./reference/translations/appi.md#main-a2", "./reference/sources/pipa-index.md#pipa-a2",
+      "./reference/../../secret.md", "./gdpr.md#../secret", "https://example.invalid/translation"
+    ]), JSON.stringify(["https://example.invalid/source", "https://example.invalid/source", "javascript:alert(1)", "http://example.invalid/source"]), "official_guidance"];
+    writeFileSync(join(dir, "criteria-mapping.csv"), `${fields.join(",")}\n${values.map((v) => `"${v.replaceAll('"', '""')}"`).join(",")}\n`);
+    const cell = loadSubmissionDocuments(fixtureRoot).legal[0];
+    assert.deepEqual(cell.translationLinks, ["/review-drafts/gdpr.html#main-a2", "./translations/appi.md#main-a2", "./sources/pipa-index.md#pipa-a2"]);
+    assert.deepEqual(cell.sourceLinks, ["https://example.invalid/source"]);
+    assert.equal(cell.evidenceKind, "official_guidance");
+  } finally { rmSync(fixtureRoot, { recursive: true, force: true }); }
 });
 
 test("new official source files and every sample appear without changing the UI code", () => {

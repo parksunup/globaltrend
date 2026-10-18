@@ -1,0 +1,97 @@
+"""GDPR 원판 색인·비공개 부분 초안 구조 검사. 법률 의미·권리 검수 아님."""
+import argparse
+import collections
+import hashlib
+import json
+import re
+from pathlib import Path
+from tools.gdpr_index import extract, public_nodes
+from tools.gdpr_corrected import apply_correction
+
+BASE = Path(__file__).resolve().parent
+
+
+def check(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def validate(source=None, private_draft=None, consolidated=None, corrigendum=None):
+    index = json.loads((BASE / 'sources/gdpr-index.json').read_text())
+    nodes = index['nodes']
+    ids = [n['node_id'] for n in nodes]
+    check(len(ids) == len(set(ids)), '색인 ID 중복')
+    check([n['source_order'] for n in nodes] == list(range(len(nodes))), '색인 순서 불연속')
+    roots = set(index['root_ids'])
+    check(all(n['parent_id'] in set(ids) | roots for n in nodes), '색인 상위 항목 누락')
+    check(not index['source_body_in_repository'] and not index['translation_body_in_repository'], '공개 보류 상태 불일치')
+    forbidden = {'source_text', 'korean_text', 'korean_title'}
+    check(all(not forbidden.intersection(n) for n in nodes), '공개 색인에 본문 필드 포함')
+    check(dict(collections.Counter(n['tag'] for n in nodes)) == index['source_counts'], '원문 구조 수 불일치')
+    for tag, total in [('Article', 99), ('Recital', 173)]:
+        check([n['number'] for n in nodes if n['tag'] == tag] == list(map(str, range(1, total + 1))), tag + ' 번호/순서 누락')
+    check(all(re.fullmatch('[0-9a-f]{64}', n['source_sha256']) for n in nodes), '원문 해시 형식 오류')
+    markdown = (BASE / 'sources/gdpr-index.md').read_text()
+    check(re.findall(r'<a id="([^"]+)"></a>', markdown) == [n['node_id'] for n in nodes if n['tag'] == 'Article'], '색인 조문 앵커 불일치')
+    check(not (BASE / 'translations/gdpr.json').exists() and not (BASE / 'translations/gdpr.md').exists(), '공개 보류 번역 본문 존재')
+    if source:
+        raw = Path(source).read_bytes()
+        check(hashlib.sha256(raw).hexdigest() == index['source']['response_sha256'], '선정 원판 응답 해시 불일치')
+        observed = extract(source)
+        if index['source'].get('correction_sources'):
+            check(consolidated and corrigendum, '보정판 검사는 공식 통합본문·정오표 입력이 모두 필요')
+            for path, receipt in zip([consolidated, corrigendum], index['source']['correction_sources']):
+                check(hashlib.sha256(Path(path).read_bytes()).hexdigest() == receipt['sha256'], '보정 공식 응답 해시 불일치')
+            observed = apply_correction(observed, consolidated, corrigendum)
+        check(public_nodes(observed) == nodes, '선정 판본과 공개 구조·번호·위치·해시 불일치')
+    if private_draft:
+        path = Path(private_draft)
+        doc = json.loads(path.read_text())
+        provisions = doc['provisions']
+        check(public_nodes(provisions) == nodes, '비공개 초안의 고정 원문 메타데이터 변경')
+        check(all(hashlib.sha256((n['source_text'] or n['source_title']).encode()).hexdigest()
+                  == n['source_sha256'] for n in provisions), '비공개 원문 본문 해시 불일치')
+        check(doc['translation']['public_release_status'] == 'withheld', '번역 본문 공개 보류 상태 불일치')
+        check(doc['translation']['human_review_status'] == 'not_started'
+              and not doc['coverage']['semantic_completeness_verified'], '사람 의미 검수 오표시')
+        check(all(n['human_review_status'] == 'not_started' for n in provisions), '사람 미검수 상태 변경')
+        drafted = [n for n in provisions if n['translation_status'] == 'draft']
+        missing = [n['node_id'] for n in provisions if n['translation_status'] != 'draft']
+        complete = not missing
+        check(doc['translation']['complete'] == complete
+              and doc['translation']['status'] == ('draft' if complete else 'partial_draft'), '원판 작성 완료/부분 초안 상태 불일치')
+        check(dict(collections.Counter(n['tag'] for n in drafted)) == doc['coverage']['draft_counts'], '작성 단위 수 불일치')
+        check(doc['coverage']['source_counts'] == index['source_counts'], '비공개 원문 단위 수 불일치')
+        check(missing == doc['coverage']['missing_node_ids'], '미작성 목록 불일치')
+        check(all(n.get('korean_text') or n.get('korean_title') for n in drafted), '초안 내부 빈 번역')
+        progress = index['private_draft_progress']
+        for tag, count in [('Article', progress['main_articles']), ('Recital', progress['recitals'])]:
+            check([n['number'] for n in drafted if n['tag'] == tag] == list(map(str, range(1, count + 1))), '작성된 첫 구간 번호 불일치')
+        for article in [n for n in drafted if n['tag'] == 'Article']:
+            check(all(n['translation_status'] == 'draft' for n in provisions
+                      if n['node_id'].startswith(article['node_id'] + '-')), '작성 조문 내부 미번역')
+        check(doc['translation']['translated_main_articles'] == progress['main_articles']
+              and doc['translation']['translated_recitals'] == progress['recitals'], '문서 작성 수 불일치')
+        check(len(drafted) == progress['drafted_nodes'] and len(missing) == progress['missing_nodes'], '공개 진행률과 비공개 초안 불일치')
+        status = json.loads((BASE / 'sources/gdpr-draft-status.json').read_text())
+        check(status['nodes'] == [dict(node_id=n['node_id'], tag=n['tag'],
+                                      translation_status=n['translation_status'],
+                                      human_review_status=n['human_review_status']) for n in provisions], '공개 항목별 검수 목록 불일치')
+        check(status['missing_node_ids'] == missing and status['selected_original_draft_complete'] == complete
+              and not status['semantic_completeness_verified'] and status['public_release_status'] == 'withheld', '공개 검수 목록 완료/보류 상태 불일치')
+        private_md = path.with_suffix('.md').read_text()
+        check(re.findall(r'<a id="([^"]+)"></a>', private_md) == [n['node_id'] for n in drafted], '비공개 번역 앵커 누락·순서 오류')
+        check(all((n.get('korean_text') or n.get('korean_title')) in private_md for n in drafted), '비공개 JSON/Markdown 내용 불일치')
+    print(f'GDPR 구조 검사 통과: 원판 색인 {len(nodes)}노드·99조·173고려사항; '
+          f'기록된 초안 {index["private_draft_progress"]["main_articles"]}조/'
+          f'{index["private_draft_progress"]["recitals"]}고려사항. 공개 재배포·사람 의미 검수는 미확정.')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--source')
+    parser.add_argument('--private-draft')
+    parser.add_argument('--consolidated')
+    parser.add_argument('--corrigendum')
+    args = parser.parse_args()
+    validate(args.source, args.private_draft, args.consolidated, args.corrigendum)
