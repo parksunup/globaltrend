@@ -14,7 +14,7 @@
 | `/work/legal` | 법제 판본 DB 등록·승인·발행. 팀 계정과 새 마이그레이션 필요 |
 | `/work/legal/[id]` | 저장소가 나중에 바뀌어도 등록 당시 DB 판본의 번역·17개 셀 확인 |
 | `/public` | 새 공개 화면. Preview에는 미검수 표본임을 표시 |
-| `/public/search` | 표본 21건 검색·필터·상세 이동 |
+| `/public/search` | 보고서체로 전수 편집한 표본 21건 검색·필터·상세 이동 |
 | `/public/laws` | 7법제·17기준·119셀 비교와 전문 읽기 |
 | `/public/weekly` | Preview에서는 주간 예시 7건. 운영에서는 발행된 주간호 준비 안내 |
 | `/feedback` | 원래 법제/동향 브랜치의 의견과 이 통합 브랜치 의견을 선택해 조회 |
@@ -52,7 +52,9 @@ GDPR은 #15의 `data/legal/translations/gdpr.json`에는 없지만 `public/revie
 
 #32의 수집기와 `/work` 검수 연결을 포함합니다. 9개 출처의 활성·승인 스위치는 모두 꺼 두었습니다. 정기 실행도 기존 `SCHEDULE_ENABLED` 등 게이트를 유지하며 원격 값을 변경하지 않습니다. CI는 의도적인 보류(exit 2)를 정상적인 차단 결과로 확인하며 실제 수집 실패를 성공으로 바꾸지 않습니다.
 
-구독 내 Codex 편집기는 `docs/trend-draft-worker.md`의 작업 가져오기→정확한 원문 판본 확인→한국어 초안→RPC 제출 계약을 사용합니다. 이 PR은 별도 AI API나 새로운 예약 Codex 작업을 만들지 않습니다. 실제 정기 운영을 시작하려면 Actions 자격 증명, 출처별 승인/UUID, 무료 한도, Codex 실행 연결을 확인해야 합니다. 주간 예시와 실제 주간호의 자동 편집·발행은 구분합니다.
+구독 내 Codex 편집기는 `docs/trend-draft-worker.md`의 작업 가져오기→정확한 원문 판본 확인→한국어 초안→RPC 제출 계약을 사용합니다. 모든 동향은 `docs/trend-report-style.md`의 보고서체로 작성하며, RPC 제출 전 `node scripts/trend-report.mjs --check <파일>`을 실행합니다. 이 PR은 별도 AI API나 새로운 예약 Codex 작업을 만들지 않습니다. 실제 정기 운영을 시작하려면 Actions 자격 증명, 출처별 승인/UUID, 무료 한도, Codex 실행 연결을 확인해야 합니다. 주간 예시와 실제 주간호의 자동 편집·발행은 구분합니다.
+
+2026-10-18 전수 편집본: 원 조사 21건은 보존하고 `data/trends/editorial/report-drafts.{json,md}`에서 각 ID의 제목·한 문단 리드·항목별 본문을 재작성했습니다. 공개 Preview 검색·상세, 팀 검토, 기존 초안 가져오기 및 주간 예시호가 같은 편집본을 사용합니다. `validate:data`는 새 수집 표본에 대한 편집본 누락도 검사합니다. 단순 화면 재배열이나 예시 7건 한정이 아닙니다.
 
 ## 검증 명령
 

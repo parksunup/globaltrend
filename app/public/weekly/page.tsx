@@ -30,7 +30,7 @@ export default function WeeklyPage() {
           {example.issue.contents.map((item:WeeklyIssueItem)=><article className={styles.weeklyArticle} id={`weekly-${item.id}`} key={item.id}>
             <header><div><span className={styles.weeklyArticleNo}>{item.number}</span><h4>{item.title}</h4></div><span className={styles.weeklyCategory}>{item.category}</span></header>
             <p className={styles.weeklyLead}>{item.leadSummary}</p>
-            <div className={styles.weeklyPoints}>{item.bodyPoints.map((point:{label:string;text:string})=><p key={`${item.id}-${point.label}`}><strong>{point.label}</strong>{point.text}</p>)}</div>
+            <div className={styles.weeklyPoints}>{item.bodyPoints.map((point:{label:string;text:string},index:number)=><p key={`${item.id}-${index}`}><strong>{point.label}</strong>{point.text}</p>)}</div>
             {item.editorialNote?<aside><strong>편집자 해설</strong><p>{item.editorialNote}</p></aside>:null}
             <footer><span>출처 · {item.originalTitle} ({item.organization}, {item.date})</span><Link href={`/public/trends/${item.id}`}>상세 자료 보기 →</Link><a href={item.officialUrl} target="_blank" rel="noreferrer">원문 보기 ↗</a></footer>
           </article>)}

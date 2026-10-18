@@ -21,7 +21,7 @@ const trendReviewPrompt = `저는 동향 담당입니다. 기존 feat/trend-sour
 현재 PR Preview의 '수집 출처'와 '동향 표본' 두 화면에서 제출 내용을 확인하세요. 다음 공개 JSON 주소에서 내 브랜치에 저장된 피드백을 읽으세요. Supabase 계정이나 플러그인 권한은 필요하지 않습니다.
 https://globaltrend-git-feat-trend-source-contracts-pipc-fairy.vercel.app/api/feedback?branch=feat%2Ftrend-source-contracts
 응답에 다음 페이지가 있으면 마지막까지 읽고, 이전 커밋에 남긴 의견도 포함하세요. item_id와 commit_sha로 대상 자료를 확인하고, 이미 고쳐진 의견인지도 현재 파일과 대조하세요. 조회가 실패하면 오류를 알려 주고 읽었다고 하지 마세요.
-피드백을 공식 원문과 대조해 data/trends/source-configs/와 data/trends/fixtures/의 필요한 내용을 수정하세요. 확인하지 못한 사실은 추정하지 말고 검토 필요로 표시하세요. 이 검수 작업에서는 새 조사 기간이나 출처를 추가하지 마세요.
+피드백을 공식 원문과 대조해 data/trends/source-configs/와 data/trends/fixtures/의 필요한 내용을 수정하세요. docs/trend-report-style.md에 맞춰 data/trends/editorial/report-drafts.json의 대응 원고도 수정하고 node scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요. 확인하지 못한 사실은 검토 기록에 남기세요. 이 검수 작업에서는 새 조사 기간이나 출처를 추가하지 마세요.
 앱 화면, Supabase, 인증, 환경변수는 수정하지 마세요. 검사를 실행한 뒤 기존 브랜치와 PR에 결과를 반영하고, PR 설명이나 댓글에 수정 내용과 남은 확인 사항을 직접 적으세요.
 최신 Vercel Preview 링크를 실제로 확인해 알려 주세요. PR은 병합하지 마세요.`;
 const prPrompt = `작업 결과를 검토 가능한 PR로 만들어 주세요.\nPR 제목에는 작업 목적을 적고, 본문에는 변경 파일, 확인한 공식 URL,\n사람이 추가로 확인해야 하는 부분, 실행한 검증을 적으세요.\nmain 브랜치에는 직접 merge하지 마세요.`;
@@ -93,7 +93,7 @@ export default function GuidePage() {
           <h3>첫 작업 · EDPB·OECD·CURIA 출처 확인</h3>
           <pre>{trendSourcePrompt}</pre>
           <h3>둘째 작업 · 샘플 동향 자료</h3>
-          <pre>{trendSamplePrompt}</pre>
+          <pre>{trendSamplePrompt + '\n\n추가 필수 기준: docs/trend-report-style.md를 먼저 읽고 모든 동향을 보고서체로 작성하세요.\n한 문단 핵심 요약과 - (소제목) 설명 형식의 상세 본문을 나누세요.\n같은 자료 ID의 data/trends/editorial/report-drafts.json 편집본도 작성·수정하세요.\nnode scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요.\n검수 지시와 미확인 범위는 본문이 아닌 검토 기록에 남기세요.'}</pre>
           <h3>셋째 작업 · 수집 출처와 동향 표본 검수</h3>
           <pre>{trendReviewPrompt}</pre>
         </section>

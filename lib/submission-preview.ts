@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { listLegalTranslationEntries } from "./legal-translation-review.ts";
+import { loadTrendEditorial } from "./trend-editorial.ts";
 
 export type SubmissionItem = {
   id: string;
@@ -253,6 +254,7 @@ function sourceConfigItems(root: string): SubmissionItem[] {
 }
 
 function fixtureItems(root: string): SubmissionItem[] {
+  const editorial=loadTrendEditorial(root);
   return trendSourceIds(root, "fixtures").flatMap((source) => {
     const path = `data/trends/fixtures/${source}.json`;
     const data = readJson(root, path);
@@ -263,11 +265,13 @@ function fixtureItems(root: string): SubmissionItem[] {
     return rows.map((value, index) => {
       const item = record(value);
       const evidence = Array.isArray(item.evidence) ? item.evidence.map(record) : [];
+      const edited=editorial.get(label(item.record_id,''));
       return {
         id: `fixture-${source}-${label(item.record_id, String(index))}`, group: "trends" as const, kind: "동향 표본",
-        title: label(item.korean_title, label(item.original_title)), subtitle: label(item.original_title),
-        summary: label(item.summary_ko), status: label(item.review_status, "unreviewed"),
+        title: edited?.title_ko||label(item.korean_title, label(item.original_title)), subtitle: label(item.original_title),
+        summary: edited?.summary_ko||label(item.summary_ko), status: label(item.review_status, "unreviewed"),
         fields: [
+          ...(edited?[{label:'주요 내용',value:edited.details_ko}]:[]),
           { label: "기관", value: label(item.organization) },
           { label: "게시일", value: label(item.source_published_date) },
           { label: "관할권", value: label(item.jurisdictions) },
@@ -276,7 +280,7 @@ function fixtureItems(root: string): SubmissionItem[] {
           { label: "검토 메모", value: label(item.review_notes) },
         ],
         links: [...officialLink(item.official_url), ...evidence.flatMap((row) => officialLink(row.url, "요약 근거"))],
-        files: presentFiles(root, [path, `data/trends/fixtures/${source}.md`, "data/trends/fixtures/review-notes.md"]),
+        files: presentFiles(root, ["data/trends/editorial/report-drafts.md",path, `data/trends/fixtures/${source}.md`, "data/trends/fixtures/review-notes.md"]),
       };
     });
   });

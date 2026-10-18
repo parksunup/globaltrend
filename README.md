@@ -244,3 +244,9 @@ pnpm supabase:stop
 ## 수집기 구현 기록과 현재 통합 상태
 
 #32의 수집 코드·원문 판본·초안 작업 임대/제출·`/work` 검수 대기함을 포함합니다. 조사 자료 기준은 #16 `c42db8b`이며 모든 출처와 정기 실행 스위치는 비활성입니다. 과거 운영 시험·비용 확인의 범위는 [클라우드 수집 상태 문서](./docs/trend-collector-cloud.md), 현재 실행 준비 조건은 [통합 안내](./docs/integration/README.md)를 확인해 주세요. 코드를 통합했다는 사실이 정기 운영이나 main 병합 완료를 뜻하지 않습니다.
+
+## 동향 보고서 문체 · 2026-10-18
+
+수집된 9출처·21건 전체의 보고서 편집본은 `data/trends/editorial/report-drafts.{json,md}`에 있습니다. 검색·상세·팀 검토·주간 예시호와 기존 초안 가져오기가 같은 편집본을 읽습니다. 원제·공식 URL·날짜·근거·보류 사유는 기존 조사 기록에 보존합니다.
+
+앞으로 모든 동향 작성 시 [보고서 작성 기준](docs/trend-report-style.md)을 먼저 읽습니다. 수집기는 원문을 보존하고 Codex가 한국어 보고서체로 작성합니다. 새 표본 추가 시 보고서 편집본을 함께 추가하고 `node scripts/trend-report.mjs --render`, `npm run validate:data`를 실행합니다. DB 초안 제출 전에는 `node scripts/trend-report.mjs --check <파일>`을 실행합니다. 형식 통과가 사실 검수나 발행을 뜻하지 않습니다.

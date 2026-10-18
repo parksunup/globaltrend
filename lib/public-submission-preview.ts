@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { PublishedStory } from "./published-trends";
 import { jurisdictionName } from "./jurisdictions.ts";
+import { loadTrendEditorial } from "./trend-editorial.ts";
 
 const kindNames: Record<string, string> = {
   official_news: "기관 소식", official_advisory: "기관 안내", press_release: "보도자료",
@@ -35,6 +36,7 @@ function sourceIds(root: string, directory: "fixtures" | "source-configs"): stri
 
 /** Submitted fixtures are displayed only on the isolated integration Preview. */
 export function loadSubmittedStories(root = process.cwd()): PublishedStory[] {
+  const editorial=loadTrendEditorial(root);
   const seen = new Set<string>();
   return sourceIds(root, "fixtures").flatMap((source): PublishedStory[] => {
     const data = json(root, `data/trends/fixtures/${source}.json`);
@@ -54,10 +56,11 @@ export function loadSubmittedStories(root = process.cwd()): PublishedStory[] {
       const keyPoints = Array.isArray(item.key_points_ko)
         ? item.key_points_ko.map((point) => value(row(point).text)).filter(Boolean).join("\n\n")
         : "";
+      const edited=editorial.get(recordId);
       return [{
         id: recordId, country, jurisdictions: countries, region: countries.map(jurisdictionName).join(" · ") || jurisdictionName(country),
-        institution: source.toUpperCase(), title, originalTitle: value(item.original_title),
-        summary, details: keyPoints, kind: kindNames[value(item.document_type)] || value(item.document_type) || "공식 자료",
+        institution: source.toUpperCase(), title:edited?.title_ko||title, originalTitle: value(item.original_title),
+        summary:edited?.summary_ko||summary, details:edited?.details_ko||value(item.details_ko)||keyPoints, kind: kindNames[value(item.document_type)] || value(item.document_type) || "공식 자료",
         tags: strings(item.topic_tags), date: date.replaceAll("-", "."),
         officialUrl,
       }];

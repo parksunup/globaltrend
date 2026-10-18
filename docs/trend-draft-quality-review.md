@@ -1,5 +1,7 @@
 # 한국어 초안 품질 지침의 근거와 검토 기록
 
+현재 문체 기준은 2026-10-18의 [보고서 작성 기준](trend-report-style.md)입니다. 아래는 원 조사와 피드백 대조 이력입니다. 현재 저장소의 9출처·21건 전체를 `data/trends/editorial/report-drafts.{json,md}`에 보고서체로 재편집했고, 제목·리드·상세 본문을 검색·상세·팀 검토·주간 예시호에 연결했습니다. 이후 작성에도 같은 지침과 제출 전 검사를 적용합니다.
+
 ## 전체 확인 범위와 상태
 
 2026-10-13에 PR [#16](https://github.com/parksunup/globaltrend/pull/16)의 댓글, 최신 참조 `refs/remotes/origin/pr16-review`의 `c42db8bd73c9002806341064326ab23331021922`, 공개 Preview 피드백을 읽었습니다. 기존 브랜치나 worktree를 변경하지 않고 `git show`로 PR 자료를 확인했습니다. 후속 대조에서는 9기관의 fixture Markdown·JSON 전체 21건, 주간 예시 Markdown·JSON 7건과 제외 2건, source-config Markdown·JSON 9쌍, `data/trends/README.md`, 두 `review-notes.md`, PR 댓글 10개 및 자료 수정 이력을 함께 참고했습니다. 공개 피드백 4건은 이 전체 근거 중 한 층입니다. 담당자가 검토·수정한 산출물의 품질 기준을 참고하는 것과 명시적 승인 상태를 구분하며, `unreviewed`를 참고 범위를 줄이는 이유로 사용하지 않습니다.

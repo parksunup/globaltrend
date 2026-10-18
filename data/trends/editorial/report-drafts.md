@@ -1,0 +1,333 @@
+# 수집 동향 전체 보고서 편집본
+
+총 21건 · 사람 검수 전 초안 · 문체 기준 privacy-report-ko-2026-10
+
+수록 순서는 출처별 정리이며 실제 주간호 선정·발행 순서가 아닙니다. 원문·날짜·확인 범위·근거·보류 사유는 fixtures의 원 조사 기록을 함께 확인합니다.
+
+## 1. 프랑스 CNIL, 개인정보 삭제권 침해로 EXTIA에 30만 유로 과징금 부과
+
+자료 ID: `cnil-extia-2026`
+
+**프랑스 개인정보 감독기관(CNIL), 전 직원과 채용 지원자의 개인정보 삭제 요청 및 처리 결과 통지 의무 위반을 이유로 EXTIA에 30만 유로 과징금 부과**
+
+- (조사 배경) 정보기술·엔지니어링 컨설턴트 채용 기업 EXTIA의 전 직원과 지원자가 2024년 삭제권 관련 민원을 제기했으며, CNIL은 삭제권 공동 집행 활동과 연계해 2025년 4월 점검 실시
+
+- (요청 처리) CNIL에 따르면 2024년 삭제 요청 265건 중 4분의 3 이상이 미처리되거나 충분히 처리되지 않았으며, 제재 사유로 GDPR 제12조·제17조 관련 미처리 요청 12건을 별도 제시
+
+- (결과 통지) 처리 결과를 통지받지 못한 사람 166명과 지연 통지를 받은 사람 27명을 제시하고, 지원자 정보가 자동 삭제된 경우에도 처리 결과 통지 의무가 유지된다고 설명
+
+- (시정·제재) 절차 진행 중 개인정보 삭제와 결과 통지 등 시정 조치가 이뤄졌으며, 과징금 산정에는 권리 보장 원칙, 대상 인원 및 과거 두 차례 의무 안내 등을 고려
+
+출처: [Non-respect des droits des personnes : sanction de 300 000 euros à l’encontre de la société EXTIA](https://www.cnil.fr/fr/sanction-non-respect-droits-personnes-extia) · Commission nationale de l’informatique et des libertés (CNIL) · 2026-09-09
+
+## 2. 프랑스 CNIL, 환자정보 보안·침해 통지 위반으로 루아르 민간병원 제재
+
+자료 ID: `cnil-hopital-loire-2026`
+
+**프랑스 개인정보 감독기관(CNIL), 환자정보의 접근 통제와 보안조치 및 개인정보 침해 통지 의무 위반으로 루아르 민간병원에 50만 유로 과징금 부과**
+
+- (보안조치) CNIL은 환자정보 처리와 관련해 외부 접속 인증, 접근 권한 제한 및 의심 활동 탐지에 관한 문제를 설명
+
+- (침해 통지) 개인정보 침해 통지와 관련해 환자가 지정한 연락 대상자에 대한 통지 문제를 함께 검토
+
+- (제재 결과) CNIL은 개인정보 보안과 침해 통지 의무 위반에 대해 50만 유로 과징금 부과 사실을 발표
+
+출처: [Violation de données en matière de santé : sanction de 500 000 euros à l’encontre de l’HÔPITAL PRIVÉ DE LA LOIRE](https://www.cnil.fr/fr/sanction-hopital-prive-loire) · Commission nationale de l’informatique et des libertés (CNIL) · 2026-09-03
+
+## 3. 프랑스 CNIL, 전자 송장 도입에 따른 개인정보 처리 기준 안내
+
+자료 ID: `cnil-electronic-invoicing-2026`
+
+**프랑스 개인정보 감독기관(CNIL), 전자 송장에 포함되는 자연인의 개인정보와 민감정보를 구분하고, 데이터 최소화·처리 주체별 책임·보유기간·보안조치에 관한 기준 안내**
+
+- (도입 일정) CNIL은 2026년 9월부터 모든 기업의 전자 송장 수신 및 대기업·중견기업의 발행 의무가 적용되고, 2027년 9월부터 중소기업을 포함한 모든 기업으로 발행·수신이 확대된다고 안내
+
+- (개인정보 범위) 법인 자체의 정보와 직원·개인사업자 등 자연인 정보를 구분하며, 담당자 이름·개인을 식별할 수 있는 업무용 이메일·자택 주소 등은 개인정보에 해당할 수 있다고 설명
+
+- (최소화·민감정보) 자유 기재 항목에 고객 이름 대신 사건·업무 번호를 사용하는 등 개인정보 최소화를 권고하고, 건강정보 등 특별 범주 정보는 엄격한 예외 요건과 직업상 비밀 보호를 고려하도록 안내
+
+- (역할·책임) 처리 목적을 정하는 발행 기업은 원칙적으로 처리책임자, 지시에 따라 처리하는 플랫폼은 수탁처리자로 설명하며, 계약·보안·비밀유지·활동 기록 관리를 요구. 플랫폼이 자체 목적으로 재이용하는 경우에는 역할 판단이 달라질 수 있다고 설명
+
+- (보유·재이용) 전자 송장에도 회계 문서의 법정 10년 보유기간이 적용된다고 안내하고, 수탁자의 자체 재이용에는 최초 목적과의 양립성 및 처리책임자의 서면 허가가 필요하다고 설명
+
+- (보안·인증) 이용자 신원 확인, 개인별 계정과 권한 통제 등을 강조하며, ISO 27001 등 인증 취득과 별개로 처리 상황에 따른 추가 보안조치를 평가하도록 안내
+
+출처: [Facturation électronique : quels enjeux pour la protection des données personnelles ?](https://www.cnil.fr/fr/facturation-electronique-quels-enjeux) · Commission nationale de l’informatique et des libertés (CNIL) · 2026-09-10
+
+## 4. EU 사법재판소, WhatsApp의 EDPB 결정 취소소송 적법성 인정
+
+자료 ID: `curia-c97-23p`
+
+**EU 사법재판소(CJEU), WhatsApp Ireland가 EDPB의 구속력 있는 결정을 다투는 소송을 제기할 수 있다고 판단하고, 일반재판소의 각하 결정을 취소해 본안 심리를 위해 환송**
+
+- (소송 대상) CURIA 보도자료에 따르면 사법재판소는 EDPB의 결정이 취소소송으로 다툴 수 있는 행위이며 WhatsApp Ireland에 직접 관련된다고 판단
+
+- (판단 결과) 본안 판단 없이 소송을 끝낸 일반재판소의 각하 결정을 취소하고, 사건을 다시 심리하도록 일반재판소에 환송
+
+- (절차상 의미) 이번 판단은 소송을 심리할 수 있는지에 관한 것으로, 문제 된 개인정보 처리의 GDPR 위반 여부에 대한 본안 판단은 후속 절차의 대상
+
+출처: [GDPR: the action brought by WhatsApp Ireland against Binding Decision 1/2021 of the European Data Protection Board is admissible](https://curia.europa.eu/site/upload/docs/application/pdf/2026-02/cp260011en.pdf) · Court of Justice of the European Union · 2026-02-10
+
+## 5. EU 사법재판소, 손해배상 청구만을 목적으로 한 열람 요구의 남용 판단 기준 제시
+
+자료 ID: `curia-c526-24`
+
+**EU 사법재판소(CJEU), GDPR 위반에 따른 손해배상 청구 조건을 인위적으로 만들려는 목적이 입증되는 경우 최초 개인정보 열람 요구도 남용적 요구로 판단될 수 있다고 설명**
+
+- (판단 쟁점) CURIA 보도자료는 최초로 제기한 개인정보 열람 요구라도 구체적 사정에 따라 과도하거나 남용적일 수 있다고 설명
+
+- (입증 요건) 개인정보처리자가 손해배상 청구 조건을 인위적으로 만들려는 의도를 입증하는 경우를 전제로 제시
+
+- (후속 절차) 실제 분쟁의 구체적 사정과 해결은 독일 국내법원이 판단하며, 열람 요구의 거부 여부는 해당 조건과 입증에 따라 개별적으로 검토
+
+출처: [A request for access to one’s own personal data may be considered abusive and refused if it is made for the sole purpose of subsequently claiming compensation for an alleged infringement of the GDPR](https://curia.europa.eu/site/upload/docs/application/pdf/2026-03/cp260038en.pdf) · Court of Justice of the European Union · 2026-03-19
+
+## 6. 아일랜드 DPC, CHI의 종이 아동 건강기록 관리에 시정명령
+
+자료 ID: `dpc-chi-tallaght-2026`
+
+**아일랜드 개인정보 감독기관(DPC), CHI의 특정 시설에서 종이 아동 건강기록과 기밀 폐기물 관리에 관한 GDPR 위반을 확인하고 견책 및 시정명령 부과**
+
+- (대상 기록) DPC는 CHI의 특정 시설에서 보관하는 종이 아동 건강기록과 기밀 폐기물의 물리적 보안·관리 문제를 검토
+
+- (감독 조치) 관련 GDPR 위반을 확인하고 견책과 시정명령을 부과했다고 발표
+
+- (개선 요구) 관련 개인정보 영향평가를 완성하고 필요한 보호조치를 이행하도록 요구
+
+출처: [Data Protection Commission Publishes Final Decision Following Inquiry into the Children’s Health Ireland (‘CHI’)](https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi) · Data Protection Commission (Ireland) · 2026-10-01
+
+## 7. 아일랜드 DPC, Google 위치정보 처리 위반으로 4억300만 유로 과징금 부과
+
+자료 ID: `dpc-google-location-2026`
+
+**아일랜드 개인정보 감독기관(DPC), Google의 세 위치정보 기능에 관한 GDPR 위반을 확인하고 총 4억300만 유로 과징금 및 6개월 내 처리 개선 명령 발표**
+
+- (조사 대상) DPC는 Google의 세 위치정보 기능에서 이뤄지는 개인정보 처리를 조사
+
+- (위반 판단) 개인정보 처리의 적법성·공정성, 책임성, 투명성 및 보유기간 관련 GDPR 위반을 확인했다고 설명
+
+- (시정·제재) 총 4억300만 유로 과징금을 부과하고 6개월 내 개인정보 처리를 개선하도록 명령
+
+출처: [Data Protection Commission fines Google €403 million following Inquiry into Google’s processing of location data](https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location) · Data Protection Commission (Ireland) · 2026-09-21
+
+## 8. EU EDPB, 과징금 부과 판단 지침 및 DSA–GDPR 최종 지침 채택
+
+자료 ID: `edpb-2026-09-21-1`
+
+**유럽데이터보호이사회(EDPB), GDPR 과징금 부과 여부에 관한 지침을 채택해 공개 의견수렴을 진행하고, 디지털서비스법(DSA)과 GDPR의 상호작용에 관한 최종 지침을 별도 채택**
+
+- (상태·대상) 과징금 부과 여부와 다른 시정권한의 관계를 다루는 지침에 대해 2026년 11월 13일까지 의견을 모집하며, DSA–GDPR 상호작용 지침은 의견수렴을 거친 최종본으로 채택
+
+- (판단 절차) 과징금 부과 근거, 의무를 부담하는 책임 주체, 고의·과실, 가중·감경 요소, 제재의 실효성·비례성·억지력을 차례로 검토하는 5단계 방법론을 제시. 과징금 액수의 산정 방법은 별도 영역으로 구분
+
+- (경미한 위반) 일반적으로 과징금 대신 견책을 활용할 수 있다고 설명하며, 경미하지 않은 위반에는 과징금 부과의 강한 추정이 적용된다고 안내. 마지막 단계에서는 개별 사건의 사정에 따른 조정 가능성을 검토
+
+- (시정 수단) 경고·견책·명령·처리 제한 또는 금지·인증 철회 등 시정권한과의 관계를 설명하고 실무 예시 14개를 제시
+
+- (DSA와 GDPR) 중개서비스 제공자의 개인정보 처리 등 두 법률이 함께 적용되는 영역에서 일관된 해석과 적용을 지원
+
+출처: [EDPB harmonises fining methodology and adopts final DSA-GDPR guidelines](https://www.edpb.europa.eu/news/edpb-harmonises-fining-methodology-and-adopts-final-dsa-gdpr-guidelines_en) · European Data Protection Board · 2026-09-21
+
+## 9. EU EDPB, 분야별 규제기관 간 정보 공유의 법적 근거 마련 촉구
+
+자료 ID: `edpb-2026-07-17-2`
+
+**유럽데이터보호이사회(EDPB), 분야별 규제기관이 집행 관련 정보를 공유할 수 있도록 EU 집행위원회에 법적 근거 제안을 요청하고, 감독기구 간 자원 공유와 공동 집행 협력 강화 방안 논의**
+
+- (논의 배경) EDPB는 2026년 7월 16~17일 더블린 회의에서 서로 다른 분야의 규제기관이 협력할 법적 기반의 필요성을 제기
+
+- (공유 범위) 기관별 집행 업무에 관련된 정보와 비밀정보를 교환할 수 있도록 EU 집행위원회에 법적 근거 마련을 요청
+
+- (집행 여건) AI 이용 증가 등으로 민원 수와 복잡성이 늘면서 감독기구의 자원 부담이 커졌다고 설명하고, 다수에게 영향을 미치는 사건 등에 대한 실무적·입법적 대응을 논의
+
+- (협력 방식) 민원 접수 기관이 수석감독기구에 자원을 제공하는 방안, 공동 작업 확대 및 집행 절차와 국가별 관행에 관한 워크숍을 논의
+
+출처: [EDPB calls for legal basis for cross-regulatory information sharing](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en) · European Data Protection Board · 2026-07-17
+
+## 10. EU EDPB, 벨기에 감독기구에 NOYB 쿠키 배너 민원 본안 심사 지시
+
+자료 ID: `edpb-2026-07-14-3`
+
+**유럽데이터보호이사회(EDPB), 벨기에 VRT의 쿠키 배너에 관한 NOYB 민원을 절차상 사유로 기각하지 말고 본안 심사하도록 벨기에 개인정보 감독기구에 지시**
+
+- (민원 대상) 벨기에 VRT의 쿠키 배너와 관련해 NOYB가 제기한 민원의 처리 절차를 검토
+
+- (판단 이유) EDPB는 권리 남용을 입증할 요소가 확인되지 않았다고 판단했다고 설명
+
+- (후속 조치) 벨기에 감독기구가 민원의 본안을 심사하도록 지시했으며, 쿠키 배너의 GDPR 위반 여부는 본안 심사에서 판단할 대상
+
+출처: [EDPB requires Belgian DPA to handle the merits of NOYB cookie banner complaint](https://www.edpb.europa.eu/news/edpb-requires-belgian-dpa-to-handle-the-merits-of-noyb-cookie-banner-complaint_en) · European Data Protection Board · 2026-07-14
+
+## 11. EU EDPB, 익명화·AI 웹 스크래핑 지침 의견수렴 및 블록체인 최종 지침 채택
+
+자료 ID: `edpb-2026-07-08-4`
+
+**유럽데이터보호이사회(EDPB), 익명화와 생성형 AI 목적 웹 스크래핑에 관한 지침을 공개 의견수렴에 부치고, 블록체인 개인정보 처리 지침을 최종본으로 채택**
+
+- (지침 단계) 익명화·생성형 AI 웹 스크래핑 지침은 2026년 10월 30일까지 의견수렴을 진행하며, 블록체인 지침은 의견수렴을 마친 최종본으로 채택
+
+- (익명성 판단) 데이터가 개인과 관련되는지를 내용·목적·효과에 따라 판단하고, 관련 주체의 관점과 객관적 요소를 토대로 합리적으로 이용할 수 있는 식별 수단을 고려하도록 설명
+
+- (평가 방법) 주체별 식별 능력 차이를 고려하는 맥락적 접근과 이를 고려하지 않는 단순화 접근을 제시. 개별 기록 분리·연결·추론의 세 기준을 충족하면 익명으로 볼 수 있으며, 충족하지 못한 경우 추가 분석이 필요하다고 안내
+
+- (웹 수집) 개인정보의 수집·저장·조직·검색에 GDPR이 적용된다고 설명하고, 목적 제한·투명성·정확성·최소화와 함께 신뢰할 수 있는 출처, 수집 시점 기록 및 학습 전 데이터 검증을 강조
+
+- (민감정보) 특별 범주 정보의 처리에는 GDPR 제6조의 처리 근거와 제9조 제2항의 예외가 함께 필요하며, 웹 수집에 대한 제9조의 일반적인 면제는 없다고 설명
+
+- (블록체인) 구조별 개인정보 처리 영향을 다루는 최종 지침과 함께 의견수렴 결과 보고서 및 변경 표시본을 공개
+
+출처: [EDPB sheds light on anonymisation and web scraping for generative AI and adopts final version of guidelines on blockchain](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en) · European Data Protection Board · 2026-07-08
+
+## 12. EU EDPB·AMLA, 금융범죄 대응 정보 공유에 관한 공동 지침 개발 추진
+
+자료 ID: `edpb-2026-07-01-5`
+
+**유럽데이터보호이사회(EDPB)와 자금세탁방지기구(AMLA), 금융범죄 대응을 위한 정보 공유와 개인정보 보호장치를 함께 다루는 공동 지침 개발 계획 발표**
+
+- (추진 배경) 금융범죄 대응을 위한 협력 관계에서 정보 공유와 개인정보 보호 요건을 함께 설명하는 공동 지침을 개발할 계획
+
+- (법적 접점) 자금세탁방지 규정 제75조에 따른 적용 대상 기업·전문가 간 및 공공기관과의 정보 공유 가능성은 정해진 한계 안에서 2027년 7월 10일부터 적용될 예정이라고 설명
+
+- (지침 목적) 기업, 감독기구, 금융정보분석기구 및 개인정보 감독기구가 협력 관계를 설계할 때 정보 공유와 보호장치를 함께 고려하도록 실무적 명확성을 제공할 계획
+
+- (향후 절차) 이해관계자의 초기 의견을 수렴하는 행사를 계획하고, 2027년 상반기에 지침 초안의 공개 의견수렴을 추진한다고 발표
+
+출처: [EDPB and AMLA to develop Joint Guidelines on partnerships for information sharing](https://www.edpb.europa.eu/news/edpb-and-amla-to-develop-joint-guidelines-on-partnerships-for-information-sharing_en) · European Data Protection Board · Anti-Money Laundering Authority · 2026-07-01
+
+## 13. 미국 FTC, AI 음성 광고 서비스 기만 혐의에 관한 합의 명령 최종 승인
+
+자료 ID: `ftc-cox-active-listening-2026`
+
+**미국 연방거래위원회(FTC), Cox Media Group 등 세 업체의 음성정보 기반 AI 광고 서비스에 관한 기만 혐의를 다루는 합의 명령을 최종 승인하고 총 93만 달러 지급 및 허위 표시 금지 조치 발표**
+
+- (사건 배경) FTC는 업체들이 소비자 대화에서 수집한 음성 데이터로 지역 광고를 표적화할 수 있다고 고객에게 허위 주장했다는 혐의를 제기
+
+- (금지 사항) 합의 명령은 광고 서비스의 기능, 음성정보의 수집·이용·동의 및 지역 표적화 능력에 관한 허위 표시를 금지
+
+- (합의 결과) 의견수렴을 거쳐 합의 명령을 최종 승인했으며 총 93만 달러 지급을 발표
+
+출처: [FTC Finalizes Orders with Cox Media Group, Two Other Firms Settling Charges They Deceived Customers About “Active Listening” AI-Powered Marketing Service](https://www.ftc.gov/news-events/news/press-releases/2026/08/ftc-finalizes-orders-cox-media-group-two-other-firms-settling-charges-they-deceived-customers-about) · Federal Trade Commission (United States) · 2026-08-27
+
+## 14. 미국 FTC, Illuminate 학생정보 보안 사건의 수정 합의 명령 최종 승인
+
+자료 ID: `ftc-illuminate-student-data-2026`
+
+**미국 연방거래위원회(FTC), Illuminate의 학생 개인정보 보안 실패 혐의에 관한 수정 합의 명령을 최종 승인하고 불필요한 정보 삭제·수집 및 보유 제한·보안 프로그램 수립 등을 요구**
+
+- (제기된 혐의) FTC는 소장에서 학생 1,010만 명의 정보에 영향을 미친 유출과 개인정보 보안 실패에 관한 혐의를 제시했다고 설명
+
+- (정보 최소화) 요청받은 제품·서비스 제공에 필요하지 않은 정보를 삭제하고 불필요한 수집·처리·보유를 제한하도록 요구
+
+- (관리체계) 공개 보유 일정과 포괄적인 정보보안 프로그램을 마련하도록 하는 수정 합의 명령을 최종 승인
+
+출처: [FTC Gives Final Approval to Order Against Illuminate Settling Allegations It Failed to Secure Students’ Personal Data](https://www.ftc.gov/news-events/news/press-releases/2026/06/ftc-gives-final-approval-order-against-illuminate-settling-allegations-it-failed-secure-students) · Federal Trade Commission (United States) · 2026-06-05
+
+## 15. 영국 ICO, 기초모델 개발사 보호조치 개선 현황 공개 및 에이전트 AI 의견 모집
+
+자료 ID: `ico-foundation-agentic-ai-2026`
+
+**영국 정보위원회(ICO), 주요 기초모델 개발사 10곳의 개인정보 보호조치 개선·개선 약속 현황을 공개하고, 에이전트 AI의 개인정보 보호 위험에 관한 의견 모집 개시**
+
+- (감독 결과) ICO는 영국에서 활동하는 주요 기초모델 개발사 10곳이 보호조치를 변경했거나 변경을 약속했다고 발표하고, 약속 이행을 계속 점검할 방침
+
+- (개선 분야) 투명성 정보의 명확화, 정보주체 권리 행사 수단 및 보호장치 평가 강화를 제시하고, 특별 범주 데이터의 적법한 이용과 모델 자체의 개인정보 포함 가능성을 주요 쟁점으로 소개
+
+- (에이전트 위험) 도구·웹사이트를 자율적으로 이용하는 AI에서는 학습 단계뿐 아니라 배포 후 행동에 따른 보호 문제도 발생한다고 설명. 보호 우회·비인가 채널·외부 시스템 접근에 관해 보고된 사례와 확인 절차를 소개
+
+- (의견 모집) 개발·배포 사업자와 전문가에게 보안·투명성·책임성·자동화된 의사결정·공정성·적법한 데이터 이용에 관한 근거를 요청하고, 제출 기한을 2026년 11월 20일로 안내
+
+- (후속 활용) 수집한 의견을 향후 지침 및 AI·자동화된 의사결정 관련 법정 실무규범 개발에 활용할 계획이며, 소비자용 AI 서비스의 개인화도 연구와 기업 협의 대상으로 제시
+
+출처: [ICO secures changes from leading AI developers as scrutiny extends to AI agents](https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/) · Information Commission’s Office (ICO) · 2026-10-08
+
+## 16. 영국 ICO, TikTok의 아동 개인정보 과징금·정보요구 통지 불복 철회 발표
+
+자료 ID: `ico-tiktok-appeals-2026`
+
+**영국 정보위원회(ICO), TikTok이 2023년 부과된 1,270만 파운드 과징금에 대한 불복을 철회하고 납부에 동의했으며, 별도 추천시스템 조사의 정보요구 통지에 대한 불복도 철회했다고 발표**
+
+- (기존 과징금) 아동 개인정보 처리와 관련해 2023년 부과된 1,270만 파운드 과징금에 대해 TikTok이 불복을 철회하고 납부에 동의했다고 설명
+
+- (별도 조사) TikTok 추천시스템 조사에 필요한 정보요구 통지에 대한 불복도 철회
+
+- (후속 절차) ICO는 정보요구 통지 관련 불복 철회에 따라 별도 추천시스템 조사를 진행할 수 있게 됐다고 설명
+
+출처: [TikTok withdraws two appeals in children’s privacy action and accepts £12.7m fine](https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/) · Information Commissioner’s Office (ICO) · 2026-09-24
+
+## 17. OECD, 신경데이터 생애주기별 거버넌스 과제 분석 보고서 소개
+
+자료 ID: `oecd-neurodata-governance`
+
+**경제협력개발기구(OECD), 신경데이터의 수집·변환·이용 과정에 관한 정책 환경과 기업 관행을 분석하고, 사람 중심의 근거 기반 거버넌스 접근 필요성을 제시하는 보고서 소개**
+
+- (분석 배경) 공식 초록은 신경기술이 임상·연구·소비자 영역으로 확장되고 있으며, 디지털·임상·사업 환경에서 생성되는 신경데이터가 개인에게 민감한 정보일 수 있다고 설명
+
+- (정책 과제) 중첩된 거버넌스 체계가 준수 부담과 감독 불균형을 유발하고, 혁신을 저해하거나 고위험 이용에 대한 감독 공백을 낳을 수 있다고 지적
+
+- (분석 범위) 데이터 수집·변환·이용의 생애주기를 따라 정책 환경과 기업 관행을 살펴보는 보고서로 소개
+
+- (정책 방향) 기술 변화에 적응하면서 혁신·성장·공익과 조화를 이루는 사람 중심의 근거 기반 접근을 강조
+
+출처: [Neurodata governance](https://www.oecd.org/en/publications/neurodata-governance_0ba61a20-en.html) · Organisation for Economic Co-operation and Development · 2026-10-06
+
+## 18. OECD, 개인정보 보호 강화 기술을 활용한 AI 모델 공동 개발·공유 방안 소개
+
+자료 ID: `oecd-pet-ai-sharing`
+
+**경제협력개발기구(OECD), 개인정보 보호 강화 기술(PETs)을 활용한 입력 데이터의 보호와 AI 모델의 기밀 공동 개발·공유 방안을 설명하고, 효용·효율·사용성 간 균형을 주요 과제로 제시**
+
+- (입력 데이터 보호) 공식 초록은 입력 데이터를 기밀하게 최소한으로 이용해 모델 성능을 높이는 유형을 설명하고, 신뢰실행환경·연합학습·안전한 다자간 연산을 예시로 제시
+
+- (모델 보호) 모델 자체를 기밀하게 공동 개발·공유하는 유형에는 차등 프라이버시·신뢰실행환경·동형암호 등을 제시
+
+- (효과·한계) PETs가 추가 데이터 수집 필요를 줄이고 데이터 공유 협력을 지원할 수 있으며, 기술의 조합으로 개별 한계를 보완할 수 있다고 설명. 효용·효율·사용성의 균형은 지속적인 과제로 제시
+
+- (정책 수단) 정부와 규제기관의 지침 마련, 규제 샌드박스 및 연구개발 지원을 통한 기술 도입 촉진을 제안
+
+출처: [Sharing trustworthy AI models with privacy‑enhancing technologies](https://www.oecd.org/en/publications/sharing-trustworthy-ai-models-with-privacy-enhancing-technologies_a266160b-en.html) · Organisation for Economic Co-operation and Development · 2025-06-17
+
+## 19. 싱가포르 PDPC·CSA, 민간 조직의 NRIC 번호 인증 사용 중단 안내
+
+자료 ID: `pdpc-nric-authentication-2025`
+
+**싱가포르 개인정보보호위원회(PDPC)와 사이버보안청(CSA), 민간 조직이 NRIC 번호를 개인 인증 수단으로 사용하는 관행을 중단하도록 공동 안내**
+
+- (안내 대상) 민간 부문 조직이 NRIC 번호를 개인 인증에 사용하는 관행을 대상으로 공동 안내
+
+- (연결 자료) 공지는 2025년 6월 26일 MDDI 발표 및 공동 안내문으로 연결되며, 구체적인 후속 설명은 해당 연결 자료에서 제공
+
+출처: [Joint Advisory Against Using NRIC Numbers for Authentication by PDPC and CSA](https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa) · Personal Data Protection Commission (Singapore) · 2025-06-26
+
+## 20. 일본 PPC, 대규모 개인정보 유출 사례에 따른 안전관리 대응 촉구
+
+자료 ID: `ppc-large-data-leaks-2026`
+
+**일본 개인정보보호위원회(PPC), 외부 불법 접근에 따른 대규모 유출 사례를 바탕으로 사업자에게 위험에 맞는 안전관리 조치와 불필요한 개인정보 보유 관행의 재점검 촉구**
+
+- (대상 사업자) 대량 개인정보 보유, 이용자의 사업자 선택이 어려운 서비스 및 민감정보·재산 피해·사기 위험 관련 정보를 취급하는 사업자의 대응을 촉구
+
+- (의무·예시) 안전관리 지침에서 반드시 취해야 하는 조치와 실행 방법의 예시를 구분하며, 적절한 수단은 제시된 예시에 한정되지 않는다고 설명
+
+- (위험 기반 설계) 권리 침해의 크기, 사업 규모·성격, 정보의 성질·양, 취급 상황과 기록 매체 등을 고려해 조직·인적·물리적·기술적 조치 및 외부 환경 파악 방안을 정하도록 안내
+
+- (개정 일정) 실행 방법 예시의 현대화 등을 검토하고 2027년 4월 확정을 계획한다고 안내하며, 예정된 검토 내용을 별지로 제시
+
+- (보유 필요성) 이용 목적과 보유의 합리적 이유가 사라진 정보는 법정 보존기간 등 예외를 고려해 지체 없이 삭제하도록 노력할 것을 설명하고, 보유 근거를 재점검하도록 촉구
+
+- (기술적 조치) 별지는 접근 통제, 이용자 식별·인증, 외부 불법 접근 방지, 시스템 이용 중 유출 방지 및 불법 접근 탐지·확산 방지를 검토 항목으로 제시
+
+출처: [大規模な漏えい等事案を踏まえた対応について（注意喚起） (令和８年１０月７日）](https://www.ppc.go.jp/news/careful_information/261007_alert/) · 個人情報保護委員会 / Personal Information Protection Commission (Japan) · 2026-10-07
+
+## 21. 일본 PPC, 개인정보보호법 등 개정법 공포 및 후속 규정 검토 안내
+
+자료 ID: `ppc-appi-amendment-promulgation-2026`
+
+**일본 개인정보보호위원회(PPC), 개인정보보호법 등 개정 법률의 국회 가결·성립 및 공포 사실을 발표하고, 일부 조항을 제외한 시행일과 후속 규정 검토 계획 안내**
+
+- (입법 경과) 법안은 2026년 4월 7일 제221회 국회에 제출됐으며, 7월 10일 가결·성립하고 7월 17일 공포됐다고 안내
+
+- (시행 일정) 일부 조항을 제외한 시행일은 공포일부터 2년 이내에 정령으로 정하는 날로 규정
+
+- (후속 작업) 원활한 시행을 위해 정령·위원회 규칙·가이드라인을 검토할 계획이며, 법률·신구대조표·개정법 설명 자료의 공식 링크를 함께 제공
+
+출처: [「個人情報の保護に関する法律等の一部を改正する法律」の公布について（令和８年７月17日）](https://www.ppc.go.jp/news/press/2026/260717/) · 個人情報保護委員会 / Personal Information Protection Commission (Japan) · 2026-07-17

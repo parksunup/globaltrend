@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import {loadTrendEditorial} from './trend-editorial.ts';
 
 export type TrendImportCandidate = {
   id: string;
@@ -40,6 +41,7 @@ function https(value: string): boolean {
 
 /** Only examples selected into the submitted weekly issue can prefill an editor's draft. */
 export function loadTrendImportCandidates(root = process.cwd()): TrendImportCandidate[] {
+  const editorial=loadTrendEditorial(root);
   const weekly = json(root, "data/trends/weekly-sample.json");
   if (!Array.isArray(weekly.entries)) return [];
   const fixtures = new Map(sources.map((source) => {
@@ -63,10 +65,11 @@ export function loadTrendImportCandidates(root = process.cwd()): TrendImportCand
     seen.add(id);
     const keyPoints = strings(entry.key_points_ko).join("\n");
     const significance = text(row(entry.privacy_significance).text_ko);
+    const edited=editorial.get(id);
     return [{
       id, source: source as typeof sources[number], originalTitle: text(item.original_title),
-      title: text(item.korean_title), summary: text(item.summary_ko),
-      details: [keyPoints, significance].filter(Boolean).join("\n\n"),
+      title: edited?.title_ko||text(item.korean_title), summary: edited?.summary_ko||text(item.summary_ko),
+      details: edited?.details_ko||[keyPoints, significance].filter(Boolean).join("\n\n"),
       officialUrl, publishedDate,
       jurisdictions: strings(item.jurisdictions), topics: strings(item.topic_tags),
     }];
