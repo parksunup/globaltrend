@@ -2,6 +2,8 @@ import {createClient} from './supabase/server';
 import {loadPublicLegal} from './public-legal';
 import {loadPublishedStories} from './published-trends';
 import {isDeepStrictEqual} from 'node:util';
+import {buildLegalReviewPackages} from './legal-release';
+import {loadAllTrendImportCandidates,hashSubmission} from './workspace-submissions';
 import type {LegalReviewPackage} from './legal-release';
 import type {WorkspaceItem} from './workspace-model';
 
@@ -54,6 +56,11 @@ export async function loadWorkspaceItems(session:Awaited<ReturnType<typeof works
   if(!p.document&&p.availability!=='official_index')issues.push({message:'번역 전문이 없는 자료입니다. 비교표만 공개됩니다.',blocking:false});
   items.push({id:String(r.id),kind:'law',publicationGroup:String(r.legal_instrument_id),revision:String(w.revision),title:p.instrument.title,subtitle:p.document?'한국어 전문·비교표':'공식 원문 색인·비교표',summary:`${p.document?`한국어 전문 ${p.document.articleCount}개 조문`:'한국어 공식 원문 별도 열람'} · 비교 기준 ${p.cells.length}개`,jurisdictions:[p.jurisdiction],status:w.trashed_at?'trashed':r.status==='published'?'published':issues.some(i=>i.blocking)?'needs_changes':'ready',hasUnpublishedChanges:r.status==='published'&&!isDeepStrictEqual(p,live),changes:r.status==='published'?legalChanges(live,p):[],issues,updatedAt:String(w.updated_at),sourceHref:p.instrument.links[0]?.url,publishedHref:r.status==='published'?(p.document?'/public/laws/'+p.document.id:'/public/laws'):undefined,editorHref:'/work/legal/'+r.id+'/edit',internalRecords:[{label:'작성 당시 판본 설명',value:p.instrument.summary},{label:'판본 기록',value:p.versionLabel},{label:'구성',value:`비교 기준 ${p.cells.length}개 · ${p.document?'한국어 전문 포함':'공식 원문 별도 열람'}`},{label:'공개 요청',value:w.requested_at?'관리자에게 요청됨':'요청 전'}]});
  }
+ // Repository submissions participate in the same selection flow before DB registration.
+ const presentUrls=new Set(reports.map(r=>originals.get(r.source_item_id)?.canonical_url));
+ for(const candidate of loadAllTrendImportCandidates())if(!presentUrls.has(candidate.officialUrl))items.push({id:'repo-trend:'+candidate.id,kind:'trend',revision:hashSubmission(candidate),title:candidate.title,subtitle:'새 제출 자료',summary:candidate.summary,body:candidate.details,jurisdictions:candidate.jurisdictions,topics:candidate.topics,status:'ready',sourceHref:candidate.officialUrl,sourceTitle:candidate.originalTitle,issues:candidate.details.trim()?[]:[{message:'본문을 입력해 주세요.',blocking:true}],internalRecords:[{label:'등록',value:'선택해 공개하면 자료 등록도 함께 처리합니다.'}]});
+ const allInstruments=await db.from('legal_instruments').select('id,jurisdiction_code,short_name');
+ for(const p of buildLegalReviewPackages())if(!laws.some(r=>r.content_hash===p.contentHash))items.push({id:'repo-law:'+p.recordId,kind:'law',submitted:true,editorHref:p.document?'/legal-translation/'+p.document.id:'/legal-drafts',revision:p.contentHash,publicationGroup:allInstruments.data?.find(i=>i.jurisdiction_code===p.jurisdiction&&i.short_name===p.instrument.title)?.id,title:p.instrument.title,subtitle:'새 제출 판본',summary:`${p.document?`한국어 전문 ${p.document.articleCount}개 조문`:'공식 원문 별도 열람'} · 비교 기준 ${p.cells.length}개`,jurisdictions:[p.jurisdiction],status:p.cells.length===17?'ready':'needs_changes',sourceHref:p.instrument.links[0]?.url,issues:p.cells.length===17?[]:[{message:'17개 비교 기준을 확인해 주세요.',blocking:true}],internalRecords:[{label:'등록',value:'선택해 공개하면 전문·비교표를 함께 등록합니다.'}]});
  return {items:items.sort((a,b)=>(b.updatedAt??'').localeCompare(a.updatedAt??'')),error:null};
  } catch(error){console.error('Workspace load failed',error);return {items:[] as WorkspaceItem[],error:'자료를 불러오지 못했습니다. 새로고침 후에도 같으면 작업 공간 준비 상태를 확인해 주세요.'};}
 }

@@ -1,6 +1,6 @@
 "use client";
 import {useRef,useState,type FormEvent} from 'react';
-import type {TrendImportCandidate} from '../../../lib/trend-import';
+import type {WorkspaceTrendCandidate as TrendImportCandidate} from '../../../lib/workspace-submissions';
 import {createWorkspaceNewDraft} from './save';
 import styles from '../work.module.css';
 export default function NewTrendForm({sources,candidate,candidateSource,readOnlyPreview}:{sources:{id:string;name:string}[];candidate?:TrendImportCandidate;candidateSource?:{id:string;name:string}|null;readOnlyPreview:boolean}) {

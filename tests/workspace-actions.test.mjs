@@ -1,10 +1,10 @@
 import test from 'node:test';import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';import ts from 'typescript';
 const id='10000000-0000-0000-0000-000000000001',target={id,kind:'trend',revision:'1'};
-function load({role='admin',preview=false,errors={}}={}) {
+function load({role='admin',preview=false,errors={},prepared}={}) {
  const calls=[],paths=[];const exports={};
- const db={from:()=>({select:()=>({eq(){return this;},maybeSingle:async()=>({data:{payload:{key_points:[{text:'보존'}]}},error:null})})}),rpc:async(name,params)=>{calls.push({name,params});return {data:{revision:2},error:errors[params.p_entity_id]??null};}};
+ const db={from:()=>({select:()=>({eq(){return this;},maybeSingle:async()=>({data:{payload:{key_points:[{text:'보존'}]}},error:null})})}),rpc:async(name,params)=>{calls.push({name,params});return {data:{entity_id:params.p_entity_id,revision:2},error:errors[params.p_entity_id]??null};}};
  const source=ts.transpileModule(readFileSync('app/work/workspace-actions.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
- vm.runInNewContext(source,{exports,console,process:{env:{VERCEL_ENV:preview?'preview':'production'}},require:name=>name==='next/cache'?{revalidatePath:p=>paths.push(p)}:{workspaceSession:async()=>({db,canEdit:['admin','editor'].includes(role),canPublish:role==='admin'})}});
+ vm.runInNewContext(source,{exports,console,process:{env:{VERCEL_ENV:preview?'preview':'production'}},require:name=>name==='next/cache'?{revalidatePath:p=>paths.push(p)}:name.includes('workspace-submissions')?{prepareWorkspaceSubmission:async()=>{if(!prepared)throw new Error('changed');return prepared;}}:{workspaceSession:async()=>({db,canEdit:['admin','editor'].includes(role),canPublish:role==='admin'})}});
  return {run:exports.executeWorkspaceAction,calls,paths};
 }
 test('preview and editor cannot perform administrator publication operations',async()=>{
@@ -21,4 +21,12 @@ test('editor saves a working payload and never updates public tables directly',a
 });
 test('malformed revision, prototype operation, and oversized selection never invoke RPC',async()=>{
  const x=load();for(const command of [{operation:'publish',targets:[{...target,revision:'NaN'}]},{operation:'toString',targets:[target]},{operation:'publish',targets:Array(101).fill(target)}])await x.run(command);assert.equal(x.calls.length,0);
+});
+
+test('one selection registers a repository submission then publishes the returned working revision',async()=>{
+ const x=load({prepared:{id,revision:'7'}});const r=await x.run({operation:'publish',targets:[{id:'repo-trend:submitted-news',kind:'trend',revision:'a'.repeat(64)}]});
+ assert.equal(r.succeeded[0],'trend:repo-trend:submitted-news');assert.equal(x.calls[0].name,'publish_publication_draft');assert.equal(x.calls[0].params.p_entity_id,id);assert.equal(x.calls[0].params.p_expected_revision,7);
+});
+test('a changed repository submission never proceeds to publication',async()=>{
+ const x=load();const r=await x.run({operation:'publish',targets:[{id:'repo-trend:submitted-news',kind:'trend',revision:'a'.repeat(64)}]});assert.equal(r.succeeded.length,0);assert.equal(r.failures.length,1);assert.equal(x.calls.length,0);
 });

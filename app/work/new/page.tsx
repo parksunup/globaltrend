@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import WorkFrame from '../frame';
 import {workspaceSession} from '../../../lib/workspace-data';
-import {loadTrendImportCandidates} from '../../../lib/trend-import';
+import {loadAllTrendImportCandidates} from '../../../lib/workspace-submissions';
 import NewTrendForm from './new-trend-form';
 import styles from '../work.module.css';
 export const dynamic='force-dynamic';
@@ -9,7 +9,7 @@ export default async function NewTrend({searchParams}:{searchParams:Promise<{can
  const {candidate: candidateId}=await searchParams;const {db,canEdit}=await workspaceSession();
  const readOnlyPreview=process.env.VERCEL_ENV==='preview';
  const {data}=canEdit?await db.from('sources').select('id,name').eq('is_active',true).order('name'):{data:[]};const sources=data??[];
- const candidates=loadTrendImportCandidates(),candidate=candidates.find(c=>c.id===candidateId);
+ const candidates=loadAllTrendImportCandidates(),candidate=candidates.find(c=>c.id===candidateId);
  const sourceHint=candidate?.source==='curia'?'CJEU':candidate?.source.toUpperCase();
  const candidateSource=sourceHint?sources.find(s=>s.name.toUpperCase().includes(sourceHint)):null;
  return <WorkFrame><Link href="/work">← 자료 목록</Link><h1>새 동향 작성</h1><p><Link href="/work/new/law">법제 제출 자료 등록하기 →</Link></p>

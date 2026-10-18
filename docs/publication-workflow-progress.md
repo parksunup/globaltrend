@@ -19,4 +19,7 @@
 - 새 작성/법제 등록/수집상태를 별도 경로로 정리. 기존 /work/legal은 법제필터로 이동.
 - 운영 DB에 lifecycle 및 private RPC boundary forward migration을 적용했습니다. 기존 21동향·7법제·119셀 유지, workingcopy29건, 익명working조회 및 직접수정 불가 확인.
 - PGlite 실제자료 fullreplay로 저장시공개본보존, 발행원자성, stale/중복방지, 취소→휴지통→복원→재공개, 법제노드ID·내부감사보존 검증 통과.
-- Node 테스트115개·타입·데이터 전수 검사 통과. 최종빌드·Preview 버튼검증 및 GitHub공식DB CI·PR 생성이 남았습니다.
+- 초기 Node 테스트115개·타입·데이터 전수 검사·빌드 및 GitHub CI(verify/database/collector) 통과. PR36 생성·연결 완료.
+- 완료 감사에서 새 제출 자료의 등록+공개 단일 동작과 전체21건후보, 법제편집 입력보존, 밝은/어두운 테마를 보강했습니다. 최종 검증 결과는 PR36 설명에 기록합니다.
+- 운영 PostgreSQL에서 동향과 법제 각각 전체 lifecycle을 트랜잭션 안에서 실행하고 ROLLBACK하여 기존 공개 내용·건수와 법제 조문ID를 보존하는지 확인했습니다.
+- Preview 실제 버튼으로 종류필터, 검색, 휴지통 빈 상태, 페이지 이동, 상세·수정 탭, 미리보기 저장차단을 확인했습니다. 모바일390px에서 가로넘침 없음 확인.

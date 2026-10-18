@@ -22,6 +22,7 @@ export type WorkspaceItem = {
   internalRecords?: {label: string; value: string}[];
   changes?: {label: string; before: string; after: string}[];
   publicationGroup?: string;
+  submitted?: boolean;
 };
 export type WorkspaceTarget = Pick<WorkspaceItem, "id" | "kind" | "revision">;
 export type WorkspaceOperation = "publish" | "request_publication" | "unpublish" | "trash" | "restore" | "save_trend";

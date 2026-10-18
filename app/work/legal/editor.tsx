@@ -1,12 +1,13 @@
 "use client";
-import {useActionState,useState} from 'react';
+import {useRef,useState,type FormEvent} from 'react';
 import type {LegalReviewPackage} from '../../../lib/legal-release';
 import {saveLegalWorkingCopy} from './save-working-copy';
 import styles from '../work.module.css';
 export default function LegalEditor({id,revision,payload,readOnly,published}:{id:string;revision:string;payload:LegalReviewPackage;readOnly:boolean;published:boolean}) {
- const [changes,setChanges]=useState<Record<string,string>>({});const [result,action,pending]=useActionState(saveLegalWorkingCopy,{ok:false,message:'',revision});
+ const [changes,setChanges]=useState<Record<string,string>>({});const [result,setResult]=useState({ok:false,message:'',revision});const [pending,setPending]=useState(false);const saving=useRef(false);
+ async function submit(event:FormEvent<HTMLFormElement>){event.preventDefault();if(saving.current||readOnly)return;saving.current=true;setPending(true);const form=new FormData(event.currentTarget);try{const next=await saveLegalWorkingCopy(result,form);setResult(next);if(next.ok)setChanges({});}catch{setResult(current=>({...current,ok:false,message:'연결하지 못했습니다. 입력한 내용은 유지됩니다. 다시 시도해 주세요.'}));}finally{saving.current=false;setPending(false);}}
  const field=(key:string,label:string,value:string,rows=4)=><label>{label}<textarea rows={rows} defaultValue={value} disabled={readOnly||pending} onChange={e=>setChanges(prev=>({...prev,[key]:e.target.value}))}/></label>;
- return <form action={action} className={styles.form}>
+ return <form onSubmit={submit} className={styles.form}>
  <input type="hidden" name="id" value={id}/><input type="hidden" name="revision" value={result.revision}/><input type="hidden" name="changes" value={JSON.stringify(changes)}/>
  <p>{published?'현재 공개본은 그대로 유지됩니다. 수정본 저장 후 자료 목록에서 공개할 수 있습니다.':'수정한 내용은 작업본으로 저장됩니다. 저장만으로 공개되지 않습니다.'}</p>
  {result.message&&<p className={result.ok?styles.notice:styles.error} role="status">{result.message}</p>}

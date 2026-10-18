@@ -35,7 +35,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
   const [openKey,setOpenKey]=useState<string|null>(null);
   const [tab,setTab]=useState<DetailTab>("preview");
   const [pending,setPending]=useState<WorkspaceOperation|null>(null);
-  const [last,setLast]=useState<{operation:WorkspaceOperation; result:WorkspaceActionResult; targets:WorkspaceTarget[]}|null>(null);
+  const [last,setLast]=useState<{operation:WorkspaceOperation; result:WorkspaceActionResult; targets:WorkspaceTarget[]; items:WorkspaceItem[]}|null>(null);
   const [confirmation,setConfirmation]=useState<{operation:"trash"|"unpublish";item:WorkspaceItem}|null>(null);
   useEffect(()=>{
     if(!confirmation)return;
@@ -110,7 +110,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
           break;
         }
       }
-      setLast({operation,result,targets:requested});
+      setLast({operation,result,targets:requested,items:targets});
       setSelected(current=>current.filter(key=>!result.succeeded.includes(key)));
       result.succeeded.forEach(key=>selectedRevisions.current.delete(key));
       // A failed save preserves the form's entered values, even if another version now exists.
@@ -122,7 +122,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
     event.preventDefault();const data=new FormData(event.currentTarget);
     void run("save_trend",[item],{title:String(data.get("title")??"").trim(),summary:String(data.get("summary")??"").trim(),body:String(data.get("body")??""),jurisdictions:csv(data.get("jurisdictions")),topics:csv(data.get("topics"))});
   }
-  const retryItems=items.filter(item=>last?.result.failures.some(failure=>failure.key===workspaceItemKey(item)));
+  const retryItems=(last?.result.failures??[]).flatMap(failure=>{const item=items.find(item=>workspaceItemKey(item)===failure.key)??last?.items.find(item=>workspaceItemKey(item)===failure.key);return item?[item]:[];});
   function retryFailed() {
     if(!last)return;
     const failures=new Set(last.result.failures.map(failure=>failure.key));
@@ -137,7 +137,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
       <strong>{actionNames[last.operation]} 완료 {last.result.succeeded.length}건{last.result.failures.length>0?` · 처리하지 못한 자료 ${last.result.failures.length}건`:""}</strong>
       {last.operation==="unpublish"&&last.result.succeeded.length>0&&<p>공개 사이트에서 내렸습니다. 자료와 수정 기록은 작업 공간에 남아 있습니다.</p>}
       {last.operation==="save_trend"&&last.result.succeeded.length>0&&<p>수정본을 저장했습니다. 공개 중인 내용은 ‘수정본 공개’를 눌러야 바뀝니다.</p>}
-      {last.result.failures.length>0&&<ul>{last.result.failures.map(failure=><li key={failure.key}><strong>{items.find(item=>workspaceItemKey(item)===failure.key)?.title??"선택한 자료"}</strong>: {failure.message}</li>)}</ul>}
+      {last.result.failures.length>0&&<ul>{last.result.failures.map(failure=><li key={failure.key}><strong>{(items.find(item=>workspaceItemKey(item)===failure.key)??last.items.find(item=>workspaceItemKey(item)===failure.key))?.title??"선택한 자료"}</strong>: {failure.message}</li>)}</ul>}
       {canRetry&&<button type="button" className={styles.secondary} disabled={disabled} onClick={retryFailed}>실패한 {retryItems.length}건 다시 시도</button>}
       <button className={styles.dismiss} type="button" onClick={()=>setLast(null)} aria-label="작업 결과 닫기">닫기</button>
     </section>}
@@ -168,7 +168,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
             <div className={styles.detailTabs} role="tablist" aria-label="자료 상세 보기">{([['preview',item.hasUnpublishedChanges?'수정본 보기':'공개될 모습'],['edit','내용 수정'],['history','내부 기록']] as [DetailTab,string][]).map(([value,label])=><button id={`tab-${value}-${key}`} role="tab" aria-selected={tab===value} aria-controls={`panel-${key}`} key={value} type="button" disabled={value==="edit"&&(!canEdit||item.status==="trashed")} onClick={()=>setTab(value)}>{label}</button>)}</div>
             <div className={styles.detailBody} id={`panel-${key}`} role="tabpanel" aria-labelledby={`tab-${tab}-${key}`}>
               {tab==="preview"&&<><h3>{item.title}</h3>{item.summary&&<p className={styles.lede}>{item.summary}</p>}{item.body?<div className={styles.body}>{item.body}</div>:item.kind==="law"?<p>법률 전문과 17개 기준 비교표는 상세 화면에서 확인하실 수 있습니다. {editorHref&&<a href={editorHref}>전문·비교표 열기 →</a>}</p>:<p>아직 상세 내용이 없습니다.</p>}{sourceHref&&<a href={sourceHref} target="_blank" rel="noopener noreferrer">{item.sourceTitle||"공식 원문"} ↗</a>}</>}
-              {tab==="edit"&&(readOnly?<p>화면 확인용에서는 수정 내용을 저장할 수 없습니다. <a href="https://globaltrend-six.vercel.app/work">운영 작업 공간에서 수정하기 →</a></p>:item.kind==="law"?<div className={styles.legalEdit}><h3>법제 전문·비교표 수정</h3><p>선정 판본의 한국어 전문과 17개 기준 비교표를 같은 자료로 관리합니다.</p>{editorHref?<a className={styles.linkButton} href={editorHref}>법제 내용 수정하기 →</a>:<p>이 판본의 편집 화면을 불러오지 못했습니다. 화면을 새로고침해 주세요.</p>}</div>:<form key={`${key}:${item.revision}`} className={styles.editor} onSubmit={event=>edit(item,event)}><label>한국어 제목<input name="title" defaultValue={item.title} required maxLength={500} disabled={disabled}/></label><label>핵심 요약<textarea name="summary" defaultValue={item.summary} required rows={3} maxLength={3000} disabled={disabled}/></label><label>상세 내용<textarea name="body" defaultValue={item.body??""} rows={10} maxLength={20000} disabled={disabled}/></label><div className={styles.fieldPair}><label>국가·지역<input name="jurisdictions" defaultValue={item.jurisdictions.join(", ")} placeholder="EU, 영국" disabled={disabled}/></label><label>주제<input name="topics" defaultValue={item.topics?.join(", ")??""} placeholder="아동, 인공지능" disabled={disabled}/></label></div><p>쉼표로 나눠 입력하세요. 저장한 수정본은 공개하기 전까지 외부에 보이지 않습니다.</p><button className={styles.primary} type="submit" disabled={disabled}>{pending==="save_trend"?"저장 중…":"수정본 저장"}</button></form>)}
+              {tab==="edit"&&(readOnly?<p>화면 확인용에서는 수정 내용을 저장할 수 없습니다. <a href="https://globaltrend-six.vercel.app/work">운영 작업 공간에서 수정하기 →</a></p>:item.kind==="law"&&item.submitted?<div className={styles.legalEdit}><p>새 제출 자료를 먼저 등록하면 이 화면에서 수정할 수 있습니다. 바로 공개하려면 자료를 선택하고 공개 버튼을 누르세요.</p><a href="/work/new/law">등록 후 내용 수정하기 →</a></div>:item.kind==="law"?<div className={styles.legalEdit}><h3>법제 전문·비교표 수정</h3><p>선정 판본의 한국어 전문과 17개 기준 비교표를 같은 자료로 관리합니다.</p>{editorHref?<a className={styles.linkButton} href={editorHref}>법제 내용 수정하기 →</a>:<p>이 판본의 편집 화면을 불러오지 못했습니다. 화면을 새로고침해 주세요.</p>}</div>:<form key={`${key}:${item.revision}`} className={styles.editor} onSubmit={event=>edit(item,event)}><label>한국어 제목<input name="title" defaultValue={item.title} required maxLength={500} disabled={disabled}/></label><label>핵심 요약<textarea name="summary" defaultValue={item.summary} required rows={3} maxLength={3000} disabled={disabled}/></label><label>상세 내용<textarea name="body" defaultValue={item.body??""} rows={10} maxLength={20000} disabled={disabled}/></label><div className={styles.fieldPair}><label>국가·지역<input name="jurisdictions" defaultValue={item.jurisdictions.join(", ")} placeholder="EU, 영국" disabled={disabled}/></label><label>주제<input name="topics" defaultValue={item.topics?.join(", ")??""} placeholder="아동, 인공지능" disabled={disabled}/></label></div><p>쉼표로 나눠 입력하세요. 저장한 수정본은 공개하기 전까지 외부에 보이지 않습니다.</p><button className={styles.primary} type="submit" disabled={disabled}>{pending==="save_trend"?"저장 중…":"수정본 저장"}</button></form>)}
               {tab==="history"&&<><h3>작업·검토 기록</h3>{item.updatedAt&&<p>최근 수정: {new Date(item.updatedAt).toLocaleString("ko-KR")}</p>}{item.internalRecords?.length?<dl className={styles.records}>{item.internalRecords.map((record,index)=><div key={index}><dt>{record.label}</dt><dd>{record.value}</dd></div>)}</dl>:<p>추가로 표시할 기록이 없습니다.</p>}{(item.issues?.length??0)>0&&<ul>{item.issues?.map((issue,index)=><li key={index}>{issue.message}</li>)}</ul>}</>}
             </div>
             <div className={styles.detailActions}>
