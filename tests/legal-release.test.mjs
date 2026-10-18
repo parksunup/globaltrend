@@ -54,7 +54,7 @@ test('citations use the actual section, not array positions or a different statu
 test('normalized GDPR retains the committed export and index provenance', () => {
   const corpus = JSON.parse(readFileSync('data/derived/gdpr.json','utf8'));
   for(const key of ['html','index']) {
-    assert.equal(createHash('sha256').update(readFileSync(corpus.export_provenance[key])).digest('hex'), corpus.export_provenance[`${key}_sha256`]);
+    assert.equal(createHash('sha256').update(readFileSync(corpus.export_provenance[key],'utf8').replaceAll('\r\n','\n')).digest('hex'), corpus.export_provenance[`${key}_sha256`]);
   }
   assert.equal(corpus.provisions.length,1123);
   assert.ok(corpus.provisions.every(node => node.human_review_status === 'not_started'));

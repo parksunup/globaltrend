@@ -55,9 +55,10 @@
   },
   "export_provenance": {
     "html": "public/review-drafts/gdpr.html",
-    "html_sha256": "03a2f05ebb8764a48cf046c2a258f22ea747241896ddcaa5917ccfe396a61e18",
+    "html_sha256": "04b5deb13e33eebe2f6d6faf31935dae92f2fd39c3fe8f1b05fcfa8c366c8c0d",
     "index": "data/legal/sources/gdpr-index.json",
-    "index_sha256": "2d4e9720445436510443b81a0963e7aac2b42243e4fe9bd1b5bb8731601ff1f1",
+    "index_sha256": "e9660e4e082f22d6ec3906e7ff2331368ee58b4cc58d5b0c6d2051ff5384efad",
+    "hashing": "UTF-8 with CRLF normalized to LF",
     "notice": "public/review-drafts/publication-notice.txt"
   },
   "provisions": [

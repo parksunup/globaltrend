@@ -37,7 +37,7 @@ jobs:
         with:
           node-version: '22'
       - name: Verify the active Preview contains this application's source
-        run: node scripts/check-public-preview.mjs --deployed-snapshot --wait-only
+        run: node scripts/check-public-preview.mjs --wait-only
       - name: Install isolated browser tools
         run: |
           npm install --prefix "$RUNNER_TEMP/preview-browser" --no-package-lock --no-audit --no-fund playwright@1.64.0
@@ -46,7 +46,7 @@ jobs:
         env:
           PLAYWRIGHT_MODULE: ${{ runner.temp }}/preview-browser/node_modules/playwright/index.mjs
           PREVIEW_ARTIFACT_DIR: ${{ runner.temp }}/preview-check-artifacts
-        run: node scripts/check-public-preview.mjs --deployed-snapshot
+        run: node scripts/check-public-preview.mjs
       - name: Upload browser evidence
         if: always()
         uses: actions/upload-artifact@v4

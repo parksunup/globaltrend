@@ -68,8 +68,9 @@ def normalize():
                    'scope_note': '2016년 영어 관보 원판 + 2018-05-23 영어 정오표. 2026년 전체 현행성 미확정. PR15의 공개 HTML 자체 한국어 번역 초안을 구조 변환했으며 번역문을 새로 생성하지 않았습니다. 원자료 © European Union. EU 공식 번역·승인 자료가 아닙니다.'},
         'translation': {'language': 'ko', 'status': 'full_draft', 'human_review_status': 'not_started', 'public_release_status': 'draft_for_review'},
         'export_provenance': {
-            'html': 'public/review-drafts/gdpr.html', 'html_sha256': hashlib.sha256(HTML.read_bytes()).hexdigest(),
-            'index': 'data/legal/sources/gdpr-index.json', 'index_sha256': hashlib.sha256(INDEX.read_bytes()).hexdigest(),
+            'html': 'public/review-drafts/gdpr.html', 'html_sha256': hashlib.sha256(HTML.read_text(encoding='utf8').encode('utf8')).hexdigest(),
+            'index': 'data/legal/sources/gdpr-index.json', 'index_sha256': hashlib.sha256(INDEX.read_text(encoding='utf8').encode('utf8')).hexdigest(),
+            'hashing': 'UTF-8 with CRLF normalized to LF',
             'notice': 'public/review-drafts/publication-notice.txt',
         },
         'provisions': nodes,
