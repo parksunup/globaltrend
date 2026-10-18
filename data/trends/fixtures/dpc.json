@@ -1,0 +1,130 @@
+{
+  "source_id": "dpc",
+  "checked_at": "2026-10-11T17:25:34+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 2,
+  "counting_unit": "one article or event per record; related documents are not separate samples",
+  "items": [
+    {
+      "record_id": "dpc-chi-tallaght-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "Data Protection Commission Publishes Final Decision Following Inquiry into the Children’s Health Ireland (‘CHI’)",
+      "organization": [
+        "Data Protection Commission (Ireland)"
+      ],
+      "jurisdictions": [
+        "IE",
+        "EU"
+      ],
+      "source_published_date": "2026-10-01",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "01st October 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+      "document_type": "official_news",
+      "korean_title": "아일랜드 DPC, CHI 아동 건강기록의 물리적 보안 문제에 시정명령",
+      "summary_ko": "DPC는 CHI의 특정 시설에서 종이 아동 건강기록과 폐기 대상 기밀문서 관리에 관한 GDPR 위반을 확인했다고 밝혔다. 견책과 시정명령을 내리고 관련 개인정보 영향평가의 완성과 보호조치 이행을 요구했다고 설명했다.",
+      "evidence": [
+        {
+          "url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+          "location": "h1; main p.date; .field--name-body의 The main findings 및 In light of the infringements 문단"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "아동정보",
+        "건강정보",
+        "DPIA",
+        "물리적보안"
+      ],
+      "event_id": "dpc-chi-tallaght-2026-event",
+      "related_documents": [],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "게시일 2026-10-01과 결정 통지일 2026-09-10을 구분합니다. 본문은 결정 전문을 추후 공개한다고 안내하며 이번에 전문 URL을 확인하지 못했습니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-publishes-final-decision-following-inquiry-childrens-health-ireland-chi",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      }
+    },
+    {
+      "record_id": "dpc-google-location-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "Data Protection Commission fines Google €403 million following Inquiry into Google’s processing of location data",
+      "organization": [
+        "Data Protection Commission (Ireland)"
+      ],
+      "jurisdictions": [
+        "IE",
+        "EU"
+      ],
+      "source_published_date": "2026-09-21",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "21st September 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location",
+      "document_type": "official_news",
+      "korean_title": "아일랜드 DPC, Google 위치정보 처리에 4억300만 유로 과징금 발표",
+      "summary_ko": "DPC는 Google의 세 위치정보 기능을 조사한 뒤 적법성·공정성, 책임성, 투명성 및 보유기간 관련 GDPR 위반을 확인했다고 밝혔다. 총 4억300만 유로의 과징금과 6개월 내 처리 개선 명령을 발표했다.",
+      "evidence": [
+        {
+          "url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location",
+          "location": "h1; main p.date; .field--name-body의 The scope of the Inquiry, The decision 및 The DPC has imposed 문단"
+        }
+      ],
+      "topic_tags": [
+        "GDPR",
+        "위치정보",
+        "투명성",
+        "보유기간",
+        "과징금"
+      ],
+      "event_id": "dpc-google-location-2026-event",
+      "related_documents": [],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "조사 대상 기간은 2018-05-25부터 2020-02-04이며 게시일과 구분합니다. 본문은 결정 전문을 추후 공개한다고 안내해 전문 법적 판단이나 불복 상태는 확정하지 않습니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.dataprotection.ie/en/news-media/latest-news/data-protection-commission-fines-google-eu403-million-following-inquiry-googles-processing-location",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      }
+    }
+  ],
+  "is_published": false,
+  "historical_access_failures": [
+    {
+      "requested_url": "https://www.dataprotection.ie/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://www.dataprotection.ie/en/news-media/latest-news",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ]
+}

@@ -4,3 +4,9 @@ tsconfig.tsbuildinfo
 .env.local
 .superpowers/
 .pnpm-store/
+__pycache__/
+*.pyc
+.env.*
+!.env.example
+/work/
+integration-*.log

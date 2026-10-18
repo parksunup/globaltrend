@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "record_id": "eu-gdpr-user-references",
+  "reviewed_on": "2026-10-12",
+  "origin_statement": "사용자가 PIPC 지정 게시물 첨부라고 설명하며 제공한 PDF; 게시물·첨부 연결은 온라인 미확인",
+  "pipc_url": "https://pipc.go.kr/np/cop/bbs/selectBoardArticle.do?bbsId=BS105&mCode=D060010000&nttId=5139",
+  "reference_body_in_repository": false,
+  "third_party_translation_body_in_repository": false,
+  "human_review_status": "not_started",
+  "files": [
+    {
+      "filename": "GDPR April.pdf",
+      "language": "en",
+      "byte_count": 1308042,
+      "sha256": "22a84bad77d526b32768ceee50714b954da14d32f0efee5faeb0435f8e1a6f82",
+      "pages": 261,
+      "article_heading_count": 99,
+      "recital_heading_count": 173,
+      "heading_numbers_complete_and_sequential": true,
+      "count_limitation": "조·고려사항 제목의 번호가 모두 존재한다는 의미. 각 항·호·각주·문장 전체의 완전성 및 번역 정확성 인증이 아님",
+      "document_identification": {
+        "displayed_date": "2016-04-06",
+        "document_number": "Council5419/16",
+        "stage": "Council first-reading position; 최종 관보 원문 아님",
+        "enactment_markers_incomplete": true
+      }
+    },
+    {
+      "filename": "GDPR_updated_221118.pdf",
+      "language": "ko",
+      "byte_count": 614622,
+      "sha256": "295b76967e44333ff75d25e69ff29c69a9288efc7bad50826f1dfea6982c1acc",
+      "pages": 114,
+      "article_heading_count": 99,
+      "recital_heading_count": 173,
+      "heading_numbers_complete_and_sequential": true,
+      "count_limitation": "조·고려사항 제목의 번호가 모두 존재한다는 의미. 각 항·호·각주·문장 전체의 완전성 및 번역 정확성 인증이 아님",
+      "document_identification": {
+        "cover_designation": "Regulation(EU)NoXXX/2016",
+        "translator_confirmed": false,
+        "legal_version_date": null,
+        "pdf_creation_date": "2018-11-22",
+        "creation_date_is_legal_version_date": false,
+        "filename_date_not_interpreted": true,
+        "relation_to_english_april_file": "완전 동일판본의 번역으로 확인되지 않음"
+      }
+    }
+  ],
+  "review_scope": {
+    "structure": "2개PDF전체 텍스트 추출의 조1–99·고려사항1–173 제목번호순서 확인",
+    "substantive_comparison": "본칙1–11조 및 고려사항1–21의 첫 구간 대조 중 핵심 차이 표본 기록; Art99 판본식별용 추가 확인",
+    "not_claimed": [
+      "전문 전체 항·호·각주·문장 완전성 검수",
+      "번역 전체 정확성·법적 효력",
+      "정오표 반영·최신 통합판·2026현행성",
+      "PIPC 번역 주체 또는 공식 한국어 법문 지위"
+    ],
+    "korean_visual_inspection_pages": [
+      1,
+      114
+    ],
+    "visual_inspection_limitation": "표지·말미 시각 확인과 전체 추출텍스트 검색; 모든114페이지의 시각적 저작권표시 검수는 아님"
+  },
+  "reuse_conditions": {
+    "public_republication_confirmed": false,
+    "kogl_type_confirmed": false,
+    "translator_confirmed": false,
+    "copyright_notice_confirmed": false,
+    "decision": "참고 대조용. 원문/제3자 번역 본문 전재하지 않음. 확인되지 않은 이용허락을 없다고 단정하지 않음"
+  },
+  "passages_needing_review": [
+    {
+      "locator": "rct_1",
+      "korean_pdf_page": 1,
+      "official_original_locator": "rct_1",
+      "finding": "기본권의 대상은 개인정보 처리와 관련한 자연인의 보호이다. 한국어 문장은 개인정보처리 자체의 보호로 읽힐 수 있어 주어·보호대상을 재검토해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "rct_19",
+      "korean_pdf_page": 3,
+      "official_original_locator": "rct_19",
+      "finding": "권리·의무 제한의 필요성 및 비례성 조건을 원판과 대조해야 한다. 한국어의 적절성 표현을 비례성 요건과 동일하게 취급하지 않는다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "rct_21",
+      "korean_pdf_page": 4,
+      "official_original_locator": "rct_21",
+      "finding": "중개서비스 제공자의 liability rules를 손해배상 범위로 한정하는 표현은 책임 규정의 범위를 좁힐 가능성이 있어 재검토해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_3(2)",
+      "korean_pdf_page": 38,
+      "official_original_locator": "art_3(2)",
+      "finding": "원판은 역내에 있는 정보주체를 대상으로 한다. 한국어의 거주 요건 표현은 거주자만으로 적용대상을 좁힐 수 있다. Article4(22)(b)의 실제 residing 조건과 구별해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_3(3)",
+      "korean_pdf_page": 38,
+      "official_original_locator": "art_3(3)",
+      "finding": "처리 주체가 원판에서는 controller이나 한국어에서는 정보주체로 되어 있다. 적용 주체를 달리 표현한 명확한 대조 차이이다.",
+      "status": "difference_confirmed"
+    },
+    {
+      "locator": "art_4(1)",
+      "korean_pdf_page": 38,
+      "official_original_locator": "art_4(1)",
+      "finding": "신원 특성 열거에서 원판의 physiological과 psychological에 해당하는 번역을 구별할 필요가 있다. 한국어는 생리적 특성 위치에 심리적 표현이 있어 정신적 항목과 함께 재검토해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_4(16)(a)",
+      "korean_pdf_page": 38,
+      "official_original_locator": "art_4(16)(a)",
+      "finding": "다른 사업장에 결정권이 있고 그 사업장이 결정 집행권도 갖는다는 원판의 누적조건이 한국어에서는 대안조건으로 읽힌다. 본점 판단 요건 차이이다.",
+      "status": "difference_confirmed"
+    },
+    {
+      "locator": "art_4(24)",
+      "korean_pdf_page": 38,
+      "official_original_locator": "art_4(24)",
+      "finding": "최종 OJ 원판은 draft decision에 대한 objection임을 정의 첫부분에 명시하나 업로드된 April 영어본은 해당 구절이 앞부분에 없다. 한국어에서도 이의제기의 대상을 명확히 확인해야 한다.",
+      "status": "version_difference_confirmed"
+    },
+    {
+      "locator": "art_6(1)(d)",
+      "korean_pdf_page": 42,
+      "official_original_locator": "art_6(1)(d)",
+      "finding": "다른 자연인의 vital interests 요건을 제3자의 생명 이익으로 표현한다. 자연인 한정 및 vital interests 범위를 재검토해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_6(3)",
+      "korean_pdf_page": 42,
+      "official_original_locator": "art_6(3)",
+      "finding": "법적 근거로 처리목적을 결정하는 요건과 공적 업무수행 필요성 대안의 연결 관계를 한국어 두 문장에서도 보존했는지 검토해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_8(1)",
+      "korean_pdf_page": 44,
+      "official_original_locator": "art_8(1)",
+      "finding": "16세 기준·회원국의 13세 이상 하향 허용·친권자 동의 조건은 확인된다. 다만 친권자 동의가 있으면 허용한다는 조건뿐 아니라 그 동의가 부여·승인된 범위에서만 허용된다는 원판의 범위제한을 보존했는지 확인해야 한다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_9(2)(c)",
+      "korean_pdf_page": 44,
+      "official_original_locator": "art_9(2)(c)",
+      "finding": "다른 자연인과 vital interests의 범위 문제는 Article6(1)(d)와 함께 점검해야 한다. 이 검토만으로 Article9의 모든 예외조건이 정확하다고 주장하지 않는다.",
+      "status": "needs_human_review"
+    },
+    {
+      "locator": "art_11(2)",
+      "korean_pdf_page": 46,
+      "official_original_locator": "art_11(2)",
+      "finding": "컨트롤러가 식별할 수 없음을 입증하는 경우 가능한 한 그 사실을 정보주체에게 알려야 한다는 독립 문장이 한국어에서 누락되어 있다. 원판 OJ와 업로드 April 영어본에는 모두 해당 고지의무가 있다.",
+      "status": "omission_confirmed"
+    },
+    {
+      "locator": "art_99(2)",
+      "korean_pdf_page": 114,
+      "official_original_locator": "art_99(2)",
+      "finding": "한국어는 적용일 2018-05-25를 명시하나 April 영어본은 적용일을 빈칸과 상대기간으로 두고 있다. 한국어를 해당 April 영어본과 완전히 같은 판본의 번역으로 확정할 수 없다.",
+      "status": "version_difference_confirmed"
+    }
+  ]
+}

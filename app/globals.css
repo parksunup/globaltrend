@@ -156,3 +156,5 @@ h1 { margin:8px 0 0; font-size:32px; letter-spacing:-.06em; }
 .sidebar,.content{min-width:0}.sidebar-foot{flex-wrap:wrap}
 @media(max-width:900px){.sidebar-foot{display:flex;margin-top:18px}.nav-list{max-width:100%}.detail-block a{overflow-wrap:anywhere}}
 .list-panel,.detail-panel,.item-list,.item-card{min-width:0}.item-card-head{flex-wrap:wrap}.item-type{overflow-wrap:anywhere}@media(max-width:900px){.app-frame,.workspace-grid{grid-template-columns:minmax(0,1fr)}}
+/* Keep the numbered paragraphs in the submitted trend summaries readable. */
+.detail-description { white-space: pre-line; }

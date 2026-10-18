@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { listLegalTranslationEntries } from "./legal-translation-review.ts";
+import { loadTrendEditorial } from "./trend-editorial.ts";
 
 export type SubmissionItem = {
   id: string;
@@ -28,6 +29,8 @@ export type LegalComparisonCell = {
   summary: string;
   exceptions: string;
   sourceUrl: string;
+  sourceLinks?: string[];
+  evidenceKind?: string;
   sourceVersion: string;
   status: string;
   pendingReason: string;
@@ -120,9 +123,18 @@ function legalComparison(root: string): LegalComparisonCell[] {
       let translationLinks: string[] = [];
       try { articleNumbers = stringArray(JSON.parse(data.article_numbers || "[]")); } catch { /* Keep the cell readable. */ }
       try {
-        translationLinks = stringArray(JSON.parse(data.translation_links || "[]"))
-          .filter((link) => /^\.\/(?:translations|sources)\/[a-z0-9-]+\.md(?:#[a-z0-9-]+)?$/.test(link));
+        translationLinks = stringArray(JSON.parse(data.translation_links || "[]")).flatMap((link) => {
+          const gdpr = /^\.\/gdpr\.md#([A-Za-z0-9-]+)$/.exec(link);
+          if (gdpr) return [`/review-drafts/gdpr.html#${gdpr[1]}`];
+          return /^\.\/(?:reference\/)?(?:translations|sources)\/[a-z0-9-]+\.md(?:#[A-Za-z0-9-]+)?$/.test(link)
+            ? [link.replace("./reference/", "./")] : [];
+        });
       } catch { /* Keep the cell readable. */ }
+      let sourceLinks: string[] = [];
+      try {
+        sourceLinks = [...new Set(stringArray(JSON.parse(data.source_links || "[]"))
+          .flatMap((link) => officialLink(link).map((source) => source.url)))];
+      } catch { /* Keep the primary official source available. */ }
       return {
         id: `criteria-${data.cell_id}`,
         criterionId: data.criterion_id,
@@ -134,6 +146,8 @@ function legalComparison(root: string): LegalComparisonCell[] {
         summary: data.korean_summary,
         exceptions: data.major_exceptions,
         sourceUrl: officialLink(data.official_source_url)[0]?.url ?? "",
+        sourceLinks,
+        evidenceKind: data.evidence_kind || "",
         sourceVersion: data.source_version,
         status: data.review_status,
         pendingReason: data.pending_reason,
@@ -240,6 +254,7 @@ function sourceConfigItems(root: string): SubmissionItem[] {
 }
 
 function fixtureItems(root: string): SubmissionItem[] {
+  const editorial=loadTrendEditorial(root);
   return trendSourceIds(root, "fixtures").flatMap((source) => {
     const path = `data/trends/fixtures/${source}.json`;
     const data = readJson(root, path);
@@ -250,11 +265,13 @@ function fixtureItems(root: string): SubmissionItem[] {
     return rows.map((value, index) => {
       const item = record(value);
       const evidence = Array.isArray(item.evidence) ? item.evidence.map(record) : [];
+      const edited=editorial.get(label(item.record_id,''));
       return {
         id: `fixture-${source}-${label(item.record_id, String(index))}`, group: "trends" as const, kind: "동향 표본",
-        title: label(item.korean_title, label(item.original_title)), subtitle: label(item.original_title),
-        summary: label(item.summary_ko), status: label(item.review_status, "unreviewed"),
+        title: edited?.title_ko||label(item.korean_title, label(item.original_title)), subtitle: label(item.original_title),
+        summary: edited?.summary_ko||label(item.summary_ko), status: label(item.review_status, "unreviewed"),
         fields: [
+          ...(edited?[{label:'주요 내용',value:edited.details_ko}]:[]),
           { label: "기관", value: label(item.organization) },
           { label: "게시일", value: label(item.source_published_date) },
           { label: "관할권", value: label(item.jurisdictions) },
@@ -263,7 +280,7 @@ function fixtureItems(root: string): SubmissionItem[] {
           { label: "검토 메모", value: label(item.review_notes) },
         ],
         links: [...officialLink(item.official_url), ...evidence.flatMap((row) => officialLink(row.url, "요약 근거"))],
-        files: presentFiles(root, [path, `data/trends/fixtures/${source}.md`, "data/trends/fixtures/review-notes.md"]),
+        files: presentFiles(root, ["data/trends/editorial/report-drafts.md",path, `data/trends/fixtures/${source}.md`, "data/trends/fixtures/review-notes.md"]),
       };
     });
   });
@@ -275,5 +292,7 @@ export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
 }
 
 export function submissionPreviewEnabled() {
-  return process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development";
+  // Team submissions remain available on the worker routes after merging.
+  // Public publication is controlled separately by publicSubmissionPreviewEnabled/RLS.
+  return true;
 }

@@ -1,0 +1,308 @@
+{
+  "document_id": "gdpr-official-currentness-check",
+  "checked_on_kst": "2026-10-13",
+  "source_version": "32016R0679-OJ20160504-EN-CORR20180523",
+  "method": "Official OP RDF; owl:sameAs identity closure; GDPR root outgoing predicates; correction work-specific expressions and languages; proposal CELEX/type/target/date; English consolidated raw-byte hash comparison",
+  "source_receipts": [
+    {
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=3e485e15-11bd-11e6-ba9a-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T09:52:13.768800+00:00",
+      "http_status": 200,
+      "bytes": 62783853,
+      "sha256": "9afc85a45c4f525d82b61980ad94bdcc41723a6bcc5f81415210ca2f0a265ca8"
+    },
+    {
+      "id": "corr1",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=c0c14e1e-b043-11e6-aab7-01aa75ed71a1&nonInferred=true",
+      "checked_at": "2026-10-13T09:59:06.221929+00:00",
+      "http_status": 200,
+      "bytes": 51849,
+      "sha256": "47a3701c34569bccf2b7afd486482613d5d2e356efde8e22a65642698f17795c"
+    },
+    {
+      "id": "corr2",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=683d5816-5e52-11e8-ab9c-01aa75ed71a1&nonInferred=true",
+      "checked_at": "2026-10-13T09:59:16.937460+00:00",
+      "http_status": 200,
+      "bytes": 266105,
+      "sha256": "300787fa9fa5a1c2e783250e7940bf8ca0c02d186945662b740b01c7507a1050"
+    },
+    {
+      "id": "corr3",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1&nonInferred=true",
+      "checked_at": "2026-10-13T09:59:06.533201+00:00",
+      "http_status": 200,
+      "bytes": 172255,
+      "sha256": "846b5da8a16bb9015a158b9e83463fbe172fe3778e3bfe2cf7cd28bd993563fe"
+    },
+    {
+      "id": "english-consolidated",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "checked_at": "2026-10-13T09:59:06.721648+00:00",
+      "http_status": 200,
+      "bytes": 462324,
+      "sha256": "a681ff22f32f125749af6e96947224369efc132edb8a95b12637e357df1056de"
+    },
+    {
+      "id": "proposal0501",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=856bddea-3639-11f0-8a44-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T09:55:41.659083+00:00",
+      "status": 200,
+      "bytes": 352227,
+      "sha256": "819d7aa50bacd5dce9640492990bdd70d02497a37282289423cde2da86706dbb"
+    },
+    {
+      "id": "proposal0837",
+      "url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=ebf17714-c56e-11f0-8da2-01aa75ed71a1&nonInferred=false",
+      "checked_at": "2026-10-13T09:55:42.125936+00:00",
+      "status": 200,
+      "bytes": 673812,
+      "sha256": "a50ff627f9374383a0935dc4cc3fe70a64cbce55488d47677ed571179f11ed81"
+    }
+  ],
+  "gdpr_work_aliases": [
+    "http://publications.europa.eu/resource/celex/32016R0679",
+    "http://publications.europa.eu/resource/cellar/3e485e15-11bd-11e6-ba9a-01aa75ed71a1",
+    "http://publications.europa.eu/resource/eli/reg/2016/679/oj",
+    "http://publications.europa.eu/resource/oj/JOL_2016_119_R_0001"
+  ],
+  "gdpr_relations": [
+    {
+      "predicate": "amendment_proposed_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/52025PC0501",
+        "http://publications.europa.eu/resource/cellar/856bddea-3639-11f0-8a44-01aa75ed71a1",
+        "http://publications.europa.eu/resource/comnat/COM_2025_0501_FIN",
+        "http://publications.europa.eu/resource/immc/COM%282025%29501%20final"
+      ],
+      "celex_identifiers": [
+        "52025PC0501"
+      ]
+    },
+    {
+      "predicate": "amendment_proposed_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/52025PC0837",
+        "http://publications.europa.eu/resource/cellar/ebf17714-c56e-11f0-8da2-01aa75ed71a1",
+        "http://publications.europa.eu/resource/comnat/COM_2025_0837_FIN",
+        "http://publications.europa.eu/resource/immc/COM%282025%29837%20final"
+      ],
+      "celex_identifiers": [
+        "52025PC0837"
+      ]
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/01995L0046-20180525",
+        "http://publications.europa.eu/resource/cellar/335ef9fc-250a-4dfa-a76d-5583b689e91e",
+        "http://publications.europa.eu/resource/consolidation/1995L0046%2F20180525",
+        "http://publications.europa.eu/resource/eli/dir/1995/46/2018-05-25"
+      ],
+      "celex_identifiers": [
+        "01995L0046-20180525"
+      ]
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/02016R0679-20160504",
+        "http://publications.europa.eu/resource/cellar/5f2552c2-cc45-11e6-ad7c-01aa75ed71a1",
+        "http://publications.europa.eu/resource/consolidation/2016R0679%2F20160504",
+        "http://publications.europa.eu/resource/eli/reg/2016/679/2016-05-04"
+      ],
+      "celex_identifiers": [
+        "02016R0679-20160504"
+      ]
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/cellar/7a27f5c5-9927-4dc7-a811-d3bba80e03cf",
+        "http://publications.europa.eu/resource/consolidation/1995L0046%2F20180525_0020010"
+      ],
+      "celex_identifiers": []
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/cellar/fbd2555d-8c40-427f-af50-f28b27ba7179",
+        "http://publications.europa.eu/resource/consolidation/2016R0679%2F20160504_0000010"
+      ],
+      "celex_identifiers": []
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/cellar/69c567aa-0ce3-4ba7-b13d-7142a9225a3c",
+        "http://publications.europa.eu/resource/consolidation/2016R0679%2F20160504_0000020"
+      ],
+      "celex_identifiers": []
+    },
+    {
+      "predicate": "consolidated_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/cellar/424e72d0-9c7b-11eb-b85c-01aa75ed71a1",
+        "http://publications.europa.eu/resource/consolidation/2016R0679%2F20160504_0000030"
+      ],
+      "celex_identifiers": []
+    },
+    {
+      "predicate": "corrected_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/32016R0679R%2801%29",
+        "http://publications.europa.eu/resource/cellar/c0c14e1e-b043-11e6-aab7-01aa75ed71a1",
+        "http://publications.europa.eu/resource/eli/reg/2016/679/corrigendum/2016-11-22/oj",
+        "http://publications.europa.eu/resource/oj/JOL_2016_314_R_0011"
+      ],
+      "celex_identifiers": [
+        "32016R0679R(01)"
+      ]
+    },
+    {
+      "predicate": "corrected_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/32016R0679R%2802%29",
+        "http://publications.europa.eu/resource/cellar/683d5816-5e52-11e8-ab9c-01aa75ed71a1",
+        "http://publications.europa.eu/resource/eli/reg/2016/679/corrigendum/2018-05-23/oj",
+        "http://publications.europa.eu/resource/oj/JOL_2018_127_R_0003"
+      ],
+      "celex_identifiers": [
+        "32016R0679R(02)"
+      ]
+    },
+    {
+      "predicate": "corrected_by",
+      "object_aliases": [
+        "http://publications.europa.eu/resource/celex/32016R0679R%2803%29",
+        "http://publications.europa.eu/resource/cellar/1b20ec09-7c8c-11eb-9ac9-01aa75ed71a1",
+        "http://publications.europa.eu/resource/eli/reg/2016/679/corrigendum/2021-03-04/oj",
+        "http://publications.europa.eu/resource/oj/JOL_2021_074_R_0005"
+      ],
+      "celex_identifiers": [
+        "32016R0679R(03)"
+      ]
+    }
+  ],
+  "graph_raw_bytes_same_as_previous": true,
+  "amended_by_relations_observed": 0,
+  "corrigenda": [
+    {
+      "celex": "32016R0679R(01)",
+      "expression_language_codes": [
+        "DEU",
+        "EST",
+        "HUN",
+        "ITA"
+      ],
+      "english_expression_observed": false
+    },
+    {
+      "celex": "32016R0679R(02)",
+      "expression_language_codes": [
+        "BUL",
+        "CES",
+        "DAN",
+        "DEU",
+        "ELL",
+        "ENG",
+        "EST",
+        "FIN",
+        "FRA",
+        "GLE",
+        "HRV",
+        "HUN",
+        "ITA",
+        "LAV",
+        "LIT",
+        "MLT",
+        "NLD",
+        "POL",
+        "POR",
+        "RON",
+        "SLK",
+        "SLV",
+        "SPA",
+        "SWE"
+      ],
+      "english_expression_observed": true
+    },
+    {
+      "celex": "32016R0679R(03)",
+      "expression_language_codes": [
+        "CES",
+        "DEU",
+        "ELL",
+        "FIN",
+        "GLE",
+        "HRV",
+        "HUN",
+        "ITA",
+        "LIT",
+        "NLD",
+        "POL",
+        "POR",
+        "SLK",
+        "SPA",
+        "SWE"
+      ],
+      "english_expression_observed": false
+    }
+  ],
+  "proposals": [
+    {
+      "celex": "52025PC0501",
+      "official_metadata_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=856bddea-3639-11f0-8a44-01aa75ed71a1&nonInferred=false",
+      "document_dates": [
+        "2025-05-21"
+      ],
+      "resource_types": [
+        "PC",
+        "http://publications.europa.eu/ontology/cdm#act_preparatory",
+        "http://publications.europa.eu/ontology/cdm#act_preparatory_ec",
+        "http://publications.europa.eu/ontology/cdm#proposal_act",
+        "http://publications.europa.eu/ontology/cdm#proposal_regulation_ec",
+        "http://publications.europa.eu/ontology/cdm#resource_legal",
+        "http://publications.europa.eu/ontology/cdm#work",
+        "http://publications.europa.eu/resource/authority/resource-type/PROP_REG"
+      ],
+      "gdpr_relation": "proposes_to_amend",
+      "adopted_successor_or_full_procedure_verified": false,
+      "applied_to_translation": false
+    },
+    {
+      "celex": "52025PC0837",
+      "official_metadata_url": "https://op.europa.eu/en/publication-detail?p_p_id=publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv&p_p_lifecycle=2&p_p_state=normal&p_p_mode=view&p_p_cacheability=cacheLevelPage&_publicationDetailsActions_PublicationDetailsActionsPortlet_INSTANCE_P7Lc96wTRLvv_requestAction=rdf&cellarId=ebf17714-c56e-11f0-8da2-01aa75ed71a1&nonInferred=false",
+      "document_dates": [
+        "2025-11-19"
+      ],
+      "resource_types": [
+        "PC",
+        "http://publications.europa.eu/ontology/cdm#act_preparatory",
+        "http://publications.europa.eu/ontology/cdm#act_preparatory_ec",
+        "http://publications.europa.eu/ontology/cdm#proposal_act",
+        "http://publications.europa.eu/ontology/cdm#proposal_regulation_ec",
+        "http://publications.europa.eu/ontology/cdm#resource_legal",
+        "http://publications.europa.eu/ontology/cdm#work",
+        "http://publications.europa.eu/resource/authority/resource-type/PROP_REG"
+      ],
+      "gdpr_relation": "proposes_to_amend",
+      "adopted_successor_or_full_procedure_verified": false,
+      "applied_to_translation": false
+    }
+  ],
+  "english_consolidated_raw_bytes_same_as_previous": true,
+  "current_2026_completeness_verified": false,
+  "publication_permission_verified": false,
+  "public_release_status": "withheld",
+  "human_review_status": "not_started",
+  "translation_body_changed": false,
+  "comparison_body_changed": false,
+  "limits": [
+    "Outgoing graph observations are not proof that all adopted amendments or related laws have been found.",
+    "Proposal document type does not verify completion of its legislative procedure or absence of an adopted successor.",
+    "English expression not observed in correction metadata is not a review of all non-English legal texts.",
+    "EU legal history/latest-version UI and complete effects of separate subsequent laws remain unverified.",
+    "No new law, date, publication permission or human review inferred from missing data."
+  ]
+}

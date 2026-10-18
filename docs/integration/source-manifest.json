@@ -1,0 +1,680 @@
+{
+  "base": "44d8cdae36cab38309600b9a88ab717bf624b7d7",
+  "sources": [
+    {
+      "pr": 15,
+      "sha": "063a927c6f8645ccac264d241203fa4f701c70f9",
+      "paths": [
+        "data/legal",
+        "public/review-drafts"
+      ]
+    },
+    {
+      "pr": 16,
+      "sha": "c42db8bd73c9002806341064326ab23331021922",
+      "paths": [
+        "data/trends"
+      ]
+    },
+    {
+      "pr": 30,
+      "sha": "0f03f51a38a61354d945376802bfe7607a943aca"
+    },
+    {
+      "pr": 32,
+      "sha": "2aa5a5d78b2a20e7231906b85ba9da570d97d12f"
+    }
+  ],
+  "files": [
+    {
+      "path": "data/legal/README.md",
+      "pr": 15,
+      "sha256": "08d5b38f9f42df07dc38a60ef202ecfea6f26d81cf0bf2d5b0898d8ac7e51ca8"
+    },
+    {
+      "path": "data/legal/comparison-cn-child-followup-20261016.md",
+      "pr": 15,
+      "sha256": "50907ef55c6bf895aab595298c332fc2bececd44a5697ec273d2927893a271de"
+    },
+    {
+      "path": "data/legal/comparison-cn-network-followup-20261016.md",
+      "pr": 15,
+      "sha256": "7ca892d06f69a7fe03a5f8d12028f385dee27625ccbf062229f74eddd877d9b6"
+    },
+    {
+      "path": "data/legal/comparison-cn-remaining-followup-20261016.md",
+      "pr": 15,
+      "sha256": "babcc9b86eafb9e8fd59ebb0fad4ba245f7019e51a1449c76d23c183ea498e99"
+    },
+    {
+      "path": "data/legal/comparison-eu-procedure-followup-20261016.md",
+      "pr": 15,
+      "sha256": "72e16a564dcf5118e6aad5ff20051c11a443290ab156038cba224e534a49d0b2"
+    },
+    {
+      "path": "data/legal/comparison-regulation-followup-20261016.md",
+      "pr": 15,
+      "sha256": "b2f7f437a95aa9f7afbfe7d259940427363e34bcd7a2feeac80bdb46358812ed"
+    },
+    {
+      "path": "data/legal/comparison-sg-enforcement-followup-20261016.md",
+      "pr": 15,
+      "sha256": "6b0732b3e5320105b675662314c7a6b74b7d2d6d4d8fe68a77dbaeb9b5a72a36"
+    },
+    {
+      "path": "data/legal/comparison-sg-procedure-indexed-20261016.md",
+      "pr": 15,
+      "sha256": "73e13763b1f725d2813794bd6b42155181ddd09da3e3557869c194a3b8786abe"
+    },
+    {
+      "path": "data/legal/comparison-status-audit-20261016.md",
+      "pr": 15,
+      "sha256": "aea9b8f4bdf3ff9bee6bba578da42429340b0c22a220fa22c1b0ed7dbc25211d"
+    },
+    {
+      "path": "data/legal/comparison-statute-followup-20261015.md",
+      "pr": 15,
+      "sha256": "e6e98d6468e454ca9728ee7a8dd17ed6fe1d716f7cf97b4404989090bebb3476"
+    },
+    {
+      "path": "data/legal/criteria-mapping.csv",
+      "pr": 15,
+      "sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab"
+    },
+    {
+      "path": "data/legal/criteria-mapping.md",
+      "pr": 15,
+      "sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f"
+    },
+    {
+      "path": "data/legal/gdpr-comparison-review.md",
+      "pr": 15,
+      "sha256": "8d83d40e53cc2d8a6af6fc0c63f40f79d7c31deaa5d5236c357bbb896f31c595"
+    },
+    {
+      "path": "data/legal/gdpr-currentness-check.md",
+      "pr": 15,
+      "sha256": "489d8fd537029451acf0de30ce5005929da174e9029346db707bd6661dd4fa55"
+    },
+    {
+      "path": "data/legal/gdpr-four-cell-review.md",
+      "pr": 15,
+      "sha256": "ff229209bb582406dfd23f98c4023b4efed527aabd47f4a78883cf1f41ee57c9"
+    },
+    {
+      "path": "data/legal/gdpr-human-review-queue.csv",
+      "pr": 15,
+      "sha256": "6dd065dc2cdaf6434e65eb7185936e3f3467c1bc8186b9b81b3f7c0ae2bb05b9"
+    },
+    {
+      "path": "data/legal/gdpr-pre-human-review.md",
+      "pr": 15,
+      "sha256": "5f33c626ebf6804f6a3539163287e0b26bc57954923d00a3cc32d6b8ddef615a"
+    },
+    {
+      "path": "data/legal/gdpr-pre-review-handoff.md",
+      "pr": 15,
+      "sha256": "7b1795d1747bccef7be20902d04731e44623206a2a20d9432ef8ba74fd830570"
+    },
+    {
+      "path": "data/legal/gdpr-procedural-followup.md",
+      "pr": 15,
+      "sha256": "cd8587b78a9138df4e95428a1062632ce3ccdacc773c8fda70dc13d600d292b0"
+    },
+    {
+      "path": "data/legal/gdpr-publication-check.md",
+      "pr": 15,
+      "sha256": "47f8b75f7964ac820f0cd1088900e3eaf5c64d6f911e02f49dde979edd3e1e16"
+    },
+    {
+      "path": "data/legal/gdpr-related-law-check.md",
+      "pr": 15,
+      "sha256": "8d15d24c1256e8249aa11ffa21dce6591d1901a98e6c95770f625a47b34a19fb"
+    },
+    {
+      "path": "data/legal/gdpr-remaining-criteria-review.md",
+      "pr": 15,
+      "sha256": "11ad9236b6ecd56763c5a2de9f19392ce769a0079072d509cfa52e0baeaf299d"
+    },
+    {
+      "path": "data/legal/instruments.csv",
+      "pr": 15,
+      "sha256": "dae04dca7dcf75d60a7d334574c14f67c6cbf20975672db5f00081030cab2dd9"
+    },
+    {
+      "path": "data/legal/instruments.md",
+      "pr": 15,
+      "sha256": "74d1eed4f02903220f1c0972080fbd924c88bd581f3ce677885c113d93cfc486"
+    },
+    {
+      "path": "data/legal/instruments.template.csv",
+      "pr": 15,
+      "sha256": "e620f1171abaa54053325c3f0b429ba0601445abdc0edebe3fdfe4e74710729a"
+    },
+    {
+      "path": "data/legal/instruments.template.md",
+      "pr": 15,
+      "sha256": "7c91eb2725f9b5b9c914c007203c98aec054425a6d8b62b757c99914c582e3ed"
+    },
+    {
+      "path": "data/legal/japan-comparison-review.md",
+      "pr": 15,
+      "sha256": "ede47d17e988acb786c1ad9df35e7e3567cf20d5a26d40fe9b1bb9035c45ab02"
+    },
+    {
+      "path": "data/legal/japan-followup-review.md",
+      "pr": 15,
+      "sha256": "1693a689c520eed695bace97e49e3976bc3c039659285bfa6b1dd6a74b3982b5"
+    },
+    {
+      "path": "data/legal/japan-pre-review.md",
+      "pr": 15,
+      "sha256": "fb29be0dfb0578257603d99c1cb31ba95cdbcfec20e03644bf207b1a092adf3e"
+    },
+    {
+      "path": "data/legal/processing-basis-review.md",
+      "pr": 15,
+      "sha256": "7511d59eeaa810c104887240a8ba1756c3cd673206d6bbf12edd02741d39470f"
+    },
+    {
+      "path": "data/legal/review-notes.md",
+      "pr": 15,
+      "sha256": "771506b527f1d443ee812dd53cd2721c75e2b47149814b7d1e0e5a0dcc2c3240"
+    },
+    {
+      "path": "data/legal/review-notes.template.md",
+      "pr": 15,
+      "sha256": "df8965a435dad3da6e495e087d9eb05afdd73e5683eb668e56a4798e13574af6"
+    },
+    {
+      "path": "data/legal/source-receipts.json",
+      "pr": 15,
+      "sha256": "d4981ac1a3f84c48507d45c8e1d49bdfc568f923aeae8f6cf6fe02df95ea2624"
+    },
+    {
+      "path": "data/legal/sources/gdpr-correction-manifest.json",
+      "pr": 15,
+      "sha256": "72b042b5564104f76ff978f225e7b9af1323ca5a218c51107f6814e3e071cfe5"
+    },
+    {
+      "path": "data/legal/sources/gdpr-currentness-check.json",
+      "pr": 15,
+      "sha256": "04b1dfe736887825f2db92167f59a70a6a07e18c4ad2b5a1c635317bd8fe93f1"
+    },
+    {
+      "path": "data/legal/sources/gdpr-draft-status.json",
+      "pr": 15,
+      "sha256": "3adb5ea512b0a89d77f592d64a55c15d05444378be04d31342d40b1e2e0aaf88"
+    },
+    {
+      "path": "data/legal/sources/gdpr-edition-review.json",
+      "pr": 15,
+      "sha256": "70fad25d3bfba08f07369466bb072b8212ac4c444ddcd5f5fa84c3837ca654a2"
+    },
+    {
+      "path": "data/legal/sources/gdpr-edition-review.md",
+      "pr": 15,
+      "sha256": "845c8c554b4c98eb3582d23d5172ac588c8fa441500595739d4ac8d16e17a63e"
+    },
+    {
+      "path": "data/legal/sources/gdpr-four-cell-review.json",
+      "pr": 15,
+      "sha256": "92c7ad01df076f92f7fa945628784f328f762f6885748860c5920abc4109f03b"
+    },
+    {
+      "path": "data/legal/sources/gdpr-index.json",
+      "pr": 15,
+      "sha256": "e9660e4e082f22d6ec3906e7ff2331368ee58b4cc58d5b0c6d2051ff5384efad"
+    },
+    {
+      "path": "data/legal/sources/gdpr-index.md",
+      "pr": 15,
+      "sha256": "0cc475e4fc06aec7de716a599f30e4b82a7c8558b333ab97446ae62cdcf01451"
+    },
+    {
+      "path": "data/legal/sources/gdpr-pre-review-audit.json",
+      "pr": 15,
+      "sha256": "9f6bd8c904473aa5ebc21639a7c25f31864251551bf31ac86c49331e131053e1"
+    },
+    {
+      "path": "data/legal/sources/gdpr-preview-reuse-20261015.json",
+      "pr": 15,
+      "sha256": "621d164cc9e499aa5b15e544144ddc785f6f7ed94ee879bff3d6f3a7fff05812"
+    },
+    {
+      "path": "data/legal/sources/gdpr-publication-check.json",
+      "pr": 15,
+      "sha256": "72af768b9cab100ad942e3a924100da83d5fb8650a61419224ea54e05be906c3"
+    },
+    {
+      "path": "data/legal/sources/gdpr-reference-files.json",
+      "pr": 15,
+      "sha256": "503907a05c4c82537efc061d635fd1081a72149c825c8bf15bc30074157d437f"
+    },
+    {
+      "path": "data/legal/sources/gdpr-reference-files.md",
+      "pr": 15,
+      "sha256": "d990fda6b2ca565be9cc022d346b296307324b9e444b9c9f1187e6ae3b1d5032"
+    },
+    {
+      "path": "data/legal/sources/gdpr-related-law-check.json",
+      "pr": 15,
+      "sha256": "0cb8935c8d98f51ded30b6464f3e1577ea5687fa9d279671b7071bfb892159e9"
+    },
+    {
+      "path": "data/legal/sources/gdpr-remaining-criteria-review.json",
+      "pr": 15,
+      "sha256": "9ab4c976995f2dbe8814b8c6a4e454e39ea06224bd0279a7c3724b975cbca1c8"
+    },
+    {
+      "path": "data/legal/sources/gdpr-review-handoff.json",
+      "pr": 15,
+      "sha256": "2cb751c69c836aec9aa3901fdf50f96c1ffdfd419079f2fa0db260a8d1b75329"
+    },
+    {
+      "path": "data/legal/sources/gdpr-terminology-change-manifest.json",
+      "pr": 15,
+      "sha256": "87eef8e97244e6b7a8dd9aa8e247b10b39b62655eb76b849603adb4ce5939068"
+    },
+    {
+      "path": "data/legal/sources/pipa-index.json",
+      "pr": 15,
+      "sha256": "8b5775b3483d0bfb5b822d9164df795a1bc05a36fcad07b9ade1494ba1175ba5"
+    },
+    {
+      "path": "data/legal/sources/pipa-index.md",
+      "pr": 15,
+      "sha256": "0dff2255a2a162451b7e5cb00f0fd7af1d37536802288601e3d39bb87fc03bb3"
+    },
+    {
+      "path": "data/legal/tools/criteria_format.py",
+      "pr": 15,
+      "sha256": "d5947a036f4b65583b9cbec21e84e38a22e44e6a56d8536cd1b7a06729da46d7"
+    },
+    {
+      "path": "data/legal/tools/gdpr_corrected.py",
+      "pr": 15,
+      "sha256": "dcaf97ffabe4efa1c3234348f6529723236ee46c23beeec84745b0ed24890fb4"
+    },
+    {
+      "path": "data/legal/tools/gdpr_index.py",
+      "pr": 15,
+      "sha256": "5ec402fe4ea88497872b8ae72ceacac541daa808c974a373487886071d10cfc0"
+    },
+    {
+      "path": "data/legal/tools/gdpr_pre_review.py",
+      "pr": 15,
+      "sha256": "1e1575966d1497b68b8a7680a4ba05a63961371b6b8d16a5e9d797e6cc6debc8"
+    },
+    {
+      "path": "data/legal/tools/gdpr_review_package.py",
+      "pr": 15,
+      "sha256": "2b03040716719ad49314621cc36616bdb050cce2f3a3566f643a11fa7870a771"
+    },
+    {
+      "path": "data/legal/tools/pipa_index.py",
+      "pr": 15,
+      "sha256": "54f536e00cbf0bdd0bd8dd15dcdcb0d056fecdab6aa08e84dd9a3585cacdc8cf"
+    },
+    {
+      "path": "data/legal/tools/render-appi.py",
+      "pr": 15,
+      "sha256": "9dc1312057b9f0ad12dd64d45ac39897cc761e92ee825faecccdc682432149ff"
+    },
+    {
+      "path": "data/legal/tools/render-criteria.py",
+      "pr": 15,
+      "sha256": "e4016f48fd5501f424b0b37125127b4a352f1916d998d3b64288e9804a5df11b"
+    },
+    {
+      "path": "data/legal/tools/render-gdpr.py",
+      "pr": 15,
+      "sha256": "00be754b2c6ba9a914b5ca9460b03d56c56b0f219d12dc6b7232b19cadc42cf1"
+    },
+    {
+      "path": "data/legal/translation-progress.md",
+      "pr": 15,
+      "sha256": "7385804bd3a24ff30f0c666ae767ee90116ae641859b3f1edd6daaa5479a3bf7"
+    },
+    {
+      "path": "data/legal/translations/appi-review-notes.md",
+      "pr": 15,
+      "sha256": "c271550956fe36857ccd07be37c2d5713ef41a4f3002ed0609cad12c0499a9b8"
+    },
+    {
+      "path": "data/legal/translations/appi-status.md",
+      "pr": 15,
+      "sha256": "26e25f0d421528150033779f726453e2e52c31c05ab1972d861132c1e1ebc467"
+    },
+    {
+      "path": "data/legal/translations/appi.json",
+      "pr": 15,
+      "sha256": "44de5b48da400d797160da9b0686d03075ed9643cd14cb47ae3e54aa71b04fd0"
+    },
+    {
+      "path": "data/legal/translations/appi.md",
+      "pr": 15,
+      "sha256": "2edac6e948000c959ce8f28e276bc802efcada77f5b10c020faca2e2333a4bcf"
+    },
+    {
+      "path": "data/legal/translations/ccpa-review-notes.md",
+      "pr": 15,
+      "sha256": "91e42087ed2cb8cf8aa8c7b511e3429642632dbd94b764332fa5daf98a4e1262"
+    },
+    {
+      "path": "data/legal/translations/ccpa.json",
+      "pr": 15,
+      "sha256": "6d94990a5c5eb90d6b867fa462dd7fdbfa403100cb1f278b7cfaabbb8e7fd49b"
+    },
+    {
+      "path": "data/legal/translations/ccpa.md",
+      "pr": 15,
+      "sha256": "14c373e8c03020974789296f15e7c4983d2bfc5f9289e950415b7f6d5fbca2bf"
+    },
+    {
+      "path": "data/legal/translations/gdpr-review-notes.md",
+      "pr": 15,
+      "sha256": "53b3560fde556298e7aa323ecbda67bf60b47c43b038986bdaf332b7ef1f4f52"
+    },
+    {
+      "path": "data/legal/translations/pdpa-review-notes.md",
+      "pr": 15,
+      "sha256": "9db303861e3d86ba15128598bbfb25672cdebc6628fcd5c2eb4235f97968858b"
+    },
+    {
+      "path": "data/legal/translations/pdpa.json",
+      "pr": 15,
+      "sha256": "98a54c3651a2e9361c1e445dc6d82fc62c05ad55d33686f4efa902c1ad3404e6"
+    },
+    {
+      "path": "data/legal/translations/pdpa.md",
+      "pr": 15,
+      "sha256": "48b6685fd521846317a379c50e8ba491ec7442f0a13499c872643441f1d6a1a5"
+    },
+    {
+      "path": "data/legal/translations/pipl-review-notes.md",
+      "pr": 15,
+      "sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86"
+    },
+    {
+      "path": "data/legal/translations/pipl.json",
+      "pr": 15,
+      "sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39"
+    },
+    {
+      "path": "data/legal/translations/pipl.md",
+      "pr": 15,
+      "sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885"
+    },
+    {
+      "path": "data/legal/translations/uk-gdpr-review-notes.md",
+      "pr": 15,
+      "sha256": "12fb6eedf70b0118b1856c1c98e2f4723ae52103eb1d7e77d73e972a16a68a65"
+    },
+    {
+      "path": "data/legal/translations/uk-gdpr.json",
+      "pr": 15,
+      "sha256": "0b53fbcdafb4cc4f04202834d496b336faa6184afcc92a22a609ee60280e9ab3"
+    },
+    {
+      "path": "data/legal/translations/uk-gdpr.md",
+      "pr": 15,
+      "sha256": "ec001253df46433eea664949ce06ce37e27b8fd764a0fdf3604dd59f77a24a75"
+    },
+    {
+      "path": "data/legal/validate-corpus.py",
+      "pr": 15,
+      "sha256": "c9ef166906c6f76c86b34474ff05b65ac6cfca40c2fedec5da32364b4f09a79b"
+    },
+    {
+      "path": "data/legal/validate-gdpr.py",
+      "pr": 15,
+      "sha256": "8adac09a4b76c33708bc76b5f837287a00e958aab16109db9aaba40adce103bd"
+    },
+    {
+      "path": "public/review-drafts/comparison.html",
+      "pr": 15,
+      "sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613"
+    },
+    {
+      "path": "public/review-drafts/criteria-mapping.csv",
+      "pr": 15,
+      "sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4"
+    },
+    {
+      "path": "public/review-drafts/criteria-mapping.md",
+      "pr": 15,
+      "sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab"
+    },
+    {
+      "path": "public/review-drafts/gdpr.html",
+      "pr": 15,
+      "sha256": "04b5deb13e33eebe2f6d6faf31935dae92f2fd39c3fe8f1b05fcfa8c366c8c0d"
+    },
+    {
+      "path": "public/review-drafts/publication-notice.txt",
+      "pr": 15,
+      "sha256": "665a2506a5ce781830e67d887ec84bb83af389a83f8ca52727207ce8bc1732ee"
+    },
+    {
+      "path": "data/trends/README.md",
+      "pr": 16,
+      "sha256": "9676e92f6c0d89e2aa3a35483c63a14d80582415041cab01d0d5d8754bc705f5"
+    },
+    {
+      "path": "data/trends/fixtures/cnil.json",
+      "pr": 16,
+      "sha256": "2a037e35237124eecfc58e71baeeb220207e5bcc8e92234734ec80b7af90467a"
+    },
+    {
+      "path": "data/trends/fixtures/cnil.md",
+      "pr": 16,
+      "sha256": "7a76d11ef7d975ef7a69569954c737273dc3a0a28baf5e78dd7feb8ccaec5e5e"
+    },
+    {
+      "path": "data/trends/fixtures/curia.json",
+      "pr": 16,
+      "sha256": "f45bfa2c8b071290223c32c8a2c06f7b81330c82c75e80285e0b5bb508093243"
+    },
+    {
+      "path": "data/trends/fixtures/curia.md",
+      "pr": 16,
+      "sha256": "9955f3f8fc1f90bd89e8b145b7512d74bdc73c118bc76292de62f37a7f990c82"
+    },
+    {
+      "path": "data/trends/fixtures/dpc.json",
+      "pr": 16,
+      "sha256": "61284db579cc6b801b6d5c510cb7fca1036bd19d5c4d87d2366db999c442e1e4"
+    },
+    {
+      "path": "data/trends/fixtures/dpc.md",
+      "pr": 16,
+      "sha256": "d4f095db68014b67c8590d2c1fcc10b8039c36c7f1d077e6b884acf602dae650"
+    },
+    {
+      "path": "data/trends/fixtures/edpb.json",
+      "pr": 16,
+      "sha256": "28ec7b92db4298e8bc138b933d60b5d2074bd48fb9ed78bc8d0a03a1f06c7ac4"
+    },
+    {
+      "path": "data/trends/fixtures/edpb.md",
+      "pr": 16,
+      "sha256": "73e0d13eb90ea725560b337d58b77930a2c4b9e974fcda7cce3388e63fffd43c"
+    },
+    {
+      "path": "data/trends/fixtures/ftc.json",
+      "pr": 16,
+      "sha256": "12c6d9a9127456fdb1ba13d9dba8c72dfc14675be5e01edc72e7c84e9b4684b6"
+    },
+    {
+      "path": "data/trends/fixtures/ftc.md",
+      "pr": 16,
+      "sha256": "54a458e90965eb83883f65cff79cc2152ef8711079ca3665ec2068e8f73e6861"
+    },
+    {
+      "path": "data/trends/fixtures/ico.json",
+      "pr": 16,
+      "sha256": "c163c0068371fea548cd82270a87061f69d167ba9b7a24ba800f578ec33d36ff"
+    },
+    {
+      "path": "data/trends/fixtures/ico.md",
+      "pr": 16,
+      "sha256": "affde7c7e46c77666a5f56de0cff12b00fe1c2a2e7e14ae023dcb51a684d8186"
+    },
+    {
+      "path": "data/trends/fixtures/oecd.json",
+      "pr": 16,
+      "sha256": "89c5f562d33f7c154bc9db92c77e1e007b3aa573d6f98c89619f6834565a1d99"
+    },
+    {
+      "path": "data/trends/fixtures/oecd.md",
+      "pr": 16,
+      "sha256": "f32733737d019ec397824fa0e4f8a4ba6ec5351bacefdb67541fd5a9ee09f36f"
+    },
+    {
+      "path": "data/trends/fixtures/pdpc.json",
+      "pr": 16,
+      "sha256": "05c1b6b774232b88fa52ea395f28383c5baf8e1215b8dc2f8313ad8ea3986c24"
+    },
+    {
+      "path": "data/trends/fixtures/pdpc.md",
+      "pr": 16,
+      "sha256": "f252d8f26bb2089a0dab1b4d79d4e96d816f7c43a5855d9eda7ec9dfa6586239"
+    },
+    {
+      "path": "data/trends/fixtures/ppc.json",
+      "pr": 16,
+      "sha256": "a13be6ea5fb6c689713cb0f6b717f5bb62e6d2cd09c3eb14017bb3f264d095c4"
+    },
+    {
+      "path": "data/trends/fixtures/ppc.md",
+      "pr": 16,
+      "sha256": "730bf03103bc3132b5d344a90a4c159563c9d4bd28b4be37f793d50ab9b3cde3"
+    },
+    {
+      "path": "data/trends/fixtures/review-notes.md",
+      "pr": 16,
+      "sha256": "fdbee4e865e76213a46187657d229a83688fc0f9b6e8a08a71e46909066d2169"
+    },
+    {
+      "path": "data/trends/review-notes.md",
+      "pr": 16,
+      "sha256": "252c20aaf802860a0661a330cf4d8dd1317f786d6f2161f2b137fa0b95d76c2f"
+    },
+    {
+      "path": "data/trends/review-notes.template.md",
+      "pr": 16,
+      "sha256": "4365d0c5b3b44ce5b0ccbcbfc604da6cd75d8d874922674ea7dc1f43b61efdcb"
+    },
+    {
+      "path": "data/trends/source-configs/cnil.json",
+      "pr": 16,
+      "sha256": "9261173d929a05cd42b5539849bf9cc6f2dda750832b52e30db922b458cfc769"
+    },
+    {
+      "path": "data/trends/source-configs/cnil.md",
+      "pr": 16,
+      "sha256": "17f6cad58677185142c87a1f94afd89a4b8d0e62e7e0bcbf66d5f3ec5831de70"
+    },
+    {
+      "path": "data/trends/source-configs/curia.json",
+      "pr": 16,
+      "sha256": "aff5ea071ea6e2a0362d770337dee440c0d13b444d66675ec6be227f0019ff01"
+    },
+    {
+      "path": "data/trends/source-configs/curia.md",
+      "pr": 16,
+      "sha256": "92a510852a062f5cab42e9583e3a68fd9075030bd745ad495cb321c27143476b"
+    },
+    {
+      "path": "data/trends/source-configs/dpc.json",
+      "pr": 16,
+      "sha256": "149406db3cadd43c4853947a32bb8a2ec2547a00f8cb525520095f17e1f491ff"
+    },
+    {
+      "path": "data/trends/source-configs/dpc.md",
+      "pr": 16,
+      "sha256": "68e66e82b8fa6a9c45c7f4f082648c47766e131b137e4f96141cd2957d474ae1"
+    },
+    {
+      "path": "data/trends/source-configs/edpb.json",
+      "pr": 16,
+      "sha256": "ee5fb233ebad2f09c4deaa077a019c214006f913b4ace478121277338baa3ed2"
+    },
+    {
+      "path": "data/trends/source-configs/edpb.md",
+      "pr": 16,
+      "sha256": "20213eaca1039d3e50fa2f486100e8fb0d7af1cff560caf9109713476c99390c"
+    },
+    {
+      "path": "data/trends/source-configs/ftc.json",
+      "pr": 16,
+      "sha256": "a707bad51abbfa22704753d2334fdaf8014b415e5144b55e438833e116255783"
+    },
+    {
+      "path": "data/trends/source-configs/ftc.md",
+      "pr": 16,
+      "sha256": "61af34bda67bf86f6d4039bf48521cbd2cc9446fc2d891d29003f21ee425a67a"
+    },
+    {
+      "path": "data/trends/source-configs/ico.json",
+      "pr": 16,
+      "sha256": "e8fa411e398a223f9ce9cbcc9df4f9afe57390e2fb2f4c07a08b8f8489d706b0"
+    },
+    {
+      "path": "data/trends/source-configs/ico.md",
+      "pr": 16,
+      "sha256": "46b4e141902a23aa8cc4d9a50327813d4e354a36e61f60e1c909518ea64af215"
+    },
+    {
+      "path": "data/trends/source-configs/oecd.json",
+      "pr": 16,
+      "sha256": "778f23305fca719d8ea3f0be0481be20906bb31f1316584c23307fdd36c9d0c7"
+    },
+    {
+      "path": "data/trends/source-configs/oecd.md",
+      "pr": 16,
+      "sha256": "d99a0cc40784505fb5e6c16c0ada5a15b62044b349e13236ca4892a947eb8cb7"
+    },
+    {
+      "path": "data/trends/source-configs/pdpc.json",
+      "pr": 16,
+      "sha256": "ff68d47035873f3c4d8fe3ca1046132dd3e0e37913a919a9bfd999ddc66fa2ab"
+    },
+    {
+      "path": "data/trends/source-configs/pdpc.md",
+      "pr": 16,
+      "sha256": "928d4a769992b402d4df0607c770467426ac549156cd6d099a1b2e8c33eebd9e"
+    },
+    {
+      "path": "data/trends/source-configs/ppc.json",
+      "pr": 16,
+      "sha256": "930a7a9f8d2f80b68dc65edcfc8d2e2141c4bb680ef2604b0e5f2572b664d7f0"
+    },
+    {
+      "path": "data/trends/source-configs/ppc.md",
+      "pr": 16,
+      "sha256": "39dbc7b7859ed11abedd6dfd967999ac6144e870b0ef37366ccdca2be02947a4"
+    },
+    {
+      "path": "data/trends/source-configs/source.template.json",
+      "pr": 16,
+      "sha256": "37960ac1ccc549074a7c7bc2eb7a5a3cfd31551143a41bb1a5a346bf41028590"
+    },
+    {
+      "path": "data/trends/source-configs/source.template.md",
+      "pr": 16,
+      "sha256": "7bb47054cfd8d511eb0edc34d87dbd1bfb22b9cb97ea1b0e4900be8840d542d7"
+    },
+    {
+      "path": "data/trends/weekly-sample.json",
+      "pr": 16,
+      "sha256": "ff654791b2f81e16bdbd25205b0f7abe53b39fd1605f386925fa3688fd0015c4"
+    },
+    {
+      "path": "data/trends/weekly-sample.md",
+      "pr": 16,
+      "sha256": "7315d5b0081a4ef1ad5d687cd64764fa2fddfdd580927e78b745cb8d05ba528f"
+    }
+  ]
+}

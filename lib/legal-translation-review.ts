@@ -14,6 +14,7 @@ type Provision = {
   human_review_status?: string;
 };
 type Corpus = {
+  jurisdiction_code?: string;
   official_name?: string;
   korean_title?: string;
   source?: { original_url?: string; selected_revision_enforcement_date?: string; scope_note?: string };
@@ -23,6 +24,7 @@ type Corpus = {
 
 export type LegalTranslationSummary = {
   id: string;
+  jurisdiction: string;
   title: string;
   officialName: string;
   version: string;
@@ -46,7 +48,8 @@ export type LegalTranslationEntry = LegalTranslationSummary | { id: string; erro
 
 function inspectCorpus(root: string, id: string): { corpus: Corpus | null; error: string } {
   if (!validId.test(id)) return { corpus: null, error: "파일 이름이 올바르지 않습니다." };
-  const path = join(translationsDir(root), `${id}.json`);
+  const primary = join(translationsDir(root), `${id}.json`);
+  const path = id === "gdpr" && !existsSync(primary) ? join(root, "data", "derived", "gdpr.json") : primary;
   if (!existsSync(path)) return { corpus: null, error: "번역 파일이 없습니다." };
   let data: unknown;
   try {
@@ -75,6 +78,7 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   const provisions = corpus.provisions ?? [];
   return {
     id,
+    jurisdiction: typeof corpus.jurisdiction_code === "string" ? corpus.jurisdiction_code : "",
     title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역 초안`,
     officialName: typeof corpus.official_name === "string" && corpus.official_name.trim() ? corpus.official_name.trim() : id.toUpperCase(),
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
@@ -88,6 +92,7 @@ export function listLegalTranslationEntries(root = process.cwd()): LegalTranslat
   if (!existsSync(dir)) return [];
   let names: string[];
   try { names = readdirSync(dir); } catch { return []; }
+  if (existsSync(join(root, "data", "derived", "gdpr.json")) && !names.includes("gdpr.json")) names.push("gdpr.json");
   return names
     .filter((name) => name.endsWith(".json") && validId.test(name.slice(0, -5)))
     .map((name) => {
@@ -108,15 +113,15 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
   const nodes = [...corpus.provisions!].sort((a, b) => a.source_order - b.source_order);
   const byId = new Map(nodes.map((node) => [node.node_id, node]));
   const supplementary = new Map(nodes.filter((node) => node.tag === "SupplProvision").map((node) => [node.scope, node.korean_title ?? "부칙"]));
-  const roots = nodes.filter((node) => ["Article", "AppdxTable", "SupplProvision"].includes(node.tag));
+  const roots = nodes.filter((node) => ["Article", "AppdxTable", "SupplProvision", "Recital", "Preamble", "Footnote"].includes(node.tag));
   const sectionById = new Map<string, TranslationSection>();
   for (const node of roots) {
-    const group = node.tag === "AppdxTable" ? "appendix" : node.tag === "SupplProvision" || node.scope !== "main" ? "supplementary" : "main";
+    const group = ["Recital", "Preamble", "Footnote"].includes(node.tag) ? "reference" : node.tag === "AppdxTable" ? "appendix" : node.tag === "SupplProvision" || node.scope !== "main" ? "supplementary" : "main";
     sectionById.set(node.node_id, {
       id: node.node_id,
       group,
       title: node.korean_title || (node.tag === "Article" ? `제${node.number}조` : node.tag === "AppdxTable" ? `별표 ${node.number}` : "부칙"),
-      context: group === "supplementary" ? supplementary.get(node.scope) ?? "부칙" : group === "appendix" ? "별표" : "본칙",
+      context: group === "reference" ? "서문·고려사항·주석" : group === "supplementary" ? supplementary.get(node.scope) ?? "부칙" : group === "appendix" ? "별표·부속서" : "본칙",
       reviewStatus: node.human_review_status ?? "not_started",
       lines: [],
     });
@@ -147,4 +152,49 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
     scopeNote: corpus.source?.scope_note || "",
     sections: [...sectionById.values()],
   };
+}
+
+
+export type LegalArticlePreview = { text: string; anchorId: string };
+
+function excerpt(lines: TranslationSection["lines"], anchorId: string): LegalArticlePreview | null {
+  const text = lines.map((line) => `${line.label ? `${line.label} ` : ""}${line.text.trim()}`).filter(Boolean).join("\n");
+  if (!text) return null;
+  return { text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text, anchorId };
+}
+
+export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string, translationLink?: string): LegalArticlePreview | null {
+  const linkedId = translationLink?.match(/#([a-zA-Z0-9-]+)$/)?.[1];
+  if (linkedId) {
+    const linkedSection = law.sections.find((item) => item.id === linkedId);
+    if (linkedSection) return excerpt(linkedSection.lines, linkedId);
+    const section = law.sections.find((item) => item.lines.some((line) => line.id === linkedId));
+    if (!section) return null;
+    return excerpt(section.lines.filter((line) => line.id === linkedId || line.id.startsWith(`${linkedId}-`)), linkedId);
+  }
+  // Supplementary provisions and appendices need their explicit location; do not substitute a main article.
+  if (/부칙|별표/.test(citation)) return null;
+  const match = citation.match(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
+  // CCPA uses decimal section numbers; PDPA uses e.g. 13A and 2(1).
+  if (!match) {
+    const english = citation.match(/^(\d+(?:\.\d+)*[a-zA-Z]?)(?:\((\d+)\))?(?![\d.])/);
+    if (!english) return null;
+    const id = `main-a${english[1].replaceAll(".", "-").toLowerCase()}`;
+    const section = law.sections.find(item => item.group === "main" && item.id.toLowerCase() === id);
+    if (!section) return null;
+    const paragraph = english[2] ? `${section.id}-p${english[2]}` : null;
+    if (paragraph) {
+      if (!section.lines.some(line => line.id === paragraph)) return null;
+      return excerpt(section.lines.filter(line => line.id === paragraph || line.id.startsWith(`${paragraph}-`)), paragraph);
+    }
+    return excerpt(section.lines, section.id);
+  }
+  const guessedId = `main-a${match[1].toLowerCase()}${match[2] ? `-${match[2]}` : ""}`;
+  const section = law.sections.find((item) => item.group === "main" && item.id.toLowerCase() === guessedId);
+  if (!section) return null;
+  const articleId = section.id;
+  if (!match[3] && !match[4]) return excerpt(section.lines, articleId);
+  const requestedId = `${articleId}${match[3] ? `-p${match[3]}` : ""}${match[4] ? `-i${match[4]}` : ""}`;
+  if (!section.lines.some((line) => line.id === requestedId)) return null;
+  return excerpt(section.lines.filter((line) => line.id === requestedId || line.id.startsWith(`${requestedId}-`)), requestedId);
 }

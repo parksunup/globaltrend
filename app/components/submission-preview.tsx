@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Link from "next/link";
 import type { SubmissionDocuments, SubmissionItem } from "../../lib/submission-preview";
 import SubmissionDocumentsView from "./submission-documents";
 import SubmissionFeedback from "./submission-feedback";
@@ -36,9 +37,11 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
       <div className="topbar-note">이 배포 브랜치의 파일 · 검수 전 초안</div>
     </header>
     <div className="submission-notice">
+      {branch === "feat/legal-corpus-foundation" && <a href="/legal-drafts">최신 전체 비교표와 GDPR 번역 초안 열기 →</a>}
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
       <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 항목 아래 목록과 공개 피드백 목록에서 읽을 수 있습니다.</span>
       {hasTrends && <span>동향 제출물은 수집 출처와 동향 표본으로 나누어 확인할 수 있습니다. 조사 표본은 발행 전 검수 자료입니다.</span>}
+      <Link href={branch ? `/feedback?branch=${encodeURIComponent(branch)}` : "/feedback"}>이 브랜치에 저장된 피드백 전체 보기 →</Link>
     </div>
     {hasDocument && <div className="document-tabs" role="group" aria-label="검수 화면 선택">
       <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>17개 기준 비교표</button>
