@@ -74,6 +74,8 @@ select is(public.publish_publication_draft('report','49000000-0000-0000-0000-000
 select is(public.publish_publication_draft('law',(select id from workspace_law_id),7)->>'status','published','restored legal snapshot can be republished');
 select throws_ok($$select public.save_publication_draft('law',(select id from workspace_law_id),8,jsonb_set((select payload from workspace_law_payload),'{cells}','[]'))$$,'22023','Exactly 17 matching legal criteria are required','invalid legal edit fails before replacing any public data');
 select is((select count(*) from public.comparison_cells where law_version_id=(select id from workspace_law_id)),17::bigint,'invalid edit and retries never duplicate or remove comparison cells');
+select throws_ok($$select public.save_publication_draft('law',(select id from workspace_law_id),8,jsonb_set((select payload from workspace_law_payload),'{cells,0,summary}','""'))$$,'22023','Exactly 17 matching legal criteria are required','empty comparison text is rejected without replacing a publication');
+select throws_ok($$select public.save_publication_draft('law',(select id from workspace_law_id),8,jsonb_set((select payload from workspace_law_payload),'{document,sections,0,lines,0,text}','""'))$$,'22023','Invalid legal text','empty translated text is rejected without replacing a publication');
 select set_config('request.jwt.claim.sub','49000000-0000-0000-0000-000000000003',true);
 select is_empty($$select * from public.publication_working_copies$$,'ordinary authenticated visitors cannot see working drafts');
 select throws_ok($$select public.restore_publication_draft('report','49000000-0000-0000-0000-000000000011',9)$$,'42501','Active editor is required','ordinary authenticated visitors cannot restore or edit');
