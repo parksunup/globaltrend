@@ -25,6 +25,7 @@ jobs:
       - run: pnpm validate:data
       - run: pnpm typecheck
       - run: pnpm build
+      - run: node scripts/verify-content-traces.mjs
 
   database:
     runs-on: ubuntu-latest

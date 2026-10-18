@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
+import { loadLegalTranslation } from "../lib/legal-translation-review.ts";
 
 const base = process.env.PREVIEW_BASE_URL;
 const expectedSha = process.env.PREVIEW_EXPECTED_SHA;
@@ -89,6 +90,13 @@ try {
       assert.equal(response?.status(), 200, pathname + " must load");
       const width = await page.evaluate(() => document.documentElement.scrollWidth);
       assert(width <= viewport.width + 2, pathname + " must not scroll horizontally: " + width + "/" + viewport.width);
+    }
+    for (const id of ["appi","pipl","gdpr","uk-gdpr","ccpa","pdpa"]) {
+      const response=await page.goto(new URL(`/public/laws/${id}`,base).href,{waitUntil:"domcontentloaded"});
+      assert.equal(response?.status(),200,`${id}: full reader must be deployed`);
+      const expected=loadLegalTranslation(id);
+      assert(expected?.sections.length,`${id}: local corpus must exist`);
+      assert.equal(await page.locator('article[id]').count(),expected.sections.length,`${id}: every translated section must be deployed`);
     }
     if (viewport.width < 600) {
       await page.goto(new URL("/public", base).href);
