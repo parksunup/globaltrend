@@ -67,9 +67,9 @@ export default function DraftViewer() {
   return <main className={styles.page}>
     <header className={styles.header}>
       <a href="/">← 제출물 검수로 돌아가기</a>
-      <h1>최신 법제 비교와 GDPR 번역 초안</h1>
+      <h1>전달받은 법제 비교·번역 파일</h1>
       <p>2026년 10월 14일 · 7법제 × 17기준 비교 119셀 · GDPR 99조와 고려사항 173개</p>
-      <p>공동 작업 검토용 초안입니다. 사람 검수는 미착수이며, 미확인 판본·조건은 자료에 표시되어 있습니다.</p>
+      <p>파일 기록 · 현재 운영 검수 상태와 별개입니다. 파일 안의 검수·미착수 표시는 작성 당시 기록이며, 최신 발행 상태는 운영 사이트에서 확인해 주세요.</p>
     </header>
     {!bundle ? <form onSubmit={unlock} className={styles.unlock}>
       <label htmlFor="draft-file">전달받은 초안 파일</label>

@@ -55,16 +55,19 @@ export default function TranslationReview({ lawId, title, sections, officialName
     reference: sections.filter((section) => section.group === "reference").length };
   const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
 
+  const published = reviewStatus === "published";
+  const statusLabel = (status: string) => status === "published" ? "검수 완료·발행됨" : status === "not_started" ? "미발행 · 제출 자료" : status;
+
   return <main className={styles.page}>
     <header className={styles.header}>
       <Link href="/legal-translation">← 법률별 번역 목록</Link>
-      <p className={styles.kicker}>법제 전문 · 사람 검수 전 초안</p>
+      <p className={styles.kicker}>법제 전문 · {statusLabel(reviewStatus)}</p>
       <h1>{title}</h1>
-      <p>{officialName}의 조문을 순서대로 읽고 의견을 남길 수 있습니다. 이 번역은 비공식 초안이며 검수·공개 승인을 뜻하지 않습니다.</p>
-      <div className={styles.meta}><span>선택 판본: {version}</span><span>사람 검수: {reviewStatus === "not_started" ? "미착수" : reviewStatus}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
-      {scopeNote && <p className={styles.caveat}>범위 주의: {scopeNote}</p>}
+      <p>{officialName}의 조문을 순서대로 읽고 의견을 남길 수 있습니다. {published ? "이 판본은 검수 완료 후 발행된 자체 한국어 번역입니다." : "이 자료의 운영 발행 상태는 위에 표시합니다. 자체 한국어 번역으로 제공합니다."}</p>
+      <div className={styles.meta}><span>선택 판본: {version}</span><span>상태: {statusLabel(reviewStatus)}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
+      {scopeNote && (published ? <details className={styles.caveat}><summary>작성 당시 판본·번역 범위 기록</summary><p>원문 범위와 작성 당시의 확인 기록입니다. 미착수·초안 표현은 현재 검수·발행 상태를 뜻하지 않습니다.</p><p>{scopeNote}</p></details> : <p className={styles.caveat}>번역 범위: {scopeNote}</p>)}
       {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
-      {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">번역 초안 원본 파일 보기 ↗</a>}
+      {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">작성 당시 번역 원본 파일 보기 ↗</a>}
     </header>
     <div className={styles.controls}>
       <div className={styles.tabs} role="group" aria-label="번역 범위">
@@ -81,7 +84,7 @@ export default function TranslationReview({ lawId, title, sections, officialName
       </nav>
       <article id={selected?.id} className={styles.article}>
         {selected ? <>
-          <p className={styles.kicker}>{selected.context} · {selected.reviewStatus === "not_started" ? "사람 검수 전" : selected.reviewStatus}</p>
+          <p className={styles.kicker}>{selected.context} · {statusLabel(published ? "published" : selected.reviewStatus)}</p>
           <h2>{selected.title}</h2>
           {selected.lines.length ? selected.lines.map((line) => <p key={line.id} className={styles.provision}>{line.label && <strong>{line.label}. </strong>}{line.text}</p>) : <p>이 항목에는 번역 본문이 없습니다. 원본 파일과 범위 메모를 확인해 주세요.</p>}
           <div className={styles.feedback}><SubmissionFeedback key={selected.id} itemId={`translation-${lawId}-${selected.id}`} branch={branch} commitSha={commitSha} /></div>

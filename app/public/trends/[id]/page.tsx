@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { loadSubmittedStories, publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
+import { publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
+import { loadPublicStories } from "../../../../lib/public-content";
+import { publicationLabel } from "../../../../lib/publication-status";
 import { loadPublishedStory } from "../../../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
@@ -15,7 +17,7 @@ export default async function TrendDetail({ params, searchParams }: {
   const { id } = await params;
   const { back } = await searchParams;
   const draftMode = publicSubmissionPreviewEnabled();
-  const story = draftMode ? loadSubmittedStories().find((item) => item.id === id) : await loadPublishedStory(id);
+  const story = draftMode ? (await loadPublicStories()).find((item) => item.id === id) : await loadPublishedStory(id);
   if (!story) notFound();
   const returnTo = back?.startsWith("/public/search?") ? back : "/public/search";
   return <main className={styles.site}>
@@ -25,7 +27,7 @@ export default async function TrendDetail({ params, searchParams }: {
         <Link href={returnTo}>← 동향 목록으로</Link>
         <p className={styles.featureMeta}>{story.region} · {story.institution} · {story.date}</p>
         <h1>{story.title}</h1>
-        {draftMode && <p className={styles.draftNotice}>담당자 제출 동향 표본 · 사람 검수 전 초안입니다.</p>}
+        {draftMode && <p className={styles.draftNotice}>{publicationLabel(story.publicationStatus)}</p>}
         <section className={styles.trendSummary}><h2>핵심 요약</h2><p>{story.summary}</p></section>
         {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p>{point.text}</p></li>)}</ul>:<p>{story.details}</p>}</section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>

@@ -15,7 +15,7 @@ export default function WeeklyPage() {
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>검수와 발행을 마친 주간 자료를 호별로 모아 읽습니다.</p></div>
       {example?<div className={styles.weeklyReport}>
         <div className={styles.weeklyReportHeader}>
-          <p className={styles.draftNotice}>팀 제출 주간 예시 · 미검수·미발행</p>
+          <p className={styles.draftNotice}>주간호 구성 예시 · 주간호 자체는 미발행</p>
           <p className={styles.weeklyReportKicker}>개인정보 주간동향 분석</p>
           <h2>{example.title}</h2>
           <p className={styles.weeklyReportMeta}>예시 호 · 해외·국제 {example.issue.contents.length}건 · 국내 0건</p>

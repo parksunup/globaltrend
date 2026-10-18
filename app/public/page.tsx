@@ -22,7 +22,7 @@ export default async function PublicHome() {
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
-    {draftMode && <div className={styles.draftNotice}>통합 테스트 · 담당자 제출 자료 · 사람 검수 전 초안입니다. 발행된 기사나 확정 법률 해설이 아닙니다. <Link href="/team">검수 화면 보기 →</Link></div>}
+    {draftMode && <div className={styles.draftNotice}>미리보기 환경 · 각 자료의 실제 검수·발행 상태를 표시합니다. <Link href="/team">검수 화면 보기 →</Link></div>}
     {draftMode && <section className={styles.submissionStats} aria-label="담당자 제출 자료 현황"><Link href="/public/search"><strong>{allStories.length}건</strong><span>동향 표본</span></Link><Link href="/public/laws"><strong>{legalItems.length}개</strong><span>조사한 법률</span></Link><Link href="/public/laws?view=compare"><strong>{comparisonCount}칸</strong><span>17개 기준 비교표</span></Link></section>}
 
     <section className={styles.hero}>
@@ -69,6 +69,6 @@ export default async function PublicHome() {
       <Link href="/public/weekly">주간호 전체 보기 →</Link>
     </section>
     <PublicFooter />
-    <p className={styles.demoBanner}>{draftMode ? "이 화면의 동향·법제 자료는 검수 전 초안이며 정식 공개 자료가 아닙니다." : "공개 동향은 관리자 검수와 발행을 마친 자료만 표시합니다."}</p>
+    <p className={styles.demoBanner}>{draftMode ? "미리보기에는 발행 자료와 작업본이 함께 표시될 수 있습니다. 개별 자료의 상태를 확인해 주세요." : "공개 동향은 관리자 검수와 발행을 마친 자료만 표시합니다."}</p>
   </main>;
 }

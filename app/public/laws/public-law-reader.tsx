@@ -1,5 +1,6 @@
 "use client";
 
+import { publicationLabel } from "../../../lib/publication-status";
 import Link from "next/link";
 import { useState } from "react";
 import type { LegalTranslationDocument } from "../../../lib/legal-translation-review";
@@ -23,8 +24,8 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
     <p className={styles.lawOverline}>{law.reviewStatus === "published" ? "KOREAN TRANSLATION" : "KOREAN TRANSLATION DRAFT"}</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
-    <div className={styles.draftNotice}>{law.reviewStatus === "published" ? "팀 검수를 거쳐 발행한 한국어 번역입니다. 공식 원문과 판본·범위를 함께 확인해 주세요." : "사람 검수 전 한국어 번역 초안입니다. 공식 법률 해석이나 확정 번역이 아닙니다."}</div>
-    <p>선택 판본 시행일: {law.version} · 조문 {law.articleCount}개{law.reviewStatus !== "published" && ` · ${law.reviewStatus === "not_started" ? "검수 전" : law.reviewStatus}`}</p>
+    <div className={styles.draftNotice}>{law.reviewStatus === "published" ? "팀 검수를 거쳐 발행한 한국어 번역입니다. 공식 원문과 판본·범위를 함께 확인해 주세요." : publicationLabel(law.reviewStatus) + ". 공식 원문과 판본·범위를 함께 확인해 주세요."}</div>
+    <p>선택 판본 시행일: {law.version} · 조문 {law.articleCount}개{law.reviewStatus !== "published" && ` · ${publicationLabel(law.reviewStatus)}`}</p>
     {law.scopeNote && <details className={styles.lawScopeNote}><summary>번역 범위와 판본 안내</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
     <div className={styles.lawSearchBar}><label htmlFor="law-article-search">조문 검색</label><input id="law-article-search" type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="조문 번호나 단어를 입력하세요 (예: 제2조, 개인정보)" />{articleQuery && <button type="button" onClick={() => setArticleQuery("")}>검색 지우기</button>}</div>
@@ -56,7 +57,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
             return <section key={group.id} id={group.id} className={styles.lawTextGroup}>
               <h2>{group.label}</h2>
               {sections.map((section) => <article key={section.id} id={section.id} className={styles.lawTextArticle}>
-                <small>{section.context}{law.reviewStatus !== "published" && ` · ${section.reviewStatus === "not_started" ? "사람 검수 전" : section.reviewStatus}`}</small>
+                <small>{section.context}{law.reviewStatus !== "published" && ` · ${publicationLabel(section.reviewStatus)}`}</small>
                 <h3>{section.title}</h3>
                 {section.lines.length ? section.lines.map((line) => <p key={line.id} id={line.id}><strong>{line.label ? `${line.label}. ` : ""}</strong>{line.text}</p>)
                   : <p>이 항목에는 번역 본문이 없습니다.</p>}

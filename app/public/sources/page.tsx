@@ -14,7 +14,7 @@ export default function PublicSourcesPage() {
       <p className={styles.lawOverline}>OFFICIAL SOURCE CANDIDATES</p>
       <h1>수집 출처</h1>
       <p>동향 담당자가 조사한 공식 출처와 표본 현황입니다.</p>
-      {draftMode && <div className={styles.draftNotice}>담당자 제출 자료 · 사람 검수 전입니다. 수집 방법과 이용조건은 출처별로 추가 확인이 필요합니다.</div>}
+      {draftMode && <div className={styles.draftNotice}>출처 설정 자료입니다. 기사 검수와 별도로 수집 방법과 이용조건은 출처별로 확인합니다.</div>}
       <div className={styles.sourceGrid}>
         {sources.map((source) => <article key={source.id} className={styles.sourceCard}>
           <small>{source.id.toUpperCase()} · 표본 {source.sampleCount}건</small>
