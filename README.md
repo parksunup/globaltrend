@@ -23,7 +23,7 @@ pnpm dev
 | [README.md](./README.md) | 프로젝트 소개, 현재 상태, 팀 참여 및 재현 가능한 개발 환경의 준비 기준 |
 | [docs/team-onboarding.md](./docs/team-onboarding.md) | 비개발자 팀원을 위한 역할, Codex 사용법, GitHub·PR 작업 순서 |
 | [docs/collector-ingest-contract.md](./docs/collector-ingest-contract.md) | 수집기가 자료·판본·초안 작업을 중복 없이 DB에 넣는 규칙 |
-| [docs/editorial-publication.md](./docs/editorial-publication.md) | 팀 계정의 동향 초안·승인·발행과 공개 페이지 연동 절차 |
+| [docs/editorial-publication.md](./docs/editorial-publication.md) | 팀 작업 공간에서 동향·법제 수정, 선택 일괄 공개, 공개 취소·복원 |
 
 문서 기준일은 2026-10-18입니다. 통합 범위·현재 경로·DB 반영 순서는 [통합 안내](./docs/integration/README.md), 전체 요구사항은 architecture.md, 팀 작업 절차는 docs/team-onboarding.md를 기준으로 합니다. 과거 날짜가 붙은 구현 기록은 당시의 검증 범위입니다.
 
@@ -250,3 +250,8 @@ pnpm supabase:stop
 수집된 9출처·21건 전체의 보고서 편집본은 `data/trends/editorial/report-drafts.{json,md}`에 있습니다. 검색·상세·팀 검토·주간 예시호와 기존 초안 가져오기가 같은 편집본을 읽습니다. 원제·공식 URL·날짜·근거·보류 사유는 기존 조사 기록에 보존합니다.
 
 앞으로 모든 동향 작성 시 [보고서 작성 기준](docs/trend-report-style.md)을 먼저 읽습니다. 수집기는 원문을 보존하고 Codex가 한국어 보고서체로 작성합니다. 새 표본 추가 시 보고서 편집본을 함께 추가하고 `node scripts/trend-report.mjs --render`, `npm run validate:data`를 실행합니다. DB 초안 제출 전에는 `node scripts/trend-report.mjs --check <파일>`을 실행합니다. 형식 통과가 사실 검수나 발행을 뜻하지 않습니다.
+
+
+## 팀 작업 공간
+
+`/work`에서 동향·법제를 함께 검색하고 선택해 공개합니다. 공개 중 자료의 수정은 별도 작업본에 저장하며, 관리자가 수정본 공개를 눌러야 외부 내용이 바뀝니다. 공개 취소와 복구 가능한 휴지통도 같은 목록에서 사용합니다. 세부 사용법은 [자료 관리·공개 안내](./docs/editorial-publication.md)를 참고하세요. `/team` 열람과 `/public` 공개 사이트는 유지합니다.
