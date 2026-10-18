@@ -3,6 +3,9 @@ import { createClient } from "../../lib/supabase/server";
 import { loadTrendImportCandidates } from "../../lib/trend-import";
 import { advanceReport, createDraft, saveDraft, signIn, signOut } from "./actions";
 import styles from "./work.module.css";
+import CollectorReviewPanel from "../components/collector-review";
+import { canReviewCollector, parseCollectorReview } from "../../lib/collector-review";
+import type { CollectorReview } from "../../lib/collector-review";
 
 export const dynamic = "force-dynamic";
 
@@ -34,6 +37,16 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   const role = membership?.is_active ? membership.role as string : null;
   const canEdit = role === "admin" || role === "editor";
   const canPublish = role === "admin";
+  const canReview = canReviewCollector(role);
+  let collectorData: CollectorReview | null = null;
+  let collectorError = false;
+  if (canReview) {
+    const result = await supabase.rpc("get_trend_collector_review");
+    try {
+      if (result.error) throw result.error;
+      collectorData = parseCollectorReview(result.data);
+    } catch { collectorError = true; }
+  }
   const readOnlyPreview = process.env.VERCEL_ENV === "preview";
   const [sourcesResult, reportsResult] = canEdit ? await Promise.all([
     supabase.from("sources").select("id,name").eq("is_active", true).order("name"),
@@ -66,6 +79,7 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
         </form>
       </section> : <>
         <div className={styles.identity}><span>{user.email} · {role ? `권한: ${role}` : "팀 권한 없음"}</span><form action={signOut}><button type="submit">로그아웃</button></form></div>
+        {canReview && <CollectorReviewPanel data={collectorData} error={collectorError} commitSha={process.env.VERCEL_GIT_COMMIT_SHA} />}
         {!canEdit ? <section className={styles.card}><h2>작성 권한이 없습니다</h2><p>관리자 또는 편집자 권한이 있는 팀 계정으로 접속해 주세요.</p></section> : <>
           {candidates.length > 0 && <section className={styles.card}>
             <h2>팀 제출 자료에서 시작</h2><p>주간 예시 호에 선정된 자료를 입력창에 채웁니다. 파일의 내용은 미검수 초안이며, 원문과 날짜를 다시 확인한 뒤 저장해 주세요.</p>

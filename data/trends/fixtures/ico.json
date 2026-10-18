@@ -1,0 +1,203 @@
+{
+  "source_id": "ico",
+  "checked_at": "2026-10-11T17:25:34+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 2,
+  "counting_unit": "one article or event per record; related documents are not separate samples",
+  "items": [
+    {
+      "record_id": "ico-foundation-agentic-ai-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "ICO secures changes from leading AI developers as scrutiny extends to AI agents",
+      "organization": [
+        "Information Commission’s Office (ICO)"
+      ],
+      "jurisdictions": [
+        "UK"
+      ],
+      "source_published_date": "2026-10-08",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "8 October 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+      "document_type": "official_news",
+      "korean_title": "ICO, 기초모델 개발사 개선 현황 공개 및 에이전트 AI 의견 수렴",
+      "summary_ko": "ICO는 주요 기초모델 개발사 10곳이 개인정보 보호 조치를 개선했거나 개선을 약속했다고 밝혔다. 에이전트 AI의 데이터 보호 위험에 대한 의견 수렴도 시작했으며, 개발사의 약속 이행을 계속 점검한다고 설명했다. 주요 내용: 감독 결과: ICO는 영국에서 활동하는 주요 기초모델 개발사 10곳이 변경을 했거나 변경을 약속했다고 발표했다. 약속의 이행을 계속 점검한다고 밝혔으므로 모두 완료됐다고 표현하지 않는다. 개선 분야: 더 명확한 투명성 정보, 정보주체의 권리 행사 수단, 보호장치 평가 강화를 제시한다. 특별 범주 데이터의 적법한 이용과 모델 자체의 개인정보 포함 가능성도 보고서의 쟁점으로 소개한다. 에이전트의 위험: 자율적으로 도구·웹사이트를 이용하는 AI에서 학습뿐 아니라 배포 후 행동에 따른 보호 문제가 생긴다고 설명한다. 보호 우회·비인가 채널·외부 시스템 접근 사례는 보고된 정황과 진행 중인 확인 절차이며 확정 위반 판단이 아니다. 의견 모집: 개발·배포 사업자와 전문가에게 보안·투명성·책임성·자동화된 의사결정·공정성·적법한 데이터 이용에 관한 근거를 요청하며 제출 기한을 2026년 11월 20일로 안내한다. 후속 활용: 수집한 의견은 향후 지침과 AI·자동화된 의사결정 관련 법정 실무규범 개발에 활용할 계획이다. 소비자용 AI 서비스의 개인화도 연구·기업 협의 대상이라고 밝혔다. 기사 이후의 조사 결과와 보고서 전문은 추가 검토 필요다.",
+      "evidence": [
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "h1; main li의 Date 옆 strong; main .rich-text .prose의 Industry improvements to foundation models 및 Next steps 절"
+        },
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "Industry improvements to foundation models"
+        },
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "These included 문단; The report also sets out 문단"
+        },
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "The rise of AI agents; Next steps; Notes to editors"
+        },
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "Next steps; Respond to the call for evidence; Notes to editors"
+        },
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+          "location": "The evidence gathered 문단; Another priority area 문단"
+        }
+      ],
+      "topic_tags": [
+        "AI",
+        "기초모델",
+        "투명성",
+        "정보주체권리"
+      ],
+      "event_id": "ico-foundation-agentic-ai-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/artificial-intelligence/building-trust-and-transparency-into-generative-ai-development-our-work-to-create-regulatory-certainty/",
+          "original_title": "new report",
+          "relationship": "same_report_supporting_guidance",
+          "access_status": "http_200_html_inspected",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "개선 완료와 개선 약속을 구분합니다. 사건 문의·검토가 위반 확정이나 모든 모델의 적법성 승인을 뜻하지 않습니다. 관련 보고서 HTML은 제목·도입과 구조를 확인했지만 전체 법적 분석은 미검수입니다.",
+        "정책·지침 관련 주요 내용을 공식 근거 범위에서 상세화했습니다. 기사·초록과 전문은 구분하고, 개인정보 보호상 의미는 편집 의견이며 법적 결론이 아닙니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      },
+      "brief_summary_ko": "ICO는 주요 기초모델 개발사 10곳이 개인정보 보호 조치를 개선했거나 개선을 약속했다고 밝혔다. 에이전트 AI의 데이터 보호 위험에 대한 의견 수렴도 시작했으며, 개발사의 약속 이행을 계속 점검한다고 설명했다.",
+      "key_points_ko": [
+        {
+          "text": "감독 결과: ICO는 영국에서 활동하는 주요 기초모델 개발사 10곳이 변경을 했거나 변경을 약속했다고 발표했다. 약속의 이행을 계속 점검한다고 밝혔으므로 모두 완료됐다고 표현하지 않는다.",
+          "evidence_location": "Industry improvements to foundation models",
+          "evidence_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/"
+        },
+        {
+          "text": "개선 분야: 더 명확한 투명성 정보, 정보주체의 권리 행사 수단, 보호장치 평가 강화를 제시한다. 특별 범주 데이터의 적법한 이용과 모델 자체의 개인정보 포함 가능성도 보고서의 쟁점으로 소개한다.",
+          "evidence_location": "These included 문단; The report also sets out 문단",
+          "evidence_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/"
+        },
+        {
+          "text": "에이전트의 위험: 자율적으로 도구·웹사이트를 이용하는 AI에서 학습뿐 아니라 배포 후 행동에 따른 보호 문제가 생긴다고 설명한다. 보호 우회·비인가 채널·외부 시스템 접근 사례는 보고된 정황과 진행 중인 확인 절차이며 확정 위반 판단이 아니다.",
+          "evidence_location": "The rise of AI agents; Next steps; Notes to editors",
+          "evidence_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/"
+        },
+        {
+          "text": "의견 모집: 개발·배포 사업자와 전문가에게 보안·투명성·책임성·자동화된 의사결정·공정성·적법한 데이터 이용에 관한 근거를 요청하며 제출 기한을 2026년 11월 20일로 안내한다.",
+          "evidence_location": "Next steps; Respond to the call for evidence; Notes to editors",
+          "evidence_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/"
+        },
+        {
+          "text": "후속 활용: 수집한 의견은 향후 지침과 AI·자동화된 의사결정 관련 법정 실무규범 개발에 활용할 계획이다. 소비자용 AI 서비스의 개인화도 연구·기업 협의 대상이라고 밝혔다. 기사 이후의 조사 결과와 보고서 전문은 추가 검토 필요다.",
+          "evidence_location": "The evidence gathered 문단; Another priority area 문단",
+          "evidence_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/ico-secures-changes-from-leading-ai-developers-as-scrutiny-extends-to-ai-agents/"
+        }
+      ],
+      "privacy_significance": {
+        "kind": "editorial_opinion",
+        "text_ko": "모델 학습과 자율 에이전트 배포 이후의 행동을 나눠 보호장치를 평가하고 개선 약속의 실제 이행을 확인할 자료입니다.",
+        "is_legal_conclusion": false
+      },
+      "detail_basis_scope": "official_news_article_only",
+      "detail_review_status": "unreviewed",
+      "rechecked_at": "2026-10-13T00:01:44+09:00"
+    },
+    {
+      "record_id": "ico-tiktok-appeals-2026",
+      "checked_at": "2026-10-11T17:25:34+09:00",
+      "original_title": "TikTok withdraws two appeals in children’s privacy action and accepts £12.7m fine",
+      "organization": [
+        "Information Commissioner’s Office (ICO)"
+      ],
+      "jurisdictions": [
+        "UK"
+      ],
+      "source_published_date": "2026-09-24",
+      "source_published_date_precision": "day",
+      "date_observations": {
+        "displayed_date": "24 September 2026",
+        "date_kind": "article_publication_date",
+        "event_date_is_separate": true
+      },
+      "official_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/",
+      "document_type": "official_news",
+      "korean_title": "TikTok, 아동 개인정보 관련 과징금·정보요구 통지에 대한 불복 철회",
+      "summary_ko": "ICO는 TikTok이 2023년 부과된 1,270만 파운드 과징금에 대한 불복을 철회하고 납부에 동의했다고 밝혔다. 별도 추천시스템 조사에 필요한 정보요구 통지에 대한 불복도 철회돼 해당 조사를 진행할 수 있게 됐다고 설명했다.",
+      "evidence": [
+        {
+          "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/",
+          "location": "h1; main li의 Date 옆 strong; main .rich-text .prose의 도입, 2023 penalty notice 및 Recommender systems investigation 절"
+        }
+      ],
+      "topic_tags": [
+        "아동정보",
+        "UK GDPR",
+        "과징금",
+        "추천시스템"
+      ],
+      "event_id": "ico-tiktok-appeals-2026-event",
+      "related_documents": [
+        {
+          "official_url": "https://ico.org.uk/action-weve-taken/enforcement/2023/05/tiktok/",
+          "original_title": "£12.7 million fine to TikTok Information Technologies UK Limited and TikTok Inc (TikTok) in 2023",
+          "relationship": "same_case_penalty_listing",
+          "access_status": "http_200_html_inspected",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "review_notes": [
+        "한국어 제목·요약은 사람 검수 전입니다. 확인한 HTML 본문에 한정하며 연결 결정·법령·보고서 전문의 법적 결론을 추가하지 않습니다.",
+        "기사에 서로 다른 두 절차가 함께 등장하므로 관련 사건을 분리해 보존합니다. 이번에는 기사 한 건으로 세며 추천시스템 조사의 최종 위반 판단을 쓰지 않습니다. 2023 집행 상세의 Date는 게시일/결정일 구분과 사이트의 과거 날짜 오류 경고에 주의합니다."
+      ],
+      "selection_reason": "개인정보 보호 쟁점을 직접 다루며 공식 상세 페이지의 제목·표시 게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/09/tiktok-withdraws-two-appeals-in-children-s-privacy-action-and-accepts-127m-fine/",
+        "title_and_date_checked": true,
+        "summary_basis": "official_html_article"
+      },
+      "related_event_ids": [
+        "ico-tiktok-2023-penalty",
+        "ico-tiktok-recommender-information-notice-2025"
+      ]
+    }
+  ],
+  "is_published": false,
+  "historical_access_failures": [
+    {
+      "requested_url": "https://ico.org.uk/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    },
+    {
+      "requested_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+    }
+  ]
+}

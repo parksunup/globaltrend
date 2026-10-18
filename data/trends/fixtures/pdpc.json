@@ -1,0 +1,83 @@
+{
+  "source_id": "pdpc",
+  "checked_at": "2026-10-11T22:28:54+09:00",
+  "selection_status": "sample_selection_complete_human_review_pending",
+  "selected_count": 1,
+  "counting_unit": "one article/event per record; related documents are not separate samples",
+  "items": [
+    {
+      "record_id": "pdpc-nric-authentication-2025",
+      "original_title": "Joint Advisory Against Using NRIC Numbers for Authentication by PDPC and CSA",
+      "organization": [
+        "Personal Data Protection Commission (Singapore)"
+      ],
+      "jurisdictions": [
+        "SG"
+      ],
+      "source_published_date": "2025-06-26",
+      "source_published_date_precision": "day",
+      "official_url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa",
+      "document_type": "official_advisory",
+      "korean_title": "PDPC·CSA, NRIC 번호를 인증에 사용하지 말 것을 공동 안내",
+      "summary_ko": "PDPC와 싱가포르 사이버보안청(CSA)은 민간 조직에 NRIC 번호를 개인 인증에 사용하는 관행을 중단하도록 공동 안내했다고 밝혔다. 확인한 공지 본문은 공동 안내문으로 연결하며, 안내를 별도의 제재 결정으로 해석하지 않는다.",
+      "key_points_ko": [
+        {
+          "text": "대상은 민간 부문 조직이며 NRIC 번호를 개인 인증에 사용하는 관행에 관한 안내다.",
+          "evidence_location": "Next.js data.content의 공지 첫 문단",
+          "evidence_url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa"
+        },
+        {
+          "text": "PDPC와 CSA가 공동으로 안내했으며 2025년 6월 26일 MDDI 발표와 연결한다.",
+          "evidence_location": "Next.js data.content의 첫 문단·MDDI 링크",
+          "evidence_url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa"
+        }
+      ],
+      "evidence": [
+        {
+          "url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa",
+          "location": "h1; .page-banner__date의 Published on 26 Jun 2025; self.__next_f.push 데이터의 기사 data.content (쿠키·메타 설명 제외)"
+        }
+      ],
+      "topic_tags": [
+        "인증",
+        "NRIC",
+        "식별번호",
+        "PDPA"
+      ],
+      "event_id": "pdpc-nric-authentication-2025-event",
+      "related_documents": [
+        {
+          "official_url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-the-personal-data-protection-commission-pdpc-and-cyber-security-agency-of-singapore-csa",
+          "relationship": "same_joint_advisory_detail",
+          "access_status": "http_200_title_date_checked_full_text_not_reviewed",
+          "counted_as_separate_sample": false
+        }
+      ],
+      "duplicate_status": "unique_in_selected_samples",
+      "review_status": "unreviewed",
+      "checked_at": "2026-10-11T22:28:54+09:00",
+      "review_notes": [
+        "확인한 공식 본문에 근거한 독자 요약이며 사람 검수 전입니다. 연결 전문·불복 상태·다른 사건의 결론은 추정하지 않습니다.",
+        "2025년 과거 표본이며 최신 한 주 조사로 표현하지 않습니다. HTML 화면에는 본문이 없지만 응답의 기사 data.content를 직접 읽었습니다. 범용 RSC 파서는 미검증이며 연결 안내문 전체 내용은 사람 검토 필요입니다."
+      ],
+      "selection_reason": "개인정보 보호에 직접 관련되고 원제목·게시일·요약 근거를 직접 확인했습니다.",
+      "verification": {
+        "http_status": 200,
+        "final_url": "https://www.pdpc.gov.sg/media-events/joint-advisory-against-using-nric-numbers-for-authentication-by-pdpc-and-csa",
+        "body_scope": "embedded_Next_RSC_article_content"
+      }
+    }
+  ],
+  "is_published": false,
+  "historical_access_failures": [
+    {
+      "requested_url": "https://www.pdpc.gov.sg/",
+      "stage": "https_proxy_connect",
+      "http_status": null,
+      "proxy_status": 403,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-10-11T21:55:45+09:00"
+    }
+  ]
+}
