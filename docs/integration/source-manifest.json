@@ -439,12 +439,18 @@
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4"
+      "sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
+      "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
+      "derived_from": "data/legal/criteria-mapping.csv",
+      "transformation_reason": "2026-10-19: synchronize public mirror with the current reviewed terminology source; original imported digest retained"
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab"
+      "sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
+      "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
+      "derived_from": "data/legal/criteria-mapping.md",
+      "transformation_reason": "2026-10-19: synchronize public mirror with the current reviewed terminology source; original imported digest retained"
     },
     {
       "path": "public/review-drafts/gdpr.html",

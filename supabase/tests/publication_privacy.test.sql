@@ -1,0 +1,16 @@
+begin;
+select plan(10);
+set local role anon;
+select throws_ok('select reviewed_by from public.law_versions limit 1','42501',null,'anonymous cannot read legal reviewer');
+select throws_ok('select reviewed_at from public.reports limit 1','42501',null,'anonymous cannot read report review date');
+select throws_ok('select metadata from public.source_items limit 1','42501',null,'anonymous cannot read internal source metadata');
+select throws_ok('select reviewed_by from public.comparison_cells limit 1','42501',null,'anonymous cannot read comparison reviewer');
+select throws_ok('select reviewed_at from public.review_states limit 1','42501',null,'anonymous cannot read legacy review date');
+set local role authenticated;
+select throws_ok('select reviewed_by from public.law_versions limit 1','42501',null,'ordinary login does not reveal reviewer');
+select throws_ok('select automation_metadata from public.reports limit 1','42501',null,'ordinary login does not reveal internal metadata');
+select throws_ok('select reviewed_by from public.report_provision_links limit 1','42501',null,'ordinary login does not reveal link reviewer');
+select lives_ok('select id,status,review_payload from public.law_versions limit 1','public legal content fields remain readable');
+select lives_ok('select id,title_ko,status from public.reports limit 1','public report content fields remain readable');
+select * from finish();
+rollback;

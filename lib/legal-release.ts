@@ -43,7 +43,9 @@ export function publishedLegalBundle(rows: { status: string; review_payload: Leg
   return {
     cells: packages.flatMap(p => p.cells.map(cell => ({ ...cell, status: "published" }))),
     instruments: packages.map(p => ({ ...p.instrument, status: "published" })),
-    documents: packages.flatMap(p => p.document ? [{ ...p.document, reviewStatus: "published", sections: p.document.sections.map(section => ({ ...section, reviewStatus: "published" })) }] : []),
+    documents: packages.flatMap(p => p.document ? [{ ...p.document,
+      scopeNote: p.document.scopeNote?.replace(/사람 검수 (?:전|미착수)\.?\s*/g, "").trim(),
+      reviewStatus: "published", sections: p.document.sections.map(section => ({ ...section, reviewStatus: "published" })) }] : []),
   };
 }
 

@@ -94,7 +94,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
           return <article className={styles.lawCatalogCard} key={record.id}>
             <h3>{record.title}</h3><p>{record.subtitle}</p>
             {translation ? <>
-              <small>한국어 전문 초안 · {translation.articleCount}개 조문 · 시행일 {translation.version} · 사람 검수: {translation.reviewStatus}</small>
+              <small>{draftMode ? "한국어 전문 초안" : "한국어 전문"} · {translation.articleCount}개 조문 · 시행일 {translation.version}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
             </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 번역 본문은 저장소에 미포함 · 색인·검토 기록만 제공" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}

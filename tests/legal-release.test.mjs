@@ -29,6 +29,10 @@ test('only published versions yield public cells and text; no repository draft f
   assert.equal(bundle.documents[0].reviewStatus, 'published');
   assert.ok(bundle.documents[0].sections.every(s => s.reviewStatus === 'published'));
   assert.equal(p.document.reviewStatus, 'not_started');
+  const cn = buildLegalReviewPackages().find(p => p.jurisdiction === 'CN');
+  const released = publishedLegalBundle([{status:'published', review_payload:cn}]);
+  assert.ok(!/사람 검수 (전|미착수)/.test(released.documents[0].scopeNote));
+  assert.match(cn.document.scopeNote, /사람 검수 전/);
 });
 
 test('UK recital/reference text survives legal reader composition', () => {
