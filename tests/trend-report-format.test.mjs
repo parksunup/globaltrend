@@ -6,6 +6,7 @@ import {loadSubmissionPreview} from '../lib/submission-preview.ts';
 import {loadTrendImportCandidates} from '../lib/trend-import.ts';
 import {loadWeeklySample} from '../lib/weekly-sample.ts';
 import {validateTrendReport} from '../lib/trend-report-format.ts';
+import {reportPoints} from '../lib/trend-editorial.ts';
 
 const edited=JSON.parse(readFileSync('data/trends/editorial/report-drafts.json','utf8')).items;
 test('every collected record has an edited report across search, detail and worker review',()=>{
@@ -27,13 +28,22 @@ test('every collected record has an edited report across search, detail and work
  }
 });
 test('future drafts must keep a short lead and report bullets instead of embedded review instructions',()=>{
- const valid={title_ko:'기관, 보호조치 안내',summary_ko:'기관, 적용 대상과 보호조치 안내',details_ko:'- (적용 대상) 민간 조직을 대상으로 안내\n\n- (일정) 의견수렴 일정 공개'};
+ const valid={title_ko:'기관, 보호조치 안내',summary_ko:'기관, 적용 대상과 보호조치 안내',details_ko:'- 민간 조직을 대상으로 보호조치 안내\n\n- 의견수렴 일정 공개'};
  assert.deepEqual(validateTrendReport(valid),[]);
  assert.ok(validateTrendReport({...valid,summary_ko:'요약\n\n주요 내용\n1. 본문'}).length);
  assert.ok(validateTrendReport({...valid,details_ko:'원문을 정확히 반영하는지 확인합니다.'}).length);
  assert.ok(validateTrendReport({...valid,details_ko:'- (범위) 원문 전문은 검토 필요다'}).length);
  assert.ok(validateTrendReport({...valid,title_ko:''}).length);
  for(const draft of edited) assert.deepEqual(validateTrendReport(draft),[],draft.record_id);
+});
+test('plain report bullets keep their text without manufacturing headings',()=>{
+ assert.deepEqual(reportPoints('- 개인정보 삭제를 권고\n\n- (제1조) 적용 대상을 규정'),[
+  {label:'',text:'개인정보 삭제를 권고'},
+  {label:'',text:'(제1조) 적용 대상을 규정'},
+ ]);
+ for(const draft of edited){
+  assert.ok(!/^- \((?:배경|대상|의무·예시|위험 기반 설계|보유 필요성|기술적 조치|상태·대상)/m.test(draft.details_ko),draft.record_id);
+ }
 });
 test('weekly and editor import use the same revised copy as search',()=>{
  const week=loadWeeklySample();

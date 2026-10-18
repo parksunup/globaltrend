@@ -600,7 +600,7 @@ erDiagram
 
 ### 모든 동향의 보고서체 작성 · 2026-10-18 확정
 
-수집 단계는 공식 제목·본문·날짜 관찰·입력 판본과 근거를 보존하고, Codex 초안 단계는 [보고서 작성 기준](docs/trend-report-style.md)에 따라 제목·한 문단 핵심 요약·소제목별 상세 본문을 작성합니다. 모든 출처와 개별 동향에 적용하며 주간호 선정 여부와 별개입니다. 제출 계약 `trend-ko-v1`과 문체 기준 `privacy-report-ko-2026-10`은 구분합니다. 새 유료 생성 API를 추가하지 않습니다.
+수집 단계는 공식 제목·본문·날짜 관찰·입력 판본과 근거를 보존하고, Codex 초안 단계는 [보고서 작성 기준](docs/trend-report-style.md)에 따라 제목·한 문단 핵심 요약·항목형 상세 본문을 작성합니다. 모든 출처와 개별 동향에 적용하며 주간호 선정 여부와 별개입니다. 제출 계약 `trend-ko-v1`과 문체 기준 `privacy-report-ko-2026-10`은 구분합니다. 새 유료 생성 API를 추가하지 않습니다.
 
 기존 수집 표본은 `data/trends/fixtures/`의 조사 근거를 보존하고 같은 ID의 `data/trends/editorial/report-drafts.json`에서 보고서 편집본을 관리합니다. Markdown 완성본은 `node scripts/trend-report.mjs --render`로 생성합니다. 공개 Preview·팀 검토·초안 가져오기는 같은 편집본을 사용하며, 운영 발행 동향은 기존 DB의 `summary_ko`·`details_ko` 제출 계약을 통해 같은 원고 구조를 받습니다. 검수 지시·미확인 범위·의미 검토는 별도 검수 필드로 보존합니다.
 

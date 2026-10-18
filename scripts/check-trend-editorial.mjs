@@ -17,7 +17,8 @@ try{
    assert.equal(await page.locator('h1').innerText(),draft.title_ko);
    assert.equal(await page.locator('article section').first().locator('p').innerText(),draft.summary_ko);
    assert.equal(await page.locator('article ul li').count(),draft.details_ko.split('\n\n').length);
-   assert.equal(await page.locator('article ul li p').first().innerText(),draft.details_ko.split('\n\n')[0].replace(/^- \([^)]+\) /,''));
+   assert.equal(await page.locator('article ul li p').first().innerText(),draft.details_ko.split('\n\n')[0].replace(/^- /,''));
+   assert.equal(await page.locator('article ul li strong').count(),0,'No manufactured per-bullet headings');
    assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),`${draft.record_id}: horizontal overflow at ${width}`);
   }
   await page.goto(base+'/public/weekly');

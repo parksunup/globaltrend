@@ -17,7 +17,6 @@ export function loadTrendEditorial(root=process.cwd()):Map<string,TrendEditorial
 
 export function reportPoints(details:string):{label:string;text:string}[] {
   return details.split(/\n\s*\n/).filter(Boolean).map(line=>{
-    const point=/^- \(([^)]+)\) ([\s\S]+)$/.exec(line);
-    return point ? {label:point[1],text:point[2]} : {label:'주요 내용',text:line};
+    return {label:'',text:line.replace(/^- /,'')};
   });
 }

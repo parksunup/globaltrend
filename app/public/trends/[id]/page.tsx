@@ -27,7 +27,7 @@ export default async function TrendDetail({ params, searchParams }: {
         <h1>{story.title}</h1>
         {draftMode && <p className={styles.draftNotice}>담당자 제출 동향 표본 · 사람 검수 전 초안입니다.</p>}
         <section className={styles.trendSummary}><h2>핵심 요약</h2><p>{story.summary}</p></section>
-        {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- (')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><strong>{point.label}</strong><p>{point.text}</p></li>)}</ul>:<p>{story.details}</p>}</section>}
+        {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p>{point.text}</p></li>)}</ul>:<p>{story.details}</p>}</section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>
         <div className={styles.lawEmptyState}><strong>공식 원문</strong><p>{story.originalTitle}</p><a href={story.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a></div>
       </article>

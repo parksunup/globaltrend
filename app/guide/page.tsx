@@ -93,7 +93,7 @@ export default function GuidePage() {
           <h3>첫 작업 · EDPB·OECD·CURIA 출처 확인</h3>
           <pre>{trendSourcePrompt}</pre>
           <h3>둘째 작업 · 샘플 동향 자료</h3>
-          <pre>{trendSamplePrompt + '\n\n추가 필수 기준: docs/trend-report-style.md를 먼저 읽고 모든 동향을 보고서체로 작성하세요.\n한 문단 핵심 요약과 - (소제목) 설명 형식의 상세 본문을 나누세요.\n같은 자료 ID의 data/trends/editorial/report-drafts.json 편집본도 작성·수정하세요.\nnode scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요.\n검수 지시와 미확인 범위는 본문이 아닌 검토 기록에 남기세요.'}</pre>
+          <pre>{trendSamplePrompt + '\n\n추가 필수 기준: docs/trend-report-style.md를 먼저 읽고 모든 동향을 보고서체로 작성하세요.\n한 문단 핵심 요약과 - 설명 형식의 상세 본문을 나누세요.\n같은 자료 ID의 data/trends/editorial/report-drafts.json 편집본도 작성·수정하세요.\nnode scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요.\n검수 지시와 미확인 범위는 본문이 아닌 검토 기록에 남기세요.'}</pre>
           <h3>셋째 작업 · 수집 출처와 동향 표본 검수</h3>
           <pre>{trendReviewPrompt}</pre>
         </section>

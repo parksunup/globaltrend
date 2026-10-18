@@ -217,9 +217,10 @@
 @media(max-width:620px){.mobileFilterToggle{display:block;width:100%;padding:12px;border:1px solid #49647a;border-radius:5px;background:#10283a;color:#cfeffc;font:inherit;text-align:left;cursor:pointer}.filtersClosed .filterGroup,.filtersClosed .filterFoot{display:none}.filtersClosed .filterHeading{margin-top:14px}}
 .homeEmpty{color:#aebfcb;font-size:13px;line-height:1.8;padding:20px 8px}
 .weeklyStrip{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto}
-.reportDetailPoints{list-style:none;margin:0;padding:0;display:grid;gap:18px}.reportDetailPoints li{border-left:2px solid var(--cyan);padding-left:15px;line-height:1.85}.reportDetailPoints strong{display:block;color:var(--cyan);font-size:14px}.reportDetailPoints p{margin:4px 0 0;color:inherit;font-size:15px}
+.reportDetailPoints{list-style:none;margin:0;padding:0;display:grid;gap:12px}.reportDetailPoints li{position:relative;padding-left:16px;line-height:1.85}.reportDetailPoints li:before{content:"–";position:absolute;left:0;color:inherit}.reportDetailPoints p{margin:0;color:inherit;font-size:15px}
 @media(max-width:620px){.weeklyStrip{grid-template-columns:1fr 1fr}.weeklyLead{grid-column:1/-1}.weeklyStrip>a{grid-column:1/-1}}
 
+.weeklyPoints{list-style:none;margin:0;padding:0}.weeklyPoints li{position:relative;padding-left:14px;color:#354c5a;font-size:13px;line-height:1.75}.weeklyPoints li:before{content:"–";position:absolute;left:0}.themeLight .weeklyPoints li{color:#354c5a}
 .weeklyReport{max-width:1180px;margin:0 auto;background:#f8fafb;color:#20313c;border:1px solid rgba(151,180,199,.3);box-shadow:0 16px 40px rgba(0,0,0,.16)}
 .weeklyReportHeader{padding:34px clamp(22px,4vw,64px) 28px;border-bottom:8px solid #0d4e91;background:#fff}
 .weeklyReportHeader .draftNotice{display:inline-block;margin:0 0 22px;padding:6px 10px;border:1px solid #e1b14a;border-radius:3px;background:#fff8e8;color:#855f1d;text-align:left;font-size:11px}

@@ -13,6 +13,6 @@ test('weekly example exposes a report-shaped issue for every selected item',()=>
  assert.equal(sample.issue.sections.length,2);
  assert.equal(sample.issue.contents.length,7);
  assert.ok(sample.issue.contents.every(item=>item.leadSummary && item.bodyPoints.length>0 && item.sourceLabel));
- assert.equal(sample.issue.contents[0].bodyPoints[0].label,'상태·대상');
+ assert.ok(sample.issue.contents.every(item=>item.bodyPoints.every(point=>point.label==='')));
  assert.ok(sample.issue.contents.every(item=>item.originalTitle && item.officialUrl.startsWith('https://')));
 });
