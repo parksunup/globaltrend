@@ -1,17 +1,20 @@
 import assert from "node:assert/strict";
 import { pathToFileURL } from "node:url";
+import { mkdir } from "node:fs/promises";
 
 const base = process.env.PUBLIC_BASE_URL ?? "http://127.0.0.1:3000";
 assert(process.env.PLAYWRIGHT_MODULE, "PLAYWRIGHT_MODULE is required");
 const { chromium } = await import(pathToFileURL(process.env.PLAYWRIGHT_MODULE).href);
-const browser = await chromium.launch();
-const routes = ["/public", "/public/search", "/public/weekly", "/public/laws?view=full", "/public/laws?view=compare", "/feedback"];
+const browser = await chromium.launch(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {});
+const routes = ["/public", "/public/search", "/public/weekly", "/public/laws?view=full", "/public/laws?view=compare", "/feedback", "/", "/team", "/guide", "/work", "/work/legal"];
+await mkdir("work/screenshots", { recursive: true });
 try {
   for (const width of [1280, 390]) {
     const context = await browser.newContext({ viewport: { width, height: 844 }, hasTouch: width < 600, isMobile: width < 600 });
     const page = await context.newPage();
     page.setDefaultTimeout(15000);
-    page.on("pageerror", (error) => console.error("Browser error:", error.message));
+    const browserErrors = [];
+    page.on("pageerror", (error) => browserErrors.push(error.message));
     for (const route of routes) {
       const response = await page.goto(new URL(route, base).href, { waitUntil: "domcontentloaded" });
       assert.equal(response?.status(), 200, route + " must load at " + width + "px");
@@ -24,7 +27,7 @@ try {
     await page.locator('a[href^="/public/trends/"]').first().click();
     assert.equal(await page.getByText("이 자료에 의견 남기기", { exact: false }).count(), 0, "Public trend detail must not show review feedback");
     await page.goto(new URL("/feedback", base).href);
-    assert.equal(await page.getByRole("link", { name: "← 검수 화면으로" }).getAttribute("href"), "/team");
+    assert.equal(await page.locator('a[href="/team"]').first().getAttribute("href"), "/team");
     if (width < 600) {
       await page.goto(new URL("/public", base).href);
       await page.getByRole("button", { name: "메뉴" }).click();
@@ -63,7 +66,22 @@ try {
       await page.keyboard.press("Escape");
       await tooltip.waitFor({ state: "hidden" });
     }
-    console.log("Public pages, navigation, comparison and article search pass at " + width + "px");
+    for (const law of ["appi", "pipl", "gdpr", "uk-gdpr", "ccpa", "pdpa"]) {
+      const response = await page.goto(new URL(`/public/laws/${law}`, base).href);
+      assert.equal(response?.status(),200,law + " full translation must load");
+      assert(await page.locator('article[id]').count() > 0, law + " must contain real provisions");
+      if (law === "gdpr") assert.equal(await page.locator('article[id^="recital-"]').count(),173);
+      if (law === "uk-gdpr") assert.equal(await page.locator('article[id^="division-"]').count(),173);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth) <= width + 2, law + " must fit the viewport");
+    }
+    await page.goto(new URL('/public/laws?view=compare',base).href);
+    await page.screenshot({path:`work/screenshots/laws-dark-${width}.png`,fullPage:true});
+    await page.getByRole('button',{name:'밝은 테마로 전환'}).click();
+    await page.screenshot({path:`work/screenshots/laws-light-${width}.png`,fullPage:true});
+    await page.reload();
+    await page.getByRole('button',{name:'어두운 테마로 전환'}).waitFor();
+    assert.deepEqual(browserErrors,[],"Browser must not produce runtime exceptions");
+    console.log("Public pages, worker routes, six full translations, themes, comparison and article search pass at " + width + "px");
     await context.close();
   }
 } finally {

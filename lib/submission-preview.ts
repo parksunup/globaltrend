@@ -288,5 +288,7 @@ export function loadSubmissionPreview(root = process.cwd()): SubmissionItem[] {
 }
 
 export function submissionPreviewEnabled() {
-  return process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development";
+  // Team submissions remain available on the worker routes after merging.
+  // Public publication is controlled separately by publicSubmissionPreviewEnabled/RLS.
+  return true;
 }

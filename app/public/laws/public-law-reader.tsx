@@ -9,6 +9,7 @@ const groups = [
   { id: "main", label: "본칙" },
   { id: "supplementary", label: "부칙" },
   { id: "appendix", label: "별표" },
+  { id: "reference", label: "서문·고려사항·주석" },
 ] as const;
 
 export default function PublicLawReader({ law, returnTo }: { law: LegalTranslationDocument; returnTo: string }) {
@@ -22,7 +23,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
     <p className={styles.lawOverline}>KOREAN TRANSLATION DRAFT</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
-    <div className={styles.draftNotice}>사람 검수 전 한국어 번역 초안입니다. 공식 법률 해석이나 확정 번역이 아닙니다.</div>
+    <div className={styles.draftNotice}>{law.reviewStatus === "published" ? "팀 검수를 거쳐 발행한 한국어 번역입니다. 공식 원문과 판본·범위를 함께 확인해 주세요." : "사람 검수 전 한국어 번역 초안입니다. 공식 법률 해석이나 확정 번역이 아닙니다."}</div>
     <p>선택 판본 시행일: {law.version} · 조문 {law.articleCount}개 · 사람 검수: {law.reviewStatus === "not_started" ? "검수 전" : law.reviewStatus}</p>
     {law.scopeNote && <details className={styles.lawScopeNote}><summary>번역 범위와 판본 안내</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}

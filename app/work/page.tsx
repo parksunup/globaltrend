@@ -66,7 +66,7 @@ export default async function WorkPage({ searchParams }: { searchParams: Promise
   const originals = new Map((sourceItems ?? []).map((item) => [item.id, item]));
 
   return <main className={styles.page}>
-    <header className={styles.header}><Link href="/">← 작업자 홈</Link><h1>동향 작성·발행</h1><Link href="/public">공개 동향 보기 →</Link></header>
+    <header className={styles.header}><Link href="/">← 작업자 홈</Link><h1>동향 작성·발행</h1><Link href="/work/legal">법제 검수·발행</Link><Link href="/public">공개 동향 보기 →</Link></header>
     <div className={styles.wrap}>
       {notice && noticeText[notice] && <p className={styles.notice} role="status">{noticeText[notice]}</p>}
       {readOnlyPreview && <p className={styles.notice}>이 PR Preview는 읽기 전용입니다. 운영 Supabase에 초안·승인을 저장하지 않습니다.</p>}

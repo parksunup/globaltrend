@@ -48,7 +48,8 @@ export type LegalTranslationEntry = LegalTranslationSummary | { id: string; erro
 
 function inspectCorpus(root: string, id: string): { corpus: Corpus | null; error: string } {
   if (!validId.test(id)) return { corpus: null, error: "파일 이름이 올바르지 않습니다." };
-  const path = join(translationsDir(root), `${id}.json`);
+  const primary = join(translationsDir(root), `${id}.json`);
+  const path = id === "gdpr" && !existsSync(primary) ? join(root, "data", "derived", "gdpr.json") : primary;
   if (!existsSync(path)) return { corpus: null, error: "번역 파일이 없습니다." };
   let data: unknown;
   try {
@@ -91,6 +92,7 @@ export function listLegalTranslationEntries(root = process.cwd()): LegalTranslat
   if (!existsSync(dir)) return [];
   let names: string[];
   try { names = readdirSync(dir); } catch { return []; }
+  if (existsSync(join(root, "data", "derived", "gdpr.json")) && !names.includes("gdpr.json")) names.push("gdpr.json");
   return names
     .filter((name) => name.endsWith(".json") && validId.test(name.slice(0, -5)))
     .map((name) => {
@@ -162,7 +164,7 @@ function excerpt(lines: TranslationSection["lines"], anchorId: string): LegalArt
 }
 
 export function findLegalArticlePreview(law: LegalTranslationDocument, citation: string, translationLink?: string): LegalArticlePreview | null {
-  const linkedId = translationLink?.match(/#([a-z0-9-]+)$/)?.[1];
+  const linkedId = translationLink?.match(/#([a-zA-Z0-9-]+)$/)?.[1];
   if (linkedId) {
     const linkedSection = law.sections.find((item) => item.id === linkedId);
     if (linkedSection) return excerpt(linkedSection.lines, linkedId);
@@ -172,11 +174,25 @@ export function findLegalArticlePreview(law: LegalTranslationDocument, citation:
   }
   // Supplementary provisions and appendices need their explicit location; do not substitute a main article.
   if (/부칙|별표/.test(citation)) return null;
-  const match = citation.match(/제(\d+)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
-  if (!match) return null;
-  const articleId = `main-a${match[1]}${match[2] ? `-${match[2]}` : ""}`;
-  const section = law.sections.find((item) => item.group === "main" && item.id === articleId);
+  const match = citation.match(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/);
+  // CCPA uses decimal section numbers; PDPA uses e.g. 13A and 2(1).
+  if (!match) {
+    const english = citation.match(/^(\d+(?:\.\d+)*[a-zA-Z]?)(?:\((\d+)\))?(?![\d.])/);
+    if (!english) return null;
+    const id = `main-a${english[1].replaceAll(".", "-").toLowerCase()}`;
+    const section = law.sections.find(item => item.group === "main" && item.id.toLowerCase() === id);
+    if (!section) return null;
+    const paragraph = english[2] ? `${section.id}-p${english[2]}` : null;
+    if (paragraph) {
+      if (!section.lines.some(line => line.id === paragraph)) return null;
+      return excerpt(section.lines.filter(line => line.id === paragraph || line.id.startsWith(`${paragraph}-`)), paragraph);
+    }
+    return excerpt(section.lines, section.id);
+  }
+  const guessedId = `main-a${match[1].toLowerCase()}${match[2] ? `-${match[2]}` : ""}`;
+  const section = law.sections.find((item) => item.group === "main" && item.id.toLowerCase() === guessedId);
   if (!section) return null;
+  const articleId = section.id;
   if (!match[3] && !match[4]) return excerpt(section.lines, articleId);
   const requestedId = `${articleId}${match[3] ? `-p${match[3]}` : ""}${match[4] ? `-i${match[4]}` : ""}`;
   if (!section.lines.some((line) => line.id === requestedId)) return null;

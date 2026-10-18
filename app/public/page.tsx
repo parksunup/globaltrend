@@ -4,15 +4,16 @@ import styles from "./public.module.css";
 import { loadPublicStories } from "../../lib/public-content";
 import { publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
 import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
-import { loadSubmissionDocuments, loadSubmissionPreview } from "../../lib/submission-preview";
+import { loadPublicLegal } from "../../lib/public-legal";
 import { PublicHeader, PublicFooter } from "./public-navigation";
 
 export const dynamic = "force-dynamic";
 
 export default async function PublicHome() {
   const draftMode = publicSubmissionPreviewEnabled();
-  const legalItems = draftMode ? loadSubmissionPreview().filter((item) => item.kind === "법제 목록") : [];
-  const comparisonCount = draftMode ? loadSubmissionDocuments().legal.length : 0;
+  const legal = await loadPublicLegal();
+  const legalItems = legal.instruments;
+  const comparisonCount = legal.cells.length;
   let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
   try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }

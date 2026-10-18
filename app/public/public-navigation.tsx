@@ -21,5 +21,5 @@ export function PublicHeader({ active }: { active: string }) {
   </header>;
 }
 export function PublicFooter() {
-  return <footer className={styles.footer}><Link href="/public">GlobalTrend</Link><p>글로벌 개인정보 보호 동향과 법제</p><Link href="/work">작업자용 페이지</Link><Link href="/team">검수 자료 보기</Link></footer>;
+  return <footer className={styles.footer}><Link href="/public">GlobalTrend</Link><p>글로벌 개인정보 보호 동향과 법제</p><Link href="/">작업자 홈</Link><Link href="/work">동향 작성·발행</Link><Link href="/work/legal">법제 검수·발행</Link><Link href="/team">검수 자료 보기</Link></footer>;
 }

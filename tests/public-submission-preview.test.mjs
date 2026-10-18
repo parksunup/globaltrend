@@ -25,7 +25,7 @@ test("integration Preview reads legal inventory, comparison and full translation
   assert.equal(translations.find((law) => law.id === "appi")?.articleCount, 250);
 });
 
-test("unreviewed submissions are enabled only on the isolated Preview branch", () => {
+test("unreviewed submissions work on every Preview branch and never on production", () => {
   const oldEnv = process.env.VERCEL_ENV;
   const oldRef = process.env.VERCEL_GIT_COMMIT_REF;
   try {
@@ -33,7 +33,7 @@ test("unreviewed submissions are enabled only on the isolated Preview branch", (
     process.env.VERCEL_GIT_COMMIT_REF = "codex/public-integration-preview";
     assert.equal(publicSubmissionPreviewEnabled(), true);
     process.env.VERCEL_GIT_COMMIT_REF = "main";
-    assert.equal(publicSubmissionPreviewEnabled(), false);
+    assert.equal(publicSubmissionPreviewEnabled(), true);
     process.env.VERCEL_ENV = "production";
     process.env.VERCEL_GIT_COMMIT_REF = "codex/public-integration-preview";
     assert.equal(publicSubmissionPreviewEnabled(), false);

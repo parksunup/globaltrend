@@ -1,6 +1,7 @@
 import PublicLawCompare from "./public-law-compare";
-import { findLegalArticlePreview, listLegalTranslations, loadLegalTranslation, type LegalArticlePreview } from "../../../lib/legal-translation-review";
-import { loadSubmissionDocuments, loadSubmissionPreview } from "../../../lib/submission-preview";
+import { type LegalArticlePreview } from "../../../lib/legal-translation-review";
+import { citedLegalPreview } from "../../../lib/legal-release";
+import { loadPublicLegal } from "../../../lib/public-legal";
 import { publicSubmissionPreviewEnabled } from "../../../lib/public-submission-preview";
 
 export const dynamic = "force-dynamic";
@@ -8,23 +9,22 @@ export const dynamic = "force-dynamic";
 export default async function PublicLawComparePage({ searchParams }: { searchParams: Promise<{ view?: string; countries?: string; criterion?: string }> }) {
   const { view, countries, criterion } = await searchParams;
   const draftMode = publicSubmissionPreviewEnabled();
-  const cells = draftMode ? loadSubmissionDocuments().legal : [];
-  const translations = draftMode ? listLegalTranslations() : [];
+  const { cells, documents: translations, instruments } = await loadPublicLegal();
   const articlePreviews: Record<string, LegalArticlePreview> = {};
   for (const translation of translations) {
-    const law = loadLegalTranslation(translation.id);
+    const law = translation;
     if (!law) continue;
     for (const cell of cells.filter((item) => item.jurisdiction === translation.jurisdiction)) {
-      for (const [index, citation] of cell.articleNumbers.entries()) {
-        const preview = findLegalArticlePreview(law, citation, cell.translationLinks[index]);
+      for (const citation of cell.articleNumbers) {
+        const preview = citedLegalPreview(law, citation);
         if (preview) articlePreviews[`${translation.id}:${citation}`] = preview;
       }
     }
   }
   return <PublicLawCompare
     cells={cells}
-    instruments={draftMode ? loadSubmissionPreview().filter((item) => item.kind === "법제 목록") : []}
-    translations={translations}
+    instruments={instruments}
+    translations={translations.map(({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount }) => ({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount }))}
     articlePreviews={articlePreviews}
     draftMode={draftMode}
     initialView={view === "compare" ? "compare" : "full"}

@@ -20,8 +20,7 @@ const countries = [
 ];
 
 function relatedArticleUrl(translationId: string, article: string, anchorId?: string, back?: string): string {
-  const match = article.match(/제(\d+)조(?:의(\d+))?/);
-  return `/public/laws/${translationId}${back ? `?back=${encodeURIComponent(back)}` : ""}${anchorId ? `#${anchorId}` : match ? `#main-a${match[1]}${match[2] ? `-${match[2]}` : ""}` : ""}`;
+  return `/public/laws/${translationId}${back ? `?back=${encodeURIComponent(back)}` : ""}${anchorId ? `#${anchorId}` : ""}`;
 }
 
 export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView, initialSelected, initialCriterion }: {
@@ -97,7 +96,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
             {translation ? <>
               <small>한국어 전문 초안 · {translation.articleCount}개 조문 · 시행일 {translation.version} · 사람 검수: {translation.reviewStatus}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
-            </> : <><small>한국어 전문 준비 중</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
+            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 번역 본문은 저장소에 미포함 · 색인·검토 기록만 제공" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
           </article>;
         })}
@@ -122,17 +121,17 @@ export default function PublicLawCompare({ cells, instruments, translations, art
                 <div><h3>{law.country}</h3><p>{record?.title ?? law.law}</p></div></header>
               <section><strong>{criterion?.name ?? "비교 기준"}</strong>
                 <p>{drafted ? cell.summary : "이 기준의 조항 요약은 아직 검토 중입니다."}</p>
-                <span className={styles.draftLabel}>{drafted ? "사람 검수 전 초안" : "추가 조사 필요"}</span></section>
+                <span className={styles.draftLabel}>{drafted ? draftMode ? "사람 검수 전 초안" : "검수 후 발행" : "추가 조사 필요"}</span></section>
               <section><strong>관련 조항</strong>
                 {cell?.articleNumbers.length ? <div className={styles.articleLinks}>{cell.articleNumbers.map((number, index) => {
                   const preview = translation ? articlePreviews[`${translation.id}:${number}`] : undefined;
                   const articleKey = `${law.code}:${criterion?.id ?? ""}`;
                   const tooltipId = `article-${law.code}-${criterion?.id ?? "none"}-${index}`;
-                  const destination = translation
+                  const destination = preview && translation
                     ? relatedArticleUrl(translation.id, number, preview?.anchorId, currentPath)
                     : cell.sourceUrl;
                   return <span key={`${number}-${index}`} className={index >= 4 && !expandedArticles[articleKey] ? styles.articleExtra : undefined}><RelatedArticlePreview
-                    citation={number} destination={destination} internal={Boolean(translation)}
+                    citation={number} destination={destination} internal={Boolean(preview && translation)}
                     text={preview?.text} tooltipId={tooltipId} /></span>;
                 })}{cell.articleNumbers.length > 4 && !expandedArticles[`${law.code}:${criterion?.id ?? ""}`] && <button type="button" className={styles.mobileArticleMore} onClick={() => setExpandedArticles((current) => ({ ...current, [`${law.code}:${criterion?.id ?? ""}`]: true }))}>관련 조항 {cell.articleNumbers.length - 4}개 더 보기</button>}</div> : <p>확인된 조항 없음</p>}</section>
               {cell?.exceptions && cell.exceptions !== "미검토" && <details className={styles.lawExceptions}><summary>주의·예외 보기</summary><p>{cell.exceptions}</p></details>}
@@ -144,7 +143,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
           })}
         </div>
       </div></> : <p className={styles.lawCatalogEmpty}>비교 자료가 아직 준비되지 않았습니다.</p>}
-      <p className={styles.lawDisclaimer}>비교 요약과 한국어 번역은 공식 원문을 대조하는 사람 검수 전 초안입니다.</p>
+      <p className={styles.lawDisclaimer}>{draftMode ? "비교 요약과 한국어 번역은 공식 원문을 대조하는 사람 검수 전 초안입니다." : "팀 검수를 거쳐 발행한 자료입니다. 선택 판본·번역 범위와 공식 원문을 함께 확인해 주세요."}</p>
     </section>}
     <PublicFooter />
   </main>;

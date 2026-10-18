@@ -1,7 +1,7 @@
 name: Public preview browser check
 on:
   push:
-    branches: [codex/public-integration-preview]
+    branches: [codex/public-integration-preview, codex/integrate-content-ui-collector]
     paths:
       - 'app/api/feedback/**'
       - 'app/feedback/**'
@@ -13,6 +13,9 @@ on:
       - 'middleware.ts'
       - 'supabase/migrations/**'
       - 'scripts/check-public-preview.mjs'
+      - 'lib/legal-release.ts'
+      - 'data/legal/**'
+      - 'data/trends/**'
       - '.github/workflows/preview-browser-check.yml'
 permissions:
   contents: read
@@ -24,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 18
     env:
-      PREVIEW_BASE_URL: https://globaltrend-git-codex-public-integration-preview-pipc-fairy.vercel.app
+      PREVIEW_BASE_URL: ${{ github.ref_name == 'codex/integrate-content-ui-collector' && 'https://globaltrend-git-codex-integrate-content-ui-collector-pipc-fairy.vercel.app' || 'https://globaltrend-git-codex-public-integration-preview-pipc-fairy.vercel.app' }}
       PREVIEW_EXPECTED_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4

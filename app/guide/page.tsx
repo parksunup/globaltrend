@@ -33,7 +33,7 @@ export default function GuidePage() {
       <h1>GlobalTrend 팀 온보딩 가이드</h1>
       <p className="guide-lead">이 프로젝트는 해외 개인정보 보호 동향과 법제를 한국어로 조사하고 비교하는 웹사이트입니다. 코딩을 잘 몰라도 참여할 수 있습니다. Codex에게 작업을 시키고, 결과를 확인하고, PR로 제출하는 방식으로 진행합니다.</p>
 
-      <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. <code>/team</code>의 검수 자료 목록만 누구나 읽을 수 있습니다. 승인된 본문 자료는 별도로 발행합니다.</p><div className="guide-note"><strong>현재는 P1 기반 구현 단계입니다.</strong><br />검토 보드, Supabase 초기 스키마·RLS·seed, 로그인 없이 읽는 <code>/team</code> 자료 목록, 수집 자료의 중복 방지·판본 보존·초안 작업 등록을 담당하는 DB 입구가 있습니다. 검수 상태 저장 DB 기능은 팀원 인증을 요구하지만 현재 웹 화면에는 승인·반려 버튼이 없습니다. 실제 출처별 자동 수집·Codex 초안 자동화·검색·발행은 아직 연결되지 않았습니다.</div><div className="guide-note"><strong>먼저 빈 업무 양식을 사용합니다.</strong><br />법제 담당은 <code>data/legal</code>, 동향 담당은 <code>data/trends</code>의 <code>*.template.*</code> 파일을 복사합니다. 사람이 읽는 <code>.md</code> + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 검토 메모를 함께 제출하고 <code>pnpm validate:data</code>로 검사합니다.</div></section>
+      <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. <code>/team</code>의 검수 자료 목록만 누구나 읽을 수 있습니다. 승인된 본문 자료는 별도로 발행합니다.</p><div className="guide-note"><strong>현재는 네 PR의 통합본 검토 단계입니다.</strong><br />법제 7개·비교표 119칸·외국법 6개 한국어 전문 초안과 동향 표본 21건을 통합했습니다. <code>/team</code>과 <code>/legal-translation</code>에서 제출 내용을 읽고, <code>/work</code>에서 동향을, <code>/work/legal</code>에서 법제를 등록·검수·발행합니다. 저장·승인·발행에는 팀 권한이 필요하며 Preview에서는 DB 쓰기가 차단됩니다. 수집기 정기 실행은 꺼져 있고 Codex 정기 편집 연결은 준비 단계입니다.</div><div className="guide-note"><strong>먼저 빈 업무 양식을 사용합니다.</strong><br />법제 담당은 <code>data/legal</code>, 동향 담당은 <code>data/trends</code>의 <code>*.template.*</code> 파일을 복사합니다. 사람이 읽는 <code>.md</code> + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 검토 메모를 함께 제출하고 <code>pnpm validate:data</code>로 검사합니다.</div></section>
 
       <section><h2 className="guide-section-title">처음 시작할 때 할 일</h2><div className="guide-steps">{steps.map(([number, title, text]) => <div className="guide-step" key={number}><b>{number}</b><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
 
@@ -84,7 +84,7 @@ export default function GuidePage() {
           <h3>셋째 작업 · 17개 기준 분류·요약표</h3>
           <pre>{legalMappingPrompt}</pre>
           <h3>넷째 작업 · 비교표와 법률별 전체 번역 초안을 각각 검수</h3>
-          <p>법제 담당 브랜치가 최신 main을 반영하면 PR Preview의 <a href="/legal-translation">법률별 전체 번역 초안</a> 목록에서 이번 법률을 선택해 조문별로 읽고 피드백을 남길 수 있습니다. 현재는 APPI가 첫 항목이며, 이후 법률도 같은 화면에 나타납니다. 17개 기준 비교표도 별도로 검수하세요. 검토하지 않은 조문이나 셀은 검수 완료로 표시하지 않습니다. 피드백 수정과 PR 작성은 Codex에게 맡깁니다.</p>
+          <p>법제 담당 브랜치가 최신 main을 반영하면 PR Preview의 <a href="/legal-translation">법률별 전체 번역 초안</a> 목록에서 이번 법률을 선택해 조문별로 읽고 피드백을 남길 수 있습니다. 현재 외국법 6개의 전문 초안을 같은 화면에서 확인할 수 있습니다. 한국법은 공식 한국어 원문 조문 색인으로 구분합니다. 17개 기준 비교표도 별도로 검수하세요. 검토하지 않은 조문이나 셀은 검수 완료로 표시하지 않습니다. 피드백 수정과 PR 작성은 Codex에게 맡깁니다.</p>
           <pre>{legalReviewPrompt}</pre>
         </section>
         <section className="guide-card">

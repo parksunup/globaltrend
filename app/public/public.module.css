@@ -535,3 +535,5 @@
 @media(max-width:620px){.mobileCriterion{display:grid;grid-template-columns:1fr;gap:8px}.mobileCriterion>div{display:flex;gap:7px}.mobileCriterion>div button{flex:1;font-size:13px}.articleSheetHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}.articleSheetHeader button{flex:none}.articleSheetActions{display:flex;justify-content:flex-end}}
 
 @media(max-width:620px){.mobileAppliedFilters button{min-height:36px;padding:6px 10px;border:1px solid var(--line);border-radius:20px;background:var(--panel);color:var(--cyan);font:inherit;font-size:12px}.themeLight .mobileAppliedFilters button,.themeLight .mobileHeaderActions a,.themeLight .mobileHeaderActions button,.themeLight .mobileCountryToggle,.themeLight .mobileCriterion select,.themeLight .mobileCriterion button,.themeLight .lawMobileReaderTools,.themeLight .lawMobileReaderTools button{background:#fff;color:#176b5e}.mobileCriterion label{font-weight:700}.mobileCriterion select{font-size:15px}}
+/* Keep draft notices readable on the light observatory theme as well. */
+.themeLight .draftNotice{color:#70470b;background:#fff4df;border-color:#bd852e}

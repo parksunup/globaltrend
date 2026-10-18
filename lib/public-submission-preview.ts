@@ -86,6 +86,6 @@ export function loadSubmittedSources(root = process.cwd()): SubmittedSource[] {
 }
 
 export function publicSubmissionPreviewEnabled(): boolean {
-  return process.env.VERCEL_ENV === "preview" &&
-    process.env.VERCEL_GIT_COMMIT_REF === "codex/public-integration-preview";
+  return process.env.VERCEL_ENV === "preview" ||
+    (process.env.VERCEL_ENV !== "production" && process.env.NODE_ENV === "development");
 }
