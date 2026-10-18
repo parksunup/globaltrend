@@ -18,7 +18,7 @@
 | 1 | 정책/제도 | 과징금 부과 판단 기준과 DSA–GDPR 최종 지침 채택<br>원제: EDPB harmonises fining methodology and adopts final DSA-GDPR guidelines | EDPB | [항목 1](#entry-1) |
 | 2 | 정책/제도 | 분야별 규제기관 간 정보 공유의 법적 근거 마련 촉구<br>원제: EDPB calls for legal basis for cross-regulatory information sharing | EDPB | [항목 2](#entry-2) |
 | 3 | 정책/제도 | 벨기에 감독기구에 NOYB 쿠키 배너 민원의 본안 심사 요구<br>원제: EDPB requires Belgian DPA to handle the merits of NOYB cookie banner complaint | EDPB | [항목 3](#entry-3) |
-| 4 | 데이터활용, AI, 신기술 | 익명화·생성형 AI 웹 스크래핑 지침 및 블록체인 최종 지침<br>원제: EDPB sheds light on anonymisation and web scraping for generative AI and adopts final version of guidelines on blockchain | EDPB | [항목 4](#entry-4) |
+| 4 | 데이터활용, AI, 신기술 | 익명처리·생성형 AI 웹 스크래핑 지침 및 블록체인 최종 지침<br>원제: EDPB sheds light on anonymisation and web scraping for generative AI and adopts final version of guidelines on blockchain | EDPB | [항목 4](#entry-4) |
 | 5 | 정책/제도 | EDPB·AMLA, 정보 공유 협력을 위한 공동 지침 개발<br>원제: EDPB and AMLA to develop Joint Guidelines on partnerships for information sharing | EDPB | [항목 5](#entry-5) |
 | 6 | 정책/제도 | 손해배상 청구 조건을 인위적으로 만들기 위한 개인정보 열람 요구의 남용 판단<br>원제: A request for access to one’s own personal data may be considered abusive and refused if it is made for the sole purpose of subsequently claiming compensation for an alleged infringement of the GDPR | CJEU/CURIA | [항목 6](#entry-6) |
 | 7 | 정책/제도 | WhatsApp의 EDPB 구속력 있는 결정 취소소송, 적법성 인정<br>원제: GDPR: the action brought by WhatsApp Ireland against Binding Decision 1/2021 of the European Data Protection Board is admissible | CJEU/CURIA | [항목 7](#entry-7) |
@@ -103,7 +103,7 @@ EDPB는 유럽연합 집행위원회에 서로 다른 분야의 규제기관이 
 
 - 집행 여건: AI 이용 증가 등으로 민원의 수와 복잡성이 늘어 감독기구의 자원 부담이 커졌다고 설명하고, 다수에게 영향을 미치는 사건 등에 실무적·필요시 입법적 대응을 논의했다고 밝혔다. 근거: [Strengthening consistency and boosting efficient enforcement](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
 
-- 협력 방식: 민원을 접수한 기관이 수석감독기구에 자원을 제공하는 방안, 공동 작업 확대, 집행 절차와 국가별 관행에 관한 워크숍을 논의했다. 기사에 소개된 방향이며 개별 사건의 의무적인 처리 절차로 확정하지 않는다. 근거: [To further boost cross-border enforcement 문단 및 공동 작업 설명](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
+- 협력 방식: 민원을 접수한 기관이 선임 감독기관에 자원을 제공하는 방안, 공동 작업 확대, 집행 절차와 국가별 관행에 관한 워크숍을 논의했다. 기사에 소개된 방향이며 개별 사건의 의무적인 처리 절차로 확정하지 않는다. 근거: [To further boost cross-border enforcement 문단 및 공동 작업 설명](https://www.edpb.europa.eu/news/edpb-calls-for-legal-basis-for-cross-regulatory-information-sharing_en)
 
 **기관·관할권·날짜**
 
@@ -189,17 +189,17 @@ EDPB는 벨기에 VRT의 쿠키 배너에 관한 NOYB 민원을 절차상 이유
 
 <a id="entry-4"></a>
 
-### 4. 익명화·생성형 AI 웹 스크래핑 지침 및 블록체인 최종 지침
+### 4. 익명처리·생성형 AI 웹 스크래핑 지침 및 블록체인 최종 지침
 
 **분류: 데이터활용, AI, 신기술**
 
 **핵심 요약 — 확인한 사실**
 
-EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을 채택하고, 블록체인 개인정보 처리 지침을 최종화했다고 밝혔다.
+EDPB는 익명처리와 생성형 AI 목적의 웹 스크래핑에 관한 지침을 채택하고, 블록체인 개인정보 처리 지침을 최종화했다고 밝혔다.
 
 **주요 내용 — 확인한 사실**
 
-- 지침 단계: 익명화·생성형 AI 웹 스크래핑 지침은 2026년 10월 30일까지 의견수렴 대상이고, 블록체인 지침은 의견수렴 후 최종본으로 채택됐다고 발표했다. 근거: [기사 도입; 두 public consultation 문단; Blockchains guidelines finalised after public consultation](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+- 지침 단계: 익명처리·생성형 AI 웹 스크래핑 지침은 2026년 10월 30일까지 의견수렴 대상이고, 블록체인 지침은 의견수렴 후 최종본으로 채택됐다고 발표했다. 근거: [기사 도입; 두 public consultation 문단; Blockchains guidelines finalised after public consultation](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
 - 익명성 판단: 기사상 데이터가 개인과 관련되는지는 내용·목적·효과에 따라 판단하며, 합리적으로 이용될 수 있는 식별 수단은 관련 주체의 관점과 객관적 요소를 고려한다. 동일한 데이터도 주체별 판단이 달라질 수 있다고 설명한다. 근거: [Understanding anonymous data](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
@@ -207,7 +207,7 @@ EDPB는 익명화와 생성형 AI 목적의 웹 스크래핑에 관한 지침을
 
 - 웹 수집 원칙: 개인정보를 수집·저장·조직·검색하는 웹 스크래핑에는 GDPR이 적용되며 목적 제한·투명성·정확성·최소화가 쟁점이라고 설명한다. 신뢰할 수 있는 출처, 수집 시점 기록, 학습 전 데이터 검증을 권고했다고 밝혔다. 근거: [Clarifying data protection implications of web scraping for AI development](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
-- 민감정보: 웹 수집에 특별 범주 정보가 포함되면 GDPR 제6조 근거와 제9조 제2항의 예외가 모두 필요하다는 설명을 담는다. 우발적 수집에 관한 판례 적용도 개별 검토 대상이며 제9조의 일반 면제가 없다고 강조한다. 근거: [processing special categories 및 no general exemption 문단](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
+- 민감정보: 웹 수집에 특별한 유형의 개인정보가 포함되면 GDPR 제6조 근거와 제9조 제2항의 예외가 모두 필요하다는 설명을 담는다. 우발적 수집에 관한 판례 적용도 개별 검토 대상이며 제9조의 일반 면제가 없다고 강조한다. 근거: [processing special categories 및 no general exemption 문단](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
 - 블록체인: 최종 지침은 구조별 개인정보 처리 영향을 설명하며, 의견수렴 결과 보고서와 변경 표시본도 공개했다고 밝혔다. 여기서는 기사 내용을 확인했으며 지침 전문의 세부 의무는 검토 필요다. 근거: [Blockchains guidelines finalised after public consultation](https://www.edpb.europa.eu/news/edpb-sheds-light-on-anonymisation-and-web-scraping-for-generative-ai-and-adopts-final-version_en)
 
@@ -401,6 +401,6 @@ CURIA 보도자료에 따르면 사법재판소는 EDPB 결정이 소송으로 �
 
 첨부된 **2026년 제36호 PDF**의 표지(물리 1쪽), 전체 목차(2쪽), 지역별 목록표(3·9쪽), 본문 항목(4–8·10–13쪽)을 읽고 구성을 참고했습니다. 참고 PDF의 뉴스 내용·원문 제목·법적 설명·로고는 이 예시의 자료로 복사하지 않았습니다. 원본의 종이 페이지 번호는 본문 링크로 바꾸고, 사용자 요청에 따라 편집 의견과 사람 검토 사항을 구분했습니다.
 
-선정·제외·중복 판단은 [fixtures/review-notes.md](fixtures/review-notes.md)에 기록했습니다. 게시일 표시와 HTML 날짜 속성이 다른 OECD 신경데이터·AI 모델 공유 자료 2건은 날짜 확정 전 제외했습니다. 기존 표본 파일의 관찰값은 보존했습니다. 모든 한국어 요약과 편집 의견은 사람 검수 전이며 실제 발행 상태를 변경하지 않았습니다.
+선정·제외·중복 판단은 [fixtures/review-notes.md](fixtures/review-notes.md)에 기록했습니다. 게시일 표시와 HTML 날짜 속성이 다른 OECD 신경 데이터·AI 모델 공유 자료 2건은 날짜 확정 전 제외했습니다. 기존 표본 파일의 관찰값은 보존했습니다. 모든 한국어 요약과 편집 의견은 사람 검수 전이며 실제 발행 상태를 변경하지 않았습니다.
 
 대응 데이터: [weekly-sample.json](weekly-sample.json). 목차와 본문은 JSON 항목 ID 및 순서에 대응합니다.

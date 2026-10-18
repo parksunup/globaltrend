@@ -79,12 +79,12 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "bba9777d06fb4559261e48f25c5e28e4000011892b77f9938ee18821eec861a6"
+      "sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab"
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "10c6e2a4f10427bf0914e842ffa1909c50f650278a3c3dc2c56734925d722355"
+      "sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f"
     },
     {
       "path": "data/legal/gdpr-comparison-review.md",
@@ -339,7 +339,7 @@
     {
       "path": "data/legal/translations/appi-review-notes.md",
       "pr": 15,
-      "sha256": "862b60ffbea1bea4c95d6254db091ceb154ea3beb478fecc09a01f772e6758ed"
+      "sha256": "c271550956fe36857ccd07be37c2d5713ef41a4f3002ed0609cad12c0499a9b8"
     },
     {
       "path": "data/legal/translations/appi-status.md",
@@ -349,12 +349,12 @@
     {
       "path": "data/legal/translations/appi.json",
       "pr": 15,
-      "sha256": "beec7c1ed63af81ef611d668a0228469c54f5ee89cd6a7880ebeb419b9322d6f"
+      "sha256": "44de5b48da400d797160da9b0686d03075ed9643cd14cb47ae3e54aa71b04fd0"
     },
     {
       "path": "data/legal/translations/appi.md",
       "pr": 15,
-      "sha256": "f229cace9f426204b3aef5cd9a260580e4d8e61dff764dd187b96e5da8da8699"
+      "sha256": "2edac6e948000c959ce8f28e276bc802efcada77f5b10c020faca2e2333a4bcf"
     },
     {
       "path": "data/legal/translations/ccpa-review-notes.md",
@@ -364,12 +364,12 @@
     {
       "path": "data/legal/translations/ccpa.json",
       "pr": 15,
-      "sha256": "a696988961a0534c79f9806a7484a35063e4b5ea3c9ae2d8e505f80c53653d54"
+      "sha256": "6d94990a5c5eb90d6b867fa462dd7fdbfa403100cb1f278b7cfaabbb8e7fd49b"
     },
     {
       "path": "data/legal/translations/ccpa.md",
       "pr": 15,
-      "sha256": "6def99703f263e3c87055e24f2c4e63c8dae6d13179464f85feaff794929c43d"
+      "sha256": "14c373e8c03020974789296f15e7c4983d2bfc5f9289e950415b7f6d5fbca2bf"
     },
     {
       "path": "data/legal/translations/gdpr-review-notes.md",
@@ -379,47 +379,47 @@
     {
       "path": "data/legal/translations/pdpa-review-notes.md",
       "pr": 15,
-      "sha256": "98637470c2760825dcbb48355172319852c8d23d1268d67051caf0376d40eefc"
+      "sha256": "9db303861e3d86ba15128598bbfb25672cdebc6628fcd5c2eb4235f97968858b"
     },
     {
       "path": "data/legal/translations/pdpa.json",
       "pr": 15,
-      "sha256": "71c8de4786ce47c02e804b5889162b15999489fce1777c1b1a55aa80df40e7b4"
+      "sha256": "98a54c3651a2e9361c1e445dc6d82fc62c05ad55d33686f4efa902c1ad3404e6"
     },
     {
       "path": "data/legal/translations/pdpa.md",
       "pr": 15,
-      "sha256": "834c36d534496809c09cf31120c485079c88264b963b6388d8b73627f622f214"
+      "sha256": "48b6685fd521846317a379c50e8ba491ec7442f0a13499c872643441f1d6a1a5"
     },
     {
       "path": "data/legal/translations/pipl-review-notes.md",
       "pr": 15,
-      "sha256": "5b7ccbeeb0b92395da9f42502e568e26a943c39aba0c8fb26de772e2f8c300f3"
+      "sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86"
     },
     {
       "path": "data/legal/translations/pipl.json",
       "pr": 15,
-      "sha256": "3247c01578cde21a1224a816ea566dd02527533c0d6b1eee10e0a7e95c8e8e29"
+      "sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39"
     },
     {
       "path": "data/legal/translations/pipl.md",
       "pr": 15,
-      "sha256": "a6210e8d85905f32e14dadb4e58936a23a9ec7b11808234b55e17cc6b5e26567"
+      "sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885"
     },
     {
       "path": "data/legal/translations/uk-gdpr-review-notes.md",
       "pr": 15,
-      "sha256": "a09c42b9f992b09ba0e565cbcd2fd784c8e405b45511c2a926f576d7e6602d4b"
+      "sha256": "12fb6eedf70b0118b1856c1c98e2f4723ae52103eb1d7e77d73e972a16a68a65"
     },
     {
       "path": "data/legal/translations/uk-gdpr.json",
       "pr": 15,
-      "sha256": "30760b629ca59df0f7fbcaf5b2680e01740f41eed2a8ceac8ca1105a3f1c702d"
+      "sha256": "0b53fbcdafb4cc4f04202834d496b336faa6184afcc92a22a609ee60280e9ab3"
     },
     {
       "path": "data/legal/translations/uk-gdpr.md",
       "pr": 15,
-      "sha256": "37f5e8e3108a8ac79d00227a9d52f2b071f081b9a10ee4e5a21c7d53a07fe325"
+      "sha256": "ec001253df46433eea664949ce06ce37e27b8fd764a0fdf3604dd59f77a24a75"
     },
     {
       "path": "data/legal/validate-corpus.py",
@@ -439,12 +439,12 @@
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "bba9777d06fb4559261e48f25c5e28e4000011892b77f9938ee18821eec861a6"
+      "sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4"
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "10c6e2a4f10427bf0914e842ffa1909c50f650278a3c3dc2c56734925d722355"
+      "sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab"
     },
     {
       "path": "public/review-drafts/gdpr.html",
@@ -464,12 +464,12 @@
     {
       "path": "data/trends/fixtures/cnil.json",
       "pr": 16,
-      "sha256": "b11e9eee1435e3570a1e0c52f6377d7398b848200e312d391c6245d4df8f75eb"
+      "sha256": "2a037e35237124eecfc58e71baeeb220207e5bcc8e92234734ec80b7af90467a"
     },
     {
       "path": "data/trends/fixtures/cnil.md",
       "pr": 16,
-      "sha256": "50120b7a7a46b90ff1bef714bd062c6cde8d1ac9629d4e6ba6eda99c4ddbbe85"
+      "sha256": "7a76d11ef7d975ef7a69569954c737273dc3a0a28baf5e78dd7feb8ccaec5e5e"
     },
     {
       "path": "data/trends/fixtures/curia.json",
@@ -484,22 +484,22 @@
     {
       "path": "data/trends/fixtures/dpc.json",
       "pr": 16,
-      "sha256": "28cec073a0e97291303df4b8050dded3e6b8fe605ebb90222537468cf17bb185"
+      "sha256": "61284db579cc6b801b6d5c510cb7fca1036bd19d5c4d87d2366db999c442e1e4"
     },
     {
       "path": "data/trends/fixtures/dpc.md",
       "pr": 16,
-      "sha256": "63909932330a50a6daf3a9412a76915891199cefd8f720f1953db0bffd4dedc4"
+      "sha256": "d4f095db68014b67c8590d2c1fcc10b8039c36c7f1d077e6b884acf602dae650"
     },
     {
       "path": "data/trends/fixtures/edpb.json",
       "pr": 16,
-      "sha256": "9a362830f1b7a686a305a722625f489584c68fae1b22d1147d054f64a16d4d50"
+      "sha256": "28ec7b92db4298e8bc138b933d60b5d2074bd48fb9ed78bc8d0a03a1f06c7ac4"
     },
     {
       "path": "data/trends/fixtures/edpb.md",
       "pr": 16,
-      "sha256": "1ac8d2ca4123919aa08f387ae1fc7e90f40b3bb1e869fa08af8102774bd14866"
+      "sha256": "73e0d13eb90ea725560b337d58b77930a2c4b9e974fcda7cce3388e63fffd43c"
     },
     {
       "path": "data/trends/fixtures/ftc.json",
@@ -514,22 +514,22 @@
     {
       "path": "data/trends/fixtures/ico.json",
       "pr": 16,
-      "sha256": "d86d565f0c818860924278b6a706e1b131fcdcb08b2d8b755a2b742176f7f970"
+      "sha256": "c163c0068371fea548cd82270a87061f69d167ba9b7a24ba800f578ec33d36ff"
     },
     {
       "path": "data/trends/fixtures/ico.md",
       "pr": 16,
-      "sha256": "873784e79c8e9d62e50ef24310deec3dc26bb2fc64f144e1803779fefb548074"
+      "sha256": "affde7c7e46c77666a5f56de0cff12b00fe1c2a2e7e14ae023dcb51a684d8186"
     },
     {
       "path": "data/trends/fixtures/oecd.json",
       "pr": 16,
-      "sha256": "0ee720b658d0b0421835dfb642440d7e5bba46c586f518e0c816b3dc7889dbe8"
+      "sha256": "89c5f562d33f7c154bc9db92c77e1e007b3aa573d6f98c89619f6834565a1d99"
     },
     {
       "path": "data/trends/fixtures/oecd.md",
       "pr": 16,
-      "sha256": "d1603eecc6081344d1994b7eafc94d2cedbbd2dbb8ce261103620475c7e947e1"
+      "sha256": "f32733737d019ec397824fa0e4f8a4ba6ec5351bacefdb67541fd5a9ee09f36f"
     },
     {
       "path": "data/trends/fixtures/pdpc.json",
@@ -554,7 +554,7 @@
     {
       "path": "data/trends/fixtures/review-notes.md",
       "pr": 16,
-      "sha256": "1feb57afe25d9231470c8faf569fb2a02c598ec610fd3aaf33b3693c1cb66eba"
+      "sha256": "fdbee4e865e76213a46187657d229a83688fc0f9b6e8a08a71e46909066d2169"
     },
     {
       "path": "data/trends/review-notes.md",
@@ -669,12 +669,12 @@
     {
       "path": "data/trends/weekly-sample.json",
       "pr": 16,
-      "sha256": "dc632e1012174b49898c3fe1b99af4ce580939cd55de6c96d2aa38c6ed11c14f"
+      "sha256": "ff654791b2f81e16bdbd25205b0f7abe53b39fd1605f386925fa3688fd0015c4"
     },
     {
       "path": "data/trends/weekly-sample.md",
       "pr": 16,
-      "sha256": "c734653d536c14c9814322b6b579ccd2b238c7c092ebfb7d1a4d3a411aaeb76a"
+      "sha256": "7315d5b0081a4ef1ad5d687cd64764fa2fddfdd580927e78b745cb8d05ba528f"
     }
   ]
 }

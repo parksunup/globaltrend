@@ -27,7 +27,7 @@
     "complete": true,
     "translated_main_articles": 185,
     "total_main_articles": 185,
-    "main_article_coverage_percent": 100.0,
+    "main_article_coverage_percent": 100,
     "overall_coverage_percent": null,
     "public_release_status": "draft_for_review",
     "source_reuse_basis": "Japanese Copyright Act Article 13(1): statutes excluded from works subject to rights under that chapter; only statutory text, not site assets or third-party translations",
@@ -1792,7 +1792,7 @@
       "source_sha256": "75387c4cbf2fc770673a6ecbd2942574db9d9ee702a135e3ae58922927245a9b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 장에서 “보유개인데이터”란 개인정보취급사업자가 공개, 내용의 정정, 추가 또는 삭제, 이용의 정지, 소거 및 제3자에 대한 제공의 정지를 할 수 있는 권한을 가진 개인데이터로서, 그 존재 여부가 밝혀짐으로써 공익 또는 그 밖의 이익이 침해되는 것으로 정령으로 정하는 것 외의 것을 말한다.",
+      "korean_text": "이 장에서 “보유 개인데이터”란 개인정보취급사업자가 공개, 내용의 정정, 추가 또는 삭제, 이용의 정지, 소거 및 제3자에 대한 제공의 정지를 할 수 있는 권한을 가진 개인데이터로서, 그 존재 여부가 밝혀짐으로써 공익 또는 그 밖의 이익이 침해되는 것으로 정령으로 정하는 것 외의 것을 말한다.",
       "markdown_anchor": "main-a16-p4"
     },
     {
@@ -3168,7 +3168,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a32",
-      "korean_title": "제32조 (보유개인데이터에 관한 사항의 공표 등)"
+      "korean_title": "제32조 (보유 개인데이터에 관한 사항의 공표 등)"
     },
     {
       "node_id": "main-a32-p1",
@@ -3181,7 +3181,7 @@
       "source_sha256": "ed784d702d51272a78bb71a66fbc1cffd542c1f60f4d3493b0dd5ddae9a5f64f",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 보유개인데이터에 관하여 다음에 열거된 사항을 본인이 알 수 있는 상태(본인의 요구에 따라 지체 없이 답변하는 경우를 포함한다)에 두어야 한다.",
+      "korean_text": "개인정보취급사업자는 보유 개인데이터에 관하여 다음에 열거된 사항을 본인이 알 수 있는 상태(본인의 요구에 따라 지체 없이 답변하는 경우를 포함한다)에 두어야 한다.",
       "markdown_anchor": "main-a32-p1"
     },
     {
@@ -3209,7 +3209,7 @@
       "source_sha256": "6649f8b047b5633b1333c81673bd6b58e6df24ade70aa4f30a13d32d3e6454d3",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "모든 보유개인데이터의 이용목적(제21조 제4항 제1호부터 제3호까지에 해당하는 경우를 제외한다).",
+      "korean_text": "모든 보유 개인데이터의 이용목적(제21조 제4항 제1호부터 제3호까지에 해당하는 경우를 제외한다).",
       "markdown_anchor": "main-a32-p1-i2"
     },
     {
@@ -3237,7 +3237,7 @@
       "source_sha256": "d9b6f0d8472db05bd3889c648254c05d4cdc1cd735782461ff5fdd9bf413e1b8",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "앞의 세 호에 열거된 것 외에 보유개인데이터의 적정한 취급의 확보에 관하여 필요한 사항으로서 정령으로 정하는 것.",
+      "korean_text": "앞의 세 호에 열거된 것 외에 보유 개인데이터의 적정한 취급의 확보에 관하여 필요한 사항으로서 정령으로 정하는 것.",
       "markdown_anchor": "main-a32-p1-i4"
     },
     {
@@ -3251,7 +3251,7 @@
       "source_sha256": "c4ad4b3269cb766644f4112ca159f937977f19c6fa9d368725a4fbdbddfa3536",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 본인으로부터 해당 본인이 식별되는 보유개인데이터의 이용목적을 통지하도록 요구받은 때에는 본인에게 지체 없이 이를 통지하여야 한다. 다만, 다음 각 호의 어느 하나에 해당하는 경우에는 그러하지 아니하다.",
+      "korean_text": "개인정보취급사업자는 본인으로부터 해당 본인이 식별되는 보유 개인데이터의 이용목적을 통지하도록 요구받은 때에는 본인에게 지체 없이 이를 통지하여야 한다. 다만, 다음 각 호의 어느 하나에 해당하는 경우에는 그러하지 아니하다.",
       "markdown_anchor": "main-a32-p2"
     },
     {
@@ -3265,7 +3265,7 @@
       "source_sha256": "fce4421d9fbb5e6239a1fb7221e92a8cf386711b4fc985701d310aa5d7787a3d",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 규정에 따라 해당 본인이 식별되는 보유개인데이터의 이용목적이 명백한 경우.",
+      "korean_text": "전항의 규정에 따라 해당 본인이 식별되는 보유 개인데이터의 이용목적이 명백한 경우.",
       "markdown_anchor": "main-a32-p2-i1"
     },
     {
@@ -3293,7 +3293,7 @@
       "source_sha256": "36b895aa5afa9bb9234b0a1a1334886c4598a0d96cf2d75133a4b0989f2932b4",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따라 요구받은 보유개인데이터의 이용목적을 통지하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따라 요구받은 보유 개인데이터의 이용목적을 통지하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
       "markdown_anchor": "main-a32-p3"
     },
     {
@@ -3322,7 +3322,7 @@
       "source_sha256": "a48f4022066e1ded4c9e39ed0598380d31d987fc66d444444c64b3fb14112ab3",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유개인데이터를 전자적·자기적 기록의 제공에 의한 방법 또는 그 밖에 개인정보보호위원회 규칙으로 정하는 방법으로 공개하도록 청구할 수 있다.",
+      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유 개인데이터를 전자적·자기적 기록의 제공에 의한 방법 또는 그 밖에 개인정보보호위원회 규칙으로 정하는 방법으로 공개하도록 청구할 수 있다.",
       "markdown_anchor": "main-a33-p1"
     },
     {
@@ -3336,7 +3336,7 @@
       "source_sha256": "835518619083e7e42bf04de0b1f7a017c13bdb1faf1defee252c2e97a798a548",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 때에는 본인에게 같은 항의 규정에 따라 해당 본인이 청구한 방법(해당 방법에 의한 공개에 많은 비용이 들거나 그 밖에 해당 방법에 의한 공개가 어려운 경우에는 서면의 교부에 의한 방법)으로 지체 없이 해당 보유개인데이터를 공개하여야 한다. 다만, 공개함으로써 다음 각 호의 어느 하나에 해당하는 경우에는 그 전부 또는 일부를 공개하지 않을 수 있다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 때에는 본인에게 같은 항의 규정에 따라 해당 본인이 청구한 방법(해당 방법에 의한 공개에 많은 비용이 들거나 그 밖에 해당 방법에 의한 공개가 어려운 경우에는 서면의 교부에 의한 방법)으로 지체 없이 해당 보유 개인데이터를 공개하여야 한다. 다만, 공개함으로써 다음 각 호의 어느 하나에 해당하는 경우에는 그 전부 또는 일부를 공개하지 않을 수 있다.",
       "markdown_anchor": "main-a33-p2"
     },
     {
@@ -3392,7 +3392,7 @@
       "source_sha256": "15e453f5fbf19ea5b2504f3804ebf6b26e63492d3b0b8349ca89dae4492c076b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 제1항의 규정에 따른 청구에 관한 보유개인데이터의 전부 또는 일부를 공개하지 아니한다는 결정을 한 때, 해당 보유개인데이터가 존재하지 않는 때 또는 같은 항의 규정에 따라 본인이 청구한 방법에 의한 공개가 어려운 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
+      "korean_text": "개인정보취급사업자는 제1항의 규정에 따른 청구에 관한 보유 개인데이터의 전부 또는 일부를 공개하지 아니한다는 결정을 한 때, 해당 보유 개인데이터가 존재하지 않는 때 또는 같은 항의 규정에 따라 본인이 청구한 방법에 의한 공개가 어려운 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
       "markdown_anchor": "main-a33-p3"
     },
     {
@@ -3406,7 +3406,7 @@
       "source_sha256": "b98ce8536c77e179fb29e1733ab31016fbebb1719557b83bf8fba52fef51dd98",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "다른 법령의 규정에 따라 본인에게 제2항 본문에 규정된 방법에 상당하는 방법으로 해당 본인이 식별되는 보유개인데이터의 전부 또는 일부를 공개하도록 되어 있는 경우에는 해당 전부 또는 일부의 보유개인데이터에 대하여 제1항 및 제2항의 규정을 적용하지 아니한다.",
+      "korean_text": "다른 법령의 규정에 따라 본인에게 제2항 본문에 규정된 방법에 상당하는 방법으로 해당 본인이 식별되는 보유 개인데이터의 전부 또는 일부를 공개하도록 되어 있는 경우에는 해당 전부 또는 일부의 보유 개인데이터에 대하여 제1항 및 제2항의 규정을 적용하지 아니한다.",
       "markdown_anchor": "main-a33-p4"
     },
     {
@@ -3449,7 +3449,7 @@
       "source_sha256": "4b9d465bf80052910bd169c546f564a1c086203db0609bf8b262f7bbdd98b808",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유개인데이터의 내용이 사실이 아닌 때에는 해당 보유개인데이터의 내용의 정정, 추가 또는 삭제(이하 이 조에서 “정정 등”이라 한다)를 청구할 수 있다.",
+      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유 개인데이터의 내용이 사실이 아닌 때에는 해당 보유 개인데이터의 내용의 정정, 추가 또는 삭제(이하 이 조에서 “정정 등”이라 한다)를 청구할 수 있다.",
       "markdown_anchor": "main-a34-p1"
     },
     {
@@ -3463,7 +3463,7 @@
       "source_sha256": "c9fe1fd743ac9e5539ebb1623db402d911fd2fe41d69b90ded918bf798df0014",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우 그 내용의 정정 등에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우를 제외하고는 이용목적의 달성에 필요한 범위 내에서 지체 없이 필요한 조사를 하고, 그 결과에 따라 해당 보유개인데이터의 내용의 정정 등을 하여야 한다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우 그 내용의 정정 등에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우를 제외하고는 이용목적의 달성에 필요한 범위 내에서 지체 없이 필요한 조사를 하고, 그 결과에 따라 해당 보유 개인데이터의 내용의 정정 등을 하여야 한다.",
       "markdown_anchor": "main-a34-p2"
     },
     {
@@ -3477,7 +3477,7 @@
       "source_sha256": "8d9a354da80077478d65622edad512cb8cac2ac1e21d0f1afaeb2caed1286f1b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 제1항의 규정에 따른 청구에 관한 보유개인데이터의 내용의 전부 또는 일부에 대하여 정정 등을 한 때 또는 정정 등을 하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실(정정 등을 한 때에는 그 내용을 포함한다)을 통지하여야 한다.",
+      "korean_text": "개인정보취급사업자는 제1항의 규정에 따른 청구에 관한 보유 개인데이터의 내용의 전부 또는 일부에 대하여 정정 등을 한 때 또는 정정 등을 하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실(정정 등을 한 때에는 그 내용을 포함한다)을 통지하여야 한다.",
       "markdown_anchor": "main-a34-p3"
     },
     {
@@ -3506,7 +3506,7 @@
       "source_sha256": "b8449ea854e1617c09daf8e1580df9aa99961f430d2395874e6bcc29f2f174d9",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유개인데이터가 제18조 또는 제19조의 규정에 위반하여 취급되고 있거나 제20조의 규정에 위반하여 취득된 것인 때에는 해당 보유개인데이터의 이용의 정지 또는 소거(이하 이 조에서 “이용정지 등”이라 한다)를 청구할 수 있다.",
+      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유 개인데이터가 제18조 또는 제19조의 규정에 위반하여 취급되고 있거나 제20조의 규정에 위반하여 취득된 것인 때에는 해당 보유 개인데이터의 이용의 정지 또는 소거(이하 이 조에서 “이용정지 등”이라 한다)를 청구할 수 있다.",
       "markdown_anchor": "main-a35-p1"
     },
     {
@@ -3520,7 +3520,7 @@
       "source_sha256": "99628e709aad9a16559a67fa43d924eee90626809c9759b55e368a501d1a427e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 위반을 시정하기 위하여 필요한 한도에서 지체 없이 해당 보유개인데이터의 이용정지 등을 하여야 한다. 다만, 해당 보유개인데이터의 이용정지 등에 많은 비용이 들거나 그 밖에 이용정지 등을 하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 위반을 시정하기 위하여 필요한 한도에서 지체 없이 해당 보유 개인데이터의 이용정지 등을 하여야 한다. 다만, 해당 보유 개인데이터의 이용정지 등에 많은 비용이 들거나 그 밖에 이용정지 등을 하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
       "markdown_anchor": "main-a35-p2"
     },
     {
@@ -3534,7 +3534,7 @@
       "source_sha256": "0cdd657cc2493dea144f4492e766510c082e88303fdfb4fc8690d38e8a836504",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유개인데이터가 제27조 제1항 또는 제28조의 규정에 위반하여 제3자에게 제공되고 있는 때에는 해당 보유개인데이터의 제3자에 대한 제공의 정지를 청구할 수 있다.",
+      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유 개인데이터가 제27조 제1항 또는 제28조의 규정에 위반하여 제3자에게 제공되고 있는 때에는 해당 보유 개인데이터의 제3자에 대한 제공의 정지를 청구할 수 있다.",
       "markdown_anchor": "main-a35-p3"
     },
     {
@@ -3548,7 +3548,7 @@
       "source_sha256": "82098d8564f4cd7838be39ad44d133a116570ed2109cd8a385979d1007d09680",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 지체 없이 해당 보유개인데이터의 제3자에 대한 제공을 정지하여야 한다. 다만, 해당 보유개인데이터의 제3자에 대한 제공의 정지에 많은 비용이 들거나 그 밖에 제3자에 대한 제공을 정지하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 지체 없이 해당 보유 개인데이터의 제3자에 대한 제공을 정지하여야 한다. 다만, 해당 보유 개인데이터의 제3자에 대한 제공의 정지에 많은 비용이 들거나 그 밖에 제3자에 대한 제공을 정지하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
       "markdown_anchor": "main-a35-p4"
     },
     {
@@ -3562,7 +3562,7 @@
       "source_sha256": "6dc93032d797102fc89a7e25fd7c081e3ed8af61944a4a2d171208b053a3577a",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유개인데이터를 해당 개인정보취급사업자가 이용할 필요가 없어진 경우, 해당 본인이 식별되는 보유개인데이터에 관하여 제26조 제1항 본문에 규정된 사태가 발생한 경우 또는 그 밖에 해당 본인이 식별되는 보유개인데이터의 취급으로 본인의 권리 또는 정당한 이익이 침해될 우려가 있는 경우에는 해당 보유개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지를 청구할 수 있다.",
+      "korean_text": "본인은 개인정보취급사업자에게 해당 본인이 식별되는 보유 개인데이터를 해당 개인정보취급사업자가 이용할 필요가 없어진 경우, 해당 본인이 식별되는 보유 개인데이터에 관하여 제26조 제1항 본문에 규정된 사태가 발생한 경우 또는 그 밖에 해당 본인이 식별되는 보유 개인데이터의 취급으로 본인의 권리 또는 정당한 이익이 침해될 우려가 있는 경우에는 해당 보유 개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지를 청구할 수 있다.",
       "markdown_anchor": "main-a35-p5"
     },
     {
@@ -3576,7 +3576,7 @@
       "source_sha256": "437753f9c879c2cc116aa8a2ecfeeb0851cfbbbe13dcfd065c36f0ac20674723",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 본인의 권리이익의 침해를 방지하기 위하여 필요한 한도에서 지체 없이 해당 보유개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지를 하여야 한다. 다만, 해당 보유개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지에 많은 비용이 들거나 그 밖에 이용정지 등 또는 제3자에 대한 제공의 정지를 하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
+      "korean_text": "개인정보취급사업자는 전항의 규정에 따른 청구를 받은 경우로서 그 청구에 이유가 있음이 판명된 때에는 본인의 권리이익의 침해를 방지하기 위하여 필요한 한도에서 지체 없이 해당 보유 개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지를 하여야 한다. 다만, 해당 보유 개인데이터의 이용정지 등 또는 제3자에 대한 제공의 정지에 많은 비용이 들거나 그 밖에 이용정지 등 또는 제3자에 대한 제공의 정지를 하기 어려운 경우로서 본인의 권리이익을 보호하기 위하여 필요한 대체 조치를 취하는 때에는 그러하지 아니하다.",
       "markdown_anchor": "main-a35-p6"
     },
     {
@@ -3590,7 +3590,7 @@
       "source_sha256": "bececfbd55a9398e728c799f5758b0ce9d4c551574ed58f92aeb83b8704b9e94",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 제1항 또는 제5항의 규정에 따른 청구에 관한 보유개인데이터의 전부 또는 일부에 대하여 이용정지 등을 하거나 이용정지 등을 하지 아니한다는 결정을 한 때, 또는 제3항이나 제5항의 규정에 따른 청구에 관한 보유개인데이터의 전부 또는 일부에 대하여 제3자에 대한 제공을 정지하거나 제3자에 대한 제공을 정지하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
+      "korean_text": "개인정보취급사업자는 제1항 또는 제5항의 규정에 따른 청구에 관한 보유 개인데이터의 전부 또는 일부에 대하여 이용정지 등을 하거나 이용정지 등을 하지 아니한다는 결정을 한 때, 또는 제3항이나 제5항의 규정에 따른 청구에 관한 보유 개인데이터의 전부 또는 일부에 대하여 제3자에 대한 제공을 정지하거나 제3자에 대한 제공을 정지하지 아니한다는 결정을 한 때에는 본인에게 지체 없이 그 사실을 통지하여야 한다.",
       "markdown_anchor": "main-a35-p7"
     },
     {
@@ -3662,7 +3662,7 @@
       "source_sha256": "db51538d928a9119e3a5ddb41a241b7d5762f52cf9caa388b72c4fb03ccc207b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 본인에게 공개 등의 청구 등에 관하여 그 대상이 되는 보유개인데이터 또는 제3자 제공기록을 특정하기에 충분한 사항의 제시를 요구할 수 있다. 이 경우 개인정보취급사업자는 본인이 쉽고 정확하게 공개 등의 청구 등을 할 수 있도록 해당 보유개인데이터 또는 해당 제3자 제공기록의 특정에 도움이 되는 정보의 제공 및 그 밖에 본인의 편의를 고려한 적절한 조치를 취하여야 한다.",
+      "korean_text": "개인정보취급사업자는 본인에게 공개 등의 청구 등에 관하여 그 대상이 되는 보유 개인데이터 또는 제3자 제공기록을 특정하기에 충분한 사항의 제시를 요구할 수 있다. 이 경우 개인정보취급사업자는 본인이 쉽고 정확하게 공개 등의 청구 등을 할 수 있도록 해당 보유 개인데이터 또는 해당 제3자 제공기록의 특정에 도움이 되는 정보의 제공 및 그 밖에 본인의 편의를 고려한 적절한 조치를 취하여야 한다.",
       "markdown_anchor": "main-a37-p2"
     },
     {
@@ -3997,7 +3997,7 @@
       "source_sha256": "a1266e1c6dc926a93c68def862206b7dda8e383a86f6a85d900b158fffa6feba",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "가명가공정보, 가명가공정보인 개인데이터 및 가명가공정보인 보유개인데이터에 대해서는 제17조 제2항, 제26조 및 제32조부터 제39조까지의 규정을 적용하지 아니한다.",
+      "korean_text": "가명가공정보, 가명가공정보인 개인데이터 및 가명가공정보인 보유 개인데이터에 대해서는 제17조 제2항, 제26조 및 제32조부터 제39조까지의 규정을 적용하지 아니한다.",
       "markdown_anchor": "main-a41-p9",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5244,7 +5244,7 @@
       "source_sha256": "327b51e7177b09f225044d6ead0b612d1bc549ee527940acde552ae3ee207900",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 장 및 제8장에서 “보유개인정보”란 행정기관 등의 직원(독립행정법인 등 및 지방독립행정법인의 경우에는 그 임원을 포함한다. 이하 이 장 및 제8장에서 같다)이 직무상 작성하거나 취득한 개인정보로서 해당 행정기관 등의 직원이 조직적으로 이용하는 것으로 해당 행정기관 등이 보유하고 있는 것을 말한다. 다만, 행정문서(행정기관이 보유하는 정보의 공개에 관한 법률[헤이세이 11년 법률 제42호. 이하 이 장에서 “행정기관정보공개법”이라 한다] 제2조 제2항에 규정된 행정문서를 말한다), 법인문서(독립행정법인 등이 보유하는 정보의 공개에 관한 법률[헤이세이 13년 법률 제140호. 이하 이 장에서 “독립행정법인등정보공개법”이라 한다] 제2조 제2항에 규정된 법인문서[같은 항 제4호에 열거된 것을 포함한다]를 말한다) 또는 지방공공단체등행정문서(지방공공단체의 기관 또는 지방독립행정법인의 직원이 직무상 작성하거나 취득한 문서, 도화 및 전자적·자기적 기록으로서 해당 지방공공단체의 기관 또는 지방독립행정법인의 직원이 조직적으로 사용하는 것으로 해당 지방공공단체의 기관 또는 지방독립행정법인이 보유하고 있는 것[행정기관정보공개법 제2조 제2항 각 호에 열거된 것에 상당하는 것으로 정령으로 정하는 것을 제외한다]을 말한다)(이하 이 장에서 “행정문서 등”이라 한다)에 기록되어 있는 것으로 한정한다.",
+      "korean_text": "이 장 및 제8장에서 “보유 개인정보”란 행정기관 등의 직원(독립행정법인 등 및 지방독립행정법인의 경우에는 그 임원을 포함한다. 이하 이 장 및 제8장에서 같다)이 직무상 작성하거나 취득한 개인정보로서 해당 행정기관 등의 직원이 조직적으로 이용하는 것으로 해당 행정기관 등이 보유하고 있는 것을 말한다. 다만, 행정문서(행정기관이 보유하는 정보의 공개에 관한 법률[헤이세이 11년 법률 제42호. 이하 이 장에서 “행정기관정보공개법”이라 한다] 제2조 제2항에 규정된 행정문서를 말한다), 법인문서(독립행정법인 등이 보유하는 정보의 공개에 관한 법률[헤이세이 13년 법률 제140호. 이하 이 장에서 “독립행정법인등정보공개법”이라 한다] 제2조 제2항에 규정된 법인문서[같은 항 제4호에 열거된 것을 포함한다]를 말한다) 또는 지방공공단체등행정문서(지방공공단체의 기관 또는 지방독립행정법인의 직원이 직무상 작성하거나 취득한 문서, 도화 및 전자적·자기적 기록으로서 해당 지방공공단체의 기관 또는 지방독립행정법인의 직원이 조직적으로 사용하는 것으로 해당 지방공공단체의 기관 또는 지방독립행정법인이 보유하고 있는 것[행정기관정보공개법 제2조 제2항 각 호에 열거된 것에 상당하는 것으로 정령으로 정하는 것을 제외한다]을 말한다)(이하 이 장에서 “행정문서 등”이라 한다)에 기록되어 있는 것으로 한정한다.",
       "markdown_anchor": "main-a60-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5259,7 +5259,7 @@
       "source_sha256": "6d1529371b59db1c45b44084770d6c2c26bf39090ef2dd588e417739186641b0",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 장 및 제8장에서 “개인정보파일”이란 보유개인정보를 포함한 정보의 집합물로서 다음에 열거된 것을 말한다.",
+      "korean_text": "이 장 및 제8장에서 “개인정보파일”이란 보유 개인정보를 포함한 정보의 집합물로서 다음에 열거된 것을 말한다.",
       "markdown_anchor": "main-a60-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5274,7 +5274,7 @@
       "source_sha256": "53ef0734f58bb93c29ac62ce066321965340d7aabe60cbf8374ad64e06e8b24a",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "일정한 사무의 목적을 달성하기 위하여 특정 보유개인정보를 전자계산기를 사용하여 검색할 수 있도록 체계적으로 구성한 것.",
+      "korean_text": "일정한 사무의 목적을 달성하기 위하여 특정 보유 개인정보를 전자계산기를 사용하여 검색할 수 있도록 체계적으로 구성한 것.",
       "markdown_anchor": "main-a60-p2-i1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5289,7 +5289,7 @@
       "source_sha256": "94ec8c116edf6a46279618aaffce6e6df6492e026a948e4be8c0eb7cc262a4f7",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전호에 열거된 것 외에 일정한 사무의 목적을 달성하기 위하여 성명, 생년월일 및 그 밖의 기술 등으로 특정 보유개인정보를 쉽게 검색할 수 있도록 체계적으로 구성한 것.",
+      "korean_text": "전호에 열거된 것 외에 일정한 사무의 목적을 달성하기 위하여 성명, 생년월일 및 그 밖의 기술 등으로 특정 보유 개인정보를 쉽게 검색할 수 있도록 체계적으로 구성한 것.",
       "markdown_anchor": "main-a60-p2-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5304,7 +5304,7 @@
       "source_sha256": "6e21b56e26a26bf9e72014395db8332072030385a1c1bc89e7acc5422c8d95f8",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 장에서 “행정기관등익명가공정보”란 다음 각 호의 모두에 해당하는 개인정보파일을 구성하는 보유개인정보의 전부 또는 일부(이들의 일부에 행정기관정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다. 이하 이 항에서 같다], 독립행정법인등정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다] 또는 지방공공단체의 정보공개조례[지방공공단체의 기관 또는 지방독립행정법인이 보유하는 정보의 공개를 청구하는 주민 등의 권리를 정하는 지방공공단체의 조례를 말한다. 이하 이 장에서 같다]에 규정된 비공개정보[행정기관정보공개법 제5조에 규정된 비공개정보에 상당하는 것을 말한다]가 포함되어 있을 때에는 이들 비공개정보에 해당하는 부분을 제외한다)를 가공하여 얻는 익명가공정보를 말한다.",
+      "korean_text": "이 장에서 “행정기관등익명가공정보”란 다음 각 호의 모두에 해당하는 개인정보파일을 구성하는 보유 개인정보의 전부 또는 일부(이들의 일부에 행정기관정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다. 이하 이 항에서 같다], 독립행정법인등정보공개법 제5조에 규정된 비공개정보[같은 조 제1호에 열거된 정보를 제외하고 같은 조 제2호 단서에 규정된 정보를 포함한다] 또는 지방공공단체의 정보공개조례[지방공공단체의 기관 또는 지방독립행정법인이 보유하는 정보의 공개를 청구하는 주민 등의 권리를 정하는 지방공공단체의 조례를 말한다. 이하 이 장에서 같다]에 규정된 비공개정보[행정기관정보공개법 제5조에 규정된 비공개정보에 상당하는 것을 말한다]가 포함되어 있을 때에는 이들 비공개정보에 해당하는 부분을 제외한다)를 가공하여 얻는 익명가공정보를 말한다.",
       "markdown_anchor": "main-a60-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5334,7 +5334,7 @@
       "source_sha256": "fa777525fd7503f10e069a581de4182143647411a6fe9585a26747fc5bab38d5",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관정보공개법 제3조에 규정된 행정기관의 장, 독립행정법인등정보공개법 제2조 제1항에 규정된 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 해당 개인정보파일을 구성하는 보유개인정보가 기록되어 있는 행정문서 등의 공개 청구(행정기관정보공개법 제3조, 독립행정법인등정보공개법 제3조 또는 정보공개조례의 규정에 따른 공개 청구를 말한다)가 있었다고 가정하면 이들이 다음의 어느 하나를 하게 되는 것일 것.",
+      "korean_text": "행정기관정보공개법 제3조에 규정된 행정기관의 장, 독립행정법인등정보공개법 제2조 제1항에 규정된 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 해당 개인정보파일을 구성하는 보유 개인정보가 기록되어 있는 행정문서 등의 공개 청구(행정기관정보공개법 제3조, 독립행정법인등정보공개법 제3조 또는 정보공개조례의 규정에 따른 공개 청구를 말한다)가 있었다고 가정하면 이들이 다음의 어느 하나를 하게 되는 것일 것.",
       "markdown_anchor": "main-a60-p3-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5349,7 +5349,7 @@
       "source_sha256": "50abc8c7af42db6396c292bfe1f1f2ee3d2b299d98515cae6bb7384c20df0183",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "해당 행정문서 등에 기록되어 있는 보유개인정보의 전부 또는 일부를 공개한다는 결정을 하는 것.",
+      "korean_text": "해당 행정문서 등에 기록되어 있는 보유 개인정보의 전부 또는 일부를 공개한다는 결정을 하는 것.",
       "markdown_anchor": "main-a60-p3-i2-si11",
       "translation_method": "assistant_translation_from_official_japanese",
       "korean_label": "가(イ)목"
@@ -5381,7 +5381,7 @@
       "source_sha256": "5117ddcb794d721994ef81ab5af7aacb3074d467117065cd7003caa3dc333868",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관 등의 사무 및 사업의 적정하고 원활한 운영에 지장이 없는 범위 내에서 제116조 제1항의 기준에 따라 해당 개인정보파일을 구성하는 보유개인정보를 가공하여 익명가공정보를 작성할 수 있는 것일 것.",
+      "korean_text": "행정기관 등의 사무 및 사업의 적정하고 원활한 운영에 지장이 없는 범위 내에서 제116조 제1항의 기준에 따라 해당 개인정보파일을 구성하는 보유 개인정보를 가공하여 익명가공정보를 작성할 수 있는 것일 것.",
       "markdown_anchor": "main-a60-p3-i3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5696,7 +5696,7 @@
       "source_sha256": "8be3d66618bb3833132f284cae5cc75eccbff138f49543e7deb59727f94e0f3e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 이용목적의 달성에 필요한 범위 내에서 보유개인정보가 과거 또는 현재의 사실과 일치하도록 노력하여야 한다.",
+      "korean_text": "행정기관의 장 등은 이용목적의 달성에 필요한 범위 내에서 보유 개인정보가 과거 또는 현재의 사실과 일치하도록 노력하여야 한다.",
       "markdown_anchor": "main-a65-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5726,7 +5726,7 @@
       "source_sha256": "3f05ec352c600481710c7f9d463e191884cf51b7636ed0ec72cb5797a66961b5",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 보유개인정보의 유출, 멸실 또는 훼손의 방지 및 그 밖의 보유개인정보의 안전관리를 위하여 필요하고 적절한 조치를 취하여야 한다.",
+      "korean_text": "행정기관의 장 등은 보유 개인정보의 유출, 멸실 또는 훼손의 방지 및 그 밖의 보유 개인정보의 안전관리를 위하여 필요하고 적절한 조치를 취하여야 한다.",
       "markdown_anchor": "main-a66-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5876,7 +5876,7 @@
       "source_sha256": "05d6c064dbb9a4daf092cf26f682e45d3ebadae696762bf24745e82ce405808b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 보유개인정보의 유출, 멸실, 훼손 및 그 밖의 보유개인정보의 안전 확보에 관한 사태로서 개인의 권리이익을 해칠 우려가 큰 것으로 개인정보보호위원회 규칙으로 정하는 사태가 발생한 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 사태가 발생하였다는 사실을 개인정보보호위원회에 보고하여야 한다.",
+      "korean_text": "행정기관의 장 등은 보유 개인정보의 유출, 멸실, 훼손 및 그 밖의 보유 개인정보의 안전 확보에 관한 사태로서 개인의 권리이익을 해칠 우려가 큰 것으로 개인정보보호위원회 규칙으로 정하는 사태가 발생한 때에는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 사태가 발생하였다는 사실을 개인정보보호위원회에 보고하여야 한다.",
       "markdown_anchor": "main-a68-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5921,7 +5921,7 @@
       "source_sha256": "474da853d1afb346dff8840e86a95a1d99df063968ef70304ccbd6647cd44d40",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "해당 보유개인정보에 제78조 제1항 각 호에 열거된 정보 중 어느 하나가 포함되어 있는 때.",
+      "korean_text": "해당 보유 개인정보에 제78조 제1항 각 호에 열거된 정보 중 어느 하나가 포함되어 있는 때.",
       "markdown_anchor": "main-a68-p2-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5951,7 +5951,7 @@
       "source_sha256": "a4767059a8c2dca242d536deb1a6997106610b4d261c16b2ec4e38dc32a60ee3",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 법령에 근거하는 경우를 제외하고 이용목적 외의 목적을 위하여 보유개인정보를 스스로 이용하거나 제공하여서는 아니 된다.",
+      "korean_text": "행정기관의 장 등은 법령에 근거하는 경우를 제외하고 이용목적 외의 목적을 위하여 보유 개인정보를 스스로 이용하거나 제공하여서는 아니 된다.",
       "markdown_anchor": "main-a69-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5966,7 +5966,7 @@
       "source_sha256": "8ba9f6386b5dad2d0a7c00c05b38599df56a52c7300a94f640e2b87fc92fb86e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 다음 각 호의 어느 하나에 해당한다고 인정하는 때에는 이용목적 외의 목적을 위하여 보유개인정보를 스스로 이용하거나 제공할 수 있다. 다만, 보유개인정보를 이용목적 외의 목적을 위하여 스스로 이용하거나 제공함으로써 본인 또는 제3자의 권리이익을 부당하게 침해할 우려가 있다고 인정되는 때에는 그러하지 아니하다.",
+      "korean_text": "전항의 규정에도 불구하고 행정기관의 장 등은 다음 각 호의 어느 하나에 해당한다고 인정하는 때에는 이용목적 외의 목적을 위하여 보유 개인정보를 스스로 이용하거나 제공할 수 있다. 다만, 보유 개인정보를 이용목적 외의 목적을 위하여 스스로 이용하거나 제공함으로써 본인 또는 제3자의 권리이익을 부당하게 침해할 우려가 있다고 인정되는 때에는 그러하지 아니하다.",
       "markdown_anchor": "main-a69-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -5996,7 +5996,7 @@
       "source_sha256": "1cc4a151568575f2569291785220ba03af67d3a0fd79b7fcc15871727b85c628",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관 등이 법령으로 정하는 소관 사무 또는 업무를 수행하는 데 필요한 한도에서 보유개인정보를 내부에서 이용하는 경우로서 해당 보유개인정보를 이용하는 데 상당한 이유가 있는 때.",
+      "korean_text": "행정기관 등이 법령으로 정하는 소관 사무 또는 업무를 수행하는 데 필요한 한도에서 보유 개인정보를 내부에서 이용하는 경우로서 해당 보유 개인정보를 이용하는 데 상당한 이유가 있는 때.",
       "markdown_anchor": "main-a69-p2-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6011,7 +6011,7 @@
       "source_sha256": "cfc4cf1d6e373648d8cc0d03288d06466f86b6cde92ee96e485122a145b21446",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "다른 행정기관, 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 보유개인정보를 제공하는 경우에 보유개인정보를 제공받는 자가 법령으로 정하는 사무 또는 업무를 수행하는 데 필요한 한도에서 제공에 관한 개인정보를 이용하고 해당 개인정보를 이용하는 데 상당한 이유가 있는 때.",
+      "korean_text": "다른 행정기관, 독립행정법인 등, 지방공공단체의 기관 또는 지방독립행정법인에게 보유 개인정보를 제공하는 경우에 보유 개인정보를 제공받는 자가 법령으로 정하는 사무 또는 업무를 수행하는 데 필요한 한도에서 제공에 관한 개인정보를 이용하고 해당 개인정보를 이용하는 데 상당한 이유가 있는 때.",
       "markdown_anchor": "main-a69-p2-i3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6026,7 +6026,7 @@
       "source_sha256": "8519c777584c986444b3147a89d27d88937dae36e7468f48d63363e86464842b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "앞의 세 호에 열거된 경우 외에 오로지 통계의 작성 또는 학술연구의 목적을 위하여 보유개인정보를 제공하는 때, 본인 외의 자에게 제공하는 것이 명백히 본인의 이익이 되는 때 또는 그 밖에 보유개인정보를 제공하는 데 특별한 이유가 있는 때.",
+      "korean_text": "앞의 세 호에 열거된 경우 외에 오로지 통계의 작성 또는 학술연구의 목적을 위하여 보유 개인정보를 제공하는 때, 본인 외의 자에게 제공하는 것이 명백히 본인의 이익이 되는 때 또는 그 밖에 보유 개인정보를 제공하는 데 특별한 이유가 있는 때.",
       "markdown_anchor": "main-a69-p2-i4",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6041,7 +6041,7 @@
       "source_sha256": "d97d35749799ca574081151d077d50671faa95b7a2d1954cce9a495e5599c2f3",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 규정은 보유개인정보의 이용 또는 제공을 제한하는 다른 법령 규정의 적용을 방해하는 것이 아니다.",
+      "korean_text": "전항의 규정은 보유 개인정보의 이용 또는 제공을 제한하는 다른 법령 규정의 적용을 방해하는 것이 아니다.",
       "markdown_anchor": "main-a69-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6056,7 +6056,7 @@
       "source_sha256": "a3ce4e66ac2f0a7ca37baf9bdb4ffa5b84ea723e61a66ca618f802ece821aacb",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 개인의 권리이익을 보호하기 위하여 특히 필요하다고 인정하는 때에는 보유개인정보를 이용목적 외의 목적으로 행정기관 등 내부에서 이용하는 것을 특정 부서나 기관 또는 직원으로 한정하여야 한다.",
+      "korean_text": "행정기관의 장 등은 개인의 권리이익을 보호하기 위하여 특히 필요하다고 인정하는 때에는 보유 개인정보를 이용목적 외의 목적으로 행정기관 등 내부에서 이용하는 것을 특정 부서나 기관 또는 직원으로 한정하여야 한다.",
       "markdown_anchor": "main-a69-p4",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6073,7 +6073,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a70",
-      "korean_title": "제70조 (보유개인정보를 제공받는 자에 대한 조치 요구)"
+      "korean_title": "제70조 (보유 개인정보를 제공받는 자에 대한 조치 요구)"
     },
     {
       "node_id": "main-a70-p1",
@@ -6086,7 +6086,7 @@
       "source_sha256": "f47c64d0168532f6a7a7beca551773561e305041d68e775da29bcd5a513e40c8",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 이용목적을 위하여 또는 전조 제2항 제3호나 제4호의 규정에 따라 보유개인정보를 제공하는 경우에 필요하다고 인정하는 때에는 보유개인정보를 제공받는 자에게 제공에 관한 개인정보의 이용 목적이나 방법의 제한 또는 그 밖의 필요한 제한을 부가하거나 그 유출 방지 및 그 밖의 개인정보의 적절한 관리를 위하여 필요한 조치를 취하도록 요구하여야 한다.",
+      "korean_text": "행정기관의 장 등은 이용목적을 위하여 또는 전조 제2항 제3호나 제4호의 규정에 따라 보유 개인정보를 제공하는 경우에 필요하다고 인정하는 때에는 보유 개인정보를 제공받는 자에게 제공에 관한 개인정보의 이용 목적이나 방법의 제한 또는 그 밖의 필요한 제한을 부가하거나 그 유출 방지 및 그 밖의 개인정보의 적절한 관리를 위하여 필요한 조치를 취하도록 요구하여야 한다.",
       "markdown_anchor": "main-a70-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6116,7 +6116,7 @@
       "source_sha256": "47ff404f66f7547fc24e7af164a31e9a83fb84de713beb3bb238a5c9d2a04707",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 외국(일본 영역 밖에 있는 국가 또는 지역을 말한다. 이하 이 조에서 같다)(개인의 권리이익을 보호하는 데 있어 일본과 동등한 수준에 있다고 인정되는 개인정보 보호 제도를 가진 외국으로서 개인정보보호위원회 규칙으로 정하는 것을 제외한다. 이하 이 조에서 같다)에 있는 제3자(제16조 제3항에 규정된 개인데이터의 취급에 대하여 전장의 제2절 규정에 따라 같은 조 제2항에 규정된 개인정보취급사업자가 취하여야 하는 조치에 상당하는 조치[제3항에서 “상당조치”라 한다]를 계속적으로 취하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 적합한 체제를 정비하고 있는 자를 제외한다. 이하 이 항 및 다음 항에서 같다)에게 이용목적 외의 목적을 위하여 보유개인정보를 제공하는 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 미리 외국에 있는 제3자에 대한 제공을 인정한다는 본인의 동의를 받아야 한다.",
+      "korean_text": "행정기관의 장 등은 외국(일본 영역 밖에 있는 국가 또는 지역을 말한다. 이하 이 조에서 같다)(개인의 권리이익을 보호하는 데 있어 일본과 동등한 수준에 있다고 인정되는 개인정보 보호 제도를 가진 외국으로서 개인정보보호위원회 규칙으로 정하는 것을 제외한다. 이하 이 조에서 같다)에 있는 제3자(제16조 제3항에 규정된 개인데이터의 취급에 대하여 전장의 제2절 규정에 따라 같은 조 제2항에 규정된 개인정보취급사업자가 취하여야 하는 조치에 상당하는 조치[제3항에서 “상당조치”라 한다]를 계속적으로 취하기 위하여 필요한 것으로 개인정보보호위원회 규칙으로 정하는 기준에 적합한 체제를 정비하고 있는 자를 제외한다. 이하 이 항 및 다음 항에서 같다)에게 이용목적 외의 목적을 위하여 보유 개인정보를 제공하는 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 미리 외국에 있는 제3자에 대한 제공을 인정한다는 본인의 동의를 받아야 한다.",
       "markdown_anchor": "main-a71-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6146,7 +6146,7 @@
       "source_sha256": "2f2447b41af4449237e370f12877de8fa386b47ecda75fdbd06d54ead9fb3c49",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 보유개인정보를 외국에 있는 제3자(제1항에 규정된 체제를 정비하고 있는 자로 한정한다)에게 이용목적 외의 목적을 위하여 제공한 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 제3자에 의한 상당조치의 계속적인 실시를 확보하기 위하여 필요한 조치를 취하는 동시에 본인의 요구에 따라 해당 필요한 조치에 관한 정보를 해당 본인에게 제공하여야 한다.",
+      "korean_text": "행정기관의 장 등은 보유 개인정보를 외국에 있는 제3자(제1항에 규정된 체제를 정비하고 있는 자로 한정한다)에게 이용목적 외의 목적을 위하여 제공한 경우에는 법령에 근거하는 경우 및 제69조 제2항 제4호에 열거된 경우를 제외하고는 개인정보보호위원회 규칙으로 정하는 바에 따라 해당 제3자에 의한 상당조치의 계속적인 실시를 확보하기 위하여 필요한 조치를 취하는 동시에 본인의 요구에 따라 해당 필요한 조치에 관한 정보를 해당 본인에게 제공하여야 한다.",
       "markdown_anchor": "main-a71-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6866,7 +6866,7 @@
       "source_sha256": "95aa45f6158c7d319d0b4f5d0d44af80f3884a29f8af67126891e35394b48db9",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "누구든지 이 법률이 정하는 바에 따라 행정기관의 장 등에게 해당 행정기관의 장 등이 소속된 행정기관 등이 보유하는 자신을 본인으로 하는 보유개인정보의 공개를 청구할 수 있다.",
+      "korean_text": "누구든지 이 법률이 정하는 바에 따라 행정기관의 장 등에게 해당 행정기관의 장 등이 소속된 행정기관 등이 보유하는 자신을 본인으로 하는 보유 개인정보의 공개를 청구할 수 있다.",
       "markdown_anchor": "main-a76-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6941,7 +6941,7 @@
       "source_sha256": "fc28452effae5f27f87199427145a4f42e598e969aefe0423e17f58b4e6749e9",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개청구에 관한 보유개인정보가 기록되어 있는 행정문서 등의 명칭 및 그 밖에 공개청구에 관한 보유개인정보를 특정하기에 충분한 사항",
+      "korean_text": "공개청구에 관한 보유 개인정보가 기록되어 있는 행정문서 등의 명칭 및 그 밖에 공개청구에 관한 보유 개인정보를 특정하기에 충분한 사항",
       "markdown_anchor": "main-a77-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6956,7 +6956,7 @@
       "source_sha256": "6707019ffa35c643dcdc7d7ca6297e168d285d5b49b0d62ebb31d8db3eea846b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 경우에 공개청구를 하는 자는 정령으로 정하는 바에 따라 공개청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 공개청구인 경우에는 공개청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "korean_text": "전항의 경우에 공개청구를 하는 자는 정령으로 정하는 바에 따라 공개청구에 관한 보유 개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 공개청구인 경우에는 공개청구에 관한 보유 개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
       "markdown_anchor": "main-a77-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6988,7 +6988,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a78",
-      "korean_title": "제78조 (보유개인정보의 공개 의무)"
+      "korean_title": "제78조 (보유 개인정보의 공개 의무)"
     },
     {
       "node_id": "main-a78-p1",
@@ -7001,7 +7001,7 @@
       "source_sha256": "b36282904a083713c0f96149474eb5e0d3bb8283247450e21a5291ae6af65e7f",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구가 있으면 공개청구에 관한 보유개인정보에 다음 각 호에 열거하는 정보(이하 이 절에서 “비공개정보”라 한다) 중 어느 하나가 포함되어 있는 경우를 제외하고는 공개청구자에게 해당 보유개인정보를 공개하여야 한다.",
+      "korean_text": "행정기관의 장 등은 공개청구가 있으면 공개청구에 관한 보유 개인정보에 다음 각 호에 열거하는 정보(이하 이 절에서 “비공개정보”라 한다) 중 어느 하나가 포함되어 있는 경우를 제외하고는 공개청구자에게 해당 보유 개인정보를 공개하여야 한다.",
       "markdown_anchor": "main-a78-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7343,7 +7343,7 @@
       "source_sha256": "8cc970b083ed50d0458033ae6e110de27111713ca4ec7ff486a76b31ecc5af0a",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보에 비공개정보가 포함되어 있는 경우에 비공개정보에 해당하는 부분을 쉽게 구분하여 제외할 수 있으면 공개청구자에게 해당 부분을 제외한 부분에 관하여 공개하여야 한다.",
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유 개인정보에 비공개정보가 포함되어 있는 경우에 비공개정보에 해당하는 부분을 쉽게 구분하여 제외할 수 있으면 공개청구자에게 해당 부분을 제외한 부분에 관하여 공개하여야 한다.",
       "markdown_anchor": "main-a79-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7358,7 +7358,7 @@
       "source_sha256": "ab9a7e716f794ef0fe8b3279608ba3813b60bb4f54707c00489f4cfcc8b083b3",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개청구에 관한 보유개인정보에 전조 제1항 제2호의 정보(공개청구자 이외의 특정 개인을 식별할 수 있는 것에 한정한다)가 포함되어 있는 경우에 해당 정보 중 성명, 생년월일 및 그 밖의 공개청구자 이외의 특정 개인을 식별할 수 있게 되는 기술 등 및 개인식별부호 부분을 제외함으로써 공개하여도 공개청구자 이외의 개인의 권리이익이 침해될 우려가 없다고 인정되면 해당 부분을 제외한 부분은 같은 호의 정보에 포함되지 않는 것으로 보아 전항의 규정을 적용한다.",
+      "korean_text": "공개청구에 관한 보유 개인정보에 전조 제1항 제2호의 정보(공개청구자 이외의 특정 개인을 식별할 수 있는 것에 한정한다)가 포함되어 있는 경우에 해당 정보 중 성명, 생년월일 및 그 밖의 공개청구자 이외의 특정 개인을 식별할 수 있게 되는 기술 등 및 개인식별부호 부분을 제외함으로써 공개하여도 공개청구자 이외의 개인의 권리이익이 침해될 우려가 없다고 인정되면 해당 부분을 제외한 부분은 같은 호의 정보에 포함되지 않는 것으로 보아 전항의 규정을 적용한다.",
       "markdown_anchor": "main-a79-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7388,7 +7388,7 @@
       "source_sha256": "00bfe098c6ac5df37b77717485c733d03b9ca27b6e3b42a3b4d1d3e70bc29739",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보에 비공개정보가 포함되어 있는 경우라도 개인의 권리이익을 보호하기 위하여 특별히 필요하다고 인정하면 공개청구자에게 해당 보유개인정보를 공개할 수 있다.",
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유 개인정보에 비공개정보가 포함되어 있는 경우라도 개인의 권리이익을 보호하기 위하여 특별히 필요하다고 인정하면 공개청구자에게 해당 보유 개인정보를 공개할 수 있다.",
       "markdown_anchor": "main-a80-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7405,7 +7405,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a81",
-      "korean_title": "제81조 (보유개인정보의 존재 여부에 관한 정보)"
+      "korean_title": "제81조 (보유 개인정보의 존재 여부에 관한 정보)"
     },
     {
       "node_id": "main-a81-p1",
@@ -7418,7 +7418,7 @@
       "source_sha256": "8092b7a9e9224807f3535df3a9d8ecdf0802d4b62778ed25e19ffba0b3d5a5f1",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개청구에 대하여 해당 공개청구에 관한 보유개인정보가 존재하는지 여부에 답하는 것만으로 비공개정보를 공개하게 되는 경우에는 행정기관의 장 등은 해당 보유개인정보의 존재 여부를 밝히지 않고 해당 공개청구를 거부할 수 있다.",
+      "korean_text": "공개청구에 대하여 해당 공개청구에 관한 보유 개인정보가 존재하는지 여부에 답하는 것만으로 비공개정보를 공개하게 되는 경우에는 행정기관의 장 등은 해당 보유 개인정보의 존재 여부를 밝히지 않고 해당 공개청구를 거부할 수 있다.",
       "markdown_anchor": "main-a81-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7448,7 +7448,7 @@
       "source_sha256": "77b819d754ee57e03da97b408ec522e8ae5e7e33c806f5b41abe871577e3c745",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보의 전부 또는 일부를 공개하는 경우에는 그 취지의 결정을 하고 공개청구자에게 그 취지, 공개하는 보유개인정보의 이용목적 및 공개의 실시에 관하여 정령으로 정하는 사항을 서면으로 통지하여야 한다. 다만, 제62조 제2호 또는 제3호에 해당하는 경우의 해당 이용목적에 관하여는 그러하지 아니하다.",
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유 개인정보의 전부 또는 일부를 공개하는 경우에는 그 취지의 결정을 하고 공개청구자에게 그 취지, 공개하는 보유 개인정보의 이용목적 및 공개의 실시에 관하여 정령으로 정하는 사항을 서면으로 통지하여야 한다. 다만, 제62조 제2호 또는 제3호에 해당하는 경우의 해당 이용목적에 관하여는 그러하지 아니하다.",
       "markdown_anchor": "main-a82-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7463,7 +7463,7 @@
       "source_sha256": "fa99b4afc21aa62c32afcc203bfb0cabd13006bae079a44946826439f963a794",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보의 전부를 공개하지 않는 경우(전조의 규정에 따라 공개청구를 거부하는 경우 및 공개청구에 관한 보유개인정보를 보유하지 않는 경우를 포함한다)에는 공개하지 않는다는 취지의 결정을 하고 공개청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유 개인정보의 전부를 공개하지 않는 경우(전조의 규정에 따라 공개청구를 거부하는 경우 및 공개청구에 관한 보유 개인정보를 보유하지 않는 경우를 포함한다)에는 공개하지 않는다는 취지의 결정을 하고 공개청구자에게 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a82-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7538,7 +7538,7 @@
       "source_sha256": "64ac525645566af320db509bd0ac863dd365cf189a51726d1a83cfd0022e0a09",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개청구에 관한 보유개인정보가 현저히 대량이어서 공개청구가 있은 날부터 60일 이내에 그 전부에 대하여 공개결정 등을 함으로써 사무 수행에 현저한 지장이 생길 우려가 있는 경우에는 전조의 규정에도 불구하고 행정기관의 장 등은 공개청구에 관한 보유개인정보 중 상당한 부분에 대하여 해당 기간 내에 공개결정 등을 하고 나머지 보유개인정보에 대하여는 상당한 기간 내에 공개결정 등을 하면 충분하다. 이 경우 행정기관의 장 등은 같은 조 제1항에 규정하는 기간 내에 공개청구자에게 다음에 열거하는 사항을 서면으로 통지하여야 한다.",
+      "korean_text": "공개청구에 관한 보유 개인정보가 현저히 대량이어서 공개청구가 있은 날부터 60일 이내에 그 전부에 대하여 공개결정 등을 함으로써 사무 수행에 현저한 지장이 생길 우려가 있는 경우에는 전조의 규정에도 불구하고 행정기관의 장 등은 공개청구에 관한 보유 개인정보 중 상당한 부분에 대하여 해당 기간 내에 공개결정 등을 하고 나머지 보유 개인정보에 대하여는 상당한 기간 내에 공개결정 등을 하면 충분하다. 이 경우 행정기관의 장 등은 같은 조 제1항에 규정하는 기간 내에 공개청구자에게 다음에 열거하는 사항을 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a84-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7568,7 +7568,7 @@
       "source_sha256": "a08e997fc2af23f05aa5cf1f6dc38cd839fc8a98a8f8f23d0f5ec5060826ed09",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "나머지 보유개인정보에 대하여 공개결정 등을 하는 기한",
+      "korean_text": "나머지 보유 개인정보에 대하여 공개결정 등을 하는 기한",
       "markdown_anchor": "main-a84-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7598,7 +7598,7 @@
       "source_sha256": "f15274c9dc38a11415365467a84c61df8c3e558211f58b04f2bb4df61e3641a1",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유개인정보가 해당 행정기관의 장 등이 소속된 행정기관 등 이외의 행정기관 등으로부터 제공된 것이거나 그 밖에 다른 행정기관의 장 등이 공개결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 공개청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 공개청구에 관한 보유 개인정보가 해당 행정기관의 장 등이 소속된 행정기관 등 이외의 행정기관 등으로부터 제공된 것이거나 그 밖에 다른 행정기관의 장 등이 공개결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 공개청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a85-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7658,7 +7658,7 @@
       "source_sha256": "94dabca8883ebefa515a2a2a8e1dc644057c952090cf67b07f3fd4898f8e5d51",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개청구에 관한 보유개인정보에 국가, 독립행정법인 등, 지방공공단체, 지방독립행정법인 및 공개청구자 이외의 자(이하 이 조, 제105조 제2항 제3호 및 제107조 제1항에서 “제3자”라 한다)에 관한 정보가 포함되어 있는 경우에는 행정기관의 장 등은 공개결정 등을 할 때 해당 정보에 관한 제3자에게 정령으로 정하는 바에 따라 해당 제3자에 관한 정보의 내용 및 그 밖에 정령으로 정하는 사항을 통지하여 의견서를 제출할 기회를 줄 수 있다.",
+      "korean_text": "공개청구에 관한 보유 개인정보에 국가, 독립행정법인 등, 지방공공단체, 지방독립행정법인 및 공개청구자 이외의 자(이하 이 조, 제105조 제2항 제3호 및 제107조 제1항에서 “제3자”라 한다)에 관한 정보가 포함되어 있는 경우에는 행정기관의 장 등은 공개결정 등을 할 때 해당 정보에 관한 제3자에게 정령으로 정하는 바에 따라 해당 제3자에 관한 정보의 내용 및 그 밖에 정령으로 정하는 사항을 통지하여 의견서를 제출할 기회를 줄 수 있다.",
       "markdown_anchor": "main-a86-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7688,7 +7688,7 @@
       "source_sha256": "dd701b361cb5af07918af47dfe5d699b10394465214cfda34296d0f7f88f1c5e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유개인정보를 공개하려는 경우로서 해당 제3자에 관한 정보가 제78조 제1항 제2호 나(ロ)목 또는 같은 항 제3호 단서에 규정하는 정보에 해당한다고 인정되는 때.",
+      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유 개인정보를 공개하려는 경우로서 해당 제3자에 관한 정보가 제78조 제1항 제2호 나(ロ)목 또는 같은 항 제3호 단서에 규정하는 정보에 해당한다고 인정되는 때.",
       "markdown_anchor": "main-a86-p2-i1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7703,7 +7703,7 @@
       "source_sha256": "fa6bbd510961b3f53123da9d35311ab7f513743e059aaf40c113ba042e07d247",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유개인정보를 제80조의 규정에 따라 공개하려는 때.",
+      "korean_text": "제3자에 관한 정보가 포함되어 있는 보유 개인정보를 제80조의 규정에 따라 공개하려는 때.",
       "markdown_anchor": "main-a86-p2-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7748,7 +7748,7 @@
       "source_sha256": "cadb9c28aacb0e656b3a0ca3507036ceee1ebe30079246d9a2ca82ff15e1dd10",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "보유개인정보의 공개는 해당 보유개인정보가 문서 또는 도화에 기록되어 있는 경우에는 열람 또는 사본의 교부로, 전자적·자기적 기록에 기록되어 있는 경우에는 그 종류, 정보화의 진전 상황 등을 고려하여 행정기관 등이 정하는 방법으로 한다. 다만, 열람의 방법으로 보유개인정보를 공개하는 경우에 행정기관의 장 등은 해당 보유개인정보가 기록되어 있는 문서 또는 도화의 보존에 지장이 생길 우려가 있다고 인정하거나 그 밖의 정당한 이유가 있으면 그 사본으로 이를 할 수 있다.",
+      "korean_text": "보유 개인정보의 공개는 해당 보유 개인정보가 문서 또는 도화에 기록되어 있는 경우에는 열람 또는 사본의 교부로, 전자적·자기적 기록에 기록되어 있는 경우에는 그 종류, 정보화의 진전 상황 등을 고려하여 행정기관 등이 정하는 방법으로 한다. 다만, 열람의 방법으로 보유 개인정보를 공개하는 경우에 행정기관의 장 등은 해당 보유 개인정보가 기록되어 있는 문서 또는 도화의 보존에 지장이 생길 우려가 있다고 인정하거나 그 밖의 정당한 이유가 있으면 그 사본으로 이를 할 수 있다.",
       "markdown_anchor": "main-a87-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7778,7 +7778,7 @@
       "source_sha256": "f3a8faebce5fbace080f514b6b264e34e34a7d14107d69505eed50d7c4846a3a",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개결정에 따라 보유개인정보의 공개를 받는 자는 정령으로 정하는 바에 따라 해당 공개결정을 한 행정기관의 장 등에게 자신이 원하는 공개 실시 방법 및 그 밖에 정령으로 정하는 사항을 신청하여야 한다.",
+      "korean_text": "공개결정에 따라 보유 개인정보의 공개를 받는 자는 정령으로 정하는 바에 따라 해당 공개결정을 한 행정기관의 장 등에게 자신이 원하는 공개 실시 방법 및 그 밖에 정령으로 정하는 사항을 신청하여야 한다.",
       "markdown_anchor": "main-a87-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -7823,7 +7823,7 @@
       "source_sha256": "d398aa6a7685e0be0eb02a5d4f405ebb7cf8f032aab3e8e1dd94ce2d1f706d90",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 다른 법령의 규정에 따라 공개청구자에게 공개청구에 관한 보유개인정보를 전조 제1항 본문에 규정하는 방법과 동일한 방법으로 공개하도록 되어 있는 경우(공개 기간이 정해져 있는 경우에는 해당 기간 내에 한정한다)에는 같은 항 본문의 규정에도 불구하고 해당 보유개인정보에 대하여 해당 동일한 방법으로 공개하지 않는다. 다만, 해당 다른 법령의 규정에 일정한 경우에는 공개하지 않는다는 취지의 정함이 있으면 그러하지 아니하다.",
+      "korean_text": "행정기관의 장 등은 다른 법령의 규정에 따라 공개청구자에게 공개청구에 관한 보유 개인정보를 전조 제1항 본문에 규정하는 방법과 동일한 방법으로 공개하도록 되어 있는 경우(공개 기간이 정해져 있는 경우에는 해당 기간 내에 한정한다)에는 같은 항 본문의 규정에도 불구하고 해당 보유 개인정보에 대하여 해당 동일한 방법으로 공개하지 않는다. 다만, 해당 다른 법령의 규정에 일정한 경우에는 공개하지 않는다는 취지의 정함이 있으면 그러하지 아니하다.",
       "markdown_anchor": "main-a88-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8033,7 +8033,7 @@
       "source_sha256": "56d9c5b77eef92054aafadd1e3016523ceee50faa77494344018f3b77940944b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "누구든지 자신을 본인으로 하는 보유개인정보(다음에 열거하는 것에 한정한다. 제98조 제1항에서 같다)의 내용이 사실이 아니라고 생각하면 이 법률이 정하는 바에 따라 해당 보유개인정보를 보유하는 행정기관의 장 등에게 해당 보유개인정보의 정정(추가 또는 삭제를 포함한다. 이하 이 절에서 같다)을 청구할 수 있다. 다만, 해당 보유개인정보의 정정에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
+      "korean_text": "누구든지 자신을 본인으로 하는 보유 개인정보(다음에 열거하는 것에 한정한다. 제98조 제1항에서 같다)의 내용이 사실이 아니라고 생각하면 이 법률이 정하는 바에 따라 해당 보유 개인정보를 보유하는 행정기관의 장 등에게 해당 보유 개인정보의 정정(추가 또는 삭제를 포함한다. 이하 이 절에서 같다)을 청구할 수 있다. 다만, 해당 보유 개인정보의 정정에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
       "markdown_anchor": "main-a90-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8048,7 +8048,7 @@
       "source_sha256": "f47a6306e04e7499d7969e446c979da97d6552ae6c953a78d942d99d2401e682",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개결정에 따라 공개받은 보유개인정보",
+      "korean_text": "공개결정에 따라 공개받은 보유 개인정보",
       "markdown_anchor": "main-a90-p1-i1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8063,7 +8063,7 @@
       "source_sha256": "eb57ae2282109effcded23bc4c4b703bb085425b049ead7d810bcf44f33fb72f",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "공개결정에 관한 보유개인정보로서 제88조 제1항의 다른 법령의 규정에 따라 공개받은 것",
+      "korean_text": "공개결정에 관한 보유 개인정보로서 제88조 제1항의 다른 법령의 규정에 따라 공개받은 것",
       "markdown_anchor": "main-a90-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8093,7 +8093,7 @@
       "source_sha256": "43cd62a988ae447bf1781235d956bd98f1de3340ad8d7382c64f877960a960e1",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "정정청구는 보유개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
+      "korean_text": "정정청구는 보유 개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
       "markdown_anchor": "main-a90-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8153,7 +8153,7 @@
       "source_sha256": "a2c5d2d1754c2a7716092b308c7fb9316b5387f16227c4edc2185163a2a78c39",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "정정청구에 관한 보유개인정보를 공개받은 날 및 그 밖에 해당 보유개인정보를 특정하기에 충분한 사항",
+      "korean_text": "정정청구에 관한 보유 개인정보를 공개받은 날 및 그 밖에 해당 보유 개인정보를 특정하기에 충분한 사항",
       "markdown_anchor": "main-a91-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8183,7 +8183,7 @@
       "source_sha256": "4f070abffe50ddc0515b3a35749f0794c1bc52400e6dd4e6d9f6828e1178d393",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 경우에 정정청구를 하는 자는 정령으로 정하는 바에 따라 정정청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 정정청구인 경우에는 정정청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "korean_text": "전항의 경우에 정정청구를 하는 자는 정령으로 정하는 바에 따라 정정청구에 관한 보유 개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 정정청구인 경우에는 정정청구에 관한 보유 개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
       "markdown_anchor": "main-a91-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8215,7 +8215,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a92",
-      "korean_title": "제92조 (보유개인정보의 정정 의무)"
+      "korean_title": "제92조 (보유 개인정보의 정정 의무)"
     },
     {
       "node_id": "main-a92-p1",
@@ -8228,7 +8228,7 @@
       "source_sha256": "33ace1346724e27dc9037f774312c6b4696d3eb3fb29041fd761e2ba85997d70",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 정정청구가 있는 경우에 해당 정정청구에 이유가 있다고 인정하면 해당 정정청구에 관한 보유개인정보의 이용목적 달성에 필요한 범위 내에서 해당 보유개인정보를 정정하여야 한다.",
+      "korean_text": "행정기관의 장 등은 정정청구가 있는 경우에 해당 정정청구에 이유가 있다고 인정하면 해당 정정청구에 관한 보유 개인정보의 이용목적 달성에 필요한 범위 내에서 해당 보유 개인정보를 정정하여야 한다.",
       "markdown_anchor": "main-a92-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8258,7 +8258,7 @@
       "source_sha256": "901fe0aa1dfa71dc95bbbde08eb7afdcca83505fdcf54d3ceb724e29c87b633b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보를 정정하는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유 개인정보를 정정하는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a93-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8273,7 +8273,7 @@
       "source_sha256": "21aedfb81ade0c078399bd20fbf62a65923453756f94dc552838c83cc0a89467",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보를 정정하지 않는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유 개인정보를 정정하지 않는 경우에는 그 취지의 결정을 하고 정정청구자에게 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a93-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8408,7 +8408,7 @@
       "source_sha256": "6782780bfc20daf1d05c4ae8a0559bfc48ace61013201f9bc87caf22138d74ef",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유개인정보가 제85조 제3항의 규정에 따른 공개에 관한 것이거나 그 밖에 다른 행정기관의 장 등이 정정결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 정정청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 정정청구에 관한 보유 개인정보가 제85조 제3항의 규정에 따른 공개에 관한 것이거나 그 밖에 다른 행정기관의 장 등이 정정결정 등을 하는 데에 정당한 이유가 있으면 해당 다른 행정기관의 장 등과 협의한 후 해당 다른 행정기관의 장 등에게 사안을 이송할 수 있다. 이 경우 이송한 행정기관의 장 등은 정정청구자에게 사안을 이송하였다는 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a96-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8455,7 +8455,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a97",
-      "korean_title": "제97조 (보유개인정보의 제공처에 대한 통지)"
+      "korean_title": "제97조 (보유 개인정보의 제공처에 대한 통지)"
     },
     {
       "node_id": "main-a97-p1",
@@ -8468,7 +8468,7 @@
       "source_sha256": "d8c543b53226fc7d951a79d55712571423b2e4963706bfee5b84b745101ddcd0",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 정정결정에 따른 보유개인정보의 정정을 실시한 경우에 필요하다고 인정하면 해당 보유개인정보의 제공처에 지체 없이 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 정정결정에 따른 보유 개인정보의 정정을 실시한 경우에 필요하다고 인정하면 해당 보유 개인정보의 제공처에 지체 없이 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a97-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8513,7 +8513,7 @@
       "source_sha256": "6615b6ecff761ba03a15224a8dd1e70267c8d9701d6236f193992f9de665cfbd",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "누구든지 자신을 본인으로 하는 보유개인정보가 다음 각 호의 어느 하나에 해당한다고 생각하면 이 법률이 정하는 바에 따라 해당 보유개인정보를 보유하는 행정기관의 장 등에게 해당 각 호에 정하는 조치를 청구할 수 있다. 다만, 해당 보유개인정보의 이용 정지, 소거 또는 제공 정지(이하 이 절에서 “이용정지”라 한다)에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
+      "korean_text": "누구든지 자신을 본인으로 하는 보유 개인정보가 다음 각 호의 어느 하나에 해당한다고 생각하면 이 법률이 정하는 바에 따라 해당 보유 개인정보를 보유하는 행정기관의 장 등에게 해당 각 호에 정하는 조치를 청구할 수 있다. 다만, 해당 보유 개인정보의 이용 정지, 소거 또는 제공 정지(이하 이 절에서 “이용정지”라 한다)에 관하여 다른 법령의 규정에 따라 특별한 절차가 정해져 있는 경우에는 그러하지 아니하다.",
       "markdown_anchor": "main-a98-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8528,7 +8528,7 @@
       "source_sha256": "9fc045de900daa407b9c8cb28cdd40d0e1f74c616786252e1831cfbd0f93d5c0",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제61조 제2항의 규정을 위반하여 보유되고 있는 때, 제63조의 규정을 위반하여 취급되고 있는 때, 제64조의 규정을 위반하여 취득된 것인 때 또는 제69조 제1항 및 제2항의 규정을 위반하여 이용되고 있는 때: 해당 보유개인정보의 이용 정지 또는 소거",
+      "korean_text": "제61조 제2항의 규정을 위반하여 보유되고 있는 때, 제63조의 규정을 위반하여 취급되고 있는 때, 제64조의 규정을 위반하여 취득된 것인 때 또는 제69조 제1항 및 제2항의 규정을 위반하여 이용되고 있는 때: 해당 보유 개인정보의 이용 정지 또는 소거",
       "markdown_anchor": "main-a98-p1-i1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8543,7 +8543,7 @@
       "source_sha256": "06b5890966edc2d0dd45d58915761c722216edf715bb994e873c3c94bde83705",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제69조 제1항 및 제2항 또는 제71조 제1항의 규정을 위반하여 제공되고 있는 때: 해당 보유개인정보의 제공 정지",
+      "korean_text": "제69조 제1항 및 제2항 또는 제71조 제1항의 규정을 위반하여 제공되고 있는 때: 해당 보유 개인정보의 제공 정지",
       "markdown_anchor": "main-a98-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8573,7 +8573,7 @@
       "source_sha256": "5bd74254c361ee475380648a5f2bb43a311f35e1661ae7099229319ccf752a8c",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이용정지청구는 보유개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
+      "korean_text": "이용정지청구는 보유 개인정보를 공개받은 날부터 90일 이내에 하여야 한다.",
       "markdown_anchor": "main-a98-p3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8633,7 +8633,7 @@
       "source_sha256": "c5fb1db3df784003abc802ba0185c07f4633211830f4556eeeb3750266d209cd",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이용정지청구에 관한 보유개인정보를 공개받은 날 및 그 밖에 해당 보유개인정보를 특정하기에 충분한 사항",
+      "korean_text": "이용정지청구에 관한 보유 개인정보를 공개받은 날 및 그 밖에 해당 보유 개인정보를 특정하기에 충분한 사항",
       "markdown_anchor": "main-a99-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8663,7 +8663,7 @@
       "source_sha256": "655b5608c7a19806906f576fa226dbaccf56fe0c9532f158b5232b119bb37ff7",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 경우에 이용정지청구를 하는 자는 정령으로 정하는 바에 따라 이용정지청구에 관한 보유개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 이용정지청구인 경우에는 이용정지청구에 관한 보유개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
+      "korean_text": "전항의 경우에 이용정지청구를 하는 자는 정령으로 정하는 바에 따라 이용정지청구에 관한 보유 개인정보의 본인이라는 사실(전조 제2항의 규정에 따른 이용정지청구인 경우에는 이용정지청구에 관한 보유 개인정보의 본인의 대리인이라는 사실)을 나타내는 서류를 제시하거나 제출하여야 한다.",
       "markdown_anchor": "main-a99-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8695,7 +8695,7 @@
       "human_review_status": "not_started",
       "korean_text": null,
       "markdown_anchor": "main-a100",
-      "korean_title": "제100조 (보유개인정보의 이용정지 의무)"
+      "korean_title": "제100조 (보유 개인정보의 이용정지 의무)"
     },
     {
       "node_id": "main-a100-p1",
@@ -8708,7 +8708,7 @@
       "source_sha256": "1dae763264b8cb630e40b8102b451349f348a9bebe377ced6cb6a35467d6cae4",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 이용정지청구가 있는 경우에 해당 이용정지청구에 이유가 있다고 인정하면 해당 행정기관의 장 등이 소속된 행정기관 등에서 개인정보의 적정한 취급을 확보하기 위하여 필요한 한도에서 해당 이용정지청구에 관한 보유개인정보의 이용정지를 하여야 한다. 다만, 해당 보유개인정보의 이용정지를 함으로써 해당 보유개인정보의 이용목적에 관한 사무 또는 사업의 성질상 해당 사무 또는 사업의 적정한 수행에 현저한 지장을 줄 우려가 있다고 인정되는 경우에는 그러하지 아니하다.",
+      "korean_text": "행정기관의 장 등은 이용정지청구가 있는 경우에 해당 이용정지청구에 이유가 있다고 인정하면 해당 행정기관의 장 등이 소속된 행정기관 등에서 개인정보의 적정한 취급을 확보하기 위하여 필요한 한도에서 해당 이용정지청구에 관한 보유 개인정보의 이용정지를 하여야 한다. 다만, 해당 보유 개인정보의 이용정지를 함으로써 해당 보유 개인정보의 이용목적에 관한 사무 또는 사업의 성질상 해당 사무 또는 사업의 적정한 수행에 현저한 지장을 줄 우려가 있다고 인정되는 경우에는 그러하지 아니하다.",
       "markdown_anchor": "main-a100-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8738,7 +8738,7 @@
       "source_sha256": "913c403f911a991efadd5b77147795a9e3a30eaf1d9bd635dd0f5ab1e2788fa4",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유개인정보의 이용정지를 하는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유 개인정보의 이용정지를 하는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a101-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8753,7 +8753,7 @@
       "source_sha256": "31cbf97edf3dae039e8949ecc09eafcfb01712bad99a2291a1545a68cd00f0ee",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유개인정보의 이용정지를 하지 않는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
+      "korean_text": "행정기관의 장 등은 이용정지청구에 관한 보유 개인정보의 이용정지를 하지 않는 경우에는 그 취지의 결정을 하고 이용정지청구자에게 그 취지를 서면으로 통지하여야 한다.",
       "markdown_anchor": "main-a101-p2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8978,7 +8978,7 @@
       "source_sha256": "7b180d849d0ead42fdecad0447ad32f2f8de779e4b3dd249e90dbe2c51dac154",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보의 전부를 공개하도록 하는 경우(해당 보유개인정보의 공개에 대하여 반대의견서가 제출되어 있는 경우는 제외한다)",
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유 개인정보의 전부를 공개하도록 하는 경우(해당 보유 개인정보의 공개에 대하여 반대의견서가 제출되어 있는 경우는 제외한다)",
       "markdown_anchor": "main-a105-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -8993,7 +8993,7 @@
       "source_sha256": "71a12386ce60885be6c4fb9a2cd35c2b63d1feccee051cbbd591de9c87318cd4",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보를 정정하도록 하는 경우",
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유 개인정보를 정정하도록 하는 경우",
       "markdown_anchor": "main-a105-p1-i3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -9008,7 +9008,7 @@
       "source_sha256": "5d3abf289673cff5e7bfcea2466a1440220b60937c82aac3a00c07c6e6323c1b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유개인정보의 이용정지를 하도록 하는 경우",
+      "korean_text": "재결로 심사청구의 전부를 인용하고 해당 심사청구에 관한 보유 개인정보의 이용정지를 하도록 하는 경우",
       "markdown_anchor": "main-a105-p1-i4",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -9068,7 +9068,7 @@
       "source_sha256": "048682fb996602c3145eff7ecf6c65cd1602e9d415d3765a31d05b675c21d344",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "해당 심사청구에 관한 보유개인정보의 공개에 대하여 반대의견서를 제출한 제3자(해당 제3자가 심사청구인 또는 참가인인 경우는 제외한다)",
+      "korean_text": "해당 심사청구에 관한 보유 개인정보의 공개에 대하여 반대의견서를 제출한 제3자(해당 제3자가 심사청구인 또는 참가인인 경우는 제외한다)",
       "markdown_anchor": "main-a105-p2-i3",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -10912,7 +10912,7 @@
       "source_sha256": "2af3ad6d3214e59a3141ba3d2fd1b34709ef62a02d3671ef5a6b94a97eee8a79",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "심사청구에 관한 공개결정 등(공개청구에 관한 보유개인정보의 전부를 공개한다는 취지의 결정은 제외한다)을 변경하여 해당 심사청구에 관한 보유개인정보를 공개한다는 취지의 재결(제3자인 참가인이 해당 제3자에 관한 정보의 공개에 반대하는 의사를 표시하고 있는 경우에 한정한다)",
+      "korean_text": "심사청구에 관한 공개결정 등(공개청구에 관한 보유 개인정보의 전부를 공개한다는 취지의 결정은 제외한다)을 변경하여 해당 심사청구에 관한 보유 개인정보를 공개한다는 취지의 재결(제3자인 참가인이 해당 제3자에 관한 정보의 공개에 반대하는 의사를 표시하고 있는 경우에 한정한다)",
       "markdown_anchor": "main-a107-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -10973,7 +10973,7 @@
       "source_sha256": "987599e721843a2e0c17bf9be724e11ba56c00d3c6fb5be8c2dd52f0c84927cb",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 절의 규정은 지방공공단체가 보유개인정보의 공개, 정정 및 이용정지 절차와 심사청구 절차에 관한 사항에 대하여 이 절의 규정에 어긋나지 않는 한 조례로 필요한 규정을 정하는 것을 방해하지 않는다.",
+      "korean_text": "이 절의 규정은 지방공공단체가 보유 개인정보의 공개, 정정 및 이용정지 절차와 심사청구 절차에 관한 사항에 대하여 이 절의 규정에 어긋나지 않는 한 조례로 필요한 규정을 정하는 것을 방해하지 않는다.",
       "markdown_anchor": "main-a108-p1",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -11070,7 +11070,7 @@
       "source_sha256": "115d9ca1df1482e9dd7c8c2d3e77fa7255fe77c5f9ef0ae5dfcd4b24488884eb",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "보유개인정보를 이용목적을 위하여 제3자에게 제공할 수 있는 경우에 해당 보유개인정보를 가공하여 작성한 행정기관등익명가공정보를 해당 제3자에게 제공하는 때",
+      "korean_text": "보유 개인정보를 이용목적을 위하여 제3자에게 제공할 수 있는 경우에 해당 보유 개인정보를 가공하여 작성한 행정기관등익명가공정보를 해당 제3자에게 제공하는 때",
       "markdown_anchor": "main-a109-p2-i2",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11086,7 +11086,7 @@
       "source_sha256": "27c131bd625307a7d7bc7dfb7ef9c0b18314b23e58cf1276def85360f75b9343",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제69조의 규정에도 불구하고 행정기관의 장 등은 법령에 근거한 경우를 제외하고는 이용목적 외의 목적을 위하여 삭제정보(보유개인정보에 해당하는 것에 한정한다)를 직접 이용하거나 제공해서는 안 된다.",
+      "korean_text": "제69조의 규정에도 불구하고 행정기관의 장 등은 법령에 근거한 경우를 제외하고는 이용목적 외의 목적을 위하여 삭제정보(보유 개인정보에 해당하는 것에 한정한다)를 직접 이용하거나 제공해서는 안 된다.",
       "markdown_anchor": "main-a109-p3",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11102,7 +11102,7 @@
       "source_sha256": "018a1819a739d0cf4136f87192b36c3447d7f4568353a79cd19bbf6e3b3ef0c0",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전항의 ‘삭제정보’란 행정기관등익명가공정보의 작성에 사용한 보유개인정보에서 삭제한 기술 등 및 개인식별부호를 말한다.",
+      "korean_text": "전항의 ‘삭제정보’란 행정기관등익명가공정보의 작성에 사용한 보유 개인정보에서 삭제한 기술 등 및 개인식별부호를 말한다.",
       "markdown_anchor": "main-a109-p4",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11233,7 +11233,7 @@
       "source_sha256": "40a7220311eb9367a2879faa57310046ac345af5658e091d6c727279711f570d",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "전조의 규정에 따른 모집에 응하여 개인정보파일을 구성하는 보유개인정보를 가공하여 작성하는 행정기관등익명가공정보를 그 사업에 사용하려는 자는 행정기관의 장 등에게 해당 사업에 관한 제안을 할 수 있다.",
+      "korean_text": "전조의 규정에 따른 모집에 응하여 개인정보파일을 구성하는 보유 개인정보를 가공하여 작성하는 행정기관등익명가공정보를 그 사업에 사용하려는 자는 행정기관의 장 등에게 해당 사업에 관한 제안을 할 수 있다.",
       "markdown_anchor": "main-a112-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11619,7 +11619,7 @@
       "source_sha256": "bd11315bc1ec0463740d570cd31aaf9000edfe2950f7620c68b095eba489c75b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제112조 제2항 제3호의 제안에 관련된 행정기관등익명가공정보의 본인의 수가 행정기관등익명가공정보의 효과적인 활용이라는 관점에서 볼 때 개인정보보호위원회 규칙으로 정하는 수 이상이고, 또한 제안에 관련된 개인정보파일을 구성하는 보유개인정보의 본인의 수 이하일 것",
+      "korean_text": "제112조 제2항 제3호의 제안에 관련된 행정기관등익명가공정보의 본인의 수가 행정기관등익명가공정보의 효과적인 활용이라는 관점에서 볼 때 개인정보보호위원회 규칙으로 정하는 수 이상이고, 또한 제안에 관련된 개인정보파일을 구성하는 보유 개인정보의 본인의 수 이하일 것",
       "markdown_anchor": "main-a114-p1-i2",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11829,7 +11829,7 @@
       "source_sha256": "a50b25c8f5b346925440d4a385304f1090a03c61920687fd22b9d34bc044850c",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성하는 때에는 특정 개인을 식별할 수 없도록 하고 그 작성에 사용하는 보유개인정보를 복원할 수 없도록 하기 위하여 필요한 것으로서 개인정보보호위원회 규칙으로 정하는 기준에 따라 해당 보유개인정보를 가공하여야 한다.",
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성하는 때에는 특정 개인을 식별할 수 없도록 하고 그 작성에 사용하는 보유 개인정보를 복원할 수 없도록 하기 위하여 필요한 것으로서 개인정보보호위원회 규칙으로 정하는 기준에 따라 해당 보유 개인정보를 가공하여야 한다.",
       "markdown_anchor": "main-a116-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -11878,7 +11878,7 @@
       "source_sha256": "7b0c4ad3a307f1406f652a7a55f036343bd99351e41d1497ca9e4f8afbca7cec",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성한 때에는 해당 행정기관등익명가공정보의 작성에 사용한 보유개인정보를 포함하는 개인정보파일에 대해서는 개인정보파일부에 다음에 열거하는 사항을 기재하여야 한다. 이 경우 해당 개인정보파일에 대한 제110조의 규정에 따라 바꾸어 읽어 적용하는 제75조 제1항의 규정을 적용할 때에는 같은 항 중 ‘및 제110조 각 호’는 ‘, 제110조 각 호 및 제117조 각 호’로 한다.",
+      "korean_text": "행정기관의 장 등은 행정기관등익명가공정보를 작성한 때에는 해당 행정기관등익명가공정보의 작성에 사용한 보유 개인정보를 포함하는 개인정보파일에 대해서는 개인정보파일부에 다음에 열거하는 사항을 기재하여야 한다. 이 경우 해당 개인정보파일에 대한 제110조의 규정에 따라 바꾸어 읽어 적용하는 제75조 제1항의 규정을 적용할 때에는 같은 항 중 ‘및 제110조 각 호’는 ‘, 제110조 각 호 및 제117조 각 호’로 한다.",
       "markdown_anchor": "main-a117-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -12462,7 +12462,7 @@
       "source_sha256": "f40dab0b30a59e912f069afafa3a1619668d0ae1e691cb96f4aec421427d4b1d",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제4절의 규정은 형사사건이나 소년의 보호사건에 관한 재판, 검사, 검찰사무관 또는 사법경찰직원이 하는 처분, 형이나 보호처분의 집행, 갱생긴급보호 또는 사면에 관한 보유개인정보(해당 재판, 처분이나 집행을 받은 자, 갱생긴급보호를 신청한 자 또는 사면의 상신이 있었던 자에 관한 것에 한정한다)에 대해서는 적용하지 않는다.",
+      "korean_text": "제4절의 규정은 형사사건이나 소년의 보호사건에 관한 재판, 검사, 검찰사무관 또는 사법경찰직원이 하는 처분, 형이나 보호처분의 집행, 갱생긴급보호 또는 사면에 관한 보유 개인정보(해당 재판, 처분이나 집행을 받은 자, 갱생긴급보호를 신청한 자 또는 사면의 상신이 있었던 자에 관한 것에 한정한다)에 대해서는 적용하지 않는다.",
       "markdown_anchor": "main-a124-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -12478,7 +12478,7 @@
       "source_sha256": "3f2385e4ebecd1e72b8103b5a5a9b282002d2331bdcc5dade64ffc5bfaf26df4",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "보유개인정보(행정기관정보공개법 제5조, 독립행정법인등정보공개법 제5조 또는 정보공개조례에 규정된 비공개정보만을 기록하는 행정문서 등에 기록되어 있는 것에 한정한다) 중 아직 분류나 그 밖의 정리가 이루어지지 않은 것으로서 동일한 이용목적에 관한 것이 현저히 대량으로 존재하기 때문에 그중에서 특정 보유개인정보를 검색하는 것이 현저히 곤란한 것은 제4절(제4관을 제외한다)의 규정을 적용할 때에는 행정기관 등에 보유되어 있지 않은 것으로 본다.",
+      "korean_text": "보유 개인정보(행정기관정보공개법 제5조, 독립행정법인등정보공개법 제5조 또는 정보공개조례에 규정된 비공개정보만을 기록하는 행정문서 등에 기록되어 있는 것에 한정한다) 중 아직 분류나 그 밖의 정리가 이루어지지 않은 것으로서 동일한 이용목적에 관한 것이 현저히 대량으로 존재하기 때문에 그중에서 특정 보유 개인정보를 검색하는 것이 현저히 곤란한 것은 제4절(제4관을 제외한다)의 규정을 적용할 때에는 행정기관 등에 보유되어 있지 않은 것으로 본다.",
       "markdown_anchor": "main-a124-p2",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -12609,7 +12609,7 @@
       "source_sha256": "8c14729208cf39e6fd2ba8227b8a2fde8e33725753f1ccc5872d49fcaa5670d1",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "행정기관의 장 등은 공개청구, 정정청구 또는 이용정지청구나 제112조 제1항 또는 제118조 제1항의 제안(이하 이 조에서 ‘공개청구 등’이라 한다)을 하려는 자가 각각 용이하고 정확하게 공개청구 등을 할 수 있도록 해당 행정기관의 장 등이 속한 행정기관 등이 보유하는 보유개인정보의 특정 또는 해당 제안에 도움이 되는 정보의 제공과 그 밖에 공개청구 등을 하려는 자의 편의를 고려한 적절한 조치를 취하여야 한다.",
+      "korean_text": "행정기관의 장 등은 공개청구, 정정청구 또는 이용정지청구나 제112조 제1항 또는 제118조 제1항의 제안(이하 이 조에서 ‘공개청구 등’이라 한다)을 하려는 자가 각각 용이하고 정확하게 공개청구 등을 할 수 있도록 해당 행정기관의 장 등이 속한 행정기관 등이 보유하는 보유 개인정보의 특정 또는 해당 제안에 도움이 되는 정보의 제공과 그 밖에 공개청구 등을 하려는 자의 편의를 고려한 적절한 조치를 취하여야 한다.",
       "markdown_anchor": "main-a127-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -15664,7 +15664,7 @@
       "source_sha256": "9c9c39eabb1dec91a69e8d4538e480a2b3f3a9be17335e95a969d3af5e1f577c",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제176조에 규정된 자가 그 업무에 관하여 알게 된 보유개인정보를 자기 또는 제3자의 부정한 이익을 도모할 목적으로 제공하거나 도용한 때에는 1년 이하의 구금형 또는 50만 엔 이하의 벌금에 처한다.",
+      "korean_text": "제176조에 규정된 자가 그 업무에 관하여 알게 된 보유 개인정보를 자기 또는 제3자의 부정한 이익을 도모할 목적으로 제공하거나 도용한 때에는 1년 이하의 구금형 또는 50만 엔 이하의 벌금에 처한다.",
       "markdown_anchor": "main-a180-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -15957,7 +15957,7 @@
       "source_sha256": "000bfa8b4cdb4740ef00f48b66ec010635070935d7219e39005f5ec36a71582c",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "거짓이나 그 밖의 부정한 수단으로 제85조 제3항에 규정된 공개결정에 근거한 보유개인정보의 공개를 받은 자",
+      "korean_text": "거짓이나 그 밖의 부정한 수단으로 제85조 제3항에 규정된 공개결정에 근거한 보유 개인정보의 공개를 받은 자",
       "markdown_anchor": "main-a185-p1-i3",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -17085,7 +17085,7 @@
       "source_sha256": "10d595f1b57dd7c37633ad0ffe28f1cd577a2d3476fbb277505cc4aa2f9b5a02",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "정부는 시행일까지 신개인정보보호법의 규정의 취지를 바탕으로 행정기관이 보유하는 개인정보의 보호에 관한 법률 제2조 제1항에 규정된 행정기관이 보유하는 같은 조 제2항에 규정된 개인정보 및 독립행정법인 등이 보유하는 개인정보의 보호에 관한 법률(헤이세이 15년 법률 제59호) 제2조 제1항에 규정된 독립행정법인 등이 보유하는 같은 조 제2항에 규정된 개인정보(이하 이 조에서 ‘행정기관등보유개인정보’라 총칭한다)의 취급에 관한 규제의 바람직한 모습에 대하여 익명가공정보(신개인정보보호법 제2조 제9항에 규정된 익명가공정보를 말하며, 행정기관등익명가공정보[행정기관등보유개인정보를 가공하여 얻는 익명가공정보를 말한다. 이하 이 항에서 같다]를 포함한다)의 원활하고 신속한 이용을 촉진하는 관점에서 행정기관등익명가공정보의 취급에 대한 지도, 조언 등을 통일적이고 횡단적으로 개인정보보호위원회가 하게 하는 것을 포함하여 검토하고 그 결과에 근거하여 필요한 조치를 취하여야 한다.",
+      "korean_text": "정부는 시행일까지 신개인정보보호법의 규정의 취지를 바탕으로 행정기관이 보유하는 개인정보의 보호에 관한 법률 제2조 제1항에 규정된 행정기관이 보유하는 같은 조 제2항에 규정된 개인정보 및 독립행정법인 등이 보유하는 개인정보의 보호에 관한 법률(헤이세이 15년 법률 제59호) 제2조 제1항에 규정된 독립행정법인 등이 보유하는 같은 조 제2항에 규정된 개인정보(이하 이 조에서 ‘행정기관등보유 개인정보’라 총칭한다)의 취급에 관한 규제의 바람직한 모습에 대하여 익명가공정보(신개인정보보호법 제2조 제9항에 규정된 익명가공정보를 말하며, 행정기관등익명가공정보[행정기관등보유 개인정보를 가공하여 얻는 익명가공정보를 말한다. 이하 이 항에서 같다]를 포함한다)의 원활하고 신속한 이용을 촉진하는 관점에서 행정기관등익명가공정보의 취급에 대한 지도, 조언 등을 통일적이고 횡단적으로 개인정보보호위원회가 하게 하는 것을 포함하여 검토하고 그 결과에 근거하여 필요한 조치를 취하여야 한다.",
       "markdown_anchor": "suppl5-a12-p1",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -17165,7 +17165,7 @@
       "source_sha256": "83ad4449e8ad4788d2873b705ea7ba0dac609cdb660dd982121d36ce6d612d95",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "정부는 신개인정보보호법의 시행 상황, 제1항의 조치의 실시 상황과 그 밖의 상황을 바탕으로 신개인정보보호법 제2조 제1항에 규정된 개인정보 및 행정기관등보유개인정보의 보호에 관한 규정을 집약하여 일체적으로 규정하는 것을 포함하여 개인정보의 보호에 관한 법제의 바람직한 모습에 대하여 검토하여야 한다.",
+      "korean_text": "정부는 신개인정보보호법의 시행 상황, 제1항의 조치의 실시 상황과 그 밖의 상황을 바탕으로 신개인정보보호법 제2조 제1항에 규정된 개인정보 및 행정기관등보유 개인정보의 보호에 관한 규정을 집약하여 일체적으로 규정하는 것을 포함하여 개인정보의 보호에 관한 법제의 바람직한 모습에 대하여 검토하여야 한다.",
       "markdown_anchor": "suppl5-a12-p6",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18143,7 +18143,7 @@
       "source_sha256": "a6dbdd9579d95144b5e100cdf9945b96024a0df1172f3fc4cd9947bfa79174fe",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제50조 시행일 전에 제50조 개정 후 개인정보보호법 제2조 제11항에 규정된 행정기관 등(제50조 개정 후 개인정보보호법 제58조 제2항의 규정에 따라 제50조 개정 후 개인정보보호법 제16조 제2항에 규정된 개인정보취급사업자로 보는 독립행정법인 노동자건강안전기구를 제외한다. 이하 이 조에서 ‘행정기관 등’이라 한다)에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제50조 개정 후 개인정보보호법 제61조 제1항의 규정에 따라 특정되는 이용목적 외의 목적을 위하여 보유개인정보를 직접 이용하거나 제공하는 것을 인정한다는 취지의 동의에 상당하는 것인 때에는 제50조 시행일에 제50조 개정 후 개인정보보호법 제69조 제2항 제1호의 동의가 있었던 것으로 본다.",
+      "korean_text": "제50조 시행일 전에 제50조 개정 후 개인정보보호법 제2조 제11항에 규정된 행정기관 등(제50조 개정 후 개인정보보호법 제58조 제2항의 규정에 따라 제50조 개정 후 개인정보보호법 제16조 제2항에 규정된 개인정보취급사업자로 보는 독립행정법인 노동자건강안전기구를 제외한다. 이하 이 조에서 ‘행정기관 등’이라 한다)에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제50조 개정 후 개인정보보호법 제61조 제1항의 규정에 따라 특정되는 이용목적 외의 목적을 위하여 보유 개인정보를 직접 이용하거나 제공하는 것을 인정한다는 취지의 동의에 상당하는 것인 때에는 제50조 시행일에 제50조 개정 후 개인정보보호법 제69조 제2항 제1호의 동의가 있었던 것으로 본다.",
       "markdown_anchor": "suppl11-a7-p10",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18159,7 +18159,7 @@
       "source_sha256": "0bb77d4e57bc2e7dfbf23312e7b3ddfb1ab2a4989cdfc89cb6595affd72c1a12",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제50조 시행일 전에 행정기관 등에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제50조 개정 후 개인정보보호법 제71조 제1항의 규정에 따른 보유개인정보의 외국에 있는 제3자 제공을 인정한다는 취지의 동의에 상당하는 것인 때에는 제50조 시행일에 같은 항의 동의가 있었던 것으로 본다.",
+      "korean_text": "제50조 시행일 전에 행정기관 등에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제50조 개정 후 개인정보보호법 제71조 제1항의 규정에 따른 보유 개인정보의 외국에 있는 제3자 제공을 인정한다는 취지의 동의에 상당하는 것인 때에는 제50조 시행일에 같은 항의 동의가 있었던 것으로 본다.",
       "markdown_anchor": "suppl11-a7-p11",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18191,7 +18191,7 @@
       "source_sha256": "95085cdbea24112c1c0a518a56e6b9ac5a7523276ef40c78977712dbb4f78b1e",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제50조 개정 후 개인정보보호법 제71조 제3항의 규정은 행정기관 등이 제50조 시행일 이후에 보유개인정보를 같은 항에 규정된 외국에 있는 제3자에게 제공한 경우에 적용한다.",
+      "korean_text": "제50조 개정 후 개인정보보호법 제71조 제3항의 규정은 행정기관 등이 제50조 시행일 이후에 보유 개인정보를 같은 항에 규정된 외국에 있는 제3자에게 제공한 경우에 적용한다.",
       "markdown_anchor": "suppl11-a7-p13",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18433,7 +18433,7 @@
       "source_sha256": "0c45bc9cd780dea6161d75815ff13cbe543baa3d9cf7a98398687d19c9a99795",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제51조 시행일 전에 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자(제51조 개정 후 개인정보보호법 제58조 제2항의 규정에 따라 제51조 개정 후 개인정보보호법 제16조 제2항에 규정된 개인정보취급사업자로 보는 제51조 개정 후 개인정보보호법 제58조 제2항 제1호에 열거하는 자를 제외한다. 이하 이 조에서 같다)에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제51조 개정 후 개인정보보호법 제61조 제1항의 규정에 따라 특정되는 이용목적 외의 목적을 위하여 보유개인정보를 직접 이용하거나 제공하는 것을 인정한다는 취지의 동의에 상당하는 것인 때에는 제51조 시행일에 제51조 개정 후 개인정보보호법 제69조 제2항 제1호의 동의가 있었던 것으로 본다.",
+      "korean_text": "제51조 시행일 전에 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자(제51조 개정 후 개인정보보호법 제58조 제2항의 규정에 따라 제51조 개정 후 개인정보보호법 제16조 제2항에 규정된 개인정보취급사업자로 보는 제51조 개정 후 개인정보보호법 제58조 제2항 제1호에 열거하는 자를 제외한다. 이하 이 조에서 같다)에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제51조 개정 후 개인정보보호법 제61조 제1항의 규정에 따라 특정되는 이용목적 외의 목적을 위하여 보유 개인정보를 직접 이용하거나 제공하는 것을 인정한다는 취지의 동의에 상당하는 것인 때에는 제51조 시행일에 제51조 개정 후 개인정보보호법 제69조 제2항 제1호의 동의가 있었던 것으로 본다.",
       "markdown_anchor": "suppl11-a9-p10",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18449,7 +18449,7 @@
       "source_sha256": "e1d7ee9fed7339d0054d83413b26f5aa4486b9b7d8ccd9ce5b97ee5768e61af7",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제51조 시행일 전에 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제51조 개정 후 개인정보보호법 제71조 제1항의 규정에 따른 보유개인정보의 외국에 있는 제3자 제공을 인정한다는 취지의 동의에 상당하는 것인 때에는 제51조 시행일에 같은 항의 동의가 있었던 것으로 본다.",
+      "korean_text": "제51조 시행일 전에 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자에 대하여 이루어진 본인의 개인정보 취급에 관한 동의가 있는 경우에 그 동의가 제51조 개정 후 개인정보보호법 제71조 제1항의 규정에 따른 보유 개인정보의 외국에 있는 제3자 제공을 인정한다는 취지의 동의에 상당하는 것인 때에는 제51조 시행일에 같은 항의 동의가 있었던 것으로 본다.",
       "markdown_anchor": "suppl11-a9-p11",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"
@@ -18481,7 +18481,7 @@
       "source_sha256": "05450e6f24e3673545e6ec8e3fefb878a61748b82a30bd7404ad8ebe2f8c9648",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "제51조 개정 후 개인정보보호법 제71조 제3항의 규정은 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자가 제51조 시행일 이후에 보유개인정보를 제51조 개정 후 개인정보보호법 제71조 제3항에 규정된 외국에 있는 제3자에게 제공한 경우에 적용한다.",
+      "korean_text": "제51조 개정 후 개인정보보호법 제71조 제3항의 규정은 제51조 개정 후 개인정보보호법 제2조 제11항 제2호 또는 제4호에 열거하는 자가 제51조 시행일 이후에 보유 개인정보를 제51조 개정 후 개인정보보호법 제71조 제3항에 규정된 외국에 있는 제3자에게 제공한 경우에 적용한다.",
       "markdown_anchor": "suppl11-a9-p13",
       "translation_method": "assistant_translation_from_official_japanese",
       "translation_model": "gpt-6.1-sol"

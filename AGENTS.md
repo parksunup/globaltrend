@@ -21,3 +21,7 @@
 - 기존 수집 표본은 `data/trends/editorial/report-drafts.json`의 대응 ID 편집본을 수정하고 `node scripts/trend-report.mjs --render`로 사람이 읽는 완성본을 갱신해. 근거가 담긴 원 조사 기록과 편집본의 제목·날짜·수치·범위를 대조해.
 - 새 수집 표본을 추가할 때에도 같은 ID의 보고서 편집본을 추가해. 기존 21건을 하드코딩한 자료 수집 상한으로 사용하지 마.
 - 저장소 산출물은 `npm run validate:data`, DB 작업 제출 JSON은 `node scripts/trend-report.mjs --check <파일경로>`를 제출 전에 실행해. 문체 검사 통과를 사실 확인이나 사람 승인으로 표현하지 마.
+
+## 번역 용어
+
+- 한국어 번역·편집 전에 `docs/translation/glossary.md`의 사용자 지정 용어를 읽고 적용해. 법률별 정의 차이를 유지하고, 미확정 후보를 확정 표준으로 취급하지 마.
