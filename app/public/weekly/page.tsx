@@ -12,10 +12,10 @@ export default function WeeklyPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>검수와 발행을 마친 주간 자료를 호별로 모아 읽습니다.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>한 주의 개인정보 보호 동향을 호별로 모아 읽습니다.</p></div>
       {example?<div className={styles.weeklyReport}>
         <div className={styles.weeklyReportHeader}>
-          <p className={styles.draftNotice}>주간호 구성 예시 · 주간호 자체는 미발행</p>
+          <p className={styles.draftNotice}>주간호 구성 예시</p>
           <p className={styles.weeklyReportKicker}>개인정보 주간동향 분석</p>
           <h2>{example.title}</h2>
           <p className={styles.weeklyReportMeta}>예시 호 · 해외·국제 {example.issue.contents.length}건 · 국내 0건</p>
@@ -35,7 +35,7 @@ export default function WeeklyPage() {
             <footer><span>출처 · {item.originalTitle} ({item.organization}, {item.date})</span><Link href={`/public/trends/${item.id}`}>상세 자료 보기 →</Link><a href={item.officialUrl} target="_blank" rel="noreferrer">원문 보기 ↗</a></footer>
           </article>)}
         </section>
-      </div>:<div className={styles.weeklyEmpty}><strong>첫 주간호를 준비하고 있습니다</strong><p>아직 발행된 주간호는 없습니다. 지금은 개별 동향과 국가별 법제를 살펴보실 수 있습니다.</p><div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div></div>}
+      </div>:<div className={styles.weeklyEmpty}><strong>첫 주간호를 준비하고 있습니다</strong><p>지금은 개별 동향과 국가별 법제를 살펴보실 수 있습니다.</p><div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div></div>}
     </section>
     <PublicFooter />
   </main>;
