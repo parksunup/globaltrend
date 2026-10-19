@@ -2,7 +2,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
 import { loadPublicStories } from "../../../../lib/public-content";
-import { publicationLabel } from "../../../../lib/publication-status";
 import { loadPublishedStory } from "../../../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
@@ -27,7 +26,6 @@ export default async function TrendDetail({ params, searchParams }: {
         <Link href={returnTo}>← 동향 목록으로</Link>
         <p className={styles.featureMeta}>{story.region} · {story.institution} · {story.date}</p>
         <h1>{story.title}</h1>
-        {draftMode && <p className={styles.draftNotice}>{publicationLabel(story.publicationStatus)}</p>}
         <section className={styles.trendSummary}><h2>핵심 요약</h2><p>{story.summary}</p></section>
         {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p>{point.text}</p></li>)}</ul>:<p>{story.details}</p>}</section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>
