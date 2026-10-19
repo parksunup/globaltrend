@@ -8,9 +8,11 @@ import SubmissionFeedback from "./submission-feedback";
 
 const groupLabels = { all: "전체", legal: "법제 담당", trends: "동향 담당" } as const;
 const statusLabels: Record<string, string> = {
-  blocked: "확인 대기", unreviewed: "사람 검수 전", draft: "초안", withheld: "공개 보류", error: "파일 오류",
-  verified: "확인됨", reviewed: "검수됨", published: "공개",
+  blocked: "확인 대기", unreviewed: "제출 자료", draft: "초안", withheld: "공개 보류", error: "파일 오류",
+  verified: "확인됨", reviewed: "검수됨", published: "검수 완료·발행됨",
 };
+
+const isHistoricalSummary = (item: SubmissionItem) => item.status === "published" && /사람\s*검수\s*(?:전|미착수)|검수\s*미착수|검수\s*전\s*초안/.test(item.summary);
 
 export default function SubmissionPreview({ items, documents, branch, commitSha }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
   const hasDocument = documents.legal.length > 0;
@@ -34,13 +36,13 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
   return <>
     <header className="topbar">
       <div><p className="eyebrow">WORKSPACE / PR PREVIEW</p><h1>제출물 검수</h1></div>
-      <div className="topbar-note">이 배포 브랜치의 파일 · 검수 전 초안</div>
+      <div className="topbar-note">제출 자료 · 항목별 운영 발행 상태</div>
     </header>
     <div className="submission-notice">
       {branch === "feat/legal-corpus-foundation" && <a href="/legal-drafts">최신 전체 비교표와 GDPR 번역 초안 열기 →</a>}
       <strong>제출 자료를 결과물에 가까운 형태로 읽어 보세요.</strong>
-      <span>표시된 초안과 피드백은 승인·실제 발행을 뜻하지 않습니다. 누구나 로그인 없이 의견을 남길 수 있으며, 저장된 의견은 항목 아래 목록과 공개 피드백 목록에서 읽을 수 있습니다.</span>
-      {hasTrends && <span>동향 제출물은 수집 출처와 동향 표본으로 나누어 확인할 수 있습니다. 조사 표본은 발행 전 검수 자료입니다.</span>}
+      <span>각 항목은 운영 기록과 대조한 발행 상태를 표시합니다. 의견 저장과 발행은 별개이며, 추가 의견은 항목 아래에 남길 수 있습니다.</span>
+      {hasTrends && <span>동향 제출물은 수집 출처와 동향 표본으로 나누어 확인할 수 있습니다. 발행된 자료와 미발행 제출 자료는 항목의 상태로 구분합니다.</span>}
       <Link href={branch ? `/feedback?branch=${encodeURIComponent(branch)}` : "/feedback"}>이 브랜치에 저장된 피드백 전체 보기 →</Link>
     </div>
     {hasDocument && <div className="document-tabs" role="group" aria-label="검수 화면 선택">
@@ -61,11 +63,11 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
     </div>}
     <div className="workspace-grid">
       <section className="list-panel">
-        <div className="panel-heading"><div><span className="panel-kicker">COMMITTED FILES</span><h2>{group === "trends" ? trendKind === "source" ? `수집 출처 ${visible.length}곳` : `동향 표본 ${visible.length}건` : `${visible.length}개 항목`}</h2></div><span className="muted">현재 Preview 기준</span></div>
+        <div className="panel-heading"><div><span className="panel-kicker">COMMITTED FILES</span><h2>{group === "trends" ? trendKind === "source" ? `수집 출처 ${visible.length}곳` : `동향 표본 ${visible.length}건` : `${visible.length}개 항목`}</h2></div><span className="muted">현재 자료 기준</span></div>
         <div className="item-list">
           {visible.map((item) => <button key={item.id} className={`item-card ${selected?.id === item.id ? "selected" : ""}`} onClick={() => setSelectedId(item.id)}>
             <div className="item-card-head"><span className={`submission-status ${item.status === "error" ? "submission-error" : ""}`}>{statusLabels[item.status] ?? item.status}</span><span className="item-type">{item.kind}</span></div>
-            <strong>{item.title}</strong><p>{item.summary}</p><div className="chips"><span>{groupLabels[item.group]}</span><span>{item.subtitle}</span></div>
+            <strong>{item.title}</strong><p>{isHistoricalSummary(item) ? "검수 완료·발행된 자료입니다. 작성 당시 설명은 상세 기록에서 확인할 수 있습니다." : item.summary}</p><div className="chips"><span>{groupLabels[item.group]}</span><span>{item.subtitle}</span></div>
           </button>)}
           {visible.length === 0 && <div className="empty">{items.length === 0 ? "이 브랜치에는 법제·동향 제출 파일이 없습니다. PR #17은 화면 코드만 담고 있으며, 팀원 PR의 자료는 해당 브랜치가 최신 main을 반영한 뒤 그 Preview에서 확인할 수 있습니다." : "현재 검색·담당자 조건에 맞는 제출물이 없습니다."}</div>}
         </div>
@@ -74,8 +76,10 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
         {selected ? <>
           <div className="detail-top"><span className="panel-kicker">SUBMITTED ITEM</span><span className={`submission-status ${selected.status === "error" ? "submission-error" : ""}`}>{statusLabels[selected.status] ?? selected.status}</span></div>
           <h2>{selected.title}</h2><p className="detail-subtitle">{selected.kind} · {selected.subtitle}</p>
-          <p className="detail-description">{selected.summary}</p>
-          {selected.fields.map((field) => <div className="detail-block" key={field.label}><span className="detail-label">{field.label}</span><p className="submission-multiline">{field.value}</p></div>)}
+          {isHistoricalSummary(selected) ? <details className="detail-block"><summary>작성 당시 설명</summary><p>아래의 미착수·초안 표현은 당시 기록이며 현재 이 자료는 검수 완료·발행된 상태입니다.</p><p className="detail-description">{selected.summary}</p></details> : <p className="detail-description">{selected.summary}</p>}
+          {selected.fields.map((field) => selected.status === "published" && /검수|미착수|미검토|초안/.test(field.label + field.value)
+            ? <details className="detail-block" key={field.label}><summary>작성 당시 기록 · {field.label}</summary><p>아래는 제출 당시의 기록이며 현재의 검수·발행 상태를 뜻하지 않습니다.</p><p className="submission-multiline">{field.value}</p></details>
+            : <div className="detail-block" key={field.label}><span className="detail-label">{field.label}</span><p className="submission-multiline">{field.value}</p></div>)}
           {selected.links.length > 0 && <div className="detail-block"><span className="detail-label">공식 근거</span>{selected.links.map((link, index) => <a key={`${link.url}-${index}`} href={link.url} target="_blank" rel="noopener noreferrer">{link.label}: {link.url}<span>↗</span></a>)}</div>}
           <div className="detail-block"><span className="detail-label">제출 파일</span>{selected.files.map((file) => safeSha
             ? <a key={file} href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/${file}`} target="_blank" rel="noopener noreferrer">{file}<span>↗</span></a>

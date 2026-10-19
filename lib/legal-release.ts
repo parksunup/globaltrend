@@ -1,3 +1,4 @@
+import { isDeepStrictEqual } from "node:util";
 import { createHash } from "node:crypto";
 import { loadSubmissionDocuments, loadSubmissionPreview, type LegalComparisonCell, type SubmissionItem } from "./submission-preview.ts";
 import { findLegalArticlePreview, listLegalTranslations, loadLegalTranslation, type LegalTranslationDocument } from "./legal-translation-review.ts";
@@ -43,13 +44,28 @@ export function publishedLegalBundle(rows: { status: string; review_payload: Leg
   return {
     cells: packages.flatMap(p => p.cells.map(cell => ({ ...cell, status: "published" }))),
     instruments: packages.map(p => ({ ...p.instrument, status: "published" })),
-    documents: packages.flatMap(p => p.document ? [{ ...p.document, reviewStatus: "published", sections: p.document.sections.map(section => ({ ...section, reviewStatus: "published" })) }] : []),
+    documents: packages.flatMap(p => p.document ? [{ ...p.document,
+      scopeNote: p.document.scopeNote?.replace(/사람 검수 (?:전|미착수)\.?\s*/g, "").trim(),
+      reviewStatus: "published", sections: p.document.sections.map(section => ({ ...section, reviewStatus: "published" })) }] : []),
   };
 }
 
 export function draftLegalBundle(root = process.cwd()): LegalBundle {
   const packages = buildLegalReviewPackages(root);
   return { cells: packages.flatMap(p => p.cells), instruments: packages.map(p => p.instrument), documents: packages.flatMap(p => p.document ? [p.document] : []) };
+}
+
+export function reviewedDraftLegalBundle(rows: {status: string; review_payload: LegalReviewPackage | null}[] | null, root = process.cwd()): LegalBundle {
+  const published = (rows ?? []).filter(row => row.status === 'published' && row.review_payload).map(row => row.review_payload!);
+  const body = ({contentHash: _hash, ...payload}: LegalReviewPackage) => payload;
+  const bundles = buildLegalReviewPackages(root).map(p => {
+    if (published.some(live => live.contentHash === p.contentHash && isDeepStrictEqual(body(live), body(p)))) return publishedLegalBundle([{status: 'published', review_payload: p}]);
+    const state = rows === null ? 'unknown' : 'unreviewed';
+    return {cells: p.cells.map(cell => ({...cell, status: state})), instruments: [{...p.instrument, status: state}],
+      documents: p.document ? [{...p.document, reviewStatus: rows === null ? 'unknown' : p.document.reviewStatus,
+        sections: p.document.sections.map(section => ({...section, reviewStatus: rows === null ? 'unknown' : section.reviewStatus}))}] : []};
+  });
+  return {cells: bundles.flatMap(b => b.cells), instruments: bundles.flatMap(b => b.instruments), documents: bundles.flatMap(b => b.documents)};
 }
 
 /** A CSV's citation and link arrays are not parallel arrays. Match actual article identifiers. */

@@ -62,7 +62,7 @@ async function loadCatalogItems(supabase: SupabaseClient): Promise<{ items: Revi
     supabase.from("sources").select("id,name,start_url,source_kind,is_active,publishers(name)").order("name"),
     supabase.from("legal_instruments").select("id,short_name,official_name,official_url,jurisdiction_code,is_published").order("short_name"),
     supabase.from("criteria").select("id,criterion_key,label_ko,sort_order,criteria_sets(name,is_published)").order("sort_order"),
-    supabase.from("review_states").select("entity_type,entity_id,status,reviewed_at"),
+    supabase.from("review_states").select("entity_type,entity_id,status"),
   ]);
   if (sources.error || laws.error || criteria.error) return { items: [], source: "supabase" };
   const states = reviewStates.error ? new Map<string, ReviewStateRow>() : indexReviewStates(reviewStates.data as ReviewStateRow[] | null);

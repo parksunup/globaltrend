@@ -62,7 +62,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
 
   return <main className={styles.lawPage}>
     <PublicHeader active="/public/laws" />
-    {draftMode && <p className={styles.draftNotice}>통합 테스트 · 법제 담당 조사 자료 · 사람 검수 전 초안입니다. 확정된 법률 해설이 아닙니다.</p>}
+    {draftMode && <p className={styles.draftNotice}>미리보기 환경 · 각 법률의 판본과 공식 원문을 확인해 주세요.</p>}
     <section className={styles.lawHero}>
       <div><p className={styles.lawOverline}>GLOBAL PRIVACY LAW ATLAS</p><h1>국가별 법제</h1>
       <p>국가·지역별 법률을 읽고, 같은 기준으로 나란히 비교해 보세요.</p></div>
@@ -94,9 +94,9 @@ export default function PublicLawCompare({ cells, instruments, translations, art
           return <article className={styles.lawCatalogCard} key={record.id}>
             <h3>{record.title}</h3><p>{record.subtitle}</p>
             {translation ? <>
-              <small>한국어 전문 초안 · {translation.articleCount}개 조문 · 시행일 {translation.version} · 사람 검수: {translation.reviewStatus}</small>
+              <small>한국어 전문 · {translation.articleCount}개 조문 · 시행일 {translation.version}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
-            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 번역 본문은 저장소에 미포함 · 색인·검토 기록만 제공" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
+            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 한국어 전문은 아직 제공되지 않습니다" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
           </article>;
         })}
@@ -120,8 +120,8 @@ export default function PublicLawCompare({ cells, instruments, translations, art
               <header><Image className={styles.flag} src={law.flag} width={42} height={28} alt="" aria-hidden="true" />
                 <div><h3>{law.country}</h3><p>{record?.title ?? law.law}</p></div></header>
               <section><strong>{criterion?.name ?? "비교 기준"}</strong>
-                <p>{drafted ? cell.summary : "이 기준의 조항 요약은 아직 검토 중입니다."}</p>
-                <span className={styles.draftLabel}>{drafted ? draftMode ? "사람 검수 전 초안" : "검수 후 발행" : "추가 조사 필요"}</span></section>
+                <p>{drafted ? cell.summary : "이 기준의 조항 요약은 아직 제공되지 않습니다."}</p>
+                {!drafted && <span className={styles.draftLabel}>자료 준비 중</span>}</section>
               <section><strong>관련 조항</strong>
                 {cell?.articleNumbers.length ? <div className={styles.articleLinks}>{cell.articleNumbers.map((number, index) => {
                   const preview = translation ? articlePreviews[`${translation.id}:${number}`] : undefined;
@@ -143,7 +143,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
           })}
         </div>
       </div></> : <p className={styles.lawCatalogEmpty}>비교 자료가 아직 준비되지 않았습니다.</p>}
-      <p className={styles.lawDisclaimer}>{draftMode ? "비교 요약과 한국어 번역은 공식 원문을 대조하는 사람 검수 전 초안입니다." : "팀 검수를 거쳐 발행한 자료입니다. 선택 판본·번역 범위와 공식 원문을 함께 확인해 주세요."}</p>
+      <p className={styles.lawDisclaimer}>선택한 법률의 판본·번역 범위와 공식 원문을 함께 확인해 주세요.</p>
     </section>}
     <PublicFooter />
   </main>;

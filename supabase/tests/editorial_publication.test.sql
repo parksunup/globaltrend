@@ -42,8 +42,10 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '20000000-0000-0000-0000-000000000002', true);
 select lives_ok($$update public.reports set status='approved' where title_ko='검수 흐름 예시'$$,
   'admin can approve after review');
+reset role;
 select results_eq($$select human_reviewed from public.reports where title_ko='검수 흐름 예시'$$,
-  array[true], 'approval records human review');
+  array[true], 'approval records human review internally');
+set local role authenticated;
 select lives_ok($$update public.reports set status='published' where title_ko='검수 흐름 예시'$$,
   'admin can publish an approved report');
 

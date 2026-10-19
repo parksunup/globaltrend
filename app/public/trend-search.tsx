@@ -21,7 +21,7 @@ const relatedTerms: Record<string, string[]> = {
   "제재": ["제재", "과징금", "집행", "벌금"],
 };
 
-export default function TrendSearch({ initialQuery, initialTopic, initialFilters = {}, stories, loadError, draftMode = false }: { initialQuery: string; initialTopic: string; initialFilters?: InitialFilters; stories: PublishedStory[]; loadError: boolean; draftMode?: boolean }) {
+export default function TrendSearch({ initialQuery, initialTopic, initialFilters = {}, stories, loadError }: { initialQuery: string; initialTopic: string; initialFilters?: InitialFilters; stories: PublishedStory[]; loadError: boolean }) {
   const router = useRouter();
   const [query, setQuery] = useState(initialQuery);
   const [submittedQuery, setSubmittedQuery] = useState(initialQuery);
@@ -118,17 +118,17 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
             setSelected(null);
           }}><span>{value === "전체" ? "전 세계" : jurisdictionName(value)}</span><span className={checked ? styles.countryCheckboxChecked : styles.countryCheckbox} aria-hidden="true">{checked && value !== "전체" ? "✓" : ""}</span></button>;
         })}</details>
-        <div className={styles.filterFoot}><span className={styles.statusDot} /> {draftMode ? "담당자 제출 표본 · 검수 전" : "검수·발행된 자료"}</div><button type="button" className={styles.mobileFilterDone} onClick={() => setFiltersExpanded(false)}>{results.length}건 결과 보기</button>
+        <div className={styles.filterFoot}>{results.length}건의 동향</div><button type="button" className={styles.mobileFilterDone} onClick={() => setFiltersExpanded(false)}>{results.length}건 결과 보기</button>
       </aside>
       <div className={styles.results}><div className={styles.mobileAppliedFilters}>{period !== "전체" && <button type="button" onClick={() => setPeriod("전체")}>{period} ×</button>}{countries.map((country) => <button type="button" key={country} onClick={() => setCountries((current) => current.filter((item) => item !== country))}>{jurisdictionName(country)} ×</button>)}{activeTopic && <button type="button" onClick={() => setTopicId("")}>{activeTopic.label} ×</button>}</div>
         <div className={styles.resultHeader}><div><p className={styles.eyebrow}>CURATED INTELLIGENCE</p><strong>{results.length}<small>건의 동향</small></strong></div><div className={styles.sortSwitch}><button type="button" className={sort === "관련도순" ? styles.sortActive : ""} onClick={() => setSort("관련도순")}>관련도순</button><button type="button" className={sort === "최신순" ? styles.sortActive : ""} onClick={() => setSort("최신순")}>최신순</button></div></div>
         {results.length ? <div className={styles.resultList}>{results.map((story) => <Link key={story.id} href={`/public/trends/${encodeURIComponent(story.id)}?back=${encodeURIComponent(returnTo)}`} onMouseEnter={() => setSelected(story.id)} onFocus={() => setSelected(story.id)} onClick={() => { try { sessionStorage.setItem("globaltrend-search-scroll", String(window.scrollY)); } catch { /* optional scroll memory */ } }} className={`${styles.storyCard} ${active?.id === story.id ? styles.storySelected : ""}`}>
           <div className={styles.storyMeta}><span>{story.region}</span><i>·</i><span>{story.institution}</span><i>·</i><time>{story.date}</time></div>
           <strong>{story.title}</strong><p>{story.summary}</p><div className={styles.tagList}>{story.tags.map((tag) => <span key={tag}>#{tag}</span>)}</div>
-        </Link>)}</div> : <div className={styles.emptyState}><span>⌕</span><strong>{loadError ? "자료를 불러오지 못했습니다" : stories.length ? "검색 결과가 없습니다" : draftMode ? "제출된 동향 표본이 없습니다" : "발행된 동향이 없습니다"}</strong><p>{loadError ? "잠시 후 다시 확인해 주세요." : stories.length ? "검색어를 바꾸거나 국가 필터를 초기화해 보세요." : draftMode ? "담당자 제출 파일이 연결되면 이곳에 나타납니다." : "팀 검수를 거쳐 발행된 자료가 이곳에 표시됩니다."}</p></div>}
+        </Link>)}</div> : <div className={styles.emptyState}><span>⌕</span><strong>{loadError ? "자료를 불러오지 못했습니다" : stories.length ? "검색 결과가 없습니다" : "아직 표시할 동향이 없습니다"}</strong><p>{loadError ? "잠시 후 다시 확인해 주세요." : stories.length ? "검색어를 바꾸거나 국가 필터를 초기화해 보세요." : "새로운 자료가 추가되면 이곳에서 찾을 수 있습니다."}</p></div>}
       </div>
       {active && <aside className={styles.preview} aria-live="polite">
-        <div className={styles.previewTop}><span>선택한 동향</span><span>{draftMode ? "검수 전 초안" : "발행됨"}</span></div>
+        <div className={styles.previewTop}><span>선택한 동향</span></div>
         <p className={styles.previewCountry}>{active.region} <i>·</i> {active.institution}</p>
         <h2>{active.title}</h2><p className={styles.previewText}>{active.summary}</p>
         <div className={styles.previewDivider} />
@@ -137,6 +137,6 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
         <span className={styles.previewLabel}>원문 출처</span><a className={styles.featureLink} href={active.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a><Link className={styles.featureLink} href={`/public/trends/${active.id}`}>상세 보기 →</Link>
       </aside>}
     </div>
-    <p className={styles.demoNote}>{draftMode ? "현재 보이는 동향은 담당자 제출 표본이며 사람 검수 전입니다." : "관리자가 발행한 자료만 표시합니다."} 관련 개념 검색은 현재 정해진 표현을 확장하는 방식입니다.</p>
+    <p className={styles.demoNote}>관련 개념 검색은 현재 정해진 표현을 확장하는 방식입니다.</p>
   </section>;
 }

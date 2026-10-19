@@ -17,14 +17,14 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
   const [fontSize, setFontSize] = useState(16);
   const [tocOpen, setTocOpen] = useState(false);
   const query = articleQuery.trim().toLocaleLowerCase();
+  const dateLabel = /^\d{4}-\d{2}-\d{2}$/.test(law.version) ? "시행일" : "자료 기준";
   const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
     <Link href={returnTo}>← {returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
-    <p className={styles.lawOverline}>KOREAN TRANSLATION DRAFT</p>
+    <p className={styles.lawOverline}>KOREAN TRANSLATION</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
-    <div className={styles.draftNotice}>{law.reviewStatus === "published" ? "팀 검수를 거쳐 발행한 한국어 번역입니다. 공식 원문과 판본·범위를 함께 확인해 주세요." : "사람 검수 전 한국어 번역 초안입니다. 공식 법률 해석이나 확정 번역이 아닙니다."}</div>
-    <p>선택 판본 시행일: {law.version} · 조문 {law.articleCount}개 · 사람 검수: {law.reviewStatus === "not_started" ? "검수 전" : law.reviewStatus}</p>
+    <p>{dateLabel}: {law.version} · 조문 {law.articleCount}개</p>
     {law.scopeNote && <details className={styles.lawScopeNote}><summary>번역 범위와 판본 안내</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
     <div className={styles.lawSearchBar}><label htmlFor="law-article-search">조문 검색</label><input id="law-article-search" type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="조문 번호나 단어를 입력하세요 (예: 제2조, 개인정보)" />{articleQuery && <button type="button" onClick={() => setArticleQuery("")}>검색 지우기</button>}</div>
@@ -56,7 +56,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
             return <section key={group.id} id={group.id} className={styles.lawTextGroup}>
               <h2>{group.label}</h2>
               {sections.map((section) => <article key={section.id} id={section.id} className={styles.lawTextArticle}>
-                <small>{section.context} · {section.reviewStatus === "not_started" ? "사람 검수 전" : section.reviewStatus}</small>
+                <small>{section.context}</small>
                 <h3>{section.title}</h3>
                 {section.lines.length ? section.lines.map((line) => <p key={line.id} id={line.id}><strong>{line.label ? `${line.label}. ` : ""}</strong>{line.text}</p>)
                   : <p>이 항목에는 번역 본문이 없습니다.</p>}
@@ -66,6 +66,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
         </div>
       </div>
     </div>
+    <p className={styles.lawDisclaimer}>비공식 한국어 번역입니다. 법률의 정확한 내용은 공식 원문을 확인해 주세요.</p>
     <div className={styles.lawMobileReaderTools}><button type="button" onClick={() => setTocOpen(true)}>목차·조문 찾기</button><button type="button" disabled={fontSize <= 14} onClick={() => setFontSize((size) => Math.max(14, size - 2))} aria-label="본문 글자 작게">가−</button><button type="button" disabled={fontSize >= 20} onClick={() => setFontSize((size) => Math.min(20, size + 2))} aria-label="본문 글자 크게">가＋</button></div>
   </section>;
 }

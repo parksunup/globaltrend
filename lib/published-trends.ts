@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { jurisdictionName } from "./jurisdictions.ts";
 
 export type PublishedStory = {
+  publicationStatus?: "published" | "draft" | "unknown";
   id: string;
   country: string;
   jurisdictions?: string[];
@@ -61,7 +62,7 @@ export async function loadPublishedStories(limit = 100, id?: string): Promise<Pu
     if (!item) return [];
     const dateValue = item.published_at ?? report.published_at;
     return [{
-      id: report.id,
+      id: report.id, publicationStatus: "published",
       country: report.jurisdictions?.[0] ?? "기타",
       jurisdictions: report.jurisdictions ?? [],
       region: report.jurisdictions?.map(jurisdictionName).join(" · ") || "국제",

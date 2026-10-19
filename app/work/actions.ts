@@ -113,3 +113,43 @@ export async function advanceReport(formData: FormData) {
   revalidatePath(`/public/trends/${id}`);
   redirect(`/work?notice=${next}`);
 }
+
+/** The explicit publish action includes approval; users do not click each internal state. */
+export async function publishReports(formData: FormData) {
+  requireWritableDeployment();
+  const db = await requireTeam("admin");
+  const entries = formData.getAll("selection");
+  if (!entries.length || entries.length > 100) redirect("/work?notice=invalid_selection");
+  const selected = new Map<string, string>();
+  for (const entry of entries) {
+    try {
+      const value = JSON.parse(String(entry));
+      if (!isUuid(value.id) || typeof value.updatedAt !== "string" || !Number.isFinite(Date.parse(value.updatedAt))) throw new Error("invalid");
+      selected.set(value.id, value.updatedAt);
+    } catch { redirect("/work?notice=invalid_selection"); }
+  }
+  let published = 0, already = 0;
+  const failed: string[] = [];
+  for (const [id, expectedUpdate] of selected) {
+    try {
+      const {data, error} = await db.from("reports").select("id,status,updated_at").eq("id", id).maybeSingle();
+      if (error || !data) { failed.push(id); continue; }
+      let report: {id: string; status: string; updated_at: string} = data;
+      if (report.status === "published") { already++; continue; }
+      if (report.updated_at !== expectedUpdate || !["draft", "in_review", "approved"].includes(report.status)) { failed.push(id); continue; }
+      while (report.status !== "published") {
+        const next = report.status === "draft" ? "in_review" : report.status === "in_review" ? "approved" : "published";
+        const result = await db.from("reports").update({status: next}).eq("id", id)
+          .eq("status", report.status).eq("updated_at", report.updated_at).select("id,status,updated_at").maybeSingle();
+        if (result.error || !result.data) throw new Error("changed_or_failed");
+        report = result.data;
+      }
+      published++;
+      revalidatePath(`/public/trends/${id}`);
+    } catch { failed.push(id); }
+  }
+  revalidatePath("/work");
+  revalidatePath("/public", "layout");
+  const result = new URLSearchParams({published: String(published), already: String(already), failed: failed.join(",")});
+  redirect(`/work?${result.toString()}#reports`);
+}
