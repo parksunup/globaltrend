@@ -1,148 +1,22 @@
-import Link from "next/link";
-import { createClient } from "../../lib/supabase/server";
-import { loadTrendImportCandidates } from "../../lib/trend-import";
-import { advanceReport, createDraft, saveDraft, signIn, signOut, publishReports } from "./actions";
-import styles from "./work.module.css";
-import CollectorReviewPanel from "../components/collector-review";
-import { canReviewCollector, parseCollectorReview } from "../../lib/collector-review";
-import type { CollectorReview } from "../../lib/collector-review";
-
-import { PublicationSelection, PublicationCheckbox, BulkPublication, PublishButton } from "./publication-selection";
-
-export const dynamic = "force-dynamic";
-
-const noticeText: Record<string, string> = {
-  invalid_selection: "공개할 자료를 선택해 주세요. 한 번에 최대 100건까지 공개할 수 있습니다.",
-  invalid_login: "이메일 또는 비밀번호를 확인해 주세요.",
-  login_required: "작업을 계속하려면 로그인해 주세요.",
-  permission_denied: "이 계정에는 해당 작업 권한이 없습니다.",
-  invalid_draft: "필수 내용과 원문 주소를 확인해 주세요.",
-  duplicate: "이 출처에 같은 원문 주소가 이미 등록되어 있습니다.",
-  save_failed: "초안을 저장하지 못했습니다. 입력 내용과 권한을 확인해 주세요.",
-  transition_failed: "상태를 변경하지 못했습니다. 자료의 현재 상태와 권한을 확인해 주세요.",
-  draft_saved: "초안을 저장했습니다. 아직 공개되지 않았습니다.",
-  in_review: "검수 대기로 보냈습니다.",
-  approved: "승인했습니다. 아직 공개되지 않았습니다.",
-  published: "발행했습니다. 공개 동향과 검색에서 확인할 수 있습니다.",
-  preview_readonly: "PR Preview에서는 운영 DB에 쓰지 않습니다. 병합 후 운영 화면에서 작성해 주세요.",
-};
-const statusText: Record<string, string> = {
-  draft: "초안", in_review: "검수 대기", approved: "승인됨", published: "발행됨", excluded: "제외",
-};
-
-export default async function WorkPage({ searchParams }: { searchParams: Promise<{ notice?: string; candidate?: string; published?: string; already?: string; failed?: string }> }) {
-  const { notice, candidate: candidateId, published, already, failed } = await searchParams;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  const { data: membership } = user
-    ? await supabase.from("team_memberships").select("role,is_active").eq("user_id", user.id).maybeSingle()
-    : { data: null };
-  const role = membership?.is_active ? membership.role as string : null;
-  const canEdit = role === "admin" || role === "editor";
-  const canPublish = role === "admin";
-  const canReview = canReviewCollector(role);
-  let collectorData: CollectorReview | null = null;
-  let collectorError = false;
-  if (canReview) {
-    const result = await supabase.rpc("get_trend_collector_review");
-    try {
-      if (result.error) throw result.error;
-      collectorData = parseCollectorReview(result.data);
-    } catch { collectorError = true; }
-  }
-  const readOnlyPreview = process.env.VERCEL_ENV === "preview";
-  const [sourcesResult, reportsResult] = canEdit ? await Promise.all([
-    supabase.from("sources").select("id,name").eq("is_active", true).order("name"),
-    supabase.from("reports").select("id,source_item_id,title_ko,one_line_summary_ko,detailed_summary_ko,jurisdictions,topics,status,created_at,published_at,updated_at")
-      .order("created_at", { ascending: false }).limit(100),
-  ]) : [{ data: [] }, { data: [] }];
-  const sources = sourcesResult.data ?? [];
-  const reports = reportsResult.data ?? [];
-  const candidates = canEdit ? loadTrendImportCandidates() : [];
-  const candidate = candidates.find((item) => item.id === candidateId);
-  const sourceHint = candidate?.source === "curia" ? "CJEU" : candidate?.source.toUpperCase();
-  const candidateSource = sourceHint ? sources.find((source) => source.name.toUpperCase().includes(sourceHint)) : null;
-  const sourceIds = reports.map((report) => report.source_item_id);
-  const { data: sourceItems } = sourceIds.length
-    ? await supabase.from("source_items").select("id,title_original,canonical_url,published_at").in("id", sourceIds)
-    : { data: [] };
-  const originals = new Map((sourceItems ?? []).map((item) => [item.id, item]));
-
-  const selectable = reports.filter(report => ["draft", "in_review", "approved"].includes(report.status));
-  const selectionValue = (report: {id: string; updated_at: string}) => JSON.stringify({id: report.id, updatedAt: report.updated_at});
-  const failedIds = new Set((failed ?? "").split(","));
-
-  return <main className={styles.page}>
-    <header className={styles.header}><Link href="/team">제출 자료 보기</Link><h1>작업 공간 · 동향</h1><Link href="/work/legal">법제 관리</Link><Link href="/public">공개 동향 보기 →</Link></header>
-    <div className={styles.wrap}>
-      {notice && noticeText[notice] && <p className={styles.notice} role="status">{noticeText[notice]}</p>}
-      {readOnlyPreview && <p className={styles.notice}>이 PR Preview는 읽기 전용입니다. 운영 Supabase에 초안·승인을 저장하지 않습니다.</p>}
-      {published !== undefined && <div className={styles.notice} role="status"><strong>{Number(published) || 0}건 공개 완료 · 이미 공개된 자료 {Number(already) || 0}건</strong>{failed && <p>일부 자료는 처리하지 못했습니다. 아래 표시된 자료를 확인하고 다시 선택해 주세요. 완료된 자료는 중복 발행하지 않습니다.</p>}</div>}
-      {!user ? <section className={styles.card}>
-        <h2>팀 계정 로그인</h2><p>자료 작성과 발행에만 로그인이 필요합니다. 공개 동향과 검수 목록은 로그인 없이 볼 수 있습니다.</p>
-        <form action={signIn} className={styles.form}>
-          <label>이메일<input name="email" type="email" autoComplete="email" required /></label>
-          <label>비밀번호<input name="password" type="password" autoComplete="current-password" required /></label>
-          <button type="submit">로그인</button>
-        </form>
-      </section> : <>
-        <div className={styles.identity}><span>{user.email} · {role ? `권한: ${role}` : "팀 권한 없음"}</span><form action={signOut}><button type="submit">로그아웃</button></form></div>
-
-        {!canEdit ? <section className={styles.card}><h2>작성 권한이 없습니다</h2><p>관리자 또는 편집자 권한이 있는 팀 계정으로 접속해 주세요.</p></section> : <>
-          <section className={styles.queue} id="reports"><div><h2>동향 자료 관리</h2><p>공개할 자료를 선택해 한 번에 발행하세요. 관리자의 공개 동작에 승인 절차가 포함되며, 이미 확인한 내용을 다시 체크하지 않습니다.</p></div>
-            {reportsResult.error && <p role="alert">자료 목록을 읽지 못했습니다. 권한과 DB 상태를 확인해 주세요.</p>}
-            {reports.length === 0 && !reportsResult.error && <p className={styles.card}>아직 등록된 동향이 없습니다.</p>}
-            <PublicationSelection key={selectable.map(selectionValue).join("|")}>
-            {canPublish && <BulkPublication values={selectable.map(selectionValue)} action={publishReports} disabled={readOnlyPreview}/>}
-            {reports.map((report) => {
-              const original = originals.get(report.source_item_id);
-              return <article className={styles.card} key={report.id} id={`report-${report.id}`}>
-                {failedIds.has(report.id) && <p className={styles.error} role="alert">이 자료를 공개하지 못했습니다. 최신 내용·상태를 확인한 후 다시 시도해 주세요.</p>}
-                {canPublish && ["draft", "in_review", "approved"].includes(report.status) && <PublicationCheckbox value={selectionValue(report)} title={report.title_ko} disabled={readOnlyPreview}/>}
-                <div className={styles.itemHead}><strong>{report.title_ko}</strong><span>{statusText[report.status] ?? report.status}</span></div>
-                <p>{report.one_line_summary_ko}</p>
-                {original && <p><a href={original.canonical_url} target="_blank" rel="noopener noreferrer">공식 원문 확인 ↗</a> · {original.title_original}</p>}
-                {report.status === "published" && <Link href={`/public/trends/${report.id}`}>공개 상세 보기 →</Link>}
-                {["draft", "in_review"].includes(report.status) && <details className={styles.editor}><summary>초안 수정</summary>
-                  <form action={saveDraft} className={styles.form}>
-                    <input name="id" type="hidden" value={report.id} />
-                    <label>한국어 제목<input name="title_ko" defaultValue={report.title_ko} maxLength={500} required /></label>
-                    <label>한 줄 요약<textarea name="summary_ko" defaultValue={report.one_line_summary_ko ?? ""} maxLength={3000} required rows={3} /></label>
-                    <label>상세 내용<textarea name="details_ko" defaultValue={report.detailed_summary_ko ?? ""} maxLength={20000} rows={5} /></label>
-                    <label>국가·지역<input name="jurisdictions" defaultValue={report.jurisdictions?.join(", ") ?? ""} /></label>
-                    <label>주제<input name="topics" defaultValue={report.topics?.join(", ") ?? ""} /></label>
-                    <button type="submit" disabled={readOnlyPreview}>수정 저장</button>
-                  </form>
-                </details>}
-                {report.status === "draft" && !canPublish && <form action={advanceReport}><input type="hidden" name="id" value={report.id}/><input type="hidden" name="next" value="in_review"/><button disabled={readOnlyPreview}>관리자에게 공개 요청</button></form>}
-                {canPublish && ["draft", "in_review", "approved"].includes(report.status) && <form action={publishReports}><input type="hidden" name="selection" value={selectionValue(report)}/><PublishButton disabled={readOnlyPreview}/></form>}
-              </article>;
-            })}
-            </PublicationSelection>
-          </section>
-          {candidates.length > 0 && <details className={styles.card} open={!!candidate}><summary>제출 자료에서 새 동향 등록</summary>
-            <h2>팀 제출 자료에서 시작</h2><p>주간 예시 호에 선정된 자료를 입력창에 채웁니다. 검토 이력은 유지하며, 선택하면 작성 폼에 내용을 채웁니다.</p>
-            <div className={styles.candidates}>{candidates.map((item) => <Link key={item.id} href={`/work?candidate=${encodeURIComponent(item.id)}#new-draft`}>{item.title} · {item.source.toUpperCase()}</Link>)}</div>
-          </details>}
-          <details className={styles.card} id="new-draft" open={!!candidate}><summary>새 동향 작성</summary>
-            <h2>새 동향 초안 등록</h2><p>{candidate ? `제출 자료 ${candidate.id}의 내용을 채웠습니다. 원문과 한국어 표현을 확인해 주세요.` : "공식 원문을 확인한 뒤 작성해 주세요. 저장해도 곧바로 공개되지 않습니다."}</p>
-            <form action={createDraft} className={styles.form} key={candidate?.id ?? "manual"}>
-              <label>수집 출처<select name="source_id" key={candidateSource?.id ?? "manual"} defaultValue={candidateSource?.id ?? ""} required><option value="">출처를 선택하세요</option>{sources.map((source) => <option key={source.id} value={source.id}>{source.name}</option>)}</select></label>
-              {sources.length === 0 && <p>활성 수집 출처가 없습니다. 출처를 먼저 등록해야 합니다.</p>}
-              <label>공식 원문 주소<input name="canonical_url" type="url" placeholder="https://…" defaultValue={candidate?.officialUrl} required /></label>
-              <label>원문 제목<input name="original_title" maxLength={500} defaultValue={candidate?.originalTitle} required /></label>
-              <label>한국어 제목<input name="title_ko" maxLength={500} defaultValue={candidate?.title} required /></label>
-              <label>한국어 한 줄 요약<textarea name="summary_ko" maxLength={3000} defaultValue={candidate?.summary} required rows={3} /></label>
-              <label>상세 내용<textarea name="details_ko" maxLength={20000} defaultValue={candidate?.details} rows={5} /></label>
-              <div className={styles.fields}><label>원문 게시일<input name="source_published_date" type="date" defaultValue={candidate?.publishedDate} /></label><label>국가·지역 (쉼표로 구분)<input name="jurisdictions" placeholder="EU, 영국" defaultValue={candidate?.jurisdictions.join(", ")} /></label></div>
-              <label>주제 (쉼표로 구분)<input name="topics" placeholder="아동, 인공지능" defaultValue={candidate?.topics.join(", ")} /></label>
-              <button type="submit" disabled={sources.length === 0 || readOnlyPreview}>초안 저장</button>
-            </form>
-          </details>
-
-        </>}
-        {canReview && <details className={styles.card}><summary>수집 상태와 원문 확인</summary><CollectorReviewPanel data={collectorData} error={collectorError} commitSha={process.env.VERCEL_GIT_COMMIT_SHA}/></details>}
-      </>}
-    </div>
-  </main>;
+import Link from 'next/link';
+import WorkFrame from './frame';
+import Workspace from './workspace';
+import {workspaceSession,loadWorkspaceItems,previewWorkspaceItems} from '../../lib/workspace-data';
+import {executeWorkspaceAction} from './workspace-actions';
+import {signIn,signOut} from './actions';
+import styles from './work.module.css';
+export const dynamic='force-dynamic';
+export default async function WorkPage({searchParams}:{searchParams:Promise<{kind?:string;notice?:string}>}) {
+ const {kind,notice}=await searchParams;const session=await workspaceSession();const readOnly=process.env.VERCEL_ENV==='preview';
+ const result=session.canEdit?await loadWorkspaceItems(session):readOnly?await previewWorkspaceItems().then(items=>({items,error:null})).catch(()=>({items:[],error:'미리보기 자료를 불러오지 못했습니다.'})):{items:[],error:null};
+ return <WorkFrame>
+ <div className={styles.workspaceLead} style={!session.canEdit?{display:"none"}:undefined}><div/>{session.canEdit&&<Link href="/work/new">＋ 새 자료</Link>}</div>
+ {readOnly&&<p className={styles.notice}><a href="https://globaltrend-six.vercel.app/work">운영 작업 공간 열기 ↗</a></p>}
+ {notice&&<p className={styles.notice} role="status">{notice==='draft_saved'?'새 자료를 저장했습니다. 목록에서 공개할 수 있습니다.':notice==='imported'?'법제 자료를 등록했습니다. 목록에서 공개할 수 있습니다.':notice==='save_failed'?'자료를 등록하지 못했습니다. 입력 내용과 계정 상태를 확인해 주세요.':notice==='stale_package'?'자료 판본이 변경됐습니다. 최신 제출 자료를 다시 확인해 주세요.':notice==='invalid_login'?'이메일과 비밀번호를 확인해 주세요.':notice==='login_required'?'팀 계정으로 로그인해 주세요.':'작업 결과를 목록에서 확인해 주세요.'}</p>}
+ {!session.user&&<details className={styles.card} open={!readOnly}><summary>팀 계정 로그인</summary><h2>팀 계정 로그인</h2><p>수정·공개는 팀 계정으로 로그인해 주세요. <Link href="/team">로그인 없이 제출 자료 보기</Link></p><form action={signIn} className={styles.form}><label>이메일<input name="email" type="email" autoComplete="email" required/></label><label>비밀번호<input name="password" type="password" autoComplete="current-password" required/></label><button>로그인</button></form></details>}
+ {session.user&&<div className={styles.identity}><span>{session.user.email} · {session.role==='admin'?'총괄 관리자':session.role==='editor'?'팀 편집자':'팀 권한 없음'}</span><form action={signOut}><button>로그아웃</button></form></div>}
+ {result.error&&<p className={styles.error} role="alert">{result.error}</p>}
+ {(session.canEdit||readOnly)&&<Workspace items={result.items} canEdit={session.canEdit||readOnly} canPublish={session.canPublish||readOnly} readOnly={readOnly} executeAction={executeWorkspaceAction} initialKind={kind==='law'?'law':kind==='trend'?'trend':'all'}/>}
+ {session.user&&!session.canEdit&&<p className={styles.card}>이 계정에는 자료 편집 권한이 없습니다. <Link href="/team">자료 열람 화면으로 이동</Link></p>}
+ </WorkFrame>;
 }
