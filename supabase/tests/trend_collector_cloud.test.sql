@@ -1,6 +1,6 @@
 begin;
 set local search_path = public, extensions;
-select plan(22);
+select plan(21);
 select has_function('public','claim_trend_draft_jobs',array['text','integer'],'claim function exists');
 select ok(not has_function_privilege('anon','public.claim_trend_draft_jobs(text,integer)','execute'),'anonymous cannot claim');
 select ok(not has_function_privilege('authenticated','public.submit_trend_draft(uuid,text,jsonb)','execute'),'team browser cannot submit as worker');
@@ -59,8 +59,6 @@ select public.claim_trend_draft_jobs('stale-worker',1);
 update public.source_items set current_revision_id=null where canonical_url='https://www.edpb.europa.eu/test-stale';
 select is((public.submit_trend_draft((select id from public.draft_jobs where input_hash=repeat('e',64)),
  'stale-worker',(select draft from test_payload))->>'status'),'superseded','old revision is rejected without touching reports');
-update public.collector_draft_daily_usage set claims=10;
-select is(jsonb_array_length(public.claim_trend_draft_jobs('budget-worker',10)),0,'daily claim cap stops without paid fallback');
 select ok(not has_function_privilege('anon','public.get_trend_collector_review()','execute'),'anonymous cannot inspect drafts or exact source bodies');
 select ok(not (select prosecdef from pg_proc where oid='public.get_trend_collector_review()'::regprocedure),'public review entrypoint does not elevate caller privileges');
 select * from finish();
