@@ -229,6 +229,22 @@ def listing_next_url(url,page):
     parts=urlsplit(url)
     return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode({'page':page+1}),''))
 
+def pdpc_api_page_number(url):
+    query=parse_qs(urlsplit(url).query,keep_blank_values=True)
+    expected={'itemsperpage':['10'],'listingtype':['media_events'],'pathname':['/media-events']}
+    page=query.pop('page',['1'])
+    if query!=expected or len(page)!=1:
+        raise ValueError('pdpc_listing_query_changed')
+    try: number=int(page[0])
+    except ValueError: raise ValueError('invalid_listing_page') from None
+    if not 1<=number<=1000: raise ValueError('invalid_listing_page')
+    return number
+
+def pdpc_api_next_url(url,page):
+    parts=urlsplit(url); query=parse_qs(parts.query,keep_blank_values=True)
+    query['page']=[str(page+1)]
+    return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
+
 def ico_search_request(html,url):
     """Observed site-internal protocol; not a documented/supported public API."""
     soup=BeautifulSoup(html,'html.parser')
@@ -275,9 +291,11 @@ def discover_pdpc_listing(data,url,page):
     for result in results:
         if not isinstance(result,dict) or any(not isinstance(result.get(k),str) for k in ('href','title','date')):
             raise ValueError('pdpc_listing_schema_changed')
-        rows.append({'url':urljoin(url,result['href']),'title':normalize(result['title']),
+        origin=f'{urlsplit(url).scheme}://{urlsplit(url).netloc}'
+        rows.append({'url':urljoin(origin,result['href']),'title':normalize(result['title']),
             'date_observations':[{'meaning':'listing_published_display','locator':'listing card datePublished','value':result['date']}]})
-    return rows,listing_next_url(url,page) if page*10<total else None
+    next_url=pdpc_api_next_url(url,page) if urlsplit(url).path=='/api/listing-api' else listing_next_url(url,page)
+    return rows,next_url if page*10<total else None
 
 def discover_listing(source,html,url,fetch):
     if source=='ico':
@@ -287,6 +305,8 @@ def discover_listing(source,html,url,fetch):
         if ctype!='application/json': raise ValueError('ico_search_response_type_changed')
         return discover_ico_search(data,url,payload['pageNumber'])
     if source=='pdpc':
+        if urlsplit(url).path=='/api/listing-api':
+            return discover_pdpc_listing(html.encode('utf-8'),url,pdpc_api_page_number(url))
         endpoint=pdpc_listing_request(html,url)
         data,_,ctype=fetch(endpoint)
         if ctype not in ('application/json','text/plain'): raise ValueError('pdpc_listing_response_type_changed')

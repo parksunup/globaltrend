@@ -106,7 +106,7 @@
     {
       "source": "pdpc",
       "source_id": "ea7465ec-48fb-4b6e-8f82-7345da7e6a75",
-      "listing": "https://www.pdpc.gov.sg/media-events",
+      "listing": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events",
       "hosts": [
         "www.pdpc.gov.sg"
       ],

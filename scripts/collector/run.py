@@ -6,6 +6,7 @@ import sys
 import uuid
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 from .core import collect,HttpClient,FetchError
 from .store import SupabaseStore,DryStore
 from . import parsers
@@ -29,21 +30,25 @@ def probe_source(config,client,sample_urls):
         return body,final,ctype
     try:
         body,final,ctype=fetch(listing)
-        if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
-            raise ValueError('unsupported_listing_type')
-        if ctype in ('text/html','application/xhtml+xml'):
+        is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+        if is_pdpc_api:
+            rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
+        elif ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
             # Bounded public-page diagnostics help distinguish a changed site
             # template from an access/challenge page; never store the response.
-            document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
-            title=document.select_one('title')
-            record['listing_document']={
-                'title':parsers.normalize(title.get_text())[:200] if title else None,
-                'language':document.html.get('lang') if document.html else None,
-                'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
-            }
-            if not title and not document.select_one('main,article,h1'):
-                record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
-        rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
+            if ctype in ('text/html','application/xhtml+xml'):
+                document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
+                title=document.select_one('title')
+                record['listing_document']={
+                    'title':parsers.normalize(title.get_text())[:200] if title else None,
+                    'language':document.html.get('lang') if document.html else None,
+                    'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
+                }
+                if not title and not document.select_one('main,article,h1'):
+                    record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
+            rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
+        else:
+            raise ValueError('unsupported_listing_type')
         if not rows: raise ValueError('listing_empty_or_structure_changed')
         record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
     except (FetchError,ValueError) as e:

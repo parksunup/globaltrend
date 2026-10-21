@@ -44,6 +44,55 @@ class CollectorTests(unittest.TestCase):
         rows,next_page=self.parsers.discover('ftc','<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><description>Short text</description></item></channel></rss>','https://www.ftc.gov/feed')
         self.assertEqual(rows[0]['url'],'https://www.ftc.gov/a'); self.assertNotIn('content_text',rows[0]); self.assertIsNone(next_page)
 
+    def test_pdpc_json_listing_pagination_preserves_api_parameters(self):
+        rows,next_page=self.parsers.discover_pdpc_listing(
+            b'{"totalItems":11,"data":[' + b','.join(
+                (b'{"href":"/media-events/a","title":"A","date":"2026-10-20"}' if i==0 else
+                 b'{"href":"/media-events/item%d","title":"Item %d","date":"2026-10-20"}'%(i,i))
+                for i in range(10)) + b']}',
+            'https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events',1)
+        self.assertEqual(len(rows),10)
+        self.assertEqual(rows[0]['url'],'https://www.pdpc.gov.sg/media-events/a')
+        self.assertIn('itemsperpage=10',next_page)
+        self.assertIn('listingtype=media_events',next_page)
+        self.assertIn('pathname=%2Fmedia-events',next_page)
+        self.assertIn('page=2',next_page)
+
+    def test_pdpc_api_pagination_rejects_changed_scope(self):
+        with self.assertRaisesRegex(ValueError,'pdpc_listing_query_changed'):
+            self.parsers.pdpc_api_page_number('https://www.pdpc.gov.sg/api/listing-api?itemsperpage=100&listingtype=media_events&pathname=%2Fmedia-events')
+
+    def test_pdpc_external_listing_link_is_skipped_and_coverage_stays_partial(self):
+        import json
+        from urllib.parse import urlencode
+        from unittest.mock import patch
+        cfg={'source':'pdpc','enabled':True,'permissions':dict(collect=True,store=True,ai=True),
+             'listing':'https://www.pdpc.gov.sg/api/listing-api?'+urlencode({'itemsperpage':10,'listingtype':'media_events','pathname':'/media-events'}),
+             'hosts':['www.pdpc.gov.sg'],'source_id':'x'}
+        rows=[{'href':f'/media-events/item{i}','title':f'Item {i}','date':'2026-10-03'} for i in range(10)]
+        rows[7]['href']='https://www.mddi.gov.sg/newsroom/speech'
+        body=json.dumps({'totalItems':10,'data':rows}).encode()
+        class Client:
+            calls=[]
+            def get(this,url):
+                this.calls.append(url)
+                if url==cfg['listing']: return body,url,'text/plain'
+                if 'www.pdpc.gov.sg' not in url: raise AssertionError('unapproved hosts must not be fetched')
+                return b'<html/>',url,'text/html'
+        class Store:
+            def resume(this,*args): return None
+            def checkpoint(this,*args): raise AssertionError('incomplete listing cannot checkpoint')
+            def ingest(this,*args): return {'item_created':True,'content_changed':False}
+        client=Client()
+        parsed={'published_date':'2026-10-03','content_text':'Body','metadata':{'relevance_reason':'test','ai_ready':True}}
+        with patch.object(self.core.parsers,'extract_document',return_value=parsed):
+            result=self.core.collect(cfg,client,Store(),'2026-10-01','2026-10-01')
+        self.assertEqual(result['excluded_unapproved_host_count'],1)
+        self.assertEqual(result['status'],'partial')
+        self.assertFalse(result['coverage_complete'])
+        self.assertEqual(result['reason'],'unapproved_external_listing_links')
+        self.assertEqual(len(client.calls),10)
+
     def test_next_page_only_uses_real_link(self):
         rows,next_page=self.parsers.discover('edpb','<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>','https://www.edpb.europa.eu/news_en')
         self.assertEqual(next_page,'https://www.edpb.europa.eu/news_en?page=1'); self.assertEqual(len(rows),1)
