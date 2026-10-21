@@ -96,6 +96,23 @@ class CollectorTests(unittest.TestCase):
         st=Store();result=self.core.collect(cfg,Client(),st,'2026-10-01','2026-10-13')
         self.assertEqual(st.failures,0);self.assertEqual(result['status'],'failed')
 
+    def test_page_limit_is_resumable_without_advancing_checkpoint(self):
+        cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}
+        class Client:
+            def get(this,url):
+                h='<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>' if url.endswith('news_en') else '<h2 class="node-article-full__title">A</h2><time class="node-article-full__date">7 October 2026</time><div class="node-article-full__body">Personal data policy statement.</div>'
+                return h.encode(),url,'text/html'
+        class Store:
+            cursor=None
+            def progress(this,cfg,since,until,cursor): this.cursor=cursor
+            def ingest(this,*args): return {'item_created':True}
+            def checkpoint(this,*args): raise AssertionError('incomplete scope checkpointed')
+        store=Store()
+        result=self.core.collect(cfg,Client(),store,'2026-10-01','2026-10-13',max_pages=1)
+        self.assertEqual(result['status'],'partial')
+        self.assertEqual(result['reason'],'page_limit')
+        self.assertEqual(store.cursor['page'],'https://www.edpb.europa.eu/news_en?page=1')
+
     def test_backfill_resumes_at_next_item_after_document_limit(self):
         cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}
         class Client:
@@ -113,7 +130,10 @@ class CollectorTests(unittest.TestCase):
             def discovery_failure(this,*args): pass
             def checkpoint(this,*args): pass
         st=Store();cl=Client()
-        self.core.collect(cfg,cl,st,'2026-10-01','2026-10-13',max_items=1)
+        first=self.core.collect(cfg,cl,st,'2026-10-01','2026-10-13',max_items=1)
+        self.assertEqual(first['status'],'partial')
+        self.assertEqual(first['reason'],'document_limit')
+        self.assertFalse(first['coverage_complete'])
         self.core.collect(cfg,cl,st,'2026-10-01','2026-10-13',max_items=1)
         self.assertEqual(cl.fetched,['https://www.edpb.europa.eu/news/a_en','https://www.edpb.europa.eu/news/b_en'])
 

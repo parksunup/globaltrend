@@ -119,7 +119,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
     try:
         while page:
             page=canonical_url(page,set(config['hosts']))
-            if page in seen_pages or result['pages']>=max_pages: raise FetchError('pagination_cycle_or_page_limit')
+            if page in seen_pages: raise FetchError('pagination_cycle')
+            if result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
             if not rows: raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
@@ -174,5 +175,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         result['reason']=None if result['coverage_complete'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
         if result['coverage_complete']: store.checkpoint(config,until)
     except (FetchError,ValueError) as e:
-        result['status']='failed'; result['reason']=str(e); result['coverage_complete']=False
+        # Ordinary batch boundaries preserve the cursor for the next run. They
+        # do not establish complete coverage, but are not collection failures.
+        result['status']='partial' if str(e) in ('document_limit','page_limit') else 'failed'
+        result['reason']=str(e); result['coverage_complete']=False
     return result

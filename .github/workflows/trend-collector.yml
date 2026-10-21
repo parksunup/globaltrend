@@ -42,11 +42,16 @@ jobs:
        vars.CLOUD_PIPELINE_VERIFIED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        source: ${{ fromJSON(inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
       REQUESTED_MODE: ${{ github.event_name == 'schedule' && 'write' || inputs.mode || 'dry-run' }}
       RUN_EVENT: ${{ github.event_name }}
       SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
-      SOURCE_SELECTION: ${{ inputs.source || 'all' }}
+      SOURCE_SELECTION: ${{ matrix.source }}
       RANGE_START: ${{ inputs.since }}
       RANGE_END: ${{ inputs.until }}
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
@@ -71,7 +76,15 @@ jobs:
           if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
           if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi
+          set +e
           python -m scripts.collector.run "${args[@]}"
+          collector_exit=$?
+          set -e
+          if [ "$collector_exit" -eq 3 ]; then
+            echo '::warning::Collection is partial; consult the JSON summary and saved resume cursor. Complete coverage is not verified.'
+          else
+            exit "$collector_exit"
+          fi
       - name: Summarize bounded execution log without paid artifact storage
         if: always()
         run: |
