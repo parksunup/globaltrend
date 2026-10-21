@@ -32,18 +32,27 @@ Deno.serve(async (req: Request) => {
   }
   const started = new Date().toISOString(),
     execution = Deno.env.get("SB_EXECUTION_ID") || crypto.randomUUID();
+  let msg: {
+    msg_id: number;
+    read_ct: number;
+    source_id: string;
+    slug: string;
+    state: State;
+  } | null = null;
   try {
-    const msg = await rpc("collector_edge_take");
+    msg = await rpc("collector_edge_take");
     if (!msg) return Response.json({ status: "idle", execution_id: execution });
+    const active = msg;
     const config = registry.sources.find((x) =>
-      x.source_id === msg.source_id && x.source === msg.slug
+      x.source_id === active.source_id && x.source === active.slug
     );
     if (!config) throw new Error("registry_mismatch");
     if (
-      !await rpc("collector_source_allowed", {
-        p_source_id: config.source_id,
-      }) || !(await rpc("collector_capacity")).can_write
-    ) throw new Error("database_approval_or_capacity");
+      !await rpc("collector_source_allowed", { p_source_id: config.source_id })
+    ) throw new Error("source_approval_revoked");
+    if (!(await rpc("collector_capacity")).can_write) {
+      throw new Error("database_storage_cap");
+    }
     const ingest = async (item: Item, url: string) => {
       if (!(await rpc("collector_capacity")).can_write) {
         throw new Error("database_storage_cap");
@@ -105,6 +114,30 @@ Deno.serve(async (req: Request) => {
     });
   } catch (e) {
     const reason = e instanceof Error ? e.message : "error";
+    // Finish failures themselves are not retried with a second write: the
+    // original queue lease stays intact and pg_net retains the HTTP failure.
+    // Source/registry gating failures can be recorded with bounded backoff.
+    if (msg && !reason.startsWith("database_")) {
+      try {
+        await rpc("collector_edge_finish", {
+          p_msg_id: msg.msg_id,
+          p_read_ct: msg.read_ct,
+          p_source_id: msg.source_id,
+          p_state: { ...msg.state, failures: (msg.state.failures || 0) + 1 },
+          p_result: {
+            status: "blocked",
+            reason,
+            source: msg.slug,
+            runtime: "supabase-edge",
+            coverage_complete: false,
+          },
+          p_execution_id: execution,
+          p_started_at: started,
+          p_continue: true,
+          p_delay: 3600,
+        });
+      } catch { /* Original queue lease and platform HTTP outcome remain. */ }
+    }
     console.error(
       /^[a-z_0-9]+$/i.test(reason) ? reason : "collector_runtime_error",
     );

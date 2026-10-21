@@ -18,6 +18,9 @@ export type Config = {
 export type State = {
   since: string;
   until: string;
+  adapter_version?: string;
+  is_backlog?: boolean;
+  parked?: State;
   page?: string;
   rows?: Row[];
   next?: string | null;
@@ -215,7 +218,13 @@ export async function advance(
     until: state.until,
   };
   try {
-    state.page ||= state.legacy_cursor?.page || c.listing;
+    if (!state.adapter_version && !state.is_backlog && state.legacy_cursor) {
+      state.page = c.listing;
+      delete state.rows;
+      state.offset = 0;
+    }
+    state.adapter_version = "edge-v1";
+    state.page ||= c.listing;
     if (!state.rows) {
       const found = await listing(c, http, canonical(state.page, c.hosts));
       if (!found.rows.length) {
@@ -280,6 +289,7 @@ export async function advance(
       result.url = url;
       result.read_scope = item.metadata.read_scope;
       result.published_date = item.published_date;
+      if (state.is_backlog) return { state, result, continue: false, delay: 0 };
     } else if (state.next) {
       state.page = canonical(state.next, c.hosts);
       delete state.rows;
@@ -308,6 +318,26 @@ export async function advance(
       : "runtime_" + (e instanceof Error ? e.name : "error");
     result.offset = state.offset || 0;
     result.page = state.page;
+    if (
+      !state.is_backlog && state.rows?.[state.offset || 0] &&
+      state.failures >= 3 && !reason.startsWith("database_")
+    ) {
+      // finish() persists this failed position and its own queue message atomically
+      // before advancing the main scan. No failed document is discarded.
+      state.parked = {
+        since: state.since,
+        until: state.until,
+        page: state.page,
+        rows: [state.rows[state.offset || 0]],
+        offset: 0,
+        is_backlog: true,
+        adapter_version: "edge-v1",
+        failures: state.failures,
+      };
+      state.offset = (state.offset || 0) + 1;
+      state.failures = 0;
+      result.failed_item_preserved = true;
+    }
     return {
       state,
       result,

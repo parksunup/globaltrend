@@ -78,3 +78,40 @@ Deno.test("unknown date is stored unready and remains an explicit incomplete ite
   eq(result.state.unknown_dates, 1);
   eq(result.result.status, "partial");
 });
+Deno.test("third non-database detail failure parks a durable retry and lets the source continue", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: config.listing,
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+    failures: 2,
+  };
+  const step = await advance(config, state, {
+    request: () => Promise.reject(new Error("unsupported_document_type")),
+  }, async () => ({}));
+  eq(step.state.offset, 1);
+  eq(step.state.parked?.rows?.[0].url, state.rows![0].url);
+  eq(step.result.status, "failed");
+});
+Deno.test("adapter changes restart discovery in the original range and retain legacy cursor", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    legacy_cursor: { page: config.listing + "?page=6", offset: 20 },
+  };
+  let called = "";
+  const step = await advance(config, state, {
+    request: async (url) => {
+      called = url;
+      return {
+        bytes: new TextEncoder().encode('<main><a href="/news/a">a</a></main>'),
+        url,
+        type: "text/html",
+      };
+    },
+  }, async () => ({}));
+  eq(called, config.listing);
+  eq(step.state.legacy_cursor, state.legacy_cursor);
+  eq(step.state.since, state.since);
+});
