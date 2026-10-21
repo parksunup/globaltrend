@@ -157,6 +157,7 @@ class AutomationTests(unittest.TestCase):
         self.assertIsNotNone(store.cursor, 'failed detail must retain a retry cursor')
         self.assertEqual(store.cursor['offset'],0)
         self.assertEqual(first['status'],'failed')
+        self.assertEqual(first['failed_url'],'https://www.edpb.europa.eu/news/a_en')
         client.failed=False
         second=collect(cfg,client,store,'2026-10-01','2026-10-13')
         self.assertEqual(client.fetched,['https://www.edpb.europa.eu/news/a_en','https://www.edpb.europa.eu/news/a_en','https://www.edpb.europa.eu/news/b_en'])

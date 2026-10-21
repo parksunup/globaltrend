@@ -177,6 +177,7 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         result[key]+=1
                         if date is None: result['held']+=1
                 except (FetchError,ValueError) as e:
+                    result['failed_url']=url
                     if str(e).startswith('database_'): raise
                     result['failed']+=1
                     store.discovery_failure(config,url,row.get('title'),str(e))
