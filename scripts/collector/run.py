@@ -41,6 +41,8 @@ def probe_source(config,client,sample_urls):
                 'language':document.html.get('lang') if document.html else None,
                 'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
             }
+            if not title and not document.select_one('main,article,h1'):
+                record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
         rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
         if not rows: raise ValueError('listing_empty_or_structure_changed')
         record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
