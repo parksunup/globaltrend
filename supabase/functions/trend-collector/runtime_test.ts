@@ -1,0 +1,80 @@
+import { advance, type State } from "./runtime.ts";
+const eq = (a: unknown, b: unknown) => {
+  if (JSON.stringify(a) !== JSON.stringify(b)) {
+    throw new Error(`${JSON.stringify(a)} != ${JSON.stringify(b)}`);
+  }
+};
+const config = {
+  source: "edpb",
+  source_id: "source",
+  listing: "https://www.edpb.europa.eu/news_en",
+  hosts: ["www.edpb.europa.eu"],
+  language: "en",
+};
+Deno.test("failed detail preserves exact position and range for retry", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: config.listing,
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+  };
+  const result = await advance(config, state, {
+    request: () => Promise.reject(new Error("http_403")),
+  }, async () => {
+    throw new Error("unexpected ingest");
+  });
+  eq(result.state.offset, 0);
+  eq(result.state.since, state.since);
+  eq(result.result.status, "failed");
+  eq(result.continue, true);
+});
+Deno.test("successful duplicate advances only after ingest and preserves incomplete coverage", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: config.listing,
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+  };
+  let stored = 0;
+  const html =
+    '<h1 class="node-article-full__title">x</h1><time class="node-article-full__date">21 October 2026</time><div class="node-article-full__body">Original complete article body long enough.</div>';
+  const result = await advance(config, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode(html),
+      url: state.rows![0].url,
+      type: "text/html",
+    }),
+  }, async () => {
+    stored++;
+    return { item_created: false, content_changed: false };
+  });
+  eq(stored, 1);
+  eq(result.state.offset, 1);
+  eq(result.result.saved, "duplicate");
+  eq(result.result.coverage_complete, false);
+});
+Deno.test("unknown date is stored unready and remains an explicit incomplete item", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: config.listing,
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+  };
+  const html =
+    '<h1 class="node-article-full__title">x</h1><div class="node-article-full__body">Original complete article body long enough.</div>';
+  const result = await advance(config, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode(html),
+      url: state.rows![0].url,
+      type: "text/html",
+    }),
+  }, async (item) => {
+    eq(item.metadata.ai_ready, false);
+    return {};
+  });
+  eq(result.state.unknown_dates, 1);
+  eq(result.result.status, "partial");
+});
