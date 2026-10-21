@@ -115,3 +115,21 @@ Deno.test("adapter changes restart discovery in the original range and retain le
   eq(step.state.legacy_cursor, state.legacy_cursor);
   eq(step.state.since, state.since);
 });
+Deno.test("text-only press release PDF preserves unread annotation targets", async () => {
+  const fixture =
+    (await import("./pdf_fixture.json", { with: { type: "json" } })).default;
+  const { extractPressReleasePDF } = await import("./runtime.ts");
+  const item = await extractPressReleasePDF(
+    Uint8Array.from(atob(fixture.base64), (c) => c.charCodeAt(0)),
+    {
+      url: "https://example.test/synthetic.pdf",
+      title: "Synthetic press release",
+    },
+  );
+  eq(item.metadata.read_scope, "press_release_pdf_not_judgment");
+  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.unread_attachments, [
+    "https://example.test/unread-decision",
+  ]);
+  eq(item.published_date, "2026-10-21");
+});

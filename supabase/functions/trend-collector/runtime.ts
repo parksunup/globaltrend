@@ -121,7 +121,10 @@ async function listing(c: Config, http: HTTP, page: string) {
   ) throw new Error("unsupported_listing_type");
   return discover(c.source, text, r.url);
 }
-async function pdf(bytes: Uint8Array, row: Row): Promise<Item> {
+export async function extractPressReleasePDF(
+  bytes: Uint8Array,
+  row: Row,
+): Promise<Item> {
   // Text-only PDF adapter; no Node canvas, OCR, browser, Python or paid service.
   const lib = await import("npm:pdfjs-dist@4.10.38/legacy/build/pdf.mjs");
   const worker = await import(
@@ -140,6 +143,13 @@ async function pdf(bytes: Uint8Array, row: Row): Promise<Item> {
       throw new Error("pdf_page_limit");
     }
     const pages: { page: number; text: string }[] = [];
+    const related: {
+      url: string;
+      title: string;
+      page: number;
+      read: boolean;
+    }[] = [];
+    const unresolved: { href: string; title: string; reason: string }[] = [];
     for (let i = 1; i <= doc.numPages; i++) {
       const page = await doc.getPage(i);
       const content = await page.getTextContent();
@@ -150,6 +160,27 @@ async function pdf(bytes: Uint8Array, row: Row): Promise<Item> {
       );
       if (text.length < 20) throw new Error("pdf_text_missing_or_ocr_required");
       pages.push({ page: i, text });
+      for (const annotation of await page.getAnnotations()) {
+        const raw = annotation.url || annotation.unsafeUrl;
+        if (typeof raw !== "string") continue;
+        try {
+          const target = new URL(raw);
+          if (target.protocol === "https:") {
+            related.push({
+              url: target.href,
+              title: "PDF link",
+              page: i,
+              read: false,
+            });
+          }
+        } catch {
+          unresolved.push({
+            href: raw,
+            title: "PDF link",
+            reason: "malformed_source_href",
+          });
+        }
+      }
     }
     const body = normalize(pages.map((x) => x.text).join(" "));
     if (body.length > 80000) {
@@ -192,8 +223,9 @@ async function pdf(bytes: Uint8Array, row: Row): Promise<Item> {
         read_scope: "press_release_pdf_not_judgment",
         date_observations: obs,
         requires_review: true,
-        related_documents: [],
-        unread_attachments: [],
+        related_documents: related,
+        unresolved_links: unresolved,
+        unread_attachments: related.map((x) => x.url),
         factual_status: "nonbinding_press_release_not_judgment",
         ai_ready: false,
         pdf_pages: pages,
@@ -258,7 +290,7 @@ export async function advance(
       const response = await http.request(url);
       let item: Item;
       if (c.source === "curia" && response.type === "application/pdf") {
-        item = await pdf(response.bytes, row);
+        item = await extractPressReleasePDF(response.bytes, row);
       } else {
         if (!["text/html", "application/xhtml+xml"].includes(response.type)) {
           throw new Error("unsupported_document_type");
