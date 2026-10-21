@@ -55,3 +55,25 @@ Deno.test("invalid complete dates are rejected", () => {
   eq(parseDate("31 February 2026"), null);
   eq(parseDate("21 October 2026"), "2026-10-21");
 });
+Deno.test("displayed ordinal publication dates remain valid without inference", () => {
+  eq(parseDate("01st October 2026"), "2026-10-01");
+});
+Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
+  const p = discover(
+    "ftc",
+    '<?xml version="1.0"?><rss><channel><item><title>A real title</title><link>https://www.ftc.gov/news-events/news/press-releases/a</link></item></channel></rss>',
+    "https://www.ftc.gov/feed.xml",
+  );
+  eq(p.rows[0]?.url, "https://www.ftc.gov/news-events/news/press-releases/a");
+});
+Deno.test("historical fullwidth Japanese dates preserve the original date meaning", () => {
+  eq(parseDate("令和８年７月17日"), "2026-07-17");
+});
+Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
+  const x = await extract(
+    "edpb",
+    '<h1 class="node-article-full__title">Notice</h1><time class="node-article-full__date">21 October 2026</time><div class="node-article-full__body"><p>See the <a href="/report">official report</a>.</p><p>The <strong>next</strong> step.</p></div>',
+    "https://www.edpb.europa.eu/news/x",
+  );
+  eq(x.content_text, "See the official report . The next step.");
+});

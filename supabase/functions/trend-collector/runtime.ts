@@ -187,7 +187,7 @@ async function pdf(bytes: Uint8Array, row: Row): Promise<Item> {
       content_hash: await sha(body),
       published_date: date,
       metadata: {
-        normalization_version: "main-body-nfc-v1",
+        normalization_version: "edge-pdf-text-nfc-v1",
         parser_version: "edge-curia-pdf-v1",
         read_scope: "press_release_pdf_not_judgment",
         date_observations: obs,
@@ -218,12 +218,16 @@ export async function advance(
     until: state.until,
   };
   try {
-    if (!state.adapter_version && !state.is_backlog && state.legacy_cursor) {
+    if (
+      state.adapter_version !== "edge-v2" && !state.is_backlog &&
+      state.legacy_cursor
+    ) {
       state.page = c.listing;
       delete state.rows;
       state.offset = 0;
+      state.seen_pages = [];
     }
-    state.adapter_version = "edge-v1";
+    state.adapter_version = "edge-v2";
     state.page ||= c.listing;
     if (!state.rows) {
       const found = await listing(c, http, canonical(state.page, c.hosts));

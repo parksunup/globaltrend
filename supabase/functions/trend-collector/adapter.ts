@@ -1,4 +1,4 @@
-import { parseHTML } from "npm:linkedom@0.18.12";
+import { DOMParser, parseHTML } from "npm:linkedom@0.18.12";
 export type Row = {
   url: string;
   title: string;
@@ -21,7 +21,10 @@ export function canonical(value: string, hosts: string[]): string {
   return u.href;
 }
 export function parseDate(value: string): string | null {
-  const s = normalize(value).toLowerCase();
+  const s = normalize(value).replace(
+    /[０-９]/g,
+    (c) => String(c.charCodeAt(0) - 0xFF10),
+  ).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1");
   let y: number, m: number, d: number;
   const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:t.*)?$/);
   const era = s.match(/(令和|平成)(元|\d+)年\s*(\d+)月\s*(\d+)日/);
@@ -102,8 +105,9 @@ export function discover(
     if (/<!DOCTYPE|<!ENTITY/i.test(html)) {
       throw new Error("xml_entities_rejected");
     }
+    const xml = new DOMParser().parseFromString(html, "text/xml");
     return {
-      rows: [...document.querySelectorAll("item")].map((x) => ({
+      rows: [...xml.querySelectorAll("item")].map((x) => ({
         url: normalize(x.querySelector("link")?.textContent || ""),
         title: normalize(x.querySelector("title")?.textContent || ""),
       })).filter((x) => x.url),
@@ -337,13 +341,17 @@ export async function extract(
       )
     ) x.remove();
   }
-  // DOM textContent does not insert spaces between block elements.
-  for (const n of nodes) {
-    for (const x of n.querySelectorAll("p,li,h2,h3,div,br")) {
-      x.append(document.createTextNode(" "));
+  // Match BeautifulSoup get_text(' ', strip=True): separators between every
+  // nonempty text node, including inline anchors and punctuation.
+  const textNodes = (node: Node): string[] => {
+    if (node.nodeType === 3) {
+      return node.textContent?.trim() ? [node.textContent.trim()] : [];
     }
-  }
-  const body = normalize(nodes.map((n) => n.textContent || "").join(" "));
+    return [...node.childNodes].flatMap(textNodes);
+  };
+  const body = normalize(
+    nodes.map((n) => textNodes(n as unknown as Node).join(" ")).join(" "),
+  );
   if (body.length < 10) throw new Error("empty_body");
   if (body.length > 80000) {
     throw new Error("long_document_requires_chunked_reading");
@@ -367,7 +375,7 @@ export async function extract(
   if (row?.date_observations) observations.push(...row.date_observations);
   if (source === "ppc") {
     const match = document.title.match(
-      /公表[（(]((?:令和|平成)(?:元|\d+)年\s*\d+月\s*\d+日)[）)]/,
+      /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
     );
     if (match) {
       observations.push({

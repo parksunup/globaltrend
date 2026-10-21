@@ -31,7 +31,7 @@ Deno.serve(async (req: Request) => {
     return new Response("Method not allowed", { status: 405 });
   }
   const started = new Date().toISOString(),
-    execution = Deno.env.get("SB_EXECUTION_ID") || crypto.randomUUID();
+    execution = crypto.randomUUID();
   let msg: {
     msg_id: number;
     read_ct: number;
@@ -99,6 +99,7 @@ Deno.serve(async (req: Request) => {
         ...step.result,
         runtime: "supabase-edge",
         execution_id: execution,
+        platform_execution_id: Deno.env.get("SB_EXECUTION_ID") || null,
         git_sha: Deno.env.get("TREND_COLLECTOR_GIT_SHA") || "unknown",
         read_ct: msg.read_ct,
       },

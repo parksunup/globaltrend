@@ -21,3 +21,16 @@ begin
  if exists(select 1 from pgmq.q_trend_collect where msg_id=(m->>'msg_id')::bigint) then raise exception 'old message not removed';end if;
 end; $$;
 select 'runtime disabled/dedup/lease/retry checks passed' as result;
+do $$
+declare m jsonb; eid uuid;
+begin
+ update public.collector_edge_sources set state=jsonb_build_object('since','2026-09-21','until',((now() at time zone 'Asia/Seoul')::date-1)::text);
+ m=public.collector_edge_take();
+ if m#>>'{state,until}' <> ((now() at time zone 'Asia/Seoul')::date)::text then raise exception 'range end frozen';end if;
+ eid=public.collector_edge_finish((m->>'msg_id')::bigint,(m->>'read_ct')::int,(m->>'source_id')::uuid,
+ (m->'state')||jsonb_build_object('parked',jsonb_build_object('since','2026-09-21','until','2026-10-21','rows',jsonb_build_array(jsonb_build_object('url','https://example.test/unread','title','synthetic rollback-only')),'is_backlog',true,'offset',0)),
+ '{"status":"failed","coverage_complete":false}','rollback-test',now(),true,0);
+ if (select count(*) from public.collector_edge_backlog)<>1 then raise exception 'failed item lost';end if;
+ if (select count(*) from pgmq.q_trend_collect)<>10 then raise exception 'main or retry message lost';end if;
+end; $$;
+select 'range expansion and independent durable failed-item retry passed' as result;
