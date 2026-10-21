@@ -86,6 +86,9 @@ class HttpClient:
                 # Do not include credentials or proxy URLs in logs.
                 if isinstance(e,urllib.error.URLError) and 'Tunnel connection failed: 403' in str(e.reason):
                     raise FetchError('network_policy_denied_403') from None
+                if attempt<2 and isinstance(e,(urllib.error.URLError,TimeoutError,OSError)):
+                    time.sleep(1+attempt)
+                    continue
                 raise FetchError('network_or_redirect_failure:'+type(e).__name__) from None
     def check_robots(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname

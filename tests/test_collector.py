@@ -117,6 +117,21 @@ class CollectorTests(unittest.TestCase):
             with self.assertRaisesRegex(self.core.FetchError,'^http_403$'):
                 client.request('https://www.ftc.gov/a')
 
+    def test_timeout_retries_twice_before_returning_content(self):
+        from io import BytesIO
+        from unittest.mock import patch
+        client=self.core.HttpClient(['www.ftc.gov'],interval=0)
+        class Headers(dict):
+            def get_content_type(self): return 'text/html'
+        class Response(BytesIO):
+            headers=Headers({'Content-Length':'2'})
+            url='https://www.ftc.gov/a'
+        response=Response(b'ok')
+        with patch.object(client.opener,'open',side_effect=[TimeoutError(),response]) as opened, patch.object(self.core.time,'sleep'):
+            data,final,ctype=client.request('https://www.ftc.gov/a')
+        self.assertEqual((data,final,ctype),(b'ok','https://www.ftc.gov/a','text/html'))
+        self.assertEqual(opened.call_count,2)
+
     def test_robots_access_failure_is_reported_at_robots_boundary(self):
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
