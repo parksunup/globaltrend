@@ -156,8 +156,10 @@ def extract(source, html, url):
     dates=[parse_date(o['value']) for o in observations]
     distinct=set(d for d in dates if d)
     published=parse_date(ppc_title_date) if ppc_title_date else next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
+    unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
+    requires_review=published is None or unread_ppc_pdf
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
-              'requires_review':published is None,'related_documents':related,'unread_attachments':[r['url'] for r in related],
+              'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(title.get_text()),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':metadata}
 

@@ -234,6 +234,32 @@ HTML에는 제목과 화면상 날짜만 있고 기사 본문 노드가 없습�
 않았지만 이 실행만으로 DPC 한 달 범위의 완전성은 입증되지 않았습니다. 새 초안이나
 공개 보고서를 자동 생성하지 않았습니다.
 
+## 최신 robots-aware 읽기 전용 probe
+
+관리형 Codex 환경의 무쓰기 probe `5d73430f-0039-49b6-aee3-94afb9c0ec53`는 기존
+9개 출처 모두에서 목록과 표본 상세를 파싱했습니다. 이 결과는 읽기 경로 확인일
+뿐이며 운영 DB 수집·범위 완전성 증명이 아닙니다. OECD 표본은 화면 표시일
+`2026-10-15`, HTML의 `datetime`은 `2026-10-14`로 달라 날짜를 미확정으로 두었습니다.
+PPC 표본은 페이지 제목의 명시적 공표일 `2026-10-07`을 식별했지만 HTML 본문은 162자,
+미열람 첨부 2건이었습니다. 첨부 PDF를 읽기 전에는 검토 필요·`ai_ready=false`로
+남기도록 했습니다.
+
+같은 코드의 GitHub Actions 무쓰기 probe [39570805523](https://github.com/parksunup/globaltrend/actions/runs/39570805523)
+및 PPC 날짜 수정 후 [39571249650](https://github.com/parksunup/globaltrend/actions/runs/39571249650)은
+각각 EDPB, CURIA, CNIL, ICO, DPC, PPC 6개 출처의 목록·표본 파싱을 통과했습니다.
+반면 세 출처는 계속 runner 접근 단계에서 실패했습니다.
+
+| 출처 | GitHub runner 결과 | 관측된 경계 |
+|---|---|---|
+| OECD | `http_403` | 개인정보 주제 목록과 상세 요청 모두 403 |
+| FTC | `robots_fetch_failed:http_403` | robots.txt 요청이 403; 정책을 우회하지 않음 |
+| PDPC | JSON 파싱 실패 | 공식 목록과 상세가 `text/html`, 0바이트 응답 |
+
+무쓰기 probe는 모두 `operation_success=false`, `coverage_complete=false`이며 DB에
+자료를 제출하지 않았습니다. 관리형 환경에서 접근되는 OECD·FTC·PDPC를 GitHub Actions
+경로에서 성공했다고 간주할 수 없습니다. 외부 프록시나 새 서비스로 우회하는 설정은
+추가하지 않았습니다.
+
 따라서 이 검증으로 확인된 것은 일부 출처에서 제한된 수동 수집·DB 저장과 CI 경로가
 동작한다는 점입니다. 9개 출처의 월간 범위 완전성이나 무인 정기 운영 준비 완료는
 검증되지 않았습니다. 새 외부 서비스, 유료 API, 추가 출처, 예약 활성화, main 병합은

@@ -47,6 +47,29 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(item['published_date'],'2026-10-07')
         self.assertIn({'meaning':'published_title','locator':'document_title','value':'令和８年10月７日'},item['metadata']['date_observations'])
         self.assertEqual([o['value'] for o in item['metadata']['date_observations'] if o['meaning']=='notice_date_candidate'],['令和８年10月７日','令和８年10月９日'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
+
+    def test_ppc_unread_pdf_is_not_marked_ai_ready_by_collector(self):
+        listing='https://www.ppc.go.jp/news/press/'
+        listing_html='<main><ul class="news-list"><li><div class="news-text"><a href="/news/press/2026/example">Advisory</a></div></li></ul></main>'
+        article='''<html><head><title>公表（令和８年10月７日） ｜個人情報保護委員会</title></head>
+        <body><h1 class="page-ttl">大規模な漏えいへの注意喚起</h1><main class="l-main">
+        令和８年10月７日 公表資料 <a href="/assets/advisory.pdf">説明資料</a>
+        </main></body></html>'''
+        class Client:
+            def get(self,url):
+                return (listing_html.encode(),listing,'text/html') if url==listing else (article.encode(),url,'text/html')
+        class Store:
+            def resume(self,*args): return None
+            def ingest(self,cfg,url,item): self.item=item; return {'item_created':True,'content_changed':False}
+        config={'source':'ppc','enabled':True,'listing':listing,'hosts':['www.ppc.go.jp'],
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        store=Store()
+        self.core.collect(config,Client(),store,'2026-10-01','2026-10-31')
+        self.assertEqual(store.item['published_date'],'2026-10-07')
+        self.assertTrue(store.item['metadata']['requires_review'])
+        self.assertFalse(store.item['metadata']['ai_ready'])
 
     def test_empty_dynamic_and_bad_pdf_are_failures(self):
         with self.assertRaises(ValueError): self.parsers.extract('pdpc','<h1>A</h1><main></main>','https://www.pdpc.gov.sg/a')
