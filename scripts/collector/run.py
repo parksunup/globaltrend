@@ -176,8 +176,13 @@ def main():
     # One compact bounded local log even when preflight/progress/run-log RPC fails.
     output=Path(args.output); output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2))
+    summary_sources=[]
+    for source in result['sources']:
+        summary={k:v for k,v in source.items() if k!='requests'}
+        if args.probe: summary['requests']=source.get('requests',[])[:10]
+        summary_sources.append(summary)
     print(json.dumps({'run_id':result['run_id'],'mode':result['mode'],'outcome':result['outcome'],
-        'operation_success':result['operation_success'],'sources':[{k:v for k,v in r.items() if k!='requests'} for r in result['sources']]},ensure_ascii=False))
+        'operation_success':result['operation_success'],'sources':summary_sources},ensure_ascii=False))
     return {'failed':1,'blocked':2,'partial':3}.get(result['outcome'],0)
 
 if __name__=='__main__': sys.exit(main())
