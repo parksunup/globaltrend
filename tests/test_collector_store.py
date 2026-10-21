@@ -24,7 +24,7 @@ class StoreResponseTests(unittest.TestCase):
                          {'can_write': True})
 
     def test_nonempty_malformed_rpc_response_remains_a_failure(self):
-        with self.assertRaisesRegex(FetchError, '^database_rpc_failure:collector_capacity$'):
+        with self.assertRaisesRegex(FetchError, '^database_rpc_failure:collector_capacity:'):
             self.store(b'not json').rpc('collector_capacity', {})
 
     def test_first_automatic_backfill_uses_one_calendar_month(self):

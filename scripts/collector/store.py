@@ -27,7 +27,11 @@ class SupabaseStore:
             # PostgREST returns an empty 204 response for successful void RPCs
             # such as progress/checkpoint/run-log writes.
             return json.loads(data) if data.strip() else None
-        except Exception as e: raise FetchError('database_rpc_failure:'+name) from None
+        except Exception as e:
+            # The HTTP client emits only safe error categories/status codes;
+            # preserve them so operational logs distinguish API failures.
+            reason=str(e) if isinstance(e,FetchError) else type(e).__name__
+            raise FetchError('database_rpc_failure:'+name+':'+reason) from None
     def preflight(self,config):
         # Static registry eligibility is checked before this DB client is created.
         if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}):
