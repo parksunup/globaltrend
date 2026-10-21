@@ -31,6 +31,16 @@ def probe_source(config,client,sample_urls):
         body,final,ctype=fetch(listing)
         if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
             raise ValueError('unsupported_listing_type')
+        if ctype in ('text/html','application/xhtml+xml'):
+            # Bounded public-page diagnostics help distinguish a changed site
+            # template from an access/challenge page; never store the response.
+            document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
+            title=document.select_one('title')
+            record['listing_document']={
+                'title':parsers.normalize(title.get_text())[:200] if title else None,
+                'language':document.html.get('lang') if document.html else None,
+                'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
+            }
         rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
         if not rows: raise ValueError('listing_empty_or_structure_changed')
         record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
