@@ -10,6 +10,11 @@ on:
         type: choice
         options: [dry-run, probe, write]
         default: dry-run
+      source:
+        description: 'Manual source selection; scheduled runs use all approved sources'
+        type: choice
+        options: [all, edpb, oecd, curia, cnil, ico, dpc, pdpc, ppc, ftc]
+        default: all
       since:
         description: 'Optional backfill start YYYY-MM-DD (bounded; resume the same range)'
         type: string
@@ -41,6 +46,7 @@ jobs:
       REQUESTED_MODE: ${{ github.event_name == 'schedule' && 'write' || inputs.mode || 'dry-run' }}
       RUN_EVENT: ${{ github.event_name }}
       SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
+      SOURCE_SELECTION: ${{ inputs.source || 'all' }}
       RANGE_START: ${{ inputs.since }}
       RANGE_END: ${{ inputs.until }}
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
@@ -62,6 +68,7 @@ jobs:
           if [ "$REQUESTED_MODE" = "write" ]; then args+=(--write); fi
           if [ "$RUN_EVENT" = "schedule" ]; then args+=(--scheduled); fi
           if [ "$REQUESTED_MODE" = "probe" ]; then args+=(--probe); fi
+          if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
           if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi
           python -m scripts.collector.run "${args[@]}"

@@ -9,13 +9,13 @@
         "www.edpb.europa.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -26,13 +26,13 @@
         "www.oecd.org"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     },
     {
@@ -43,115 +43,115 @@
         "curia.europa.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "english_press_release_listing_and_pdf"
     },
     {
       "source": "cnil",
-      "source_id": null,
+      "source_id": "7e8b50e2-4dc6-4748-9de9-2d34c2380b47",
       "listing": "https://www.cnil.fr/fr/actualites",
       "hosts": [
         "www.cnil.fr"
       ],
       "language": "fr",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     },
     {
       "source": "ico",
-      "source_id": null,
+      "source_id": "d7c96a28-2fca-49ad-a631-3a62cf0a03b9",
       "listing": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
       "hosts": [
         "ico.org.uk"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "observed_internal_search_and_news_html"
     },
     {
       "source": "dpc",
-      "source_id": null,
+      "source_id": "b4a60458-7c61-485e-8de2-0d1126398f06",
       "listing": "https://www.dataprotection.ie/en/news-media/latest-news",
       "hosts": [
         "www.dataprotection.ie"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     },
     {
       "source": "pdpc",
-      "source_id": null,
+      "source_id": "ea7465ec-48fb-4b6e-8f82-7345da7e6a75",
       "listing": "https://www.pdpc.gov.sg/media-events",
       "hosts": [
         "www.pdpc.gov.sg"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "observed_listing_json_and_embedded_rsc_article"
     },
     {
       "source": "ppc",
-      "source_id": null,
+      "source_id": "1f948872-529c-4db2-85af-4740d5f2bae3",
       "listing": "https://www.ppc.go.jp/news/press/",
       "hosts": [
         "www.ppc.go.jp"
       ],
       "language": "ja",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     },
     {
       "source": "ftc",
-      "source_id": null,
+      "source_id": "430bd32d-19b1-4752-8280-7b2d2acbda88",
       "listing": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
       "hosts": [
         "www.ftc.gov"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "current_terms_and_free_limits_and_pipeline_not_verified",
+      "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
     }
   ]
