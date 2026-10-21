@@ -10,7 +10,10 @@ from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 
 MAX_BYTES=2_000_000
-MAX_REQUESTS=100
+# Per-process safety ceiling, independent of the per-run document/page inputs.
+# A 100-item backfill also performs progress and database RPC calls; the old
+# value of 100 unintentionally stopped a batch before its document limit.
+MAX_REQUESTS=1000
 class FetchError(Exception): pass
 
 def canonical_url(url,hosts):
