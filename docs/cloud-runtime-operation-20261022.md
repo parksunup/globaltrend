@@ -100,7 +100,7 @@ OECD 관련 보도자료 링크도 Python 발견 규칙에 추가했지만 현�
 - 최초 npm ci는 package-lock 부재로 EUSAGE였습니다. 저장소의 pnpm-lock으로 설치 후 앱/타입/빌드가 통과했습니다.
 - 터미널 git push는 `fatal: could not read Username for 'https://github.com': No such device or address`였습니다.
   기존 GitHub 연결 도구로 같은 파일을 별도 브랜치에 반영했고, 다시 fetch한 remote와 로컬의 전체 tree가 동일합니다.
-- 원격 CI `39670202628`은 05:26 조회 시 in_progress였습니다. 아직 통과 결과로 재사용하지 않습니다.
+- 원격 CI `39670202628`의 collector·collector-edge·database·verify 네 job이 모두 success임을 05:28 이전 재조회로 확인했습니다.
 - 보안 advisor는 기존 authenticated security-definer 관련 경고와 leaked password protection 경고를 반환했습니다.
   새 cloud route table은 RLS/worker 전용이며 anon/authenticated에 함수 실행 권한을 열지 않았습니다.
 
