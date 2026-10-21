@@ -19,7 +19,7 @@ def normalize(text):
 
 def parse_date(text):
     """Only a displayed complete date; no current-year or URL inference."""
-    text = normalize(text).lower()
+    text = normalize(text).translate(str.maketrans('０１２３４５６７８９','0123456789')).lower()
     era = re.search(r'(令和|平成)(元|\d+)年\s*(\d+)月\s*(\d+)日', text)
     try:
         if era:
@@ -141,15 +141,21 @@ def extract(source, html, url):
     if len(body)<10: raise ValueError('empty_body')
     if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=[]
+    ppc_title_date=None
     if date_node:
         observations.append({'meaning':'published_display','locator':date_sel or 'Date + strong','value':normalize(date_node.get_text())})
         if date_node.get('datetime'): observations.append({'meaning':'published_attribute','locator':'time@datetime','value':date_node['datetime']})
     if source=='ppc':
         # Do not select the first era date: notices can include enactment/update dates.
-        observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|\d+)年\s*\d+月\s*\d+日',body)]
+        observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日',body)]
+        page_title=normalize(soup.title.get_text()) if soup.title else ''
+        publication=re.search(r'公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]',page_title)
+        if publication:
+            ppc_title_date=publication[1]
+            observations.append({'meaning':'published_title','locator':'document_title','value':ppc_title_date})
     dates=[parse_date(o['value']) for o in observations]
     distinct=set(d for d in dates if d)
-    published=next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
+    published=parse_date(ppc_title_date) if ppc_title_date else next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
               'requires_review':published is None,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}

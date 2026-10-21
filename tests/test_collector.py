@@ -33,8 +33,20 @@ class CollectorTests(unittest.TestCase):
 
     def test_ppc_era_and_other_dates_are_not_conflated(self):
         self.assertEqual(self.parsers.parse_date('令和8年10月7日'),'2026-10-07')
+        self.assertEqual(self.parsers.parse_date('令和８年10月７日'),'2026-10-07')
         self.assertIsNone(self.parsers.parse_date('令和0年10月7日'))
         self.assertIsNone(self.parsers.parse_date('2026-02-30'))
+
+    def test_ppc_explicit_publication_date_in_title_wins_over_added_notice_date(self):
+        html='''<html><head><title>漏えい対応の公表（令和８年10月７日） ｜個人情報保護委員会</title></head>
+        <body><h1 class="page-ttl">漏えい対応の公表</h1><main class="l-main">
+        令和８年10月７日 個人情報保護委員会 公表資料 ※令和８年10月９日追加
+        <a href="/news/press/2026/example.pdf">説明資料</a>
+        </main></body></html>'''
+        item=self.parsers.extract('ppc',html,'https://www.ppc.go.jp/news/press/2026/example/')
+        self.assertEqual(item['published_date'],'2026-10-07')
+        self.assertIn({'meaning':'published_title','locator':'document_title','value':'令和８年10月７日'},item['metadata']['date_observations'])
+        self.assertEqual([o['value'] for o in item['metadata']['date_observations'] if o['meaning']=='notice_date_candidate'],['令和８年10月７日','令和８年10月９日'])
 
     def test_empty_dynamic_and_bad_pdf_are_failures(self):
         with self.assertRaises(ValueError): self.parsers.extract('pdpc','<h1>A</h1><main></main>','https://www.pdpc.gov.sg/a')
