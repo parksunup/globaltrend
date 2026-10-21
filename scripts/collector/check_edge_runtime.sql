@@ -34,3 +34,17 @@ begin
  if (select count(*) from pgmq.q_trend_collect)<>10 then raise exception 'main or retry message lost';end if;
 end; $$;
 select 'range expansion and independent durable failed-item retry passed' as result;
+do $$
+declare b public.collector_edge_backlog; m record; new_state jsonb;
+begin
+ select * into b from public.collector_edge_backlog limit 1;
+ select * into m from pgmq.q_trend_collect where message->>'source_id'=b.source_id::text and not(message ? 'backlog_id') limit 1;
+ perform pgmq.set_vt('trend_collect',m.msg_id,120);
+ new_state=jsonb_build_object('since',b.range_start,'until',b.range_end+1,'rows',b.state->'rows','offset',0,'is_backlog',true);
+ perform public.collector_edge_finish(m.msg_id,m.read_ct,b.source_id,jsonb_build_object('since',b.range_start,'until',b.range_end+1,'parked',new_state),
+  '{"status":"failed","coverage_complete":false}','duplicate-rollback-test',now(),true,0);
+ if (select count(*) from public.collector_edge_backlog where not resolved)<>1 then raise exception 'failed URL duplicated on range extension';end if;
+ if (select range_end from public.collector_edge_backlog where id=b.id)<>b.range_end+1 then raise exception 'pending range lost';end if;
+ if (select count(*) from pgmq.q_trend_collect where message ? 'backlog_id')<>1 then raise exception 'duplicate retry message';end if;
+end; $$;
+select 'failed URL deduplication across range extensions passed' as result;

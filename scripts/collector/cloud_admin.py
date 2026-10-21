@@ -17,6 +17,7 @@ BASE = 'https://api.supabase.com/v1/projects/emlgwhkgaihhrirhdpnp'
 MIGRATIONS = [ROOT / 'supabase/migrations' / name for name in [
     '20261021130000_collector_edge_runtime.sql',
     '20261021131500_collector_edge_backlog.sql',
+    '20261021133000_collector_backlog_dedup.sql',
 ]]
 
 def request(path, data=None, content_type='application/json', method=None):
