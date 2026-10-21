@@ -23,6 +23,8 @@ class FakeHTTPSHandler(urllib.request.HTTPSHandler):
             status = 200
         elif path == '/allowed':
             body = b''; status = 302; headers['Location'] = '/blocked'
+        elif path == '/http-redirect':
+            body = b''; status = 301; headers['Location'] = 'http://ico.org.uk/upgraded'
         else:
             body = b'The redirected body'; status = 200
         headers['Content-Type'] = 'text/plain'
@@ -51,6 +53,17 @@ class RedirectTests(unittest.TestCase):
         self.assertEqual(final, 'https://ico.org.uk/blocked')
         self.assertEqual(client.budget['requests'], len(handler.paths))
         self.assertEqual(client.requests, 3)
+
+    def test_same_host_http_redirect_is_upgraded_before_fetch(self):
+        client, handler = self.client()
+        body, final, _ = client.get('https://ico.org.uk/http-redirect')
+        self.assertEqual(body, b'The redirected body')
+        self.assertEqual(final, 'https://ico.org.uk/upgraded')
+        self.assertEqual(handler.paths, ['/robots.txt', '/http-redirect', '/upgraded'])
+
+    def test_http_redirect_to_unapproved_host_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, 'URL outside approved official hosts'):
+            SafeRedirect(['ico.org.uk']).redirect_request(None, None, 301, 'Moved', {}, 'http://other.example/path')
 
     def test_redirect_stops_before_exceeding_request_budget(self):
         client, handler = self.client()

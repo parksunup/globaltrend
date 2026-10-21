@@ -23,6 +23,13 @@ def canonical_url(url,hosts):
     query=[(k,v) for k,v in parse_qsl(p.query,keep_blank_values=True) if not k.lower().startswith('utm_') and k.lower() not in ('fbclid','gclid')]
     return urlunsplit(('https',p.hostname,p.path or '/',urlencode(sorted(query)),''))
 
+def canonical_redirect_url(url,hosts):
+    """Accept an HTTP-to-HTTPS upgrade only on the same approved host."""
+    p=urlsplit(url)
+    if p.scheme=='http' and p.hostname in hosts and not p.username and not p.password and p.port in (None,80):
+        url=urlunsplit(('https',p.hostname,p.path or '/',p.query,''))
+    return canonical_url(url,hosts)
+
 def is_unapproved_https_host(url,hosts):
     try: parsed=urlsplit(url)
     except ValueError: return False
@@ -46,7 +53,7 @@ def retry_delay(value):
 class SafeRedirect(urllib.request.HTTPRedirectHandler):
     def __init__(self,hosts): self.hosts=set(hosts)
     def redirect_request(self,req,fp,code,msg,headers,newurl):
-        canonical_url(newurl,self.hosts)
+        canonical_redirect_url(newurl,self.hosts)
         # Return the redirect to HttpClient so robots, rate and request limits
         # apply to each hop instead of urllib following it inside one open().
         return None
@@ -74,7 +81,7 @@ class HttpClient:
                 if e.code in (301,302,303,307,308):
                     if _redirects>=5 or not e.headers.get('Location'):
                         e.close(); raise FetchError('redirect_limit_or_location_missing') from None
-                    try: target=canonical_url(urljoin(url,e.headers['Location']),self.hosts)
+                    try: target=canonical_redirect_url(urljoin(url,e.headers['Location']),self.hosts)
                     except ValueError:
                         e.close(); raise FetchError('network_or_redirect_failure:ValueError') from None
                     status=e.code; e.close()
