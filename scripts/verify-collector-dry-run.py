@@ -12,7 +12,7 @@ result = subprocess.run([sys.executable, "-m", "scripts.collector.run", "--write
 if not output.exists():
     raise SystemExit(result.returncode or 1)
 data = json.loads(output.read_text(encoding="utf-8"))
-if result.returncode != 2 or data.get("mode") != "write" or data.get("outcome") != "blocked" or not data.get("sources"):
+if result.returncode != 2 or data.get("mode") != "write" or data.get("outcome") != "blocked" or not data.get("sources") or data.get("requests") != 0 or data.get("run_log", {}).get("status") != "skipped":
     raise SystemExit("Unexpected collector dry-run result")
 if any(source.get("status") != "held" or source.get("reason") != "schedule_not_enabled" for source in data["sources"]):
     raise SystemExit("Disabled schedule must block every source before network or DB access")
