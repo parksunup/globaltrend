@@ -90,7 +90,8 @@ class HttpClient:
     def check_robots(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname
         if origin not in self.robots:
-            data,_,_=self.request(origin+'/robots.txt')
+            try: data,_,_=self.request(origin+'/robots.txt')
+            except FetchError as e: raise FetchError('robots_fetch_failed:'+str(e)) from None
             robot=urllib.robotparser.RobotFileParser(); robot.parse(data.decode('utf-8','replace').splitlines())
             self.robots[origin]=robot
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
