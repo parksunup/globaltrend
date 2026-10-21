@@ -56,6 +56,15 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(created, 0)
         self.assertEqual(result['stop_reason'], 'schedule_not_enabled')
 
+    def test_write_on_mismatched_runner_never_creates_database_client(self):
+        code, result, created, calls = self.execute([self.config()], env={
+            'GITHUB_ACTIONS':'true', 'COLLECTOR_RUNNER':'self-hosted',
+            'COLLECTOR_ACTUAL_RUNNER':'github-hosted'})
+        self.assertEqual(code, 2)
+        self.assertEqual(created, 0)
+        self.assertEqual(calls, 0)
+        self.assertEqual(result['stop_reason'], 'runner_selection_mismatch')
+
     def test_database_approval_precedes_range_lookup_and_blocks_collection(self):
         class Store:
             run_id='test'

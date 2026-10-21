@@ -6,9 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'probe checks live parsers without writes; write needs verified pipeline and secrets'
+        description: 'preflight checks runtime, DB and sites without writes; write uses verified gates'
         type: choice
-        options: [dry-run, probe, write]
+        options: [dry-run, probe, preflight, write]
         default: dry-run
       source:
         description: 'Manual source selection; scheduled runs use all approved sources'
@@ -56,6 +56,9 @@ jobs:
       matrix:
         source: ${{ fromJSON(inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
+      COLLECTOR_RUNNER: github-hosted
+      COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
+      COLLECTOR_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
       REQUESTED_MODE: ${{ github.event_name == 'schedule' && 'write' || inputs.mode || 'dry-run' }}
       RUN_EVENT: ${{ github.event_name }}
       SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
@@ -79,6 +82,12 @@ jobs:
       - name: Collect within explicit limits
         shell: bash
         run: |
+          if [ "$REQUESTED_MODE" = "preflight" ]; then
+            args=(--output work/collector-result.json)
+            if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
+            python -m scripts.collector.preflight "${args[@]}"
+            exit $?
+          fi
           args=(--output work/collector-result.json)
           if [ "$REQUESTED_MODE" = "write" ]; then args+=(--write); fi
           if [ "$RUN_EVENT" = "schedule" ]; then args+=(--scheduled); fi
@@ -98,6 +107,7 @@ jobs:
           fi
       - name: Summarize bounded execution log without paid artifact storage
         if: always()
+        shell: bash
         run: |
           python - <<'PY'
           import os, pathlib

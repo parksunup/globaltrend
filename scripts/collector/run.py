@@ -10,6 +10,7 @@ from urllib.parse import urlsplit
 from .core import collect,HttpClient,FetchError
 from .store import SupabaseStore,DryStore
 from . import parsers
+from .environment import runtime_info, runtime_problem
 
 ROOT=Path(__file__).resolve().parents[2]
 def probe_source(config,client,sample_urls):
@@ -108,9 +109,10 @@ def main():
     if not configs: p.error('unknown source')
     result={'run_id':str(uuid.uuid4()),'started_at':dt.datetime.now(dt.timezone.utc).isoformat(),
       'mode':'probe' if args.probe else 'write' if args.write else 'dry_run','scheduled':args.scheduled,
-      'pr16_commit':registry['pr16_commit'],'sources':[], 'run_log':{'status':'skipped','reason':'no_eligible_collection'}}
+      'pr16_commit':registry['pr16_commit'],'runtime':runtime_info(),'sources':[], 'run_log':{'status':'skipped','reason':'no_eligible_collection'}}
     global_hold=None
     if args.scheduled and os.environ.get('SCHEDULE_ENABLED')!='true': global_hold='schedule_not_enabled'
+    elif args.write and runtime_problem(): global_hold=runtime_problem()
     elif args.write and not all(os.environ.get(k)=='true' for k in ('COLLECTION_ENABLED','FREE_LIMITS_VERIFIED','CLOUD_PIPELINE_VERIFIED')):
         global_hold='operation_cost_or_pipeline_checks_missing'
     store=None; attempted=False; database_stop=False; probe_failed=False
@@ -181,7 +183,7 @@ def main():
         summary={k:v for k,v in source.items() if k!='requests'}
         if args.probe: summary['requests']=source.get('requests',[])[:10]
         summary_sources.append(summary)
-    print(json.dumps({'run_id':result['run_id'],'mode':result['mode'],'outcome':result['outcome'],
+    print(json.dumps({'run_id':result['run_id'],'mode':result['mode'],'runtime':result['runtime'],'outcome':result['outcome'],
         'operation_success':result['operation_success'],'sources':summary_sources},ensure_ascii=False))
     return {'failed':1,'blocked':2,'partial':3}.get(result['outcome'],0)
 
