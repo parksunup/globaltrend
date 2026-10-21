@@ -48,6 +48,12 @@ Deno.serve(async (req: Request) => {
     );
     if (!config) throw new Error("registry_mismatch");
     if (
+      !config.enabled ||
+      !["collect", "store", "ai"].every((k) =>
+        config.permissions[k as keyof typeof config.permissions]
+      )
+    ) throw new Error("registry_permissions_revoked");
+    if (
       !await rpc("collector_source_allowed", { p_source_id: config.source_id })
     ) throw new Error("source_approval_revoked");
     if (!(await rpc("collector_capacity")).can_write) {

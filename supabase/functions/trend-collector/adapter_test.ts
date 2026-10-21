@@ -77,3 +77,16 @@ Deno.test("HTML extraction preserves historical Python text-node normalization",
   );
   eq(x.content_text, "See the official report . The next step.");
 });
+Deno.test("malformed source links remain unresolved and never become invented URLs", async () => {
+  const raw =
+    "https://Uber fined nearly 825 million euros for automated driver blocking";
+  const x = await extract(
+    "edpb",
+    `<h1 class="node-article-full__title">Notice</h1><time class="node-article-full__date">21 October 2026</time><div class="node-article-full__body"><p>Original body with an <a href="${raw}">underlying decision</a>.</p></div>`,
+    "https://www.edpb.europa.eu/news/x",
+  );
+  eq(x.metadata.related_documents.length, 0);
+  eq(x.metadata.unresolved_links[0].href, raw);
+  eq(x.metadata.ai_ready, false);
+  eq(x.content_text, "Original body with an underlying decision .");
+});

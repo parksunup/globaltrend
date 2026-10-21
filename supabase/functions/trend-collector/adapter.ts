@@ -327,13 +327,22 @@ export async function extract(
   nodes = nodes.filter((n) =>
     !nodes.some((other) => other !== n && other.contains(n))
   );
-  const related = nodes.flatMap((n) =>
-    [...n.querySelectorAll("a[href]")].map((a) => ({
-      url: new URL(a.getAttribute("href")!, url).href,
-      title: normalize(a.textContent || ""),
-      read: false,
-    }))
-  ).filter((x) => x.url.startsWith("https://"));
+  const related: { url: string; title: string; read: boolean }[] = [];
+  const unresolvedLinks: { href: string; title: string; reason: string }[] = [];
+  for (const n of nodes) {
+    for (const a of n.querySelectorAll("a[href]")) {
+      const href = a.getAttribute("href")!;
+      const title = normalize(a.textContent || "");
+      try {
+        const target = new URL(href, url);
+        if (target.protocol === "https:") {
+          related.push({ url: target.href, title, read: false });
+        }
+      } catch {
+        unresolvedLinks.push({ href, title, reason: "malformed_source_href" });
+      }
+    }
+  }
   for (const n of nodes) {
     for (
       const x of n.querySelectorAll(
@@ -389,7 +398,7 @@ export async function extract(
     ...new Set(observations.map((x) => parseDate(x.value)).filter(Boolean)),
   ];
   const date = dates.length === 1 ? dates[0] : null;
-  const requiresReview = !date ||
+  const requiresReview = unresolvedLinks.length > 0 || !date ||
     source === "ppc" &&
       related.some((x) => new URL(x.url).pathname.endsWith(".pdf"));
   return {
@@ -399,11 +408,12 @@ export async function extract(
     published_date: date,
     metadata: {
       normalization_version: "main-body-nfc-v1",
-      parser_version: "edge-adapter-v1",
+      parser_version: "edge-adapter-v2",
       read_scope: scope,
       date_observations: observations,
       requires_review: requiresReview,
       related_documents: related,
+      unresolved_links: unresolvedLinks,
       unread_attachments: related.map((x) => x.url),
       factual_status: "original_statement_not_independent_legal_finding",
       ai_ready: !requiresReview,
