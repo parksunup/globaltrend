@@ -1,8 +1,6 @@
-name: Trend collector (gated automation)
+name: Trend collector (manual validation)
 
 on:
-  schedule:
-    - cron: '17 22 * * *' # Next day 07:17 Asia/Seoul; default branch only.
   workflow_dispatch:
     inputs:
       mode:
@@ -11,7 +9,7 @@ on:
         options: [dry-run, probe, preflight, write]
         default: dry-run
       source:
-        description: 'Manual source selection; scheduled runs use all approved sources'
+        description: 'Source selection for this manual validation run'
         type: choice
         options: [all, edpb, oecd, curia, cnil, ico, dpc, pdpc, ppc, ftc]
         default: all
@@ -30,9 +28,9 @@ on:
         type: string
         default: '10'
 
-# The scheduled job is blocked before runner allocation unless every runtime
-# switch is explicitly true. Defining cron on this PR branch does not activate
-# it: GitHub schedules use the default branch. No variable is changed here.
+# architecture.md 3.1 assigns collection scheduling to Supabase Cron + Queues.
+# Keep Actions manual-only so merging this workflow cannot enable a second
+# collection scheduler. Manual writes still require the existing runtime gates.
 permissions:
   contents: read
 
@@ -42,12 +40,6 @@ concurrency:
 
 jobs:
   collect:
-    if: >-
-      github.event_name != 'schedule' ||
-      (vars.SCHEDULE_ENABLED == 'true' &&
-       vars.COLLECTION_ENABLED == 'true' &&
-       vars.FREE_LIMITS_VERIFIED == 'true' &&
-       vars.CLOUD_PIPELINE_VERIFIED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -58,7 +50,7 @@ jobs:
     env:
       COLLECTOR_RUNNER: github-hosted
       COLLECTOR_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
-      REQUESTED_MODE: ${{ github.event_name == 'schedule' && 'write' || inputs.mode || 'dry-run' }}
+      REQUESTED_MODE: ${{ inputs.mode || 'dry-run' }}
       RUN_EVENT: ${{ github.event_name }}
       SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
       SOURCE_SELECTION: ${{ matrix.source }}
@@ -91,7 +83,6 @@ jobs:
           fi
           args=(--output work/collector-result.json)
           if [ "$REQUESTED_MODE" = "write" ]; then args+=(--write); fi
-          if [ "$RUN_EVENT" = "schedule" ]; then args+=(--scheduled); fi
           if [ "$REQUESTED_MODE" = "probe" ]; then args+=(--probe); fi
           if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
