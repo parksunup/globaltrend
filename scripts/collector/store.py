@@ -48,7 +48,13 @@ class SupabaseStore:
     def _range_start(data,until):
         import datetime as dt
         end=dt.date.fromisoformat(until); last=data.get('last_success_date')
-        start=dt.date.fromisoformat(last)-dt.timedelta(days=3) if last else end-dt.timedelta(days=7)
+        if last:
+            start=dt.date.fromisoformat(last)-dt.timedelta(days=3)
+        else:
+            month=end.month-1 or 12
+            year=end.year if end.month>1 else end.year-1
+            import calendar
+            start=dt.date(year,month,min(end.day,calendar.monthrange(year,month)[1]))
         return min(start,end).isoformat()
     def ingest(self,config,url,item):
         p={'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':item['title_original'],

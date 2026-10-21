@@ -26,3 +26,11 @@ class StoreResponseTests(unittest.TestCase):
     def test_nonempty_malformed_rpc_response_remains_a_failure(self):
         with self.assertRaisesRegex(FetchError, '^database_rpc_failure:collector_capacity$'):
             self.store(b'not json').rpc('collector_capacity', {})
+
+    def test_first_automatic_backfill_uses_one_calendar_month(self):
+        self.assertEqual(SupabaseStore._range_start({}, '2026-10-21'), '2026-09-21')
+        self.assertEqual(SupabaseStore._range_start({}, '2024-03-31'), '2024-02-29')
+        self.assertEqual(SupabaseStore._range_start({}, '2025-03-31'), '2025-02-28')
+
+    def test_incremental_run_keeps_three_day_overlap_after_last_success(self):
+        self.assertEqual(SupabaseStore._range_start({'last_success_date':'2026-10-19'}, '2026-10-21'), '2026-10-16')
