@@ -348,7 +348,7 @@ def discover(source,html,url):
         return list(found.values()),urljoin(base,next_link['href']) if next_link else None
     selectors={'edpb':'main a[href*="/news/"]','cnil':'main .ctn-gen-liste-titre a[href]',
                'dpc':'main article.node--view-mode-teaser h2 a[href]','ppc':'main .news-list .news-text a[href]',
-               'ftc':'main a[href*="/news-events/news/press-releases/"]','oecd':'main a[href*="/publications/"]'}
+               'ftc':'main a[href*="/news-events/news/press-releases/"]','oecd':'main a[href*="/publications/"],main a[href*="/about/news/press-releases/"]'}
     links=soup.select(selectors[source]); found={}
     for a in links:
         target=urljoin(url,a['href'])
