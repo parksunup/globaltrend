@@ -6,7 +6,7 @@ select has_column('public','collector_edge_backlog','retryable',
 
 create temporary table test_blocked_backlog(id uuid primary key) on commit drop;
 do $$
-declare sid uuid; bid uuid; claim jsonb;
+declare sid uuid; bid uuid; mid bigint; claim jsonb;
 begin
  -- Local seeds generate source IDs; production-only PDPC IDs are not fixtures.
  select id into strict sid from public.sources where name='EDPB 뉴스·보도자료';
@@ -17,7 +17,10 @@ begin
  values(sid,'https://www.mci.gov.sg/example',date '2026-10-21',date '2026-10-22','{"rows":[{"url":"https://www.mci.gov.sg/example"}]}'::jsonb)
  returning id into bid;
  insert into test_blocked_backlog values(bid);
- perform pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','backlog-retry','backlog_id',bid));
+ select pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','backlog-retry','backlog_id',bid)) into mid;
+ -- pgmq uses wall-clock time while take uses the transaction timestamp.
+ -- Make only this synthetic test message visible in the same transaction.
+ update pgmq.q_trend_collect set vt=now()-interval '1 second' where msg_id=mid;
  claim:=public.collector_edge_take();
  perform public.collector_edge_finish((claim->>'msg_id')::bigint,(claim->>'read_ct')::integer,
   sid,coalesce(claim->'state','{}'::jsonb),'{"status":"failed","reason":"unapproved_url"}'::jsonb,
