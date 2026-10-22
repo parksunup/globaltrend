@@ -21,7 +21,7 @@ begin
  if m.message ? 'backlog_id' then
   select retryable into strict retry from public.collector_edge_backlog
    where id=(m.message->>'backlog_id')::uuid for update;
-  retry := retry and p_result->>'reason' is distinct from 'unapproved_url';
+  retry := retry and (p_result->>'reason' is distinct from 'unapproved_url');
   update public.collector_edge_backlog set
    state=case when retry then p_state else p_state||jsonb_build_object('retry_blocked_reason','unapproved_url') end,
    retryable=retry,
