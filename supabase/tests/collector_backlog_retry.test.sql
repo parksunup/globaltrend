@@ -8,7 +8,10 @@ create temporary table test_blocked_backlog(id uuid primary key) on commit drop;
 do $$
 declare sid uuid; bid uuid; claim jsonb;
 begin
- select source_id into strict sid from public.collector_edge_sources where slug='pdpc';
+ -- Local seeds generate source IDs; production-only PDPC IDs are not fixtures.
+ select id into strict sid from public.sources where name='EDPB 뉴스·보도자료';
+ insert into public.collector_edge_sources(source_id,slug) values(sid,'test-backlog-retry')
+  on conflict(source_id) do nothing;
  update public.collector_edge_control set enabled=true where singleton;
  insert into public.collector_edge_backlog(source_id,url,range_start,range_end,state)
  values(sid,'https://www.mci.gov.sg/example',date '2026-10-21',date '2026-10-22','{"rows":[{"url":"https://www.mci.gov.sg/example"}]}'::jsonb)
