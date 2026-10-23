@@ -1,6 +1,7 @@
 import { parseHTML } from "npm:linkedom@0.18.12";
 import {
   canonical,
+  cnilListingDate,
   discover,
   extract,
   normalize,
@@ -80,13 +81,18 @@ async function listing(c: Config, http: HTTP, page: string) {
     if (!node || !/^\d+$/.test(node) || order !== "newest") {
       throw new Error("ico_listing_template_changed");
     }
-    const n = Number(new URL(page).searchParams.get("page") || 1);
+    const query = new URL(page).searchParams;
+    if ([...query.keys()].some((k) => !["from", "to", "page"].includes(k)) ||
+      ["page", "from", "to"].some((k) => query.getAll(k).length > 1)) throw new Error("unverified_listing_query");
+    const n = Number(query.get("page") || 1);
+    if (!Number.isInteger(n) || n < 1 || n > 1000) throw new Error("invalid_listing_page");
+    const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({ key, values: query.getAll(key) }));
     const response = await http.request(
       new URL("/api/search", page).href,
       "POST",
       JSON.stringify({
         rootPageId: Number(node),
-        filters: [],
+        filters,
         pageNumber: n,
         order: "newest",
       }),
@@ -95,9 +101,16 @@ async function listing(c: Config, http: HTTP, page: string) {
     if (
       !Array.isArray(data.results) ||
       data.pagination?.showingPageNumber !== n ||
+      !Number.isInteger(data.pagination.totalResults) || data.pagination.totalResults < 0 ||
+      !Number.isInteger(data.pagination.perPage) || data.pagination.perPage <= 0 ||
+      !Number.isInteger(data.pagination.totalPages) ||
+      data.pagination.totalPages !== Math.max(1, Math.ceil(data.pagination.totalResults / data.pagination.perPage)) ||
       typeof data.pagination?.hasMore !== "boolean" ||
       data.pagination.hasMore !== (n < data.pagination.totalPages)
     ) throw new Error("ico_pagination_changed_or_stale");
+    if (data.results.length !== Math.max(0, Math.min(data.pagination.perPage, data.pagination.totalResults - (n - 1) * data.pagination.perPage))) {
+      throw new Error("ico_listing_page_incomplete");
+    }
     const rows: Row[] = data.results.map(
       (x: { url: string; title: string }) => {
         if (typeof x.url !== "string" || typeof x.title !== "string") {
@@ -125,6 +138,17 @@ export async function extractPressReleasePDF(
   bytes: Uint8Array,
   row: Row,
 ): Promise<Item> {
+  return extractTextPDF(bytes, row, "curia");
+}
+export async function extractPDPCPDF(bytes: Uint8Array, row: Row): Promise<Item> {
+  const target = new URL(canonical(row.url, ["www.pdpc.gov.sg"]));
+  if (!/^\/assets\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(target.pathname)) {
+    throw new Error("unapproved_pdpc_pdf_asset");
+  }
+  if (!normalize(row.title || "")) throw new Error("pdf_listing_evidence_missing");
+  return extractTextPDF(bytes, row, "pdpc");
+}
+async function extractTextPDF(bytes: Uint8Array, row: Row, source: "curia" | "pdpc"): Promise<Item> {
   // Text-only PDF adapter; no Node canvas, OCR, browser, Python or paid service.
   const lib = await import("npm:pdfjs-dist@4.10.38/legacy/build/pdf.mjs");
   const worker = await import(
@@ -186,11 +210,14 @@ export async function extractPressReleasePDF(
     if (body.length > 80000) {
       throw new Error("long_document_requires_chunked_reading");
     }
-    const obs = [...(row.date_observations || [])];
+    // A PDPC listing date is not yet verified as the PDF publication date.
+    const obs = source === "pdpc"
+      ? (row.date_observations || []).map(o => ({...o, meaning: "listing_date_candidate"}))
+      : [...(row.date_observations || [])];
     const dateline = pages[0].text.match(
       /Luxembourg,\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})/,
     );
-    if (dateline) {
+    if (source === "curia" && dateline) {
       obs.push({
         meaning: "press_release_dateline",
         locator: "PDF page 1 dateline",
@@ -211,7 +238,7 @@ export async function extractPressReleasePDF(
         }).filter(Boolean),
       ),
     ];
-    const date = dates.length === 1 ? dates[0] : null;
+    const date = source === "curia" && dates.length === 1 ? dates[0] : null;
     return {
       title_original: row.title,
       content_text: body,
@@ -219,14 +246,14 @@ export async function extractPressReleasePDF(
       published_date: date,
       metadata: {
         normalization_version: "edge-pdf-text-nfc-v1",
-        parser_version: "edge-curia-pdf-v1",
-        read_scope: "press_release_pdf_not_judgment",
+        parser_version: source === "curia" ? "edge-curia-pdf-v1" : "edge-pdpc-asset-pdf-text-v1",
+        read_scope: source === "curia" ? "press_release_pdf_not_judgment" : "pdf_text_only",
         date_observations: obs,
         requires_review: true,
         related_documents: related,
         unresolved_links: unresolved,
         unread_attachments: related.map((x) => x.url),
-        factual_status: "nonbinding_press_release_not_judgment",
+        factual_status: source === "curia" ? "nonbinding_press_release_not_judgment" : "official_pdf_text_not_visual_or_independent_legal_finding",
         ai_ready: false,
         pdf_pages: pages,
       } as Item["metadata"],
@@ -251,7 +278,8 @@ export async function advance(
   };
   try {
     if (
-      state.adapter_version !== "edge-v2" && !state.is_backlog &&
+      !["edge-v2", "edge-cnil-v3"].includes(state.adapter_version || "") &&
+      !state.is_backlog &&
       state.legacy_cursor
     ) {
       state.page = c.listing;
@@ -259,8 +287,38 @@ export async function advance(
       state.offset = 0;
       state.seen_pages = [];
     }
-    state.adapter_version = "edge-v2";
+    // Refresh legacy CNIL row snapshots once, at their current page. Never
+    // transfer a stale offset to rows with newly observed dates. Backlog is exact.
+    if (
+      c.source === "cnil" && !state.is_backlog &&
+      state.adapter_version !== "edge-cnil-v3"
+    ) {
+      delete state.rows;
+      state.offset = 0;
+      state.seen_pages = [];
+    }
+    state.adapter_version = c.source === "cnil" ? "edge-cnil-v3" : "edge-v2";
     state.page ||= c.listing;
+    if (c.source === "ico" && !state.is_backlog) {
+      for (const value of [state.since, state.until]) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || parseDate(value) !== value) {
+          throw new Error("invalid_ico_listing_range");
+        }
+      }
+      if (state.since > state.until) throw new Error("invalid_ico_listing_range");
+      const scoped = new URL(state.page);
+      if (scoped.searchParams.get("from") !== state.since || scoped.searchParams.get("to") !== state.until) {
+        state.legacy_cursor ||= { page: state.page, offset: state.offset || 0 };
+        const first = new URL(c.listing);
+        first.search = new URLSearchParams({ from: state.since, to: state.until }).toString();
+        state.page = first.href;
+        delete state.rows;
+        delete state.next;
+        state.offset = 0;
+        state.seen_pages = [];
+        state.exhausted = false;
+      }
+    }
     if (!state.rows) {
       const found = await listing(c, http, canonical(state.page, c.hosts));
       if (!found.rows.length) {
@@ -285,12 +343,42 @@ export async function advance(
       result.discovered = found.rows.length;
       result.next = found.next;
     } else if ((state.offset || 0) < state.rows.length) {
+      if (c.source === "cnil" && !state.is_backlog) {
+        const excluded: {
+          url: string;
+          date: string;
+          observations: Row["date_observations"];
+        }[] = [];
+        while ((state.offset || 0) < state.rows.length) {
+          const candidate = state.rows[state.offset || 0];
+          const date = cnilListingDate(candidate);
+          if (!date || date >= state.since && date <= state.until) break;
+          excluded.push({
+            url: canonical(candidate.url, c.hosts),
+            date,
+            observations: candidate.date_observations,
+          });
+          state.offset = (state.offset || 0) + 1;
+        }
+        if (excluded.length) {
+          // The public sort key is article type, not a verified date order.
+          // Only these cards are excluded; later pages and all backlog survive.
+          result.stage = "listing_date_filter";
+          result.saved = "out_of_range";
+          result.read_scope = "listing_date_only";
+          result.listing_date_excluded = excluded.length;
+          result.listing_date_evidence = excluded;
+          return { state, result, continue: true, delay: 0 };
+        }
+      }
       const row = state.rows[state.offset || 0];
       const url = canonical(row.url, c.hosts);
       const response = await http.request(url);
       let item: Item;
       if (c.source === "curia" && response.type === "application/pdf") {
         item = await extractPressReleasePDF(response.bytes, row);
+      } else if (c.source === "pdpc" && response.type === "application/pdf") {
+        item = await extractPDPCPDF(response.bytes, {...row, url: canonical(response.url, c.hosts)});
       } else {
         if (!["text/html", "application/xhtml+xml"].includes(response.type)) {
           throw new Error("unsupported_document_type");
@@ -338,6 +426,14 @@ export async function advance(
       state.offset = 0;
       state.seen_pages = [];
       state.page = c.listing;
+      result.listing_scan_complete = true;
+      result.unresolved_date_count = state.unknown_dates || 0;
+      result.coverage_blockers = [
+        "listing_exhaustiveness_unverified",
+        ...((state.unknown_dates || 0) > 0
+          ? ["unknown_publication_dates"]
+          : []),
+      ];
       result.reason = "listing_exhaustiveness_unverified";
       result.stage = "range_incomplete";
       return { state, result, continue: false, delay: 0 };

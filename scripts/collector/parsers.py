@@ -110,6 +110,13 @@ def extract(source, html, url):
     if source not in selectors:
         raise ValueError('dynamic_or_unverified_template: no verified general parser')
     title_sel,date_sel,body_sel=selectors[source]
+    oecd_release=source=='oecd' and urlsplit(url).path.startswith('/en/about/news/press-releases/')
+    if oecd_release:
+        # Verified official article template, scoped away from related cards.
+        article='main [itemtype="https://schema.org/Article"]'
+        title_sel=article+' h1.cmp-article-header__title'
+        date_sel=article+' .cmp-article-header__date time[itemprop="datePublished"]'
+        body_sel=[article+' [itemprop="articleBody"] .cmp-text']
     title=soup.select_one(title_sel)
     date_node=soup.select_one(date_sel) if date_sel else None
     if source=='ico':
@@ -120,13 +127,25 @@ def extract(source, html, url):
     if source=='pdpc':
         nodes=pdpc_body_nodes(soup)
         scope='news_html_from_embedded_rsc'
-    if source=='oecd':
+    if oecd_release:
+        scope='press_release_html_not_report'
+    elif source=='oecd':
         scope='official_abstract'
         for h in soup.select('h2.cmp-title__text'):
             if normalize(h.get_text()).lower()=='abstract':
                 container=h.find_parent(class_='cmp-two-column-container')
                 if container: nodes=container.select('.cmp-text p')
                 break
+        if not nodes:
+            # Some official publication landing pages have an Introduction,
+            # not an Abstract. Read only that verified section, not the page's
+            # navigation/related publications or the unseen report itself.
+            for h in soup.select('h2.cmp-title__text'):
+                if normalize(h.get_text()).lower()=='introduction':
+                    container=h.find_parent(class_='cmp-two-column-container')
+                    if container: nodes=container.select('.cmp-text p')
+                    if nodes: scope='official_overview'
+                    break
     if not title or not nodes: raise ValueError('title_or_body_missing')
     related=[]
     for node in nodes:
@@ -153,12 +172,19 @@ def extract(source, html, url):
         if publication:
             ppc_title_date=publication[1]
             observations.append({'meaning':'published_title','locator':'document_title','value':ppc_title_date})
-    dates=[parse_date(o['value']) for o in observations]
+        # This dedicated header is the notice dateline, unlike enactment,
+        # revision and attachment-addition dates elsewhere in the article.
+        for dateline in soup.select('main.l-main .l-article > .date-box'):
+            observations.append({'meaning':'published_notice_dateline',
+                'locator':'main.l-main .l-article > .date-box',
+                'value':normalize(dateline.get_text(' ',strip=True))})
+    publication_observations=[o for o in observations if o['meaning']!='notice_date_candidate']
+    dates=[parse_date(o['value']) for o in publication_observations]
     distinct=set(d for d in dates if d)
-    published=parse_date(ppc_title_date) if ppc_title_date else next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
+    published=next(iter(distinct)) if len(distinct)==1 else None
     unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
-    requires_review=published is None or unread_ppc_pdf
-    metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
+    requires_review=published is None or unread_ppc_pdf or scope in ('official_overview','press_release_html_not_report')
+    metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'oecd-press-release-v1' if oecd_release else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
               'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(title.get_text()),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':metadata}
@@ -182,18 +208,44 @@ def extract_pdf(data,url):
                     if action.get('/S')=='/URI' and urlsplit(link).scheme=='https':
                         related.append({'url':link,'title':'PDF link','page':i,'read':False})
         return {'pages':pages,'related_documents':related,'read_scope':'pdf_text_only','url':url,'requires_review':True}
+    except ValueError as e:
+        if str(e) in ('pdf_text_missing_or_ocr_required','pdf_limit_or_encrypted'): raise
+        raise ValueError('pdf_extraction_failed') from e
     except Exception as e: raise ValueError('pdf_extraction_failed') from e
+
+def extract_pdpc_pdf(data,url,row):
+    """Only the observed official asset route; text reading is not visual/OCR review."""
+    target=urlsplit(url)
+    if target.scheme!='https' or target.netloc!='www.pdpc.gov.sg' or not re.fullmatch(r'/assets/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}',target.path):
+        raise ValueError('unapproved_pdpc_pdf_asset')
+    if not row or not normalize(row.get('title','')):
+        raise ValueError('pdf_listing_evidence_missing')
+    pdf=extract_pdf(data,url)
+    body=normalize(' '.join(page['text'] for page in pdf['pages']))
+    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
+    # PDPC cards can display event dates. No verified PDF publication dateline
+    # exists yet, so neither listing dates nor arbitrary PDF prose decide range.
+    observations=[dict(o,meaning='listing_date_candidate') for o in row.get('date_observations',[])]
+    metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-asset-pdf-text-v1',
+        'read_scope':'pdf_text_only','date_observations':observations,'pdf_pages':pdf['pages'],
+        'requires_review':True,'related_documents':pdf['related_documents'],
+        'unread_attachments':[link['url'] for link in pdf['related_documents']],
+        'factual_status':'official_pdf_text_not_visual_or_independent_legal_finding','ai_ready':False}
+    return {'title_original':normalize(row['title']),'content_text':body,
+        'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':None,'metadata':metadata}
 
 def extract_document(source,data,url,content_type,row=None):
     if content_type in ('text/html','application/xhtml+xml'):
         item=extract(source,data.decode('utf-8','replace'),url)
-        if source=='pdpc' and row and row.get('date_observations'):
+        if source in ('pdpc','cnil') and row and row.get('date_observations'):
             observations=item['metadata']['date_observations']+row['date_observations']
             item['metadata']['date_observations']=observations
             dates={parse_date(o['value']) for o in observations}- {None}
             if len(dates)>1:
                 item['published_date']=None; item['metadata']['requires_review']=True
         return item
+    if source=='pdpc' and content_type=='application/pdf':
+        return extract_pdpc_pdf(data,url,row)
     if source!='curia' or content_type!='application/pdf':
         raise ValueError('unsupported_document_type')
     if not row or not normalize(row.get('title','')):
@@ -253,6 +305,16 @@ def pdpc_api_next_url(url,page):
     query['page']=[str(page+1)]
     return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
 
+def ico_range_url(url,since,until):
+    """Scope the official form to this collection period; restart legacy pages."""
+    for value in (since,until):
+        if not re.fullmatch(r'\d{4}-\d{2}-\d{2}',value) or parse_date(value)!=value:
+            raise ValueError('invalid_ico_listing_range')
+    if since>until: raise ValueError('invalid_ico_listing_range')
+    parts=urlsplit(url); query=parse_qs(parts.query,keep_blank_values=True)
+    if query.get('from')!=[since] or query.get('to')!=[until]: query={'from':[since],'to':[until]}
+    return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
+
 def ico_search_request(html,url):
     """Observed site-internal protocol; not a documented/supported public API."""
     soup=BeautifulSoup(html,'html.parser')
@@ -262,7 +324,16 @@ def ico_search_request(html,url):
         raise ValueError('ico_listing_template_changed')
     node_id=container['data-node-id']
     if not node_id.isdigit() or int(node_id)<=0: raise ValueError('ico_listing_template_changed')
-    return {'rootPageId':int(node_id),'filters':[],'pageNumber':listing_page_number(url),'order':'newest'}
+    parts=urlsplit(url); query=parse_qs(parts.query,keep_blank_values=True)
+    if set(query)-{'from','to','page'}: raise ValueError('unverified_listing_query')
+    filters=[]
+    if 'from' in query or 'to' in query:
+        if any(len(query.get(k,[]))!=1 for k in ('from','to')): raise ValueError('invalid_ico_listing_range')
+        ico_range_url(url,query['from'][0],query['to'][0])
+        filters=[{'key':k,'values':query[k]} for k in ('from','to')]
+    if len(query.get('page',['1']))!=1: raise ValueError('invalid_listing_page')
+    page_url=urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode({'page':query.get('page',['1'])[0]}),''))
+    return {'rootPageId':int(node_id),'filters':filters,'pageNumber':listing_page_number(page_url),'order':'newest'}
 
 def discover_ico_search(data,url,page):
     response=json.loads(data)
@@ -272,12 +343,19 @@ def discover_ico_search(data,url,page):
     current=pagination.get('showingPageNumber'); total=pagination.get('totalPages'); more=pagination.get('hasMore')
     if type(current) is not int or current!=page or type(total) is not int or total<current or type(more) is not bool or more!=(current<total):
         raise ValueError('ico_pagination_changed_or_stale')
+    count=pagination.get('totalResults'); per_page=pagination.get('perPage')
+    if type(count) is not int or count<0 or type(per_page) is not int or per_page<=0 or total!=max(1,(count+per_page-1)//per_page):
+        raise ValueError('ico_pagination_changed_or_stale')
+    if len(response['results'])!=max(0,min(per_page,count-(page-1)*per_page)):
+        raise ValueError('ico_listing_page_incomplete')
     rows=[]
     for result in response['results']:
         if not isinstance(result,dict) or not isinstance(result.get('url'),str) or not isinstance(result.get('title'),str):
             raise ValueError('ico_search_schema_changed')
         rows.append({'url':urljoin(url,result['url']),'title':normalize(result['title'])})
-    return rows,listing_next_url(url,page) if more else None
+    parts=urlsplit(url); query=parse_qs(parts.query,keep_blank_values=True); query['page']=[str(page+1)]
+    next_url=urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
+    return rows,next_url if more else None
 
 def pdpc_listing_request(html,url):
     soup=BeautifulSoup(html,'html.parser')
@@ -357,6 +435,21 @@ def discover(source,html,url):
             card=a.find_parent(class_='node-article-card')
             heading=card.select_one('.node-article-card__title') if card else None
             if heading: title=normalize(heading.get_text())
-        found[target]={'url':target,'title':title}
+        row={'url':target,'title':title}
+        if source=='cnil':
+            card=a.find_parent(class_='list-inner')
+            row['date_observations']=[{'meaning':'listing_published_display',
+                'locator':'listing .list-inner .attributes p.date','value':normalize(n.get_text())}
+                for n in card.select('.attributes p.date')] if card else []
+        found[target]=row
     next_link=soup.select_one('a[rel~="next"],.pager__item--next a,.pager-next a')
     return list(found.values()),urljoin(url,next_link['href']) if next_link else None
+
+
+def cnil_listing_date(row):
+    """An individual card date, never proof of the archive's sort order."""
+    observations=row.get('date_observations',[])
+    if len(observations)!=1: return None
+    observation=observations[0]
+    if observation.get('meaning')!='listing_published_display' or observation.get('locator')!='listing .list-inner .attributes p.date': return None
+    return parse_date(observation.get('value',''))

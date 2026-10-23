@@ -90,3 +90,37 @@ Deno.test("malformed source links remain unresolved and never become invented UR
   eq(x.metadata.ai_ready, false);
   eq(x.content_text, "Original body with an underlying decision .");
 });
+
+Deno.test("PPC official notice dateline excludes body dates and keeps PDFs unread", async () => {
+  const x = await extract("ppc", '<html><head><title>法律の公布について（令和８年７月17日）</title></head><body><h1 class="page-ttl">法律の公布について</h1><main class="l-main"><div class="l-article"><div class="date-box mb-m">令和８年７月17日<br>個人情報保護委員会</div><p>令和８年４月７日に提出、令和８年７月10日に成立。</p><a href="/files/pdf/260717_houritsu.pdf">法律</a></div></main></body></html>', "https://www.ppc.go.jp/news/press/2026/260717/");
+  eq(x.published_date, "2026-07-17");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.related_documents[0].read, false);
+  eq(x.metadata.date_observations[0].meaning, "published_notice_dateline");
+});
+Deno.test("PPC conflicting publication title and notice dateline remain unknown", async () => {
+  const x = await extract("ppc", '<html><head><title>公表（令和８年７月18日）</title></head><body><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main></body></html>', "https://www.ppc.go.jp/news/press/a/");
+  eq(x.published_date, null);
+  eq(x.metadata.ai_ready, false);
+});
+Deno.test("PPC body revision dates never become publication dates", async () => {
+  const x = await extract("ppc", '<h1 class="page-ttl">注意喚起</h1><main class="l-main"><p>令和６年12月11日、令和８年10月７日改訂。令和８年10月９日追加。</p></main>', "https://www.ppc.go.jp/news/careful_information/261007_alert/");
+  eq(x.published_date, null);
+  eq(x.metadata.ai_ready, false);
+});
+Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async () => {
+  const p = discover(
+    "cnil",
+    '<main><div class="list-inner"><h3 class="ctn-gen-liste-titre"><a href="/fr/a">A</a></h3><div class="attributes"><p class="date">27 mars 2024</p></div></div></main>',
+    "https://www.cnil.fr/fr/actualites",
+  );
+  eq(p.rows[0].date_observations?.[0].value, "27 mars 2024");
+  const item = await extract(
+    "cnil",
+    '<main><h1>A</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">Personal data protection evidence.</div></main>',
+    p.rows[0].url,
+    p.rows[0],
+  );
+  eq(item.published_date, null);
+  eq(item.metadata.requires_review, true);
+});
