@@ -189,6 +189,30 @@ class CollectorTests(unittest.TestCase):
         st=Store(); result=self.core.collect(cfg,Client(),st,'2026-10-01','2026-10-13')
         self.assertEqual(result['status'],'failed'); self.assertFalse(st.checkpointed)
 
+    def test_paginated_scan_does_not_prove_period_coverage(self):
+        from unittest.mock import patch
+        cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),
+             'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu']}
+        first=cfg['listing']; second=first+'?page=1'
+        class Client:
+            def get(self,url): return b'<html>article</html>',url,'text/html'
+        class Store:
+            checkpointed=False
+            def ingest(self,*args): return {'item_created':True}
+            def progress(self,*args): pass
+            def checkpoint(self,*args): self.checkpointed=True
+        rows=[
+            ([{'url':'https://www.edpb.europa.eu/news/a_en','title':'A'}],second),
+            ([{'url':'https://www.edpb.europa.eu/news/b_en','title':'B'}],None)]
+        article={'published_date':'2026-10-07','metadata':{'requires_review':False}}
+        store=Store()
+        with patch.object(self.core,'fetch_listing',side_effect=rows), \
+             patch.object(self.parsers,'extract_document',return_value=article):
+            result=self.core.collect(cfg,Client(),store,'2026-10-01','2026-10-13')
+        self.assertEqual(result['pages'],2)
+        self.assertFalse(result['coverage_complete'])
+        self.assertFalse(store.checkpointed)
+
     def test_database_storage_stop_does_not_attempt_another_write(self):
         cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}
         class Client:

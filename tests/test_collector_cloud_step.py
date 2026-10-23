@@ -102,5 +102,94 @@ class OECDOverviewTests(unittest.TestCase):
         self.assertIn('Official introduction',item['content_text'])
 
 
+class OECDPressReleaseTests(unittest.TestCase):
+    url='https://www.oecd.org/en/about/news/press-releases/2022/12/privacy.html'
+    html='''<main><div itemtype="https://schema.org/Article" itemscope>
+      <h1 class="cmp-article-header__title" itemprop="headline">Privacy agreement</h1>
+      <div class="cmp-article-header__date"><time datetime="2022-12-14" itemprop="datePublished">14 December 2022</time></div>
+      <div itemprop="articleBody"><div class="text"><div class="cmp-text"><p>Official statement on privacy and government access.
+      <a href="/en/publications/report.html">Related report</a></p></div></div></div>
+      <div class="cmp-text"><p>Related content outside article must be excluded.</p></div>
+    </div></main>'''
+
+    def test_press_release_extracts_only_observed_article_body(self):
+        item=parsers.extract('oecd',self.html,self.url)
+        self.assertEqual(item['title_original'],'Privacy agreement')
+        self.assertEqual(item['published_date'],'2022-12-14')
+        self.assertNotIn('outside article',item['content_text'])
+        self.assertEqual(item['metadata']['read_scope'],'press_release_html_not_report')
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(item['metadata']['related_documents'][0]['read'],False)
+        self.assertIn('https://www.oecd.org/en/publications/report.html',item['metadata']['unread_attachments'])
+
+    def test_press_release_conflicting_dates_remain_unresolved(self):
+        item=parsers.extract('oecd',self.html.replace('datetime="2022-12-14"','datetime="2022-12-13"'),self.url)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']),2)
+
+    def test_unverified_article_template_does_not_broaden_publication_parser(self):
+        with self.assertRaisesRegex(ValueError,'title_or_body_missing'):
+            parsers.extract('oecd',self.html,'https://www.oecd.org/en/publications/report.html')
+
+
+class FTCBoundedResumeTests(unittest.TestCase):
+    def run_feed(self,count):
+        import json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls=['https://www.ftc.gov/news-events/news/press-releases/item-'+str(i) for i in range(count)]
+        config={'source':'ftc','source_id':'source','language':'en','listing':'https://www.ftc.gov/feed.xml',
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            turn=0
+            fetched=[]
+            def get(self,url):
+                if url==config['listing']:
+                    self.turn+=1
+                    order=urls[self.turn%count:]+urls[:self.turn%count]
+                    rss='<rss><channel>'+''.join('<item><title>Changed '+str(self.turn)+'</title><link>'+u+'</link></item>' for u in order)+'</channel></rss>'
+                    return rss.encode(),url,'application/rss+xml'
+                self.fetched.append(url)
+                html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-22">22 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+                return html.encode(),url,'text/html'
+        client=Client();cursor=None;results=[]
+        for _ in range(count+1):
+            store=PreparedStore(cursor)
+            result=collect(config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            results.append(result);cursor=store.cursor
+            if cursor is not None:
+                self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+            if cursor is None or result['reason']=='ftc_resume_cursor_capacity_exceeded':break
+        self.assertEqual(len(client.fetched),len(set(client.fetched)))
+        self.assertTrue(all(not r['coverage_complete'] for r in results))
+        return client,cursor,results,config
+
+    def test_full_thirty_item_mutable_feed_finishes_without_false_coverage(self):
+        client,cursor,results,_=self.run_feed(30)
+        self.assertEqual(len(client.fetched),30)
+        self.assertIsNone(cursor)
+
+    def test_large_mutable_feed_stops_before_cursor_overflow_without_forgetting_urls(self):
+        client,cursor,results,config=self.run_feed(65)
+        self.assertEqual(results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertIsNotNone(cursor)
+        self.assertGreater(len(client.fetched),30)
+        self.assertLess(len(client.fetched),65)
+        self.assertEqual(len(cursor['processed_url_hashes']),len(client.fetched))
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        saved_cursor=dict(cursor)
+        fetched=list(client.fetched)
+        retry=PreparedStore(cursor)
+        result=collect(config,client,retry,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(result['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertEqual(retry.cursor,saved_cursor)
+        self.assertEqual(client.fetched,fetched)
+        self.assertEqual(retry.operations,[])
+        self.assertIsNone(retry.failure)
+
+
 if __name__ == '__main__':
     unittest.main()
