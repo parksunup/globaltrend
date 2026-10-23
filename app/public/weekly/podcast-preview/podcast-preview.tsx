@@ -70,12 +70,12 @@ export default function PodcastPreview({
 
       <section className={styles.featured} aria-labelledby="featured-heading">
         <h2 className={styles.sectionTitle} id="featured-heading">
-          이번 회차에서 다룰 주요 소식
+          이번 회차의 주요 소식과 짧은 메모
         </h2>
         <ol className={styles.stories}>
           {featuredStories.map((story, index) => (
             <li className={styles.story} key={story.officialUrl}>
-              <span className={styles.storyNumber}>{String(index + 1).padStart(2, "0")}</span>
+              <span className={styles.storyNumber}>{story.editorialFormat === "brief" ? "NOTE" : String(index + 1).padStart(2, "0")}</span>
               <div>
                 <a href={story.officialUrl} target="_blank" rel="noreferrer">
                   {story.title}
