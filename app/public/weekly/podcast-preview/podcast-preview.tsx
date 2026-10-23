@@ -8,6 +8,7 @@ type FeaturedStory = {
   date: string;
   organization: string;
   officialUrl: string;
+  editorialFormat: "feature" | "brief";
 };
 type PreviewStyles = Record<string, string>;
 
@@ -78,7 +79,8 @@ export default function PodcastPreview({
               <span className={styles.storyNumber}>{story.editorialFormat === "brief" ? "NOTE" : String(index + 1).padStart(2, "0")}</span>
               <div>
                 <a href={story.officialUrl} target="_blank" rel="noreferrer">
-                  {story.title}
+                  {story.editorialFormat === "brief" && <span className={styles.storyLabel}>짧은 판결 메모</span>}
+                {story.title}
                 </a>
                 <p className={styles.storyMeta}>{story.organization} · {story.date}</p>
               </div>
