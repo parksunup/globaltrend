@@ -79,14 +79,14 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "443e4b963dc02eba817fc20409998d270d6058a84f9a6f25a29c32f41482096b",
+      "sha256": "37806401e3564c4f143d37e52cd6c888367247ff3fe61f0697a3e74bb187efc7",
       "imported_sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
       "transformation_reason": "2026-10-23: selected SG appeal / CA breach-source follow-up and canonical comparison mirror synchronization; original imported digest retained"
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "12ff787ac91715a3ca881d7c0054968b51d6cb38b716fb65ecaceb0aa944e88a",
+      "sha256": "604ccab6db022df2faaa05921337ad7c8edfb9db296802e3b7800fe3aeaf1d45",
       "imported_sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
       "transformation_reason": "2026-10-23: selected SG appeal / CA breach-source follow-up and canonical comparison mirror synchronization; original imported digest retained"
     },
@@ -444,14 +444,14 @@
     {
       "path": "public/review-drafts/comparison.html",
       "pr": 15,
-      "sha256": "22babae3b6593bcbdae5951b42354ea52e73702af32d0af8ed1c066b28ff9542",
+      "sha256": "27890a78d5477113a08e4b279a90f98d3f177a3412656346469fc3abd7ac1389",
       "imported_sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613",
       "transformation_reason": "2026-10-23: selected SG appeal / CA breach-source follow-up and canonical comparison mirror synchronization; original imported digest retained"
     },
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "443e4b963dc02eba817fc20409998d270d6058a84f9a6f25a29c32f41482096b",
+      "sha256": "37806401e3564c4f143d37e52cd6c888367247ff3fe61f0697a3e74bb187efc7",
       "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
       "derived_from": "data/legal/criteria-mapping.csv",
       "transformation_reason": "2026-10-23: selected SG appeal / CA breach-source follow-up and canonical comparison mirror synchronization; original imported digest retained"
@@ -459,7 +459,7 @@
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "12ff787ac91715a3ca881d7c0054968b51d6cb38b716fb65ecaceb0aa944e88a",
+      "sha256": "604ccab6db022df2faaa05921337ad7c8edfb9db296802e3b7800fe3aeaf1d45",
       "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
       "derived_from": "data/legal/criteria-mapping.md",
       "transformation_reason": "2026-10-23: selected SG appeal / CA breach-source follow-up and canonical comparison mirror synchronization; original imported digest retained"
