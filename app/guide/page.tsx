@@ -31,6 +31,13 @@ export default function GuidePage() {
     <div className="guide-wrap">
       <p className="eyebrow">GLOBALTREND / TEAM GUIDE</p>
       <h1>GlobalTrend 팀 온보딩 가이드</h1>
+      <section className="guide-card">
+        <h2>작업한 결과를 바로 확인하는 방법</h2>
+        <p>Codex에게 기존 담당 브랜치에 결과를 저장하고 commit/push해 달라고 요청하세요. 동향은 feat/trend-source-contracts, 법제는 feat/legal-corpus-foundation을 계속 사용합니다.</p>
+        <p><a href="/team?role=trends">동향 담당 작업 확인 →</a> · <a href="/team?role=legal">법제 담당 작업 확인 →</a></p>
+        <p>이 화면은 최신 브랜치를 자동으로 읽으므로 자료를 고칠 때마다 PR을 병합하거나 사이트를 다시 배포할 필요가 없습니다. 몇 분 뒤 화면의 자료 커밋 번호가 바뀌었는지 확인하세요. ChatGPT 대화만 하거나 push하지 않은 자료는 볼 수 없습니다.</p>
+        <p>이미 공개 저장소에 제출된 본문은 미발행·공개 보류라는 이유로 숨기지 않습니다. 검수 열람과 대외 발행은 별개이며 Supabase 관리 권한이나 로그인은 필요 없습니다. 이 기능의 첫 배포는 한 번 필요하고, 옛 고정 커밋 배포의 코드는 자동 변경되지 않습니다.</p>
+      </section>
       <p className="guide-lead">이 프로젝트는 해외 개인정보 보호 동향과 법제를 한국어로 조사하고 비교하는 웹사이트입니다. 코딩을 잘 몰라도 참여할 수 있습니다. Codex에게 작업을 시키고, 결과를 확인하고, PR로 제출하는 방식으로 진행합니다.</p>
 
       <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. <code>/team</code>의 검수 자료 목록만 누구나 읽을 수 있습니다. 승인된 본문 자료는 별도로 발행합니다.</p><div className="guide-note"><strong>현재는 네 PR의 통합본 검토 단계입니다.</strong><br />법제 7개·비교표 119칸·외국법 6개 한국어 전문 초안과 동향 표본 21건을 통합했습니다. <code>/team</code>과 <code>/legal-translation</code>에서 제출 내용을 읽고, <code>/work</code>에서 동향을, <code>/work/legal</code>에서 법제를 등록·검수·발행합니다. 저장·승인·발행에는 팀 권한이 필요하며 Preview에서는 DB 쓰기가 차단됩니다. 수집기 정기 실행은 꺼져 있고 Codex 정기 편집 연결은 준비 단계입니다.</div><div className="guide-note"><strong>먼저 빈 업무 양식을 사용합니다.</strong><br />법제 담당은 <code>data/legal</code>, 동향 담당은 <code>data/trends</code>의 <code>*.template.*</code> 파일을 복사합니다. 사람이 읽는 <code>.md</code> + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 검토 메모를 함께 제출하고 <code>pnpm validate:data</code>로 검사합니다.</div></section>

@@ -58,11 +58,13 @@ test('submission lists reflect supplied publication status and archive obsolete 
   assert.match(html,/검수 완료·발행됨/);assert.match(html,/작성 당시 기록 · 검토 메모/);assert.match(html,/<summary>작성 당시 설명<\/summary>/);
   assert.doesNotMatch(html,/이 배포 브랜치의 파일 · 검수 전 초안/);
 });
-test('translation list prefers published documents without discarding invalid or unpublished files',async()=>{
-  const load=loader({'../../lib/legal-translation-review':{listLegalTranslationEntries:()=>[{id:'gdpr',title:'원본 초안',officialName:'GDPR',version:'2026',articleCount:99,reviewStatus:'not_started'},{id:'broken',error:'파일 오류'},{id:'draft',title:'미발행 번역',officialName:'draft',version:'2026',articleCount:3,reviewStatus:'not_started'}]},'../../lib/submission-preview':{submissionPreviewEnabled:()=>true},'../../lib/public-legal':{loadReviewedLegalDrafts:async()=>({documents:[{...props,id:'gdpr',title:'운영 발행 번역',articleCount:99}]})}});
+test('translation review entry uses live legal workspace rather than overwriting submitted drafts with published DB data',async()=>{
+  const load=loader({'../../lib/public-legal':{loadReviewedLegalDrafts:async()=>{throw Error('검수 화면에서 운영 발행본을 읽으면 안 됩니다.');}}});
   const Page=load('app/legal-translation/page.tsx').default;
-  const html=renderToStaticMarkup(await Page());
-  assert.match(html,/운영 발행 번역/);assert.match(html,/검수 완료·발행됨/);assert.match(html,/BROKEN 번역 파일 오류/);assert.match(html,/미발행 번역/);assert.doesNotMatch(html,/>원본 초안</);
+  const element=await Page();
+  assert.equal(element.props.role,'legal');
+  const html=renderToStaticMarkup(element);
+  assert.match(html,/최신 제출 자료를 불러오는 중/);assert.match(html,/PR 병합이나 자료별 사이트 재배포는 필요하지 않습니다/);
 });
 test('offline viewer describes historical files without declaring present review status',()=>{
   const Component=loader()('app/components/draft-viewer.tsx').default;

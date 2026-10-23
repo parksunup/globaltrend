@@ -11,6 +11,7 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
   const fieldId = useId();
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
+  const [draftCommitSha, setDraftCommitSha] = useState<string | undefined>();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [feedback, setFeedback] = useState<PublicFeedback[]>([]);
@@ -26,7 +27,7 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
   const itemParams = new URLSearchParams({ branch: branch ?? "", item: itemId });
 
   useEffect(() => {
-    setBody(""); setMessage(""); setFeedback([]); setNextOffset(null);
+    setBody(""); setDraftCommitSha(undefined); setMessage(""); setFeedback([]); setNextOffset(null);
   }, [branch, itemId]);
 
   useEffect(() => {
@@ -72,10 +73,10 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
     setBusy(true); setMessage("");
     try {
       const { error } = await createClient().from("submission_feedback").insert({
-        branch_name: branch!, item_id: itemId, commit_sha: commitSha!.toLowerCase(), author_name: authorName, body: trimmed,
+        branch_name: branch!, item_id: itemId, commit_sha: (draftCommitSha ?? commitSha)!.toLowerCase(), author_name: authorName, body: trimmed,
       });
       if (error) throw error;
-      if (sequence === requestNumber.current) { setBody(""); setMessage("피드백을 저장했습니다. 아래 목록을 다시 불러옵니다."); setRefresh((value) => value + 1); }
+      if (sequence === requestNumber.current) { setBody(""); setDraftCommitSha(undefined); setMessage("피드백을 저장했습니다. 아래 목록을 다시 불러옵니다."); setRefresh((value) => value + 1); }
     } catch { if (sequence === requestNumber.current) setMessage("저장하지 못했습니다. 입력 내용은 남겨 두었습니다. 잠시 후 다시 시도해 주세요."); }
     finally { setBusy(false); }
   }
@@ -89,7 +90,12 @@ export default function SubmissionFeedback({ itemId, branch, commitSha }: { item
       <label htmlFor={`${fieldId}-name`}>이름 또는 별칭 (선택)</label>
       <input id={`${fieldId}-name`} value={name} onChange={(event) => setName(event.target.value)} maxLength={80} placeholder="비워 두면 익명으로 저장됩니다" />
       <label htmlFor={`${fieldId}-body`}>수정 의견이나 질문</label>
-      <textarea id={`${fieldId}-body`} value={body} onChange={(event) => setBody(event.target.value)} maxLength={4000} placeholder="예: 이 요약의 날짜가 원문과 다른 것 같습니다. 근거를 다시 확인해 주세요." />
+      <textarea id={`${fieldId}-body`} value={body} onChange={(event) => {
+        if (!body) setDraftCommitSha(commitSha);
+        if (!event.target.value) setDraftCommitSha(undefined);
+        setBody(event.target.value);
+      }} maxLength={4000} placeholder="예: 이 요약의 날짜가 원문과 다른 것 같습니다. 근거를 다시 확인해 주세요." />
+      {body && draftCommitSha && draftCommitSha !== commitSha && <p className="feedback-warning">작성 중 자료가 갱신되었습니다. 입력한 의견은 보존되며, 작성을 시작한 자료 버전 {draftCommitSha.slice(0, 7)}에 연결해 저장합니다.</p>}
       <div className="feedback-actions"><span>{body.length}/4000 · 의견은 공개 목록에 표시됩니다.</span><button type="button" onClick={save} disabled={busy || !body.trim()}>{busy ? "저장 중…" : "피드백 저장"}</button></div>
     </>}
     {message && <p className="feedback-message" role="status">{message}</p>}
