@@ -1,15 +1,23 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 
-type Turn = {speaker: "Mina" | "Joon"; text: string};
+type Turn = {speaker: "Mina" | "Joon"; text: string; chapter?: string};
+type FeaturedStory = {
+  title: string;
+  date: string;
+  organization: string;
+  officialUrl: string;
+};
 type PreviewStyles = Record<string, string>;
 
 export default function PodcastPreview({
   turns,
+  featuredStories,
   styles,
 }: {
   turns: Turn[];
+  featuredStories: FeaturedStory[];
   styles: PreviewStyles;
 }) {
   const [url, setUrl] = useState("");
@@ -60,6 +68,25 @@ export default function PodcastPreview({
         </span>
       </div>
 
+      <section className={styles.featured} aria-labelledby="featured-heading">
+        <h2 className={styles.sectionTitle} id="featured-heading">
+          이번 회차에서 다룰 주요 소식
+        </h2>
+        <ol className={styles.stories}>
+          {featuredStories.map((story, index) => (
+            <li className={styles.story} key={story.officialUrl}>
+              <span className={styles.storyNumber}>{String(index + 1).padStart(2, "0")}</span>
+              <div>
+                <a href={story.officialUrl} target="_blank" rel="noreferrer">
+                  {story.title}
+                </a>
+                <p className={styles.storyMeta}>{story.organization} · {story.date}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
       {error && <p className={styles.error} role="alert">{error}</p>}
       {url && (
         <audio
@@ -72,14 +99,17 @@ export default function PodcastPreview({
       )}
 
       <div className={styles.transcript}>
-        <h2>대본 미리보기</h2>
+        <h2 className={styles.sectionTitle}>대본 미리보기</h2>
         {turns.map((turn, index) => (
-          <article className={styles.turn} key={index}>
-            <strong className={styles.speaker}>
-              {turn.speaker === "Mina" ? "진행자 1" : "진행자 2"}
-            </strong>
-            <p>{turn.text}</p>
-          </article>
+          <Fragment key={index}>
+            {turn.chapter && <h3 className={styles.chapter}>{turn.chapter}</h3>}
+            <article className={styles.turn}>
+              <strong className={styles.speaker}>
+                {turn.speaker === "Mina" ? "진행자 1" : "진행자 2"}
+              </strong>
+              <p>{turn.text}</p>
+            </article>
+          </Fragment>
         ))}
       </div>
     </section>
