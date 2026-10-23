@@ -1,4 +1,26 @@
 import {buildWeeklyPodcastScript} from "../../../../lib/weekly-podcast-script";
+import {PublicFooter, PublicHeader} from "../../public-navigation";
+import publicStyles from "../../public.module.css";
+import styles from "./podcast-preview.module.css";
 import PodcastPreview from "./podcast-preview";
-export const dynamic="force-dynamic";
-export default function Page(){const sample=buildWeeklyPodcastScript();return <main style={{maxWidth:880,margin:"40px auto",padding:24,fontFamily:"sans-serif"}}><p>제작 테스트 · 비공개</p><h1>{sample.title}</h1><p>{sample.notice}</p><PodcastPreview turns={sample.turns}/></main>}
+
+export const dynamic = "force-dynamic";
+
+export default function Page() {
+  const sample = buildWeeklyPodcastScript();
+
+  return (
+    <main className={`${publicStyles.site} ${styles.page}`}>
+      <PublicHeader active="/public/weekly" />
+      <div className={styles.content}>
+        <header className={styles.hero}>
+          <p className={styles.kicker}>PODCAST · PRODUCTION TEST</p>
+          <h1>{sample.title}</h1>
+          <p className={styles.notice}>{sample.notice}</p>
+        </header>
+        <PodcastPreview turns={sample.turns} styles={styles} />
+      </div>
+      <PublicFooter />
+    </main>
+  );
+}
