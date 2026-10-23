@@ -24,8 +24,14 @@ class SupabaseStore:
         try:
             data,_,_=self.client.request(self.base+'/rest/v1/rpc/'+name,'POST',json.dumps(payload,ensure_ascii=False).encode(),
                 {'apikey':self.key,'Authorization':'Bearer '+self.key,'Content-Type':'application/json'})
-            return json.loads(data)
-        except Exception as e: raise FetchError('database_rpc_failure:'+name) from None
+            # PostgREST returns an empty 204 response for successful void RPCs
+            # such as progress/checkpoint/run-log writes.
+            return json.loads(data) if data.strip() else None
+        except Exception as e:
+            # The HTTP client emits only safe error categories/status codes;
+            # preserve them so operational logs distinguish API failures.
+            reason=str(e) if isinstance(e,FetchError) else type(e).__name__
+            raise FetchError('database_rpc_failure:'+name+':'+reason) from None
     def preflight(self,config):
         # Static registry eligibility is checked before this DB client is created.
         if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}):
@@ -46,7 +52,13 @@ class SupabaseStore:
     def _range_start(data,until):
         import datetime as dt
         end=dt.date.fromisoformat(until); last=data.get('last_success_date')
-        start=dt.date.fromisoformat(last)-dt.timedelta(days=3) if last else end-dt.timedelta(days=7)
+        if last:
+            start=dt.date.fromisoformat(last)-dt.timedelta(days=3)
+        else:
+            month=end.month-1 or 12
+            year=end.year if end.month>1 else end.year-1
+            import calendar
+            start=dt.date(year,month,min(end.day,calendar.monthrange(year,month)[1]))
         return min(start,end).isoformat()
     def ingest(self,config,url,item):
         p={'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':item['title_original'],

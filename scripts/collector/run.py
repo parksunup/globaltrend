@@ -6,9 +6,11 @@ import sys
 import uuid
 import time
 from pathlib import Path
+from urllib.parse import urlsplit
 from .core import collect,HttpClient,FetchError
 from .store import SupabaseStore,DryStore
 from . import parsers
+from .environment import runtime_info, runtime_problem
 
 ROOT=Path(__file__).resolve().parents[2]
 def probe_source(config,client,sample_urls):
@@ -29,9 +31,25 @@ def probe_source(config,client,sample_urls):
         return body,final,ctype
     try:
         body,final,ctype=fetch(listing)
-        if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+        is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+        if is_pdpc_api:
+            rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
+        elif ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+            # Bounded public-page diagnostics help distinguish a changed site
+            # template from an access/challenge page; never store the response.
+            if ctype in ('text/html','application/xhtml+xml'):
+                document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
+                title=document.select_one('title')
+                record['listing_document']={
+                    'title':parsers.normalize(title.get_text())[:200] if title else None,
+                    'language':document.html.get('lang') if document.html else None,
+                    'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
+                }
+                if not title and not document.select_one('main,article,h1'):
+                    record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
+            rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
+        else:
             raise ValueError('unsupported_listing_type')
-        rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
         if not rows: raise ValueError('listing_empty_or_structure_changed')
         record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
     except (FetchError,ValueError) as e:
@@ -91,9 +109,10 @@ def main():
     if not configs: p.error('unknown source')
     result={'run_id':str(uuid.uuid4()),'started_at':dt.datetime.now(dt.timezone.utc).isoformat(),
       'mode':'probe' if args.probe else 'write' if args.write else 'dry_run','scheduled':args.scheduled,
-      'pr16_commit':registry['pr16_commit'],'sources':[], 'run_log':{'status':'skipped','reason':'no_eligible_collection'}}
+      'pr16_commit':registry['pr16_commit'],'runtime':runtime_info(),'sources':[], 'run_log':{'status':'skipped','reason':'no_eligible_collection'}}
     global_hold=None
     if args.scheduled and os.environ.get('SCHEDULE_ENABLED')!='true': global_hold='schedule_not_enabled'
+    elif args.write and runtime_problem(): global_hold=runtime_problem()
     elif args.write and not all(os.environ.get(k)=='true' for k in ('COLLECTION_ENABLED','FREE_LIMITS_VERIFIED','CLOUD_PIPELINE_VERIFIED')):
         global_hold='operation_cost_or_pipeline_checks_missing'
     store=None; attempted=False; database_stop=False; probe_failed=False
@@ -159,8 +178,13 @@ def main():
     # One compact bounded local log even when preflight/progress/run-log RPC fails.
     output=Path(args.output); output.parent.mkdir(parents=True,exist_ok=True)
     output.write_text(json.dumps(result,ensure_ascii=False,indent=2))
-    print(json.dumps({'run_id':result['run_id'],'mode':result['mode'],'outcome':result['outcome'],
-        'operation_success':result['operation_success'],'sources':[{k:v for k,v in r.items() if k!='requests'} for r in result['sources']]},ensure_ascii=False))
+    summary_sources=[]
+    for source in result['sources']:
+        summary={k:v for k,v in source.items() if k!='requests'}
+        if args.probe: summary['requests']=source.get('requests',[])[:10]
+        summary_sources.append(summary)
+    print(json.dumps({'run_id':result['run_id'],'mode':result['mode'],'runtime':result['runtime'],'outcome':result['outcome'],
+        'operation_success':result['operation_success'],'sources':summary_sources},ensure_ascii=False))
     return {'failed':1,'blocked':2,'partial':3}.get(result['outcome'],0)
 
 if __name__=='__main__': sys.exit(main())
