@@ -127,6 +127,16 @@ def extract(source, html, url):
                 container=h.find_parent(class_='cmp-two-column-container')
                 if container: nodes=container.select('.cmp-text p')
                 break
+        if not nodes:
+            # Some official publication landing pages have an Introduction,
+            # not an Abstract. Read only that verified section, not the page's
+            # navigation/related publications or the unseen report itself.
+            for h in soup.select('h2.cmp-title__text'):
+                if normalize(h.get_text()).lower()=='introduction':
+                    container=h.find_parent(class_='cmp-two-column-container')
+                    if container: nodes=container.select('.cmp-text p')
+                    if nodes: scope='official_overview'
+                    break
     if not title or not nodes: raise ValueError('title_or_body_missing')
     related=[]
     for node in nodes:
@@ -157,7 +167,7 @@ def extract(source, html, url):
     distinct=set(d for d in dates if d)
     published=parse_date(ppc_title_date) if ppc_title_date else next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
     unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
-    requires_review=published is None or unread_ppc_pdf
+    requires_review=published is None or unread_ppc_pdf or scope=='official_overview'
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
               'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}

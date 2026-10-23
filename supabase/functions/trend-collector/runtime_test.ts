@@ -133,3 +133,18 @@ Deno.test("text-only press release PDF preserves unread annotation targets", asy
   ]);
   eq(item.published_date, "2026-10-21");
 });
+
+Deno.test("exhausted listing reports a finished scan separately from period coverage", async () => {
+  const state: State = {
+    since: "2026-10-16", until: "2026-10-23", adapter_version: "edge-v2",
+    page: config.listing, rows: [], offset: 0, next: null, unknown_dates: 3,
+  };
+  const step = await advance(config, state, {
+    request: () => Promise.reject(new Error("unexpected network")),
+  }, async () => { throw new Error("unexpected ingest"); });
+  eq(step.result.listing_scan_complete, true);
+  eq(step.result.coverage_complete, false);
+  eq(step.result.unresolved_date_count, 3);
+  eq(step.result.coverage_blockers, ["listing_exhaustiveness_unverified", "unknown_publication_dates"]);
+  eq(step.continue, false);
+});

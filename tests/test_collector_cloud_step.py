@@ -56,6 +56,51 @@ class CloudStepTests(unittest.TestCase):
         self.assertEqual(bundle['result']['reason'], 'http_503')
         self.assertFalse(bundle['backlog_resolved'])
 
+class MutableFeedResumeTests(unittest.TestCase):
+    def test_ftc_resumes_by_processed_urls_when_listing_titles_change(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls = ['https://www.ftc.gov/news-events/news/press-releases/a',
+                'https://www.ftc.gov/news-events/news/press-releases/b',
+                'https://www.ftc.gov/news-events/news/press-releases/c']
+        config = {'source':'ftc','source_id':'source','language':'en',
+                  'listing':'https://www.ftc.gov/feed.xml','hosts':['www.ftc.gov'],
+                  'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        item = {'title_original':'Privacy action','published_date':'2026-10-22',
+                'content_text':'Complete official article content.', 'content_hash':'abc',
+                'metadata':{'requires_review':False}}
+        class Client:
+            def get(self, url):
+                return b'body', url, 'text/html'
+        rows = lambda title: [{'url':urls[0],'title':title},{'url':urls[1],'title':'B'},{'url':urls[2],'title':'C'}]
+        first = PreparedStore(None)
+        second = PreparedStore(None)
+        third = PreparedStore(None)
+        with patch('scripts.collector.core.fetch_listing', side_effect=[
+                (rows('A'),None),(rows('A updated'),None),(rows('A changed again'),None)]), \
+             patch('scripts.collector.core.parsers.extract_document', return_value=item):
+            collect(config,Client(),first,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            second.cursor=first.cursor
+            collect(config,Client(),second,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            self.assertEqual(second.operations[0]['p_canonical_url'],urls[1])
+            third.cursor=second.cursor
+            collect(config,Client(),third,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(third.operations[0]['p_canonical_url'],urls[2])
+        self.assertIsNone(third.cursor)
+        self.assertFalse(third.complete)
+
+class OECDOverviewTests(unittest.TestCase):
+    def test_publication_overview_without_abstract_preserves_limited_scope(self):
+        html = '''<main><h1 class="cmp-report-header__title">Regulatory Policy Outlook</h1>
+        <div class="cmp-two-column-container"><h2 class="cmp-title__text">Introduction</h2>
+        <div class="cmp-text"><p>Official introduction about regulatory governance and public policy.</p></div></div>
+        <div class="cmp-text"><p>Related publication must not become report body.</p></div></main>'''
+        item=parsers.extract('oecd',html,'https://www.oecd.org/en/publications/report.html')
+        self.assertEqual(item['metadata']['read_scope'],'official_overview')
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertNotIn('Related publication',item['content_text'])
+        self.assertIn('Official introduction',item['content_text'])
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -136,6 +136,9 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         result['reason']='source_permissions_or_operation_unapproved'; return result
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
+    # A mutable feed's titles/order can change between one-document commits.
+    # Keep processed URL identities until this listing scan is exhausted.
+    processed_keys=set((cursor or {}).get('processed_url_hashes',[])) if config['source']=='ftc' else set()
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
@@ -169,8 +172,11 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':sorted(processed_keys)} if config['source']=='ftc' else {})})
                     continue
+                url_key=hashlib.sha256(url.encode()).hexdigest()
+                if config['source']=='ftc' and url_key in processed_keys: continue
                 if url in seen_items: continue
                 if len(seen_items)>=max_items: raise FetchError('document_limit')
                 seen_items.add(url); result['discovered']+=1
@@ -201,14 +207,18 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         store.progress(config,since,until,{'page':page,'offset':index,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':sorted(processed_keys)} if config['source']=='ftc' else {})})
                     raise FetchError('detail_failure:'+str(e)) from None
+                if config['source']=='ftc': processed_keys.add(url_key)
                 if hasattr(store,'progress'):
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':sorted(processed_keys)} if config['source']=='ftc' else {})})
             page=next_page
             cursor=None
+            processed_keys.clear()
             if hasattr(store,'progress'):
                 store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']} if page else None)

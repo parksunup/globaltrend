@@ -338,6 +338,12 @@ export async function advance(
       state.offset = 0;
       state.seen_pages = [];
       state.page = c.listing;
+      result.listing_scan_complete = true;
+      result.unresolved_date_count = state.unknown_dates || 0;
+      result.coverage_blockers = [
+        "listing_exhaustiveness_unverified",
+        ...((state.unknown_dates || 0) > 0 ? ["unknown_publication_dates"] : []),
+      ];
       result.reason = "listing_exhaustiveness_unverified";
       result.stage = "range_incomplete";
       return { state, result, continue: false, delay: 0 };
