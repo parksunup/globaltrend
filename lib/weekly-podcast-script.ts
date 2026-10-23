@@ -24,7 +24,9 @@ function requireStory(stories: WeeklyIssueItem[], id: string) {
  */
 export function buildWeeklyPodcastScript() {
   const issue = loadWeeklySample();
-  const featuredStories = FEATURED_STORY_IDS.map((id, index) => ({\n    ...requireStory(issue.issue.contents, id),\n    editorialFormat: index === 2 ? "brief" as const : "feature" as const,\n  }));
+  const featuredStories = FEATURED_STORY_IDS.map((id, index) => ({
+    ...requireStory(issue.issue.contents, id),
+    editorialFormat: index === 2 ? "brief" as const : "feature" as const,\n  }));
 
   const turns: PodcastTurn[] = [
     {
