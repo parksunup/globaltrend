@@ -6,6 +6,8 @@
 
 ### 로컬에서 검토하기
 
+담당자 최신 작업은 `/team?role=trends`(동향), `/team?role=legal`(법제)에서 확인합니다. 기존 담당 브랜치에 자료를 push하면 병합·자료별 재배포 없이 자동으로 읽습니다. 미발행 자료도 검수 화면에서는 표시하며, 공개 페이지의 발행 권한과는 분리됩니다. [사용 방법과 실패 확인](./docs/live-team-workspace.md)
+
 ```bash
 pnpm install --frozen-lockfile
 pnpm dev
