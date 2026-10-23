@@ -41,3 +41,20 @@
 :global(.themeLight) .actions, :global(.themeLight) .turn { border-color: #d5ddd8; }
 :global(.themeLight) .transcript h2 { color: #1c332b; }
 :global(.themeLight) .turn p { color: #3d5148; }
+
+
+.featured { margin: 28px 0 34px; padding: 22px 0 26px; border-bottom: 1px solid var(--line); }
+.sectionTitle { margin: 0 0 16px; font-size: 20px; line-height: 1.45; letter-spacing: -.035em; }
+.stories { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.story { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; padding: 16px; border: 1px solid var(--line); border-radius: 8px; background: color-mix(in srgb, var(--panel) 75%, transparent); }
+.storyNumber { color: var(--cyan); font-size: 12px; font-weight: 700; letter-spacing: .08em; }
+.story a { color: inherit; font-size: 14px; font-weight: 700; line-height: 1.65; text-decoration: none; }
+.story a:hover { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
+.storyMeta { margin: 10px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.chapter { margin: 32px 0 0; padding: 11px 0 10px; border-top: 1px solid var(--line); color: var(--cyan); font-size: 15px; line-height: 1.5; letter-spacing: -.02em; }
+:global(.themeLight) .story { background: #f7f9f6; }
+:global(.themeLight) .story a { color: #1d352d; }
+@media (max-width: 760px) {
+  .stories { grid-template-columns: 1fr; }
+  .featured { margin: 23px 0 28px; }
+}
