@@ -13,6 +13,7 @@ export default function WeeklyPage() {
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>한 주의 개인정보 보호 동향을 호별로 모아 읽습니다.</p></div>
+      <p><Link href="/public/weekly/podcast">주간 팟캐스트 듣기 →</Link></p>
       {example?<div className={styles.weeklyReport}>
         <div className={styles.weeklyReportHeader}>
           <p className={styles.draftNotice}>주간호 구성 예시</p>
