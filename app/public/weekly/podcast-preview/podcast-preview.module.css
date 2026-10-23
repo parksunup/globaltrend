@@ -58,4 +58,5 @@
   .stories { grid-template-columns: 1fr; }
   .featured { margin: 23px 0 28px; }
 }
-\n.storyLabel { display: inline-block; margin: 0 0 8px; color: var(--cyan); font-size: 10px; font-weight: 700; letter-spacing: .04em; }\n
+
+.storyLabel { display: inline-block; margin: 0 0 8px; color: var(--cyan); font-size: 10px; font-weight: 700; letter-spacing: .04em; }
