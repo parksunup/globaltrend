@@ -10,7 +10,10 @@ from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 
 MAX_BYTES=2_000_000
-MAX_REQUESTS=100
+# Per-process safety ceiling, independent of the per-run document/page inputs.
+# A 100-item backfill also performs progress and database RPC calls; the old
+# value of 100 unintentionally stopped a batch before its document limit.
+MAX_REQUESTS=1000
 class FetchError(Exception): pass
 
 def canonical_url(url,hosts):
@@ -19,6 +22,18 @@ def canonical_url(url,hosts):
         raise ValueError('URL outside approved official hosts')
     query=[(k,v) for k,v in parse_qsl(p.query,keep_blank_values=True) if not k.lower().startswith('utm_') and k.lower() not in ('fbclid','gclid')]
     return urlunsplit(('https',p.hostname,p.path or '/',urlencode(sorted(query)),''))
+
+def canonical_redirect_url(url,hosts):
+    """Accept an HTTP-to-HTTPS upgrade only on the same approved host."""
+    p=urlsplit(url)
+    if p.scheme=='http' and p.hostname in hosts and not p.username and not p.password and p.port in (None,80):
+        url=urlunsplit(('https',p.hostname,p.path or '/',p.query,''))
+    return canonical_url(url,hosts)
+
+def is_unapproved_https_host(url,hosts):
+    try: parsed=urlsplit(url)
+    except ValueError: return False
+    return parsed.scheme=='https' and parsed.hostname not in hosts and not parsed.username and not parsed.password and parsed.port in (None,443)
 
 def read_limited(stream,limit=MAX_BYTES):
     result=bytearray()
@@ -38,7 +53,7 @@ def retry_delay(value):
 class SafeRedirect(urllib.request.HTTPRedirectHandler):
     def __init__(self,hosts): self.hosts=set(hosts)
     def redirect_request(self,req,fp,code,msg,headers,newurl):
-        canonical_url(newurl,self.hosts)
+        canonical_redirect_url(newurl,self.hosts)
         # Return the redirect to HttpClient so robots, rate and request limits
         # apply to each hop instead of urllib following it inside one open().
         return None
@@ -66,7 +81,7 @@ class HttpClient:
                 if e.code in (301,302,303,307,308):
                     if _redirects>=5 or not e.headers.get('Location'):
                         e.close(); raise FetchError('redirect_limit_or_location_missing') from None
-                    try: target=canonical_url(urljoin(url,e.headers['Location']),self.hosts)
+                    try: target=canonical_redirect_url(urljoin(url,e.headers['Location']),self.hosts)
                     except ValueError:
                         e.close(); raise FetchError('network_or_redirect_failure:ValueError') from None
                     status=e.code; e.close()
@@ -81,11 +96,15 @@ class HttpClient:
                 # Do not include credentials or proxy URLs in logs.
                 if isinstance(e,urllib.error.URLError) and 'Tunnel connection failed: 403' in str(e.reason):
                     raise FetchError('network_policy_denied_403') from None
+                if attempt<2 and isinstance(e,(urllib.error.URLError,TimeoutError,OSError)):
+                    time.sleep(1+attempt)
+                    continue
                 raise FetchError('network_or_redirect_failure:'+type(e).__name__) from None
     def check_robots(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname
         if origin not in self.robots:
-            data,_,_=self.request(origin+'/robots.txt')
+            try: data,_,_=self.request(origin+'/robots.txt')
+            except FetchError as e: raise FetchError('robots_fetch_failed:'+str(e)) from None
             robot=urllib.robotparser.RobotFileParser(); robot.parse(data.decode('utf-8','replace').splitlines())
             self.robots[origin]=robot
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
@@ -102,29 +121,39 @@ def fetch_listing(source,client,page):
     def fetch(url,method='GET',payload=None):
         return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
     data,final,ctype=fetch(page)
+    is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+    if is_pdpc_api:
+        return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 
 def collect(config,client,store,since,until,max_pages=10,max_items=30):
     result={'source':config['source'],'status':'held','reason':None,'coverage_complete':False,'since':since,'until':until,
-            'discovered':0,'new':0,'changed':0,'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,'pages':0}
+            'discovered':0,'new':0,'changed':0,'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,
+            'excluded_unapproved_host_count':0,'pages':0}
     if not config.get('enabled') or not all(config.get('permissions',{}).get(k) for k in ('collect','store','ai')):
         result['reason']='source_permissions_or_operation_unapproved'; return result
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
+    prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
     result['status']='partial'
     try:
         while page:
             page=canonical_url(page,set(config['hosts']))
-            if page in seen_pages or result['pages']>=max_pages: raise FetchError('pagination_cycle_or_page_limit')
+            if page in seen_pages: raise FetchError('pagination_cycle')
+            if result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
             if not rows: raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
             fingerprint=hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest()
-            listing_urls=[canonical_url(row['url'],set(config['hosts'])) for row in rows]
+            listing_urls=[]
+            for row in rows:
+                try: listing_urls.append(canonical_url(row['url'],set(config['hosts'])))
+                except ValueError:
+                    if config['source']!='pdpc' or not is_unapproved_https_host(row['url'],set(config['hosts'])): raise
             if fingerprint in seen_fingerprints or config['source'] in ('ico','pdpc') and (
                 len(set(listing_urls))!=len(listing_urls) or seen_listing_urls.intersection(listing_urls)):
                 raise FetchError('listing_repeated_or_duplicate_items')
@@ -132,7 +161,16 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
             start=(cursor or {}).get('offset',0) if (cursor or {}).get('fingerprint')==fingerprint else 0
             for index,row in enumerate(rows):
                 if index<start: continue
-                url=canonical_url(row['url'],set(config['hosts']))
+                try: url=canonical_url(row['url'],set(config['hosts']))
+                except ValueError:
+                    if config['source']!='pdpc' or not is_unapproved_https_host(row['url'],set(config['hosts'])): raise
+                    result['excluded_unapproved_host_count']+=1
+                    if hasattr(store,'progress'):
+                        store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
+                            'had_pagination':had_pagination,'failures':prior_failures,
+                            'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                    continue
                 if url in seen_items: continue
                 if len(seen_items)>=max_items: raise FetchError('document_limit')
                 seen_items.add(url); result['discovered']+=1
@@ -145,13 +183,15 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     else:
                         if date is None: result['unknown_date']+=1
                         # Eligibility is not a positive relevance decision or human approval.
-                        item['metadata'].update({'relevance_reason':'full_body_available_human_relevance_review_pending','ai_ready':date is not None,
+                        item['metadata'].update({'relevance_reason':'full_body_available_human_relevance_review_pending',
+                            'ai_ready':date is not None and not item['metadata']['requires_review'],
                             'pr16_commit':'547a83611cad948439598e2974e7ce8afd10781d'})
                         saved=store.ingest(config,url,item)
                         key='new' if saved.get('item_created') else 'changed' if saved.get('content_changed') else 'duplicate'
                         result[key]+=1
                         if date is None: result['held']+=1
                 except (FetchError,ValueError) as e:
+                    result['failed_url']=url
                     if str(e).startswith('database_'): raise
                     result['failed']+=1
                     store.discovery_failure(config,url,row.get('title'),str(e))
@@ -160,19 +200,25 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     if hasattr(store,'progress'):
                         store.progress(config,since,until,{'page':page,'offset':index,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
-                            'unknown_dates':prior_unknown_dates+result['unknown_date']})
+                            'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
                     raise FetchError('detail_failure:'+str(e)) from None
                 if hasattr(store,'progress'):
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
-                        'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date']})
+                        'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
             page=next_page
             cursor=None
             if hasattr(store,'progress'):
-                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date']} if page else None)
-        result['coverage_complete']=had_pagination and result['failed']==0 and prior_failures==0 and result['unknown_date']==0 and prior_unknown_dates==0
+                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']} if page else None)
+        result['coverage_complete']=had_pagination and result['failed']==0 and prior_failures==0 and result['unknown_date']==0 and prior_unknown_dates==0 and prior_excluded_hosts==0 and result['excluded_unapproved_host_count']==0
         result['status']='success' if result['coverage_complete'] else 'partial'
-        result['reason']=None if result['coverage_complete'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
+        result['reason']=None if result['coverage_complete'] else ('unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure')
         if result['coverage_complete']: store.checkpoint(config,until)
     except (FetchError,ValueError) as e:
-        result['status']='failed'; result['reason']=str(e); result['coverage_complete']=False
+        # Ordinary batch boundaries preserve the cursor for the next run. They
+        # do not establish complete coverage, but are not collection failures.
+        result['status']='partial' if str(e) in ('document_limit','page_limit') else 'failed'
+        result['reason']=str(e); result['coverage_complete']=False
     return result

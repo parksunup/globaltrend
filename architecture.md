@@ -77,12 +77,12 @@ A를 기본으로 만들되 URL·파일 수동 등록 경로를 함께 둡니다
 flowchart LR
     Sources[공식 RSS·API·웹·문서] --> Fetch[수집·본문 추출]
     Manual[팀의 URL·파일 등록] --> Fetch
-    Cron[GitHub Actions 예약 · 현재 비활성] --> Queue[Supabase 작업 대기·판본]
+    Cron[Supabase Cron · 운영 연결 검증 필요] --> Queue[Supabase Queues 작업 대기·판본]
     Queue --> Fetch
     Fetch --> Raw[비공개 원문·문서 버전]
     Raw --> Process[정규화·중복 판정·분류]
     Process --> DraftQueue[Codex 초안 대기함]
-    DraftQueue --> Codex[같은 프로젝트의 Codex 전용 스레드]
+    DraftQueue --> Codex[같은 프로젝트의 클라우드 Codex 편집 워커]
     Codex --> Review[Supabase 초안 저장·팀 검수 화면]
     Review --> Published[승인된 발행 버전]
     Published --> Search[키워드·벡터 검색]
@@ -118,7 +118,7 @@ Vercel Cron을 대안 스케줄러로 선택할 수는 있지만, 기본안에�
 
 ### 3.2 Codex 전용 스레드를 편집 워커로 사용
 
-초안 생성은 별도 OpenAI API를 호출하지 않습니다. 이 프로젝트 안에 `동향 초안 생성` 전용 Codex 스레드를 만들고, Codex Automation이 정해진 주기에 이 스레드를 실행하도록 구성합니다. Codex 앱은 같은 프로젝트에서 병렬 스레드와 백그라운드 Automation을 지원합니다. 이 방식은 별도 OpenAI API 과금을 피하지만 Codex 구독의 사용 한도는 소비합니다. 구독별 정확한 자동화 가용성과 한도는 설정 시 계정에서 확인합니다. [Codex 장기 작업과 Automations](https://developers.openai.com/blog/run-long-horizon-tasks-with-codex)
+초안 생성은 별도 OpenAI API를 호출하지 않습니다. 이 프로젝트 안에 `동향 초안 생성` 전용 클라우드 Codex 작업을 두고, 클라우드 예약이 정해진 주기에 실행하도록 구성합니다. 사용자 PC와 데스크톱 앱이 꺼져 있어도 수집과 초안 작성이 모두 실행되어야 합니다. 이 방식은 Codex 구독의 사용 한도를 소비합니다. 현재 계정에서 저장소·필수 도구를 갖춘 클라우드 예약을 만들 수 있는지와 실제 무인 실행은 별도로 검증하며, 데스크톱 예약의 존재로 이를 입증하지 않습니다. [예약 작업 공식 문서](https://learn.chatgpt.com/docs/automations?surface=app)
 
 ```mermaid
 sequenceDiagram
@@ -147,9 +147,9 @@ sequenceDiagram
 - 초안 생성 지침·양식·용어집·출력 스키마는 Git에 버전 관리합니다. DB에는 Codex 모델/설정, 스레드/실행 식별자, 지침 commit SHA와 결과 시각을 남깁니다.
 - Codex가 직접 공개 상태로 바꾸지 못하게 합니다. 초안 작성 권한과 발행 승인 권한을 분리합니다.
 
-Codex가 Supabase에 접근하는 첫 구현은 저장소의 제한된 명령(`draft:claim`, `draft:submit`, `draft:fail`)을 호출하도록 합니다. 명령은 전용 워커 자격으로 좁은 RPC만 사용합니다. Supabase 플러그인은 개발·점검과 수동 복구에 사용하되, 반복 자동화가 광범위한 관리 권한에 의존하지 않게 합니다. 워커 자격증명은 로컬 Codex 실행 환경에만 저장하며 Git·브라우저·Vercel 클라이언트에 넣지 않습니다.
+Codex가 Supabase에 접근하는 첫 구현은 저장소의 제한된 명령(`draft:claim`, `draft:submit`, `draft:fail`)을 호출하도록 합니다. 명령은 전용 워커 자격으로 좁은 RPC만 사용합니다. Supabase 플러그인은 개발·점검과 수동 복구에 사용하되, 반복 자동화가 광범위한 관리 권한에 의존하지 않게 합니다. 워커 자격증명은 클라우드 실행부의 보안 설정으로 제공하며 Git·대화·브라우저·Vercel 클라이언트에 넣지 않습니다. 사용자 PC에 저장된 자격증명을 운영 전제로 삼지 않습니다.
 
-수집과 사이트 검색·열람은 Codex 실행 여부와 독립적으로 계속 작동합니다. Codex 앱이나 해당 컴퓨터가 꺼져 있거나 사용 한도에 도달하면 원문 수집은 계속되고 초안 작업만 `pending`으로 쌓입니다. 대기량·가장 오래된 작업·마지막 성공 실행을 관리자 화면에 표시하고, 스레드를 수동 실행해 따라잡을 수 있게 합니다.
+수집과 사이트 검색·열람은 Codex 실행 여부와 독립적으로 계속 작동하도록 구성합니다. 사용자 PC·앱 종료는 초안 대기의 원인이 되어서는 안 됩니다. 클라우드 편집 워커의 장애나 구독 한도 도달 때에는 초안 작업을 `pending`으로 보존하고 다음 클라우드 실행이 임대·판본을 대조해 이어받아야 합니다. 대기량·가장 오래된 작업·마지막 성공 실행을 관리자 화면에 표시합니다. 이는 목표 동작이며 실제 예약·작성·검수함 반영 기록을 확인하기 전에는 운영 완료로 보고하지 않습니다.
 
 ## 4. 동향 수집과 주간 자료 파이프라인
 

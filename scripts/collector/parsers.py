@@ -19,7 +19,7 @@ def normalize(text):
 
 def parse_date(text):
     """Only a displayed complete date; no current-year or URL inference."""
-    text = normalize(text).lower()
+    text = normalize(text).translate(str.maketrans('０１２３４５６７８９','0123456789')).lower()
     era = re.search(r'(令和|平成)(元|\d+)年\s*(\d+)月\s*(\d+)日', text)
     try:
         if era:
@@ -141,17 +141,25 @@ def extract(source, html, url):
     if len(body)<10: raise ValueError('empty_body')
     if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=[]
+    ppc_title_date=None
     if date_node:
         observations.append({'meaning':'published_display','locator':date_sel or 'Date + strong','value':normalize(date_node.get_text())})
         if date_node.get('datetime'): observations.append({'meaning':'published_attribute','locator':'time@datetime','value':date_node['datetime']})
     if source=='ppc':
         # Do not select the first era date: notices can include enactment/update dates.
-        observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|\d+)年\s*\d+月\s*\d+日',body)]
+        observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日',body)]
+        page_title=normalize(soup.title.get_text()) if soup.title else ''
+        publication=re.search(r'公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]',page_title)
+        if publication:
+            ppc_title_date=publication[1]
+            observations.append({'meaning':'published_title','locator':'document_title','value':ppc_title_date})
     dates=[parse_date(o['value']) for o in observations]
     distinct=set(d for d in dates if d)
-    published=next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
+    published=parse_date(ppc_title_date) if ppc_title_date else next(iter(distinct)) if len(distinct)==1 and source!='ppc' else None
+    unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
+    requires_review=published is None or unread_ppc_pdf
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
-              'requires_review':published is None,'related_documents':related,'unread_attachments':[r['url'] for r in related],
+              'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(title.get_text()),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':metadata}
 
@@ -229,6 +237,22 @@ def listing_next_url(url,page):
     parts=urlsplit(url)
     return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode({'page':page+1}),''))
 
+def pdpc_api_page_number(url):
+    query=parse_qs(urlsplit(url).query,keep_blank_values=True)
+    expected={'itemsperpage':['10'],'listingtype':['media_events'],'pathname':['/media-events']}
+    page=query.pop('page',['1'])
+    if query!=expected or len(page)!=1:
+        raise ValueError('pdpc_listing_query_changed')
+    try: number=int(page[0])
+    except ValueError: raise ValueError('invalid_listing_page') from None
+    if not 1<=number<=1000: raise ValueError('invalid_listing_page')
+    return number
+
+def pdpc_api_next_url(url,page):
+    parts=urlsplit(url); query=parse_qs(parts.query,keep_blank_values=True)
+    query['page']=[str(page+1)]
+    return urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
+
 def ico_search_request(html,url):
     """Observed site-internal protocol; not a documented/supported public API."""
     soup=BeautifulSoup(html,'html.parser')
@@ -275,9 +299,11 @@ def discover_pdpc_listing(data,url,page):
     for result in results:
         if not isinstance(result,dict) or any(not isinstance(result.get(k),str) for k in ('href','title','date')):
             raise ValueError('pdpc_listing_schema_changed')
-        rows.append({'url':urljoin(url,result['href']),'title':normalize(result['title']),
+        origin=f'{urlsplit(url).scheme}://{urlsplit(url).netloc}'
+        rows.append({'url':urljoin(origin,result['href']),'title':normalize(result['title']),
             'date_observations':[{'meaning':'listing_published_display','locator':'listing card datePublished','value':result['date']}]})
-    return rows,listing_next_url(url,page) if page*10<total else None
+    next_url=pdpc_api_next_url(url,page) if urlsplit(url).path=='/api/listing-api' else listing_next_url(url,page)
+    return rows,next_url if page*10<total else None
 
 def discover_listing(source,html,url,fetch):
     if source=='ico':
@@ -287,6 +313,8 @@ def discover_listing(source,html,url,fetch):
         if ctype!='application/json': raise ValueError('ico_search_response_type_changed')
         return discover_ico_search(data,url,payload['pageNumber'])
     if source=='pdpc':
+        if urlsplit(url).path=='/api/listing-api':
+            return discover_pdpc_listing(html.encode('utf-8'),url,pdpc_api_page_number(url))
         endpoint=pdpc_listing_request(html,url)
         data,_,ctype=fetch(endpoint)
         if ctype not in ('application/json','text/plain'): raise ValueError('pdpc_listing_response_type_changed')
@@ -320,7 +348,7 @@ def discover(source,html,url):
         return list(found.values()),urljoin(base,next_link['href']) if next_link else None
     selectors={'edpb':'main a[href*="/news/"]','cnil':'main .ctn-gen-liste-titre a[href]',
                'dpc':'main article.node--view-mode-teaser h2 a[href]','ppc':'main .news-list .news-text a[href]',
-               'ftc':'main a[href*="/news-events/news/press-releases/"]','oecd':'main a[href*="/publications/"]'}
+               'ftc':'main a[href*="/news-events/news/press-releases/"]','oecd':'main a[href*="/publications/"],main a[href*="/about/news/press-releases/"]'}
     links=soup.select(selectors[source]); found={}
     for a in links:
         target=urljoin(url,a['href'])
