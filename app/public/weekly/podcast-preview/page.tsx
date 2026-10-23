@@ -18,7 +18,11 @@ export default function Page() {
           <h1>{sample.title}</h1>
           <p className={styles.notice}>{sample.notice}</p>
         </header>
-        <PodcastPreview turns={sample.turns} styles={styles} />
+        <PodcastPreview
+          turns={sample.turns}
+          featuredStories={sample.featuredStories}
+          styles={styles}
+        />
       </div>
       <PublicFooter />
     </main>
