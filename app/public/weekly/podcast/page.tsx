@@ -29,7 +29,7 @@ export default async function PublishedPodcastsPage() {
           {episode.description ? <p>{episode.description}</p> : null}
           <audio controls preload="none" style={{width:"100%",margin:"18px 0"}}><source src={audio} type={episode.audio_mime_type} />브라우저에서 오디오를 재생할 수 없습니다.</audio>
           <h3>이번 호에 포함된 동향</h3>
-          <ul>{included.map(report => <li key={report!.id}><Link href={`/public/trends/${report!.id}`}>{report!.title_ko}</Link>{report!.one_line_summary_ko ? <p>{report!.one_line_summary_ko}</p> : null}</li>)}</ul>
+          <ul>{included.map((report: {id: string; title_ko: string; one_line_summary_ko: string | null}) => <li key={report!.id}><Link href={`/public/trends/${report!.id}`}>{report!.title_ko}</Link>{report!.one_line_summary_ko ? <p>{report!.one_line_summary_ko}</p> : null}</li>)}</ul>
         </article>;
       }) : <div className={styles.weeklyEmpty}><strong>아직 공개된 팟캐스트가 없습니다</strong><p>주간호 오디오가 게시되면 이곳에서 들으실 수 있습니다.</p></div>}
     </section>
