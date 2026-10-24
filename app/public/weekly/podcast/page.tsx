@@ -22,7 +22,7 @@ export default async function PublishedPodcastsPage() {
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간 동향 팟캐스트</h1><p>발행된 주간호에 포함된 동향을 두 진행자의 대화로 들어보세요.</p></div>
       {error ? <p role="alert">팟캐스트를 불러오지 못했습니다.</p> : episodeRows.length ? episodeRows.map(episode => {
         const audio = db.storage.from("weekly-podcasts").getPublicUrl(episode.audio_path).data.publicUrl;
-        const included = (episode.report_ids ?? []).map(id => reportMap.get(id)).filter(Boolean);
+        const included = (episode.report_ids ?? []).map((id: string) => reportMap.get(id)).filter(Boolean);
         return <article key={episode.issue_key} style={{maxWidth:1000,margin:"24px auto",padding:"28px",border:"1px solid var(--line,#d9e1dd)",borderRadius:16,background:"var(--surface,#fff)"}}>
           <p className={styles.overline}>{episode.issue_key} · {episode.week_start}–{episode.week_end}</p>
           <h2>{episode.title}</h2>
