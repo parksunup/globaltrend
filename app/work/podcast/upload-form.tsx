@@ -70,7 +70,7 @@ export default function PodcastUploadForm({ reports }: { reports: Report[] }) {
 
   return <section className={styles.card}>
     <h2>NotebookLM 오디오 게시</h2>
-    <p>NotebookLM에서 다운로드한 오디오 파일을 선택하고, 해당 주간호에 실제 포함된 공개 동향만 골라 주세요. 게시 후 공개 주간 팟캐스트 페이지에 바로 표시됩니다.</p>
+    <p>주간호 정보와 실제 포함된 공개 동향, NotebookLM 오디오를 한 번 등록하면 주간호와 팟캐스트가 함께 공개됩니다. 이미 공개된 자료만 선택할 수 있습니다.</p>
     <form className={styles.form} onSubmit={submit}>
       <label>주간호 표기<input name="issueKey" placeholder="예: 2026-W43" pattern="[0-9]{4}-W[0-9]{2}" required /></label>
       <label>팟캐스트 제목<input name="title" maxLength={160} required /></label>
