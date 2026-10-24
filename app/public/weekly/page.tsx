@@ -1,20 +1,75 @@
 import Link from "next/link";
+import { createClient } from "../../../lib/supabase/server";
 import { PublicHeader, PublicFooter } from "../public-navigation";
 import styles from "../public.module.css";
 import { publicSubmissionPreviewEnabled } from "../../../lib/public-submission-preview";
 import { loadWeeklySample } from "../../../lib/weekly-sample";
 import type { WeeklyIssueItem } from "../../../lib/weekly-sample";
 
-export const dynamic="force-dynamic";
+export const dynamic = "force-dynamic";
 
-export default function WeeklyPage() {
-  const example=publicSubmissionPreviewEnabled()?loadWeeklySample():null;
+export default async function WeeklyPage() {
+  const db = await createClient();
+  const { data: issues, error: issuesError } = await db.from("weekly_issues")
+    .select("issue_key,title,description,week_start,week_end,published_at")
+    .eq("status", "published").order("week_start", { ascending: false }).limit(52);
+  const issueRows = issues ?? [];
+  const issueKeys = issueRows.map(issue => issue.issue_key);
+  const [{ data: links }, { data: podcasts }] = issueKeys.length
+    ? await Promise.all([
+        db.from("weekly_issue_reports").select("issue_key,report_id,sort_order")
+          .in("issue_key", issueKeys).order("sort_order"),
+        db.from("weekly_podcast_episodes").select("issue_key")
+          .eq("status", "published").in("issue_key", issueKeys),
+      ])
+    : [{ data: [] }, { data: [] }];
+  const reportIds = [...new Set((links ?? []).map(link => link.report_id))];
+  const { data: reports } = reportIds.length
+    ? await db.from("reports").select("id,title_ko,one_line_summary_ko")
+        .eq("status", "published").in("id", reportIds)
+    : { data: [] };
+  const reportMap = new Map((reports ?? []).map(report => [report.id, report]));
+  const linksByIssue = new Map<string, typeof links>();
+  for (const link of links ?? []) {
+    const rows = linksByIssue.get(link.issue_key) ?? [];
+    rows.push(link);
+    linksByIssue.set(link.issue_key, rows);
+  }
+  const podcastIssues = new Set((podcasts ?? []).map(episode => episode.issue_key));
+  const example = publicSubmissionPreviewEnabled() ? loadWeeklySample() : null;
+  const schemaNotReady = issuesError?.code === "PGRST205" || issuesError?.code === "42P01";
+
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>한 주의 개인정보 보호 동향을 호별로 모아 읽습니다.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>한 주의 개인정보 보호 동향과 그 주에 발행된 팟캐스트를 호별로 모아 읽습니다.</p></div>
       <p><Link href="/public/weekly/podcast">주간 팟캐스트 듣기 →</Link></p>
-      {example?<div className={styles.weeklyReport}>
+      {issuesError && !schemaNotReady ? <p role="alert">공개 주간호를 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p> : null}
+      {issueRows.map(issue => {
+        const included = (linksByIssue.get(issue.issue_key) ?? [])
+          .map(link => reportMap.get(link.report_id)).filter(Boolean);
+        return <article key={issue.issue_key} className={styles.weeklyReport} style={{marginBottom:28}}>
+          <div className={styles.weeklyReportHeader}>
+            <p className={styles.weeklyReportKicker}>{issue.issue_key} · {issue.week_start}–{issue.week_end}</p>
+            <h2>{issue.title}</h2>
+            {issue.description ? <p>{issue.description}</p> : null}
+            <p className={styles.weeklyReportMeta}>공개 동향 {included.length}건</p>
+            {podcastIssues.has(issue.issue_key) ? <p><Link href="/public/weekly/podcast">이 호 팟캐스트 듣기 →</Link></p> : null}
+          </div>
+          {links?.length ? <section className={styles.weeklyArticles} aria-label={`${issue.issue_key} 포함 동향`}>
+            {included.map(report => report ? <article className={styles.weeklyArticle} key={report.id}>
+              <h3><Link href={`/public/trends/${report.id}`}>{report.title_ko}</Link></h3>
+              {report.one_line_summary_ko ? <p className={styles.weeklyLead}>{report.one_line_summary_ko}</p> : null}
+            </article> : null)}
+          </section> : <p>이 주간호에 연결된 동향이 없습니다.</p>}
+        </article>;
+      })}
+      {!issueRows.length && !example ? <div className={styles.weeklyEmpty}>
+        <strong>{schemaNotReady ? "주간호 공개를 준비하고 있습니다" : "아직 공개된 주간호가 없습니다"}</strong>
+        <p>{schemaNotReady ? "주간호 게시 기능을 배포한 뒤 이곳에서 읽을 수 있습니다." : "개별 동향과 국가별 법제를 먼저 살펴보실 수 있습니다."}</p>
+        <div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div>
+      </div> : null}
+      {example ? <div className={styles.weeklyReport}>
         <div className={styles.weeklyReportHeader}>
           <p className={styles.draftNotice}>주간호 구성 예시</p>
           <p className={styles.weeklyReportKicker}>개인정보 주간동향 분석</p>
@@ -36,7 +91,7 @@ export default function WeeklyPage() {
             <footer><span>출처 · {item.originalTitle} ({item.organization}, {item.date})</span><Link href={`/public/trends/${item.id}`}>상세 자료 보기 →</Link><a href={item.officialUrl} target="_blank" rel="noreferrer">원문 보기 ↗</a></footer>
           </article>)}
         </section>
-      </div>:<div className={styles.weeklyEmpty}><strong>첫 주간호를 준비하고 있습니다</strong><p>지금은 개별 동향과 국가별 법제를 살펴보실 수 있습니다.</p><div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div></div>}
+      </div> : null}
     </section>
     <PublicFooter />
   </main>;
