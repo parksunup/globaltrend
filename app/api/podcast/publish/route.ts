@@ -6,7 +6,7 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["audio/mpeg", "audio/wav", "audio/mp4", "audio/x-m4a"]);
 
 function isRealDate(value: string) {
-  if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(value)) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const date = new Date(`${value}T00:00:00.000Z`);
   return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
 }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const fileSizeBytes = Number(payload.fileSizeBytes);
   const reportIds = payload.reportIds;
 
-  if (!/^\\d{4}-W(?:0[1-9]|[1-4]\\d|5[0-3])$/.test(issueKey) ||
+  if (!/^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/.test(issueKey) ||
       !title || title.length > 160 || description.length > 1000 ||
       !isRealDate(weekStart) || !isRealDate(weekEnd) || weekStart > weekEnd ||
       !Array.isArray(reportIds) || reportIds.length < 1 || reportIds.length > 20 ||
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
   }
 
   const extension = audioMimeType === "audio/mpeg" ? "mp3" : audioMimeType === "audio/wav" ? "wav" : "m4a";
-  const pathPattern = new RegExp(`^${issueKey}/[0-9a-f-]{36}\\\\.${extension}$`, "i");
+  const pathPattern = new RegExp(`^${issueKey}/[0-9a-f-]{36}\\.${extension}$`, "i");
   if (!pathPattern.test(audioPath)) {
     return NextResponse.json({ error: "업로드된 오디오 파일 경로를 확인할 수 없습니다." }, { status: 400 });
   }
