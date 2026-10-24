@@ -148,7 +148,7 @@ begin
     when p_audio_mime_type = 'audio/wav' then 'wav'
     else 'm4a'
   end;
-  if p_audio_path !~ ('^' || p_issue_key || '/[0-9a-f-]{36}\\.' || v_extension || '$') then
+  if p_audio_path !~ ('^' || p_issue_key || '/[0-9a-f-]{36}\.' || v_extension || '$') then
     raise exception 'invalid audio path' using errcode = '22023';
   end if;
 
