@@ -5,6 +5,12 @@ export const runtime = "nodejs";
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["audio/mpeg", "audio/wav", "audio/mp4", "audio/x-m4a"]);
 
+function isRealDate(value: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
+}
+
 export async function POST(request: Request) {
   const db = await createClient();
   const { data: { user } } = await db.auth.getUser();
@@ -16,24 +22,33 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "팟캐스트 발행은 총괄 관리자만 할 수 있습니다." }, { status: 403 });
   }
 
-  const form = await request.formData();
-  const issueKey = String(form.get("issueKey") ?? "").trim();
-  const title = String(form.get("title") ?? "").trim();
-  const description = String(form.get("description") ?? "").trim();
-  const weekStart = String(form.get("weekStart") ?? "");
-  const weekEnd = String(form.get("weekEnd") ?? "");
-  const file = form.get("audio");
-  let reportIds: unknown;
-  try { reportIds = JSON.parse(String(form.get("reportIds") ?? "[]")); } catch { reportIds = null; }
-
-  if (!/^\d{4}-W\d{2}$/.test(issueKey) || !title || title.length > 160 ||
-      !/^\d{4}-\d{2}-\d{2}$/.test(weekStart) || !/^\d{4}-\d{2}-\d{2}$/.test(weekEnd) ||
-      weekStart > weekEnd || !Array.isArray(reportIds) || reportIds.length < 1 ||
-      reportIds.length > 20 || reportIds.some(id => typeof id !== "string" || !/^[0-9a-f-]{36}$/i.test(id))) {
-    return NextResponse.json({ error: "주간호 정보와 포함 동향을 확인해 주세요." }, { status: 400 });
+  let payload: Record<string, unknown>;
+  try { payload = await request.json(); } catch {
+    return NextResponse.json({ error: "게시 정보를 확인해 주세요." }, { status: 400 });
   }
-  if (!(file instanceof File) || !ALLOWED_TYPES.has(file.type) || file.size < 1 || file.size > MAX_FILE_SIZE) {
-    return NextResponse.json({ error: "MP3, WAV, M4A 오디오 파일(최대 50MB)을 선택해 주세요." }, { status: 400 });
+  const issueKey = typeof payload.issueKey === "string" ? payload.issueKey.trim() : "";
+  const title = typeof payload.title === "string" ? payload.title.trim() : "";
+  const description = typeof payload.description === "string" ? payload.description.trim() : "";
+  const weekStart = typeof payload.weekStart === "string" ? payload.weekStart : "";
+  const weekEnd = typeof payload.weekEnd === "string" ? payload.weekEnd : "";
+  const audioPath = typeof payload.audioPath === "string" ? payload.audioPath : "";
+  const audioMimeType = typeof payload.audioMimeType === "string" ? payload.audioMimeType : "";
+  const fileSizeBytes = Number(payload.fileSizeBytes);
+  const reportIds = payload.reportIds;
+
+  if (!/^\d{4}-W\d{2}$/.test(issueKey) || !title || title.length > 160 || description.length > 1000 ||
+      !isRealDate(weekStart) || !isRealDate(weekEnd) || weekStart > weekEnd ||
+      !Array.isArray(reportIds) || reportIds.length < 1 || reportIds.length > 20 ||
+      reportIds.some(id => typeof id !== "string" || !/^[0-9a-f-]{36}$/i.test(id)) ||
+      !Number.isInteger(fileSizeBytes) || fileSizeBytes < 1 || fileSizeBytes > MAX_FILE_SIZE ||
+      !ALLOWED_TYPES.has(audioMimeType)) {
+    return NextResponse.json({ error: "주간호 정보, 포함 동향, 오디오 파일을 확인해 주세요." }, { status: 400 });
+  }
+
+  const extension = audioMimeType === "audio/mpeg" ? "mp3" : audioMimeType === "audio/wav" ? "wav" : "m4a";
+  const pathPattern = new RegExp(`^${issueKey}/[0-9a-f-]{36}\\.${extension}$`, "i");
+  if (!pathPattern.test(audioPath)) {
+    return NextResponse.json({ error: "업로드된 오디오 파일 경로를 확인할 수 없습니다." }, { status: 400 });
   }
 
   const uniqueIds = [...new Set(reportIds as string[])];
@@ -44,25 +59,34 @@ export async function POST(request: Request) {
   }
 
   const existing = await db.from("weekly_podcast_episodes").select("issue_key").eq("issue_key", issueKey).maybeSingle();
+  if (existing.error) {
+    return NextResponse.json({ error: "팟캐스트 게시 기능을 준비 중입니다. 데이터베이스 배포 후 다시 시도해 주세요." }, { status: 503 });
+  }
   if (existing.data) {
     return NextResponse.json({ error: "이 주간호의 팟캐스트가 이미 등록되어 있습니다. 기존 발행을 먼저 취소해 주세요." }, { status: 409 });
   }
 
-  const extension = file.type === "audio/mpeg" ? "mp3" : file.type === "audio/wav" ? "wav" : "m4a";
-  const audioPath = `${issueKey}/${crypto.randomUUID()}.${extension}`;
-  const { error: uploadError } = await db.storage.from("weekly-podcasts")
-    .upload(audioPath, file, { contentType: file.type, upsert: false });
-  if (uploadError) return NextResponse.json({ error: "오디오 업로드에 실패했습니다. 다시 시도해 주세요." }, { status: 502 });
+  const slash = audioPath.indexOf("/");
+  const directory = audioPath.slice(0, slash);
+  const fileName = audioPath.slice(slash + 1);
+  const { data: objects, error: storageError } = await db.storage.from("weekly-podcasts")
+    .list(directory, { search: fileName, limit: 10 });
+  const uploaded = objects?.find(object => object.name === fileName);
+  const metadata = uploaded?.metadata as { size?: number; mimetype?: string } | undefined;
+  if (storageError || !uploaded || Number(metadata?.size) !== fileSizeBytes ||
+      (metadata?.mimetype && metadata.mimetype !== audioMimeType)) {
+    return NextResponse.json({ error: "Storage에 올라간 파일과 게시 정보가 일치하지 않습니다. 오디오를 다시 선택해 주세요." }, { status: 400 });
+  }
 
   const { error: insertError } = await db.from("weekly_podcast_episodes").insert({
     issue_key: issueKey, title, description, week_start: weekStart, week_end: weekEnd,
-    report_ids: uniqueIds, audio_path: audioPath, audio_mime_type: file.type,
-    file_size_bytes: file.size, status: "published", created_by: user.id,
+    report_ids: uniqueIds, audio_path: audioPath, audio_mime_type: audioMimeType,
+    file_size_bytes: fileSizeBytes, status: "published", created_by: user.id,
     published_at: new Date().toISOString(),
   });
   if (insertError) {
     await db.storage.from("weekly-podcasts").remove([audioPath]);
-    return NextResponse.json({ error: "업로드는 됐지만 발행 기록을 저장하지 못했습니다. 다시 시도해 주세요." }, { status: 502 });
+    return NextResponse.json({ error: "오디오 확인은 완료했지만 게시 기록 저장에 실패했습니다. 다시 시도해 주세요." }, { status: 502 });
   }
 
   return NextResponse.json({ ok: true, issueKey, message: "팟캐스트를 공개 주간호에 게시했습니다." });
