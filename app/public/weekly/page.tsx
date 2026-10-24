@@ -56,7 +56,7 @@ export default async function WeeklyPage() {
             <p className={styles.weeklyReportMeta}>공개 동향 {included.length}건</p>
             {podcastIssues.has(issue.issue_key) ? <p><Link href="/public/weekly/podcast">이 호 팟캐스트 듣기 →</Link></p> : null}
           </div>
-          {links?.length ? <section className={styles.weeklyArticles} aria-label={`${issue.issue_key} 포함 동향`}>
+          {included.length ? <section className={styles.weeklyArticles} aria-label={`${issue.issue_key} 포함 동향`}>
             {included.map(report => report ? <article className={styles.weeklyArticle} key={report.id}>
               <h3><Link href={`/public/trends/${report.id}`}>{report.title_ko}</Link></h3>
               {report.one_line_summary_ko ? <p className={styles.weeklyLead}>{report.one_line_summary_ko}</p> : null}
