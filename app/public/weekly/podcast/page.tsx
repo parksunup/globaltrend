@@ -15,12 +15,16 @@ export default async function PublishedPodcastsPage() {
   const { data: reports } = ids.length ? await db.from("reports")
     .select("id,title_ko,one_line_summary_ko").eq("status", "published").in("id", ids) : { data: [] };
   const reportMap = new Map((reports ?? []).map(report => [report.id, report]));
+  const schemaNotReady = error?.code === "PGRST205" || error?.code === "42P01";
 
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간 동향 팟캐스트</h1><p>발행된 주간호에 포함된 동향을 두 진행자의 대화로 들어보세요.</p></div>
-      {error ? <p role="alert">팟캐스트를 불러오지 못했습니다.</p> : episodeRows.length ? episodeRows.map(episode => {
+      {error ? schemaNotReady
+        ? <div className={styles.weeklyEmpty}><strong>팟캐스트 공개를 준비하고 있습니다</strong><p>게시 기능을 배포한 뒤 주간호 오디오가 공개됩니다.</p></div>
+        : <p role="alert">팟캐스트 목록을 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p>
+        : episodeRows.length ? episodeRows.map(episode => {
         const audio = db.storage.from("weekly-podcasts").getPublicUrl(episode.audio_path).data.publicUrl;
         const included = (episode.report_ids ?? []).map((id: string) => reportMap.get(id)).filter(Boolean);
         return <article key={episode.issue_key} style={{maxWidth:1000,margin:"24px auto",padding:"28px",border:"1px solid var(--line,#d9e1dd)",borderRadius:16,background:"var(--surface,#fff)"}}>
