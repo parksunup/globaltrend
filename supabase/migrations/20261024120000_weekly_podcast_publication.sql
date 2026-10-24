@@ -132,7 +132,7 @@ begin
      or p_audio_mime_type not in ('audio/mpeg','audio/wav','audio/mp4','audio/x-m4a') then
     raise exception 'invalid weekly issue or podcast data' using errcode = '22023';
   end if;
-  if (select count(distinct report_id) from unnest(p_report_ids) as report_id)
+  if (select count(distinct report_id) from unnest(p_report_ids) as ids(report_id))
      <> cardinality(p_report_ids) then
     raise exception 'duplicate report IDs are not allowed' using errcode = '22023';
   end if;
@@ -176,8 +176,8 @@ revoke all on function public.publish_weekly_podcast_issue(text,text,text,date,d
 grant execute on function public.publish_weekly_podcast_issue(text,text,text,date,date,uuid[],text,text,bigint) to authenticated;
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-values ('weekly-podcasts','weekly-podcasts',true,52428800,array['audio/mpeg','audio/wav','audio/mp4','audio/x-m4a'])
-on conflict (id) do update set public = true, file_size_limit = excluded.file_size_limit,
+values ('weekly-podcasts','weekly-podcasts',false,52428800,array['audio/mpeg','audio/wav','audio/mp4','audio/x-m4a'])
+on conflict (id) do update set public = false, file_size_limit = excluded.file_size_limit,
   allowed_mime_types = excluded.allowed_mime_types;
 
 create policy "public can play published podcast audio"
