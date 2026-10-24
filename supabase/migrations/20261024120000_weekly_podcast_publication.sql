@@ -40,7 +40,17 @@ on conflict (id) do update set public = true, file_size_limit = excluded.file_si
 
 create policy "public can play published podcast audio"
   on storage.objects for select to anon, authenticated
-  using (bucket_id = 'weekly-podcasts');
+  using (
+    bucket_id = 'weekly-podcasts'
+    and (
+      private.is_team_member('admin')
+      or exists (
+        select 1 from public.weekly_podcast_episodes episode
+        where episode.audio_path = storage.objects.name
+          and episode.status = 'published'
+      )
+    )
+  );
 create policy "admins upload podcast audio"
   on storage.objects for insert to authenticated
   with check (bucket_id = 'weekly-podcasts' and private.is_team_member('admin'));
