@@ -79,7 +79,7 @@ begin
  if (select cursor->>'offset' from public.collector_cloud_routes where source_id=sid)<>'1' then raise exception 'backlog overwrote main cursor'; end if;
 end $$;
 do $$
-declare sid uuid; claim jsonb; bundle jsonb; result jsonb;
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb; due_at timestamptz;
 begin
  select source_id into sid from public.collector_edge_sources where slug='ftc';
  update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null,msg_id=null,read_ct=null where source_id=sid;
@@ -91,10 +91,13 @@ begin
  bundle=jsonb_build_object('cursor',null,'operations','[]'::jsonb,
   'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','success'));
  result=public.collector_cloud_commit(sid,'daily-window-worker',(claim->>'lease_token')::uuid,bundle,'daily-window-rollback-test');
- if result->>'retry_after_seconds'<>'72000' then raise exception 'daily queue recheck delay is not 20 hours'; end if;
+ if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'daily queue recheck delay is out of bounds'; end if;
+ select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
+  and message->>'kind'='daily-window-validation' order by msg_id desc limit 1;
+ if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'queue will not be visible before the next producer window'; end if;
 end $$;
 do $$
-declare sid uuid; claim jsonb; bundle jsonb; result jsonb;
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb; due_at timestamptz;
 begin
  select source_id into sid from public.collector_edge_sources where slug='ftc';
  update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null,msg_id=null,read_ct=null where source_id=sid;
@@ -113,6 +116,9 @@ begin
   raise exception 'malformed persisted FTC hash accepted';
  exception when others then if sqlerrm='malformed persisted FTC hash accepted' then raise; end if; end;
  result=public.collector_cloud_commit(sid,'completed-feed-worker',(claim->>'lease_token')::uuid,bundle,'completed-feed-rollback-test');
- if result->>'retry_after_seconds'<>'72000' then raise exception 'completed feed did not enter daily recheck window'; end if;
+ if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'completed feed recheck delay is out of bounds'; end if;
+ select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
+  and message->>'kind'='completed-feed-validation' order by msg_id desc limit 1;
+ if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'completed feed will not be visible before the next producer window'; end if;
 end $$;
 select 'cloud connector rollback checks passed' as result;
