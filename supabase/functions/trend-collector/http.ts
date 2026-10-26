@@ -8,6 +8,7 @@ const robotsParser = robotsModule as unknown as (
   body: string,
 ) => Robots;
 import { canonical } from "./adapter.ts";
+import { requestTimeoutMs } from "./http-timeout.mjs";
 export class OfficialHTTP {
   private robot: ReturnType<typeof robotsParser> | undefined;
   private last = 0;
@@ -56,7 +57,7 @@ export class OfficialHTTP {
           ...(body ? { "Content-Type": "application/json" } : {}),
         },
         redirect: "manual",
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(requestTimeoutMs(url)),
       });
       if ([301, 302, 303, 307, 308].includes(r.status)) {
         const loc = r.headers.get("location");
