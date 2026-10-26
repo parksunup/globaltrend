@@ -17,7 +17,7 @@ export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view}
   const [tab,setTab] = useState(lawId?'full':view??'compare');
   const [query,setQuery] = useState(''), [article,setArticle] = useState('');
   const [origin,setOrigin] = useState(''), [copied,setCopied] = useState('');
-  const [loginRequired,setLoginRequired] = useState(false),[connection,setConnection]=useState<{token:string;expiresAt:string}>(),[connecting,setConnecting]=useState(false);
+  const [loginRequired,setLoginRequired] = useState(false),[connection,setConnection]=useState<{token:string}>(),[connecting,setConnecting]=useState(false);
   useEffect(()=>setOrigin(window.location.origin),[]);
   useEffect(()=>{
     let active = true, timer:ReturnType<typeof setTimeout>;
@@ -72,7 +72,7 @@ export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view}
         <p>PR 병합이나 자료별 사이트 재배포는 필요하지 않습니다. Supabase 관리자 권한과 Vercel 팀 가입도 필요하지 않습니다. 동향 초안은 사이트 팀 계정으로 로그인해서 읽습니다. 본인의 Codex에는 기존 담당 브랜치에 저장할 GitHub 권한이 있어야 합니다.</p>
         <p>이 작업실의 수정은 작업 초안입니다. 대외 발행은 별도로 진행합니다.</p>
         <button disabled={!prompt||connecting||(role==='trends'&&(!data?.databaseAvailable||loginRequired))} onClick={copyPrompt}>{connecting?'연결 중…':'Codex 연결 프롬프트 복사'}</button><span role="status">{copied}</span>
-        {role==='trends'&&<p>복사하면 24시간짜리 작업실 연결키가 포함됩니다. 원고 읽기와 작업실 수정본 저장만 허용하며 발행·삭제는 할 수 없습니다. 새로 복사하면 같은 계정의 이전 연결키는 해제됩니다.</p>}
+        {role==='trends'&&<p>연결키는 별도 만료 없이 유지되며, 이 계정에서 새 키를 발급하거나 ‘Codex 연결 해제’를 누르면 이전 키가 즉시 무효화됩니다. 원고 읽기와 비공개 수정본 저장만 허용하고 발행·삭제·관리 기능은 허용하지 않습니다. 키를 공개 GitHub·PR·파일·로그에 넣지 마세요.</p>}
         {role==='trends'&&data?.databaseAvailable&&<button onClick={async()=>{try{const response=await fetch('/api/team-workspace/connect',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revoke:true})});if(!response.ok)throw Error();setConnection(undefined);setCopied('Codex 작업실 연결을 해제했습니다.');}catch{setCopied('연결 해제에 실패했습니다. 다시 시도해 주세요.');}}}>Codex 연결 해제</button>}
         <textarea aria-label="Codex에 넣을 예시 프롬프트" value={prompt} readOnly rows={14}/>
         <a href={'/api/team-workspace?role='+role} target="_blank" rel="noopener noreferrer">Codex가 읽는 자료 연결 주소 ↗</a>
