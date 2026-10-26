@@ -124,3 +124,48 @@ Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async (
   eq(item.published_date, null);
   eq(item.metadata.requires_review, true);
 });
+
+
+Deno.test("PDPC extracts article content through nested Flight layout wrappers", async () => {
+  const element = (type: string, props: Record<string, unknown> = {}) =>
+    [null, type, null, props];
+  const article = element("article", {
+    children: [
+      element("div", {
+        data: { content: "<p>PDPC article body with enough detail.</p>" },
+      }),
+    ],
+  });
+  const root = element("main", {
+    className: "layout layout--standard",
+    children: [
+      element("div", {
+        className: "container",
+        children: [
+          element("div", {
+            className: "row",
+            children: [
+              element("main", {
+                className: "col-lg-9",
+                children: [article],
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+  const flight = "0:" + JSON.stringify(root) + "\n";
+  const html =
+    '<main><h1>PDPC title</h1><div class="page-banner__date">18 October 2026</div></main>' +
+    "<script>self.__next_f.push(" + JSON.stringify([1, flight]) + ");</script>";
+  const item = await extract(
+    "pdpc",
+    html,
+    "https://www.pdpc.gov.sg/media-events/example",
+  );
+  eq(item.title_original, "PDPC title");
+  eq(item.content_text, "PDPC article body with enough detail.");
+  eq(item.metadata.read_scope, "news_html_from_embedded_rsc");
+  eq(item.published_date, "2026-10-18");
+});
