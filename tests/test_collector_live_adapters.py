@@ -29,7 +29,7 @@ def press_pdf(text):
 
 
 class LiveAdapterTests(unittest.TestCase):
-    def test_dpc_listing_date_fills_missing_detail_date_but_conflicts_remain_unknown(self):
+    def test_dpc_listing_date_fills_missing_detail_date_but_detail_date_wins_conflict(self):
         url = 'https://www.dataprotection.ie/en/news-media/latest-news/example'
         row = {'title': 'Example', 'date_observations': [{
             'meaning': 'listing_published_display',
@@ -44,7 +44,8 @@ class LiveAdapterTests(unittest.TestCase):
 
         body_with_conflict = '<h1>Example</h1><main><p class="date">02nd October 2026</p><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>'
         item = parsers.extract_document('dpc', body_with_conflict.encode(), url, 'text/html', row)
-        self.assertIsNone(item['published_date'])
+        self.assertEqual(item['published_date'], '2026-10-02')
+        self.assertTrue(item['metadata']['date_conflict'])
         self.assertTrue(item['metadata']['requires_review'])
         self.assertEqual(len(item['metadata']['date_observations']), 2)
 

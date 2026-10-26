@@ -157,6 +157,18 @@ Deno.test("ICO extraction uses explicit Dublin Core publication date", async () 
   eq(x.metadata.ai_ready, true);
 });
 
+Deno.test("DPC detail publication date wins over conflicting teaser date with review", async () => {
+  const x = await extract(
+    "dpc",
+    '<h1>Privacy notice</h1><main><p class="date">12 October 2026</p><div class="field--name-body"><p>A sufficiently detailed DPC publication body.</p></div></main>',
+    "https://www.dataprotection.ie/en/news-media/latest-news/example",
+    { url: "https://www.dataprotection.ie/en/news-media/latest-news/example", title: "Privacy notice", date_observations: [{ meaning: "listing_published_display", locator: "listing article.node--view-mode-teaser p.date", value: "11th October 2026" }] },
+  );
+  eq(x.published_date, "2026-10-12");
+  eq(x.metadata.date_conflict, true);
+  eq(x.metadata.requires_review, true);
+});
+
 Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
   const x = await extract(
     "edpb",
@@ -221,8 +233,31 @@ Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async (
     p.rows[0].url,
     p.rows[0],
   );
-  eq(item.published_date, null);
+  eq(item.published_date, "2026-10-20");
+  eq(item.metadata.date_conflict, true);
   eq(item.metadata.requires_review, true);
+});
+
+Deno.test("PDPC exact detail publication label wins over conflicting card date", async () => {
+  const article = ["$", "main", null, { className: "layout layout--standard", children: [
+    ["$", "article", null, { children: [["$", "$L26", null, { data: { content: "<p>A sufficiently complete PDPC advisory body.</p>" } }]] }],
+  ] }];
+  const html = `<main><h1>Advisory</h1><span class="page-banner__date">Published on 30 Sep 2026</span><main class="layout layout--standard"><article></article></main></main><script>self.__next_f.push(${JSON.stringify([1, "24:" + JSON.stringify(article) + "\n"])})</script>`;
+  const item = await extract("pdpc", html, "https://www.pdpc.gov.sg/media-events/advisory", {
+    url: "https://www.pdpc.gov.sg/media-events/advisory",
+    title: "Advisory",
+    date_observations: [{ meaning: "listing_published_display", locator: "card", value: "29 Sep 2026" }],
+  });
+  eq(item.published_date, "2026-09-30");
+  eq(item.metadata.date_conflict, true);
+  eq(item.metadata.requires_review, true);
+  const ambiguous = await extract("pdpc", html.replace("Published on 30 Sep 2026", "Updated on 30 Sep 2026"), "https://www.pdpc.gov.sg/media-events/advisory", {
+    url: "https://www.pdpc.gov.sg/media-events/advisory",
+    title: "Advisory",
+    date_observations: [{ meaning: "listing_published_display", locator: "card", value: "29 Sep 2026" }],
+  });
+  eq(ambiguous.published_date, null);
+  eq(ambiguous.metadata.requires_review, true);
 });
 
 

@@ -12,7 +12,8 @@ class CnilRangeTests(unittest.TestCase):
         self.assertIsNone(parsers.cnil_listing_date(rows[1]))
         html='<main><h1>A</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">Personal data protection evidence.</div></main>'
         item=parsers.extract_document('cnil',html.encode(),LISTING,'text/html',rows[0])
-        self.assertIsNone(item['published_date'])
+        self.assertEqual(item['published_date'],'2026-10-20')
+        self.assertTrue(item['metadata']['date_conflict'])
         self.assertTrue(item['metadata']['requires_review'])
     def test_old_page_never_stops_scan_before_later_new_card(self):
         cfg={'source':'cnil','enabled':True,'listing':LISTING,'hosts':['www.cnil.fr'],'permissions':dict(collect=True,store=True,ai=True)}
@@ -63,6 +64,7 @@ class CnilRangeTests(unittest.TestCase):
         result=core.collect(cfg,client,store,'2026-09-21','2026-10-23',max_items=1)
         self.assertEqual(client.calls,[LISTING,detail])
         self.assertEqual(result['new'],1)
-        self.assertEqual(result['unknown_date'],1)
-        self.assertIsNone(store.items[0]['published_date'])
+        self.assertEqual(result['unknown_date'],0)
+        self.assertEqual(store.items[0]['published_date'],'2026-10-20')
+        self.assertTrue(store.items[0]['metadata']['date_conflict'])
         self.assertTrue(store.items[0]['metadata']['requires_review'])

@@ -89,6 +89,29 @@ export function parseDate(value: string): string | null {
   ) return null;
   return out;
 }
+/** Accept only the complete publication label shown on a PDPC detail page. */
+export function pdpcDetailPublishedDate(value: string): string | null {
+  const match = normalize(value).match(/^Published on\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})$/i);
+  return match ? parseDate(match[1]) : null;
+}
+/** CNIL article-page date line, kept distinct from archive card dates. */
+export function cnilDetailPublishedDate(
+  meaning: string,
+  locator: string,
+  value: string,
+): string | null {
+  const normalized = normalize(value).toLowerCase();
+  if (meaning !== "published_display" || locator !== "main .ctn-gen-auteur" ||
+    !/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/.test(normalized)) return null;
+  return parseDate(normalized);
+}
+/** DPC detail-page publication label, distinct from the teaser-card date. */
+export function dpcDetailPublishedDate(observation: Observation): string | null {
+  const value = normalize(observation.value);
+  if (observation.meaning !== "published_display" || observation.locator !== "main p.date" ||
+    !/^\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s+\d{4}$/i.test(value)) return null;
+  return parseDate(value);
+}
 /** Read only ICO's explicit Dublin Core publication date; never infer from URL/title. */
 export function icoPublishedDate(html: string): { date: string; value: string } | null {
   const { document } = parseHTML(html);
@@ -545,8 +568,24 @@ export async function extract(
       ...(dpcListing ? [dpcListing] : []),
     ]),
   ];
-  const date = dates.length === 1 ? dates[0] : null;
+  let date = dates.length === 1 ? dates[0] : null;
+  const explicitDetailDates = source === "dpc"
+    ? observations.map((x) => dpcDetailPublishedDate(x)).filter((x): x is string => Boolean(x))
+    : source === "pdpc"
+    ? observations.filter((x) => x.meaning === "published_display" && x.locator === "main .page-banner__date")
+      .map((x) => pdpcDetailPublishedDate(x.value)).filter((x): x is string => Boolean(x))
+    : source === "cnil"
+    ? observations.map((x) => cnilDetailPublishedDate(x.meaning, x.locator, x.value))
+      .filter((x): x is string => Boolean(x))
+    : [];
+  const explicitDetailDate = new Set(explicitDetailDates);
+  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => !explicitDetailDate.has(x));
+  if (explicitDetailDate.size === 1) date = [...explicitDetailDate][0];
+  const dateResolution = explicitDetailDate.size === 1
+    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
+    : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
+    dateConflict ||
     source === "ppc" &&
       (related.some((x) => new URL(x.url).pathname.endsWith(".pdf")) ||
         ppcOpeningDateline);
@@ -560,6 +599,8 @@ export async function extract(
       parser_version: source === "pdpc" ? "edge-pdpc-article-v3" : "edge-adapter-v2",
       read_scope: scope,
       date_observations: observations,
+      ...(dateConflict ? { date_conflict: true } : {}),
+      ...(dateResolution ? { date_resolution: dateResolution } : {}),
       requires_review: requiresReview,
       related_documents: related,
       unresolved_links: unresolvedLinks,
