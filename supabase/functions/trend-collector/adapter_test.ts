@@ -155,7 +155,7 @@ Deno.test("PDPC extracts article content through nested Flight layout wrappers",
       }),
     ],
   });
-  const flight = "0:" + JSON.stringify(root) + "\\n";
+  const flight = "0:" + JSON.stringify(root) + "\n";
   const html =
     '<main><h1>PDPC title</h1><div class="page-banner__date">18 October 2026</div></main>' +
     "<script>self.__next_f.push(" + JSON.stringify([1, flight]) + ");</script>";
