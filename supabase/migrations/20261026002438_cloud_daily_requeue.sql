@@ -35,6 +35,7 @@ set search_path=pg_catalog,public,private,pgmq as $$
 declare r public.collector_cloud_routes; m record; b public.collector_edge_backlog; slug text; op jsonb;
  saved jsonb='[]'; one_saved jsonb; result jsonb; event_id uuid; delay_seconds integer; next_cursor jsonb;
  failure jsonb; backlog_id uuid; failed_cursor jsonb; source_since date; source_until date;
+ recheck_at timestamptz; committed_at timestamptz;
 begin
  select * into strict r from public.collector_cloud_routes where source_id=p_source_id for update;
  if not r.enabled or r.worker is null or r.lease_token is null or r.lease_until is null or r.msg_id is null or r.read_ct is null
@@ -97,10 +98,16 @@ begin
   else raise exception 'backlog outcome required'; end if;
   update public.collector_edge_backlog set resolved=delay_seconds=-1,state=state||jsonb_build_object('cloud_last_result',result),updated_at=clock_timestamp() where id=b.id;
  else
-  -- Recheck a completed listing within the next daily window, even when its
-  -- cursor carries a bounded persisted seen-URL set (FTC). In-pass steps stay immediate.
-  delay_seconds=case when result->>'status'='failed' then 3600
-   when next_cursor is null or result->>'listing_scan_complete'='true' then 72000 else 0 end;
+  -- Recheck a completed listing at 03:00 KST before the next 04:00-05:00
+  -- producer window, even when a completed FTC cursor carries seen hashes.
+  -- In-pass steps stay immediate; failures retain their one-hour retry.
+  if result->>'status'='failed' then delay_seconds=3600;
+  elsif next_cursor is null or result->>'listing_scan_complete'='true' then
+   committed_at=clock_timestamp();
+   recheck_at=(date_trunc('day',committed_at at time zone 'Asia/Seoul')+interval '3 hours') at time zone 'Asia/Seoul';
+   if recheck_at<=committed_at then recheck_at=recheck_at+interval '1 day'; end if;
+   delay_seconds=greatest(1,ceil(extract(epoch from recheck_at-committed_at))::integer);
+  else delay_seconds=0; end if;
   update public.collector_cloud_routes set cursor=next_cursor where source_id=p_source_id;
   perform public.collector_set_progress(p_source_id,r.range_start,r.range_end,next_cursor,false);
  end if;
