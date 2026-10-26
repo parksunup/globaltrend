@@ -56,6 +56,463 @@ class CloudStepTests(unittest.TestCase):
         self.assertEqual(bundle['result']['reason'], 'http_503')
         self.assertFalse(bundle['backlog_resolved'])
 
+class OecdTopicAndNewsroomResumeTests(unittest.TestCase):
+    topic = 'https://www.oecd.org/en/topics/privacy-and-data-protection.html'
+    newsroom = 'https://www.oecd.org/en/about/newsroom.html'
+    config = {'source':'oecd','source_id':'source','language':'en','listing':topic,
+              'hosts':['www.oecd.org'],'enabled':True,
+              'permissions':{'collect':True,'store':True,'ai':True}}
+
+    @staticmethod
+    def html_for(rows):
+        return ('<main>' + ''.join(
+            '<article><a href="' + url + '">' + title + '</a></article>'
+            for url,title in rows
+        ) + '</main>').encode()
+
+    @staticmethod
+    def item(url, row):
+        return {'title_original':row['title'],'published_date':'2026-10-22',
+                'content_text':'Official OECD release content for test.',
+                'content_hash':'hash-'+url.rsplit('/',1)[-1],
+                'metadata':{'requires_review':False,'date_observations':[]}}
+
+    def test_topic_then_six_newsroom_links_resume_only_with_page_cursor(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        from scripts.collector import core
+        topic_rows=[
+            ('/en/publications/2026/privacy-review.html','Privacy review'),
+            ('/en/about/news/press-releases/2026/10/topic-release.html','Topic release'),
+        ]
+        newsroom_rows=[
+            ('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Newsroom release '+str(i))
+            for i in range(6)
+        ]
+        topic_urls=['https://www.oecd.org'+path for path,_ in topic_rows]
+        newsroom_urls=['https://www.oecd.org'+path for path,_ in newsroom_rows]
+
+        class Client:
+            def __init__(self): self.listings=[]; self.details=[]
+            def get(self,url):
+                if url==self_outer.topic:
+                    self.listings.append(url); return self_outer.html_for(topic_rows),url,'text/html'
+                if url==self_outer.newsroom:
+                    self.listings.append(url); return self_outer.html_for(newsroom_rows),url,'text/html'
+                self.details.append(url); return b'fixture',url,'text/html'
+
+        self_outer=self
+        client=Client(); cursor=None
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row: self.item(url,row)):
+            # Complete the original topic page first; its durable cursor then
+            # points directly at the official newsroom page without a DB route
+            # change or a second listing API.
+            for expected in topic_urls:
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                self.assertIn(expected,client.details)
+                cursor=store.cursor
+            self.assertEqual(cursor['page'],self.newsroom)
+            self.assertEqual(cursor['offset'],0)
+            self.assertNotIn('listing_scan_complete',result)
+            self.assertFalse(result['coverage_complete'])
+
+            # The six official newsroom cards are consumed one at a time. The
+            # page URL alone tells the resumed worker which listing to read.
+            for index,expected in enumerate(newsroom_urls):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                self.assertIn(expected,client.details)
+                cursor=store.cursor
+                if index<5:
+                    self.assertEqual(cursor['page'],self.newsroom)
+                    self.assertFalse(result.get('listing_scan_complete',False))
+                else:
+                    self.assertEqual(cursor['page'],self.topic)
+                    self.assertTrue(result['listing_scan_complete'])
+                    self.assertFalse(result['coverage_complete'])
+                    self.assertEqual(len(cursor['processed_url_hashes']),6)
+
+        self.assertEqual(client.listings.count(self.topic),2)
+        self.assertEqual(client.listings.count(self.newsroom),6)
+        self.assertEqual(set(client.details),set(topic_urls+newsroom_urls))
+        self.assertTrue(all(url.startswith('https://www.oecd.org/') for url in client.listings+client.details))
+
+    def test_next_scan_restarts_topic_and_skips_prior_newsroom_urls(self):
+        import hashlib, json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        rows=[('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Release '+str(i)) for i in range(6)]
+        urls=['https://www.oecd.org'+path for path,_ in rows]
+        topic_rows=[(rows[0][0],'Release 0')]
+        self_outer=self
+        class Client:
+            def __init__(self): self.details=[]; self.listings=[]
+            def get(self,url):
+                if url==self_outer.topic:
+                    self.listings.append(url); return self_outer.html_for(topic_rows),url,'text/html'
+                if url==self_outer.newsroom:
+                    self.listings.append(url); return self_outer.html_for(rows),url,'text/html'
+                self.details.append(url); return b'fixture',url,'text/html'
+        client=Client(); cursor=None; result=None
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            # Finish topic, then the six-card newsroom pass. The completed
+            # cycle leaves the next run at topic with stable newsroom hashes.
+            for _ in range(8):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                cursor=store.cursor
+                if result.get('listing_scan_complete'): break
+            self.assertTrue(result and result.get('listing_scan_complete'))
+            self.assertEqual(cursor['page'],self.topic)
+            expected=sorted(hashlib.sha256(url.encode()).hexdigest() for url in urls)
+            self.assertEqual(sorted(cursor['processed_url_hashes']),expected)
+            self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+            self.assertFalse(result['coverage_complete'])
+            details_after_first_cycle=list(client.details)
+
+            # The next scheduled cycle starts at topic, recognizes the old URL
+            # there, proceeds to newsroom, then skips all six unchanged cards.
+            for _ in range(3):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-23','2026-10-24',max_pages=1,max_items=1)
+                cursor=store.cursor
+                if result.get('listing_scan_complete'): break
+            self.assertTrue(result and result.get('listing_scan_complete'))
+            self.assertEqual(cursor['page'],self.topic)
+            self.assertEqual(client.details,details_after_first_cycle)
+            self.assertEqual(sorted(cursor['processed_url_hashes']),expected)
+            self.assertFalse(result['coverage_complete'])
+
+    def test_newsroom_detail_failure_keeps_page_and_failed_offset(self):
+        from scripts.collector.core import collect,FetchError
+        from scripts.collector.cloud_step import PreparedStore
+        newsroom_rows=[
+            ('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Newsroom release '+str(i))
+            for i in range(6)
+        ]
+        urls=['https://www.oecd.org'+path for path,_ in newsroom_rows]
+        self_outer=self
+        class Client:
+            def __init__(self,fail=False): self.fail=fail
+            def get(self,url):
+                if url==self_outer.newsroom:
+                    return self_outer.html_for(newsroom_rows),url,'text/html'
+                if self.fail and url==urls[1]: raise FetchError('http_503')
+                return b'fixture',url,'text/html'
+
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row: self.item(url,row)):
+            first=PreparedStore({'page':self.newsroom,'offset':0})
+            collect(self.config,Client(),first,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            self.assertEqual(first.cursor['page'],self.newsroom)
+            self.assertEqual(first.cursor['offset'],1)
+            failed=PreparedStore(first.cursor)
+            result=collect(self.config,Client(fail=True),failed,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(result['status'],'failed')
+        self.assertEqual(failed.failure['url'],urls[1])
+        self.assertEqual(failed.cursor['page'],self.newsroom)
+        self.assertEqual(failed.cursor['offset'],1)
+        self.assertFalse(result['coverage_complete'])
+
+    def test_cloud_step_parks_newsroom_failure_before_advancing_that_page(self):
+        import json
+        from pathlib import Path
+        from scripts.collector import cloud_step
+        from scripts.collector.core import FetchError
+        rows=[
+            ('/en/about/news/press-releases/2026/10/release-0.html','Newsroom release 0'),
+            ('/en/about/news/press-releases/2026/10/release-1.html','Newsroom release 1'),
+        ]
+        urls=['https://www.oecd.org'+path for path,_ in rows]
+        registry=json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text())
+        oecd=next(source for source in registry['sources'] if source['source']=='oecd')
+        class Client:
+            def __init__(self,fail):
+                self.fail=fail; self.budget={'requests':0,'bytes':0,'started':0}
+            def get(self,url):
+                self.budget['requests']+=1
+                if url==self_outer.newsroom:
+                    body=self_outer.html_for(rows); self.budget['bytes']+=len(body)
+                    return body,url,'text/html'
+                if self.fail and url==urls[1]: raise FetchError('http_503')
+                return b'fixture',url,'text/html'
+        self_outer=self
+        claim={'slug':'oecd','source_id':oecd['source_id'],'since':'2026-10-16','until':'2026-10-23',
+               'cursor':{'page':self.newsroom,'offset':0},'lease_until':'2099-01-01T00:00:00+00:00'}
+        with patch('scripts.collector.cloud_step.HttpClient',side_effect=lambda *a,**k:Client(False)), \
+             patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            first=cloud_step.prepare(claim)
+        self.assertEqual(first['cursor']['page'],self.newsroom)
+        self.assertEqual(first['cursor']['offset'],1)
+
+        claim['cursor']=first['cursor']
+        with patch('scripts.collector.cloud_step.HttpClient',side_effect=lambda *a,**k:Client(True)), \
+             patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            failed=cloud_step.prepare(claim)
+        self.assertEqual(failed['failure']['url'],urls[1])
+        self.assertEqual(failed['failure']['cursor']['page'],self.newsroom)
+        self.assertEqual(failed['failure']['cursor']['offset'],1)
+        self.assertEqual(failed['cursor']['page'],self.newsroom)
+        self.assertEqual(failed['cursor']['offset'],2)
+        self.assertEqual(failed['result']['reason'],'detail_failure_parked')
+        self.assertFalse(failed['result']['coverage_complete'])
+
+class MutableFeedResumeTests(unittest.TestCase):
+    def test_ftc_out_of_range_pubdate_skips_only_detail_request(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        listing='https://www.ftc.gov/feeds/press-release-consumer-protection.xml'
+        url='https://www.ftc.gov/news-events/news/press-releases/outside-range'
+        class Client:
+            def __init__(self): self.requests=[]
+            def get(self,target):
+                self.requests.append(target)
+                if target==listing:
+                    return ('<rss><channel><item><title>Old release</title><link>'+url+
+                            '</link><pubDate>Sun, 18 Oct 2026 14:00:00 +0000</pubDate></item></channel></rss>').encode(),target,'application/rss+xml'
+                raise AssertionError('out-of-range detail page should not be fetched')
+        config={'source':'ftc','source_id':'source','language':'en','listing':listing,
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        client=Client(); store=PreparedStore(None)
+        result=collect(config,client,store,'2026-10-19','2026-10-25',max_pages=1,max_items=1)
+        self.assertEqual(client.requests,[listing])
+        self.assertEqual(result['out_of_range'],1)
+        self.assertEqual(result['listing_date_excluded'],1)
+        self.assertEqual(result['range_filter_read_scope'],'listing_date_only')
+        self.assertEqual(result['listing_date_evidence']['date'],'2026-10-18')
+        self.assertFalse(result['coverage_complete'])
+
+    def test_ftc_missing_or_untrusted_pubdate_falls_back_to_detail(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        listing='https://www.ftc.gov/feed.xml'; url='https://www.ftc.gov/news-events/news/press-releases/item'
+        config={'source':'ftc','source_id':'source','language':'en','listing':listing,
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        for tags in ('', '<pubDate>19 Oct 2026 00:00:00</pubDate>',
+                     '<pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate><pubDate>Tue, 20 Oct 2026 00:00:00 +0000</pubDate>'):
+            class Client:
+                def __init__(self): self.requests=[]
+                def get(self,target):
+                    self.requests.append(target)
+                    if target==listing:
+                        return ('<rss><channel><item><title>Release</title><link>'+url+'</link>'+tags+'</item></channel></rss>').encode(),target,'application/rss+xml'
+                    return b'body',target,'text/html'
+            config_row={'title_original':'Release','published_date':'2026-10-20','content_text':'Complete source text.','content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
+            client=Client(); store=PreparedStore(None)
+            with patch('scripts.collector.core.parsers.extract_document',return_value=config_row):
+                collect(config,client,store,'2026-10-19','2026-10-25',max_pages=1,max_items=1)
+            self.assertEqual(client.requests,[listing,url])
+
+    def test_ftc_resumes_by_processed_urls_when_listing_titles_change(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls = ['https://www.ftc.gov/news-events/news/press-releases/a',
+                'https://www.ftc.gov/news-events/news/press-releases/b',
+                'https://www.ftc.gov/news-events/news/press-releases/c']
+        config = {'source':'ftc','source_id':'source','language':'en',
+                  'listing':'https://www.ftc.gov/feed.xml','hosts':['www.ftc.gov'],
+                  'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        item = {'title_original':'Privacy action','published_date':'2026-10-22',
+                'content_text':'Complete official article content.', 'content_hash':'abc',
+                'metadata':{'requires_review':False}}
+        class Client:
+            def get(self, url):
+                return b'body', url, 'text/html'
+        rows = lambda title: [{'url':urls[0],'title':title},{'url':urls[1],'title':'B'},{'url':urls[2],'title':'C'}]
+        first = PreparedStore(None)
+        second = PreparedStore(None)
+        third = PreparedStore(None)
+        with patch('scripts.collector.core.fetch_listing', side_effect=[
+                (rows('A'),None),(rows('A updated'),None),(rows('A changed again'),None)]), \
+             patch('scripts.collector.core.parsers.extract_document', return_value=item):
+            collect(config,Client(),first,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            second.cursor=first.cursor
+            collect(config,Client(),second,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            self.assertEqual(second.operations[0]['p_canonical_url'],urls[1])
+            third.cursor=second.cursor
+            collect(config,Client(),third,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(third.operations[0]['p_canonical_url'],urls[2])
+        self.assertIsNotNone(third.cursor)
+        self.assertEqual(len(third.cursor['processed_url_hashes']),len(urls))
+        self.assertEqual(third.cursor['offset'],0)
+        self.assertFalse(third.complete)
+
+class OECDOverviewTests(unittest.TestCase):
+    def test_publication_overview_without_abstract_preserves_limited_scope(self):
+        html = '''<main><h1 class="cmp-report-header__title">Regulatory Policy Outlook</h1>
+        <div class="cmp-two-column-container"><h2 class="cmp-title__text">Introduction</h2>
+        <div class="cmp-text"><p>Official introduction about regulatory governance and public policy.</p></div></div>
+        <div class="cmp-text"><p>Related publication must not become report body.</p></div></main>'''
+        item=parsers.extract('oecd',html,'https://www.oecd.org/en/publications/report.html')
+        self.assertEqual(item['metadata']['read_scope'],'official_overview')
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertNotIn('Related publication',item['content_text'])
+        self.assertIn('Official introduction',item['content_text'])
+
+
+class OECDPressReleaseTests(unittest.TestCase):
+    url='https://www.oecd.org/en/about/news/press-releases/2022/12/privacy.html'
+    html='''<main><div itemtype="https://schema.org/Article" itemscope>
+      <h1 class="cmp-article-header__title" itemprop="headline">Privacy agreement</h1>
+      <div class="cmp-article-header__date"><time datetime="2022-12-14" itemprop="datePublished">14 December 2022</time></div>
+      <div itemprop="articleBody"><div class="text"><div class="cmp-text"><p>Official statement on privacy and government access.
+      <a href="/en/publications/report.html">Related report</a></p></div></div></div>
+      <div class="cmp-text"><p>Related content outside article must be excluded.</p></div>
+    </div></main>'''
+
+    def test_press_release_extracts_only_observed_article_body(self):
+        item=parsers.extract('oecd',self.html,self.url)
+        self.assertEqual(item['title_original'],'Privacy agreement')
+        self.assertEqual(item['published_date'],'2022-12-14')
+        self.assertNotIn('outside article',item['content_text'])
+        self.assertEqual(item['metadata']['read_scope'],'press_release_html_not_report')
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(item['metadata']['related_documents'][0]['read'],False)
+        self.assertIn('https://www.oecd.org/en/publications/report.html',item['metadata']['unread_attachments'])
+
+    def test_press_release_conflicting_dates_remain_unresolved(self):
+        item=parsers.extract('oecd',self.html.replace('datetime="2022-12-14"','datetime="2022-12-13"'),self.url)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']),2)
+
+    def test_unverified_article_template_does_not_broaden_publication_parser(self):
+        with self.assertRaisesRegex(ValueError,'title_or_body_missing'):
+            parsers.extract('oecd',self.html,'https://www.oecd.org/en/publications/report.html')
+
+
+class FTCBoundedResumeTests(unittest.TestCase):
+    def run_feed(self,count):
+        import json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls=['https://www.ftc.gov/news-events/news/press-releases/item-'+str(i) for i in range(count)]
+        config={'source':'ftc','source_id':'source','language':'en','listing':'https://www.ftc.gov/feed.xml',
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            turn=0
+            fetched=[]
+            def get(self,url):
+                if url==config['listing']:
+                    self.turn+=1
+                    order=urls[self.turn%count:]+urls[:self.turn%count]
+                    rss='<rss><channel>'+''.join('<item><title>Changed '+str(self.turn)+'</title><link>'+u+'</link></item>' for u in order)+'</channel></rss>'
+                    return rss.encode(),url,'application/rss+xml'
+                self.fetched.append(url)
+                html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-22">22 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+                return html.encode(),url,'text/html'
+        client=Client();cursor=None;results=[]
+        for _ in range(count+1):
+            store=PreparedStore(cursor)
+            result=collect(config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            results.append(result);cursor=store.cursor
+            if cursor is not None:
+                self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+            if cursor is None or result['reason']=='ftc_resume_cursor_capacity_exceeded':break
+        self.assertEqual(len(client.fetched),len(set(client.fetched)))
+        self.assertTrue(all(not r['coverage_complete'] for r in results))
+        return client,cursor,results,config
+
+    def test_full_thirty_item_mutable_feed_finishes_without_false_coverage(self):
+        client,cursor,results,_=self.run_feed(30)
+        self.assertEqual(len(client.fetched),30)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(len(cursor['processed_url_hashes']),30)
+        self.assertTrue(results[-1]['listing_scan_complete'])
+        self.assertFalse(results[-1]['coverage_complete'])
+
+    def test_completed_feed_scan_persists_seen_urls_for_next_scheduled_run(self):
+        import hashlib, json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls=['https://www.ftc.gov/news-events/news/press-releases/persist-'+str(i) for i in range(30)]
+        config={'source':'ftc','source_id':'source','language':'en','listing':'https://www.ftc.gov/feed.xml',
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+
+        class Client:
+            turn=0
+            fetched=[]
+            def get(self,url):
+                if url==config['listing']:
+                    self.turn+=1
+                    # Mutate both titles and order between one-item cloud claims.
+                    order=urls[self.turn%len(urls):]+urls[:self.turn%len(urls)]
+                    rss='<rss><channel>'+''.join('<item><title>Changed '+str(self.turn)+' '+str(i)+'</title><link>'+u+'</link></item>' for i,u in enumerate(order))+'</channel></rss>'
+                    return rss.encode(),url,'application/rss+xml'
+                self.fetched.append(url)
+                html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-22">22 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+                return html.encode(),url,'text/html'
+
+        client=Client(); cursor=None; result=None
+        for _ in range(len(urls)+2):
+            store=PreparedStore(cursor)
+            result=collect(config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            cursor=store.cursor
+            if result.get('listing_scan_complete'): break
+        self.assertTrue(result and result.get('listing_scan_complete'))
+        self.assertEqual(set(client.fetched),set(urls))
+        expected=sorted(hashlib.sha256(url.encode()).hexdigest() for url in urls)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(cursor.get('processed_url_hashes'),expected)
+        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+        self.assertFalse(result['coverage_complete'])
+
+        fetched_before=list(client.fetched)
+        # A new scheduled scan sees the same URLs in a different order and with
+        # changed titles; it should skip detail requests by stable URL identity.
+        next_store=PreparedStore(cursor)
+        next_result=collect(config,client,next_store,'2026-10-16','2026-10-24',max_pages=1,max_items=1)
+        self.assertTrue(next_result.get('listing_scan_complete'))
+        self.assertEqual(client.fetched,fetched_before)
+        self.assertEqual(next_store.cursor.get('processed_url_hashes'),expected)
+        self.assertFalse(next_result['coverage_complete'])
+
+    def test_large_mutable_feed_stops_before_cursor_overflow_without_forgetting_urls(self):
+        import hashlib
+        client,cursor,results,config=self.run_feed(65)
+        self.assertEqual(results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertIsNotNone(cursor)
+        self.assertGreater(len(client.fetched),30)
+        self.assertLess(len(client.fetched),65)
+        self.assertEqual(len(cursor['processed_url_hashes']),len(client.fetched))
+        self.assertEqual(set(cursor['processed_url_hashes']),
+                         {hashlib.sha256(url.encode()).hexdigest() for url in client.fetched})
+        self.assertFalse(results[-1]['coverage_complete'])
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        saved_cursor=dict(cursor)
+        fetched=list(client.fetched)
+        retry=PreparedStore(cursor)
+        result=collect(config,client,retry,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(result['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertEqual(retry.cursor,saved_cursor)
+        self.assertEqual(client.fetched,fetched)
+        self.assertEqual(retry.operations,[])
+        self.assertIsNone(retry.failure)
+
+    def test_fifty_hashes_fit_and_fifty_first_url_is_not_fetched(self):
+        import json
+        client,cursor,results,config=self.run_feed(50)
+        self.assertEqual(len(client.fetched),50)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(len(cursor['processed_url_hashes']),50)
+        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+        self.assertTrue(results[-1]['listing_scan_complete'])
+        self.assertFalse(results[-1]['coverage_complete'])
+
+        overflow_client,overflow_cursor,overflow_results,_=self.run_feed(51)
+        self.assertEqual(overflow_results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertEqual(len(overflow_client.fetched),50)
+        self.assertIsNotNone(overflow_cursor)
+        self.assertEqual(len(overflow_cursor['processed_url_hashes']),50)
+        self.assertFalse(overflow_results[-1]['coverage_complete'])
+
 
 if __name__ == '__main__':
     unittest.main()

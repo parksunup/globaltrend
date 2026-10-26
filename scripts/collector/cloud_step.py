@@ -6,6 +6,7 @@ Use only with a live collector_cloud_take claim and collector_cloud_commit RPC.
 import argparse
 import datetime as dt
 import json
+import hashlib
 from pathlib import Path
 from .core import HttpClient, FetchError, collect
 from . import parsers
@@ -87,6 +88,12 @@ def prepare(claim):
         result = collect(config, client, store, claim['since'], claim['until'], max_pages=1, max_items=1)
         if store.failure:
             # The commit RPC must persist this backlog before accepting the advance.
+            if claim['slug'] == 'ftc':
+                # Include the parked URL in both cursors; commit atomically
+                # preserves its retry before accepting this listing advance.
+                keys=set(store.cursor.get('processed_url_hashes', []))
+                keys.add(hashlib.sha256(store.failure['url'].encode()).hexdigest())
+                store.cursor={**store.cursor,'processed_url_hashes':sorted(keys)}
             store.failure['cursor'] = store.cursor
             store.cursor = {**store.cursor, 'offset': store.cursor['offset'] + 1}
             result.update(status='partial', reason='detail_failure_parked', parked_failure=store.failure)

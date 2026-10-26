@@ -1,0 +1,90 @@
+{
+  "listing_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+  "search_script_url": "https://ico.org.uk/js/search.js",
+  "listing_sha256": "2cef142da2206916f88994a4c06c078b66aec0559e7e93a784c29bdc6d3d2239",
+  "script_sha256": "4a530336e5e8c756041af2c067be9ab1e647d3006cb04e50df860fa48f4a6e45",
+  "protocol_evidence": "Official HTML: #filter-page-container data-node-id=2816; form date inputs name=from and name=to. search.js groups nonempty FormData entries as {key,values}, then POSTs JSON with rootPageId,filters,pageNumber,order to /api/search.",
+  "observations": [
+    {
+      "request": {
+        "rootPageId": 2816,
+        "filters": [],
+        "pageNumber": 12,
+        "order": "newest"
+      },
+      "type": "application/json",
+      "results_length": 20,
+      "pagination": {
+        "totalResults": 421,
+        "perPage": 25,
+        "showingPageNumber": 12,
+        "totalPages": 17,
+        "showingFrom": 276,
+        "showingTo": 300,
+        "hasMore": true
+      },
+      "sha256": "9de1135c7a4110e20340bc2b974fc93fa7ce56c84012bbcd3923dffc85ebcc94",
+      "observed_at": "2026-10-23T12:02:04.287390+00:00"
+    },
+    {
+      "request": {
+        "rootPageId": 2816,
+        "filters": [],
+        "pageNumber": 13,
+        "order": "newest"
+      },
+      "type": "application/json",
+      "results_length": 0,
+      "pagination": {
+        "totalResults": 421,
+        "perPage": 25,
+        "showingPageNumber": 13,
+        "totalPages": 17,
+        "showingFrom": 301,
+        "showingTo": 325,
+        "hasMore": true
+      },
+      "sha256": "808aa19c30193976e2b372be3a1a099a97c936db9a92e74a482c4c969f6495f5",
+      "observed_at": "2026-10-23T12:02:10.270684+00:00"
+    },
+    {
+      "request": {
+        "rootPageId": 2816,
+        "filters": [
+          {
+            "key": "from",
+            "values": [
+              "2026-09-21"
+            ]
+          },
+          {
+            "key": "to",
+            "values": [
+              "2026-10-23"
+            ]
+          }
+        ],
+        "pageNumber": 1,
+        "order": "newest"
+      },
+      "type": "application/json",
+      "results_length": 11,
+      "pagination": {
+        "totalResults": 11,
+        "perPage": 25,
+        "showingPageNumber": 1,
+        "totalPages": 1,
+        "showingFrom": 1,
+        "showingTo": 11,
+        "hasMore": false
+      },
+      "sha256": "9a54013e2fa7db93f4369b779c5fcfd8542e80861c42ec453ef2ecbb1470c344",
+      "observed_at": "2026-10-23T12:02:16.394671+00:00"
+    }
+  ],
+  "limitations": [
+    "Search backend internals are unavailable: a fixed result-window limit is a hypothesis, not established.",
+    "Filtered listing is the collection-period query, not proof of full archive coverage.",
+    "No production writes, deployment or scheduled-run verification performed."
+  ]
+}

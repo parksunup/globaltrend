@@ -79,6 +79,32 @@ class CollectorTests(unittest.TestCase):
         rows,next_page=self.parsers.discover('ftc','<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><description>Short text</description></item></channel></rss>','https://www.ftc.gov/feed')
         self.assertEqual(rows[0]['url'],'https://www.ftc.gov/a'); self.assertNotIn('content_text',rows[0]); self.assertIsNone(next_page)
 
+    def test_ftc_pubdate_requires_one_explicit_timezone_and_uses_korea_date(self):
+        rss='<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>Mon, 19 Oct 2026 00:00:00 +0900</pubDate></item></channel></rss>'
+        rows,_=self.parsers.discover('ftc',rss,'https://www.ftc.gov/feed')
+        self.assertEqual(self.parsers.ftc_listing_date(rows[0]),'2026-10-19')
+        self.assertEqual(rows[0]['date_observations'],[{
+            'meaning':'listing_published_rfc822','locator':'rss item pubDate',
+            'value':'Mon, 19 Oct 2026 00:00:00 +0900'}])
+        for pubdate in ('19 Oct 2026 00:00:00','not a date'):
+            bad=f'<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>{pubdate}</pubDate></item></channel></rss>'
+            parsed,_=self.parsers.discover('ftc',bad,'https://www.ftc.gov/feed')
+            self.assertIsNone(self.parsers.ftc_listing_date(parsed[0]))
+        conflict='<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate><pubDate>Tue, 20 Oct 2026 00:00:00 +0000</pubDate></item></channel></rss>'
+        parsed,_=self.parsers.discover('ftc',conflict,'https://www.ftc.gov/feed')
+        self.assertIsNone(self.parsers.ftc_listing_date(parsed[0]))
+        self.assertEqual(len(parsed[0]['date_observations']),2)
+
+    def test_ftc_body_and_pubdate_conflict_remains_unconfirmed(self):
+        row={'title':'Privacy action','date_observations':[{
+            'meaning':'listing_published_rfc822','locator':'rss item pubDate',
+            'value':'Mon, 19 Oct 2026 00:00:00 +0000'}]}
+        html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-20">20 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+        item=self.parsers.extract_document('ftc',html.encode(),'https://www.ftc.gov/a','text/html',row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']),3)
+
     def test_pdpc_json_listing_pagination_preserves_api_parameters(self):
         rows,next_page=self.parsers.discover_pdpc_listing(
             b'{"totalItems":11,"data":[' + b','.join(
@@ -188,6 +214,30 @@ class CollectorTests(unittest.TestCase):
             def checkpoint(self,*args): self.checkpointed=True
         st=Store(); result=self.core.collect(cfg,Client(),st,'2026-10-01','2026-10-13')
         self.assertEqual(result['status'],'failed'); self.assertFalse(st.checkpointed)
+
+    def test_paginated_scan_does_not_prove_period_coverage(self):
+        from unittest.mock import patch
+        cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),
+             'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu']}
+        first=cfg['listing']; second=first+'?page=1'
+        class Client:
+            def get(self,url): return b'<html>article</html>',url,'text/html'
+        class Store:
+            checkpointed=False
+            def ingest(self,*args): return {'item_created':True}
+            def progress(self,*args): pass
+            def checkpoint(self,*args): self.checkpointed=True
+        rows=[
+            ([{'url':'https://www.edpb.europa.eu/news/a_en','title':'A'}],second),
+            ([{'url':'https://www.edpb.europa.eu/news/b_en','title':'B'}],None)]
+        article={'published_date':'2026-10-07','metadata':{'requires_review':False}}
+        store=Store()
+        with patch.object(self.core,'fetch_listing',side_effect=rows), \
+             patch.object(self.parsers,'extract_document',return_value=article):
+            result=self.core.collect(cfg,Client(),store,'2026-10-01','2026-10-13')
+        self.assertEqual(result['pages'],2)
+        self.assertFalse(result['coverage_complete'])
+        self.assertFalse(store.checkpointed)
 
     def test_database_storage_stop_does_not_attempt_another_write(self):
         cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}

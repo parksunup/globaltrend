@@ -18,16 +18,16 @@
 
 일일 예약은 새로 발견된 자료와 기존 미완료 범위를 처리하고, 실제 개인정보 관련성이 있는 비중복 자료를 한국어 보고서체 초안으로 제출합니다. 일일 실행은 전주 주간 호의 확정/집계 역할을 맡지 않습니다.
 
-1. 직전 daily producer 요약, 수집 이벤트·제출 job/report, 출처 상태, cloud cursor·queue·backlog를 읽습니다. 유효 임대가 있으면 빼앗지 않습니다.
+1. 직전 daily producer 요약, **9개 출처 전체**의 수집 이벤트·제출 job/report, 출처 상태, cloud cursor·queue·backlog를 읽습니다. `docs/collector-daily-evidence.sql`의 한국시간 날짜를 해당 실행일로 바꿔 읽기 전용 집계하고, `daily-cron`(Edge 예약), `manual-validation`(수동), cloud-python의 result trigger 및 실제 automation run ID를 따로 대조합니다. CNIL의 `listing_date_excluded`는 카드 날짜만 확인한 건수이므로 상세 열람·저장 건수와 구분합니다. 유효 임대가 있으면 빼앗지 않습니다. 수집을 시작하기 전에 기존 대기 자료의 원문·적격성을 검토해 작성 가능한 작업부터 처리합니다. 수집의 무진행 반복 때문에 기존 적격 초안이 밀리지 않게 합니다.
 2. OECD·FTC는 기존 `collector_cloud_take → python -m scripts.collector.cloud_step → collector_cloud_commit` 경로를 사용합니다. 이전 commit이 성공한 뒤 다음 claim을 진행합니다. Claim과 미저장 bundle은 ignored work/에 보관하고, commit 응답이 있어야 저장 성공으로 기록합니다.
 3. Bundle에 실제 automation/run ID·예정 시각·`trigger='scheduled'`·Git SHA를 넣습니다. 실제 context에서 모르는 값은 지어내지 않고 미확인으로 남깁니다. queue message kind와 예약 trigger를 혼동하지 않습니다.
-4. 나머지 7개 승인 출처는 기존 Edge/Cron 소비자가 처리합니다. 출처 승인·호스트·route를 추가하거나 재설정하지 않습니다. CNIL 실패·재시도와 기존 미완료 범위를 보존합니다. coverage는 실제 전체 검증 전까지 미완료로 둡니다.
-5. 적격 pending/retry draft 후보를 읽기 전용 비교합니다. 원문 전체, 실제 개인정보 관련성, 같은 발표·언어판 중복 여부, 기존 보고서·상태를 확인하고 작업 1건씩 targeted claim합니다. 제출 완료와 `existing_event_report:` 보류 건은 재선점하지 않습니다.
+4. 나머지 7개 승인 출처는 기존 Edge/Cron 소비자가 처리합니다. **처리 책임이 다르다는 이유로 운영 확인·보고에서 제외하지 않습니다.** 출처별 예약/수동 실행, 실제 신규/변경/중복 저장, 기간 밖 자료, 실패, 미확정 날짜, 남은 목록·backlog, 초안 제출 상태를 모두 확인합니다. 최신 이벤트 한 건의 경고를 하루 전체 수집 성과로 대신하지 않습니다. `listing_exhaustiveness_unverified`는 기존 구현이 목록 끝에서 항상 남기는 경고이므로 목록 탐색 종료와 기간 전체 입증을 구분합니다. 출처 승인·호스트·route를 추가하거나 재설정하지 않습니다. CNIL 실패·재시도와 기존 미완료 범위를 보존합니다. coverage는 실제 전체 검증 전까지 미완료로 둡니다.
+5. 각 성공 commit 체크포인트 뒤에도 적격 초안을 확인해 수집과 작성을 교대로 진행합니다. 적격 pending/retry draft 후보를 읽기 전용 비교합니다. 원문 전체, 실제 개인정보 관련성, 같은 발표·언어판 중복 여부, 기존 보고서·상태를 확인하고 작업 1건씩 targeted claim합니다. 제출 완료와 `existing_event_report:` 보류 건은 재선점하지 않습니다.
 6. 정확한 revision_id·input_hash·instruction_version 및 30분 lease를 유지합니다. 원문과 용어집을 바탕으로 이 Codex 실행에서 초안을 직접 작성하고 주체·날짜·수치·인용·법적 단계를 대조합니다. 별도 생성 API를 사용하지 않습니다.
 7. `node scripts/trend-report.mjs --check work/draft-<job_id>.json`을 실제 통과한 초안만 `submit_trend_draft`로 제출합니다. 실패 원고는 기존 fail 경로를 쓰고 제출 성공으로 간주하지 않습니다.
 8. reports·publication_working_copies(`entity_type='report'`)·기존 `get_trend_collector_review()` JSON items에서 report ID, draft·미검수·미게시·공개 요청 없음·revision을 확인합니다. 관리자 확인과 팀 RLS 조회, 브라우저 직접 확인을 구분합니다. 권한을 확대하지 않습니다.
 
-하루 여러 자료를 처리할 수 있지만, 이는 정책상 수량 목표나 보장이 아닙니다. 적격 자료가 없으면 작성하지 않습니다. 실행 요약의 `role='daily-producer'`에 대상 기간, 처리량, event/job/revision/input_hash/report ID, 검사 결과, 소요시간, 남은 범위와 중복 방지 근거를 남깁니다. 정상 건수마다 별도 주간 보고를 만들지 않습니다. 사용자에게 별도 알림은 실패·권한/비용 오류·재개 불가 등 조치가 필요한 경우에만 합니다.
+하루 여러 자료를 처리할 수 있지만, 이는 정책상 수량 목표나 보장이 아닙니다. 적격 자료가 없으면 작성하지 않습니다. 실행 요약의 `role='daily-producer'`에 9개 출처 전체의 대상 기간, 신규/변경/중복/기간 밖/실패 처리량, 예약/수동 구분, event/job/revision/input_hash/report ID, 초안 제외·보류의 실제 사유, 검사 결과, 소요시간, 남은 범위와 중복 방지 근거를 남깁니다. 처리하지 않은 출처도 직전 확인 기록의 시각과 미실행 여부를 명시합니다. 실행 이력의 completed는 플랫폼 작업 종료이며 9개 출처의 완전 수집이나 초안 제출 성공과 동일하지 않습니다. 정상 건수마다 별도 주간 보고를 만들지 않습니다. 사용자에게 별도 알림은 실패·권한/비용 오류·재개 불가 등 조치가 필요한 경우에만 합니다.
 
 ## 월요일 주간 집계·보고자
 

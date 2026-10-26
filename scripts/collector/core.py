@@ -10,6 +10,8 @@ from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 
 MAX_BYTES=2_000_000
+MAX_PROCESSED_URL_HASHES=50
+OECD_NEWSROOM_LISTING='https://www.oecd.org/en/about/newsroom.html'
 # Per-process safety ceiling, independent of the per-run document/page inputs.
 # A 100-item backfill also performs progress and database RPC calls; the old
 # value of 100 unintentionally stopped a batch before its document limit.
@@ -136,9 +138,19 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         result['reason']='source_permissions_or_operation_unapproved'; return result
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
+    # A mutable feed's titles/order can change between one-document commits.
+    # FTC keeps URL identities across claims and completed daily scans; titles
+    # and row order are not stable enough to serve as a resume key.
+    processed_hashes=list((cursor or {}).get('processed_url_hashes',[])) if config['source'] in ('ftc','oecd') else []
+    processed_keys=set(processed_hashes)
+    oecd_cycle_complete=False
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
+    if config['source']=='ico':
+        scoped=parsers.ico_range_url(page,since,until)
+        if scoped!=page: cursor=None
+        page=scoped
     result['status']='partial'
     try:
         while page:
@@ -169,27 +181,55 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
                     continue
+                url_key=hashlib.sha256(url.encode()).hexdigest()
+                if config['source'] in ('ftc','oecd') and url_key in processed_keys: continue
                 if url in seen_items: continue
-                if len(seen_items)>=max_items: raise FetchError('document_limit')
+                if len(seen_items)-result.get('listing_date_excluded',0)>=max_items: raise FetchError('document_limit')
+                if config['source']=='ftc':
+                    # PostgreSQL collector_set_progress rejects jsonb::text over
+                    # 4000 bytes. Reserve the next identity *before* fetching or
+                    # ingesting; never truncate this exact set and skip URLs.
+                    # Counters reserve one unknown date/failure, covering the
+                    # atomic parked-failure cursor as well as success.
+                    prospective={'page':page,'offset':index+1,'fingerprint':fingerprint,
+                        'had_pagination':had_pagination,'failures':prior_failures+result['failed']+1,
+                        'unknown_dates':prior_unknown_dates+result['unknown_date']+1,
+                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                        'processed_url_hashes':sorted(processed_keys | {url_key})}
+                    if (len(prospective['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
+                            len(json.dumps(prospective,ensure_ascii=False).encode('utf-8'))>4000):
+                        raise FetchError('ftc_resume_cursor_capacity_exceeded')
                 seen_items.add(url); result['discovered']+=1
                 try:
-                    body,detail,ctype=client.get(url)
-                    item=parsers.extract_document(config['source'],body,detail,ctype,row)
-                    date=item['published_date']
-                    if date and not since<=date<=until:
+                    listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
+                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else None)
+                    if listing_date and not since<=listing_date<=until:
+                        # An individually dated CNIL/FTC row can be excluded
+                        # without reading its body. This says nothing about
+                        # archive ordering or complete period coverage.
                         result['out_of_range']+=1
+                        result['listing_date_excluded']=result.get('listing_date_excluded',0)+1
+                        result['range_filter_read_scope']='listing_date_only'
+                        result['listing_date_evidence']={'url':url,'date':listing_date,'observations':row['date_observations']}
                     else:
-                        if date is None: result['unknown_date']+=1
-                        # Eligibility is not a positive relevance decision or human approval.
-                        item['metadata'].update({'relevance_reason':'full_body_available_human_relevance_review_pending',
-                            'ai_ready':date is not None and not item['metadata']['requires_review'],
-                            'pr16_commit':'547a83611cad948439598e2974e7ce8afd10781d'})
-                        saved=store.ingest(config,url,item)
-                        key='new' if saved.get('item_created') else 'changed' if saved.get('content_changed') else 'duplicate'
-                        result[key]+=1
-                        if date is None: result['held']+=1
+                        body,detail,ctype=client.get(url)
+                        item=parsers.extract_document(config['source'],body,detail,ctype,row)
+                        date=item['published_date']
+                        if date and not since<=date<=until:
+                            result['out_of_range']+=1
+                        else:
+                            if date is None: result['unknown_date']+=1
+                            # Eligibility is not a positive relevance decision or human approval.
+                            item['metadata'].update({'relevance_reason':'full_body_available_human_relevance_review_pending',
+                                'ai_ready':date is not None and not item['metadata']['requires_review'],
+                                'pr16_commit':'547a83611cad948439598e2974e7ce8afd10781d'})
+                            saved=store.ingest(config,url,item)
+                            key='new' if saved.get('item_created') else 'changed' if saved.get('content_changed') else 'duplicate'
+                            result[key]+=1
+                            if date is None: result['held']+=1
                 except (FetchError,ValueError) as e:
                     result['failed_url']=url
                     if str(e).startswith('database_'): raise
@@ -201,21 +241,85 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         store.progress(config,since,until,{'page':page,'offset':index,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
                     raise FetchError('detail_failure:'+str(e)) from None
+                if config['source']=='ftc':
+                    processed_keys.add(url_key)
+                    processed_hashes=sorted(processed_keys)
+                elif config['source']=='oecd' and urlsplit(page).path==urlsplit(OECD_NEWSROOM_LISTING).path:
+                    # Keep a bounded rolling identity window for the newsroom's
+                    # mutable six-card listing. Check it against topic rows too.
+                    processed_hashes=[value for value in processed_hashes if value!=url_key]
+                    processed_hashes.append(url_key)
+                    processed_hashes=processed_hashes[-MAX_PROCESSED_URL_HASHES:]
+                    processed_keys=set(processed_hashes)
                 if hasattr(store,'progress'):
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
+            completed_page=page
             page=next_page
             cursor=None
+            if config['source']=='ftc' and page is None:
+                # The FTC RSS is a bounded, single-page feed. Keep the exact
+                # URL hashes in its latest complete snapshot so tomorrow's
+                # scan does not fetch the same details again. Replace old
+                # hashes only after completing the whole feed; never truncate
+                # a growing in-progress set to fit PostgreSQL's 4 KB limit.
+                processed_keys={hashlib.sha256(url.encode()).hexdigest() for url in listing_urls}
+                completed_cursor={'page':completed_page,'offset':0,'fingerprint':fingerprint,
+                    'had_pagination':had_pagination,'failures':prior_failures+result['failed'],
+                    'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    'processed_url_hashes':sorted(processed_keys)}
+                if (len(completed_cursor['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
+                        len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000):
+                    raise FetchError('ftc_resume_cursor_capacity_exceeded')
+            elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path!=urlsplit(OECD_NEWSROOM_LISTING).path:
+                # The official topic landing page exposes publications and may
+                # link related releases, but it is not the newsroom release list.
+                # Continue the same durable source cursor through the official
+                # newsroom's six latest release cards. The newsroom page itself
+                # is not a paginated archive, so this adds discovery only and
+                # never establishes period completeness.
+                page=OECD_NEWSROOM_LISTING
+                completed_cursor={'page':page,'offset':0,'had_pagination':had_pagination,
+                    'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    'processed_url_hashes':processed_hashes}
+                result['listing_transition']='topic_to_official_newsroom'
+            elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path==urlsplit(OECD_NEWSROOM_LISTING).path:
+                # Restart the next scheduled scan at the topic listing while
+                # retaining a bounded rolling set of processed newsroom URLs.
+                page=config['listing']
+                completed_cursor={'page':page,'offset':0,'had_pagination':False,
+                    'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    'processed_url_hashes':processed_hashes}
+                result['listing_transition']='newsroom_to_topic_restart'
+                oecd_cycle_complete=True
+            else:
+                if config['source'] not in ('ftc','oecd'): processed_keys.clear()
+                completed_cursor={'page':page,'offset':0,'had_pagination':had_pagination,
+                    'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})} if page else None
             if hasattr(store,'progress'):
-                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']} if page else None)
-        result['coverage_complete']=had_pagination and result['failed']==0 and prior_failures==0 and result['unknown_date']==0 and prior_unknown_dates==0 and prior_excluded_hosts==0 and result['excluded_unapproved_host_count']==0
-        result['status']='success' if result['coverage_complete'] else 'partial'
-        result['reason']=None if result['coverage_complete'] else ('unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure')
-        if result['coverage_complete']: store.checkpoint(config,until)
+                store.progress(config,since,until,completed_cursor)
+            if oecd_cycle_complete:
+                break
+        # Reaching a last page establishes only this listing scan. Pagination
+        # alone does not prove that the source covers every item in the period,
+        # including related releases, hidden pages and unread attachments.
+        result['coverage_complete']=False
+        result['status']='partial'
+        if config['source']!='oecd' or oecd_cycle_complete:
+            result['listing_scan_complete']=True
+        result['reason']='unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
+        if config['source']=='cnil':
+            result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
     except (FetchError,ValueError) as e:
         # Ordinary batch boundaries preserve the cursor for the next run. They
         # do not establish complete coverage, but are not collection failures.

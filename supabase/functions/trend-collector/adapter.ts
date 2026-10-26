@@ -145,6 +145,16 @@ export function discover(
       );
     }
     const row: Row = { url: target, title };
+    if (source === "cnil") {
+      row.date_observations = [
+        ...(a.closest(".list-inner")?.querySelectorAll(".attributes p.date") ||
+          []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing .list-inner .attributes p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
     if (source === "curia") {
       const t = a.closest(".curia-itemlist-item")?.querySelector("time");
       row.date_observations = t
@@ -383,6 +393,14 @@ export async function extract(
     : [];
   if (row?.date_observations) observations.push(...row.date_observations);
   if (source === "ppc") {
+    // The dedicated notice header excludes enactment/revision dates in prose.
+    for (const dateline of document.querySelectorAll("main.l-main .l-article > .date-box")) {
+      observations.push({
+        meaning: "published_notice_dateline",
+        locator: "main.l-main .l-article > .date-box",
+        value: normalize(dateline.textContent || ""),
+      });
+    }
     const match = document.title.match(
       /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
     );
@@ -419,4 +437,20 @@ export async function extract(
       ai_ready: !requiresReview,
     },
   };
+}
+
+export function cnilListingDate(row: Row): string | null {
+  const obs = row.date_observations || [];
+  if (
+    obs.length !== 1 || obs[0].meaning !== "listing_published_display" ||
+    obs[0].locator !== "listing .list-inner .attributes p.date"
+  ) return null;
+  const value = normalize(obs[0].value).toLowerCase();
+  // Only an exact single French date may skip the detail request. Generic
+  // parseDate accepts dates embedded in prose, which could mistake an update
+  // date or label for the publication date and silently skip an in-range card.
+  if (!/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/u.test(value)) {
+    return null;
+  }
+  return parseDate(value);
 }
