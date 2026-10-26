@@ -7,6 +7,25 @@ from scripts.collector.core import HttpClient, FetchError
 
 
 class DynamicListingTests(unittest.TestCase):
+    def test_dpc_listing_preserves_single_teaser_date_and_rejects_ambiguous_dates(self):
+        html = '''<main>
+          <article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/a">A</a></h2><p class="date">01st October 2026</p></article>
+          <article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/b">B</a></h2><p class="date">28th September 2026</p><p class="date">27th September 2026</p></article>
+        </main>'''
+        rows, _ = parsers.discover('dpc', html, 'https://www.dataprotection.ie/en/news-media/latest-news')
+        self.assertEqual(rows[0]['date_observations'], [{
+            'meaning': 'listing_published_display',
+            'locator': 'listing article.node--view-mode-teaser p.date',
+            'value': '01st October 2026',
+        }])
+        self.assertEqual(parsers.dpc_listing_date(rows[0]), '2026-10-01')
+        self.assertEqual(len(rows[1]['date_observations']), 2)
+        self.assertIsNone(parsers.dpc_listing_date(rows[1]))
+        self.assertIsNone(parsers.dpc_listing_date({'date_observations': [
+            {'meaning': 'listing_published_display', 'locator': 'other', 'value': '01st October 2026'}]}))
+        self.assertIsNone(parsers.dpc_listing_date({'date_observations': [
+            {'meaning': 'listing_published_display', 'locator': 'listing article.node--view-mode-teaser p.date', 'value': '31st February 2026'}]}))
+
     def test_pdpc_embedded_body_excludes_footer_and_nonarticle_payloads(self):
         content = '<p>The complete embedded advisory body.</p><a href="/assets/advisory.pdf">Advisory PDF</a>'
         article = ['$', 'main', None, {'className': 'layout layout--standard', 'children': [
@@ -69,6 +88,51 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(rows[0]['date_observations'][0]['value'], '30 Sep 2026')
         self.assertEqual(nxt, 'https://www.pdpc.gov.sg/media-events?page=2')
 
+    def test_ico_period_filters_follow_official_form_protocol(self):
+        html = '<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>'
+        payload = parsers.ico_search_request(html, 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2')
+        self.assertEqual(payload['filters'], [{'key': 'from', 'values': ['2026-09-21']}, {'key': 'to', 'values': ['2026-10-23']}])
+        self.assertEqual(payload['pageNumber'], 2)
+
+    def test_ico_rejects_partial_and_empty_pages_despite_has_more(self):
+        for page, size in [(12, 20), (13, 0)]:
+            response = {'results': [{'url': '/news/a/', 'title': 'A'}] * size,
+                        'pagination': {'showingPageNumber': page, 'hasMore': True, 'totalPages': 17,
+                                       'totalResults': 421, 'perPage': 25}}
+            with self.assertRaisesRegex(ValueError, 'ico_listing_page_incomplete'):
+                parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/', page)
+
+    def test_ico_next_page_preserves_period(self):
+        response = {'results': [{'url': '/news/a/', 'title': 'A'}] * 25,
+                    'pagination': {'showingPageNumber': 1, 'hasMore': True, 'totalPages': 2,
+                                   'totalResults': 26, 'perPage': 25}}
+        _, nxt = parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23', 1)
+        self.assertEqual(nxt, 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2')
+
+    def test_ico_legacy_page_restarts_in_range_and_scoped_cursor_resumes(self):
+        from scripts.collector.core import collect
+        class Store:
+            def __init__(self, page): self.page = page
+            def resume(self, *args): return {'page': self.page, 'offset': 20, 'failures': 2}
+        class Client:
+            def __init__(self): self.pages = []
+            def get(self, url):
+                self.pages.append(url)
+                raise FetchError('stop_after_request')
+        cfg = {'source': 'ico', 'hosts': ['ico.org.uk'], 'listing': 'https://ico.org.uk/news/',
+               'enabled': True, 'permissions': dict(collect=True, store=True, ai=True)}
+        for old, expected in [('https://ico.org.uk/news/?page=13', 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23'),
+                              ('https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2', 'https://ico.org.uk/news/?from=2026-09-21&page=2&to=2026-10-23')]:
+            client = Client()
+            result = collect(cfg, client, Store(old), '2026-09-21', '2026-10-23')
+            self.assertEqual(client.pages, [expected])
+            self.assertFalse(result['coverage_complete'])
+
+    def test_ico_range_rejects_invalid_or_reversed_dates(self):
+        for since, until in [('2026-02-30', '2026-10-23'), ('2026-10-24', '2026-10-23')]:
+            with self.assertRaisesRegex(ValueError, 'invalid_ico_listing_range'):
+                parsers.ico_range_url('https://ico.org.uk/news/', since, until)
+
     def test_ico_request_uses_current_dom_id_and_selected_order(self):
         html = '<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>'
         payload = parsers.ico_search_request(html, 'https://ico.org.uk/news/?page=2')
@@ -82,19 +146,19 @@ class DynamicListingTests(unittest.TestCase):
 
     def test_ico_json_follows_explicit_pagination_and_ignores_creation_date(self):
         response = {'results': [{'url': '/news/a/', 'title': 'Data rights', 'createdDateTime': '2026-01-01'}],
-                    'pagination': {'showingPageNumber': 1, 'hasMore': True, 'totalPages': 2}}
+                    'pagination': {'showingPageNumber': 1, 'hasMore': True, 'totalPages': 2, 'totalResults': 2, 'perPage': 1}}
         rows, nxt = parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/', 1)
         self.assertEqual(rows, [{'url': 'https://ico.org.uk/news/a/', 'title': 'Data rights'}])
         self.assertEqual(nxt, 'https://ico.org.uk/news/?page=2')
 
     def test_ico_json_rejects_stale_page_and_null_response(self):
-        for response in [None, {'results': [], 'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 2}}]:
+        for response in [None, {'results': [], 'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 2, 'totalResults': 2, 'perPage': 1}}]:
             with self.assertRaises(ValueError):
                 parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/?page=2', 2)
 
     def test_ico_last_page_has_no_next_url(self):
         response = {'results': [{'url': '/news/a/', 'title': 'A'}],
-                    'pagination': {'showingPageNumber': 2, 'hasMore': False, 'totalPages': 2}}
+                    'pagination': {'showingPageNumber': 2, 'hasMore': False, 'totalPages': 2, 'totalResults': 2, 'perPage': 1}}
         _, nxt = parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/?page=2', 2)
         self.assertIsNone(nxt)
 
@@ -123,7 +187,7 @@ class DynamicListingTests(unittest.TestCase):
             def post(self, url, payload, headers):
                 self.post_payload = json.loads(payload)
                 response = {'results': [{'url': '/news/a/', 'title': 'Data rights', 'description': 'Never use this snippet as full text'}],
-                    'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 1}}
+                    'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 1, 'totalResults': 1, 'perPage': 25}}
                 return json.dumps(response).encode(), url, 'application/json'
         client = Client()
         record, failed = probe_source({'source': 'ico', 'listing': 'https://ico.org.uk/news/'}, client, [])

@@ -2,6 +2,7 @@ import { DOMParser, parseHTML } from "npm:linkedom@0.18.12";
 export type Row = {
   url: string;
   title: string;
+  topic?: string;
   date_observations?: Observation[];
 };
 type Observation = { meaning: string; locator: string; value: string };
@@ -88,6 +89,15 @@ export function parseDate(value: string): string | null {
   ) return null;
   return out;
 }
+/** Read only ICO's explicit Dublin Core publication date; never infer from URL/title. */
+export function icoPublishedDate(html: string): { date: string; value: string } | null {
+  const { document } = parseHTML(html);
+  const value = normalize(
+    document.querySelector('meta[name="DC.Date"]')?.getAttribute("content") || "",
+  );
+  const date = value ? parseDate(value) : null;
+  return date ? { date, value } : null;
+}
 export const sha = async (s: string) =>
   [
     ...new Uint8Array(
@@ -145,6 +155,26 @@ export function discover(
       );
     }
     const row: Row = { url: target, title };
+    if (source === "cnil") {
+      row.date_observations = [
+        ...(a.closest(".list-inner")?.querySelectorAll(".attributes p.date") ||
+          []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing .list-inner .attributes p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
+    if (source === "dpc") {
+      const card = a.closest("article.node--view-mode-teaser");
+      row.date_observations = [
+        ...(card?.querySelectorAll("p.date") || []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing article.node--view-mode-teaser p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
     if (source === "curia") {
       const t = a.closest(".curia-itemlist-item")?.querySelector("time");
       row.date_observations = t
@@ -175,6 +205,38 @@ export function discover(
   };
 }
 export function pdpcContent(document: Document): Element[] {
+  // PDPC's Next.js payload can advertise a 404 article root even when the
+  // official page HTML contains the rendered article. Prefer the narrowly
+  // scoped main-column article, then remove navigation, galleries and teasers.
+  const renderedArticle = document.querySelector(
+    "main.col-lg-9 > article.layout.layout--standard",
+  );
+  if (renderedArticle) {
+    const readable = renderedArticle.cloneNode(true) as Element;
+    // Some PDPC campaign/event pages place one promotional video card inside
+    // an otherwise empty article shell. That card is a teaser, not the
+    // page's report body. Classify this narrow shape separately so it can be
+    // skipped without turning it into a content fetch failure.
+    const hasPromoCard = Boolean(readable.querySelector(".article-card-cta"));
+    const richTextNodes = [...readable.querySelectorAll(".rte")];
+    const hasEmptyRichText = richTextNodes.length > 0 &&
+      richTextNodes.every((node) =>
+        normalize(node.textContent || "").length < 60
+      );
+    const isEventsCategory = normalize(
+      document.querySelector(".page-banner__category")?.textContent || "",
+    ).toLowerCase() === "events";
+    for (const node of readable.querySelectorAll(
+      ".article-footer,.article-card-cta,.image-gallery,.slick-slider,.progress-wrapper,.tabs__mobile-controls,button",
+    )) node.remove();
+    const remaining = normalize(readable.textContent || "").length;
+    if (
+      isEventsCategory && hasPromoCard && hasEmptyRichText && remaining < 60
+    ) {
+      throw new Error("pdpc_promotional_landing_without_article");
+    }
+    if (remaining >= 60) return [readable];
+  }
   const chunks: string[] = [];
   for (const script of document.querySelectorAll("script:not([src])")) {
     const text = (script.textContent || "").trim();
@@ -222,45 +284,81 @@ export function pdpcContent(document: Document): Element[] {
     if (records.has(id)) throw new Error("pdpc_duplicate_record");
     records.set(id, value);
   }
+
+  type FlightNode = unknown[] & [unknown, unknown, unknown, Record<string, unknown>];
+  const isElement = (value: unknown): value is FlightNode =>
+    Array.isArray(value) && typeof value[1] === "string" &&
+    !!value[3] && typeof value[3] === "object";
   const nodes: Element[] = [];
-  // Only content props under the standard main/article, never navigation or shell.
-  for (const v of records.values()) {
-    const main = v as [
-      unknown,
-      string,
-      unknown,
-      { className?: string; children?: unknown[] },
-    ];
-    if (
-      !Array.isArray(main) || main[1] !== "main" ||
-      main[3]?.className !== "layout layout--standard"
-    ) continue;
-    for (const a of main[3].children || []) {
-      const article = a as typeof main;
-      if (!Array.isArray(article) || article[1] !== "article") continue;
-      for (const c of article[3]?.children || []) {
-        const component = c as [
-          unknown,
-          unknown,
-          unknown,
-          { data?: { content?: unknown } },
-        ];
-        let content = component?.[3]?.data?.content;
-        if (typeof content === "string" && /^\$[a-f0-9]+$/.test(content)) {
-          content = records.get(content.slice(1));
+  const seenContent = new Set<string>();
+  const visited = new Set<object>();
+  const childValues = (value: unknown): unknown[] => {
+    if (!isElement(value)) return [];
+    const children = value[3].children;
+    return Array.isArray(children) ? children : children == null ? [] : [children];
+  };
+  const resolveContent = (content: unknown): string | null => {
+    if (typeof content !== "string") return null;
+    if (!/^\$[a-f0-9]+$/.test(content)) return content;
+    const resolved = records.get(content.slice(1));
+    return typeof resolved === "string" && !resolved.startsWith("$")
+      ? resolved
+      : null;
+  };
+  const collectArticle = (value: unknown) => {
+    if (!value || typeof value !== "object" || visited.has(value as object)) return;
+    visited.add(value as object);
+    if (isElement(value)) {
+      const data = value[3].data;
+      if (data && typeof data === "object" && "content" in data) {
+        const content = resolveContent((data as { content?: unknown }).content);
+        if (content === null) throw new Error("pdpc_content_unresolved");
+        if (!seenContent.has(content)) {
+          seenContent.add(content);
+          nodes.push(
+            parseHTML("<div>" + content + "</div>").document.querySelector(
+              "div",
+            )!,
+          );
         }
-        if (content === undefined) continue;
-        if (typeof content !== "string" || content.startsWith("$")) {
-          throw new Error("pdpc_content_unresolved");
-        }
-        nodes.push(
-          parseHTML("<div>" + content + "</div>").document.querySelector(
-            "div",
-          )!,
-        );
+      }
+      for (const child of childValues(value)) collectArticle(child);
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) collectArticle(child);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        collectArticle(child);
       }
     }
-  }
+  };
+  const findMainArticles = (
+    value: unknown,
+    insideMain = false,
+    seen = new Set<object>(),
+  ) => {
+    if (!value || typeof value !== "object" || seen.has(value as object)) return;
+    seen.add(value as object);
+    if (isElement(value)) {
+      const inMain = insideMain || value[1] === "main";
+      if (inMain && value[1] === "article") collectArticle(value);
+      for (const child of childValues(value)) {
+        findMainArticles(child, inMain, seen);
+      }
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) findMainArticles(child, insideMain, seen);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        findMainArticles(child, insideMain, seen);
+      }
+    }
+  };
+  // Flight layouts may add container/row/main wrappers. Anchor extraction to an
+  // article nested anywhere below a main element; never fall back to page shell text.
+  for (const value of records.values()) findMainArticles(value);
   if (!nodes.length) throw new Error("pdpc_article_missing");
   return nodes;
 }
@@ -287,7 +385,7 @@ export async function extract(
     ppc: ["h1.page-ttl", null, ["main.l-main"]],
     ico: ["h1", null, ["main .rich-text .prose"]],
     oecd: ["h1.cmp-report-header__title", "time", []],
-    pdpc: ["main h1", "main .page-banner__date", []],
+    pdpc: ["header.page-banner h1, main h1", "main .page-banner__date", []],
   };
   if (!selectors[source]) throw new Error("unverified_template");
   const [ts, ds, bs] = selectors[source];
@@ -302,7 +400,7 @@ export async function extract(
   let scope = "news_html";
   if (source === "pdpc") {
     nodes = pdpcContent(document as unknown as Document);
-    scope = "news_html_from_embedded_rsc";
+    scope = "official_article_html_or_embedded_rsc";
   }
   if (source === "oecd") {
     scope = "official_abstract";
@@ -382,7 +480,27 @@ export async function extract(
     ]
     : [];
   if (row?.date_observations) observations.push(...row.date_observations);
+  if (source === "ico") {
+    // Use the same explicit Dublin Core publication date for in-range items
+    // that the range guard already uses for out-of-range backlog items.
+    const published = icoPublishedDate(html);
+    if (published) {
+      observations.push({
+        meaning: "official_published_attribute",
+        locator: 'meta[name="DC.Date"]@content',
+        value: published.value,
+      });
+    }
+  }
   if (source === "ppc") {
+    // The dedicated notice header excludes enactment/revision dates in prose.
+    for (const dateline of document.querySelectorAll("main.l-main .l-article > .date-box")) {
+      observations.push({
+        meaning: "published_notice_dateline",
+        locator: "main.l-main .l-article > .date-box",
+        value: normalize(dateline.textContent || ""),
+      });
+    }
     const match = document.title.match(
       /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
     );
@@ -394,8 +512,18 @@ export async function extract(
       });
     }
   }
+  const dpcListing = source === "dpc" ? dpcListingDate(row) : null;
+  const dateObservations = source === "dpc"
+    ? observations.filter((x) =>
+      x.meaning !== "listing_published_display" ||
+      x.locator !== "listing article.node--view-mode-teaser p.date"
+    )
+    : observations;
   const dates = [
-    ...new Set(observations.map((x) => parseDate(x.value)).filter(Boolean)),
+    ...new Set([
+      ...dateObservations.map((x) => parseDate(x.value)).filter(Boolean),
+      ...(dpcListing ? [dpcListing] : []),
+    ]),
   ];
   const date = dates.length === 1 ? dates[0] : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
@@ -408,7 +536,7 @@ export async function extract(
     published_date: date,
     metadata: {
       normalization_version: "main-body-nfc-v1",
-      parser_version: "edge-adapter-v2",
+      parser_version: source === "pdpc" ? "edge-pdpc-article-v3" : "edge-adapter-v2",
       read_scope: scope,
       date_observations: observations,
       requires_review: requiresReview,
@@ -419,4 +547,48 @@ export async function extract(
       ai_ready: !requiresReview,
     },
   };
+}
+
+export function cnilListingDate(row: Row): string | null {
+  const obs = row.date_observations || [];
+  if (
+    obs.length !== 1 || obs[0].meaning !== "listing_published_display" ||
+    obs[0].locator !== "listing .list-inner .attributes p.date"
+  ) return null;
+  const value = normalize(obs[0].value).toLowerCase();
+  // Only an exact single French date may skip the detail request. Generic
+  // parseDate accepts dates embedded in prose, which could mistake an update
+  // date or label for the publication date and silently skip an in-range card.
+  if (!/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/u.test(value)) {
+    return null;
+  }
+  return parseDate(value);
+}
+
+export function dpcListingDate(row?: Row): string | null {
+  const observations = row?.date_observations || [];
+  if (
+    observations.length !== 1 ||
+    observations[0].meaning !== "listing_published_display" ||
+    observations[0].locator !==
+      "listing article.node--view-mode-teaser p.date"
+  ) return null;
+  const value = normalize(observations[0].value);
+  const match = value.match(
+    /^(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})$/i,
+  );
+  if (!match) return null;
+  const day = Number(match[1]);
+  const suffix = match[2]?.toLowerCase();
+  const expectedSuffix = day % 100 >= 11 && day % 100 <= 13
+    ? "th"
+    : day % 10 === 1
+    ? "st"
+    : day % 10 === 2
+    ? "nd"
+    : day % 10 === 3
+    ? "rd"
+    : "th";
+  if (suffix && suffix !== expectedSuffix) return null;
+  return parseDate(value);
 }

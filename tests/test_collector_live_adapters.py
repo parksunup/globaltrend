@@ -29,11 +29,61 @@ def press_pdf(text):
 
 
 class LiveAdapterTests(unittest.TestCase):
+    def test_dpc_listing_date_fills_missing_detail_date_but_conflicts_remain_unknown(self):
+        url = 'https://www.dataprotection.ie/en/news-media/latest-news/example'
+        row = {'title': 'Example', 'date_observations': [{
+            'meaning': 'listing_published_display',
+            'locator': 'listing article.node--view-mode-teaser p.date',
+            'value': '01st October 2026',
+        }]}
+        body_without_date = '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>'
+        item = parsers.extract_document('dpc', body_without_date.encode(), url, 'text/html', row)
+        self.assertEqual(item['published_date'], '2026-10-01')
+        self.assertFalse(item['metadata']['requires_review'])
+        self.assertEqual(item['metadata']['date_observations'], row['date_observations'])
+
+        body_with_conflict = '<h1>Example</h1><main><p class="date">02nd October 2026</p><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>'
+        item = parsers.extract_document('dpc', body_with_conflict.encode(), url, 'text/html', row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']), 2)
+
+        ambiguous_row = {'title': 'Example', 'date_observations': [
+            row['date_observations'][0],
+            {**row['date_observations'][0], 'value': '02nd October 2026'},
+        ]}
+        item = parsers.extract_document('dpc', body_without_date.encode(), url, 'text/html', ambiguous_row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']), 2)
+
     def test_ppc_discovers_notices_without_year_navigation(self):
         html = '<main><div class="tab-nav"><a href="/news/press/2026">Archive</a></div><ul class="news-list"><li><div class="news-text"><a href="/news/press/2026/261007_houdou">Notice</a></div></li></ul></main>'
         rows, next_page = parsers.discover('ppc', html, 'https://www.ppc.go.jp/news/press/')
         self.assertEqual(rows, [{'url': 'https://www.ppc.go.jp/news/press/2026/261007_houdou', 'title': 'Notice'}])
         self.assertIsNone(next_page)
+
+    def test_ppc_official_notice_dateline_excludes_body_dates_and_keeps_pdf_unread(self):
+        # Structure observed at /news/press/2026/260717/ on 2026-10-23.
+        html = '<title>法律の公布について（令和８年７月17日）</title><h1 class="page-ttl">法律の公布について</h1><main class="l-main"><div class="l-article"><div class="date-box mb-m">令和８年７月17日<br>個人情報保護委員会</div><p>令和８年４月７日に提出、令和８年７月10日に成立。</p><a href="/files/pdf/260717_houritsu.pdf">法律</a></div></main>'
+        item = parsers.extract('ppc', html, 'https://www.ppc.go.jp/news/press/2026/260717/')
+        self.assertEqual(item['published_date'], '2026-07-17')
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertFalse(item['metadata']['related_documents'][0]['read'])
+        self.assertEqual(item['metadata']['date_observations'][-1]['meaning'], 'published_notice_dateline')
+
+    def test_ppc_conflicting_publication_title_and_notice_dateline_remain_unknown(self):
+        html = '<title>公表（令和８年７月18日）</title><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main>'
+        item = parsers.extract('ppc', html, 'https://www.ppc.go.jp/news/press/a/')
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+
+    def test_ppc_body_revision_dates_do_not_become_publication_dates(self):
+        html = '<h1 class="page-ttl">注意喚起</h1><main class="l-main"><p>令和６年12月11日、令和８年10月７日改訂。令和８年10月９日追加。</p></main>'
+        item = parsers.extract('ppc', html, 'https://www.ppc.go.jp/news/careful_information/261007_alert/')
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
 
     def test_edpb_card_overlay_gets_visible_title(self):
         html = '<main><article class="node-article-card"><h3 class="node-article-card__title">Data rights</h3><a class="node-article-card__link" href="/news/a_en"></a></article></main>'
@@ -67,6 +117,35 @@ class LiveAdapterTests(unittest.TestCase):
         item = parsers.extract_document('curia', press_pdf('Press release. Luxembourg, 8 October 2026. Data protection rights.'),
             'https://curia.europa.eu/site/upload/press-en.pdf', 'application/pdf', row)
         self.assertIsNone(item['published_date'])
+
+    def test_pdpc_asset_pdf_is_text_only_and_does_not_infer_publication_date(self):
+        url = 'https://www.pdpc.gov.sg/assets/25e68133-795e-4c3f-bbea-7456b01c8506'
+        item = parsers.extract_document('pdpc', press_pdf('Luxembourg, 8 October 2026. Data protection safeguards.'), url,
+            'application/pdf', {'title':'Official data breach report', 'date_observations':[
+                {'meaning':'listing_published_display','locator':'listing card','value':'11 Apr 2025'}]})
+        self.assertEqual(item['title_original'], 'Official data breach report')
+        self.assertEqual(item['metadata']['read_scope'], 'pdf_text_only')
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertEqual(item['metadata']['pdf_pages'][0]['page'], 1)
+        self.assertIsNone(item['published_date'])
+        self.assertEqual(item['metadata']['date_observations'][0]['meaning'], 'listing_date_candidate')
+
+    def test_pdpc_pdf_missing_text_preserves_ocr_error(self):
+        with self.assertRaisesRegex(ValueError, '^pdf_text_missing_or_ocr_required$'):
+            parsers.extract_document('pdpc', press_pdf(''),
+                'https://www.pdpc.gov.sg/assets/82bd9d26-fa3d-4f9f-96fc-8c7829fc6b64', 'application/pdf', {'title':'Official PDF'})
+
+    def test_pdpc_pdf_requires_approved_asset_url_and_listing_title(self):
+        pdf = press_pdf('A sufficiently long official report body.')
+        for url in ['https://evil.test/assets/25e68133-795e-4c3f-bbea-7456b01c8506',
+                    'https://www.pdpc.gov.sg.evil.test/assets/25e68133-795e-4c3f-bbea-7456b01c8506',
+                    'https://www.pdpc.gov.sg/media-events/a']:
+            with self.assertRaisesRegex(ValueError, 'unapproved_pdpc_pdf_asset'):
+                parsers.extract_document('pdpc', pdf, url, 'application/pdf', {'title':'Report'})
+        with self.assertRaisesRegex(ValueError, 'pdf_listing_evidence_missing'):
+            parsers.extract_document('pdpc', pdf,
+                'https://www.pdpc.gov.sg/assets/25e68133-795e-4c3f-bbea-7456b01c8506', 'application/pdf')
 
     def test_other_sources_cannot_ingest_pdf_as_verified_curia_press_release(self):
         with self.assertRaisesRegex(ValueError, 'unsupported_document_type'):

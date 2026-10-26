@@ -25,11 +25,12 @@ type Props = {
   reviewStatus: string;
   branch?: string;
   commitSha?: string;
+  showFeedback?: boolean;
 };
 
 const groupNames = { main: "본칙", supplementary: "부칙", appendix: "별표·부속서", reference: "서문·고려사항·주석" } as const;
 
-export default function TranslationReview({ lawId, title, sections, officialName, officialUrl, version, scopeNote, reviewStatus, branch, commitSha }: Props) {
+export default function TranslationReview({ lawId, title, sections, officialName, officialUrl, version, scopeNote, branch, commitSha, showFeedback = true }: Props) {
   const [group, setGroup] = useState<TranslationSection["group"]>(sections.some((section) => section.group === "main") ? "main" : sections[0]?.group ?? "main");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(sections.find((section) => section.group === "main")?.id ?? sections[0]?.id ?? "");
@@ -55,17 +56,14 @@ export default function TranslationReview({ lawId, title, sections, officialName
     reference: sections.filter((section) => section.group === "reference").length };
   const safeSha = commitSha && /^[a-f0-9]{40}$/i.test(commitSha) ? commitSha : null;
 
-  const published = reviewStatus === "published";
-  const statusLabel = (status: string) => status === "published" ? "검수 완료·발행됨" : status === "not_started" ? "미발행 · 제출 자료" : status;
-
   return <main className={styles.page}>
     <header className={styles.header}>
       <Link href="/legal-translation">← 법률별 번역 목록</Link>
-      <p className={styles.kicker}>법제 전문 · {statusLabel(reviewStatus)}</p>
+      <p className={styles.kicker}>법제 전문</p>
       <h1>{title}</h1>
-      <p>{officialName}의 조문을 순서대로 읽고 의견을 남길 수 있습니다. {published ? "이 판본은 검수 완료 후 발행된 자체 한국어 번역입니다." : "이 자료의 운영 발행 상태는 위에 표시합니다. 자체 한국어 번역으로 제공합니다."}</p>
-      <div className={styles.meta}><span>선택 판본: {version}</span><span>상태: {statusLabel(reviewStatus)}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
-      {scopeNote && (published ? <details className={styles.caveat}><summary>작성 당시 판본·번역 범위 기록</summary><p>원문 범위와 작성 당시의 확인 기록입니다. 미착수·초안 표현은 현재 검수·발행 상태를 뜻하지 않습니다.</p><p>{scopeNote}</p></details> : <p className={styles.caveat}>번역 범위: {scopeNote}</p>)}
+      <p>{officialName}의 조문 순서에 따라 한국어 번역을 읽을 수 있습니다. 번역 범위와 공식 원문을 함께 확인해 주세요.</p>
+      <div className={styles.meta}><span>판본: {version}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
+      {scopeNote && <p className={styles.caveat}>번역 범위: {scopeNote}</p>}
       {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
       {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">작성 당시 번역 원본 파일 보기 ↗</a>}
     </header>
@@ -84,10 +82,10 @@ export default function TranslationReview({ lawId, title, sections, officialName
       </nav>
       <article id={selected?.id} className={styles.article}>
         {selected ? <>
-          <p className={styles.kicker}>{selected.context} · {statusLabel(published ? "published" : selected.reviewStatus)}</p>
+          <p className={styles.kicker}>{selected.context}</p>
           <h2>{selected.title}</h2>
           {selected.lines.length ? selected.lines.map((line) => <p key={line.id} className={styles.provision}>{line.label && <strong>{line.label}. </strong>}{line.text}</p>) : <p>이 항목에는 번역 본문이 없습니다. 원본 파일과 범위 메모를 확인해 주세요.</p>}
-          <div className={styles.feedback}><SubmissionFeedback key={selected.id} itemId={`translation-${lawId}-${selected.id}`} branch={branch} commitSha={commitSha} /></div>
+          {showFeedback && <div className={styles.feedback}><SubmissionFeedback key={selected.id} itemId={`translation-${lawId}-${selected.id}`} branch={branch} commitSha={commitSha} /></div>}
         </> : <p>왼쪽에서 조문을 선택해 주세요.</p>}
       </article>
     </div>

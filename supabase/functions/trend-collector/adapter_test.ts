@@ -1,4 +1,4 @@
-import { canonical, discover, extract, parseDate } from "./adapter.ts";
+import { canonical, dpcListingDate, discover, extract, icoPublishedDate, parseDate } from "./adapter.ts";
 const eq = (a: unknown, b: unknown) => {
   if (JSON.stringify(a) !== JSON.stringify(b)) {
     throw new Error(`${JSON.stringify(a)} != ${JSON.stringify(b)}`);
@@ -58,6 +58,72 @@ Deno.test("invalid complete dates are rejected", () => {
 Deno.test("displayed ordinal publication dates remain valid without inference", () => {
   eq(parseDate("01st October 2026"), "2026-10-01");
 });
+Deno.test("DPC listing preserves the one displayed teaser publication date", () => {
+  const p = discover(
+    "dpc",
+    '<main><article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/example">Example</a></h2><p class="date">01st October 2026</p></article></main>',
+    "https://www.dataprotection.ie/en/news-media/latest-news",
+  );
+  eq(p.rows[0]?.date_observations, [{
+    meaning: "listing_published_display",
+    locator: "listing article.node--view-mode-teaser p.date",
+    value: "01st October 2026",
+  }]);
+  eq(dpcListingDate(p.rows[0]), "2026-10-01");
+});
+Deno.test("DPC listing date is used only for one exact valid observation", () => {
+  const observation = {
+    meaning: "listing_published_display",
+    locator: "listing article.node--view-mode-teaser p.date",
+    value: "01st October 2026",
+  };
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A" }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [observation, observation] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "31st February 2026" }] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "01th October 2026" }] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, locator: "page body" }] }), null);
+});
+Deno.test("DPC listing date fills a missing detail date but conflicts stay unknown", async () => {
+  const row = {
+    url: "https://www.dataprotection.ie/en/news-media/latest-news/example",
+    title: "Example",
+    date_observations: [{
+      meaning: "listing_published_display",
+      locator: "listing article.node--view-mode-teaser p.date",
+      value: "01st October 2026",
+    }],
+  };
+  const missing = await extract(
+    "dpc",
+    '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    row,
+  );
+  eq(missing.published_date, "2026-10-01");
+  eq(missing.metadata.ai_ready, true);
+  eq(missing.metadata.date_observations[0].value, "01st October 2026");
+  const conflict = await extract(
+    "dpc",
+    '<h1>Example</h1><main><p class="date">02nd October 2026</p><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    row,
+  );
+  eq(conflict.published_date, null);
+  eq(conflict.metadata.ai_ready, false);
+  eq(conflict.metadata.date_observations.length, 2);
+  const ambiguous = await extract(
+    "dpc",
+    '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    { ...row, date_observations: [
+      row.date_observations![0],
+      { ...row.date_observations![0], value: "02nd October 2026" },
+    ] },
+  );
+  eq(ambiguous.published_date, null);
+  eq(ambiguous.metadata.ai_ready, false);
+  eq(ambiguous.metadata.date_observations.length, 2);
+});
 Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
   const p = discover(
     "ftc",
@@ -69,6 +135,28 @@ Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
 Deno.test("historical fullwidth Japanese dates preserve the original date meaning", () => {
   eq(parseDate("令和８年７月17日"), "2026-07-17");
 });
+Deno.test("ICO scope checks use only the explicit DC publication date", () => {
+  eq(icoPublishedDate('<meta name="DC.Date" content="Monday, February 16, 2026">'), {
+    date: "2026-02-16",
+    value: "Monday, February 16, 2026",
+  });
+  eq(icoPublishedDate('<title>News 16 February 2026</title>'), null);
+});
+Deno.test("ICO extraction uses explicit Dublin Core publication date", async () => {
+  const x = await extract(
+    "ico",
+    '<html><head><meta name="DC.Date" content="Monday, October 12, 2026"></head><body><h1>Privacy enforcement notice</h1><main><div class="rich-text"><div class="prose"><p>A sufficiently long official article body.</p></div></div></main></body></html>',
+    "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/example/",
+  );
+  eq(x.published_date, "2026-10-12");
+  eq(x.metadata.date_observations[0], {
+    meaning: "official_published_attribute",
+    locator: 'meta[name="DC.Date"]@content',
+    value: "Monday, October 12, 2026",
+  });
+  eq(x.metadata.ai_ready, true);
+});
+
 Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
   const x = await extract(
     "edpb",
@@ -89,4 +177,108 @@ Deno.test("malformed source links remain unresolved and never become invented UR
   eq(x.metadata.unresolved_links[0].href, raw);
   eq(x.metadata.ai_ready, false);
   eq(x.content_text, "Original body with an underlying decision .");
+});
+
+Deno.test("PPC official notice dateline excludes body dates and keeps PDFs unread", async () => {
+  const x = await extract("ppc", '<html><head><title>法律の公布について（令和８年７月17日）</title></head><body><h1 class="page-ttl">法律の公布について</h1><main class="l-main"><div class="l-article"><div class="date-box mb-m">令和８年７月17日<br>個人情報保護委員会</div><p>令和８年４月７日に提出、令和８年７月10日に成立。</p><a href="/files/pdf/260717_houritsu.pdf">法律</a></div></main></body></html>', "https://www.ppc.go.jp/news/press/2026/260717/");
+  eq(x.published_date, "2026-07-17");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.related_documents[0].read, false);
+  eq(x.metadata.date_observations[0].meaning, "published_notice_dateline");
+});
+Deno.test("PPC conflicting publication title and notice dateline remain unknown", async () => {
+  const x = await extract("ppc", '<html><head><title>公表（令和８年７月18日）</title></head><body><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main></body></html>', "https://www.ppc.go.jp/news/press/a/");
+  eq(x.published_date, null);
+  eq(x.metadata.ai_ready, false);
+});
+Deno.test("PPC body revision dates never become publication dates", async () => {
+  const x = await extract("ppc", '<h1 class="page-ttl">注意喚起</h1><main class="l-main"><p>令和６年12月11日、令和８年10月７日改訂。令和８年10月９日追加。</p></main>', "https://www.ppc.go.jp/news/careful_information/261007_alert/");
+  eq(x.published_date, null);
+  eq(x.metadata.ai_ready, false);
+});
+Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async () => {
+  const p = discover(
+    "cnil",
+    '<main><div class="list-inner"><h3 class="ctn-gen-liste-titre"><a href="/fr/a">A</a></h3><div class="attributes"><p class="date">27 mars 2024</p></div></div></main>',
+    "https://www.cnil.fr/fr/actualites",
+  );
+  eq(p.rows[0].date_observations?.[0].value, "27 mars 2024");
+  const item = await extract(
+    "cnil",
+    '<main><h1>A</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">Personal data protection evidence.</div></main>',
+    p.rows[0].url,
+    p.rows[0],
+  );
+  eq(item.published_date, null);
+  eq(item.metadata.requires_review, true);
+});
+
+
+Deno.test("PDPC extracts article content through nested Flight layout wrappers", async () => {
+  const element = (type: string, props: Record<string, unknown> = {}) =>
+    [null, type, null, props];
+  const article = element("article", {
+    children: [
+      element("div", {
+        data: { content: "<p>PDPC article body with enough detail.</p>" },
+      }),
+    ],
+  });
+  const root = element("main", {
+    className: "layout layout--standard",
+    children: [
+      element("div", {
+        className: "container",
+        children: [
+          element("div", {
+            className: "row",
+            children: [
+              element("main", {
+                className: "col-lg-9",
+                children: [article],
+              }),
+            ],
+          }),
+        ],
+      }),
+    ],
+  });
+  const flight = "0:" + JSON.stringify(root) + "\n";
+  const html =
+    '<main><h1>PDPC title</h1><div class="page-banner__date">18 October 2026</div></main>' +
+    "<script>self.__next_f.push(" + JSON.stringify([1, flight]) + ");</script>";
+  const item = await extract(
+    "pdpc",
+    html,
+    "https://www.pdpc.gov.sg/media-events/example",
+  );
+  eq(item.title_original, "PDPC title");
+  eq(item.content_text, "PDPC article body with enough detail.");
+  eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
+  eq(item.published_date, "2026-10-18");
+});
+
+Deno.test("PDPC uses rendered main-column article when Flight contains a 404 shell", async () => {
+  const html = `<header class="page-banner"><h1>Singapore Data Festival 2026</h1></header>
+    <main class="layout layout--standard"><div class="container"><div class="row">
+    <nav class="side-nav col-lg-3">Navigation must not be collected</nav>
+    <main class="col-lg-9"><article class="layout layout--standard">
+    <div class="statistics"><h3>3000</h3><span>Attendees</span></div>
+    <blockquote>Data governance matters more, not less, in the age of AI.</blockquote>
+    <div class="article-card-cta">Related story must not be collected</div>
+    <div class="image-gallery">Gallery controls must not be collected</div>
+    </article></main></div></div></main>`;
+  const item = await extract(
+    "pdpc",
+    html,
+    "https://www.pdpc.gov.sg/media-events/singapore-data-festival-2026",
+  );
+  eq(item.title_original, "Singapore Data Festival 2026");
+  eq(item.content_text.includes("Data governance matters"), true);
+  eq(item.content_text.includes("Navigation must not"), false);
+  eq(item.content_text.includes("Related story must not"), false);
+  eq(item.content_text.includes("Gallery controls must not"), false);
+  eq(item.published_date, null);
+  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
 });
