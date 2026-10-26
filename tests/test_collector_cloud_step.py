@@ -56,6 +56,212 @@ class CloudStepTests(unittest.TestCase):
         self.assertEqual(bundle['result']['reason'], 'http_503')
         self.assertFalse(bundle['backlog_resolved'])
 
+class OecdTopicAndNewsroomResumeTests(unittest.TestCase):
+    topic = 'https://www.oecd.org/en/topics/privacy-and-data-protection.html'
+    newsroom = 'https://www.oecd.org/en/about/newsroom.html'
+    config = {'source':'oecd','source_id':'source','language':'en','listing':topic,
+              'hosts':['www.oecd.org'],'enabled':True,
+              'permissions':{'collect':True,'store':True,'ai':True}}
+
+    @staticmethod
+    def html_for(rows):
+        return ('<main>' + ''.join(
+            '<article><a href="' + url + '">' + title + '</a></article>'
+            for url,title in rows
+        ) + '</main>').encode()
+
+    @staticmethod
+    def item(url, row):
+        return {'title_original':row['title'],'published_date':'2026-10-22',
+                'content_text':'Official OECD release content for test.',
+                'content_hash':'hash-'+url.rsplit('/',1)[-1],
+                'metadata':{'requires_review':False,'date_observations':[]}}
+
+    def test_topic_then_six_newsroom_links_resume_only_with_page_cursor(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        from scripts.collector import core
+        topic_rows=[
+            ('/en/publications/2026/privacy-review.html','Privacy review'),
+            ('/en/about/news/press-releases/2026/10/topic-release.html','Topic release'),
+        ]
+        newsroom_rows=[
+            ('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Newsroom release '+str(i))
+            for i in range(6)
+        ]
+        topic_urls=['https://www.oecd.org'+path for path,_ in topic_rows]
+        newsroom_urls=['https://www.oecd.org'+path for path,_ in newsroom_rows]
+
+        class Client:
+            def __init__(self): self.listings=[]; self.details=[]
+            def get(self,url):
+                if url==self_outer.topic:
+                    self.listings.append(url); return self_outer.html_for(topic_rows),url,'text/html'
+                if url==self_outer.newsroom:
+                    self.listings.append(url); return self_outer.html_for(newsroom_rows),url,'text/html'
+                self.details.append(url); return b'fixture',url,'text/html'
+
+        self_outer=self
+        client=Client(); cursor=None
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row: self.item(url,row)):
+            # Complete the original topic page first; its durable cursor then
+            # points directly at the official newsroom page without a DB route
+            # change or a second listing API.
+            for expected in topic_urls:
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                self.assertIn(expected,client.details)
+                cursor=store.cursor
+            self.assertEqual(cursor['page'],self.newsroom)
+            self.assertEqual(cursor['offset'],0)
+            self.assertNotIn('listing_scan_complete',result)
+            self.assertFalse(result['coverage_complete'])
+
+            # The six official newsroom cards are consumed one at a time. The
+            # page URL alone tells the resumed worker which listing to read.
+            for index,expected in enumerate(newsroom_urls):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                self.assertIn(expected,client.details)
+                cursor=store.cursor
+                if index<5:
+                    self.assertEqual(cursor['page'],self.newsroom)
+                    self.assertFalse(result.get('listing_scan_complete',False))
+                else:
+                    self.assertEqual(cursor['page'],self.topic)
+                    self.assertTrue(result['listing_scan_complete'])
+                    self.assertFalse(result['coverage_complete'])
+                    self.assertEqual(len(cursor['processed_url_hashes']),6)
+
+        self.assertEqual(client.listings.count(self.topic),2)
+        self.assertEqual(client.listings.count(self.newsroom),6)
+        self.assertEqual(set(client.details),set(topic_urls+newsroom_urls))
+        self.assertTrue(all(url.startswith('https://www.oecd.org/') for url in client.listings+client.details))
+
+    def test_next_scan_restarts_topic_and_skips_prior_newsroom_urls(self):
+        import hashlib, json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        rows=[('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Release '+str(i)) for i in range(6)]
+        urls=['https://www.oecd.org'+path for path,_ in rows]
+        topic_rows=[(rows[0][0],'Release 0')]
+        self_outer=self
+        class Client:
+            def __init__(self): self.details=[]; self.listings=[]
+            def get(self,url):
+                if url==self_outer.topic:
+                    self.listings.append(url); return self_outer.html_for(topic_rows),url,'text/html'
+                if url==self_outer.newsroom:
+                    self.listings.append(url); return self_outer.html_for(rows),url,'text/html'
+                self.details.append(url); return b'fixture',url,'text/html'
+        client=Client(); cursor=None; result=None
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            # Finish topic, then the six-card newsroom pass. The completed
+            # cycle leaves the next run at topic with stable newsroom hashes.
+            for _ in range(8):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+                cursor=store.cursor
+                if result.get('listing_scan_complete'): break
+            self.assertTrue(result and result.get('listing_scan_complete'))
+            self.assertEqual(cursor['page'],self.topic)
+            expected=sorted(hashlib.sha256(url.encode()).hexdigest() for url in urls)
+            self.assertEqual(sorted(cursor['processed_url_hashes']),expected)
+            self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+            self.assertFalse(result['coverage_complete'])
+            details_after_first_cycle=list(client.details)
+
+            # The next scheduled cycle starts at topic, recognizes the old URL
+            # there, proceeds to newsroom, then skips all six unchanged cards.
+            for _ in range(3):
+                store=PreparedStore(cursor)
+                result=collect(self.config,client,store,'2026-10-23','2026-10-24',max_pages=1,max_items=1)
+                cursor=store.cursor
+                if result.get('listing_scan_complete'): break
+            self.assertTrue(result and result.get('listing_scan_complete'))
+            self.assertEqual(cursor['page'],self.topic)
+            self.assertEqual(client.details,details_after_first_cycle)
+            self.assertEqual(sorted(cursor['processed_url_hashes']),expected)
+            self.assertFalse(result['coverage_complete'])
+
+    def test_newsroom_detail_failure_keeps_page_and_failed_offset(self):
+        from scripts.collector.core import collect,FetchError
+        from scripts.collector.cloud_step import PreparedStore
+        newsroom_rows=[
+            ('/en/about/news/press-releases/2026/10/release-'+str(i)+'.html','Newsroom release '+str(i))
+            for i in range(6)
+        ]
+        urls=['https://www.oecd.org'+path for path,_ in newsroom_rows]
+        self_outer=self
+        class Client:
+            def __init__(self,fail=False): self.fail=fail
+            def get(self,url):
+                if url==self_outer.newsroom:
+                    return self_outer.html_for(newsroom_rows),url,'text/html'
+                if self.fail and url==urls[1]: raise FetchError('http_503')
+                return b'fixture',url,'text/html'
+
+        with patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row: self.item(url,row)):
+            first=PreparedStore({'page':self.newsroom,'offset':0})
+            collect(self.config,Client(),first,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            self.assertEqual(first.cursor['page'],self.newsroom)
+            self.assertEqual(first.cursor['offset'],1)
+            failed=PreparedStore(first.cursor)
+            result=collect(self.config,Client(fail=True),failed,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+        self.assertEqual(result['status'],'failed')
+        self.assertEqual(failed.failure['url'],urls[1])
+        self.assertEqual(failed.cursor['page'],self.newsroom)
+        self.assertEqual(failed.cursor['offset'],1)
+        self.assertFalse(result['coverage_complete'])
+
+    def test_cloud_step_parks_newsroom_failure_before_advancing_that_page(self):
+        import json
+        from pathlib import Path
+        from scripts.collector import cloud_step
+        from scripts.collector.core import FetchError
+        rows=[
+            ('/en/about/news/press-releases/2026/10/release-0.html','Newsroom release 0'),
+            ('/en/about/news/press-releases/2026/10/release-1.html','Newsroom release 1'),
+        ]
+        urls=['https://www.oecd.org'+path for path,_ in rows]
+        registry=json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text())
+        oecd=next(source for source in registry['sources'] if source['source']=='oecd')
+        class Client:
+            def __init__(self,fail):
+                self.fail=fail; self.budget={'requests':0,'bytes':0,'started':0}
+            def get(self,url):
+                self.budget['requests']+=1
+                if url==self_outer.newsroom:
+                    body=self_outer.html_for(rows); self.budget['bytes']+=len(body)
+                    return body,url,'text/html'
+                if self.fail and url==urls[1]: raise FetchError('http_503')
+                return b'fixture',url,'text/html'
+        self_outer=self
+        claim={'slug':'oecd','source_id':oecd['source_id'],'since':'2026-10-16','until':'2026-10-23',
+               'cursor':{'page':self.newsroom,'offset':0},'lease_until':'2099-01-01T00:00:00+00:00'}
+        with patch('scripts.collector.cloud_step.HttpClient',side_effect=lambda *a,**k:Client(False)), \
+             patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            first=cloud_step.prepare(claim)
+        self.assertEqual(first['cursor']['page'],self.newsroom)
+        self.assertEqual(first['cursor']['offset'],1)
+
+        claim['cursor']=first['cursor']
+        with patch('scripts.collector.cloud_step.HttpClient',side_effect=lambda *a,**k:Client(True)), \
+             patch('scripts.collector.core.parsers.extract_document',
+                   side_effect=lambda source,body,url,kind,row:self.item(url,row)):
+            failed=cloud_step.prepare(claim)
+        self.assertEqual(failed['failure']['url'],urls[1])
+        self.assertEqual(failed['failure']['cursor']['page'],self.newsroom)
+        self.assertEqual(failed['failure']['cursor']['offset'],1)
+        self.assertEqual(failed['cursor']['page'],self.newsroom)
+        self.assertEqual(failed['cursor']['offset'],2)
+        self.assertEqual(failed['result']['reason'],'detail_failure_parked')
+        self.assertFalse(failed['result']['coverage_complete'])
+
 class MutableFeedResumeTests(unittest.TestCase):
     def test_ftc_out_of_range_pubdate_skips_only_detail_request(self):
         from scripts.collector.core import collect
