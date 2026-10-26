@@ -10,6 +10,7 @@ from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 
 MAX_BYTES=2_000_000
+MAX_FTC_PROCESSED_URL_HASHES=50
 # Per-process safety ceiling, independent of the per-run document/page inputs.
 # A 100-item backfill also performs progress and database RPC calls; the old
 # value of 100 unintentionally stopped a batch before its document limit.
@@ -195,7 +196,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         'unknown_dates':prior_unknown_dates+result['unknown_date']+1,
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                         'processed_url_hashes':sorted(processed_keys | {url_key})}
-                    if len(json.dumps(prospective,ensure_ascii=False).encode('utf-8'))>4000:
+                    if (len(prospective['processed_url_hashes'])>MAX_FTC_PROCESSED_URL_HASHES or
+                            len(json.dumps(prospective,ensure_ascii=False).encode('utf-8'))>4000):
                         raise FetchError('ftc_resume_cursor_capacity_exceeded')
                 seen_items.add(url); result['discovered']+=1
                 try:
@@ -260,7 +262,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                     'processed_url_hashes':sorted(processed_keys)}
-                if len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000:
+                if (len(completed_cursor['processed_url_hashes'])>MAX_FTC_PROCESSED_URL_HASHES or
+                        len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000):
                     raise FetchError('ftc_resume_cursor_capacity_exceeded')
             else:
                 if config['source']!='ftc': processed_keys.clear()
