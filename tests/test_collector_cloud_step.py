@@ -502,16 +502,181 @@ class FTCBoundedResumeTests(unittest.TestCase):
         self.assertEqual(len(client.fetched),50)
         self.assertIsNotNone(cursor)
         self.assertEqual(len(cursor['processed_url_hashes']),50)
-        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
-        self.assertTrue(results[-1]['listing_scan_complete'])
-        self.assertFalse(results[-1]['coverage_complete'])
 
-        overflow_client,overflow_cursor,overflow_results,_=self.run_feed(51)
-        self.assertEqual(overflow_results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
-        self.assertEqual(len(overflow_client.fetched),50)
-        self.assertIsNotNone(overflow_cursor)
-        self.assertEqual(len(overflow_cursor['processed_url_hashes']),50)
-        self.assertFalse(overflow_results[-1]['coverage_complete'])
+
+class DurableFtcListingSnapshotTests(unittest.TestCase):
+    listing='https://www.ftc.gov/feeds/press-release-consumer-protection.xml'
+    source_id='430bd32d-19b1-4752-8280-7b2d2acbda88'
+    urls={key:f'https://www.ftc.gov/news-events/news/press-releases/2026/{key.lower()}' for key in ('A','B','C','X')}
+
+    @classmethod
+    def rss(cls,order):
+        return ('<rss><channel>'+''.join(
+            f'<item><title>{key}</title><link>{cls.urls[key]}</link>'
+            '<pubDate>Fri, 23 Oct 2026 12:00:00 +0000</pubDate></item>' for key in order
+        )+'</channel></rss>').encode()
+
+    def claim(self,cursor=None,**extra):
+        return {'slug':'ftc','source_id':self.source_id,'snapshot_protocol':1,'since':'2026-10-16','until':'2026-10-26',
+                'cursor':cursor,'lease_until':'2099-01-01T00:00:00+00:00',**extra}
+
+    def test_snapshot_keeps_original_unprocessed_url_after_live_feed_changes(self):
+        from scripts.collector.cloud_step import prepare
+        from scripts.collector.core import HttpClient
+        class Client(HttpClient):
+            order=['A','B','C']; details=[]
+            def get(this,url):
+                if url==self.listing: return self.rss(this.order),url,'application/rss+xml'
+                this.details.append(url)
+                return b'body',url,'text/html'
+        article={'title_original':'Privacy release','published_date':'2026-10-23','content_text':'Official article body.',
+                 'content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
+        with patch('scripts.collector.cloud_step.HttpClient',Client), \
+             patch('scripts.collector.core.parsers.extract_document',return_value=article):
+            staged=prepare(self.claim())
+            snapshot=staged['listing_snapshot']
+            self.assertEqual([row['url'] for row in snapshot['rows']],[self.urls[k] for k in ('A','B','C')])
+            self.assertIsNone(staged.get('snapshot_ref'))
+            self.assertEqual(staged['cursor']['offset'],0)
+            self.assertEqual(staged['cursor']['snapshot_id'],snapshot['id'])
+            first=prepare(self.claim(staged['cursor'],snapshot={
+                'id':snapshot['id'],'listing_url':snapshot['listing_url'],'fingerprint':snapshot['fingerprint'],
+                'row_count':3,'ordinal':0,'row':snapshot['rows'][0],'url_hashes':snapshot['url_hashes']}))
+            self.assertEqual(first['snapshot_ref']['ordinal'],0)
+            self.assertEqual(first['cursor']['offset'],1)
+            self.assertEqual(first['cursor']['snapshot_id'],snapshot['id'])
+
+            # No DB commit occurred here in the unit test; this claim models the
+            # persisted first commit. A later live RSS has rotated, but the take
+            # contract returns the staged row B and its original scan identity.
+            row_claim=self.claim(first['cursor'],snapshot={
+                'id':snapshot['id'],'listing_url':snapshot['listing_url'],'fingerprint':snapshot['fingerprint'],
+                'row_count':len(snapshot['rows']),'ordinal':1,'row':snapshot['rows'][1],
+                'url_hashes':snapshot['url_hashes']})
+            Client.order=['A','X','C']
+            second=prepare(row_claim)
+            self.assertEqual(second['snapshot_ref'],{'id':snapshot['id'],'ordinal':1})
+            self.assertEqual(second['operations'][0]['p_canonical_url'],self.urls['B'])
+            self.assertNotIn(self.urls['X'],Client.details)
+            self.assertEqual(second['cursor']['offset'],2)
+            self.assertEqual(second['cursor']['snapshot_id'],snapshot['id'])
+
+            third=prepare(self.claim(second['cursor'],snapshot={
+                'id':snapshot['id'],'listing_url':snapshot['listing_url'],'fingerprint':snapshot['fingerprint'],
+                'row_count':3,'ordinal':2,'row':snapshot['rows'][2],'url_hashes':snapshot['url_hashes']}))
+            self.assertEqual(third['operations'][0]['p_canonical_url'],self.urls['C'])
+            self.assertTrue(third['result']['listing_scan_complete'])
+            self.assertNotIn('snapshot_id',third['cursor'])
+            self.assertLessEqual(len(third['cursor']['processed_url_hashes']),50)
+            self.assertFalse(third['result']['coverage_complete'])
+
+    def test_uncommitted_claim_retries_same_staged_row_and_lease_is_required(self):
+        from scripts.collector.cloud_step import prepare
+        from scripts.collector.core import HttpClient
+        class Client(HttpClient):
+            details=[]
+            def get(this,url):
+                if url==self.listing: return self.rss(['A','B','C']),url,'application/rss+xml'
+                this.details.append(url); return b'body',url,'text/html'
+        article={'title_original':'B','published_date':'2026-10-23','content_text':'Official article body.',
+                 'content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
+        staged={'id':'d4cb6348-0ea2-4a9f-8b47-5427f5915f9a','listing_url':self.listing,
+                'fingerprint':'a'*64,'row_count':3,'ordinal':1,
+                'row':{'url':self.urls['B'],'title':'B','date_observations':[]},'url_hashes':['a'*64]}
+        cursor={'page':self.listing,'offset':1,'fingerprint':'a'*64,'snapshot_id':staged['id'],
+                'processed_url_hashes':['b'*64]}
+        claim=self.claim(cursor,snapshot=staged)
+        with patch('scripts.collector.cloud_step.HttpClient',Client), \
+             patch('scripts.collector.core.parsers.extract_document',return_value=article):
+            first=prepare(claim) # worker crashes before commit
+            retry=prepare(claim) # lease expiry/reclaim returns identical row
+        self.assertEqual(first['snapshot_ref'],retry['snapshot_ref'])
+        self.assertEqual(first['operations'][0]['p_canonical_url'],self.urls['B'])
+        self.assertEqual(retry['operations'][0]['p_canonical_url'],self.urls['B'])
+        self.assertEqual(Client.details,[self.urls['B'],self.urls['B']])
+
+        expired={**claim,'lease_until':'2000-01-01T00:00:00+00:00'}
+        with patch('scripts.collector.cloud_step.HttpClient',Client):
+            with self.assertRaisesRegex(ValueError,'lease_expired'):
+                prepare(expired)
+
+    def test_legacy_processed_hash_is_union_with_snapshot_and_skips_only_that_url(self):
+        import hashlib
+        from scripts.collector.cloud_step import prepare
+        from scripts.collector.core import HttpClient
+        seen=hashlib.sha256(self.urls['A'].encode()).hexdigest()
+        class Client(HttpClient):
+            details=[]
+            def get(this,url):
+                if url==self.listing: return self.rss(['A','B','C']),url,'application/rss+xml'
+                this.details.append(url); return b'body',url,'text/html'
+        article={'title_original':'B','published_date':'2026-10-23','content_text':'Official article body.',
+                 'content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
+        with patch('scripts.collector.cloud_step.HttpClient',Client), \
+             patch('scripts.collector.cloud_step.parsers.extract_document',return_value=article):
+            staged=prepare(self.claim(previous_listing_hashes=[seen]))
+            first_claim=self.claim(staged['cursor'],previous_listing_hashes=[seen],snapshot={
+                'id':staged['listing_snapshot']['id'],'listing_url':staged['listing_snapshot']['listing_url'],
+                'fingerprint':staged['listing_snapshot']['fingerprint'],'row_count':3,'ordinal':0,
+                'row':staged['listing_snapshot']['rows'][0],'url_hashes':staged['listing_snapshot']['url_hashes']})
+            first=prepare(first_claim)
+            self.assertEqual(first['operations'],[])
+            self.assertEqual(first['cursor']['offset'],1)
+            self.assertEqual(Client.details,[])
+            second_claim=self.claim(first['cursor'],previous_listing_hashes=[seen],snapshot={
+                'id':staged['listing_snapshot']['id'],'listing_url':staged['listing_snapshot']['listing_url'],
+                'fingerprint':staged['listing_snapshot']['fingerprint'],'row_count':3,'ordinal':1,
+                'row':staged['listing_snapshot']['rows'][1],'url_hashes':staged['listing_snapshot']['url_hashes']})
+            second=prepare(second_claim)
+        self.assertEqual(second['operations'][0]['p_canonical_url'],self.urls['B'])
+        self.assertEqual(Client.details,[self.urls['B']])
+
+    def test_oversized_live_listing_returns_failed_bundle_without_advancing(self):
+        from scripts.collector.cloud_step import prepare
+        from scripts.collector.core import HttpClient
+        rows=[{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}',
+               'title':str(i),'date_observations':[]} for i in range(101)]
+        class Client(HttpClient):
+            def get(this,url): return b'<rss/>',url,'application/rss+xml'
+        with patch('scripts.collector.cloud_step.HttpClient',Client), \
+             patch('scripts.collector.cloud_step.fetch_listing',return_value=(rows,None)):
+            bundle=prepare(self.claim())
+        self.assertEqual(bundle['result']['status'],'failed')
+        self.assertEqual(bundle['result']['reason'],'ftc_listing_snapshot_capacity_exceeded')
+        self.assertIsNone(bundle['cursor'])
+        self.assertEqual(bundle['operations'],[])
+        self.assertIsNone(bundle.get('listing_snapshot'))
+
+    def test_snapshot_bounds_and_allowlisted_urls_stop_before_detail_request(self):
+        import hashlib, json
+        from scripts.collector.cloud_step import PreparedStore
+        from scripts.collector.core import FetchError
+        store=PreparedStore(None)
+        rows=[{'url':self.urls['A'],'title':'A','date_observations':[]}]
+        store.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
+        self.assertEqual(len(store.listing_snapshot['rows']),1)
+        self.assertLessEqual(len(__import__('json').dumps(store.cursor).encode()),4000)
+        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_unapproved_url'):
+            PreparedStore(None).stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,
+              [{'url':'https://www.ftc.gov.evil.test/a','title':'evil','date_observations':[]}])
+        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_capacity_exceeded'):
+            PreparedStore(None).stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,
+              [{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}','title':str(i),'date_observations':[]} for i in range(101)])
+        hashes=[hashlib.sha256(str(i).encode()).hexdigest() for i in range(50)]
+        legacy=PreparedStore({'page':self.listing,'offset':0,'fingerprint':'b'*64,'processed_url_hashes':hashes})
+        legacy.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
+        self.assertEqual(legacy.cursor['processed_url_hashes'],hashes)
+        self.assertLessEqual(len(json.dumps(legacy.cursor,ensure_ascii=False).encode()),4000)
+
+        almost_full={'page':self.listing,'offset':0,'fingerprint':'c'*64,'padding':''}
+        almost_full['padding']='x'*(3950-len(json.dumps(almost_full,ensure_ascii=False).encode()))
+        self.assertLessEqual(len(json.dumps(almost_full,ensure_ascii=False).encode()),4000)
+        bounded=PreparedStore(almost_full)
+        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_cursor_capacity_exceeded'):
+            bounded.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
+        self.assertEqual(bounded.cursor,almost_full)
+        self.assertIsNone(bounded.listing_snapshot)
+
 
 
 if __name__ == '__main__':
