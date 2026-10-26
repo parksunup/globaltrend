@@ -1,5 +1,6 @@
 """PR16 observed selectors; these are not a claim of live coverage."""
 import datetime as dt
+from email.utils import parsedate_to_datetime
 import hashlib
 import io
 import json
@@ -7,6 +8,7 @@ import re
 import unicodedata
 import xml.etree.ElementTree as ET
 from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qs, urlencode
+from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
 
 NORMALIZATION_VERSION = 'main-body-nfc-v1'
@@ -243,6 +245,16 @@ def extract_document(source,data,url,content_type,row=None):
             dates={parse_date(o['value']) for o in observations}- {None}
             if len(dates)>1:
                 item['published_date']=None; item['metadata']['requires_review']=True
+        if source=='ftc' and row and row.get('date_observations'):
+            listing_observations=row['date_observations']
+            body_observations=item['metadata']['date_observations']
+            item['metadata']['date_observations']=body_observations+listing_observations
+            dates={parse_date(o['value']) for o in body_observations}- {None}
+            dates.update(ftc_listing_date({'date_observations':[observation]})
+                         for observation in listing_observations)
+            dates.discard(None)
+            if len(dates)>1:
+                item['published_date']=None; item['metadata']['requires_review']=True
         return item
     if source=='pdpc' and content_type=='application/pdf':
         return extract_pdpc_pdf(data,url,row)
@@ -403,7 +415,16 @@ def discover(source,html,url):
     if source=='ftc' and '<rss' in html[:1000].lower():
         if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
-        return [{'url':x.findtext('link'),'title':x.findtext('title') or ''} for x in root.findall('.//item') if x.findtext('link')],None
+        rows=[]
+        for item in root.findall('.//item'):
+            target=item.findtext('link')
+            if not target: continue
+            row={'url':target,'title':item.findtext('title') or ''}
+            pubdates=[normalize(node.text or '') for node in item.findall('pubDate')]
+            if pubdates:
+                row['date_observations']=[{'meaning':'listing_published_rfc822','locator':'rss item pubDate','value':value} for value in pubdates]
+            rows.append(row)
+        return rows,None
     if source in ('pdpc','ico'): raise ValueError('listing_adapter_pending_live_verification')
     soup=BeautifulSoup(html,'html.parser')
     if source=='curia':
@@ -453,3 +474,16 @@ def cnil_listing_date(row):
     observation=observations[0]
     if observation.get('meaning')!='listing_published_display' or observation.get('locator')!='listing .list-inner .attributes p.date': return None
     return parse_date(observation.get('value',''))
+
+def ftc_listing_date(row):
+    """Return one timezone-qualified RSS pubDate as a Korea calendar date."""
+    observations=row.get('date_observations',[])
+    if len(observations)!=1: return None
+    observation=observations[0]
+    if observation.get('meaning')!='listing_published_rfc822' or observation.get('locator')!='rss item pubDate': return None
+    try:
+        value=parsedate_to_datetime(observation.get('value',''))
+        if value is None or value.utcoffset() is None: return None
+        return value.astimezone(ZoneInfo('Asia/Seoul')).date().isoformat()
+    except (TypeError,ValueError,OverflowError):
+        return None
