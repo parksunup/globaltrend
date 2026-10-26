@@ -202,6 +202,19 @@ export function pdpcContent(document: Document): Element[] {
   );
   if (renderedArticle) {
     const readable = renderedArticle.cloneNode(true) as Element;
+    // Some PDPC campaign/event pages place one promotional video card inside
+    // an otherwise empty article shell. That card is a teaser, not the
+    // page's report body. Classify this narrow shape separately so it can be
+    // skipped without turning it into a content fetch failure.
+    const hasOnlyPromoCard = Boolean(
+      readable.querySelector(".article-card-cta") &&
+        [...readable.querySelectorAll(".rte")].every((node) =>
+          normalize(node.textContent || "").length < 60
+        ),
+    );
+    if (hasOnlyPromoCard) {
+      throw new Error("pdpc_promotional_landing_without_article");
+    }
     for (const node of readable.querySelectorAll(
       ".article-footer,.article-card-cta,.image-gallery,.slick-slider,.progress-wrapper,.tabs__mobile-controls,button",
     )) node.remove();
