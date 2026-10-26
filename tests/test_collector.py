@@ -79,6 +79,32 @@ class CollectorTests(unittest.TestCase):
         rows,next_page=self.parsers.discover('ftc','<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><description>Short text</description></item></channel></rss>','https://www.ftc.gov/feed')
         self.assertEqual(rows[0]['url'],'https://www.ftc.gov/a'); self.assertNotIn('content_text',rows[0]); self.assertIsNone(next_page)
 
+    def test_ftc_pubdate_requires_one_explicit_timezone_and_uses_korea_date(self):
+        rss='<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>Mon, 19 Oct 2026 00:00:00 +0900</pubDate></item></channel></rss>'
+        rows,_=self.parsers.discover('ftc',rss,'https://www.ftc.gov/feed')
+        self.assertEqual(self.parsers.ftc_listing_date(rows[0]),'2026-10-19')
+        self.assertEqual(rows[0]['date_observations'],[{
+            'meaning':'listing_published_rfc822','locator':'rss item pubDate',
+            'value':'Mon, 19 Oct 2026 00:00:00 +0900'}])
+        for pubdate in ('19 Oct 2026 00:00:00','not a date'):
+            bad=f'<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>{pubdate}</pubDate></item></channel></rss>'
+            parsed,_=self.parsers.discover('ftc',bad,'https://www.ftc.gov/feed')
+            self.assertIsNone(self.parsers.ftc_listing_date(parsed[0]))
+        conflict='<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate><pubDate>Tue, 20 Oct 2026 00:00:00 +0000</pubDate></item></channel></rss>'
+        parsed,_=self.parsers.discover('ftc',conflict,'https://www.ftc.gov/feed')
+        self.assertIsNone(self.parsers.ftc_listing_date(parsed[0]))
+        self.assertEqual(len(parsed[0]['date_observations']),2)
+
+    def test_ftc_body_and_pubdate_conflict_remains_unconfirmed(self):
+        row={'title':'Privacy action','date_observations':[{
+            'meaning':'listing_published_rfc822','locator':'rss item pubDate',
+            'value':'Mon, 19 Oct 2026 00:00:00 +0000'}]}
+        html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-20">20 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+        item=self.parsers.extract_document('ftc',html.encode(),'https://www.ftc.gov/a','text/html',row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']),3)
+
     def test_pdpc_json_listing_pagination_preserves_api_parameters(self):
         rows,next_page=self.parsers.discover_pdpc_listing(
             b'{"totalItems":11,"data":[' + b','.join(
