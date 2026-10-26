@@ -1,4 +1,4 @@
-import { canonical, discover, extract, icoPublishedDate, parseDate } from "./adapter.ts";
+import { canonical, dpcListingDate, discover, extract, icoPublishedDate, parseDate } from "./adapter.ts";
 const eq = (a: unknown, b: unknown) => {
   if (JSON.stringify(a) !== JSON.stringify(b)) {
     throw new Error(`${JSON.stringify(a)} != ${JSON.stringify(b)}`);
@@ -57,6 +57,72 @@ Deno.test("invalid complete dates are rejected", () => {
 });
 Deno.test("displayed ordinal publication dates remain valid without inference", () => {
   eq(parseDate("01st October 2026"), "2026-10-01");
+});
+Deno.test("DPC listing preserves the one displayed teaser publication date", () => {
+  const p = discover(
+    "dpc",
+    '<main><article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/example">Example</a></h2><p class="date">01st October 2026</p></article></main>',
+    "https://www.dataprotection.ie/en/news-media/latest-news",
+  );
+  eq(p.rows[0]?.date_observations, [{
+    meaning: "listing_published_display",
+    locator: "listing article.node--view-mode-teaser p.date",
+    value: "01st October 2026",
+  }]);
+  eq(dpcListingDate(p.rows[0]), "2026-10-01");
+});
+Deno.test("DPC listing date is used only for one exact valid observation", () => {
+  const observation = {
+    meaning: "listing_published_display",
+    locator: "listing article.node--view-mode-teaser p.date",
+    value: "01st October 2026",
+  };
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A" }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [observation, observation] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "31st February 2026" }] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "01th October 2026" }] }), null);
+  eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, locator: "page body" }] }), null);
+});
+Deno.test("DPC listing date fills a missing detail date but conflicts stay unknown", async () => {
+  const row = {
+    url: "https://www.dataprotection.ie/en/news-media/latest-news/example",
+    title: "Example",
+    date_observations: [{
+      meaning: "listing_published_display",
+      locator: "listing article.node--view-mode-teaser p.date",
+      value: "01st October 2026",
+    }],
+  };
+  const missing = await extract(
+    "dpc",
+    '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    row,
+  );
+  eq(missing.published_date, "2026-10-01");
+  eq(missing.metadata.ai_ready, true);
+  eq(missing.metadata.date_observations[0].value, "01st October 2026");
+  const conflict = await extract(
+    "dpc",
+    '<h1>Example</h1><main><p class="date">02nd October 2026</p><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    row,
+  );
+  eq(conflict.published_date, null);
+  eq(conflict.metadata.ai_ready, false);
+  eq(conflict.metadata.date_observations.length, 2);
+  const ambiguous = await extract(
+    "dpc",
+    '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>',
+    row.url,
+    { ...row, date_observations: [
+      row.date_observations![0],
+      { ...row.date_observations![0], value: "02nd October 2026" },
+    ] },
+  );
+  eq(ambiguous.published_date, null);
+  eq(ambiguous.metadata.ai_ready, false);
+  eq(ambiguous.metadata.date_observations.length, 2);
 });
 Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
   const p = discover(

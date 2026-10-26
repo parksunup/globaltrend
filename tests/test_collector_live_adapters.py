@@ -29,6 +29,34 @@ def press_pdf(text):
 
 
 class LiveAdapterTests(unittest.TestCase):
+    def test_dpc_listing_date_fills_missing_detail_date_but_conflicts_remain_unknown(self):
+        url = 'https://www.dataprotection.ie/en/news-media/latest-news/example'
+        row = {'title': 'Example', 'date_observations': [{
+            'meaning': 'listing_published_display',
+            'locator': 'listing article.node--view-mode-teaser p.date',
+            'value': '01st October 2026',
+        }]}
+        body_without_date = '<h1>Example</h1><main><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>'
+        item = parsers.extract_document('dpc', body_without_date.encode(), url, 'text/html', row)
+        self.assertEqual(item['published_date'], '2026-10-01')
+        self.assertFalse(item['metadata']['requires_review'])
+        self.assertEqual(item['metadata']['date_observations'], row['date_observations'])
+
+        body_with_conflict = '<h1>Example</h1><main><p class="date">02nd October 2026</p><div class="field--name-body"><p>A complete original data protection article body.</p></div></main>'
+        item = parsers.extract_document('dpc', body_with_conflict.encode(), url, 'text/html', row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']), 2)
+
+        ambiguous_row = {'title': 'Example', 'date_observations': [
+            row['date_observations'][0],
+            {**row['date_observations'][0], 'value': '02nd October 2026'},
+        ]}
+        item = parsers.extract_document('dpc', body_without_date.encode(), url, 'text/html', ambiguous_row)
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(len(item['metadata']['date_observations']), 2)
+
     def test_ppc_discovers_notices_without_year_navigation(self):
         html = '<main><div class="tab-nav"><a href="/news/press/2026">Archive</a></div><ul class="news-list"><li><div class="news-text"><a href="/news/press/2026/261007_houdou">Notice</a></div></li></ul></main>'
         rows, next_page = parsers.discover('ppc', html, 'https://www.ppc.go.jp/news/press/')

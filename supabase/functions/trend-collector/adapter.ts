@@ -164,6 +164,16 @@ export function discover(
         value: normalize(n.textContent || ""),
       }));
     }
+    if (source === "dpc") {
+      const card = a.closest("article.node--view-mode-teaser");
+      row.date_observations = [
+        ...(card?.querySelectorAll("p.date") || []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing article.node--view-mode-teaser p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
     if (source === "curia") {
       const t = a.closest(".curia-itemlist-item")?.querySelector("time");
       row.date_observations = t
@@ -501,8 +511,18 @@ export async function extract(
       });
     }
   }
+  const dpcListing = source === "dpc" ? dpcListingDate(row) : null;
+  const dateObservations = source === "dpc"
+    ? observations.filter((x) =>
+      x.meaning !== "listing_published_display" ||
+      x.locator !== "listing article.node--view-mode-teaser p.date"
+    )
+    : observations;
   const dates = [
-    ...new Set(observations.map((x) => parseDate(x.value)).filter(Boolean)),
+    ...new Set([
+      ...dateObservations.map((x) => parseDate(x.value)).filter(Boolean),
+      ...(dpcListing ? [dpcListing] : []),
+    ]),
   ];
   const date = dates.length === 1 ? dates[0] : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
@@ -541,5 +561,33 @@ export function cnilListingDate(row: Row): string | null {
   if (!/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/u.test(value)) {
     return null;
   }
+  return parseDate(value);
+}
+
+export function dpcListingDate(row?: Row): string | null {
+  const observations = row?.date_observations || [];
+  if (
+    observations.length !== 1 ||
+    observations[0].meaning !== "listing_published_display" ||
+    observations[0].locator !==
+      "listing article.node--view-mode-teaser p.date"
+  ) return null;
+  const value = normalize(observations[0].value);
+  const match = value.match(
+    /^(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})$/i,
+  );
+  if (!match) return null;
+  const day = Number(match[1]);
+  const suffix = match[2]?.toLowerCase();
+  const expectedSuffix = day % 100 >= 11 && day % 100 <= 13
+    ? "th"
+    : day % 10 === 1
+    ? "st"
+    : day % 10 === 2
+    ? "nd"
+    : day % 10 === 3
+    ? "rd"
+    : "th";
+  if (suffix && suffix !== expectedSuffix) return null;
   return parseDate(value);
 }
