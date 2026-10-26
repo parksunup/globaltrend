@@ -290,6 +290,23 @@ class FTCBoundedResumeTests(unittest.TestCase):
         self.assertEqual(retry.operations,[])
         self.assertIsNone(retry.failure)
 
+    def test_fifty_hashes_fit_and_fifty_first_url_is_not_fetched(self):
+        import json
+        client,cursor,results,config=self.run_feed(50)
+        self.assertEqual(len(client.fetched),50)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(len(cursor['processed_url_hashes']),50)
+        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+        self.assertTrue(results[-1]['listing_scan_complete'])
+        self.assertFalse(results[-1]['coverage_complete'])
+
+        overflow_client,overflow_cursor,overflow_results,_=self.run_feed(51)
+        self.assertEqual(overflow_results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertEqual(len(overflow_client.fetched),50)
+        self.assertIsNotNone(overflow_cursor)
+        self.assertEqual(len(overflow_cursor['processed_url_hashes']),50)
+        self.assertFalse(overflow_results[-1]['coverage_complete'])
+
 
 if __name__ == '__main__':
     unittest.main()
