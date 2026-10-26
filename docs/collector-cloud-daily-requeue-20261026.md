@@ -6,9 +6,9 @@ A read-only query of the existing Supabase function on 2026-10-26 showed that a 
 
 ## Change in this PR
 
-The generated migration `20261026002438_cloud_daily_requeue.sql` changes only the null-cursor recheck to 72,000 seconds (20 hours). It leaves failed-step retries at one hour, in-pass steps immediate, existing leases, source approval/capacity checks, backlog ownership, cursor preservation, and `coverage_complete=false` unchanged. It does not reset routes or queue state.
+The generated migration `20261026002438_cloud_daily_requeue.sql` changes a completed-listing recheck to 72,000 seconds (20 hours), whether the scan has a null cursor or a bounded FTC seen-URL cursor. It leaves failed-step retries at one hour, in-pass steps immediate, existing leases, source approval/capacity checks, backlog ownership, cursor preservation, and `coverage_complete=false` unchanged. It does not reset routes or queue state.
 
-`scripts/collector/cloud_connector_check.sql` adds a transaction-rollback check that a regular completed route returns `retry_after_seconds=72000`. Run it only inside an explicit transaction that is rolled back.
+`scripts/collector/cloud_connector_check.sql` adds transaction-rollback checks that a null-cursor completion and a completed FTC feed with a persisted cursor both return `retry_after_seconds=72000`. Run it only inside an explicit transaction that is rolled back.
 
 ## Acceptance after PR approval and migration deployment
 
