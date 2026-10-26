@@ -7,6 +7,25 @@ from scripts.collector.core import HttpClient, FetchError
 
 
 class DynamicListingTests(unittest.TestCase):
+    def test_dpc_listing_preserves_single_teaser_date_and_rejects_ambiguous_dates(self):
+        html = '''<main>
+          <article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/a">A</a></h2><p class="date">01st October 2026</p></article>
+          <article class="node--view-mode-teaser"><h2><a href="/en/news-media/latest-news/b">B</a></h2><p class="date">28th September 2026</p><p class="date">27th September 2026</p></article>
+        </main>'''
+        rows, _ = parsers.discover('dpc', html, 'https://www.dataprotection.ie/en/news-media/latest-news')
+        self.assertEqual(rows[0]['date_observations'], [{
+            'meaning': 'listing_published_display',
+            'locator': 'listing article.node--view-mode-teaser p.date',
+            'value': '01st October 2026',
+        }])
+        self.assertEqual(parsers.dpc_listing_date(rows[0]), '2026-10-01')
+        self.assertEqual(len(rows[1]['date_observations']), 2)
+        self.assertIsNone(parsers.dpc_listing_date(rows[1]))
+        self.assertIsNone(parsers.dpc_listing_date({'date_observations': [
+            {'meaning': 'listing_published_display', 'locator': 'other', 'value': '01st October 2026'}]}))
+        self.assertIsNone(parsers.dpc_listing_date({'date_observations': [
+            {'meaning': 'listing_published_display', 'locator': 'listing article.node--view-mode-teaser p.date', 'value': '31st February 2026'}]}))
+
     def test_pdpc_embedded_body_excludes_footer_and_nonarticle_payloads(self):
         content = '<p>The complete embedded advisory body.</p><a href="/assets/advisory.pdf">Advisory PDF</a>'
         article = ['$', 'main', None, {'className': 'layout layout--standard', 'children': [

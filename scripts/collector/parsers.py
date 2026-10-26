@@ -245,6 +245,20 @@ def extract_document(source,data,url,content_type,row=None):
             dates={parse_date(o['value']) for o in observations}- {None}
             if len(dates)>1:
                 item['published_date']=None; item['metadata']['requires_review']=True
+        if source=='dpc' and row:
+            listing_observations=row.get('date_observations',[])
+            if listing_observations:
+                body_observations=item['metadata']['date_observations']
+                item['metadata']['date_observations']=body_observations+listing_observations
+                dates={parse_date(o['value']) for o in body_observations}- {None}
+                listing_date=dpc_listing_date(row)
+                if listing_date: dates.add(listing_date)
+                if len(dates)==1:
+                    item['published_date']=next(iter(dates))
+                    item['metadata']['requires_review']=False
+                else:
+                    item['published_date']=None
+                    item['metadata']['requires_review']=True
         if source=='ftc' and row and row.get('date_observations'):
             listing_observations=row['date_observations']
             body_observations=item['metadata']['date_observations']
@@ -462,6 +476,11 @@ def discover(source,html,url):
             row['date_observations']=[{'meaning':'listing_published_display',
                 'locator':'listing .list-inner .attributes p.date','value':normalize(n.get_text())}
                 for n in card.select('.attributes p.date')] if card else []
+        if source=='dpc':
+            card=a.find_parent('article',class_='node--view-mode-teaser')
+            row['date_observations']=[{'meaning':'listing_published_display',
+                'locator':'listing article.node--view-mode-teaser p.date',
+                'value':normalize(n.get_text())} for n in card.select('p.date')] if card else []
         found[target]=row
     next_link=soup.select_one('a[rel~="next"],.pager__item--next a,.pager-next a')
     return list(found.values()),urljoin(url,next_link['href']) if next_link else None
@@ -483,6 +502,25 @@ def cnil_listing_date(row):
     # the publication date and silently skip an in-range item.
     if not re.fullmatch(r'\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}',value):
         return None
+    return parse_date(value)
+
+
+def dpc_listing_date(row):
+    """Return only a single complete date displayed on the DPC news teaser."""
+    observations=row.get('date_observations',[]) if isinstance(row,dict) else []
+    if len(observations)!=1: return None
+    observation=observations[0]
+    if (observation.get('meaning')!='listing_published_display' or
+            observation.get('locator')!='listing article.node--view-mode-teaser p.date'):
+        return None
+    value=normalize(observation.get('value',''))
+    match=re.fullmatch(r'(\d{1,2})(st|nd|rd|th)?\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})',value,re.I)
+    if not match: return None
+    day=int(match[1]); suffix=(match[2] or '').lower()
+    expected=('th' if 11 <= day % 100 <= 13 else
+              'st' if day % 10 == 1 else 'nd' if day % 10 == 2 else
+              'rd' if day % 10 == 3 else 'th')
+    if suffix and suffix!=expected: return None
     return parse_date(value)
 
 def ftc_listing_date(row):
