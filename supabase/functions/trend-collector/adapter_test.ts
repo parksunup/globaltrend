@@ -173,6 +173,31 @@ Deno.test("PDPC extracts article content through nested Flight layout wrappers",
   );
   eq(item.title_original, "PDPC title");
   eq(item.content_text, "PDPC article body with enough detail.");
-  eq(item.metadata.read_scope, "news_html_from_embedded_rsc");
+  eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
   eq(item.published_date, "2026-10-18");
+});
+
+Deno.test("PDPC uses rendered main-column article when Flight contains a 404 shell", async () => {
+  const html = `<header class="page-banner"><h1>Singapore Data Festival 2026</h1></header>
+    <main class="layout layout--standard"><div class="container"><div class="row">
+    <nav class="side-nav col-lg-3">Navigation must not be collected</nav>
+    <main class="col-lg-9"><article class="layout layout--standard">
+    <div class="statistics"><h3>3000</h3><span>Attendees</span></div>
+    <blockquote>Data governance matters more, not less, in the age of AI.</blockquote>
+    <div class="article-card-cta">Related story must not be collected</div>
+    <div class="image-gallery">Gallery controls must not be collected</div>
+    </article></main></div></div></main>`;
+  const item = await extract(
+    "pdpc",
+    html,
+    "https://www.pdpc.gov.sg/media-events/singapore-data-festival-2026",
+  );
+  eq(item.title_original, "Singapore Data Festival 2026");
+  eq(item.content_text.includes("Data governance matters"), true);
+  eq(item.content_text.includes("Navigation must not"), false);
+  eq(item.content_text.includes("Related story must not"), false);
+  eq(item.content_text.includes("Gallery controls must not"), false);
+  eq(item.published_date, null);
+  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
 });

@@ -194,6 +194,19 @@ export function discover(
   };
 }
 export function pdpcContent(document: Document): Element[] {
+  // PDPC's Next.js payload can advertise a 404 article root even when the
+  // official page HTML contains the rendered article. Prefer the narrowly
+  // scoped main-column article, then remove navigation, galleries and teasers.
+  const renderedArticle = document.querySelector(
+    "main.col-lg-9 > article.layout.layout--standard",
+  );
+  if (renderedArticle) {
+    const readable = renderedArticle.cloneNode(true) as Element;
+    for (const node of readable.querySelectorAll(
+      ".article-footer,.article-card-cta,.image-gallery,.slick-slider,.progress-wrapper,.tabs__mobile-controls,button",
+    )) node.remove();
+    if (normalize(readable.textContent || "").length >= 60) return [readable];
+  }
   const chunks: string[] = [];
   for (const script of document.querySelectorAll("script:not([src])")) {
     const text = (script.textContent || "").trim();
@@ -342,7 +355,7 @@ export async function extract(
     ppc: ["h1.page-ttl", null, ["main.l-main"]],
     ico: ["h1", null, ["main .rich-text .prose"]],
     oecd: ["h1.cmp-report-header__title", "time", []],
-    pdpc: ["main h1", "main .page-banner__date", []],
+    pdpc: ["header.page-banner h1, main h1", "main .page-banner__date", []],
   };
   if (!selectors[source]) throw new Error("unverified_template");
   const [ts, ds, bs] = selectors[source];
@@ -357,7 +370,7 @@ export async function extract(
   let scope = "news_html";
   if (source === "pdpc") {
     nodes = pdpcContent(document as unknown as Document);
-    scope = "news_html_from_embedded_rsc";
+    scope = "official_article_html_or_embedded_rsc";
   }
   if (source === "oecd") {
     scope = "official_abstract";
@@ -471,7 +484,7 @@ export async function extract(
     published_date: date,
     metadata: {
       normalization_version: "main-body-nfc-v1",
-      parser_version: "edge-adapter-v2",
+      parser_version: source === "pdpc" ? "edge-pdpc-article-v3" : "edge-adapter-v2",
       read_scope: scope,
       date_observations: observations,
       requires_review: requiresReview,
