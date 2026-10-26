@@ -1,117 +1,35 @@
-const steps = [
-  ["1", "GitHub 저장소를 컴퓨터로 가져오기", "본인 GitHub 계정으로 초대를 수락하고 GitHub Desktop에서 parksunup/globaltrend를 Clone합니다."],
-  ["2", "리드가 만든 양식 받기", "Fetch origin으로 목록을 갱신한 뒤 리드가 미리 만든 담당자 브랜치로 전환합니다. 같은 이름의 브랜치를 새로 만들지 않습니다."],
-  ["3", "빈 양식에 조사 결과 적기", "법제 담당은 data/legal, 동향 담당은 data/trends의 빈 양식을 복사해 작성합니다. 모르는 내용은 검토 필요로 남깁니다."],
-  ["4", "검사하고 PR 만들기", "pnpm validate:data를 실행하고 공식 링크와 검토할 부분을 확인한 뒤 PR을 올립니다. main에는 직접 올리지 않습니다."],
-];
-
-const readFirst = `제 역할은 [프로젝트 리드 / 법제 담당 / 동향 담당 중 하나]입니다.\n이 저장소의 README.md, architecture.md, docs/team-onboarding.md를 먼저 읽고\n프로젝트 목적, 공개 범위, 현재 구현 상태, 제 역할을 쉬운 말로 설명해 주세요.\n아직 파일은 수정하지 말고, 제가 이해한 내용이 맞는지 확인할 수 있게 요약해 주세요.\n역할이 비어 있거나 불분명하면 문서만 보고 추정하지 말고 먼저 질문해 주세요.`;
-const legalPrompt = `법제 담당입니다. README.md, architecture.md와 온보딩 문서를 먼저 읽으세요.\n한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 캘리포니아 CCPA, 싱가포르 PDPA의\n공식 법령명, 관할권, 원문 URL, 확인한 판본·시행일, 기존 한국어 번역의 유무와 출처를 조사하세요.\nUK GDPR에 연결되는 영국의 보완 법령도 메모하되 새 비교 기준은 만들지 마세요.\n\n사람이 읽는 data/legal/instruments.md와 대응하는 data/legal/instruments.csv를 만드세요.\n원문과 번역의 이용·재배포 조건을 확인한 내용은 data/legal/review-notes.md에 적으세요.\n확인하지 못한 값은 추정하지 말고 검토 필요로 표시하세요.\n앱 코드, Supabase, 인증, 환경변수는 수정하지 마세요.`;
-const legalTranslationPrompt = `법제 담당의 둘째 작업입니다. 공식 판본을 확정한 법률 하나를 선택하세요.\n처음에는 일본 APPI로 시작하고, 이후 다른 해외법에도 같은 작업을 반복합니다.\n선택한 법률의 조문 전체를 빠짐없이 한국어로 번역해 한 문서로 완성하세요.\n길면 여러 작업으로 나누되 각 작업이 끝날 때 같은 문서에 이어 쓰고,\n마지막에 원문 목차와 조·항·호·부칙의 수와 순서를 대조해 누락을 확인하세요.\n\n결과는 법률별 한국어 번역 전문 한 파일입니다. 예: data/legal/translations/appi.md.\n제목에 법률명·관할권·공식 원문 URL·판본·시행일·번역 상태를 적고,\n본문에는 원문의 편·장·절·조·항·호 구조와 조항 번호를 유지하세요.\n원문에 없는 해석을 덧붙이지 말고, 애매한 용어와 번역 결정은 별도 검토 메모에 남기세요.\n각 조항에 연결할 수 있는 appi.json과 누락·검수 상태 목록도 작성하세요. 다른 법률도 해당 법률 ID의 Markdown·JSON 파일을 만들고, JSON 조문 목록은 검수 화면이 읽는 provisions 구조에 맞추세요.\n검토 메모에는 원문과 번역문의 조·항·호·부칙 수, 빠진 항목, 확인 방법을 표로 적으세요.\n미완료 문서를 '전문'이나 검수 완료로 표시하지 마세요. 새로 생성하거나 수정한 번역은 검수 대기 작업본으로 두세요. 이미 검수·발행된 동일 판본은 실제 상태를 유지하고, 변경한 내용에 검수 완료 상태를 임의로 승계하지 마세요.\n공개 저장소에 본문을 올릴 수 있는 조건이 불확실하면 본문은 커밋하지 말고\n판본·진행률·공개 보류 이유를 검토 메모에 남겨 리더에게 전달하세요.`;
-const legalMappingPrompt = `법제 담당의 셋째 작업입니다. 먼저 완성된 법률별 한국어 번역 문서를 읽으세요.\n그 다음 팀원이 작업 브랜치에 추가한 한국·일본 비교표의 17개 기준을 세로 행으로, 7개 법제를 가로 열로 둔\n조항별 분류·요약표를 작성하세요. 비교표 파일을 읽지 못했다면 작업을 멈추고 필요한 파일명을 먼저 보고하세요.\n각 셀에는 관련 조항 번호, 한국어 핵심 요약, 주요 예외, 번역 문서의 해당 조항 링크,\n공식 원문 URL, 검수 상태를 넣으세요. 여러 조항이 관련되면 모두 연결하세요.\n\ndata/legal/criteria-mapping.md와 각 셀에 대응하는 criteria-mapping.csv를 만드세요.\n우선 한국 PIPA와 일본 APPI부터 채우고, 나머지 법률은 번역 전문이 완성될 때마다 추가하세요.\n아직 조사하지 않은 셀은 '미검토'로 두고 근거 없이 '규정 없음'이라고 쓰지 마세요.\n번역 초안은 검수 완료 번역으로 표시하지 마세요. 앱 코드와 Supabase는 수정하지 마세요.`;
-const legalReviewPrompt = `저는 법제 담당입니다. 기존 feat/legal-corpus-foundation 브랜치에서 작업하세요. 새 브랜치를 만들지 마세요.
-먼저 다음 공개 JSON 주소에서 내 브랜치에 저장된 피드백을 읽으세요. Supabase 계정이나 플러그인 권한은 필요하지 않습니다.
-https://globaltrend-git-feat-legal-corpus-foundation-pipc-fairy.vercel.app/api/feedback?branch=feat%2Flegal-corpus-foundation
-응답에 다음 페이지가 있으면 마지막까지 읽으세요. 현재 커밋뿐 아니라 이전 커밋에 남긴 의견도 포함해, 17개 기준표 의견과 전체 번역 초안 조문별 의견을 각각 확인하세요. item_id와 commit_sha로 대상 자료를 확인하고, 이미 고쳐진 의견인지도 현재 파일과 대조하세요. 조회가 실패하면 오류를 알려 주고 읽었다고 하지 마세요.
-공식 법령 원문과 대조하여 필요한 내용을 data/legal/에서 수정하고 검증하세요. 실제로 사람이 확인한 조문·비교 셀과 아직 미검수인 범위를 구분하세요. 번역 전문과 17개 기준표 중 하나만 검토하고 둘 다 완료됐다고 표시하지 마세요.
-기존 브랜치와 PR에 수정 결과를 반영하고 PR 설명·댓글에 수정 내용, 사람 검수 범위, 미검수 범위, 최신 Preview 링크를 직접 작성하세요. 링크는 실제로 확인하고 추측하지 마세요. 앱 화면·Supabase·인증·환경변수는 수정하지 말고 PR도 병합하지 마세요.`;
-const trendSourcePrompt = `동향 담당입니다. README.md, architecture.md와 온보딩 문서를 먼저 읽으세요.\nEDPB, OECD, CJEU/CURIA의 공식 자료 목록과 상세 페이지를 실제로 확인하세요.\n각 출처의 시작 URL, 자료 유형, 제목·게시일·본문·공식 링크를 얻는 방법,\nRSS·API 제공 여부, 수집 제외 대상, 접근 실패 사례를 기록하세요.\nCURIA는 사건번호·ECLI·선고일이 보이는지도 확인하세요.\n\n출처별로 사람이 읽는 data/trends/source-configs/edpb.md, oecd.md, curia.md와\n대응하는 edpb.json, oecd.json, curia.json을 만드세요.\n확인하지 못한 페이지 구조나 선택자는 추정하지 말고 검토 필요로 적으세요.\n앱 코드, Supabase, 인증, 환경변수는 수정하지 마세요.`;
-const trendSamplePrompt = `동향 담당의 다음 작업입니다. EDPB, OECD, CJEU/CURIA에서 개인정보 보호와\n직접 관련된 실제 자료를 출처별로 최대 5건씩 고르세요. 부족하면 건수를 채우려고 꾸미지 마세요.\n각 건의 원제목, 기관, 국가·관할권, 원문 게시일, 공식 URL, 자료 유형,\n한국어 제목·짧은 요약, 요약의 근거 위치, 주제 태그, 중복·검토 상태를 기록하세요.\n판결문·보도자료 등 같은 사건의 문서는 연결하고 중복 건수로 세지 마세요.\n원문에서 확인할 수 없는 법적 결론은 쓰지 마세요.\n\n출처별 data/trends/fixtures/edpb.md·edpb.json, oecd.md·oecd.json,\ncuria.md·curia.json을 만들고 선택·제외 이유를 review-notes.md에 적으세요.\nMarkdown 표의 한 행과 JSON의 한 항목이 대응해야 합니다.\n원문 전문이나 무허가 번역문을 공개 저장소에 넣지 마세요.`;
-const trendReviewPrompt = `저는 동향 담당입니다. 기존 feat/trend-source-contracts 브랜치와 PR #16에서 작업하세요. 새 브랜치를 만들지 마세요.
-현재 PR Preview의 '수집 출처'와 '동향 표본' 두 화면에서 제출 내용을 확인하세요. 다음 공개 JSON 주소에서 내 브랜치에 저장된 피드백을 읽으세요. Supabase 계정이나 플러그인 권한은 필요하지 않습니다.
-https://globaltrend-git-feat-trend-source-contracts-pipc-fairy.vercel.app/api/feedback?branch=feat%2Ftrend-source-contracts
-응답에 다음 페이지가 있으면 마지막까지 읽고, 이전 커밋에 남긴 의견도 포함하세요. item_id와 commit_sha로 대상 자료를 확인하고, 이미 고쳐진 의견인지도 현재 파일과 대조하세요. 조회가 실패하면 오류를 알려 주고 읽었다고 하지 마세요.
-피드백을 공식 원문과 대조해 data/trends/source-configs/와 data/trends/fixtures/의 필요한 내용을 수정하세요. docs/trend-report-style.md에 맞춰 data/trends/editorial/report-drafts.json의 대응 원고도 수정하고 node scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요. 확인하지 못한 사실은 검토 기록에 남기세요. 이 검수 작업에서는 새 조사 기간이나 출처를 추가하지 마세요.
-앱 화면, Supabase, 인증, 환경변수는 수정하지 마세요. 검사를 실행한 뒤 기존 브랜치와 PR에 결과를 반영하고, PR 설명이나 댓글에 수정 내용과 남은 확인 사항을 직접 적으세요.
-최신 Vercel Preview 링크를 실제로 확인해 알려 주세요. PR은 병합하지 마세요.`;
-const prPrompt = `작업 결과를 검토 가능한 PR로 만들어 주세요.\nPR 제목에는 작업 목적을 적고, 본문에는 변경 파일, 확인한 공식 URL,\n사람이 추가로 확인해야 하는 부분, 실행한 검증을 적으세요.\nmain 브랜치에는 직접 merge하지 마세요.`;
+import Link from 'next/link';
 
 export default function GuidePage() {
-  return <main className="guide-page">
-    <div className="guide-wrap">
-      <p className="eyebrow">GLOBALTREND / TEAM GUIDE</p>
-      <h1>GlobalTrend 팀 온보딩 가이드</h1>
-      <section className="guide-card">
-        <h2>작업한 결과를 바로 확인하는 방법</h2>
-        <p>Codex에게 기존 담당 브랜치에 결과를 저장하고 commit/push해 달라고 요청하세요. 동향은 feat/trend-source-contracts, 법제는 feat/legal-corpus-foundation을 계속 사용합니다.</p>
-        <p><a href="/team?role=trends">동향 담당 작업 확인 →</a> · <a href="/team?role=legal">법제 담당 작업 확인 →</a></p>
-        <p>이 화면은 최신 브랜치를 자동으로 읽으므로 자료를 고칠 때마다 PR을 병합하거나 사이트를 다시 배포할 필요가 없습니다. 몇 분 뒤 화면의 자료 커밋 번호가 바뀌었는지 확인하세요. ChatGPT 대화만 하거나 push하지 않은 자료는 볼 수 없습니다.</p>
-        <p>이미 공개 저장소에 제출된 본문은 미발행·공개 보류라는 이유로 숨기지 않습니다. 검수 열람과 대외 발행은 별개이며 Supabase 관리 권한이나 로그인은 필요 없습니다. 이 기능의 첫 배포는 한 번 필요하고, 옛 고정 커밋 배포의 코드는 자동 변경되지 않습니다.</p>
-      </section>
-      <p className="guide-lead">이 프로젝트는 해외 개인정보 보호 동향과 법제를 한국어로 조사하고 비교하는 웹사이트입니다. 코딩을 잘 몰라도 참여할 수 있습니다. Codex에게 작업을 시키고, 결과를 확인하고, PR로 제출하는 방식으로 진행합니다.</p>
-
-      <section className="guide-card"><h2>우리가 만드는 사이트</h2><p>사이트에는 네 가지 큰 기능이 있습니다.</p><ol><li>EDPB·OECD·CJEU 같은 공식 출처에서 개인정보 보호 자료를 모읍니다.</li><li>모인 자료를 한국어로 정리해 주간 동향 자료를 만듭니다.</li><li>한국 PIPA, 일본 APPI, 중국 PIPL, EU GDPR, UK GDPR, 미국 CCPA, 싱가포르 PDPA를 비교합니다.</li><li>동향 자료에서 언급된 법 조항을 실제 법제 자료와 연결합니다.</li></ol><p>수집·번역·초안이 자동으로 공개되지는 않습니다. <code>/team</code>의 검수 자료 목록만 누구나 읽을 수 있습니다. 승인된 본문 자료는 별도로 발행합니다.</p><div className="guide-note"><strong>현재는 네 PR의 통합본 검토 단계입니다.</strong><br />법제 7개·비교표 119칸·외국법 6개 한국어 전문 초안과 동향 표본 21건을 통합했습니다. <code>/team</code>과 <code>/legal-translation</code>에서 제출 내용을 읽고, <code>/work</code>에서 동향을, <code>/work/legal</code>에서 법제를 등록·검수·발행합니다. 저장·승인·발행에는 팀 권한이 필요하며 Preview에서는 DB 쓰기가 차단됩니다. 수집기 정기 실행은 꺼져 있고 Codex 정기 편집 연결은 준비 단계입니다.</div><div className="guide-note"><strong>먼저 빈 업무 양식을 사용합니다.</strong><br />법제 담당은 <code>data/legal</code>, 동향 담당은 <code>data/trends</code>의 <code>*.template.*</code> 파일을 복사합니다. 사람이 읽는 <code>.md</code> + 사이트가 읽는 <code>.csv</code> 또는 <code>.json</code> + 검토 메모를 함께 제출하고 <code>pnpm validate:data</code>로 검사합니다.</div></section>
-
-      <section><h2 className="guide-section-title">처음 시작할 때 할 일</h2><div className="guide-steps">{steps.map(([number, title, text]) => <div className="guide-step" key={number}><b>{number}</b><div><strong>{title}</strong><p>{text}</p></div></div>)}</div></section>
-
-      <section className="guide-card">
-        <h2>1. 팀원이 자기 계정으로 저장소 열기 · Windows</h2>
-        <p><strong>계정은 두 개입니다.</strong> GitHub에는 팀원 본인의 GitHub 계정으로, Codex가 있는 ChatGPT 데스크톱 앱에는 본인의 ChatGPT 계정으로 로그인합니다. 리더의 계정을 함께 쓰지 않습니다.</p>
-        <p>Codex의 로컬 프로젝트는 컴퓨터의 폴더를 엽니다. 먼저 GitHub Desktop으로 저장소를 컴퓨터에 복제하고, 그 폴더를 Codex에서 선택하세요.</p>
-        <h3>① 리더가 초대하고, 팀원이 수락합니다</h3>
-        <ol>
-          <li>리더가 <a href="https://github.com/parksunup/globaltrend">parksunup/globaltrend</a>에서 <strong>Settings → Collaborators → Add people</strong>로 들어가 팀원의 GitHub 사용자 이름을 초대합니다. <strong>Access</strong> 묶음이 보이면 그 아래 <strong>Collaborators</strong>를 선택합니다.</li>
-          <li>팀원은 본인의 GitHub 계정으로 로그인해 초대 이메일 또는 알림의 <strong>View invitation / Accept invitation</strong>을 눌러 수락합니다.</li>
-        </ol>
-        <h3>② GitHub Desktop에서 저장소를 Clone합니다</h3>
-        <ol>
-          <li><a href="https://desktop.github.com/">GitHub Desktop</a>을 설치하고 실행합니다. <strong>Sign in to GitHub.com</strong>으로 본인 계정에 로그인합니다.</li>
-          <li>상단 메뉴 <strong>File → Clone repository…</strong>를 누릅니다.</li>
-          <li><strong>URL</strong> 탭을 누르고 주소 칸에 <code>https://github.com/parksunup/globaltrend</code>를 붙여 넣습니다. 자기 계정의 저장소 목록에 안 보여도 URL로 지정할 수 있습니다.</li>
-          <li><strong>Local path → Choose…</strong>에서 컴퓨터에 저장할 위치를 고른 뒤 <strong>Clone</strong>을 누릅니다. 표시된 경로를 기억합니다.</li>
-          <li><strong>Repository → Show in Explorer</strong>로 폴더를 열어 <code>README.md</code>, <code>architecture.md</code>, <code>app</code> 폴더가 있는지 확인합니다.</li>
-        </ol>
-        <p>브라우저의 저장소 페이지에서 녹색 <strong>Code → Open with GitHub Desktop → Choose… → Clone</strong>으로 진행해도 됩니다.</p>
-        <h3>③ Codex에서 그 폴더를 엽니다</h3>
-        <ol>
-          <li>ChatGPT 데스크톱 앱에 본인의 ChatGPT 계정으로 로그인하고, 상단 <strong>ChatGPT</strong> 선택 메뉴에서 <strong>Codex</strong>를 고릅니다.</li>
-          <li><strong>Add new project</strong>를 누르거나 <strong>Ctrl+O</strong>를 누릅니다.</li>
-          <li>파일 선택 창에서 방금 Clone한 <strong>globaltrend 폴더 자체</strong>를 선택합니다. <code>README.md</code> 파일 하나를 선택하지 않습니다.</li>
-          <li>왼쪽 프로젝트 목록의 <strong>globaltrend</strong>를 열고 새 작업을 시작합니다. 아래 2번의 프롬프트로 문서를 먼저 읽힙니다.</li>
-        </ol>
-        <h3>④ 리드가 만든 담당자 브랜치로 전환합니다</h3>
-        <p>리드가 공용 양식을 <code>main</code>에 반영하고 담당자 브랜치를 만들었다는 안내를 받은 뒤 시작합니다. GitHub Desktop에서 <strong>Fetch origin</strong>을 눌러 원격 브랜치 목록을 갱신한 다음 <strong>Current branch</strong>에서 자기 브랜치를 선택합니다.</p>
-        <p>법제 담당은 <code>feat/legal-corpus-foundation</code>, 동향 담당은 <code>feat/trend-source-contracts</code>를 사용합니다. <strong>New branch</strong>나 <strong>Create branch</strong>는 누르지 않습니다. 브랜치가 보이지 않으면 새로 만들지 말고 리드에게 확인합니다.</p>
-        <p><strong>저장소가 안 보인다면:</strong> GitHub Desktop의 <strong>URL</strong> 탭에 위 주소를 직접 넣으세요. Clone이 실패하면 GitHub Desktop 로그인 계정과 주소를 확인합니다. Clone은 되지만 변경 사항을 올릴 수 없다면 초대 수락 상태를 확인합니다.</p>
-        <p><strong>Codex에서 폴더가 안 보인다면:</strong> GitHub Desktop의 <strong>Repository → Show in Explorer</strong>에서 실제 위치를 확인한 뒤 <strong>Add new project / Ctrl+O</strong>로 그 폴더를 고릅니다. 이 절차에는 Codex GitHub 플러그인 연결이 필요하지 않습니다.</p>
-        <p><strong>주의:</strong> <strong>Create a new repository</strong>나 <strong>Fork</strong>를 선택하지 않습니다. 기존 저장소를 <strong>Clone</strong>합니다.</p>
-        <p>화면 메뉴 참고: <a href="https://docs.github.com/en/desktop/adding-and-cloning-repositories/cloning-and-forking-repositories-from-github-desktop">GitHub Desktop 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/windows/windows-app">ChatGPT Windows 앱 공식 안내</a> · <a href="https://learn.chatgpt.com/docs/projects">Codex 로컬 프로젝트 안내</a></p>
-      </section>
-
-      <section className="guide-card"><h2>2. Codex에게 문서를 먼저 읽히기</h2><p>새 작업을 시작할 때 아래 내용을 붙여 넣고, 첫 줄의 대괄호를 자신의 실제 역할 하나로 바꿉니다. 역할명은 고정된 책임 범위이며 현재 대화 상대가 자동으로 프로젝트 리드가 되는 것은 아닙니다.</p><pre>{readFirst}</pre><p>Codex가 요약한 내용을 읽고 프로젝트 목적과 작업 범위를 제대로 이해했는지 확인합니다. 바로 코드를 수정하게 하지 않습니다.</p></section>
-
-      <div className="guide-columns">
-        <section className="guide-card">
-          <h2>3-A. 법제 담당</h2>
-          <p>공식 판본 확인 → 법률별 한국어 번역 전문 작성 → 완성된 번역을 바탕으로 17개 기준별 조항 분류·요약표 작성 순서로 진행합니다. 번역은 법률 하나씩 이어서 작성합니다.</p>
-          <h3>첫 작업 · 7개 법제와 판본 확인</h3>
-          <pre>{legalPrompt}</pre>
-          <h3>둘째 작업 · 법률별 한국어 번역 전문</h3>
-          <pre>{legalTranslationPrompt}</pre>
-          <h3>셋째 작업 · 17개 기준 분류·요약표</h3>
-          <pre>{legalMappingPrompt}</pre>
-          <h3>넷째 작업 · 비교표와 법률별 전체 번역 초안을 각각 검수</h3>
-          <p>법제 담당 브랜치가 최신 main을 반영하면 PR Preview의 <a href="/legal-translation">법률별 전체 번역 초안</a> 목록에서 이번 법률을 선택해 조문별로 읽고 피드백을 남길 수 있습니다. 현재 외국법 6개의 전문 초안을 같은 화면에서 확인할 수 있습니다. 한국법은 공식 한국어 원문 조문 색인으로 구분합니다. 17개 기준 비교표도 별도로 검수하세요. 검토하지 않은 조문이나 셀은 검수 완료로 표시하지 않습니다. 피드백 수정과 PR 작성은 Codex에게 맡깁니다.</p>
-          <pre>{legalReviewPrompt}</pre>
-        </section>
-        <section className="guide-card">
-          <h2>3-B. 동향 담당</h2>
-          <p>공식 출처 조사 → 근거가 있는 동향 표본 → Preview에서 출처·표본 검수 순서로 진행합니다. 기존 예시 호 파일은 보존하지만 새로 만들지 않으며, 검수 화면에는 표시하지 않습니다.</p>
-          <h3>첫 작업 · EDPB·OECD·CURIA 출처 확인</h3>
-          <pre>{trendSourcePrompt}</pre>
-          <h3>둘째 작업 · 샘플 동향 자료</h3>
-          <pre>{trendSamplePrompt + '\n\n추가 필수 기준: docs/trend-report-style.md를 먼저 읽고 모든 동향을 보고서체로 작성하세요.\n한 문단 핵심 요약과 - 설명 형식의 상세 본문을 나누세요.\n같은 자료 ID의 data/trends/editorial/report-drafts.json 편집본도 작성·수정하세요.\nnode scripts/trend-report.mjs --render와 npm run validate:data를 실행하세요.\n검수 지시와 미확인 범위는 본문이 아닌 검토 기록에 남기세요.'}</pre>
-          <h3>셋째 작업 · 수집 출처와 동향 표본 검수</h3>
-          <pre>{trendReviewPrompt}</pre>
-        </section>
-      </div>
-
-      <section className="guide-card"><h2>4. 검사하고 PR로 제출하기</h2><p>Codex가 파일을 만들면 <code>pnpm validate:data</code>를 실행합니다. 그다음 공식 URL이 있는지, 추정한 내용이 섞이지 않았는지, 지정된 폴더 밖의 파일을 수정하지 않았는지 확인합니다.</p><pre>{prPrompt}</pre><p>PR이 올라오면 담당자는 자기 Vercel Preview 첫 화면의 <strong>PR 제출물</strong> 탭을 엽니다. 법제 담당은 비교표·번역 초안을 확인하고, 동향 담당은 <strong>수집 출처</strong>와 <strong>동향 표본</strong>을 나누어 확인합니다. 기존 주간 예시 호는 Preview 검수 화면에 나오지 않습니다. 셀·출처·표본별로 로그인 없이 자연어 피드백을 남길 수 있습니다. 이름은 선택 사항이며 신원이 확인된 이름이 아닙니다. 저장된 의견은 항목 아래 목록에 표시되며, <a href="/feedback">공개 피드백 목록</a>에서도 브랜치별로 읽을 수 있습니다. 목록의 ‘Codex용 JSON’ 주소를 Codex에게 주시면 Supabase 권한 없이 의견을 읽고 반영할 수 있습니다. 의견 저장은 검수 승인이나 실제 발행을 뜻하지 않습니다. 프로젝트 리드는 원본·공식 근거·남은 피드백·자동 검사를 함께 확인한 뒤 main에 merge합니다. 팀원은 main에 직접 push하거나 merge하지 않습니다.</p></section>
-
-      <section className="guide-card"><h2>프로젝트 리드가 PR에서 확인할 것</h2><ul><li>요청한 결과 파일이 실제로 들어 있는가</li><li>법률별 번역 전문이 원문 조·항·호·부칙과 빠짐없이 대응하는가</li><li>17개 기준표의 조항 링크가 해당 법률 전문과 공식 판본을 가리키는가</li><li><strong>Markdown 표를 먼저 읽고 내용을 이해할 수 있는가</strong></li><li>Markdown 표와 CSV·JSON의 행·항목 수가 서로 맞는가</li><li>공식 원문 URL을 직접 열 수 있는가</li><li>확인하지 못한 내용이 `검토 필요`로 표시되어 있는가</li><li>앱 코드·Supabase·환경변수를 불필요하게 수정하지 않았는가</li><li>PR에 검증 방법과 남은 문제가 적혀 있는가</li><li>기존 자료를 삭제하거나 덮어쓰지 않았는가</li></ul></section>
-
-      <section className="guide-card"><h2>팀의 기본 원칙</h2><p>법제 담당과 동향 담당은 서로의 작업을 기다릴 필요가 없습니다. 각자 정해진 폴더의 결과물을 만들고 PR을 제출합니다. 프로젝트 리드가 결과물을 검토한 뒤 나중에 웹사이트와 Supabase에 연결합니다.</p><p>모르는 부분은 임의로 채우지 말고 `검토 필요`라고 적습니다. Codex가 만든 결과도 최종 법률 판단이나 공개 승인을 대신하지 않습니다.</p></section>
-      <a className="guide-back" href="/">검토 보드로 돌아가기 ↗</a>
-    </div>
+  return <main className="guide-wrap">
+    <p className="eyebrow">GLOBALTREND / TEAM GUIDE</p>
+    <h1>담당자 작업실 안내</h1>
+    <p className="guide-lead">자료를 훑어보고, 평소 쓰는 Codex에 자연어로 고칠 점을 말씀하시면 됩니다. Codex가 저장한 내용을 이 화면에서 다시 확인할 수 있습니다.</p>
+    <section className="guide-card">
+      <h2>작업 순서</h2>
+      <ol>
+        <li>담당 작업실을 엽니다. 동향은 <Link href="/team?role=trends">동향 작업실</Link>, 법제는 <Link href="/team?role=legal">법제 작업실</Link>입니다.</li>
+        <li>동향 담당자는 이 사이트의 팀 계정으로 로그인해 원고를 읽습니다. Supabase 관리자 권한이나 Vercel 팀 가입은 필요하지 않습니다.</li>
+        <li>화면의 <strong>Codex에 수정 요청하는 방법 · 예시 프롬프트</strong>를 열고 <strong>Codex 연결 프롬프트 복사</strong>를 누릅니다. 저장소 주소와 기존 담당 브랜치, 수정·확인 방법이 포함되어 있습니다.</li>
+        <li>복사한 문장을 본인의 Codex에 붙여 넣고, 마지막에 고칠 점을 편하게 적습니다. 항목마다 따로 의견을 등록할 필요는 없습니다.</li>
+        <li>Codex가 저장을 마치면 같은 작업실에서 결과를 확인합니다. 화면은 2분마다 새로 확인합니다.</li>
+      </ol>
+    </section>
+    <section className="guide-card">
+      <h2>자료는 어디에 저장되나요?</h2>
+      <p>동향 DB 원고 수정은 비공개 작업실 수정본에 저장됩니다. 운영 원고를 직접 변경하거나 자동 발행하지 않습니다. Codex 연결키는 24시간 동안 작업실 원고를 읽고 수정본을 저장하는 데만 쓰이며, 계정 비밀번호는 프롬프트에 들어가지 않습니다.</p>
+      <p>법제 자료와 GitHub에만 있는 조사 자료는 기존 담당 브랜치에 저장합니다. 동향은 <code>feat/trend-source-contracts</code>, 법제는 <code>feat/legal-corpus-foundation</code>입니다. 새 브랜치를 만들 필요가 없습니다.</p>
+      <p>동향 자료를 바꿀 때는 사이트에서 팀 로그인 후 연결 프롬프트를 복사하세요. 법제는 <Link href="/team?role=legal">법제 작업실</Link>에서 예시 프롬프트를 복사하면 됩니다. 코드 변경은 기존 담당 브랜치에 push되어야 화면에 반영됩니다.</p>
+    </section>
+    <section className="guide-card">
+      <h2>화면 구성</h2>
+      <ul>
+        <li>동향 담당: 모든 동향 원고를 검색하고 본문과 공식 출처를 읽습니다.</li>
+        <li>법제 담당: 17개 기준 비교표와 법률별 전체 번역을 따로 살펴봅니다.</li>
+      </ul>
+      <p>매 수정마다 PR 병합이나 사이트 재배포를 기다리지 않습니다. 다만 이미 배포된 기능 코드가 없는 오래된 주소에서는 새 작업실 기능을 볼 수 없습니다.</p>
+      <p>작업실 수정은 대외 공개와 별개입니다. 기존 공개 페이지는 <Link href="/public">국제요정 공개 페이지</Link>, 운영 자료 관리는 <code>/work</code>에서 확인합니다.</p>
+    </section>
+    <p className="guide-lead"><Link href="/team?role=trends">동향 작업실 열기 →</Link>　<Link href="/team?role=legal">법제 작업실 열기 →</Link></p>
   </main>;
 }
