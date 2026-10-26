@@ -590,14 +590,18 @@ Deno.test("PDPC listing retains API topic for scope decisions", async () => {
   const step = await advance(pdpcRangeConfig, state, {
     request: async requestUrl => ({
       bytes: new TextEncoder().encode(JSON.stringify({
-        data: [{href: "/assets/report", title: "Report", date: "25 May 2026", topic: "Reports"}],
-        totalItems: 1,
+        data: [
+          {href: "/assets/report", title: "Report", date: "25 May 2026", topic: "Reports"},
+          {href: "/media-events/unknown-topic", title: "Unknown topic", date: "25 May 2026"},
+        ],
+        totalItems: 2,
       })),
       url: requestUrl,
       type: "application/json",
     }),
   }, async () => { throw new Error("listing only"); });
   eq(step.state.rows?.[0].topic, "Reports");
+  eq(step.state.rows?.[1].topic, undefined);
   eq(step.result.stage, "listing");
 });
 const pdpcAsset = "https://www.pdpc.gov.sg/assets/25e68133-795e-4c3f-bbea-7456b01c8506";

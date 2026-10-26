@@ -54,15 +54,15 @@ async function listing(c: Config, http: HTTP, page: string) {
         Math.max(0, Math.min(10, data.totalItems - (n - 1) * 10))
     ) throw new Error("pdpc_listing_page_incomplete");
     const rows: Row[] = data.data.map(
-      (x: { href: string; title: string; date: string; topic: string }) => {
+      (x: { href: string; title: string; date: string; topic?: unknown }) => {
         if (
           typeof x.href !== "string" || typeof x.title !== "string" ||
-          typeof x.date !== "string" || typeof x.topic !== "string"
+          typeof x.date !== "string"
         ) throw new Error("pdpc_listing_schema_changed");
         return {
           url: new URL(x.href, page).href,
           title: normalize(x.title),
-          topic: normalize(x.topic),
+          topic: typeof x.topic === "string" ? normalize(x.topic) : undefined,
           date_observations: [{
             meaning: "listing_published_display",
             locator: "listing card",
