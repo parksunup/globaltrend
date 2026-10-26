@@ -445,5 +445,12 @@ export function cnilListingDate(row: Row): string | null {
     obs.length !== 1 || obs[0].meaning !== "listing_published_display" ||
     obs[0].locator !== "listing .list-inner .attributes p.date"
   ) return null;
-  return parseDate(obs[0].value);
+  const value = normalize(obs[0].value).toLowerCase();
+  // Only an exact single French date may skip the detail request. Generic
+  // parseDate accepts dates embedded in prose, which could mistake an update
+  // date or label for the publication date and silently skip an in-range card.
+  if (!/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/u.test(value)) {
+    return null;
+  }
+  return parseDate(value);
 }
