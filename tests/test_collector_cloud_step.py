@@ -57,6 +57,51 @@ class CloudStepTests(unittest.TestCase):
         self.assertFalse(bundle['backlog_resolved'])
 
 class MutableFeedResumeTests(unittest.TestCase):
+    def test_ftc_out_of_range_pubdate_skips_only_detail_request(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        listing='https://www.ftc.gov/feeds/press-release-consumer-protection.xml'
+        url='https://www.ftc.gov/news-events/news/press-releases/outside-range'
+        class Client:
+            def __init__(self): self.requests=[]
+            def get(self,target):
+                self.requests.append(target)
+                if target==listing:
+                    return ('<rss><channel><item><title>Old release</title><link>'+url+
+                            '</link><pubDate>Sun, 18 Oct 2026 14:00:00 +0000</pubDate></item></channel></rss>').encode(),target,'application/rss+xml'
+                raise AssertionError('out-of-range detail page should not be fetched')
+        config={'source':'ftc','source_id':'source','language':'en','listing':listing,
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        client=Client(); store=PreparedStore(None)
+        result=collect(config,client,store,'2026-10-19','2026-10-25',max_pages=1,max_items=1)
+        self.assertEqual(client.requests,[listing])
+        self.assertEqual(result['out_of_range'],1)
+        self.assertEqual(result['listing_date_excluded'],1)
+        self.assertEqual(result['range_filter_read_scope'],'listing_date_only')
+        self.assertEqual(result['listing_date_evidence']['date'],'2026-10-18')
+        self.assertFalse(result['coverage_complete'])
+
+    def test_ftc_missing_or_untrusted_pubdate_falls_back_to_detail(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        listing='https://www.ftc.gov/feed.xml'; url='https://www.ftc.gov/news-events/news/press-releases/item'
+        config={'source':'ftc','source_id':'source','language':'en','listing':listing,
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+        for tags in ('', '<pubDate>19 Oct 2026 00:00:00</pubDate>',
+                     '<pubDate>Mon, 19 Oct 2026 00:00:00 +0000</pubDate><pubDate>Tue, 20 Oct 2026 00:00:00 +0000</pubDate>'):
+            class Client:
+                def __init__(self): self.requests=[]
+                def get(self,target):
+                    self.requests.append(target)
+                    if target==listing:
+                        return ('<rss><channel><item><title>Release</title><link>'+url+'</link>'+tags+'</item></channel></rss>').encode(),target,'application/rss+xml'
+                    return b'body',target,'text/html'
+            config_row={'title_original':'Release','published_date':'2026-10-20','content_text':'Complete source text.','content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
+            client=Client(); store=PreparedStore(None)
+            with patch('scripts.collector.core.parsers.extract_document',return_value=config_row):
+                collect(config,client,store,'2026-10-19','2026-10-25',max_pages=1,max_items=1)
+            self.assertEqual(client.requests,[listing,url])
+
     def test_ftc_resumes_by_processed_urls_when_listing_titles_change(self):
         from scripts.collector.core import collect
         from scripts.collector.cloud_step import PreparedStore
@@ -86,7 +131,9 @@ class MutableFeedResumeTests(unittest.TestCase):
             third.cursor=second.cursor
             collect(config,Client(),third,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
         self.assertEqual(third.operations[0]['p_canonical_url'],urls[2])
-        self.assertIsNone(third.cursor)
+        self.assertIsNotNone(third.cursor)
+        self.assertEqual(len(third.cursor['processed_url_hashes']),len(urls))
+        self.assertEqual(third.cursor['offset'],0)
         self.assertFalse(third.complete)
 
 class OECDOverviewTests(unittest.TestCase):
@@ -169,15 +216,68 @@ class FTCBoundedResumeTests(unittest.TestCase):
     def test_full_thirty_item_mutable_feed_finishes_without_false_coverage(self):
         client,cursor,results,_=self.run_feed(30)
         self.assertEqual(len(client.fetched),30)
-        self.assertIsNone(cursor)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(len(cursor['processed_url_hashes']),30)
+        self.assertTrue(results[-1]['listing_scan_complete'])
+        self.assertFalse(results[-1]['coverage_complete'])
+
+    def test_completed_feed_scan_persists_seen_urls_for_next_scheduled_run(self):
+        import hashlib, json
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        urls=['https://www.ftc.gov/news-events/news/press-releases/persist-'+str(i) for i in range(30)]
+        config={'source':'ftc','source_id':'source','language':'en','listing':'https://www.ftc.gov/feed.xml',
+                'hosts':['www.ftc.gov'],'enabled':True,'permissions':{'collect':True,'store':True,'ai':True}}
+
+        class Client:
+            turn=0
+            fetched=[]
+            def get(self,url):
+                if url==config['listing']:
+                    self.turn+=1
+                    # Mutate both titles and order between one-item cloud claims.
+                    order=urls[self.turn%len(urls):]+urls[:self.turn%len(urls)]
+                    rss='<rss><channel>'+''.join('<item><title>Changed '+str(self.turn)+' '+str(i)+'</title><link>'+u+'</link></item>' for i,u in enumerate(order))+'</channel></rss>'
+                    return rss.encode(),url,'application/rss+xml'
+                self.fetched.append(url)
+                html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-22">22 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
+                return html.encode(),url,'text/html'
+
+        client=Client(); cursor=None; result=None
+        for _ in range(len(urls)+2):
+            store=PreparedStore(cursor)
+            result=collect(config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
+            cursor=store.cursor
+            if result.get('listing_scan_complete'): break
+        self.assertTrue(result and result.get('listing_scan_complete'))
+        self.assertEqual(set(client.fetched),set(urls))
+        expected=sorted(hashlib.sha256(url.encode()).hexdigest() for url in urls)
+        self.assertIsNotNone(cursor)
+        self.assertEqual(cursor.get('processed_url_hashes'),expected)
+        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
+        self.assertFalse(result['coverage_complete'])
+
+        fetched_before=list(client.fetched)
+        # A new scheduled scan sees the same URLs in a different order and with
+        # changed titles; it should skip detail requests by stable URL identity.
+        next_store=PreparedStore(cursor)
+        next_result=collect(config,client,next_store,'2026-10-16','2026-10-24',max_pages=1,max_items=1)
+        self.assertTrue(next_result.get('listing_scan_complete'))
+        self.assertEqual(client.fetched,fetched_before)
+        self.assertEqual(next_store.cursor.get('processed_url_hashes'),expected)
+        self.assertFalse(next_result['coverage_complete'])
 
     def test_large_mutable_feed_stops_before_cursor_overflow_without_forgetting_urls(self):
+        import hashlib
         client,cursor,results,config=self.run_feed(65)
         self.assertEqual(results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
         self.assertIsNotNone(cursor)
         self.assertGreater(len(client.fetched),30)
         self.assertLess(len(client.fetched),65)
         self.assertEqual(len(cursor['processed_url_hashes']),len(client.fetched))
+        self.assertEqual(set(cursor['processed_url_hashes']),
+                         {hashlib.sha256(url.encode()).hexdigest() for url in client.fetched})
+        self.assertFalse(results[-1]['coverage_complete'])
         from scripts.collector.core import collect
         from scripts.collector.cloud_step import PreparedStore
         saved_cursor=dict(cursor)
