@@ -302,6 +302,48 @@ Deno.test("CNIL batches only consecutive old cards and leaves ambiguous or newer
   eq(pending.result.status, "failed");
   eq(pending.state.offset, 2);
 });
+Deno.test("CNIL reads detail when one listing field contains extra or multiple dates", async () => {
+  for (const value of [
+    "27 mars 2024 — mise à jour le 20 octobre 2026",
+    "Publié le 27 mars 2024",
+    "27 mars 2024 et 20 octobre 2026",
+  ]) {
+    const row = {
+      ...cnilOldRow,
+      date_observations: [{
+        ...cnilOldRow.date_observations[0],
+        value,
+      }],
+    };
+    const detail = "https://www.cnil.fr/fr/old";
+    let requested = "";
+    const state: State = {
+      since: "2026-09-21",
+      until: "2026-10-23",
+      adapter_version: "edge-cnil-v3",
+      page: cnilConfig.listing,
+      rows: [row],
+      offset: 0,
+    };
+    const step = await advance(cnilConfig, state, {
+      request: async (url) => {
+        requested = url;
+        return {
+          bytes: new TextEncoder().encode(
+            '<main><h1>Old</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">Personal data protection evidence.</div></main>',
+          ),
+          url,
+          type: "text/html",
+        };
+      },
+    }, async () => ({ item_created: true }));
+    eq(requested, detail);
+    eq(step.result.stage, "detail");
+    eq(step.result.unknown_date, true);
+    eq(step.state.offset, 1);
+    eq(step.result.coverage_complete, false);
+  }
+});
 Deno.test("exhausted Edge scans restart discovery with extended range and unresolved work intact", async () => {
   for (const cfg of [config, cnilConfig]) {
     const state: State = {
