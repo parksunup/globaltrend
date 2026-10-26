@@ -2,6 +2,24 @@ begin;
 set local search_path=public,extensions;
 select plan(13);
 
+-- The migration's fixed production registry UUIDs are not present in the
+-- synthetic local seed catalog. Add one transaction-local FTC source so these
+-- table constraints are exercised independently of production IDs.
+insert into public.publishers(name,acronym,publisher_type,website_url,description_ko)
+select 'FTC snapshot test publisher','FTC-SNAPSHOT-TEST','international_org',
+ 'https://www.ftc.gov/','Synthetic fixture for durable listing snapshot tests'
+where not exists(select 1 from public.publishers where acronym='FTC-SNAPSHOT-TEST');
+insert into public.sources(publisher_id,name,source_kind,fetch_strategy,start_url,parser_config,poll_interval_minutes,next_run_at)
+select p.id,'FTC snapshot test source','html','http',
+ 'https://www.ftc.gov/feeds/press-release-consumer-protection.xml','{}'::jsonb,1440,now()
+from public.publishers p
+where p.acronym='FTC-SNAPSHOT-TEST'
+and not exists(select 1 from public.sources where name='FTC snapshot test source');
+insert into public.collector_edge_sources(source_id,slug)
+select s.id,'ftc' from public.sources s
+where s.name='FTC snapshot test source'
+and not exists(select 1 from public.collector_edge_sources where slug='ftc');
+
 select has_table('public','collector_cloud_listing_scans','staged FTC scan table exists');
 select has_table('public','collector_cloud_listing_rows','ordered FTC rows exist');
 select ok((select relrowsecurity from pg_class where oid='public.collector_cloud_listing_scans'::regclass),
