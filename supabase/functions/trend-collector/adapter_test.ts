@@ -173,7 +173,7 @@ Deno.test("PDPC extracts article content through nested Flight layout wrappers",
   );
   eq(item.title_original, "PDPC title");
   eq(item.content_text, "PDPC article body with enough detail.");
-  eq(item.metadata.read_scope, "news_html_from_embedded_rsc");
+  eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
   eq(item.published_date, "2026-10-18");
 });
 
