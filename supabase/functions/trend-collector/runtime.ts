@@ -301,6 +301,10 @@ export async function advance(
     state.adapter_version = c.source === "cnil" ? "edge-cnil-v3" : "edge-v2";
     state.page ||= c.listing;
     if (c.source === "ico" && !state.is_backlog) {
+      // A finished full scan's unresolved count describes that past scan. The
+      // next scan must recompute it from zero; in-flight scans and exact
+      // backlog retries keep their accumulated count unchanged.
+      if (state.exhausted && !state.rows) state.unknown_dates = 0;
       for (const value of [state.since, state.until]) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || parseDate(value) !== value) {
           throw new Error("invalid_ico_listing_range");
