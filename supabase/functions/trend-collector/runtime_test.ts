@@ -106,7 +106,8 @@ Deno.test("PDPC campaign landing with only a video card is skipped, not retried 
   const url =
     "https://www.pdpc.gov.sg/media-events/privacy-awareness-week-2026";
   const html =
-    '<header class="page-banner"><h1>Privacy Awareness Week 2026</h1></header>' +
+    '<header class="page-banner"><div class="page-banner__category"><span>Events</span></div>' +
+    '<h1>Privacy Awareness Week 2026</h1></header>' +
     '<main class="col-lg-9"><article class="layout layout--standard">' +
     '<div class="rte"></div><article class="article-card-cta"><div class="article-card-cta__body">' +
     '<h3>Learn what happens when we overshare our personal data with AI</h3>' +
