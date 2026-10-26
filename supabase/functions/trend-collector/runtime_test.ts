@@ -251,6 +251,29 @@ Deno.test("ICO in-range date does not bypass complete article extraction", async
   eq(step.continue, true);
   eq(step.state.offset, 0);
 });
+
+Deno.test("PDPC non-article event backlog is closed without claiming period coverage", async () => {
+  const c = { ...config, source: "pdpc", listing: "https://www.pdpc.gov.sg/media-events", hosts: ["www.pdpc.gov.sg"] };
+  const html = `<header class="page-banner"><h1>Privacy Awareness Week 2026</h1>
+    <div class="page-banner__category">Events</div></header>
+    <main><main class="col-lg-9"><article class="layout layout--standard">
+    <div class="rte"></div><article class="article-card-cta">Promotional teaser</article>
+    <div class="image-gallery">Gallery only</div></article></main></main>`;
+  const state: State = {
+    since: "2026-10-16", until: "2026-10-26", page: c.listing,
+    rows: [{ url: "https://www.pdpc.gov.sg/media-events/privacy-awareness-week-2026", title: "Privacy Awareness Week 2026" }],
+    offset: 0, failures: 16, is_backlog: true,
+  };
+  const step = await advance(c, state, {
+    request: async (url) => ({ bytes: new TextEncoder().encode(html), url, type: "text/html" }),
+  }, async () => { throw new Error("must not ingest an empty event shell"); });
+  eq(step.result.status, "partial");
+  eq(step.result.saved, "non_article_event");
+  eq(step.result.backlog_resolved, true);
+  eq(step.result.coverage_complete, false);
+  eq(step.state.failures, 0);
+  eq(step.continue, false);
+});
 const cnilConfig = {
   ...config,
   source: "cnil",

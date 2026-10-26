@@ -201,3 +201,18 @@ Deno.test("PDPC uses rendered main-column article when Flight contains a 404 she
   eq(item.metadata.ai_ready, false);
   eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
 });
+
+Deno.test("PDPC event landing page without editorial body is classified, not parsed", async () => {
+  const html = `<header class="page-banner"><h1>Privacy Awareness Week 2026</h1>
+    <div class="page-banner__category">Events</div></header>
+    <main><main class="col-lg-9"><article class="layout layout--standard">
+    <div class="rte"></div><article class="article-card-cta">Promotional teaser</article>
+    <div class="image-gallery">Gallery only</div></article></main></main>`;
+  let reason = "";
+  try {
+    await extract("pdpc", html, "https://www.pdpc.gov.sg/media-events/privacy-awareness-week-2026");
+  } catch (e) {
+    reason = e instanceof Error ? e.message : "";
+  }
+  eq(reason, "pdpc_non_article_event_page");
+});

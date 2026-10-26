@@ -457,6 +457,22 @@ export async function advance(
     return { state, result, continue: true, delay: 0 };
   } catch (e) {
     const reason = e instanceof Error ? e.message : "unknown_failure";
+    if (reason === "pdpc_non_article_event_page") {
+      state.failures = 0;
+      result.status = "partial";
+      result.stage = "detail_scope_check";
+      result.saved = "non_article_event";
+      result.reason = reason;
+      result.read_scope = "official_article_html_or_embedded_rsc";
+      result.backlog_resolved = !!state.is_backlog;
+      if (!state.is_backlog) state.offset = (state.offset || 0) + 1;
+      return {
+        state,
+        result,
+        continue: !state.is_backlog,
+        delay: 0,
+      };
+    }
     // A database write may have succeeded before its response was lost: retry same
     // position, relying on ingest's URL/hash uniqueness. Never advance on failure.
     state.failures = (state.failures || 0) + 1;

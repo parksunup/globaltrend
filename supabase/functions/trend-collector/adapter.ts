@@ -205,7 +205,17 @@ export function pdpcContent(document: Document): Element[] {
     for (const node of readable.querySelectorAll(
       ".article-footer,.article-card-cta,.image-gallery,.slick-slider,.progress-wrapper,.tabs__mobile-controls,button",
     )) node.remove();
-    if (normalize(readable.textContent || "").length >= 60) return [readable];
+    const readableText = normalize(readable.textContent || "");
+    if (readableText.length >= 60) return [readable];
+    // Some PDPC event landing pages contain only an empty rich-text block,
+    // promotion card, and gallery. Do not retry these as if the article parser
+    // had failed: the page explicitly identifies itself as an event and has no
+    // editorial body after promotional material is removed.
+    const category = normalize(
+      document.querySelector("header.page-banner .page-banner__category")
+        ?.textContent || "",
+    ).toLowerCase();
+    if (category === "events") throw new Error("pdpc_non_article_event_page");
   }
   const chunks: string[] = [];
   for (const script of document.querySelectorAll("script:not([src])")) {
