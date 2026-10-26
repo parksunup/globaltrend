@@ -648,6 +648,7 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
         self.assertIsNone(bundle.get('listing_snapshot'))
 
     def test_snapshot_bounds_and_allowlisted_urls_stop_before_detail_request(self):
+        import hashlib, json
         from scripts.collector.cloud_step import PreparedStore
         from scripts.collector.core import FetchError
         store=PreparedStore(None)
@@ -661,6 +662,20 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
         with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_capacity_exceeded'):
             PreparedStore(None).stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,
               [{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}','title':str(i),'date_observations':[]} for i in range(101)])
+        hashes=[hashlib.sha256(str(i).encode()).hexdigest() for i in range(50)]
+        legacy=PreparedStore({'page':self.listing,'offset':0,'fingerprint':'b'*64,'processed_url_hashes':hashes})
+        legacy.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
+        self.assertEqual(legacy.cursor['processed_url_hashes'],hashes)
+        self.assertLessEqual(len(json.dumps(legacy.cursor,ensure_ascii=False).encode()),4000)
+
+        almost_full={'page':self.listing,'offset':0,'fingerprint':'c'*64,'padding':''}
+        almost_full['padding']='x'*(3950-len(json.dumps(almost_full,ensure_ascii=False).encode()))
+        self.assertLessEqual(len(json.dumps(almost_full,ensure_ascii=False).encode()),4000)
+        bounded=PreparedStore(almost_full)
+        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_cursor_capacity_exceeded'):
+            bounded.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
+        self.assertEqual(bounded.cursor,almost_full)
+        self.assertIsNone(bounded.listing_snapshot)
 
 
 

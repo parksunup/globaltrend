@@ -68,13 +68,17 @@ class PreparedStore:
             normalized.append(normalized_row)
         if len(json.dumps(normalized,ensure_ascii=False).encode('utf-8'))>400000:
             raise FetchError('ftc_listing_snapshot_payload_too_large')
-        self.listing_snapshot={
+        snapshot={
             'id':str(uuid.uuid4()),'listing_url':listing_url,'fingerprint':fingerprint,
             'rows':normalized,
             'url_hashes':sorted(hashlib.sha256(row['url'].encode()).hexdigest() for row in normalized),
         }
-        self.cursor={**(self.cursor or {}),'page':listing_url,'offset':0,'fingerprint':fingerprint,
-                     'snapshot_id':self.listing_snapshot['id']}
+        cursor={**(self.cursor or {}),'page':listing_url,'offset':0,'fingerprint':fingerprint,
+                'snapshot_id':snapshot['id']}
+        if len(json.dumps(cursor,ensure_ascii=False).encode('utf-8'))>4000:
+            raise FetchError('ftc_listing_snapshot_cursor_capacity_exceeded')
+        self.listing_snapshot=snapshot
+        self.cursor=cursor
 
     def set_snapshot_ordinal(self, ordinal):
         if self.listing_snapshot:
