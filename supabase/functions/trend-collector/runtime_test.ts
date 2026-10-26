@@ -347,7 +347,7 @@ Deno.test("CNIL excludes old cards without detail reads and preserves pagination
   eq(backlog.result.status, "failed");
   eq(backlog.state.offset, 0);
 });
-Deno.test("CNIL legacy rows refresh current page preserving unresolved counters", async () => {
+Deno.test("CNIL legacy rows refresh current page preserving unresolved dates", async () => {
   const state: State = {
     since: "2026-09-21",
     until: "2026-10-23",
@@ -368,7 +368,7 @@ Deno.test("CNIL legacy rows refresh current page preserving unresolved counters"
   }, async () => ({}));
   eq(step.result.stage, "listing");
   eq(step.state.rows?.[0].date_observations?.[0].value, "27 mars 2024");
-  eq(step.state.failures, 1);
+  eq(step.state.failures, 0);
   eq(step.state.unknown_dates, 2);
 });
 Deno.test("CNIL batches only consecutive old cards and leaves ambiguous or newer rows pending", async () => {
@@ -480,7 +480,7 @@ Deno.test("exhausted Edge scans restart discovery with extended range and unreso
     eq(resumed.state.since, state.since);
     eq(resumed.state.until, "2026-10-24");
     eq(resumed.state.unknown_dates, 2);
-    eq(resumed.state.failures, 1);
+    eq(resumed.state.failures, 0);
     eq(resumed.result.coverage_complete, false);
   }
 });
@@ -544,4 +544,47 @@ Deno.test("PDPC PDF requires an official asset and nonempty listing title", asyn
     eq(step.result.reason, reason);
     eq(step.state.offset, 0);
   }
+});
+
+Deno.test("valid CNIL listing retry resets consecutive failures and preserves range and page", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-26",
+    adapter_version: "edge-cnil-v3",
+    page: cnilConfig.listing + "?page=16",
+    offset: 0,
+    failures: 2,
+    unknown_dates: 3,
+  };
+  const step = await advance(cnilConfig, state, {
+    request: async (url) => {
+      eq(url, state.page);
+      return {
+        bytes: new TextEncoder().encode('<main><div class="list-inner"><h3 class="ctn-gen-liste-titre"><a href="/fr/retry">Retry</a></h3><div class="attributes"><p class="date">20 octobre 2026</p></div></div><a rel="next" href="?page=17">Next</a></main>'),
+        url,
+        type: "text/html",
+      };
+    },
+  }, async () => { throw new Error("unexpected ingest"); });
+  eq(step.result.stage, "listing");
+  eq(step.state.failures, 0);
+  eq(step.state.since, state.since);
+  eq(step.state.until, state.until);
+  eq(step.state.page, state.page);
+  eq(step.state.next, cnilConfig.listing + "?page=17");
+  eq(step.state.offset, 0);
+  eq(step.state.unknown_dates, 3);
+  eq(step.result.coverage_complete, false);
+  eq(state.failures, 2);
+});
+
+Deno.test("invalid CNIL listing response retains consecutive failure history", async () => {
+  const state: State = { since: "2026-09-21", until: "2026-10-26", adapter_version: "edge-cnil-v3", page: cnilConfig.listing, failures: 2 };
+  const step = await advance(cnilConfig, state, { request: async (url) => ({ bytes: new TextEncoder().encode('<main>Changed template</main>'), url, type: "text/html" }) }, async () => ({}));
+  eq(step.result.status, "failed");
+  eq(step.result.reason, "listing_empty_or_structure_changed");
+  eq(step.state.failures, 3);
+  eq(step.state.since, state.since);
+  eq(step.state.until, state.until);
+  eq(step.state.page, state.page);
 });

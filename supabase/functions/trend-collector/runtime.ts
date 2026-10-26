@@ -335,6 +335,7 @@ export async function advance(
         throw new Error("listing_cycle");
       }
       state.seen_pages = [...(state.seen_pages || []), fingerprint].slice(-50);
+      state.failures = 0;
       state.rows = found.rows;
       state.next = found.next;
       state.offset = 0;
