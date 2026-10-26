@@ -78,4 +78,19 @@ begin
  if result->>'retry_after_seconds'<>'3600' or (select resolved from public.collector_edge_backlog where id=backlog) then raise exception 'failed backlog lost'; end if;
  if (select cursor->>'offset' from public.collector_cloud_routes where source_id=sid)<>'1' then raise exception 'backlog overwrote main cursor'; end if;
 end $$;
+do $$
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb;
+begin
+ select source_id into sid from public.collector_edge_sources where slug='ftc';
+ update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null,msg_id=null,read_ct=null where source_id=sid;
+ -- Hide earlier rollback fixtures so the newly queued regular route is selected.
+ update pgmq.q_trend_collect set vt=clock_timestamp()+interval '2 days' where (message->>'source_id')::uuid=sid;
+ perform pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','daily-window-validation'));
+ claim=public.collector_cloud_take('daily-window-worker','ftc');
+ if claim is null or claim ? 'backlog_id' then raise exception 'expected a regular cloud route claim'; end if;
+ bundle=jsonb_build_object('cursor',null,'operations','[]'::jsonb,
+  'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','success'));
+ result=public.collector_cloud_commit(sid,'daily-window-worker',(claim->>'lease_token')::uuid,bundle,'daily-window-rollback-test');
+ if result->>'retry_after_seconds'<>'72000' then raise exception 'daily queue recheck delay is not 20 hours'; end if;
+end $$;
 select 'cloud connector rollback checks passed' as result;
