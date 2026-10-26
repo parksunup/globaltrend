@@ -76,6 +76,21 @@ Deno.test("ICO scope checks use only the explicit DC publication date", () => {
   });
   eq(icoPublishedDate('<title>News 16 February 2026</title>'), null);
 });
+Deno.test("ICO extraction uses explicit Dublin Core publication date", async () => {
+  const x = await extract(
+    "ico",
+    '<html><head><meta name="DC.Date" content="Monday, October 12, 2026"></head><body><h1>Privacy enforcement notice</h1><main><div class="rich-text"><div class="prose"><p>A sufficiently long official article body.</p></div></div></main></body></html>',
+    "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/10/example/",
+  );
+  eq(x.published_date, "2026-10-12");
+  eq(x.metadata.date_observations[0], {
+    meaning: "official_published_attribute",
+    locator: 'meta[name="DC.Date"]@content',
+    value: "Monday, October 12, 2026",
+  });
+  eq(x.metadata.ai_ready, true);
+});
+
 Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
   const x = await extract(
     "edpb",
