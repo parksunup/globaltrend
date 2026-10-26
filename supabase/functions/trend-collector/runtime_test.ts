@@ -232,6 +232,52 @@ Deno.test("ICO restarts an unfiltered cursor in its period and validates full pa
   }
 });
 
+Deno.test("ICO exhausted full rescan recomputes unknown-date count but keeps coverage incomplete", async () => {
+  const c = { ...config, source: "ico", listing: "https://ico.org.uk/news/", hosts: ["ico.org.uk"] };
+  const state: State = {
+    since: "2026-09-21", until: "2026-10-23", adapter_version: "edge-v2",
+    page: c.listing, exhausted: true, unknown_dates: 10,
+  };
+  const step = await advance(c, state, { request: async (url, method) => {
+    if (method === "POST") return {
+      bytes: new TextEncoder().encode(JSON.stringify({
+        results: Array.from({ length: 25 }, (_, i) => ({ url: "/news/" + i, title: "A" })),
+        pagination: { showingPageNumber: 1, totalPages: 1, hasMore: false, perPage: 25, totalResults: 25 },
+      })),
+      url, type: "application/json",
+    };
+    return {
+      bytes: new TextEncoder().encode('<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>'),
+      url, type: "text/html",
+    };
+  } }, async () => { throw new Error("unexpected ingest"); });
+  eq(step.result.stage, "listing");
+  eq(step.state.unknown_dates, 0);
+  eq(step.state.exhausted, false);
+  eq(step.result.coverage_complete, false);
+  eq(step.state.since, "2026-09-21");
+  eq(step.state.until, "2026-10-23");
+});
+
+Deno.test("ICO exact backlog retry preserves unknown count, cursor, and saved range", async () => {
+  const c = { ...config, source: "ico", listing: "https://ico.org.uk/news/", hosts: ["ico.org.uk"] };
+  const state: State = {
+    since: "2026-09-21", until: "2026-10-23", adapter_version: "edge-v2",
+    is_backlog: true, exhausted: true, page: c.listing + "?page=3",
+    rows: [{ url: "https://ico.org.uk/news/old", title: "Old item" }], offset: 0,
+    unknown_dates: 10, failures: 2,
+  };
+  const step = await advance(c, state, {
+    request: () => Promise.reject(new Error("http_503")),
+  }, async () => { throw new Error("unexpected ingest"); });
+  eq(step.state.unknown_dates, 10);
+  eq(step.state.offset, 0);
+  eq(step.state.since, "2026-09-21");
+  eq(step.state.until, "2026-10-23");
+  eq(step.state.failures, 3);
+  eq(step.result.coverage_complete, false);
+});
+
 Deno.test("ICO keeps a scoped detail cursor and unresolved counters when resuming", async () => {
   const c = { ...config, source: "ico", listing: "https://ico.org.uk/news/", hosts: ["ico.org.uk"] };
   const state: State = { since: "2026-09-21", until: "2026-10-23", adapter_version: "edge-v2",
