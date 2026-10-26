@@ -103,9 +103,15 @@ begin
  claim=public.collector_cloud_take('completed-feed-worker','ftc');
  if claim is null then raise exception 'expected a completed feed claim'; end if;
  bundle=jsonb_build_object('cursor',jsonb_build_object(
-   'page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml','offset',0),
+   'page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml','offset',0,
+   'processed_url_hashes',jsonb_build_array(repeat('a',64))),
   'operations','[]'::jsonb,
   'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','partial','listing_scan_complete',true));
+ begin
+  perform public.collector_cloud_commit(sid,'completed-feed-worker',(claim->>'lease_token')::uuid,
+   jsonb_set(bundle,'{cursor,processed_url_hashes}',jsonb_build_array('not-a-sha256-hash')),'malformed-hash-test');
+  raise exception 'malformed persisted FTC hash accepted';
+ exception when others then if sqlerrm='malformed persisted FTC hash accepted' then raise; end if; end;
  result=public.collector_cloud_commit(sid,'completed-feed-worker',(claim->>'lease_token')::uuid,bundle,'completed-feed-rollback-test');
  if result->>'retry_after_seconds'<>'72000' then raise exception 'completed feed did not enter daily recheck window'; end if;
 end $$;
