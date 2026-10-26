@@ -3,6 +3,30 @@
 -- daily producer could repeatedly start before its queue item became visible.
 -- Keep failure retry (1 hour), in-pass continuation (immediate), backlog, lease,
 -- approval, capacity, and coverage behavior unchanged.
+create or replace function private.collector_cloud_cursor_valid(c jsonb,slug text) returns boolean
+language plpgsql immutable set search_path=pg_catalog as $$
+declare field text;
+begin
+ if c='null'::jsonb then return true; end if;
+ if c is null or jsonb_typeof(c)<>'object' or octet_length(c::text)>4000
+  or jsonb_typeof(c->'page') is distinct from 'string'
+  or (c->>'page') !~ (case when slug='ftc' then '^https://www[.]ftc[.]gov/' else '^https://www[.]oecd[.]org/' end)
+  or jsonb_typeof(c->'offset') is distinct from 'number' or (c->>'offset') !~ '^[0-9]{1,6}$' then return false; end if;
+ foreach field in array array['failures','unknown_dates','excluded_unapproved_host_count'] loop
+  if c ? field and (jsonb_typeof(c->field) is distinct from 'number' or (c->>field) !~ '^[0-9]{1,9}$') then return false; end if;
+ end loop;
+ if c ? 'had_pagination' and jsonb_typeof(c->'had_pagination') is distinct from 'boolean' then return false; end if;
+ if c ? 'fingerprint' and (c->>'fingerprint') !~ '^[0-9a-f]{64}$' then return false; end if;
+ if c ? 'processed_url_hashes' then
+  if jsonb_typeof(c->'processed_url_hashes') is distinct from 'array' then return false; end if;
+  if jsonb_array_length(c->'processed_url_hashes')>50 then return false; end if;
+  if exists(select 1 from jsonb_array_elements(c->'processed_url_hashes') h(value)
+   where jsonb_typeof(value) is distinct from 'string' or value#>>'{}' !~ '^[0-9a-f]{64}$') then return false; end if;
+ end if;
+ return true;
+end; $$;
+revoke all on function private.collector_cloud_cursor_valid(jsonb,text) from public,anon,authenticated;
+
 create or replace function public.collector_cloud_commit(
  p_source_id uuid,p_worker text,p_lease_token uuid,p_bundle jsonb,p_execution_id text
 )
