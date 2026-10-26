@@ -450,6 +450,18 @@ export async function extract(
     ]
     : [];
   if (row?.date_observations) observations.push(...row.date_observations);
+  if (source === "ico") {
+    // Use the same explicit Dublin Core publication date for in-range items
+    // that the range guard already uses for out-of-range backlog items.
+    const published = icoPublishedDate(html);
+    if (published) {
+      observations.push({
+        meaning: "official_published_attribute",
+        locator: 'meta[name="DC.Date"]@content',
+        value: published.value,
+      });
+    }
+  }
   if (source === "ppc") {
     // The dedicated notice header excludes enactment/revision dates in prose.
     for (const dateline of document.querySelectorAll("main.l-main .l-article > .date-box")) {
