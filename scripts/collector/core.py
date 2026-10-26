@@ -137,7 +137,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
     # A mutable feed's titles/order can change between one-document commits.
-    # Keep processed URL identities until this listing scan is exhausted.
+    # FTC keeps URL identities across claims and completed daily scans; titles
+    # and row order are not stable enough to serve as a resume key.
     processed_keys=set((cursor or {}).get('processed_url_hashes',[])) if config['source']=='ftc' else set()
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
@@ -198,10 +199,12 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         raise FetchError('ftc_resume_cursor_capacity_exceeded')
                 seen_items.add(url); result['discovered']+=1
                 try:
-                    listing_date=parsers.cnil_listing_date(row) if config['source']=='cnil' else None
+                    listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
+                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else None)
                     if listing_date and not since<=listing_date<=until:
-                        # Exclude this card only: the exposed sort key is article
-                        # type, so even a fully old page cannot end the scan.
+                        # An individually dated CNIL/FTC row can be excluded
+                        # without reading its body. This says nothing about
+                        # archive ordering or complete period coverage.
                         result['out_of_range']+=1
                         result['listing_date_excluded']=result.get('listing_date_excluded',0)+1
                         result['range_filter_read_scope']='listing_date_only'
@@ -242,12 +245,31 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                             **({'processed_url_hashes':sorted(processed_keys)} if config['source']=='ftc' else {})})
+            completed_page=page
             page=next_page
             cursor=None
-            processed_keys.clear()
+            if config['source']=='ftc' and page is None:
+                # The FTC RSS is a bounded, single-page feed. Keep the exact
+                # URL hashes in its latest complete snapshot so tomorrow's
+                # scan does not fetch the same details again. Replace old
+                # hashes only after completing the whole feed; never truncate
+                # a growing in-progress set to fit PostgreSQL's 4 KB limit.
+                processed_keys={hashlib.sha256(url.encode()).hexdigest() for url in listing_urls}
+                completed_cursor={'page':completed_page,'offset':0,'fingerprint':fingerprint,
+                    'had_pagination':had_pagination,'failures':prior_failures+result['failed'],
+                    'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    'processed_url_hashes':sorted(processed_keys)}
+                if len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000:
+                    raise FetchError('ftc_resume_cursor_capacity_exceeded')
+            else:
+                if config['source']!='ftc': processed_keys.clear()
+                completed_cursor={'page':page,'offset':0,'had_pagination':had_pagination,
+                    'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                    **({'processed_url_hashes':sorted(processed_keys)} if config['source']=='ftc' else {})} if page else None
             if hasattr(store,'progress'):
-                store.progress(config,since,until,{'page':page,'offset':0,'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
-                    'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']} if page else None)
+                store.progress(config,since,until,completed_cursor)
         # Reaching a last page establishes only this listing scan. Pagination
         # alone does not prove that the source covers every item in the period,
         # including related releases, hidden pages and unread attachments.
