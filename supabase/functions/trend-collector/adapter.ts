@@ -396,6 +396,7 @@ export async function extract(
       x.textContent?.trim() === "Date"
     )?.nextElementSibling || null;
   }
+  let ppcOpeningDateline = false;
   let nodes = bs.flatMap((x) => [...document.querySelectorAll(x)]);
   let scope = "news_html";
   if (source === "pdpc") {
@@ -501,6 +502,25 @@ export async function extract(
         value: normalize(dateline.textContent || ""),
       });
     }
+    // Some PPC notices place the publication date at the very start of the
+    // main content, immediately followed by the Commission name, instead of
+    // using .date-box. Keep this strict opening pattern so later dates in the
+    // body (for example enactment or revision dates) cannot become publish dates.
+    const main = document.querySelector("main.l-main");
+    const opening = main
+      ? normalize(textNodes(main as unknown as Node).join(" "))
+      : "";
+    const openingDate = opening.match(
+      /^((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)\s*個人情報保護委員会(?:\s|$)/,
+    );
+    if (openingDate) {
+      ppcOpeningDateline = true;
+      observations.push({
+        meaning: "published_opening_dateline",
+        locator: "main.l-main opening date",
+        value: openingDate[1],
+      });
+    }
     const match = document.title.match(
       /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
     );
@@ -528,7 +548,8 @@ export async function extract(
   const date = dates.length === 1 ? dates[0] : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
     source === "ppc" &&
-      related.some((x) => new URL(x.url).pathname.endsWith(".pdf"));
+      (related.some((x) => new URL(x.url).pathname.endsWith(".pdf")) ||
+        ppcOpeningDateline);
   return {
     title_original: normalize(title.textContent || ""),
     content_text: body,

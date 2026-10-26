@@ -71,6 +71,34 @@ class CollectorTests(unittest.TestCase):
         self.assertTrue(store.item['metadata']['requires_review'])
         self.assertFalse(store.item['metadata']['ai_ready'])
 
+    def test_ppc_opening_datelines_set_publication_date_and_ai_ready_on_recollection(self):
+        listing='https://www.ppc.go.jp/news/press/'
+        articles=[
+            ('https://www.ppc.go.jp/news/press/2026/260601', 'Poster contest',
+             '<title>Poster contest</title><h1 class="page-ttl">Poster contest</h1><main class="l-main"><div class="l-article"><p>令和８年6月１日</p><p>個人情報保護委員会</p><p>報道発表資料を掲載します。</p></div></main>', '2026-06-01'),
+            ('https://www.ppc.go.jp/news/press/2026/26%20622', 'Privacy awareness week',
+             '<title>Privacy awareness week</title><h1 class="page-ttl">Privacy awareness week</h1><main class="l-main"><div class="l-article"><p>令和８年６月22日</p><p>個人情報保護委員会</p><p>６月22日に報道発表を行いました。</p><a href="/news/privacy_awareness_week/">週間の案内</a></div></main>', '2026-06-22'),
+        ]
+        for url,title,article,published in articles:
+            listing_html=f'<main><ul class="news-list"><li><div class="news-text"><a href="{url}">{title}</a></div></li></ul></main>'
+            class Client:
+                def get(self, requested):
+                    return (listing_html.encode(),listing,'text/html') if requested==listing else (article.encode(),url,'text/html')
+            class Store:
+                def resume(self,*args): return None
+                def ingest(self,cfg,canonical,item): self.item=item; return {'item_created':True,'content_changed':False}
+            config={'source':'ppc','enabled':True,'listing':listing,'hosts':['www.ppc.go.jp'],
+                    'permissions':{'collect':True,'store':True,'ai':True}}
+            store=Store()
+            self.core.collect(config,Client(),store,'2026-06-01','2026-06-30')
+            self.assertEqual(store.item['published_date'],published)
+            self.assertFalse(store.item['metadata']['ai_ready'])
+            self.assertTrue(store.item['metadata']['requires_review'])
+            out_of_range_store=Store()
+            result=self.core.collect(config,Client(),out_of_range_store,'2026-10-16','2026-10-26')
+            self.assertEqual(result['out_of_range'],1)
+            self.assertFalse(hasattr(out_of_range_store,'item'))
+
     def test_empty_dynamic_and_bad_pdf_are_failures(self):
         with self.assertRaises(ValueError): self.parsers.extract('pdpc','<h1>A</h1><main></main>','https://www.pdpc.gov.sg/a')
         with self.assertRaises(ValueError): self.parsers.extract_pdf(b'bad pdf','https://curia.europa.eu/a.pdf')

@@ -186,6 +186,18 @@ Deno.test("PPC official notice dateline excludes body dates and keeps PDFs unrea
   eq(x.metadata.related_documents[0].read, false);
   eq(x.metadata.date_observations[0].meaning, "published_notice_dateline");
 });
+Deno.test("PPC poster contest opening dateline is a publication date", async () => {
+  const x = await extract("ppc", '<title>「個人情報に関するポスターコンクール」を開催します</title><h1 class="page-ttl">「個人情報に関するポスターコンクール」を開催します</h1><main class="l-main"><div class="l-article"><p>令和８年6月１日</p><p>個人情報保護委員会</p><p>「個人情報に関するポスターコンクール」を開催します。報道発表資料を掲載します。</p></div></main>', "https://www.ppc.go.jp/news/press/2026/260601");
+  eq(x.published_date, "2026-06-01");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
+});
+Deno.test("PPC privacy awareness week opening dateline is a publication date", async () => {
+  const x = await extract("ppc", '<title>令和８年度「個人情報を考える週間」について</title><h1 class="page-ttl">令和８年度「個人情報を考える週間」について</h1><main class="l-main"><div class="l-article"><p>令和８年６月22日</p><p>個人情報保護委員会</p><p>令和８年度「個人情報を考える週間」について。６月22日に報道発表を行いました。</p><a href="/news/privacy_awareness_week/">週間の案内</a></div></main>', "https://www.ppc.go.jp/news/press/2026/26%20622");
+  eq(x.published_date, "2026-06-22");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
+});
 Deno.test("PPC conflicting publication title and notice dateline remain unknown", async () => {
   const x = await extract("ppc", '<html><head><title>公表（令和８年７月18日）</title></head><body><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main></body></html>', "https://www.ppc.go.jp/news/press/a/");
   eq(x.published_date, null);

@@ -169,6 +169,19 @@ def extract(source, html, url):
     if source=='ppc':
         # Do not select the first era date: notices can include enactment/update dates.
         observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日',body)]
+        # Some PPC press releases put the publication dateline at the very
+        # start of main.l-main followed by the Commission name, instead of in
+        # the newer .date-box header. Only accept that strict opening pattern;
+        # later era dates may be enactment, revision or campaign dates.
+        main=soup.select_one('main.l-main')
+        opening=normalize(main.get_text(' ',strip=True)) if main else ''
+        opening_date=re.match(
+            r'^((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)\s*個人情報保護委員会(?:\s|$)',
+            opening,
+        )
+        if opening_date:
+            observations.append({'meaning':'published_opening_dateline',
+                'locator':'main.l-main opening date','value':opening_date[1]})
         page_title=normalize(soup.title.get_text()) if soup.title else ''
         publication=re.search(r'公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]',page_title)
         if publication:
@@ -185,7 +198,10 @@ def extract(source, html, url):
     distinct=set(d for d in dates if d)
     published=next(iter(distinct)) if len(distinct)==1 else None
     unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
-    requires_review=published is None or unread_ppc_pdf or scope in ('official_overview','press_release_html_not_report')
+    # The opening-dateline template is new to the collector. Resolve the
+    # publication date, but keep these announcements behind human review until
+    # the editorial/read-scope gate is independently satisfied.
+    requires_review=published is None or unread_ppc_pdf or scope in ('official_overview','press_release_html_not_report') or (source=='ppc' and opening_date is not None)
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'oecd-press-release-v1' if oecd_release else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
               'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
