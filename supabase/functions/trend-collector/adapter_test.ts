@@ -1,4 +1,4 @@
-import { canonical, discover, extract, parseDate } from "./adapter.ts";
+import { canonical, discover, extract, icoPublishedDate, parseDate } from "./adapter.ts";
 const eq = (a: unknown, b: unknown) => {
   if (JSON.stringify(a) !== JSON.stringify(b)) {
     throw new Error(`${JSON.stringify(a)} != ${JSON.stringify(b)}`);
@@ -68,6 +68,13 @@ Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
 });
 Deno.test("historical fullwidth Japanese dates preserve the original date meaning", () => {
   eq(parseDate("令和８年７月17日"), "2026-07-17");
+});
+Deno.test("ICO scope checks use only the explicit DC publication date", () => {
+  eq(icoPublishedDate('<meta name="DC.Date" content="Monday, February 16, 2026">'), {
+    date: "2026-02-16",
+    value: "Monday, February 16, 2026",
+  });
+  eq(icoPublishedDate('<title>News 16 February 2026</title>'), null);
 });
 Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
   const x = await extract(

@@ -4,6 +4,7 @@ import {
   cnilListingDate,
   discover,
   extract,
+  icoPublishedDate,
   normalize,
   parseDate,
   type Row,
@@ -383,12 +384,27 @@ export async function advance(
         if (!["text/html", "application/xhtml+xml"].includes(response.type)) {
           throw new Error("unsupported_document_type");
         }
-        item = await extract(
-          c.source,
-          new TextDecoder().decode(response.bytes),
-          response.url,
-          row,
-        );
+        const html = new TextDecoder().decode(response.bytes);
+        const icoDate = c.source === "ico" ? icoPublishedDate(html) : null;
+        if (icoDate && (icoDate.date < state.since || icoDate.date > state.until)) {
+          result.stage = "detail_scope_check";
+          result.saved = "out_of_range";
+          result.published_date = icoDate.date;
+          result.date_evidence = {
+            meaning: "official_published_attribute",
+            locator: 'meta[name="DC.Date"]@content',
+            value: icoDate.value,
+          };
+          state.failures = 0;
+          if (state.is_backlog) {
+            result.reason = "backlog_out_of_range";
+            result.backlog_resolved = true;
+            return { state, result, continue: false, delay: 0 };
+          }
+          state.offset = (state.offset || 0) + 1;
+          return { state, result, continue: true, delay: 0 };
+        }
+        item = await extract(c.source, html, response.url, row);
       }
       if (
         item.published_date &&

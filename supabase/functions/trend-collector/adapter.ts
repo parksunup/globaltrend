@@ -88,6 +88,15 @@ export function parseDate(value: string): string | null {
   ) return null;
   return out;
 }
+/** Read only ICO's explicit Dublin Core publication date; never infer from URL/title. */
+export function icoPublishedDate(html: string): { date: string; value: string } | null {
+  const { document } = parseHTML(html);
+  const value = normalize(
+    document.querySelector('meta[name="DC.Date"]')?.getAttribute("content") || "",
+  );
+  const date = value ? parseDate(value) : null;
+  return date ? { date, value } : null;
+}
 export const sha = async (s: string) =>
   [
     ...new Uint8Array(
