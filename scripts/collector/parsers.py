@@ -473,7 +473,17 @@ def cnil_listing_date(row):
     if len(observations)!=1: return None
     observation=observations[0]
     if observation.get('meaning')!='listing_published_display' or observation.get('locator')!='listing .list-inner .attributes p.date': return None
-    return parse_date(observation.get('value',''))
+    value=observation.get('value')
+    if not isinstance(value,str): return None
+    value=normalize(value).lower()
+    # This field is allowed to exclude a card without reading its detail page,
+    # so accept only the exact French date display observed on CNIL cards.
+    # Generic parse_date intentionally finds dates inside prose for other
+    # sources; using it directly here could mistake an update date or label for
+    # the publication date and silently skip an in-range item.
+    if not re.fullmatch(r'\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}',value):
+        return None
+    return parse_date(value)
 
 def ftc_listing_date(row):
     """Return one timezone-qualified RSS pubDate as a Korea calendar date."""
