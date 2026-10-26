@@ -73,8 +73,10 @@ begin
   else raise exception 'backlog outcome required'; end if;
   update public.collector_edge_backlog set resolved=delay_seconds=-1,state=state||jsonb_build_object('cloud_last_result',result),updated_at=clock_timestamp() where id=b.id;
  else
-  -- 20 hours leaves a four-hour margin before the next daily producer run.
-  delay_seconds=case when result->>'status'='failed' then 3600 when next_cursor is null then 72000 else 0 end;
+  -- Recheck a completed listing within the next daily window, even when its
+  -- cursor carries a bounded persisted seen-URL set (FTC). In-pass steps stay immediate.
+  delay_seconds=case when result->>'status'='failed' then 3600
+   when next_cursor is null or result->>'listing_scan_complete'='true' then 72000 else 0 end;
   update public.collector_cloud_routes set cursor=next_cursor where source_id=p_source_id;
   perform public.collector_set_progress(p_source_id,r.range_start,r.range_end,next_cursor,false);
  end if;
