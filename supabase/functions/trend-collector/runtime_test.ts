@@ -94,6 +94,54 @@ Deno.test("third non-database detail failure parks a durable retry and lets the 
   eq(step.state.parked?.rows?.[0].url, state.rows![0].url);
   eq(step.result.status, "failed");
 });
+
+Deno.test("PDPC campaign landing with only a video card is skipped, not retried as a failed article", async () => {
+  const pdpc = {
+    source: "pdpc",
+    source_id: "pdpc-source",
+    listing: "https://www.pdpc.gov.sg/media-events",
+    hosts: ["www.pdpc.gov.sg"],
+    language: "en",
+  };
+  const url =
+    "https://www.pdpc.gov.sg/media-events/privacy-awareness-week-2026";
+  const html =
+    '<header class="page-banner"><div class="page-banner__category"><span>Events</span></div>' +
+    '<h1>Privacy Awareness Week 2026</h1></header>' +
+    '<main class="col-lg-9"><article class="layout layout--standard">' +
+    '<div class="rte"></div><article class="article-card-cta"><div class="article-card-cta__body">' +
+    '<h3>Learn what happens when we overshare our personal data with AI</h3>' +
+    '<a href="https://www.instagram.com/reel/example/">Watch here</a></div></article>' +
+    '<div class="rte"></div><div class="image-gallery"><button>Next slide</button></div>' +
+    '</article></main>';
+  const state: State = {
+    since: "2026-10-16",
+    until: "2026-10-26",
+    page: pdpc.listing,
+    rows: [{ url, title: "Privacy Awareness Week 2026" }],
+    offset: 0,
+    is_backlog: true,
+  };
+  let ingested = false;
+  const step = await advance(pdpc, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode(html),
+      url,
+      type: "text/html",
+    }),
+  }, async () => {
+    ingested = true;
+    return {};
+  });
+  eq(ingested, false);
+  eq(step.state.offset, 1);
+  eq(step.state.failures, 0);
+  eq(step.result.reason, "pdpc_promotional_landing_without_article");
+  eq(step.result.saved, "non_article");
+  eq(step.result.backlog_resolved, true);
+  eq(step.result.coverage_complete, false);
+  eq(step.continue, false);
+});
 Deno.test("adapter changes restart discovery in the original range and retain legacy cursor", async () => {
   const state: State = {
     since: "2026-09-21",

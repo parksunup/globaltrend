@@ -457,6 +457,28 @@ export async function advance(
     return { state, result, continue: true, delay: 0 };
   } catch (e) {
     const reason = e instanceof Error ? e.message : "unknown_failure";
+    if (
+      c.source === "pdpc" &&
+      reason === "pdpc_promotional_landing_without_article"
+    ) {
+      // An empty PDPC article shell containing only a promotional video card
+      // is a non-report landing page, not a transient fetch failure. Preserve
+      // the source range and cursor while recording the skip; resolve only
+      // this exact backlog item when running its targeted retry.
+      state.offset = (state.offset || 0) + 1;
+      state.failures = 0;
+      result.status = "partial";
+      result.stage = "detail_scope_check";
+      result.reason = "pdpc_promotional_landing_without_article";
+      result.saved = "non_article";
+      result.read_scope = "official_html_promo_card_only";
+      result.coverage_complete = false;
+      if (state.is_backlog) {
+        result.backlog_resolved = true;
+        return { state, result, continue: false, delay: 0 };
+      }
+      return { state, result, continue: true, delay: 0 };
+    }
     // A database write may have succeeded before its response was lost: retry same
     // position, relying on ingest's URL/hash uniqueness. Never advance on failure.
     state.failures = (state.failures || 0) + 1;
