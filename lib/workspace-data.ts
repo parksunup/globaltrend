@@ -11,7 +11,7 @@ export async function workspaceSession() {
  const db=await createClient();const {data:{user}}=await db.auth.getUser();
  const {data:member}=user?await db.from('team_memberships').select('role,is_active').eq('user_id',user.id).maybeSingle():{data:null};
  const role=member?.is_active?String(member.role):null;
- return {db,user,role,canEdit:role==='admin'||role==='editor',canPublish:role==='admin'};
+ return {db,user,role,canEdit:role==='admin'||role==='editor',canPublish:role==='admin'||role==='editor'};
 }
 export function reportPayload(row:Record<string,unknown>) {
  return {title_ko:row.title_ko??'',one_line_summary_ko:row.one_line_summary_ko??'',detailed_summary_ko:row.detailed_summary_ko??'',jurisdictions:row.jurisdictions??[],topics:row.topics??[]};

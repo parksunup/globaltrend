@@ -14,13 +14,13 @@ const statusLabels: Record<string, string> = {
 
 const isHistoricalSummary = (item: SubmissionItem) => item.status === "published" && /사람\s*검수\s*(?:전|미착수)|검수\s*미착수|검수\s*전\s*초안/.test(item.summary);
 
-export default function SubmissionPreview({ items, documents, branch, commitSha }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string }) {
+export default function SubmissionPreview({ items, documents, branch, commitSha, initialDocument = false }: { items: SubmissionItem[]; documents: SubmissionDocuments; branch?: string; commitSha?: string; initialDocument?: boolean }) {
   const hasDocument = documents.legal.length > 0;
   const hasTrends = items.some((item) => item.group === "trends");
   const hasLegal = items.some((item) => item.group === "legal");
   const sourceCount = items.filter((item) => item.group === "trends" && item.kind === "수집 출처").length;
   const sampleCount = items.filter((item) => item.group === "trends" && item.kind === "동향 표본").length;
-  const [showDocument, setShowDocument] = useState(false);
+  const [showDocument, setShowDocument] = useState(initialDocument);
   const [group, setGroup] = useState<"all" | "legal" | "trends">(hasTrends ? "trends" : "all");
   const [trendKind, setTrendKind] = useState<"source" | "sample">(sampleCount ? "sample" : "source");
   const [query, setQuery] = useState("");
