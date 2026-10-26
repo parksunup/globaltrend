@@ -199,7 +199,7 @@ begin
    where id=snap_id and source_id=p_source_id and status='active' for update;
   if slug<>'ftc' or r.cursor->>'snapshot_id' is distinct from snap_id::text
    or row_i<>(r.cursor->>'offset')::integer or row_i<0 or row_i>=active_scan.row_count
-   or (next_cursor->>'offset')::integer<>case when row_i+1=active_scan.row_count then 0 else row_i+1 end then
+   or (next_cursor->>'offset')::integer<>(case when row_i+1=active_scan.row_count then 0 else row_i+1 end) then
    raise exception 'FTC snapshot cursor mismatch'; end if;
   if row_i+1<active_scan.row_count and next_cursor->>'snapshot_id' is distinct from snap_id::text then
    raise exception 'FTC snapshot cursor mismatch'; end if;
