@@ -27,6 +27,16 @@ begin
 end; $$;
 revoke all on function private.collector_cloud_cursor_valid(jsonb,text) from public,anon,authenticated;
 
+create or replace function private.collector_cloud_daily_recheck_at(p_now timestamptz) returns timestamptz
+language plpgsql stable set search_path=pg_catalog as $$
+declare recheck_at timestamptz;
+begin
+ recheck_at=(date_trunc('day',p_now at time zone 'Asia/Seoul')+interval '3 hours') at time zone 'Asia/Seoul';
+ if recheck_at<=p_now then recheck_at=recheck_at+interval '1 day'; end if;
+ return recheck_at;
+end; $$;
+revoke all on function private.collector_cloud_daily_recheck_at(timestamptz) from public,anon,authenticated;
+
 create or replace function public.collector_cloud_commit(
  p_source_id uuid,p_worker text,p_lease_token uuid,p_bundle jsonb,p_execution_id text
 )
@@ -104,8 +114,7 @@ begin
   if result->>'status'='failed' then delay_seconds=3600;
   elsif next_cursor is null or result->>'listing_scan_complete'='true' then
    committed_at=clock_timestamp();
-   recheck_at=(date_trunc('day',committed_at at time zone 'Asia/Seoul')+interval '3 hours') at time zone 'Asia/Seoul';
-   if recheck_at<=committed_at then recheck_at=recheck_at+interval '1 day'; end if;
+   recheck_at=private.collector_cloud_daily_recheck_at(committed_at);
    delay_seconds=greatest(1,ceil(extract(epoch from recheck_at-committed_at))::integer);
   else delay_seconds=0; end if;
   update public.collector_cloud_routes set cursor=next_cursor where source_id=p_source_id;
