@@ -54,14 +54,15 @@ async function listing(c: Config, http: HTTP, page: string) {
         Math.max(0, Math.min(10, data.totalItems - (n - 1) * 10))
     ) throw new Error("pdpc_listing_page_incomplete");
     const rows: Row[] = data.data.map(
-      (x: { href: string; title: string; date: string }) => {
+      (x: { href: string; title: string; date: string; topic: string }) => {
         if (
           typeof x.href !== "string" || typeof x.title !== "string" ||
-          typeof x.date !== "string"
+          typeof x.date !== "string" || typeof x.topic !== "string"
         ) throw new Error("pdpc_listing_schema_changed");
         return {
           url: new URL(x.href, page).href,
           title: normalize(x.title),
+          topic: normalize(x.topic),
           date_observations: [{
             meaning: "listing_published_display",
             locator: "listing card",
@@ -379,6 +380,35 @@ export async function advance(
       }
       const row = state.rows[state.offset || 0];
       const url = canonical(row.url, c.hosts);
+      const pdpcReportDate = c.source === "pdpc" && row.topic === "Reports" &&
+          row.date_observations?.length === 1 &&
+          row.date_observations[0].meaning === "listing_published_display" &&
+          row.date_observations[0].locator === "listing card"
+        ? parseDate(row.date_observations[0].value)
+        : null;
+      if (
+        pdpcReportDate &&
+        (pdpcReportDate < state.since || pdpcReportDate > state.until)
+      ) {
+        state.failures = 0;
+        result.stage = "listing_date_scope_check";
+        result.saved = "out_of_range";
+        result.read_scope = "official_listing_api_topic_and_date";
+        result.published_date = pdpcReportDate;
+        result.date_evidence = {
+          topic: row.topic,
+          meaning: "listing_published_display",
+          locator: "listing card",
+          value: row.date_observations![0].value,
+        };
+        if (state.is_backlog) {
+          result.reason = "backlog_out_of_range";
+          result.backlog_resolved = true;
+          return { state, result, continue: false, delay: 0 };
+        }
+        state.offset = (state.offset || 0) + 1;
+        return { state, result, continue: true, delay: 0 };
+      }
       const response = await http.request(url);
       let item: Item;
       if (c.source === "curia" && response.type === "application/pdf") {

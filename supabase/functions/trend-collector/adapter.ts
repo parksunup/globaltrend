@@ -2,6 +2,7 @@ import { DOMParser, parseHTML } from "npm:linkedom@0.18.12";
 export type Row = {
   url: string;
   title: string;
+  topic?: string;
   date_observations?: Observation[];
 };
 type Observation = { meaning: string; locator: string; value: string };
