@@ -1,6 +1,6 @@
 begin;
 set local search_path = public, extensions;
-select plan(10);
+select plan(14);
 
 select is(public.collector_draft_policy()->>'policy_version', 'trend-draft-unlimited-v2', 'unlimited policy is identified');
 select ok(public.collector_draft_policy()->'daily_claim_limit' = 'null'::jsonb, 'no daily claim limit is advertised');
@@ -22,6 +22,16 @@ select 'target', draft_job_id from public.ingest_source_item(
  'https://www.edpb.europa.eu/test-unlimited-target', 'Target item', null, null, now(), 'en', 'news',
  'The board published the targeted final guideline on personal data processing.', repeat('b', 64), null,
  '{"ai_ready":true}'::jsonb, 'trend-ko-v1');
+insert into target_jobs(kind, job)
+select 'already-reported', draft_job_id from public.ingest_source_item(
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'), null,
+ 'https://www.edpb.europa.eu/test-unlimited-already-reported', 'Already reported item', null, null, now(), 'en', 'news',
+ 'The board published another final guideline on personal data processing.', repeat('f', 64), null,
+ '{"ai_ready":true}'::jsonb, 'trend-ko-v1');
+insert into public.reports(source_item_id, title_ko)
+select j.source_item_id, '기존 검수 보고서'
+from public.draft_jobs j join target_jobs t on t.job = j.id
+where t.kind = 'already-reported';
 
 insert into public.collector_draft_daily_usage(day, claims)
 values ((now() at time zone 'Asia/Seoul')::date, 10)
@@ -32,8 +42,17 @@ select is((public.claim_trend_draft_jobs('target-worker', 1, (select job from ta
  (select job from target_jobs where kind = 'target'), 'targeted claim returns only the requested job');
 select is((select status from public.draft_jobs where id = (select job from target_jobs where kind = 'other')),
  'pending', 'targeted claim leaves a different job untouched');
+select is(jsonb_array_length(public.claim_trend_draft_jobs('reported-target-worker', 1,
+ (select job from target_jobs where kind = 'already-reported'))), 0,
+ 'targeted claim skips an item that already has a report');
+select is((select status from public.draft_jobs where id = (select job from target_jobs where kind = 'already-reported')),
+ 'pending', 'skipping an existing report does not alter the pending job');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('generic-worker', 1)), 1,
  'generic claim still works after ten claims today');
+select is((select status from public.draft_jobs where id = (select job from target_jobs where kind = 'already-reported')),
+ 'pending', 'generic claim does not take an item with an existing report');
+select is((select attempts from public.draft_jobs where id = (select job from target_jobs where kind = 'already-reported')),
+ 0, 'existing report does not consume a draft attempt');
 select is((select claims from public.collector_draft_daily_usage where day = (now() at time zone 'Asia/Seoul')::date),
  10, 'legacy daily usage stays unchanged');
 
