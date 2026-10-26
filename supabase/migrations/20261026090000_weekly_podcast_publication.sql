@@ -39,11 +39,11 @@ revoke all on public.weekly_issues from anon, authenticated;
 revoke all on public.weekly_issue_reports from anon, authenticated;
 revoke all on public.weekly_podcast_episodes from anon, authenticated;
 
-grant select(issue_key,title,description,week_start,week_end,published_at,created_at)
+grant select(issue_key,title,description,week_start,week_end,status,published_at,created_at)
   on public.weekly_issues to anon;
 grant select(issue_key,report_id,sort_order)
   on public.weekly_issue_reports to anon;
-grant select(issue_key,audio_path,audio_mime_type,file_size_bytes,published_at,created_at)
+grant select(issue_key,audio_path,audio_mime_type,file_size_bytes,status,published_at,created_at)
   on public.weekly_podcast_episodes to anon;
 grant select,insert,update,delete on public.weekly_issues to authenticated;
 grant select,insert,update,delete on public.weekly_issue_reports to authenticated;

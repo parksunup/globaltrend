@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
+    "/api/podcast/extension": ["./extensions/notebooklm-bridge/*"],
     "/": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/team": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/public": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
