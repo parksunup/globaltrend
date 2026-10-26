@@ -1,5 +1,16 @@
 -- Run after the new migration, inside an explicit BEGIN ... ROLLBACK.
 do $$
+begin
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 17:59:59+00')
+  is distinct from timestamptz '2026-10-25 18:00:00+00' then raise exception 'pre-03:00 target is incorrect'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 18:00:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'exact-03:00 target must be next day'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 18:15:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'post-03:00 target is incorrect'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 23:15:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'long-run completion target is incorrect'; end if;
+end $$;
+do $$
 declare claim jsonb; second jsonb; output jsonb; bundle jsonb; original_edge jsonb; sid uuid;
 begin
  select source_id,state into sid,original_edge from public.collector_edge_sources where slug='ftc';
@@ -94,6 +105,7 @@ begin
  if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'daily queue recheck delay is out of bounds'; end if;
  select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
   and message->>'kind'='daily-window-validation' order by msg_id desc limit 1;
+ if due_at<=clock_timestamp() then raise exception 'daily queue recheck is not in the future'; end if;
  if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'queue will not be visible before the next producer window'; end if;
 end $$;
 do $$
@@ -119,6 +131,7 @@ begin
  if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'completed feed recheck delay is out of bounds'; end if;
  select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
   and message->>'kind'='completed-feed-validation' order by msg_id desc limit 1;
+ if due_at<=clock_timestamp() then raise exception 'completed feed recheck is not in the future'; end if;
  if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'completed feed will not be visible before the next producer window'; end if;
 end $$;
 select 'cloud connector rollback checks passed' as result;
