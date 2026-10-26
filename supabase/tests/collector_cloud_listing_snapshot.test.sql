@@ -12,9 +12,9 @@ select ok(not has_table_privilege('service_role','public.collector_cloud_listing
  'service role uses the RPC instead of direct snapshot reads');
 select ok(not has_table_privilege('authenticated','public.collector_cloud_listing_rows','select'),
  'signed-in users cannot read staged feed data');
-select ok(has_function('public','collector_cloud_take',array['text','text']),
+select has_function('public','collector_cloud_take',array['text','text'],
  'take RPC exposes durable snapshot claims');
-select ok(has_function('public','collector_cloud_commit',array['uuid','text','uuid','jsonb','text']),
+select has_function('public','collector_cloud_commit',array['uuid','text','uuid','jsonb','text'],
  'commit RPC atomically stages rows and cursor progress');
 
 -- Keep the pre-snapshot cursor contract usable during rollout. Fifty SHA-256
