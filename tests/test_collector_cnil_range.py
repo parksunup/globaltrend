@@ -35,5 +35,34 @@ class CnilRangeTests(unittest.TestCase):
         self.assertTrue(r.get('listing_scan_complete'))
         self.assertFalse(r['coverage_complete'])
     def test_ambiguous_card_date_is_not_filtered(self):
+        self.assertEqual(parsers.cnil_listing_date({'date_observations':[OBS]}),'2024-03-27')
         self.assertIsNone(parsers.cnil_listing_date({'date_observations':[OBS,{**OBS,'value':'20 octobre 2026'}]}))
         self.assertIsNone(parsers.cnil_listing_date({'date_observations':[{**OBS,'value':'31 février 2024'}]}))
+        for value in ('27 mars 2024 — mise à jour le 20 octobre 2026',
+                      'Publié le 27 mars 2024',
+                      '27 mars 2024 et 20 octobre 2026'):
+            self.assertIsNone(parsers.cnil_listing_date({'date_observations':[{**OBS,'value':value}]}))
+
+    def test_ambiguous_single_date_field_reads_detail_instead_of_filtering(self):
+        cfg={'source':'cnil','enabled':True,'listing':LISTING,'hosts':['www.cnil.fr'],'permissions':dict(collect=True,store=True,ai=True)}
+        ambiguous=card('ambiguous','27 mars 2024 — mise à jour le 20 octobre 2026')
+        detail='https://www.cnil.fr/fr/ambiguous'
+        pages={LISTING:'<main>'+ambiguous+'</main>',
+            detail:'<main><h1>Ambiguous</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">Personal data protection evidence.</div></main>'}
+        class Client:
+            calls=[]
+            def get(self,url):
+                self.calls.append(url)
+                return pages[url].encode(),url,'text/html'
+        class Store:
+            def __init__(self): self.items=[]
+            def ingest(self,*args): self.items.append(args[2]); return {'item_created':True}
+            def progress(self,*args): pass
+            def checkpoint(self,*args): raise AssertionError('ambiguous date cannot prove full coverage')
+        client=Client();store=Store()
+        result=core.collect(cfg,client,store,'2026-09-21','2026-10-23',max_items=1)
+        self.assertEqual(client.calls,[LISTING,detail])
+        self.assertEqual(result['new'],1)
+        self.assertEqual(result['unknown_date'],1)
+        self.assertIsNone(store.items[0]['published_date'])
+        self.assertTrue(store.items[0]['metadata']['requires_review'])
