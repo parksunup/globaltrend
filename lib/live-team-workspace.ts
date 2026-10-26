@@ -4,6 +4,8 @@ import { join, dirname } from 'node:path';
 import { loadSubmissionPreview, loadSubmissionDocuments } from './submission-preview.ts';
 import { listLegalTranslationEntries, loadLegalTranslation } from './legal-translation-review.ts';
 import type { LegalTranslationDocument } from './legal-translation-review.ts';
+import { loadAllTrendImportCandidates } from './workspace-submissions.ts';
+import { buildLegalReviewPackages } from './legal-release.ts';
 
 export const TEAM_BRANCHES = {
   trends: 'feat/trend-source-contracts', legal: 'feat/legal-corpus-foundation',
@@ -17,6 +19,8 @@ export type LiveWorkspace = {
   translations: LegalTranslationDocument[];
   translationErrors: {id: string; error: string}[];
   notes: {path: string; text: string}[];
+  /** Server-only publication inputs for this exact branch snapshot. */
+  publicationInputs?: {trends: ReturnType<typeof loadAllTrendImportCandidates>; legal: ReturnType<typeof buildLegalReviewPackages>};
 };
 type Entry = {path: string; type: string; size?: number};
 const REPO = 'parksunup/globaltrend';
@@ -97,7 +101,8 @@ export function createLiveWorkspaceReader(options: {fetch?: typeof fetch; now?: 
           notes:entries.filter(e=>e.path.endsWith('.md') &&
             !(e.path==='data/legal/criteria-mapping.md' && loadSubmissionDocuments(root).legal.length) &&
             !translations.some(document=>e.path===`data/legal/translations/${document.id}.md`))
-            .map(e=>({path:e.path,text:readFileSync(join(root,...e.path.split('/')),'utf8')}))};
+            .map(e=>({path:e.path,text:readFileSync(join(root,...e.path.split('/')),'utf8')})),
+          publicationInputs:{trends:role==='trends'?loadAllTrendImportCandidates(root):[],legal:role==='legal'?buildLegalReviewPackages(root):[]}};
         cache.set(role,snapshot); return snapshot;
       } finally { rmSync(root,{recursive:true,force:true}); }
     } catch (error) {

@@ -1,12 +1,12 @@
 import { createLiveWorkspaceReader } from '../../../lib/live-team-workspace';
 import { composeTeamTrends, loadTeamTrendRows, parseTrendEdit } from '../../../lib/team-trends';
 import { createClient } from '../../../lib/supabase/server';
-// Next Data Cache is shared across instances. Browser traffic must not multiply
-// unauthenticated GitHub requests for the same branch list or immutable files.
 const readLiveWorkspace = createLiveWorkspaceReader({
   token:process.env.TEAM_GITHUB_READ_TOKEN,
   fetch:(url,init)=>fetch(url,{...init,cache:'force-cache',next:{revalidate:String(url).includes('/branches?')?120:86400}}),
 });
+// Next Data Cache is shared across instances. Browser traffic must not multiply
+// unauthenticated GitHub requests for the same branch list or immutable files.
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
@@ -38,8 +38,27 @@ export async function GET(request: Request) {
     }
     const snapshot = await readLiveWorkspace(role);
     const trends = role==='trends'?composeTeamTrends(rows,snapshot,[]):null;
-    const data = {...snapshot,databaseAvailable,trends:trends?.items??[],warnings:[...(trends?.warnings??[]),...(!databaseAvailable?['DB 초안 연결을 확인하지 못했습니다. 현재는 GitHub 자료만 표시하며 전체 원고가 아닙니다. 관리자에게 작업실 읽기 연결 상태를 확인해 달라고 알려 주세요.']:[])]};
-    const etag = '"' + role + '-' + data.commitSha + '-' + (trends?.revision??'legal') + '"';
+    const {publicationInputs:_privatePublicationInputs,...visibleSnapshot}=snapshot;
+    const db=await createClient();const {data:{user}}=await db.auth.getUser();
+    const {data:membership}=user&&typeof db.from==='function'?await db.from('team_memberships').select('role,is_active').eq('user_id',user.id).maybeSingle():{data:null};
+    const canPublish=Boolean(membership?.is_active&&['admin','editor'].includes(String(membership.role)));
+    let legalPublications:{recordId:string;title:string;jurisdiction:string;status:'published'|'draft'|'ready';publishedId?:string}[]=[];
+    if(role==='legal'&&snapshot.publicationInputs) {
+      const instruments=await db.from('legal_instruments').select('id,jurisdiction_code,short_name');
+      const rows=instruments.data??[];const ids=rows.map(row=>row.id);
+      const versions=ids.length?await db.from('law_versions').select('id,legal_instrument_id,status,content_hash').in('legal_instrument_id',ids):{data:[],error:null};
+      if(!instruments.error&&!versions.error)legalPublications=snapshot.publicationInputs.legal.map(candidate=>{
+        const instrument=rows.find(row=>row.jurisdiction_code===candidate.jurisdiction&&row.short_name===candidate.instrument.title);
+        const related=(versions.data??[]).filter(row=>row.legal_instrument_id===instrument?.id);
+        const published=related.find(row=>row.status==='published');
+        const matching=related.find(row=>row.content_hash===candidate.contentHash);
+        return {recordId:candidate.recordId,title:candidate.instrument.title,jurisdiction:candidate.jurisdiction,
+          status:published&&matching?.id===published.id?'published':matching?'draft':'ready',...(published?{publishedId:published.id}:{})};
+      });
+    }
+    const data = {...visibleSnapshot,databaseAvailable,trends:trends?.items??[],canPublish,legalPublications,warnings:[...(trends?.warnings??[]),...(!databaseAvailable?['DB 초안 연결을 확인하지 못했습니다. 현재는 GitHub 자료만 표시하며 전체 원고가 아닙니다. 관리자에게 작업실 읽기 연결 상태를 확인해 달라고 알려 주세요.']:[])]};
+    const publicationRevision=role==='legal'?legalPublications.map(item=>`${item.recordId}:${item.status}:${item.publishedId??''}`).join('|'):'legal';
+    const etag = '"' + role + '-' + data.commitSha + '-' + (trends?.revision??publicationRevision) + '"';
     if (!data.stale && databaseAvailable && request.headers.get('if-none-match') === etag) return new Response(null,{status:304,headers:{...headers,ETag:etag}});
     return Response.json(data,{headers:{...headers,ETag:etag}});
   } catch (error) {
