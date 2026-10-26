@@ -190,7 +190,7 @@ export function pdpcContent(document: Document): Element[] {
     const text = (script.textContent || "").trim();
     if (!text.startsWith("self.__next_f.push(")) continue;
     const v = JSON.parse(
-      text.slice("self.__next_f.push(".length).replace(/\);?$/, ""),
+      text.slice("self.__next_f.push(".length).replace(/\\);?$/, ""),
     );
     if (Array.isArray(v) && v[0] === 1 && typeof v[1] === "string") {
       chunks.push(v[1]);
@@ -226,51 +226,87 @@ export function pdpcContent(document: Document): Element[] {
       if (e < 0) e = stream.length;
       const s = decoder.decode(stream.slice(pos, e));
       pos = e;
-      if (!/^[\[{"]|^(null|true|false)$/.test(s)) continue;
+      if (!/^[\\[{"]|^(null|true|false)$/.test(s)) continue;
       value = JSON.parse(s);
     }
     if (records.has(id)) throw new Error("pdpc_duplicate_record");
     records.set(id, value);
   }
+
+  type FlightNode = unknown[] & [unknown, unknown, unknown, Record<string, unknown>];
+  const isElement = (value: unknown): value is FlightNode =>
+    Array.isArray(value) && typeof value[1] === "string" &&
+    !!value[3] && typeof value[3] === "object";
   const nodes: Element[] = [];
-  // Only content props under the standard main/article, never navigation or shell.
-  for (const v of records.values()) {
-    const main = v as [
-      unknown,
-      string,
-      unknown,
-      { className?: string; children?: unknown[] },
-    ];
-    if (
-      !Array.isArray(main) || main[1] !== "main" ||
-      main[3]?.className !== "layout layout--standard"
-    ) continue;
-    for (const a of main[3].children || []) {
-      const article = a as typeof main;
-      if (!Array.isArray(article) || article[1] !== "article") continue;
-      for (const c of article[3]?.children || []) {
-        const component = c as [
-          unknown,
-          unknown,
-          unknown,
-          { data?: { content?: unknown } },
-        ];
-        let content = component?.[3]?.data?.content;
-        if (typeof content === "string" && /^\$[a-f0-9]+$/.test(content)) {
-          content = records.get(content.slice(1));
+  const seenContent = new Set<string>();
+  const visited = new Set<object>();
+  const childValues = (value: unknown): unknown[] => {
+    if (!isElement(value)) return [];
+    const children = value[3].children;
+    return Array.isArray(children) ? children : children == null ? [] : [children];
+  };
+  const resolveContent = (content: unknown): string | null => {
+    if (typeof content !== "string") return null;
+    if (!/^\\$[a-f0-9]+$/.test(content)) return content;
+    const resolved = records.get(content.slice(1));
+    return typeof resolved === "string" && !resolved.startsWith("$")
+      ? resolved
+      : null;
+  };
+  const collectArticle = (value: unknown) => {
+    if (!value || typeof value !== "object" || visited.has(value as object)) return;
+    visited.add(value as object);
+    if (isElement(value)) {
+      const data = value[3].data;
+      if (data && typeof data === "object" && "content" in data) {
+        const content = resolveContent((data as { content?: unknown }).content);
+        if (content === null) throw new Error("pdpc_content_unresolved");
+        if (!seenContent.has(content)) {
+          seenContent.add(content);
+          nodes.push(
+            parseHTML("<div>" + content + "</div>").document.querySelector(
+              "div",
+            )!,
+          );
         }
-        if (content === undefined) continue;
-        if (typeof content !== "string" || content.startsWith("$")) {
-          throw new Error("pdpc_content_unresolved");
-        }
-        nodes.push(
-          parseHTML("<div>" + content + "</div>").document.querySelector(
-            "div",
-          )!,
-        );
+      }
+      for (const child of childValues(value)) collectArticle(child);
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) collectArticle(child);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        collectArticle(child);
       }
     }
-  }
+  };
+  const findMainArticles = (
+    value: unknown,
+    insideMain = false,
+    seen = new Set<object>(),
+  ) => {
+    if (!value || typeof value !== "object" || seen.has(value as object)) return;
+    seen.add(value as object);
+    if (isElement(value)) {
+      const inMain = insideMain || value[1] === "main";
+      if (inMain && value[1] === "article") collectArticle(value);
+      for (const child of childValues(value)) {
+        findMainArticles(child, inMain, seen);
+      }
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) findMainArticles(child, insideMain, seen);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        findMainArticles(child, insideMain, seen);
+      }
+    }
+  };
+  // Flight layouts may add container/row/main wrappers. Anchor extraction to an
+  // article nested anywhere below a main element; never fall back to page shell text.
+  for (const value of records.values()) findMainArticles(value);
   if (!nodes.length) throw new Error("pdpc_article_missing");
   return nodes;
 }
