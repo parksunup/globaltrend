@@ -8,7 +8,7 @@ A read-only query of the existing Supabase function on 2026-10-26 showed that a 
 
 The generated migration `20261026002438_cloud_daily_requeue.sql` schedules a completed-listing recheck for 03:00 KST before the next daily producer window, whether the scan has a null cursor or a bounded FTC seen-URL cursor. It leaves failed-step retries at one hour, in-pass steps immediate, existing leases, source approval/capacity checks, backlog ownership, and `coverage_complete=false` unchanged. It validates persisted FTC URL hashes as lowercase SHA-256 values, limits their count to 50 and the full cursor to 4,000 bytes, and rejects overflow instead of dropping hashes. It does not reset routes or queue state.
 
-`scripts/collector/cloud_connector_check.sql` adds transaction-rollback checks that a null-cursor completion and a completed FTC feed with a persisted cursor both reappear before 04:00 KST, while a malformed persisted hash is rejected. Run it only inside an explicit transaction that is rolled back.
+`scripts/collector/cloud_connector_check.sql` adds boundary checks just before, exactly at, and after 03:00 KST, including a late completion, then transaction-rollback checks that a null-cursor completion and a completed FTC feed with a persisted cursor both reappear before 04:00 KST. It also checks that malformed persisted hashes are rejected. Run it only inside an explicit transaction that is rolled back.
 
 ## Acceptance after PR approval and migration deployment
 
