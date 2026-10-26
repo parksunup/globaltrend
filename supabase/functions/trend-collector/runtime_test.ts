@@ -201,6 +201,56 @@ Deno.test("ICO keeps a scoped detail cursor and unresolved counters when resumin
   eq(step.state.failures, 2);
   eq(step.result.coverage_complete, false);
 });
+
+Deno.test("ICO backlog resolves only with official publication date outside its range", async () => {
+  const c = { ...config, source: "ico", listing: "https://ico.org.uk/news/", hosts: ["ico.org.uk"] };
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: c.listing,
+    rows: [{ url: "https://ico.org.uk/news/old", title: "Old item" }],
+    offset: 0,
+    failures: 14,
+    is_backlog: true,
+  };
+  let ingested = false;
+  const step = await advance(c, state, {
+    request: async (url) => ({
+      bytes: new TextEncoder().encode('<meta name="DC.Date" content="Monday, February 16, 2026"><h1>Old item</h1>'),
+      url,
+      type: "text/html",
+    }),
+  }, async () => { ingested = true; throw new Error("must not ingest an out-of-range item"); });
+  eq(ingested, false);
+  eq(step.result.reason, "backlog_out_of_range");
+  eq(step.result.backlog_resolved, true);
+  eq(step.result.published_date, "2026-02-16");
+  eq(step.result.coverage_complete, false);
+  eq(step.continue, false);
+});
+
+Deno.test("ICO in-range date does not bypass complete article extraction", async () => {
+  const c = { ...config, source: "ico", listing: "https://ico.org.uk/news/", hosts: ["ico.org.uk"] };
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: c.listing,
+    rows: [{ url: "https://ico.org.uk/news/in-range", title: "In range" }],
+    offset: 0,
+    is_backlog: true,
+  };
+  const step = await advance(c, state, {
+    request: async (url) => ({
+      bytes: new TextEncoder().encode('<meta name="DC.Date" content="Monday, October 19, 2026"><h1>In range</h1>'),
+      url,
+      type: "text/html",
+    }),
+  }, async () => { throw new Error("missing body should remain a failure"); });
+  eq(step.result.status, "failed");
+  eq(step.result.reason, "title_or_body_missing");
+  eq(step.continue, true);
+  eq(step.state.offset, 0);
+});
 const cnilConfig = {
   ...config,
   source: "cnil",
