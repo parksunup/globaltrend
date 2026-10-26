@@ -535,6 +535,71 @@ const pdpcPDFConfig = {
   ...config, source: "pdpc", listing: "https://www.pdpc.gov.sg/media-events",
   hosts: ["www.pdpc.gov.sg"],
 };
+const pdpcRangeConfig = {
+  ...pdpcPDFConfig,
+  listing: "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events",
+};
+const pdpcDateObservation = (value: string) => [{
+  meaning: "listing_published_display",
+  locator: "listing card",
+  value,
+}];
+Deno.test("PDPC Reports listing date filters an exact out-of-range backlog before fetching", async () => {
+  const url = "https://www.pdpc.gov.sg/assets/report-2026-05-25";
+  const state: State = {
+    since: "2026-10-16", until: "2026-10-26", is_backlog: true,
+    rows: [{url, title: "Data Breach Report", topic: "Reports", date_observations: pdpcDateObservation("25 May 2026")}],
+    offset: 0,
+  };
+  let requested = false;
+  const step = await advance(pdpcRangeConfig, state, {
+    request: async () => { requested = true; throw new Error("should not fetch out-of-range report"); },
+  }, async () => { throw new Error("should not ingest out-of-range report"); });
+  eq(requested, false);
+  eq(step.result.saved, "out_of_range");
+  eq(step.result.read_scope, "official_listing_api_topic_and_date");
+  eq(step.result.published_date, "2026-05-25");
+  eq(step.result.backlog_resolved, true);
+  eq(step.result.coverage_complete, false);
+  eq(step.state.offset, 0);
+  eq(step.continue, false);
+});
+Deno.test("PDPC Events date is never treated as publication date for range filtering", async () => {
+  const url = "https://www.pdpc.gov.sg/media-events/example-event";
+  const state: State = {
+    since: "2026-10-16", until: "2026-10-26", is_backlog: true,
+    rows: [{url, title: "Privacy event", topic: "Events", date_observations: pdpcDateObservation("25 May 2026")}],
+    offset: 0,
+  };
+  let requested = false;
+  const step = await advance(pdpcRangeConfig, state, {
+    request: async requestUrl => {
+      requested = true;
+      eq(requestUrl, url);
+      return {bytes: new TextEncoder().encode("not an article"), url, type: "text/html"};
+    },
+  }, async () => { throw new Error("unexpected ingest"); });
+  eq(requested, true);
+  eq(step.result.saved, undefined);
+  eq(step.result.backlog_resolved, undefined);
+  eq(step.state.offset, 0);
+});
+Deno.test("PDPC listing retains API topic for scope decisions", async () => {
+  const page = pdpcRangeConfig.listing;
+  const state: State = {since: "2026-10-16", until: "2026-10-26", page, offset: 0};
+  const step = await advance(pdpcRangeConfig, state, {
+    request: async requestUrl => ({
+      bytes: new TextEncoder().encode(JSON.stringify({
+        data: [{href: "/assets/report", title: "Report", date: "25 May 2026", topic: "Reports"}],
+        totalItems: 1,
+      })),
+      url: requestUrl,
+      type: "application/json",
+    }),
+  }, async () => { throw new Error("listing only"); });
+  eq(step.state.rows?.[0].topic, "Reports");
+  eq(step.result.stage, "listing");
+});
 const pdpcAsset = "https://www.pdpc.gov.sg/assets/25e68133-795e-4c3f-bbea-7456b01c8506";
 const pdpcPDFState = (): State => ({
   since: "2026-10-16", until: "2026-10-23", is_backlog: true,
