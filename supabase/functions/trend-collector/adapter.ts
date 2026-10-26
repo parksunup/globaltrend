@@ -190,7 +190,7 @@ export function pdpcContent(document: Document): Element[] {
     const text = (script.textContent || "").trim();
     if (!text.startsWith("self.__next_f.push(")) continue;
     const v = JSON.parse(
-      text.slice("self.__next_f.push(".length).replace(/\\);?$/, ""),
+      text.slice("self.__next_f.push(".length).replace(/\);?$/, ""),
     );
     if (Array.isArray(v) && v[0] === 1 && typeof v[1] === "string") {
       chunks.push(v[1]);
@@ -226,7 +226,7 @@ export function pdpcContent(document: Document): Element[] {
       if (e < 0) e = stream.length;
       const s = decoder.decode(stream.slice(pos, e));
       pos = e;
-      if (!/^[\\[{"]|^(null|true|false)$/.test(s)) continue;
+      if (!/^[\[{"]|^(null|true|false)$/.test(s)) continue;
       value = JSON.parse(s);
     }
     if (records.has(id)) throw new Error("pdpc_duplicate_record");
@@ -247,7 +247,7 @@ export function pdpcContent(document: Document): Element[] {
   };
   const resolveContent = (content: unknown): string | null => {
     if (typeof content !== "string") return null;
-    if (!/^\\$[a-f0-9]+$/.test(content)) return content;
+    if (!/^\$[a-f0-9]+$/.test(content)) return content;
     const resolved = records.get(content.slice(1));
     return typeof resolved === "string" && !resolved.startsWith("$")
       ? resolved
