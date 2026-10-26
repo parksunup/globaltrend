@@ -35,6 +35,8 @@ begin
      or (select phase from public.podcast_production_jobs where id=job_id)<>'published' then
     raise exception 'atomic or repeat-safe publication failed';
   end if;
+  insert into public.podcast_production_jobs(issue_key,packet,source_hash,report_snapshot,created_by,phase)
+    values('2099-W01',packet,'cancelled-test',snapshot,actor,'cancelled');
   perform set_config('request.jwt.claims','{}',true);
   caught=false;
   begin perform public.publish_podcast_production_job(job_id);
@@ -43,4 +45,4 @@ begin
 end;
 $$;
 rollback;
-select 'unready blocked / source changes blocked / publication atomic / repeat safe / anonymous blocked / all writes rolled back' as result;
+select 'unready blocked / source changes blocked / publication atomic / repeat safe / cancelled attempt preserved / anonymous blocked / all writes rolled back' as result;

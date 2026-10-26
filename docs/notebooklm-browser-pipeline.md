@@ -23,6 +23,7 @@
 
 - 기존 PR #46의 테스트를 포함한 PR #47을 이어서 구현합니다. NotebookLM 외 유료 AI API를 호출하지 않습니다.
 - 운영 DB에 `20261026090000_weekly_podcast_publication`과 `20261026090013_notebooklm_browser_production`을 적용했고, 파일명도 DB의 실제 기록과 맞췄습니다. 제작 기록은 활성 관리자만 접근합니다.
+- `20261026090723_podcast_production_retry`는 중단된 제작 기록을 보존하면서 같은 주간호를 새 자료로 다시 만들 수 있게 합니다. 이 변경도 운영 DB에 적용했습니다.
 - `publish_podcast_production_job`은 기존 게시 함수를 같은 트랜잭션에서 호출합니다. 동일 제작을 다시 완료해도 게시를 반복하지 않습니다.
 - ZIP 다운로드 API의 서버리스 추적 목록에는 확장 파일 전체를 포함합니다.
 - 이 구현은 서버가 Google에 로그인하는 방식이나 공식 NotebookLM API가 아닙니다. 브라우저가 꺼진 동안의 NotebookLM 입력·음성 회수는 실행하지 않습니다. 자동 주간 예약 생성은 활성화하지 않습니다.
