@@ -11,3 +11,4 @@ __pycache__/
 /work/
 integration-*.log
 .team-workspace/
+.podcast-private/

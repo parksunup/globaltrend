@@ -1,0 +1,2 @@
+# Same implementation as notebooklm-py's MCP, without an idle server process.
+notebooklm-py==0.8.5
