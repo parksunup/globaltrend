@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "../../../../lib/supabase/server";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
+import WeeklyFormats from '../weekly-formats';
 
 export const dynamic = "force-dynamic";
 
@@ -42,7 +43,9 @@ export default async function PublishedPodcastsPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간 동향 팟캐스트</h1><p>공개된 주간호에 포함된 동향을 두 진행자의 대화로 들어보세요.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간호</h1><p>한 주의 동향을 정리한 서면 자료와 주요 주제를 깊이 다루는 팟캐스트를 따로 만나보세요.</p></div>
+      <WeeklyFormats active="podcast" />
+      <h2>주간 동향 팟캐스트</h2><p>주요 주제 한 가지를 깊이 살펴보고, 짧은 추가 소식을 두 진행자의 대화로 들어보세요.</p>
       {error ? schemaNotReady
         ? <div className={styles.weeklyEmpty}><strong>팟캐스트 공개를 준비하고 있습니다</strong><p>게시 기능을 배포한 뒤 주간호 오디오가 공개됩니다.</p></div>
         : <p role="alert">팟캐스트 목록을 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p>
