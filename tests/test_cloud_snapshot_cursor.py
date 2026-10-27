@@ -18,10 +18,10 @@ class CloudSnapshotCursorTests(unittest.TestCase):
         listing_url = "https://www.ftc.gov/feeds/press-release-consumer-protection.xml"
         item_url = "https://www.ftc.gov/news-events/news/press-releases/example"
         item_hash = hashlib.sha256(item_url.encode()).hexdigest()
-        hashes = [item_hash] + [
+        hashes = [
             hashlib.sha256(f"snapshot-row-{i}".encode()).hexdigest()
             for i in range(49)
-        ]
+        ] + [item_hash]
         snapshot_id = str(uuid.uuid4())
         claim = {
             "slug": "ftc",
@@ -33,7 +33,7 @@ class CloudSnapshotCursorTests(unittest.TestCase):
             "until": "2026-10-27",
             "cursor": {
                 "page": listing_url,
-                "offset": 0,
+                "offset": 49,
                 "fingerprint": "a" * 64,
                 "snapshot_id": snapshot_id,
             },
@@ -42,8 +42,8 @@ class CloudSnapshotCursorTests(unittest.TestCase):
                 "id": snapshot_id,
                 "listing_url": listing_url,
                 "fingerprint": "a" * 64,
-                "row_count": 1,
-                "ordinal": 0,
+                "row_count": 50,
+                "ordinal": 49,
                 "row": {
                     "url": item_url,
                     "title": "Example",
@@ -51,7 +51,7 @@ class CloudSnapshotCursorTests(unittest.TestCase):
                 },
                 "url_hashes": hashes,
             },
-            "previous_listing_hashes": [item_hash],
+            "previous_listing_hashes": [],
         }
 
         bundle = prepare(claim)
