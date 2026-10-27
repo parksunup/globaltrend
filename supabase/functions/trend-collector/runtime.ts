@@ -389,6 +389,23 @@ export async function advance(
       }
       const row = state.rows[state.offset || 0];
       if (c.source === "pdpc") {
+        if (row.topic === "Events") {
+          // The listing date denotes an event, not article publication.
+          // Preserve period coverage as incomplete while keeping event cards
+          // out of the source-item and draft queues.
+          result.stage = "detail_scope_check";
+          result.saved = "non_article";
+          result.reason = "pdpc_event_listing_not_publication";
+          result.read_scope = "official_listing_api_topic_only";
+          result.url = canonical(row.url, c.hosts);
+          state.failures = 0;
+          if (state.is_backlog) {
+            result.backlog_resolved = true;
+            return { state, result, continue: false, delay: 0 };
+          }
+          state.offset = (state.offset || 0) + 1;
+          return { state, result, continue: true, delay: 0 };
+        }
         const target = new URL(row.url);
         if (target.protocol === "https:" && pdpcExternalReferralHosts.has(target.hostname)) {
           result.stage = "detail_scope_check";

@@ -643,7 +643,7 @@ Deno.test("PDPC Reports listing date filters an exact out-of-range backlog befor
   eq(step.state.offset, 0);
   eq(step.continue, false);
 });
-Deno.test("PDPC Events date is never treated as publication date for range filtering", async () => {
+Deno.test("PDPC Events are not ingested as published articles", async () => {
   const url = "https://www.pdpc.gov.sg/media-events/example-event";
   const state: State = {
     since: "2026-10-16", until: "2026-10-26", is_backlog: true,
@@ -652,15 +652,13 @@ Deno.test("PDPC Events date is never treated as publication date for range filte
   };
   let requested = false;
   const step = await advance(pdpcRangeConfig, state, {
-    request: async requestUrl => {
-      requested = true;
-      eq(requestUrl, url);
-      return {bytes: new TextEncoder().encode("not an article"), url, type: "text/html"};
-    },
+    request: async () => { requested = true; throw new Error("event must not be fetched as article"); },
   }, async () => { throw new Error("unexpected ingest"); });
-  eq(requested, true);
-  eq(step.result.saved, undefined);
-  eq(step.result.backlog_resolved, undefined);
+  eq(requested, false);
+  eq(step.result.saved, "non_article");
+  eq(step.result.reason, "pdpc_event_listing_not_publication");
+  eq(step.result.coverage_complete, false);
+  eq(step.result.backlog_resolved, true);
   eq(step.state.offset, 0);
 });
 Deno.test("PDPC listing retains API topic for scope decisions", async () => {
