@@ -583,7 +583,9 @@ export async function advance(
       ? reason
       : "runtime_" + (e instanceof Error ? e.name : "error");
     result.offset = state.offset || 0;
-    result.page = state.page;
+    const safeFailurePage = safeDiagnosticUrl(state.page, c.hosts);
+    if (safeFailurePage) result.page = safeFailurePage;
+    else delete result.page;
     if (
       !state.is_backlog && state.rows?.[state.offset || 0] &&
       state.failures >= 3 && !reason.startsWith("database_")
