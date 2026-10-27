@@ -83,7 +83,7 @@ Deno.test("DPC listing date is used only for one exact valid observation", () =>
   eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "01th October 2026" }] }), null);
   eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, locator: "page body" }] }), null);
 });
-Deno.test("DPC listing date fills a missing detail date but conflicts stay unknown", async () => {
+Deno.test("DPC exact detail date wins over a conflicting listing date with review", async () => {
   const row = {
     url: "https://www.dataprotection.ie/en/news-media/latest-news/example",
     title: "Example",
@@ -108,7 +108,8 @@ Deno.test("DPC listing date fills a missing detail date but conflicts stay unkno
     row.url,
     row,
   );
-  eq(conflict.published_date, null);
+  eq(conflict.published_date, "2026-10-02");
+  eq(conflict.metadata.date_conflict, true);
   eq(conflict.metadata.ai_ready, false);
   eq(conflict.metadata.date_observations.length, 2);
   const ambiguous = await extract(
