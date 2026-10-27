@@ -583,7 +583,7 @@ export async function advance(
       ? reason
       : "runtime_" + (e instanceof Error ? e.name : "error");
     result.offset = state.offset || 0;
-    const safeFailurePage = safeDiagnosticUrl(state.page, c.hosts);
+    const safeFailurePage = typeof state.page === "string" ? safeDiagnosticUrl(state.page, c.hosts) : null;
     if (safeFailurePage) result.page = safeFailurePage;
     else delete result.page;
     if (
