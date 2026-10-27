@@ -55,6 +55,63 @@ Deno.test("successful duplicate advances only after ingest and preserves incompl
   eq(result.result.saved, "duplicate");
   eq(result.result.coverage_complete, false);
 });
+Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
+  const ico = {
+    source: "ico",
+    source_id: "ico-source",
+    listing: "https://ico.org.uk/news/",
+    hosts: ["ico.org.uk"],
+    language: "en",
+  };
+  const state: State = {
+    since: "2026-01-01",
+    until: "2026-10-27",
+    is_backlog: true,
+    rows: [{
+      url: "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/02/old-article/",
+      title: "Old article",
+    }],
+    offset: 0,
+  };
+  let stored = false;
+  const step = await advance(ico, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode('<h1>Unrelated page</h1><main><p>Some other document body.</p></main>'),
+      url: "https://ico.org.uk/about-the-ico/what-we-do/",
+      type: "text/html",
+    }),
+  }, async () => {
+    stored = true;
+    return {};
+  });
+  eq(stored, false);
+  eq(step.state.offset, 0);
+  eq(step.result.status, "failed");
+  eq(step.result.reason, "detail_redirect_target_mismatch");
+  eq(step.result.coverage_complete, false);
+});
+Deno.test("same document trailing slash redirect remains readable", async () => {
+  const state: State = {
+    since: "2026-09-21", until: "2026-10-21",
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+  };
+  let stored = false;
+  const step = await advance(config, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode(
+        '<h1 class="node-article-full__title">x</h1><time class="node-article-full__date">21 October 2026</time><div class="node-article-full__body">Original complete article body long enough.</div>',
+      ),
+      url: "https://www.edpb.europa.eu/news/x/",
+      type: "text/html",
+    }),
+  }, async () => {
+    stored = true;
+    return {};
+  });
+  eq(stored, true);
+  eq(step.result.status, "partial");
+});
 Deno.test("unknown date is stored unready and remains an explicit incomplete item", async () => {
   const state: State = {
     since: "2026-09-21",
@@ -417,6 +474,50 @@ Deno.test("CNIL legacy rows refresh current page preserving unresolved dates", a
   eq(step.state.failures, 0);
   eq(step.state.unknown_dates, 2);
 });
+Deno.test("CNIL listing timeout records safe stage and URL without token query values", async () => {
+  const url = "https://www.cnil.fr/fr/actualites?page=12&access_token=secret-value&email=person%40example.com";
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-26",
+    adapter_version: "edge-cnil-v3",
+    page: url,
+  };
+  const step = await advance(cnilConfig, state, {
+    request: async () => {
+      throw new DOMException("The operation timed out", "TimeoutError");
+    },
+  }, async () => ({}));
+  eq(step.result.status, "failed");
+  eq(step.result.stage, "listing_fetch");
+  eq(step.result.url, "https://www.cnil.fr/fr/actualites?page=12");
+  eq(JSON.stringify(step.result).includes("secret-value"), false);
+  eq(JSON.stringify(step.result).includes("person@example.com"), false);
+});
+Deno.test("CNIL detail timeout records safe URL and keeps the exact retry offset", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-26",
+    adapter_version: "edge-cnil-v3",
+    page: cnilConfig.listing,
+    rows: [{
+      url: "https://www.cnil.fr/fr/safe-article?page=2&token=secret-value",
+      title: "Article",
+    }],
+    offset: 0,
+  };
+  const step = await advance(cnilConfig, state, {
+    request: async () => {
+      throw new DOMException("The operation timed out", "TimeoutError");
+    },
+  }, async () => ({}));
+  eq(step.result.status, "failed");
+  eq(step.result.stage, "detail_fetch");
+  eq(step.result.url, "https://www.cnil.fr/fr/safe-article?page=2");
+  eq(JSON.stringify(step.result).includes("secret-value"), false);
+  eq(step.state.offset, 0);
+  eq(step.state.since, state.since);
+  eq(step.state.until, state.until);
+});
 Deno.test("CNIL batches only consecutive old cards and leaves ambiguous or newer rows pending", async () => {
   const state: State = {
     since: "2026-09-21",
@@ -544,6 +645,28 @@ const pdpcDateObservation = (value: string) => [{
   locator: "listing card",
   value,
 }];
+Deno.test("PDPC external government links remain referrals and never become PDPC articles", async () => {
+  for (const host of ["www.csa.gov.sg", "www.mci.gov.sg", "www.mddi.gov.sg", "www.mfa.gov.sg"]) {
+    const url = `https://${host}/news/privacy-article?tracking=private`;
+    for (const is_backlog of [false, true]) {
+      const state: State = {
+        since: "2026-10-16", until: "2026-10-27", is_backlog,
+        rows: [{url, title: "Linked agency document", topic: "News",
+          date_observations: pdpcDateObservation("20 Jul 2026")}], offset: 0,
+      };
+      const step = await advance(pdpcRangeConfig, state, {
+        request: async () => { throw new Error("external host must not be fetched"); },
+      }, async () => { throw new Error("external document must not be ingested as PDPC"); });
+      eq(step.result.saved, "external_referral");
+      eq(step.result.reason, "different_agency_source");
+      eq(step.result.url, `https://${host}/news/privacy-article`);
+      eq(step.result.coverage_complete, false);
+      eq(step.result.backlog_resolved, is_backlog || undefined);
+      eq(step.state.offset, is_backlog ? 0 : 1);
+      eq(step.continue, !is_backlog);
+    }
+  }
+});
 Deno.test("PDPC Reports listing date filters an exact out-of-range backlog before fetching", async () => {
   const url = "https://www.pdpc.gov.sg/assets/report-2026-05-25";
   const state: State = {
@@ -564,7 +687,7 @@ Deno.test("PDPC Reports listing date filters an exact out-of-range backlog befor
   eq(step.state.offset, 0);
   eq(step.continue, false);
 });
-Deno.test("PDPC Events date is never treated as publication date for range filtering", async () => {
+Deno.test("PDPC Events are not ingested as published articles", async () => {
   const url = "https://www.pdpc.gov.sg/media-events/example-event";
   const state: State = {
     since: "2026-10-16", until: "2026-10-26", is_backlog: true,
@@ -573,15 +696,13 @@ Deno.test("PDPC Events date is never treated as publication date for range filte
   };
   let requested = false;
   const step = await advance(pdpcRangeConfig, state, {
-    request: async requestUrl => {
-      requested = true;
-      eq(requestUrl, url);
-      return {bytes: new TextEncoder().encode("not an article"), url, type: "text/html"};
-    },
+    request: async () => { requested = true; throw new Error("event must not be fetched as article"); },
   }, async () => { throw new Error("unexpected ingest"); });
-  eq(requested, true);
-  eq(step.result.saved, undefined);
-  eq(step.result.backlog_resolved, undefined);
+  eq(requested, false);
+  eq(step.result.saved, "non_article");
+  eq(step.result.reason, "pdpc_event_listing_not_publication");
+  eq(step.result.coverage_complete, false);
+  eq(step.result.backlog_resolved, true);
   eq(step.state.offset, 0);
 });
 Deno.test("PDPC listing retains API topic for scope decisions", async () => {

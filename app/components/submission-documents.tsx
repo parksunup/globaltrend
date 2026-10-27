@@ -34,7 +34,7 @@ function LegalDocument({ cells, branch, commitSha, showFeedback = true }: { cell
         return <td key={code}>{cell ? <button type="button" className={`comparison-cell ${selected?.id === cell.id ? "selected" : ""}`} onClick={() => { setSelectedId(cell.id); document.getElementById("comparison-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}><span>{drafted ? cell.summary : "미검토"}</span><small>{drafted ? cell.articleNumbers.slice(0, 2).join(" · ") : "추가 조사 필요"}</small></button> : "—"}</td>;
       })}</tr>)}
     </tbody></table></div>
-    {selected && <article id="comparison-detail" className="document-detail"><span className="panel-kicker">선택한 비교 셀 · {selected.jurisdiction}</span><h3>{selected.criterionName}</h3><p className="document-lede">{selected.summary}</p>
+    {selected && <article id="comparison-detail" className="document-detail"><span className="panel-kicker">선택한 비교 셀 · {selected.jurisdiction} · {selected.status === "published" ? "검수 완료·발행됨" : "미발행 · 제출 자료"}</span><h3>{selected.criterionName}</h3><p className="document-lede">{selected.summary}</p>
       {selected.evidenceKind && <div className="detail-block"><span className="detail-label">근거 확인 범위</span><p>{evidenceLabels[selected.evidenceKind] ?? selected.evidenceKind}</p></div>}
       {selected.articleNumbers.length > 0 && <div className="detail-block"><span className="detail-label">관련 조항</span><p>{selected.articleNumbers.join(" · ")}</p></div>}
       {selected.translationLinks.length > 0 && <div className="detail-block"><span className="detail-label">조문·번역 근거</span>{selected.translationLinks.map((link) => {
@@ -49,7 +49,9 @@ function LegalDocument({ cells, branch, commitSha, showFeedback = true }: { cell
       {selected.exceptions && selected.exceptions !== "미검토" && <div className="detail-block"><span className="detail-label">주요 예외·주의</span><p>{selected.exceptions}</p></div>}
       <div className="detail-block"><span className="detail-label">판본</span><p>{selected.sourceVersion}</p></div>
       {selectedSources.length > 0 && <div className="detail-block"><span className="detail-label">근거 자료</span>{selectedSources.map((url, index) => <a key={url} href={url} target="_blank" rel="noopener noreferrer">{sourceLabel(url)} {index + 1} ↗</a>)}</div>}
-      {selected.pendingReason && <div className="detail-block"><span className="detail-label">자료 범위 메모</span><p>{selected.pendingReason}</p></div>}
+      {selected.pendingReason && (selected.status === "published"
+        ? <details className="detail-block"><summary>작성 당시 검토 기록</summary><p>현재 검수·발행 상태를 뜻하지 않습니다.</p><p>{selected.pendingReason}</p></details>
+        : <div className="detail-block"><span className="detail-label">자료 범위 메모</span><p>{selected.pendingReason}</p></div>)}
       {showFeedback && <SubmissionFeedback key={selected.id} itemId={selected.id} branch={branch} commitSha={commitSha} />}
     </article>}
   </>;

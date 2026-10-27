@@ -64,7 +64,7 @@ test('translation review entry uses live legal workspace rather than overwriting
   const element=await Page();
   assert.equal(element.props.role,'legal');
   const html=renderToStaticMarkup(element);
-  assert.match(html,/최신 자료를 불러오는 중/);assert.match(html,/PR 병합이나 자료별 사이트 재배포는 필요하지 않습니다/);
+  assert.match(html,/법제 작업실/);assert.match(html,/Codex가 저장한 수정본을 이 화면에서 다시 확인하실 수 있습니다/);
 });
 test('offline viewer describes historical files without declaring present review status',()=>{
   const Component=loader()('app/components/draft-viewer.tsx').default;

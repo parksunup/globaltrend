@@ -41,6 +41,30 @@ def parse_date(text):
     except ValueError: pass
     return None
 
+def pdpc_detail_published_date(value):
+    """Only accept the exact PDPC detail-page publication label."""
+    value=normalize(value)
+    match=re.fullmatch(r'Published on\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})',value,re.I)
+    return parse_date(match[1]) if match else None
+
+def cnil_detail_published_date(observation):
+    """CNIL article-page author/date line, distinct from an archive card date."""
+    if observation.get('meaning')!='published_display' or observation.get('locator')!='main .ctn-gen-auteur':
+        return None
+    value=normalize(observation.get('value','')).lower()
+    if not re.fullmatch(r'\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}',value):
+        return None
+    return parse_date(value)
+
+def dpc_detail_published_date(observation):
+    """DPC detail-page publication label, separate from the teaser card."""
+    if observation.get('meaning')!='published_display' or observation.get('locator')!='main p.date':
+        return None
+    value=normalize(observation.get('value',''))
+    if not re.fullmatch(r'\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s+\d{4}',value,re.I):
+        return None
+    return parse_date(value)
+
 def pdpc_body_nodes(soup):
     """Decode only JSON and byte-delimited text in the observed Flight format.
 
@@ -166,9 +190,27 @@ def extract(source, html, url):
     if date_node:
         observations.append({'meaning':'published_display','locator':date_sel or 'Date + strong','value':normalize(date_node.get_text())})
         if date_node.get('datetime'): observations.append({'meaning':'published_attribute','locator':'time@datetime','value':date_node['datetime']})
+    if source=='ico':
+        meta=soup.find('meta',attrs={'name':re.compile(r'^DC\.Date$',re.I)})
+        value=normalize(meta.get('content','')) if meta else ''
+        if value and parse_date(value):
+            observations.append({'meaning':'official_published_attribute','locator':'meta[name="DC.Date"]@content','value':value})
     if source=='ppc':
         # Do not select the first era date: notices can include enactment/update dates.
         observations=[{'meaning':'notice_date_candidate','locator':'main.l-main','value':m[0]} for m in re.finditer(r'(令和|平成)(元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日',body)]
+        # Some PPC press releases put the publication dateline at the very
+        # start of main.l-main followed by the Commission name, instead of in
+        # the newer .date-box header. Only accept that strict opening pattern;
+        # later era dates may be enactment, revision or campaign dates.
+        main=soup.select_one('main.l-main')
+        opening=normalize(main.get_text(' ',strip=True)) if main else ''
+        opening_date=re.match(
+            r'^((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)\s*個人情報保護委員会(?:\s|$)',
+            opening,
+        )
+        if opening_date:
+            observations.append({'meaning':'published_opening_dateline',
+                'locator':'main.l-main opening date','value':opening_date[1]})
         page_title=normalize(soup.title.get_text()) if soup.title else ''
         publication=re.search(r'公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]',page_title)
         if publication:
@@ -185,7 +227,10 @@ def extract(source, html, url):
     distinct=set(d for d in dates if d)
     published=next(iter(distinct)) if len(distinct)==1 else None
     unread_ppc_pdf=source=='ppc' and any(urlsplit(doc['url']).path.lower().endswith('.pdf') for doc in related)
-    requires_review=published is None or unread_ppc_pdf or scope in ('official_overview','press_release_html_not_report')
+    # The opening-dateline template is new to the collector. Resolve the
+    # publication date, but keep these announcements behind human review until
+    # the editorial/read-scope gate is independently satisfied.
+    requires_review=published is None or unread_ppc_pdf or scope in ('official_overview','press_release_html_not_report') or (source=='ppc' and opening_date is not None)
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-flight-rte-v1' if source=='pdpc' else 'oecd-press-release-v1' if oecd_release else 'pr16-selectors-v1','read_scope':scope,'date_observations':observations,
               'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
@@ -243,17 +288,49 @@ def extract_document(source,data,url,content_type,row=None):
             observations=item['metadata']['date_observations']+row['date_observations']
             item['metadata']['date_observations']=observations
             dates={parse_date(o['value']) for o in observations}- {None}
-            if len(dates)>1:
-                item['published_date']=None; item['metadata']['requires_review']=True
+            if source=='pdpc':
+                explicit={pdpc_detail_published_date(o['value']) for o in observations
+                          if o.get('meaning')=='published_display' and o.get('locator')=='main .page-banner__date'}-{None}
+            else:
+                explicit={cnil_detail_published_date(o) for o in observations}-{None}
+            if len(explicit)==1:
+                selected=next(iter(explicit))
+                conflicts=sorted(d for d in dates if d!=selected)
+                item['published_date']=selected
+                item['metadata']['date_conflict']=bool(conflicts)
+                item['metadata']['date_resolution']={
+                    'selected':'explicit_detail_page_published_display',
+                    'published_date':selected,
+                    'conflicting_dates':conflicts,
+                }
+                if conflicts:
+                    item['metadata']['requires_review']=True
+                    item['metadata']['ai_ready']=False
+            elif len(dates)>1:
+                item['published_date']=None; item['metadata']['date_conflict']=True; item['metadata']['requires_review']=True; item['metadata']['ai_ready']=False
         if source=='dpc' and row:
             listing_observations=row.get('date_observations',[])
             if listing_observations:
                 body_observations=item['metadata']['date_observations']
                 item['metadata']['date_observations']=body_observations+listing_observations
-                dates={parse_date(o['value']) for o in body_observations}- {None}
+                dates={parse_date(o['value']) for o in body_observations+listing_observations}- {None}
                 listing_date=dpc_listing_date(row)
                 if listing_date: dates.add(listing_date)
-                if len(dates)==1:
+                explicit={dpc_detail_published_date(o) for o in body_observations}-{None}
+                if len(explicit)==1:
+                    selected=next(iter(explicit))
+                    conflicts=sorted(d for d in dates if d!=selected)
+                    item['published_date']=selected
+                    item['metadata']['date_conflict']=bool(conflicts)
+                    item['metadata']['date_resolution']={
+                        'selected':'explicit_detail_page_published_display',
+                        'published_date':selected,
+                        'conflicting_dates':conflicts,
+                    }
+                    if conflicts:
+                        item['metadata']['requires_review']=True
+                        item['metadata']['ai_ready']=False
+                elif len(dates)==1:
                     item['published_date']=next(iter(dates))
                     item['metadata']['requires_review']=False
                 else:

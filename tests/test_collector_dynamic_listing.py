@@ -26,6 +26,14 @@ class DynamicListingTests(unittest.TestCase):
         self.assertIsNone(parsers.dpc_listing_date({'date_observations': [
             {'meaning': 'listing_published_display', 'locator': 'listing article.node--view-mode-teaser p.date', 'value': '31st February 2026'}]}))
 
+    def test_dpc_detail_date_wins_over_conflicting_teaser_with_review(self):
+        html='<h1>Privacy notice</h1><main><p class="date">12 October 2026</p><div class="field--name-body"><p>A sufficiently detailed DPC publication body.</p></div></main>'
+        row={'date_observations':[{'meaning':'listing_published_display','locator':'listing article.node--view-mode-teaser p.date','value':'11th October 2026'}]}
+        item=parsers.extract_document('dpc',html.encode(),'https://www.dataprotection.ie/en/news-media/latest-news/example','text/html',row)
+        self.assertEqual(item['published_date'],'2026-10-12')
+        self.assertTrue(item['metadata']['date_conflict'])
+        self.assertTrue(item['metadata']['requires_review'])
+
     def test_pdpc_embedded_body_excludes_footer_and_nonarticle_payloads(self):
         content = '<p>The complete embedded advisory body.</p><a href="/assets/advisory.pdf">Advisory PDF</a>'
         article = ['$', 'main', None, {'className': 'layout layout--standard', 'children': [
@@ -42,8 +50,36 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(item['metadata']['unread_attachments'], ['https://www.pdpc.gov.sg/assets/advisory.pdf'])
         item = parsers.extract_document('pdpc', html.encode(), 'https://www.pdpc.gov.sg/media-events/advisory', 'text/html',
             {'date_observations': [{'meaning': 'listing_published_display', 'locator': 'card', 'value': '29 Sep 2026'}]})
-        self.assertIsNone(item['published_date'])
+        self.assertEqual(item['published_date'], '2026-09-30')
         self.assertEqual(len(item['metadata']['date_observations']), 2)
+        self.assertTrue(item['metadata']['date_conflict'])
+        self.assertTrue(item['metadata']['requires_review'])
+
+    def test_pdpc_ambiguous_detail_date_label_does_not_override_listing(self):
+        content='<p>The complete embedded advisory body.</p>'
+        article=['$', 'main', None, {'className':'layout layout--standard','children':[
+            ['$', 'article', None, {'children':[['$', '$L26', None, {'data':{'content':content}}]]}]]}]
+        html='<main><h1>Advisory</h1><span class="page-banner__date">Updated on 30 Sep 2026</span><main class="layout layout--standard"><article></article></main></main><script>self.__next_f.push(' + json.dumps([1,'24:'+json.dumps(article)+'\n']) + ')</script>'
+        item=parsers.extract_document('pdpc',html.encode(),'https://www.pdpc.gov.sg/media-events/advisory','text/html',
+            {'date_observations':[{'meaning':'listing_published_display','locator':'card','value':'29 Sep 2026'}]})
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['date_conflict'])
+        self.assertTrue(item['metadata']['requires_review'])
+
+    def test_ico_uses_explicit_dublin_core_published_date(self):
+        html='<html><head><meta name="DC.Date" content="Monday, October 12, 2026"></head><body><h1>Privacy notice</h1><main><div class="rich-text"><div class="prose"><p>A sufficiently complete official privacy notice.</p></div></div></main></body></html>'
+        item=parsers.extract('ico',html,'https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/example/')
+        self.assertEqual(item['published_date'],'2026-10-12')
+        self.assertEqual(item['metadata']['date_observations'][-1],{
+            'meaning':'official_published_attribute','locator':'meta[name="DC.Date"]@content',
+            'value':'Monday, October 12, 2026'})
+
+    def test_cnil_detail_publication_date_wins_over_archive_card_with_review(self):
+        html='<main><h1>Article</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">A sufficiently complete privacy article body.</div></main>'
+        item=parsers.extract_document('cnil',html.encode(),'https://www.cnil.fr/fr/a','text/html',{
+            'date_observations':[{'meaning':'listing_published_display','locator':'listing .list-inner .attributes p.date','value':'27 mars 2024'}]})
+        self.assertEqual(item['published_date'],'2026-10-20')
+        self.assertTrue(item['metadata']['date_conflict'])
         self.assertTrue(item['metadata']['requires_review'])
 
     def test_pdpc_empty_or_unresolved_embedded_body_fails_closed(self):

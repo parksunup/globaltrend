@@ -10,7 +10,7 @@ create temporary table test_context (job uuid, item uuid, revision uuid, report 
 update public.sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
 insert into test_context(job,item,revision)
 select draft_job_id,source_item_id,source_item_revision_id from public.ingest_source_item(
- (select id from public.sources where name='EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector',
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector',
  'Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. The consultation closes on 20 November 2026.',
  repeat('c',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
@@ -40,18 +40,16 @@ select results_eq('select status,human_reviewed from public.reports where source
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
  '42501','Active job lease is required','duplicate submit is rejected');
 
--- A changed body creates a second exact revision; the existing report must survive.
+-- A changed body for an already-reported item must not consume another draft lease.
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
  'https://www.edpb.europa.eu/test-collector','Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. Updated later.',repeat('d',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
-select public.claim_trend_draft_jobs('worker-three',1);
-select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',
- (select id from public.draft_jobs where input_hash=repeat('d',64)),'worker-three',(select draft::text from test_payload)),
- 'existing report moves proposed update to human review');
+select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-three',1)),0,
+ 'existing report blocks a new revision claim');
+select is((select status from public.draft_jobs where input_hash=repeat('d',64)),
+ 'pending','reported revision remains pending without consuming a lease');
 select is((select title_ko from public.reports where source_item_id=(select item from test_context)),
  '개인정보 지침 발표','existing report is never overwritten by automatic update');
-select is((select status from public.draft_jobs where input_hash=repeat('d',64)),
- 'needs_human_review','new revision remains waiting for human review');
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
  'https://www.edpb.europa.eu/test-stale','Stale input',null,null,now(),'en','news',
  'The board published final guidelines on personal data.',repeat('e',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
