@@ -580,9 +580,9 @@ export async function extract(
     : [];
   const explicitDetailDate = new Set(explicitDetailDates);
   const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x !== null && !explicitDetailDate.has(x));
-  if (explicitDetailDate.size === 1) date = [...explicitDetailDate][0];
-  const dateResolution = explicitDetailDate.size === 1
-    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
+  if (explicitDetailDate.size === 1 && !dateConflict) date = [...explicitDetailDate][0];
+  const dateResolution = explicitDetailDate.size === 1 && !dateConflict
+    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: [] }
     : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
     dateConflict ||
