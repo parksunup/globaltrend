@@ -1,0 +1,31 @@
+name: NotebookLM cloud podcast
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+permissions:
+  contents: read
+  id-token: write
+concurrency:
+  group: notebooklm-cloud-podcast
+  cancel-in-progress: false
+jobs:
+  produce:
+    # No private, self-hosted, or larger paid runners.
+    if: github.repository == 'parksunup/globaltrend' && github.event.repository.private == false && github.ref == 'refs/heads/main' && vars.PODCAST_CLOUD_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned NotebookLM implementation
+        run: python -m pip install -r scripts/podcast-cloud/requirements.txt
+      - name: Cloud worker (no browser, no credential artifacts)
+        env:
+          NOTEBOOKLM_AUTH_JSON: ${{ secrets.NOTEBOOKLM_AUTH_JSON }}
+          PODCAST_ENDPOINT: https://emlgwhkgaihhrirhdpnp.supabase.co/functions/v1/podcast-cloud
+        run: python scripts/podcast-cloud/worker.py
