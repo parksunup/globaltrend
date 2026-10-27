@@ -83,7 +83,7 @@ Deno.test("DPC listing date is used only for one exact valid observation", () =>
   eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, value: "01th October 2026" }] }), null);
   eq(dpcListingDate({ url: "https://www.dataprotection.ie/a", title: "A", date_observations: [{ ...observation, locator: "page body" }] }), null);
 });
-Deno.test("DPC listing date fills a missing detail date but conflicts stay unknown", async () => {
+Deno.test("DPC exact detail date wins over a conflicting listing date with review", async () => {
   const row = {
     url: "https://www.dataprotection.ie/en/news-media/latest-news/example",
     title: "Example",
@@ -108,7 +108,8 @@ Deno.test("DPC listing date fills a missing detail date but conflicts stay unkno
     row.url,
     row,
   );
-  eq(conflict.published_date, null);
+  eq(conflict.published_date, "2026-10-02");
+  eq(conflict.metadata.date_conflict, true);
   eq(conflict.metadata.ai_ready, false);
   eq(conflict.metadata.date_observations.length, 2);
   const ambiguous = await extract(
@@ -157,6 +158,18 @@ Deno.test("ICO extraction uses explicit Dublin Core publication date", async () 
   eq(x.metadata.ai_ready, true);
 });
 
+Deno.test("DPC detail publication date wins over conflicting teaser date with review", async () => {
+  const x = await extract(
+    "dpc",
+    '<h1>Privacy notice</h1><main><p class="date">12 October 2026</p><div class="field--name-body"><p>A sufficiently detailed DPC publication body.</p></div></main>',
+    "https://www.dataprotection.ie/en/news-media/latest-news/example",
+    { url: "https://www.dataprotection.ie/en/news-media/latest-news/example", title: "Privacy notice", date_observations: [{ meaning: "listing_published_display", locator: "listing article.node--view-mode-teaser p.date", value: "11th October 2026" }] },
+  );
+  eq(x.published_date, "2026-10-12");
+  eq(x.metadata.date_conflict, true);
+  eq(x.metadata.requires_review, true);
+});
+
 Deno.test("HTML extraction preserves historical Python text-node normalization", async () => {
   const x = await extract(
     "edpb",
@@ -186,6 +199,18 @@ Deno.test("PPC official notice dateline excludes body dates and keeps PDFs unrea
   eq(x.metadata.related_documents[0].read, false);
   eq(x.metadata.date_observations[0].meaning, "published_notice_dateline");
 });
+Deno.test("PPC poster contest opening dateline is a publication date", async () => {
+  const x = await extract("ppc", '<title>「個人情報に関するポスターコンクール」を開催します</title><h1 class="page-ttl">「個人情報に関するポスターコンクール」を開催します</h1><main class="l-main"><div class="l-article"><p>令和８年6月１日</p><p>個人情報保護委員会</p><p>「個人情報に関するポスターコンクール」を開催します。報道発表資料を掲載します。</p></div></main>', "https://www.ppc.go.jp/news/press/2026/260601");
+  eq(x.published_date, "2026-06-01");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
+});
+Deno.test("PPC privacy awareness week opening dateline is a publication date", async () => {
+  const x = await extract("ppc", '<title>令和８年度「個人情報を考える週間」について</title><h1 class="page-ttl">令和８年度「個人情報を考える週間」について</h1><main class="l-main"><div class="l-article"><p>令和８年６月22日</p><p>個人情報保護委員会</p><p>令和８年度「個人情報を考える週間」について。６月22日に報道発表を行いました。</p><a href="/news/privacy_awareness_week/">週間の案内</a></div></main>', "https://www.ppc.go.jp/news/press/2026/26%20622");
+  eq(x.published_date, "2026-06-22");
+  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
+});
 Deno.test("PPC conflicting publication title and notice dateline remain unknown", async () => {
   const x = await extract("ppc", '<html><head><title>公表（令和８年７月18日）</title></head><body><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main></body></html>', "https://www.ppc.go.jp/news/press/a/");
   eq(x.published_date, null);
@@ -209,8 +234,31 @@ Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async (
     p.rows[0].url,
     p.rows[0],
   );
-  eq(item.published_date, null);
+  eq(item.published_date, "2026-10-20");
+  eq(item.metadata.date_conflict, true);
   eq(item.metadata.requires_review, true);
+});
+
+Deno.test("PDPC exact detail publication label wins over conflicting card date", async () => {
+  const article = ["$", "main", null, { className: "layout layout--standard", children: [
+    ["$", "article", null, { children: [["$", "$L26", null, { data: { content: "<p>A sufficiently complete PDPC advisory body.</p>" } }]] }],
+  ] }];
+  const html = `<main><h1>Advisory</h1><span class="page-banner__date">Published on 30 Sep 2026</span><main class="layout layout--standard"><article></article></main></main><script>self.__next_f.push(${JSON.stringify([1, "24:" + JSON.stringify(article) + "\n"])})</script>`;
+  const item = await extract("pdpc", html, "https://www.pdpc.gov.sg/media-events/advisory", {
+    url: "https://www.pdpc.gov.sg/media-events/advisory",
+    title: "Advisory",
+    date_observations: [{ meaning: "listing_published_display", locator: "card", value: "29 Sep 2026" }],
+  });
+  eq(item.published_date, "2026-09-30");
+  eq(item.metadata.date_conflict, true);
+  eq(item.metadata.requires_review, true);
+  const ambiguous = await extract("pdpc", html.replace("Published on 30 Sep 2026", "Updated on 30 Sep 2026"), "https://www.pdpc.gov.sg/media-events/advisory", {
+    url: "https://www.pdpc.gov.sg/media-events/advisory",
+    title: "Advisory",
+    date_observations: [{ meaning: "listing_published_display", locator: "card", value: "29 Sep 2026" }],
+  });
+  eq(ambiguous.published_date, null);
+  eq(ambiguous.metadata.requires_review, true);
 });
 
 

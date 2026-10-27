@@ -50,6 +50,43 @@ const pdpcExternalReferralHosts = new Set([
   "www.mddi.gov.sg",
   "www.mfa.gov.sg",
 ]);
+/** Keep diagnostic links on approved public hosts and drop arbitrary query data. */
+function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
+  try {
+    const parsed = new URL(canonical(raw, hosts));
+    let decodedPath: string;
+    try {
+      decodedPath = decodeURIComponent(parsed.pathname);
+    } catch {
+      return null;
+    }
+    const segments = decodedPath.split("/").filter(Boolean);
+    if (
+      decodedPath.length > 512 ||
+      segments.some((segment) =>
+        segment.length > 100 || /[@\p{Cc}]/u.test(segment) ||
+        /^[A-Za-z0-9_-]{32,}$/.test(segment) ||
+        /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/.test(segment)
+      )
+    ) return null;
+
+    const safe = new URL(parsed.origin + parsed.pathname);
+    const allowedParams = new Set(["page", "offset", "pagenumber", "from", "to"]);
+    for (const key of allowedParams) {
+      const values = parsed.searchParams.getAll(key);
+      if (values.length !== 1) continue;
+      const value = values[0];
+      const valid = key === "from" || key === "to"
+        ? /^\d{4}-\d{2}-\d{2}$/.test(value)
+        : /^\d{1,6}$/.test(value);
+      if (valid) safe.searchParams.set(key, value);
+    }
+    safe.searchParams.sort();
+    return safe.href;
+  } catch {
+    return null;
+  }
+}
 async function listing(c: Config, http: HTTP, page: string) {
   const r = await http.request(page);
   const text = new TextDecoder().decode(r.bytes);
@@ -287,6 +324,18 @@ export async function advance(
     since: state.since,
     until: state.until,
   };
+  let requestStage: "listing" | "detail" = "listing";
+  const diagnosticHttp: HTTP = {
+    request: async (raw, method, body) => {
+      result.stage = `${requestStage}_fetch`;
+      const diagnosticUrl = safeDiagnosticUrl(raw, c.hosts);
+      if (diagnosticUrl) result.url = diagnosticUrl;
+      else delete result.url;
+      const response = await http.request(raw, method, body);
+      result.stage = `${requestStage}_parse`;
+      return response;
+    },
+  };
   try {
     if (
       !["edge-v2", "edge-cnil-v3"].includes(state.adapter_version || "") &&
@@ -335,7 +384,12 @@ export async function advance(
       }
     }
     if (!state.rows) {
-      const found = await listing(c, http, canonical(state.page, c.hosts));
+      result.stage = "listing_url_validation";
+      const listingUrl = canonical(state.page, c.hosts);
+      const safeListingUrl = safeDiagnosticUrl(listingUrl, c.hosts);
+      if (safeListingUrl) result.url = safeListingUrl;
+      else delete result.url;
+      const found = await listing(c, diagnosticHttp, listingUrl);
       if (!found.rows.length) {
         throw new Error("listing_empty_or_structure_changed");
       }
@@ -388,6 +442,11 @@ export async function advance(
         }
       }
       const row = state.rows[state.offset || 0];
+      requestStage = "detail";
+      result.stage = "detail_url_validation";
+      const safeDetailUrl = safeDiagnosticUrl(row.url, c.hosts);
+      if (safeDetailUrl) result.url = safeDetailUrl;
+      else delete result.url;
       if (c.source === "pdpc") {
         if (row.topic === "Events") {
           // The listing date denotes an event, not article publication.
@@ -397,7 +456,6 @@ export async function advance(
           result.saved = "non_article";
           result.reason = "pdpc_event_listing_not_publication";
           result.read_scope = "official_listing_api_topic_only";
-          result.url = canonical(row.url, c.hosts);
           state.failures = 0;
           if (state.is_backlog) {
             result.backlog_resolved = true;
@@ -453,7 +511,7 @@ export async function advance(
         state.offset = (state.offset || 0) + 1;
         return { state, result, continue: true, delay: 0 };
       }
-      const response = await http.request(url);
+      const response = await diagnosticHttp.request(url);
       let item: Item;
       if (c.source === "curia" && response.type === "application/pdf") {
         item = await extractPressReleasePDF(response.bytes, row);
@@ -500,6 +558,7 @@ export async function advance(
         (item.published_date < state.since || item.published_date > state.until)
       ) result.saved = "out_of_range";
       else {
+        result.stage = "item_store";
         const saved = await ingest(item, url);
         result.saved = saved.item_created
           ? "new"
@@ -576,7 +635,9 @@ export async function advance(
       ? reason
       : "runtime_" + (e instanceof Error ? e.name : "error");
     result.offset = state.offset || 0;
-    result.page = state.page;
+    const safeFailurePage = typeof state.page === "string" ? safeDiagnosticUrl(state.page, c.hosts) : null;
+    if (safeFailurePage) result.page = safeFailurePage;
+    else delete result.page;
     if (
       !state.is_backlog && state.rows?.[state.offset || 0] &&
       state.failures >= 3 && !reason.startsWith("database_")

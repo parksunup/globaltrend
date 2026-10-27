@@ -89,6 +89,29 @@ export function parseDate(value: string): string | null {
   ) return null;
   return out;
 }
+/** Accept only the complete publication label shown on a PDPC detail page. */
+export function pdpcDetailPublishedDate(value: string): string | null {
+  const match = normalize(value).match(/^Published on\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})$/i);
+  return match ? parseDate(match[1]) : null;
+}
+/** CNIL article-page date line, kept distinct from archive card dates. */
+export function cnilDetailPublishedDate(
+  meaning: string,
+  locator: string,
+  value: string,
+): string | null {
+  const normalized = normalize(value).toLowerCase();
+  if (meaning !== "published_display" || locator !== "main .ctn-gen-auteur" ||
+    !/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/.test(normalized)) return null;
+  return parseDate(normalized);
+}
+/** DPC detail-page publication label, distinct from the teaser-card date. */
+export function dpcDetailPublishedDate(observation: Observation): string | null {
+  const value = normalize(observation.value);
+  if (observation.meaning !== "published_display" || observation.locator !== "main p.date" ||
+    !/^\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s+\d{4}$/i.test(value)) return null;
+  return parseDate(value);
+}
 /** Read only ICO's explicit Dublin Core publication date; never infer from URL/title. */
 export function icoPublishedDate(html: string): { date: string; value: string } | null {
   const { document } = parseHTML(html);
@@ -396,6 +419,7 @@ export async function extract(
       x.textContent?.trim() === "Date"
     )?.nextElementSibling || null;
   }
+  let ppcOpeningDateline = false;
   let nodes = bs.flatMap((x) => [...document.querySelectorAll(x)]);
   let scope = "news_html";
   if (source === "pdpc") {
@@ -501,6 +525,25 @@ export async function extract(
         value: normalize(dateline.textContent || ""),
       });
     }
+    // Some PPC notices place the publication date at the very start of the
+    // main content, immediately followed by the Commission name, instead of
+    // using .date-box. Keep this strict opening pattern so later dates in the
+    // body (for example enactment or revision dates) cannot become publish dates.
+    const main = document.querySelector("main.l-main");
+    const opening = main
+      ? normalize(textNodes(main as unknown as Node).join(" "))
+      : "";
+    const openingDate = opening.match(
+      /^((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)\s*個人情報保護委員会(?:\s|$)/,
+    );
+    if (openingDate) {
+      ppcOpeningDateline = true;
+      observations.push({
+        meaning: "published_opening_dateline",
+        locator: "main.l-main opening date",
+        value: openingDate[1],
+      });
+    }
     const match = document.title.match(
       /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
     );
@@ -525,10 +568,36 @@ export async function extract(
       ...(dpcListing ? [dpcListing] : []),
     ]),
   ];
-  const date = dates.length === 1 ? dates[0] : null;
+  let date = dates.length === 1 ? dates[0] : null;
+  const explicitDetailDates = source === "dpc"
+    ? observations.map((x) => dpcDetailPublishedDate(x)).filter((x): x is string => Boolean(x))
+    : source === "pdpc"
+    ? observations.filter((x) => x.meaning === "published_display" && x.locator === "main .page-banner__date")
+      .map((x) => pdpcDetailPublishedDate(x.value)).filter((x): x is string => Boolean(x))
+    : source === "cnil"
+    ? observations.map((x) => cnilDetailPublishedDate(x.meaning, x.locator, x.value))
+      .filter((x): x is string => Boolean(x))
+    : [];
+  const explicitDetailDate = new Set(explicitDetailDates);
+  const cnilListingObservations = source === "cnil"
+    ? (row?.date_observations || []).filter((x) =>
+      x.meaning === "listing_published_display" &&
+      x.locator === "listing .list-inner .attributes p.date"
+    )
+    : [];
+  const cnilListingIsAmbiguous = cnilListingObservations.length > 0 && cnilListingDate(row!) === null;
+  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x != null && !explicitDetailDate.has(x));
+  const canSelectDetailDate = explicitDetailDate.size === 1 &&
+    (!dateConflict || source === "dpc" || source === "pdpc" || source === "cnil" && !cnilListingIsAmbiguous);
+  if (canSelectDetailDate) date = [...explicitDetailDate][0];
+  const dateResolution = canSelectDetailDate
+    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
+    : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
+    dateConflict ||
     source === "ppc" &&
-      related.some((x) => new URL(x.url).pathname.endsWith(".pdf"));
+      (related.some((x) => new URL(x.url).pathname.endsWith(".pdf")) ||
+        ppcOpeningDateline);
   return {
     title_original: normalize(title.textContent || ""),
     content_text: body,
@@ -539,6 +608,8 @@ export async function extract(
       parser_version: source === "pdpc" ? "edge-pdpc-article-v3" : "edge-adapter-v2",
       read_scope: scope,
       date_observations: observations,
+      ...(dateConflict ? { date_conflict: true } : {}),
+      ...(dateResolution ? { date_resolution: dateResolution } : {}),
       requires_review: requiresReview,
       related_documents: related,
       unresolved_links: unresolvedLinks,

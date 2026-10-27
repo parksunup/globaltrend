@@ -8,6 +8,7 @@ import datetime as dt
 import json
 import hashlib
 import uuid
+import re
 from pathlib import Path
 from .core import HttpClient, FetchError, MAX_PROCESSED_URL_HASHES, canonical_url, collect, fetch_listing
 from . import parsers
@@ -169,11 +170,16 @@ def prepare(claim):
         ordinal=snapshot.get('ordinal')
         row_count=snapshot.get('row_count')
         row=snapshot.get('row')
+        hashes=snapshot.get('url_hashes')
         if type(ordinal) is not int or ordinal<0 or type(row_count) is not int or not 0<row_count<=MAX_FTC_SNAPSHOT_ROWS or ordinal>=row_count:
             raise ValueError('listing_snapshot_claim_invalid')
         if (claim['cursor'].get('offset') != ordinal or not isinstance(row,dict) or
                 not isinstance(row.get('url'),str) or not isinstance(row.get('title'),str)):
             raise ValueError('listing_snapshot_claim_invalid')
+        if (not isinstance(hashes,list) or len(hashes)!=row_count or
+                len(set(hashes))!=len(hashes) or
+                any(not isinstance(value,str) or not re.fullmatch(r'[0-9a-f]{64}',value) for value in hashes)):
+            raise ValueError('listing_snapshot_hashes_missing_or_invalid')
         store.snapshot_ref={'id':snapshot['id'],'ordinal':ordinal}
         result={'source':'ftc','status':'partial','reason':None,'coverage_complete':False,
                 'since':claim['since'],'until':claim['until'],'discovered':1,'new':0,'changed':0,
@@ -185,6 +191,8 @@ def prepare(claim):
             raise ValueError('listing_snapshot_url_not_canonical')
         try:
             row_hash=hashlib.sha256(url.encode()).hexdigest()
+            if row_hash not in set(hashes):
+                raise ValueError('listing_snapshot_hash_mismatch')
             if row_hash in set(claim.get('previous_listing_hashes') or cursor.get('processed_url_hashes') or []):
                 result['duplicate']=1
                 result['reason']='previously_seen_url'

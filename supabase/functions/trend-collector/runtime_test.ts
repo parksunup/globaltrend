@@ -474,6 +474,50 @@ Deno.test("CNIL legacy rows refresh current page preserving unresolved dates", a
   eq(step.state.failures, 0);
   eq(step.state.unknown_dates, 2);
 });
+Deno.test("CNIL listing timeout records safe stage and URL without token query values", async () => {
+  const url = "https://www.cnil.fr/fr/actualites?page=12&access_token=secret-value&email=person%40example.com";
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-26",
+    adapter_version: "edge-cnil-v3",
+    page: url,
+  };
+  const step = await advance(cnilConfig, state, {
+    request: async () => {
+      throw new DOMException("The operation timed out", "TimeoutError");
+    },
+  }, async () => ({}));
+  eq(step.result.status, "failed");
+  eq(step.result.stage, "listing_fetch");
+  eq(step.result.url, "https://www.cnil.fr/fr/actualites?page=12");
+  eq(JSON.stringify(step.result).includes("secret-value"), false);
+  eq(JSON.stringify(step.result).includes("person@example.com"), false);
+});
+Deno.test("CNIL detail timeout records safe URL and keeps the exact retry offset", async () => {
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-26",
+    adapter_version: "edge-cnil-v3",
+    page: cnilConfig.listing,
+    rows: [{
+      url: "https://www.cnil.fr/fr/safe-article?page=2&token=secret-value",
+      title: "Article",
+    }],
+    offset: 0,
+  };
+  const step = await advance(cnilConfig, state, {
+    request: async () => {
+      throw new DOMException("The operation timed out", "TimeoutError");
+    },
+  }, async () => ({}));
+  eq(step.result.status, "failed");
+  eq(step.result.stage, "detail_fetch");
+  eq(step.result.url, "https://www.cnil.fr/fr/safe-article?page=2");
+  eq(JSON.stringify(step.result).includes("secret-value"), false);
+  eq(step.state.offset, 0);
+  eq(step.state.since, state.since);
+  eq(step.state.until, state.until);
+});
 Deno.test("CNIL batches only consecutive old cards and leaves ambiguous or newer rows pending", async () => {
   const state: State = {
     since: "2026-09-21",
