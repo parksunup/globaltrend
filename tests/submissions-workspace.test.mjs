@@ -11,7 +11,7 @@ const story={id:'one',institution:'CURIA',title:'판례 동향',originalTitle:'O
 const law={recordId:'jp-appi',jurisdiction:'JP',contentHash:'b'.repeat(64),versionLabel:'2026',instrument:{title:'APPI',summary:'법제 설명'},availability:'translation',document:{sections:[]},cells:[]};
 function moduleUnderTest({stories=[story],laws=[law]}={}){
   const exports={};const source=ts.transpileModule(readFileSync('lib/workspace-submissions.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-  vm.runInNewContext(source,{exports,process,console,require(name){if(name==='./public-submission-preview')return {loadSubmittedStories:typeof stories==='function'?stories:()=>stories};if(name==='./legal-release')return {buildLegalReviewPackages:()=>laws};return require(name);}});return exports;
+  vm.runInNewContext(source,{exports,process,console,require(name){if(name==='./public-submission-preview.ts'||name==='./public-submission-preview')return {loadSubmittedStories:typeof stories==='function'?stories:()=>stories};if(name==='./legal-release.ts'||name==='./legal-release')return {buildLegalReviewPackages:()=>laws};return require(name);}});return exports;
 }
 function fakeDb({sources=true,existing=false,edited=false,workingEdited=false,trashed=false,lawEdited=false,race=false}={}){
   const calls=[];const tables={sources:sources?[{id:uuid(1),publishers:{acronym:'CJEU'}}]:[],source_items:[],reports:[],publication_working_copies:[]};
