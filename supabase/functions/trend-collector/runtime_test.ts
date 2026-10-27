@@ -544,6 +544,28 @@ const pdpcDateObservation = (value: string) => [{
   locator: "listing card",
   value,
 }];
+Deno.test("PDPC external government links remain referrals and never become PDPC articles", async () => {
+  for (const host of ["www.csa.gov.sg", "www.mci.gov.sg", "www.mddi.gov.sg", "www.mfa.gov.sg"]) {
+    const url = `https://${host}/news/privacy-article?tracking=private`;
+    for (const is_backlog of [false, true]) {
+      const state: State = {
+        since: "2026-10-16", until: "2026-10-27", is_backlog,
+        rows: [{url, title: "Linked agency document", topic: "News",
+          date_observations: pdpcDateObservation("20 Jul 2026")}], offset: 0,
+      };
+      const step = await advance(pdpcRangeConfig, state, {
+        request: async () => { throw new Error("external host must not be fetched"); },
+      }, async () => { throw new Error("external document must not be ingested as PDPC"); });
+      eq(step.result.saved, "external_referral");
+      eq(step.result.reason, "different_agency_source");
+      eq(step.result.url, `https://${host}/news/privacy-article`);
+      eq(step.result.coverage_complete, false);
+      eq(step.result.backlog_resolved, is_backlog || undefined);
+      eq(step.state.offset, is_backlog ? 0 : 1);
+      eq(step.continue, !is_backlog);
+    }
+  }
+});
 Deno.test("PDPC Reports listing date filters an exact out-of-range backlog before fetching", async () => {
   const url = "https://www.pdpc.gov.sg/assets/report-2026-05-25";
   const state: State = {

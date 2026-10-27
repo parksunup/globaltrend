@@ -72,13 +72,12 @@ class SupabaseStore:
         if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}): raise FetchError('database_source_approval_missing')
         return self.rpc('ingest_source_item',p)[0]
     def discovery_failure(self,config,url,title,error):
-        # Do not fake a title to satisfy the ingest contract. Unnamed failures remain in run logs.
-        if not title: return
-        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_storage_cap')
-        if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}): raise FetchError('database_source_approval_missing')
-        self.rpc('ingest_source_item',{'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':title,
-          'p_published_at':None,'p_event_date':None,'p_fetched_at':None,'p_language_code':config.get('language','en'),'p_document_type':'news',
-          'p_content_text':None,'p_content_hash':None,'p_raw_storage_path':None,'p_metadata':{'fetch_failure':error,'ai_ready':False},'p_instruction_version':'trend-ko-v1'})
+        # collect() retains this URL and its failed offset in the durable progress
+        # cursor, then records the failure in collector_record_run. A listing
+        # title alone is not an article: inserting it as a discovered source_item
+        # creates a permanently empty body and an unverified publication date.
+        # Retry the same URL via the cursor instead of manufacturing a document.
+        return None
     def checkpoint(self,config,until):
         self.rpc('collector_set_progress',{'p_source_id':config['source_id'],'p_since':None,'p_until':until,'p_cursor':None,'p_complete':True})
     def progress(self,config,since,until,cursor):

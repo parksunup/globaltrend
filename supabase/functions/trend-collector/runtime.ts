@@ -41,6 +41,15 @@ type HTTP = {
   ) => Promise<{ bytes: Uint8Array; url: string; type: string }>;
 };
 export type Item = Awaited<ReturnType<typeof extract>>;
+// PDPC's media listing also links to other Singapore agencies. These hosts
+// are recognised referrals, not PDPC articles. Never ingest them under the
+// PDPC source identity, even when the linked agency is an approved host.
+const pdpcExternalReferralHosts = new Set([
+  "www.csa.gov.sg",
+  "www.mci.gov.sg",
+  "www.mddi.gov.sg",
+  "www.mfa.gov.sg",
+]);
 async function listing(c: Config, http: HTTP, page: string) {
   const r = await http.request(page);
   const text = new TextDecoder().decode(r.bytes);
@@ -379,6 +388,24 @@ export async function advance(
         }
       }
       const row = state.rows[state.offset || 0];
+      if (c.source === "pdpc") {
+        const target = new URL(row.url);
+        if (target.protocol === "https:" && pdpcExternalReferralHosts.has(target.hostname)) {
+          result.stage = "detail_scope_check";
+          result.saved = "external_referral";
+          result.reason = "different_agency_source";
+          result.read_scope = "official_listing_external_referral_only";
+          result.url = target.origin + target.pathname;
+          result.referral_host = target.hostname;
+          state.failures = 0;
+          if (state.is_backlog) {
+            result.backlog_resolved = true;
+            return { state, result, continue: false, delay: 0 };
+          }
+          state.offset = (state.offset || 0) + 1;
+          return { state, result, continue: true, delay: 0 };
+        }
+      }
       const url = canonical(row.url, c.hosts);
       const pdpcReportDate = c.source === "pdpc" && row.topic === "Reports" &&
           row.date_observations?.length === 1 &&

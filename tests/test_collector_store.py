@@ -34,3 +34,9 @@ class StoreResponseTests(unittest.TestCase):
 
     def test_incremental_run_keeps_three_day_overlap_after_last_success(self):
         self.assertEqual(SupabaseStore._range_start({'last_success_date':'2026-10-19'}, '2026-10-21'), '2026-10-16')
+
+    def test_failed_detail_does_not_create_an_empty_article(self):
+        store = self.store(b'[]')
+        store.discovery_failure({'source_id': 'approved-source'},
+                                'https://example.org/article', 'Listed title', 'request_or_runtime_limit')
+        store.client.request.assert_not_called()
