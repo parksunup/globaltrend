@@ -29,7 +29,7 @@ NotebookLM MCP 프로젝트 `notebooklm-py` 0.8.5의 실행 엔진을 사용합�
 5. Google 세션은 `.podcast-private/` 안에만 저장되며 `.gitignore`와 현재 Windows 사용자 전용 폴더 ACL로 보호합니다. 이 디렉터리는 외부에 전달하지 않습니다.
 6. PR 병합 후 GitHub 변수 `PODCAST_CLOUD_ENABLED=true`와 DB `podcast_cloud_runtime.enabled=true`를 켜고 수동 실행으로 실제 생성·회수를 시험합니다. 인증 없는 API가 401로 차단되고 OIDC 저장이 성공해도 실제 Google 생성 시험을 대신하지 않습니다.
 
-사용자는 2026-10-27에 전용 계정 세션의 GitHub 암호화 저장 및 이 패키지의 클라우드 사용을 승인했습니다. 현재 실제 세션은 아직 연결하지 않았습니다. 연결 스크립트는 계정 접근 권한을 새로 만드는 절차이며 사용자 직접 실행을 전제로 합니다.
+사용자는 2026-10-27에 전용 계정 세션의 GitHub 암호화 저장 및 이 패키지의 클라우드 사용을 승인했습니다. 같은 날 전용 계정으로 직접 로그인한 세션을 `NOTEBOOKLM_AUTH_JSON` Secret에 연결했고, Secret 이름과 인증 시험을 확인했습니다. 비밀번호·세션 본문은 저장소에 넣지 않았습니다. 연결 스크립트는 설치된 Chrome의 별도 프로필을 사용하며, 이 컴퓨터에서는 Windows 신뢰 인증서를 Python에도 적용해 인증서 검증을 유지합니다.
 
 ## 비용·실행 환경
 
@@ -50,11 +50,13 @@ NotebookLM MCP 프로젝트 `notebooklm-py` 0.8.5의 실행 엔진을 사용합�
 
 ## 검증 기록 — 2026-10-27
 
-- 설치 버전의 SDK 메서드 인자를 실제로 확인했습니다. Python 모의시험 4개, Node 테스트 7개, 타입 검사·Next.js 운영 빌드·연결 스크립트 PowerShell 구문 검사 통과.
+- 설치 버전의 SDK 메서드 인자를 실제로 확인했습니다. Python 모의시험 4개, Node 테스트 9개, 타입 검사·Next.js 운영 빌드·연결 스크립트 PowerShell 구문 검사 통과.
 - 운영 DB 마이그레이션 `20261027065954_podcast_cloud_worker` 적용. runtime은 비활성으로 유지.
 - `podcast-cloud` Edge Function 배포. 함수 자체가 GitHub OIDC 서명을 검증하므로 플랫폼의 Supabase JWT 검사만 끕니다. 무인증 요청 401 확인.
 - `docs/podcast-cloud-rollback-check.sql`: 단일 선점, 이중 선점 차단, 기존 게시 함수 연결, 게시 후 상태 역행 차단을 트랜잭션 안에서 검사한 뒤 모두 롤백했습니다.
-- 실제 전용 Google 세션 연결, GitHub에서 음성 생성·회수, 공개 페이지 재생까지의 전 과정은 아직 검증 전입니다. 통과하기 전에는 운영 자동화를 켜지 않습니다.
+- 전용 Google 계정에서 게시하지 않는 가상 자료를 넣어 짧은 한국어 음성 1건을 실제 생성했습니다. 작업 번호 `31e7419b-3190-42b1-809e-497a2d629065`의 완료를 확인하고 MP4 오디오 10,836,773바이트를 내려받았습니다. 사용자 작업공간의 `output/podcast-pipeline/notebooklm-smoke-2026-10-27.m4a`에 시험본을 두었습니다.
+- [GitHub 클라우드 시험 실행 #40491079311](https://github.com/parksunup/globaltrend/actions/runs/40491079311)에서 표준 Ubuntu 실행기가 Secret으로 인증하고 **같은 작업 번호의 음성 10,836,773바이트를 회수**했습니다. 추가 음성을 만들거나 GitHub artifact에 음성·쿠키를 보관하지 않았습니다. 일회성 시험 workflow는 결과 확인 후 PR 브랜치에서 제거합니다.
+- 실제 GitHub 클라우드에서 새 음성을 생성하고 DB·Storage에 저장하는 흐름, GitHub OIDC 양성 경로, 사이트에서 재생·게시하는 흐름은 아직 검증 전입니다. 운영 workflow는 main에 없고 `PODCAST_CLOUD_ENABLED`와 DB runtime도 켜지 않았습니다. 이 전 과정을 확인하기 전에는 자동 제작이 된다고 안내하지 않습니다.
 
 ## 참고 문서
 
