@@ -582,7 +582,7 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
                  'content_hash':'hash','metadata':{'requires_review':False,'date_observations':[]}}
         staged={'id':'d4cb6348-0ea2-4a9f-8b47-5427f5915f9a','listing_url':self.listing,
                 'fingerprint':'a'*64,'row_count':3,'ordinal':1,
-                'row':{'url':self.urls['B'],'title':'B','date_observations':[]},'url_hashes':['a'*64]}
+                'row':{'url':self.urls['B'],'title':'B','date_observations':[]},'url_hashes':[__import__('hashlib').sha256(self.urls[k].encode()).hexdigest() for k in ('A','B','C')] }
         cursor={'page':self.listing,'offset':1,'fingerprint':'a'*64,'snapshot_id':staged['id'],
                 'processed_url_hashes':['b'*64]}
         claim=self.claim(cursor,snapshot=staged)
