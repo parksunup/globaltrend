@@ -55,6 +55,63 @@ Deno.test("successful duplicate advances only after ingest and preserves incompl
   eq(result.result.saved, "duplicate");
   eq(result.result.coverage_complete, false);
 });
+Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
+  const ico = {
+    source: "ico",
+    source_id: "ico-source",
+    listing: "https://ico.org.uk/news/",
+    hosts: ["ico.org.uk"],
+    language: "en",
+  };
+  const state: State = {
+    since: "2026-01-01",
+    until: "2026-10-27",
+    is_backlog: true,
+    rows: [{
+      url: "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/02/old-article/",
+      title: "Old article",
+    }],
+    offset: 0,
+  };
+  let stored = false;
+  const step = await advance(ico, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode('<h1>Unrelated page</h1><main><p>Some other document body.</p></main>'),
+      url: "https://ico.org.uk/about-the-ico/what-we-do/",
+      type: "text/html",
+    }),
+  }, async () => {
+    stored = true;
+    return {};
+  });
+  eq(stored, false);
+  eq(step.state.offset, 0);
+  eq(step.result.status, "failed");
+  eq(step.result.reason, "detail_redirect_target_mismatch");
+  eq(step.result.coverage_complete, false);
+});
+Deno.test("same document trailing slash redirect remains readable", async () => {
+  const state: State = {
+    since: "2026-09-21", until: "2026-10-21",
+    rows: [{ url: "https://www.edpb.europa.eu/news/x", title: "x" }],
+    offset: 0,
+  };
+  let stored = false;
+  const step = await advance(config, state, {
+    request: async () => ({
+      bytes: new TextEncoder().encode(
+        '<h1 class="node-article-full__title">x</h1><time class="node-article-full__date">21 October 2026</time><div class="node-article-full__body">Original complete article body long enough.</div>',
+      ),
+      url: "https://www.edpb.europa.eu/news/x/",
+      type: "text/html",
+    }),
+  }, async () => {
+    stored = true;
+    return {};
+  });
+  eq(stored, true);
+  eq(step.result.status, "partial");
+});
 Deno.test("unknown date is stored unready and remains an explicit incomplete item", async () => {
   const state: State = {
     since: "2026-09-21",

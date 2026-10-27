@@ -446,6 +446,16 @@ export async function advance(
         if (!["text/html", "application/xhtml+xml"].includes(response.type)) {
           throw new Error("unsupported_document_type");
         }
+        // Retired article URLs can redirect to unrelated HTML pages with a
+        // successful response. A PDF download may legitimately redirect to a
+        // different asset path, so only compare HTML article paths here.
+        const requested = new URL(url);
+        const received = new URL(canonical(response.url, c.hosts));
+        const documentPath = (u: URL) => u.pathname.replace(/\/+$/, "") || "/";
+        if (
+          requested.origin !== received.origin ||
+          documentPath(requested) !== documentPath(received)
+        ) throw new Error("detail_redirect_target_mismatch");
         const html = new TextDecoder().decode(response.bytes);
         const icoDate = c.source === "ico" ? icoPublishedDate(html) : null;
         if (icoDate && (icoDate.date < state.since || icoDate.date > state.until)) {
