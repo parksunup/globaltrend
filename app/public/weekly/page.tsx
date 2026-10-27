@@ -38,9 +38,9 @@ export default async function WeeklyPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간호</h1><p>한 주의 동향을 정리한 서면 자료와 주요 주제를 깊이 다루는 팟캐스트를 따로 만나보세요.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간호</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
       <WeeklyFormats active="written" />
-      <h2>서면 주간 동향</h2>
+      <h2>주간 동향</h2>
       <p>한 주의 해외 개인정보 보호 동향을 호별로 모아 읽습니다.</p>
       {issuesError && !schemaNotReady ? <p role="alert">공개 주간호를 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p> : null}
       {issueRows.map(issue => {
@@ -63,8 +63,8 @@ export default async function WeeklyPage() {
         </article>;
       })}
       {!issueRows.length && !example ? <div className={styles.weeklyEmpty}>
-        <strong>{schemaNotReady ? "서면 주간 동향 공개를 준비하고 있습니다" : "아직 공개된 서면 주간 동향이 없습니다"}</strong>
-        <p>서면 자료가 게시되면 이곳에서 읽을 수 있습니다. 팟캐스트는 위의 별도 메뉴에서 들으실 수 있습니다.</p>
+        <strong>{schemaNotReady ? "주간 동향 공개를 준비하고 있습니다" : "아직 공개된 주간 동향이 없습니다"}</strong>
+        <p>주간 동향이 게시되면 이곳에서 읽을 수 있습니다. 팟캐스트는 위의 별도 메뉴에서 들으실 수 있습니다.</p>
         <div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div>
       </div> : null}
       {example ? <div className={styles.weeklyReport}>

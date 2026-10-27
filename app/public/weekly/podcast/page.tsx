@@ -43,7 +43,7 @@ export default async function PublishedPodcastsPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간호</h1><p>한 주의 동향을 정리한 서면 자료와 주요 주제를 깊이 다루는 팟캐스트를 따로 만나보세요.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간호</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
       <WeeklyFormats active="podcast" />
       <h2>주간 동향 팟캐스트</h2><p>주요 주제 한 가지를 깊이 살펴보고, 짧은 추가 소식을 두 진행자의 대화로 들어보세요.</p>
       {error ? schemaNotReady
