@@ -579,7 +579,7 @@ export async function extract(
       .filter((x): x is string => Boolean(x))
     : [];
   const explicitDetailDate = new Set(explicitDetailDates);
-  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => !explicitDetailDate.has(x));
+  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x !== null && !explicitDetailDate.has(x));
   if (explicitDetailDate.size === 1) date = [...explicitDetailDate][0];
   const dateResolution = explicitDetailDate.size === 1
     ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
