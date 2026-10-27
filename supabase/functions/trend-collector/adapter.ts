@@ -579,10 +579,19 @@ export async function extract(
       .filter((x): x is string => Boolean(x))
     : [];
   const explicitDetailDate = new Set(explicitDetailDates);
-  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x !== null && !explicitDetailDate.has(x));
-  if (explicitDetailDate.size === 1 && !dateConflict) date = [...explicitDetailDate][0];
-  const dateResolution = explicitDetailDate.size === 1 && !dateConflict
-    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: [] }
+  const cnilListingObservations = source === "cnil"
+    ? (row?.date_observations || []).filter((x) =>
+      x.meaning === "listing_published_display" &&
+      x.locator === "listing .list-inner .attributes p.date"
+    )
+    : [];
+  const cnilListingIsAmbiguous = cnilListingObservations.length > 0 && cnilListingDate(row!) === null;
+  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x != null && !explicitDetailDate.has(x));
+  const canSelectDetailDate = explicitDetailDate.size === 1 &&
+    (!dateConflict || source === "dpc" || source === "pdpc" || source === "cnil" && !cnilListingIsAmbiguous);
+  if (canSelectDetailDate) date = [...explicitDetailDate][0];
+  const dateResolution = canSelectDetailDate
+    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
     : null;
   const requiresReview = unresolvedLinks.length > 0 || !date ||
     dateConflict ||
