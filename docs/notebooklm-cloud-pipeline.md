@@ -56,7 +56,8 @@ NotebookLM MCP 프로젝트 `notebooklm-py` 0.8.5의 실행 엔진을 사용합�
 - `docs/podcast-cloud-rollback-check.sql`: 단일 선점, 이중 선점 차단, 기존 게시 함수 연결, 게시 후 상태 역행 차단을 트랜잭션 안에서 검사한 뒤 모두 롤백했습니다.
 - 전용 Google 계정에서 게시하지 않는 가상 자료를 넣어 짧은 한국어 음성 1건을 실제 생성했습니다. 작업 번호 `31e7419b-3190-42b1-809e-497a2d629065`의 완료를 확인하고 MP4 오디오 10,836,773바이트를 내려받았습니다. 사용자 작업공간의 `output/podcast-pipeline/notebooklm-smoke-2026-10-27.m4a`에 시험본을 두었습니다.
 - [GitHub 클라우드 시험 실행 #40491079311](https://github.com/parksunup/globaltrend/actions/runs/40491079311)에서 표준 Ubuntu 실행기가 Secret으로 인증하고 **같은 작업 번호의 음성 10,836,773바이트를 회수**했습니다. 추가 음성을 만들거나 GitHub artifact에 음성·쿠키를 보관하지 않았습니다. 일회성 시험 workflow는 결과 확인 후 PR 브랜치에서 제거합니다.
-- 실제 GitHub 클라우드에서 새 음성을 생성하고 DB·Storage에 저장하는 흐름, GitHub OIDC 양성 경로, 사이트에서 재생·게시하는 흐름은 아직 검증 전입니다. 운영 workflow는 main에 없고 `PODCAST_CLOUD_ENABLED`와 DB runtime도 켜지 않았습니다. 이 전 과정을 확인하기 전에는 자동 제작이 된다고 안내하지 않습니다.
+- [GitHub 클라우드 생성 시험 #40491881309](https://github.com/parksunup/globaltrend/actions/runs/40491881309)에서 **새 한국어 시험 음성을 실제 생성하고 회수**했습니다. 작업 번호 `c6d8ab12-7ed6-40f2-83b1-6d78bf98f251`, 오디오 10,247,128바이트를 확인했습니다. 사용자가 들을 수 있는 시험본은 `output/podcast-pipeline/notebooklm-cloud-smoke-2026-10-27.m4a`입니다. 공개된 기사가 아닌 가상 자료로 만들었으며, 사이트에 게시하지 않았습니다. 일회성 생성 workflow는 결과 확인 후 PR 브랜치에서 제거합니다.
+- 아직 검증하지 못한 구간은 **운영 workflow → GitHub OIDC → DB 작업 선점 → 오디오 Storage 저장 → 사이트 재생·게시**입니다. 운영 workflow는 main에 없고 `PODCAST_CLOUD_ENABLED`와 DB runtime도 켜지 않았습니다. 이 전 과정을 확인하기 전에는 사이트의 제작 버튼이 실제로 작동한다고 안내하지 않습니다.
 
 ## 참고 문서
 
