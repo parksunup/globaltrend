@@ -51,7 +51,7 @@ select is((select status from public.draft_jobs where input_hash=repeat('d',64))
 select is((select title_ko from public.reports where source_item_id=(select item from test_context)),
  '개인정보 지침 발표','existing report is never overwritten by automatic update');
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
- 'https://www.edpb.europa.eu/test-stale','Stale input',null,null,now(),'en','news',
+ 'https://www.edpb.europa.eu/test-stale','Stale input','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data.',repeat('e',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
 select public.claim_trend_draft_jobs('stale-worker',1);
 update public.source_items set current_revision_id=null where canonical_url='https://www.edpb.europa.eu/test-stale';

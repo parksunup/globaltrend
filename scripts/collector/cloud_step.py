@@ -147,7 +147,11 @@ def prepare(claim):
             item = parsers.extract_document(claim['slug'], body, url, ctype, detail)
             item['metadata'].update(ai_ready=item['published_date'] is not None and not item['metadata']['requires_review'],
                                     relevance_reason='full_body_available_human_relevance_review_pending')
-            if item['published_date'] and not claim['since'] <= item['published_date'] <= claim['until']:
+            if (claim['slug']=='oecd' and parsers.oecd_certainly_outside_window(item,claim['since'],claim['until'])):
+                result['reason'] = 'backlog_out_of_range'
+                result['range_filter_read_scope'] = 'official_detail_time_observations'
+                result['date_observations'] = item['metadata']['date_observations']
+            elif item['published_date'] and not claim['since'] <= item['published_date'] <= claim['until']:
                 result['reason'] = 'backlog_out_of_range'
             else:
                 store.ingest(config, url, item)

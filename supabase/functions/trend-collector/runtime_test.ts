@@ -90,6 +90,39 @@ Deno.test("redirect to another article cannot overwrite the requested source ite
   eq(step.result.reason, "detail_redirect_target_mismatch");
   eq(step.result.coverage_complete, false);
 });
+Deno.test("DPC dated old listing card is excluded before following a retired link", async () => {
+  const dpc = {
+    source: "dpc",
+    source_id: "dpc-source",
+    listing: "https://www.dataprotection.ie/en/news-media/latest-news",
+    hosts: ["www.dataprotection.ie"],
+    language: "en",
+  };
+  const url = "https://www.dataprotection.ie/en/dpc-guidance/podcasts/know-your-data-brexit-and-data-protection";
+  const state: State = {
+    since: "2026-10-26",
+    until: "2026-10-28",
+    is_backlog: true,
+    page: dpc.listing,
+    rows: [{
+      url,
+      title: "Know Your Data - Brexit and Data Protection",
+      date_observations: [{
+        value: "16th September 2019",
+        locator: "listing article.node--view-mode-teaser p.date",
+        meaning: "listing_published_display",
+      }],
+    }],
+    offset: 0,
+  };
+  const step = await advance(dpc, state, {
+    request: () => Promise.reject(new Error("retired link must not be fetched")),
+  }, async () => { throw new Error("old item must not be ingested"); });
+  eq(step.result.saved, "out_of_range");
+  eq(step.result.published_date, "2019-09-16");
+  eq(step.result.backlog_resolved, true);
+  eq(step.continue, false);
+});
 Deno.test("same document trailing slash redirect remains readable", async () => {
   const state: State = {
     since: "2026-09-21", until: "2026-10-21",

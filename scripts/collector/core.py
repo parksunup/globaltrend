@@ -218,7 +218,12 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         body,detail,ctype=client.get(url)
                         item=parsers.extract_document(config['source'],body,detail,ctype,row)
                         date=item['published_date']
-                        if date and not since<=date<=until:
+                        if (config['source']=='oecd' and
+                                parsers.oecd_certainly_outside_window(item,since,until)):
+                            result['out_of_range']+=1
+                            result['range_filter_read_scope']='official_detail_time_observations'
+                            result['date_observations']=item['metadata']['date_observations']
+                        elif date and not since<=date<=until:
                             result['out_of_range']+=1
                         else:
                             if date is None: result['unknown_date']+=1
