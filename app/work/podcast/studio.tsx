@@ -22,7 +22,7 @@ export default function PodcastStudio(){
  const [login,setLogin]=useState(false),[loaded,setLoaded]=useState(false),[setup,setSetup]=useState(false),[canPublish,setCanPublish]=useState(false);
  const [error,setError]=useState(''),[busy,setBusy]=useState(false),[connected,setConnected]=useState(false);
  const [mode,setMode]=useState<'cloud'|'browser'>('cloud'),[cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required');
- const [dates,setDates]=useState(previousWeek),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefId,setBriefId]=useState(''),[contextIds,setContextIds]=useState<string[]>([]),[autoPublish,setAutoPublish]=useState(true);
+ const [dates,setDates]=useState(previousWeek),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefId,setBriefId]=useState(''),[contextIds,setContextIds]=useState<string[]>([]),[autoPublish,setAutoPublish]=useState(false);
  const [audio,setAudio]=useState<{id:string;url:string}>();
  const pending=useRef(new Map<string,{resolve:(v:any)=>void;reject:(e:Error)=>void;timer:ReturnType<typeof setTimeout>}>());
  const transfers=useRef(new Map<string,Transfer>());
