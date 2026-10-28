@@ -6,11 +6,12 @@ import { teamWorkspacePrompt } from '../../lib/team-workspace-prompts';
 import SubmissionDocumentsView from './submission-documents';
 import TranslationReview from './translation-review';
 import TeamLogin from './team-login';
+import TeamWeeklyPanel from './team-weekly-panel';
 import { createClient } from '../../lib/supabase/client';
 import styles from './live-team-workspace.module.css';
 
-type Workspace = LiveWorkspace & {trends:TeamTrend[];warnings:string[];databaseAvailable:boolean;canPublish:boolean;legalPublications:{recordId:string;title:string;jurisdiction:string;status:'published'|'draft'|'ready';publishedId?:string}[]};
-export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view}:{role?:TeamRole;lawId?:string;view?:'compare'|'full'}) {
+type Workspace = LiveWorkspace & {trends:TeamTrend[];warnings:string[];databaseAvailable:boolean;canPublish:boolean;canManageWeekly:boolean;legalPublications:{recordId:string;title:string;jurisdiction:string;status:'published'|'draft'|'ready';publishedId?:string}[]};
+export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view,weekly=false,readOnly=false}:{role?:TeamRole;lawId?:string;view?:'compare'|'full';weekly?:boolean;readOnly?:boolean}) {
   const [role,setRole] = useState<TeamRole>(initialRole), [data,setData] = useState<Workspace|null>(null);
   const [error,setError] = useState(''), [loading,setLoading] = useState(true), [refresh,setRefresh] = useState(0);
   const [law,setLaw] = useState(lawId??''), [checked,setChecked] = useState('');
@@ -20,6 +21,7 @@ export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view}
   const [loginRequired,setLoginRequired] = useState(false),[connection,setConnection]=useState<{token:string}>(),[connecting,setConnecting]=useState(false);
   const [publicationBusy,setPublicationBusy]=useState(''),[publicationMessage,setPublicationMessage]=useState('');
   const [selectedTrendIds,setSelectedTrendIds]=useState<string[]>([]);
+  const [trendView,setTrendView]=useState<'all'|'weekly'>(weekly?'weekly':'all');
   useEffect(()=>setOrigin(window.location.origin),[]);
   useEffect(()=>{
     let active = true, timer:ReturnType<typeof setTimeout>;
@@ -107,10 +109,13 @@ export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view}
     {data&&!data.canPublish&&<section className={styles.publication}><strong>공개하려면 담당자 등록이 필요합니다</strong><p>로그인했는데 공개 버튼이 보이지 않으면 작업실 관리자에게 “공개할 수 있는 담당자로 등록해 주세요”라고 알려 주세요.</p><TeamLogin onSuccess={()=>setRefresh(value=>value+1)}/></section>}
     {publicationMessage&&<p role="status" className={styles.publicationMessage}>{publicationMessage}</p>}
     {data && role==='trends' && <section className={styles.documents} aria-label="동향 원고">
+      <div className={styles.trendViews} role="group" aria-label="동향 작업 보기"><button type="button" aria-pressed={trendView==='all'} onClick={()=>setTrendView('all')}>전체 원고</button><button type="button" aria-pressed={trendView==='weekly'} onClick={()=>setTrendView('weekly')}>주간 주요 동향 선정</button></div>
+      {trendView==='weekly'?(data.databaseAvailable?<TeamWeeklyPanel trends={data.trends} canManage={data.canManageWeekly} readOnly={readOnly}/>:<p role="alert" className={styles.error}>원고 DB 연결을 확인하지 못해 주간호를 편집할 수 없습니다.</p>):<>
       <h2>동향 원고 {data.trends.length}건{!data.databaseAvailable?' · 일부 자료':''}</h2><label>원고 검색 <input value={query} onChange={event=>setQuery(event.target.value)} placeholder="제목·국가·출처 검색"/></label><p>{trends.length}건 표시 · 선택 {selectedTrendIds.length}건</p>
       {data.canPublish&&<div className={styles.publication}><label><input type="checkbox" checked={trends.some(item=>item.status!=='published'&&item.editState!=='conflict')&&trends.filter(item=>item.status!=='published'&&item.editState!=='conflict').every(item=>selectedTrendIds.includes(item.id))} onChange={event=>{const available=trends.filter(item=>item.status!=='published'&&item.editState!=='conflict').map(item=>item.id);setSelectedTrendIds(event.target.checked?Array.from(new Set([...selectedTrendIds,...available])):selectedTrendIds.filter(id=>!trends.some(item=>item.id===id)))}}/> 현재 검색 결과 중 공개 가능한 자료 선택</label><button disabled={!selectedTrendIds.length||Boolean(publicationBusy)} onClick={()=>void publishSelectedTrends()}>{publicationBusy==='batch'?'일괄 공개 중…':`선택한 원고 공개 (${selectedTrendIds.length}건)`}</button><p>이미 공개 중이거나 기준 원고가 바뀌어 대조가 필요한 원고는 선택할 수 없습니다.</p></div>}
       <div className={styles.trendGrid}><div className={styles.articleList}>{trends.map(item=><div className={styles.articleChoice} key={item.id}><label><input type="checkbox" aria-label={`${item.title_ko} 선택`} checked={selectedTrendIds.includes(item.id)} disabled={!data.canPublish||item.status==='published'||item.editState==='conflict'} onChange={event=>setSelectedTrendIds(event.target.checked?[...selectedTrendIds,item.id]:selectedTrendIds.filter(id=>id!==item.id))}/></label><button aria-pressed={selected?.id===item.id} onClick={()=>setArticle(item.id)}><strong>{item.title_ko}</strong><small>{item.published_date} · {item.source_name}</small><span>{item.summary_ko}</span>{item.editState==='applied'&&<small>Codex 수정본</small>}{item.editState==='conflict'&&<small>원고 변경됨 · 수정본 대조 필요</small>}</button></div>)}</div>
       <article className={styles.article} aria-label="선택한 동향 원고">{selected?<><p>{selected.published_date} · {selected.source_name}</p><h2>{selected.title_ko}</h2><p className={styles.lede}>{selected.summary_ko}</p><div className={styles.prose}>{selected.details_ko}</div><a href={selected.official_url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>{selected.proposedEdit&&<details><summary>최신 원고와 대조가 필요한 Codex 수정본</summary><h3>{selected.proposedEdit.title_ko}</h3><p>{selected.proposedEdit.summary_ko}</p><div className={styles.prose}>{selected.proposedEdit.details_ko}</div></details>}{data.canPublish&&<div className={styles.publication}><strong>공개 상태: {selected.status==='published'?'공개 중':'비공개'}</strong><p>Codex 수정본이 있으면 공개할 때 게시본에 반영됩니다. 기준 원고와 충돌한 수정본은 공개되지 않습니다.</p><button disabled={Boolean(publicationBusy)} onClick={()=>void setPublicationStatus(selected.id,selected.status==='published'?'unpublish':'publish',selected.official_url)}>{publicationBusy===role+':'+selected.id?'처리 중…':selected.status==='published'?'공개 취소':'공개하기'}</button></div>}</>:<p>검색 조건에 맞는 원고가 없습니다.</p>}</article></div>
+      </>}
     </section>}
     {data && role==='legal' && <section className={styles.documents} aria-label="법제 자료">
       <div className={styles.publicationList}><div><h2>법제 공개 상태</h2><p>공개하면 그 법률의 17개 기준 비교표와 전체 번역이 함께 반영됩니다.</p></div>{data.legalPublications.map(item=><article key={item.recordId}><div><strong>{item.title}</strong><span>{item.jurisdiction} · {item.status==='published'?'공개 중':item.publishedId?'새 판본 준비됨 · 기존 판본 공개 중':item.status==='draft'?'비공개 · 저장된 초안':'아직 비공개'}</span></div>{data.canPublish&&<div><button disabled={Boolean(publicationBusy)} onClick={()=>void setPublicationStatus(item.recordId,'publish')}>{publicationBusy===role+':'+item.recordId?'처리 중…':item.status==='published'?'공개 내용 갱신':'공개하기'}</button>{item.publishedId&&<button disabled={Boolean(publicationBusy)} onClick={()=>void setPublicationStatus(item.recordId,'unpublish')}>현재 공개 취소</button>}</div>}</article>)}</div>

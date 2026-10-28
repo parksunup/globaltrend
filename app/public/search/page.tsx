@@ -1,7 +1,7 @@
 import TrendSearch from "../trend-search";
 import styles from "../public.module.css";
 import { PublicHeader, PublicFooter } from "../public-navigation";
-import { loadPublicStories } from "../../../lib/public-content";
+import { loadTrendCatalog as loadPublicStories } from "../../../lib/trend-catalog";
 export const dynamic = "force-dynamic";
 export default async function PublicSearchPage({ searchParams }: { searchParams: Promise<{ q?: string; topic?: string; country?: string; period?: string; from?: string; to?: string; mode?: string; sort?: string; restore?: string }> }) {
  const filters = await searchParams;

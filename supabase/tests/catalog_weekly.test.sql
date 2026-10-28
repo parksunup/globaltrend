@@ -1,0 +1,11 @@
+begin;
+select plan(7);
+select ok(has_function_privilege('anon','public.get_trend_catalog(integer,integer,uuid)','execute'),'catalog metadata is publicly searchable');
+select ok(not has_function_privilege('anon','public.save_written_weekly_draft(text,text,date,date,jsonb)','execute'),'anonymous cannot select issue articles');
+select ok(not has_function_privilege('anon','public.publish_written_weekly_issue(text)','execute'),'anonymous cannot publish');
+select ok(has_function_privilege('service_role','public.save_written_weekly_draft(text,text,date,date,jsonb)','execute'),'scheduled editor can save a draft');
+select ok(not has_function_privilege('service_role','public.publish_written_weekly_issue(text)','execute'),'producer has no automatic publication grant');
+select is((select count(*)::integer from get_trend_catalog(0,200)),least(200,(select count(*)::integer from source_items i join sources s on s.id=i.source_id where s.is_active and s.terms_reviewed_at is not null and exists(select 1 from reports r where r.source_item_id=i.id and r.status = 'published' and nullif(btrim(r.title_ko),'') is not null and nullif(btrim(r.one_line_summary_ko),'') is not null and nullif(btrim(r.detailed_summary_ko),'') is not null))),'public catalog contains only published Korean reports');
+select ok(not exists(select 1 from get_trend_catalog(0,200) where editorial_status <> 'published' or report_id is null),'no unreviewed report enters public catalog');
+select * from finish();
+rollback;

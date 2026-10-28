@@ -42,6 +42,7 @@ export async function GET(request: Request) {
     const db=await createClient();const {data:{user}}=await db.auth.getUser();
     const {data:membership}=user&&typeof db.from==='function'?await db.from('team_memberships').select('role,is_active').eq('user_id',user.id).maybeSingle():{data:null};
     const canPublish=Boolean(membership?.is_active&&['admin','editor'].includes(String(membership.role)));
+    const canManageWeekly=Boolean(membership?.is_active&&membership.role==='admin');
     let legalPublications:{recordId:string;title:string;jurisdiction:string;status:'published'|'draft'|'ready';publishedId?:string}[]=[];
     if(role==='legal'&&snapshot.publicationInputs) {
       const instruments=await db.from('legal_instruments').select('id,jurisdiction_code,short_name');
@@ -56,7 +57,7 @@ export async function GET(request: Request) {
           status:published&&matching?.id===published.id?'published':matching?'draft':'ready',...(published?{publishedId:published.id}:{})};
       });
     }
-    const data = {...visibleSnapshot,databaseAvailable,trends:trends?.items??[],canPublish,legalPublications,warnings:[...(trends?.warnings??[]),...(!databaseAvailable?['DB 초안 연결을 확인하지 못했습니다. 현재는 GitHub 자료만 표시하며 전체 원고가 아닙니다. 관리자에게 작업실 읽기 연결 상태를 확인해 달라고 알려 주세요.']:[])]};
+    const data = {...visibleSnapshot,databaseAvailable,trends:trends?.items??[],canPublish,canManageWeekly,legalPublications,warnings:[...(trends?.warnings??[]),...(!databaseAvailable?['DB 초안 연결을 확인하지 못했습니다. 현재는 GitHub 자료만 표시하며 전체 원고가 아닙니다. 관리자에게 작업실 읽기 연결 상태를 확인해 달라고 알려 주세요.']:[])]};
     const publicationRevision=role==='legal'?legalPublications.map(item=>`${item.recordId}:${item.status}:${item.publishedId??''}`).join('|'):'legal';
     const etag = '"' + role + '-' + data.commitSha + '-' + (trends?.revision??publicationRevision) + '"';
     if (!data.stale && databaseAvailable && request.headers.get('if-none-match') === etag) return new Response(null,{status:304,headers:{...headers,ETag:etag}});
