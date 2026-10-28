@@ -1,8 +1,5 @@
 import Link from "next/link";
-import {loadTrendCatalog} from "../../../../lib/trend-catalog";
 import { notFound } from "next/navigation";
-import { publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
-import { loadPublicStories } from "../../../../lib/public-content";
 import { loadPublishedStory } from "../../../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
@@ -16,9 +13,7 @@ export default async function TrendDetail({ params, searchParams }: {
 }) {
   const { id } = await params;
   const { back } = await searchParams;
-  const draftMode = publicSubmissionPreviewEnabled();
-  const catalogId = /^catalog-[0-9a-f-]{36}$/i.test(id) ? id.slice(8) : null;
-  const story = catalogId ? (await loadTrendCatalog(catalogId))[0] : draftMode ? (await loadPublicStories()).find((item) => item.id === id) : await loadPublishedStory(id);
+  const story = await loadPublishedStory(id);
   if (!story) notFound();
   const returnTo = back?.startsWith("/public/search?") ? back : "/public/search";
   return <main className={styles.site}>
