@@ -1,14 +1,14 @@
 'use client';
 import {useState} from 'react';
 import styles from '../../public/public.module.css';
-export type WeeklyCandidate={id:string;title:string;summary:string;details:string;date:string;source:string;url:string;status:string;selectable?:boolean};
+export type WeeklyCandidate={id:string;title:string;summary:string;details:string;date:string;source:string;url:string;status:string};
 export default function WeeklyEditor({candidates,initialIds,notes,issueKey,title,start,end,save,readOnly=false}:{candidates:WeeklyCandidate[];initialIds:string[];notes:Record<string,string>;issueKey:string;title:string;start:string;end:string;save:(form:FormData)=>Promise<void>;readOnly?:boolean}){
  const [ids,setIds]=useState(initialIds);
  const [busy,setBusy]=useState(false);
  const selected=ids.map(id=>candidates.find(c=>c.id===id)).filter((c):c is WeeklyCandidate=>!!c);
  const remaining=candidates.filter(c=>!ids.includes(c.id));
  function toggle(id:string){setIds(previous=>previous.includes(id)?previous.filter(x=>x!==id):[...previous,id]);}
- function check(c:WeeklyCandidate){return <label style={{display:'inline-flex',gap:8,alignItems:'center',padding:10,cursor:'pointer'}}><input type="checkbox" disabled={c.selectable===false} checked={ids.includes(c.id)} onChange={()=>toggle(c.id)} aria-label={`${c.title} 주간호 포함`}/>{c.selectable===false?'한국어 초안 작성 전':'주간호 포함'}</label>;}
+ function check(c:WeeklyCandidate){return <label style={{display:'inline-flex',gap:8,alignItems:'center',padding:10,cursor:'pointer'}}><input type="checkbox" checked={ids.includes(c.id)} onChange={()=>toggle(c.id)} aria-label={`${c.title} 주간호 포함`}/>주간호 포함</label>;}
  return <form action={async form=>{setBusy(true);try{await save(form);}finally{setBusy(false);}}}>
  <input type="hidden" name="key" value={issueKey}/><input type="hidden" name="start" value={start}/><input type="hidden" name="end" value={end}/>
  {selected.map(c=><span key={c.id}><input type="hidden" name="report" value={c.id}/><input type="hidden" name={`reason-${c.id}`} value={notes[c.id]??'작업실에서 주요 동향으로 선정'}/></span>)}
