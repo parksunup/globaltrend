@@ -39,15 +39,8 @@ export default async function WeeklyEditorPage({searchParams}:{searchParams:Prom
   for(const r of data??[]){if(seen.has(r.source_item_id))continue;seen.add(r.source_item_id);const source=Array.isArray(r.source_items)?r.source_items[0]:r.source_items;const institution=Array.isArray(source.sources)?source.sources[0]:source.sources;candidates.push({id:r.id,title:r.title_ko,summary:r.one_line_summary_ko??'',details:r.detailed_summary_ko??'',status:r.status,date:source.published_at?.slice(0,10)??'',url:source.canonical_url,source:institution?.name??'공식 출처'});}
   if((data??[]).length<200)break;
  }
- // Include the week's entire collected list, even when its Korean report is not ready.
- for(let offset=0;!loadError;offset+=200){
-  const {data,error}=await db.rpc('get_trend_catalog',{p_offset:offset,p_limit:200});
-  if(error){loadError=true;break;}
-  for(const row of data??[]){if(seen.has(row.item_id)||!row.published_date||row.published_date<requested||row.published_date>end)continue;seen.add(row.item_id);candidates.push({id:`catalog-${row.item_id}`,title:row.title,summary:'원문 수집 완료 · 한국어 초안 작성 전',details:'',date:row.published_date,url:row.official_url,source:row.source_name,status:'초안 미작성',selectable:false});}
-  if((data??[]).length<200)break;
- }
  const entries=(Array.isArray(issue?.selection_notes)?issue.selection_notes:[]) as {report_id:string;reason:string}[];
- const initialIds=issue?entries.map(e=>e.report_id):candidates.filter(c=>c.selectable!==false).slice(0,8).map(c=>c.id);
+ const initialIds=issue?entries.map(e=>e.report_id):candidates.slice(0,8).map(c=>c.id);
  const notes=Object.fromEntries(entries.map(e=>[e.report_id,e.reason]));
  return <main className={styles.site}><section className={styles.searchPage}><Link href="/work">← 작업실</Link><h1>주간호 편집</h1><form><label>대상 주의 월요일 <input type="date" name="start" defaultValue={requested}/></label><button>해당 주 보기</button></form>
  {params.error&&<p role="alert">저장하지 못했습니다: {params.error}</p>}{params.saved&&<p role="status">저장했습니다.</p>}
