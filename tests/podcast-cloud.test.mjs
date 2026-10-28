@@ -12,6 +12,9 @@ test('only the exact production workflow identity is trusted',()=>{
 test('cloud workflow has no PR trigger, credential artifacts or paid runners',()=>{
  const code=readFileSync(new URL('../.github/workflows/podcast-cloud.yml',import.meta.url),'utf8');
  assert.match(code,/PODCAST_CLOUD_ENABLED == 'true'/);assert.match(code,/private == false/);
+ assert.match(code,/PODCAST_SESSION_ENABLED == 'true'/);
+ assert.match(code,/PODCAST_SESSION_TEST_UNTIL/);
+ assert.match(code,/PODCAST_SESSION_KEY: \$\{\{ secrets.PODCAST_SESSION_KEY \}\}/);
  assert.match(code,/runs-on: ubuntu-latest/);assert.match(code,/persist-credentials: false/);
  assert.doesNotMatch(code,/pull_request|upload-artifact|actions\/cache|runs-on:.*self-hosted/);
 });

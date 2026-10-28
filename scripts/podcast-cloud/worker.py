@@ -119,42 +119,83 @@ async def produce(client, cloud, job, clock=time.monotonic, sleep=asyncio.sleep,
     print("Generation pending; the next cloud run will poll the same artifact.")
 
 
-async def main():
-    # Third-party debug output may include RPC payloads; suppress it completely.
-    logging.disable(logging.CRITICAL)
-    cloud = Cloud()
-    if not os.environ.get("NOTEBOOKLM_AUTH_JSON"):
-        cloud.call("health", ok=False)
-        print("Dedicated Google account connection required. No work was claimed.")
-        return 1
-    from notebooklm import NotebookLMClient
-    job = None
+def auth_failure(exc):
+    return any(word in type(exc).__name__.lower() for word in ("auth", "login", "cookie"))
+
+
+def report_job_failure(cloud, job, exc):
+    cp = job.get("cloud_checkpoint", {})
+    phase = "blocked" if cp.get("stage") in AMBIGUOUS else "needs_login" if auth_failure(exc) else "failed"
     try:
-        # HTTP only. No CDP, browser launches, screenshots, or private browser profile.
-        async with NotebookLMClient.from_storage(allow_headless=False, rate_limit_max_retries=0, server_error_max_retries=0) as client:
-            await client.notebooks.list()  # Authenticate before claiming a job.
-            cloud.call("health", ok=True)
-            job = cloud.call("claim").get("job")
-            if job:
-                await produce(client, cloud, job)
-            else:
-                print("No queued episode.")
-        return 0
+        cloud.checkpoint(job, cp, phase, "Google 로그인 또는 제작 상태를 확인해 주세요. 자동으로 새 음성을 만들지는 않았습니다.")
+    except Exception:
+        pass
+
+
+async def run_session(cloud, vault, lease, client_factory, production_enabled=False):
+    """Always persist verified rotations, including after a non-auth job failure."""
+    job = None
+    category = "invalid_state"
+    try:
+        with tempfile.TemporaryDirectory(prefix="podcast-auth-") as folder:
+            path = vault.restore(folder, lease)
+            category = "transport"
+            result = 0
+            # HTTP only; no browser or copied browser profile in the runner.
+            async with client_factory(path) as client:
+                await client.notebooks.list()
+                cloud.call("health", ok=True)
+                if production_enabled and not lease.get("auth_only", True):
+                    job = cloud.call("claim").get("job")
+                    if job:
+                        try:
+                            await produce(client, cloud, job)
+                        except Exception as exc:
+                            report_job_failure(cloud, job, exc)
+                            if auth_failure(exc):
+                                raise
+                            result = 1
+                    else:
+                        print("No queued episode.")
+            # The SDK saves rotated cookies on clean context exit. Store only
+            # after successful live verification; never replace a good jar on failure.
+            category = "storage"
+            envelope = vault.seal(path.read_bytes(), lease["version"] + 1)
+            cloud.call("session_save", data={"version": lease["version"], "envelope": envelope})
+            print("Dedicated cloud session verified and encrypted state saved.")
+            return result
     except Exception as exc:
-        is_auth = any(word in type(exc).__name__.lower() for word in ("auth", "login", "cookie"))
+        category = "auth" if auth_failure(exc) else category
         if job:
-            cp = job.get("cloud_checkpoint", {})
-            phase = "blocked" if cp.get("stage") in AMBIGUOUS else "needs_login" if is_auth else "failed"
-            try:
-                cloud.checkpoint(job, cp, phase, "Google 로그인 또는 제작 상태를 확인해 주세요. 자동으로 새 음성을 만들지는 않았습니다.")
-            except Exception:
-                pass
-        if job is None or is_auth:
-            try:
+            report_job_failure(cloud, job, exc)
+        try:
+            cloud.call("session_fail", data={"category": category})
+            if category == "auth":
                 cloud.call("health", ok=False)
-            except Exception:
-                pass
-        print("Cloud production stopped safely. Check the studio; no credential details were logged.")
+        except Exception:
+            pass
+        print("Cloud session check stopped safely (" + category + "). No credential details were logged.")
+        return 1
+
+
+async def main():
+    logging.disable(logging.CRITICAL)
+    try:
+        from session_store import SessionVault
+        from notebooklm import NotebookLMClient
+        cloud = Cloud()
+        vault = SessionVault.from_environment()
+        lease = cloud.call("session_acquire").get("session")
+        if not lease:
+            print("Session checks paused, finished, or already leased. No work was claimed.")
+            return 0
+        factory = lambda path: NotebookLMClient.from_storage(
+            path=str(path), keepalive=600, allow_headless=False,
+            rate_limit_max_retries=0, server_error_max_retries=0)
+        return await run_session(cloud, vault, lease, factory,
+                                 production_enabled=os.environ.get("PODCAST_PRODUCE_ENABLED") == "true")
+    except Exception:
+        print("Cloud session setup unavailable. No credential details were logged.")
         return 1
 
 

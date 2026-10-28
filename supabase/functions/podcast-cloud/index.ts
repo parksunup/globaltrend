@@ -14,14 +14,23 @@ Deno.serve(async req=>{
     if(!trusted(claims))throw Error();
   }catch{return new Response('Unauthorized',{status:401});}
   try {
-    if(Number(req.headers.get('content-length')??0)>16000)throw Error('request too large');
-    const raw=await req.text();if(raw.length>16000)throw Error('request too large');
+    if(Number(req.headers.get('content-length')??0)>262144)throw Error('request too large');
+    const raw=await req.text();if(raw.length>262144)throw Error('request too large');
     const body=JSON.parse(raw),run=`${claims.run_id}:${claims.run_attempt}`;
     async function step(action:string,data:Record<string,unknown>={}){
       const {data:result,error}=await db.rpc('podcast_cloud_step',{p_run:run,p_action:action,p_job_id:body.jobId??null,p_data:data});
       if(error)throw Error('worker_state_conflict');return result;
     }
     const action=body.action;
+    if(['session_acquire','session_save','session_fail'].includes(action)){
+      const {data:result,error}=await db.rpc('podcast_session_step',{
+        p_run:run,p_action:action.slice(8),p_data:body.data??{}
+      });
+      if(error)throw Error('session_state_conflict');
+      return Response.json(action==='session_acquire'?{session:result}:result,{
+        headers:{'Cache-Control':'no-store'}
+      });
+    }
     if(action==='health')return Response.json(await step('health',{ok:body.ok===true}));
     if(action==='claim')return Response.json({job:await step('claim')});
     if(!uuid(body.jobId))throw Error('invalid job');
