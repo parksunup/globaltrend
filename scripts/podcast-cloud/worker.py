@@ -120,7 +120,35 @@ async def produce(client, cloud, job, clock=time.monotonic, sleep=asyncio.sleep,
 
 
 def auth_failure(exc):
-    return any(word in type(exc).__name__.lower() for word in ("auth", "login", "cookie"))
+    # AuthExtractionError is a response/parser failure, not proof of sign-out.
+    # Match the SDK's explicit signals, including subclasses, never substrings.
+    return any(cls.__name__ in {"AuthError", "_LoginRedirectError", "HeadlessLoginRequiredError"}
+               for cls in type(exc).__mro__)
+
+
+def failure_reason(exc):
+    """Closed diagnostic codes only. Never emit messages, URLs or responses."""
+    if auth_failure(exc):
+        return "login_rejected"
+    names = {cls.__name__ for cls in type(exc).__mro__}
+    if "AuthExtractionError" in names:
+        return "token_extraction"
+    if "RequiredCookieValidationError" in names:
+        return {"missing_cookie": "cookie_missing", "psidts_unroutable": "cookie_route"}.get(
+            getattr(exc, "reason", None), "cookie_validation")
+    # These exact SDK prefixes distinguish a network/access gate from expiry.
+    # Comparing a message is local; no portion of it is logged or persisted.
+    if isinstance(exc, ValueError):
+        message = str(exc)
+        if message.startswith("Google's CookieMismatch page was reached"):
+            return "cookie_scope"
+        if message.startswith("NotebookLM redirected this request to its region / anti-abuse access gate"):
+            return "access_gate"
+    if names & {"TimeoutException", "TimeoutError"}:
+        return "timeout"
+    if "HTTPStatusError" in names:
+        return "http_status"
+    return "unclassified"
 
 
 def report_job_failure(cloud, job, exc):
@@ -136,18 +164,23 @@ async def run_session(cloud, vault, lease, client_factory, production_enabled=Fa
     """Always persist verified rotations, including after a non-auth job failure."""
     job = None
     category = "invalid_state"
+    stage = "restore"
     try:
         with tempfile.TemporaryDirectory(prefix="podcast-auth-") as folder:
             path = vault.restore(folder, lease)
             category = "transport"
             result = 0
             # HTTP only; no browser or copied browser profile in the runner.
+            stage = "open_client"
             async with client_factory(path) as client:
+                stage = "list_notebooks"
                 await client.notebooks.list()
+                stage = "record_health"
                 cloud.call("health", ok=True)
                 if production_enabled and not lease.get("auth_only", True):
                     job = cloud.call("claim").get("job")
                     if job:
+                        stage = "produce"
                         try:
                             await produce(client, cloud, job)
                         except Exception as exc:
@@ -160,11 +193,13 @@ async def run_session(cloud, vault, lease, client_factory, production_enabled=Fa
             # The SDK saves rotated cookies on clean context exit. Store only
             # after successful live verification; never replace a good jar on failure.
             category = "storage"
+            stage = "save_session"
             envelope = vault.seal(path.read_bytes(), lease["version"] + 1)
             cloud.call("session_save", data={"version": lease["version"], "envelope": envelope})
             print("Dedicated cloud session verified and encrypted state saved.")
             return result
     except Exception as exc:
+        reason = failure_reason(exc)
         category = "auth" if auth_failure(exc) else category
         if job:
             report_job_failure(cloud, job, exc)
@@ -174,7 +209,8 @@ async def run_session(cloud, vault, lease, client_factory, production_enabled=Fa
                 cloud.call("health", ok=False)
         except Exception:
             pass
-        print("Cloud session check stopped safely (" + category + "). No credential details were logged.")
+        print("Cloud session check stopped safely (" + category +
+              "; stage=" + stage + "; reason=" + reason + "). No credential details were logged.")
         return 1
 
 
