@@ -10,11 +10,11 @@ const source=fs.readFileSync(new URL('../app/work/weekly/weekly-editor.tsx',impo
 const code=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
 const mod={exports:{}};
 new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):require(name),mod,mod.exports);
-test('weekly editing preview renders eight selected reports, all remaining items and an unwritten-item notice',()=>{
- const candidates=Array.from({length:11},(_,i)=>({id:String(i),title:`기사 ${i}`,summary:'요약',details:'본문',date:'2026-10-20',source:'기관',url:'https://example.test',status:'draft',selectable:i!==10}));
+test('weekly editing preview renders eight selected reports, all remaining items and all have selectable Korean drafts',()=>{
+ const candidates=Array.from({length:11},(_,i)=>({id:String(i),title:`기사 ${i}`,summary:'요약',details:'본문',date:'2026-10-20',source:'기관',url:'https://example.test',status:'draft'}));
  const html=renderToStaticMarkup(React.createElement(mod.exports.default,{candidates,initialIds:candidates.slice(0,8).map(c=>c.id),notes:{},issueKey:'2026-W43',title:'주간호',start:'2026-10-19',end:'2026-10-25',save:async()=>{}}));
  assert.equal((html.match(/name="report"/g)??[]).length,8);
  assert.ok(html.includes('같은 주의 나머지 동향 3건'));
  for(let i=0;i<11;i++)assert.ok(html.includes(`기사 ${i}`));
- assert.ok(html.includes('한국어 초안 작성 전'));assert.ok(html.includes('공개 주간호 형태 미리보기'));
+ assert.ok(!html.includes('한국어 초안 작성 전'));assert.ok(html.includes('공개 주간호 형태 미리보기'));
 });
