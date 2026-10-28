@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {trusted} from '../supabase/functions/podcast-cloud/trust.ts';
-const good={repository:'parksunup/globaltrend',repository_id:'1390776769',repository_owner_id:'289618557',repository_visibility:'public',ref:'refs/heads/main',sub:'repo:parksunup/globaltrend:ref:refs/heads/main',workflow_ref:'parksunup/globaltrend/.github/workflows/podcast-cloud.yml@refs/heads/main',runner_environment:'github-hosted',event_name:'schedule',run_id:'123',run_attempt:'1'};
+const good={repository:'parksunup/globaltrend',repository_id:'1390776769',repository_owner_id:'289618557',repository_visibility:'public',ref:'refs/heads/main',sub:'repo:parksunup@289618557/globaltrend@1390776769:ref:refs/heads/main',workflow_ref:'parksunup/globaltrend/.github/workflows/podcast-cloud.yml@refs/heads/main',runner_environment:'github-hosted',event_name:'schedule',run_id:'123',run_attempt:'1'};
 test('only the exact production workflow identity is trusted',()=>{
  assert.equal(trusted(good),true);
  for(const key of Object.keys(good))assert.equal(trusted({...good,[key]:'attacker'}),false,key);
