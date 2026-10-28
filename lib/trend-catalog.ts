@@ -6,7 +6,7 @@ export async function loadTrendCatalog(itemId?:string, readPage?:(offset:number)
  for(let offset=0;;offset+=200){
   const {data,error}=readPage?await readPage(offset):await db!.rpc('get_trend_catalog',{p_offset:offset,p_limit:200,p_item_id:itemId??null});
   if(error)throw Error(`수집 자료 조회 실패: ${error.code}`);
-  for(const row of data??[])stories.push({id:row.report_id??`catalog-${row.item_id}`,publicationStatus:row.report_id?'published':'unknown',country:row.jurisdictions?.[0]??'기타',jurisdictions:row.jurisdictions,region:row.source_name,institution:row.source_name,title:row.title,originalTitle:row.original_title,summary:row.editorial_status==='published'?'한국어 보고서 발행 완료':row.editorial_status==='review_pending'?'한국어 초안 검수 대기':'원문 수집 완료 · 한국어 초안 준비',details:'',kind:row.document_type,tags:row.topics??[],date:row.published_date?.replaceAll('-','.')??'날짜 확인 중',officialUrl:row.official_url});
+  for(const row of data??[]){if(!['published','review_pending'].includes(row.editorial_status))throw Error('한국어 작성이 완료되지 않은 자료 응답입니다.');stories.push({id:row.report_id??`catalog-${row.item_id}`,publicationStatus:row.report_id?'published':'unknown',country:row.jurisdictions?.[0]??'기타',jurisdictions:row.jurisdictions,region:row.source_name,institution:row.source_name,title:row.title,originalTitle:row.original_title,summary:row.editorial_status==='published'?'한국어 보고서 발행 완료':row.editorial_status==='review_pending'?'한국어 초안 검수 대기':'한국어 초안 검수 대기',details:'',kind:row.document_type,tags:row.topics??[],date:row.published_date?.replaceAll('-','.')??'날짜 확인 중',officialUrl:row.official_url});}
   if(itemId||(data??[]).length<200)break;
  }
  return stories;
