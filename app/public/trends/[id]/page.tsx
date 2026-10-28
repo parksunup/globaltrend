@@ -1,4 +1,5 @@
 import Link from "next/link";
+import {loadTrendCatalog} from "../../../../lib/trend-catalog";
 import { notFound } from "next/navigation";
 import { publicSubmissionPreviewEnabled } from "../../../../lib/public-submission-preview";
 import { loadPublicStories } from "../../../../lib/public-content";
@@ -16,7 +17,8 @@ export default async function TrendDetail({ params, searchParams }: {
   const { id } = await params;
   const { back } = await searchParams;
   const draftMode = publicSubmissionPreviewEnabled();
-  const story = draftMode ? (await loadPublicStories()).find((item) => item.id === id) : await loadPublishedStory(id);
+  const catalogId = /^catalog-[0-9a-f-]{36}$/i.test(id) ? id.slice(8) : null;
+  const story = catalogId ? (await loadTrendCatalog(catalogId))[0] : draftMode ? (await loadPublicStories()).find((item) => item.id === id) : await loadPublishedStory(id);
   if (!story) notFound();
   const returnTo = back?.startsWith("/public/search?") ? back : "/public/search";
   return <main className={styles.site}>
