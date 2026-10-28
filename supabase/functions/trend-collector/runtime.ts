@@ -2,6 +2,7 @@ import { parseHTML } from "npm:linkedom@0.18.12";
 import {
   canonical,
   cnilListingDate,
+  dpcListingDate,
   discover,
   extract,
   icoPublishedDate,
@@ -482,6 +483,22 @@ export async function advance(
         }
       }
       const url = canonical(row.url, c.hosts);
+      const dpcDate = c.source === "dpc" ? dpcListingDate(row) : null;
+      if (dpcDate && (dpcDate < state.since || dpcDate > state.until)) {
+        state.failures = 0;
+        result.stage = "listing_date_scope_check";
+        result.saved = "out_of_range";
+        result.read_scope = "official_listing_date_only";
+        result.published_date = dpcDate;
+        result.date_evidence = row.date_observations?.[0];
+        if (state.is_backlog) {
+          result.reason = "backlog_out_of_range";
+          result.backlog_resolved = true;
+          return { state, result, continue: false, delay: 0 };
+        }
+        state.offset = (state.offset || 0) + 1;
+        return { state, result, continue: true, delay: 0 };
+      }
       const pdpcReportDate = c.source === "pdpc" && row.topic === "Reports" &&
           row.date_observations?.length === 1 &&
           row.date_observations[0].meaning === "listing_published_display" &&
