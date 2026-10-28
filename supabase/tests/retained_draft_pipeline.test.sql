@@ -1,8 +1,10 @@
 begin;
 set local search_path=public,extensions;
-select plan(11);
+select plan(12);
 update sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
 create temporary table retained_context as select source_item_id item,source_item_revision_id revision,draft_job_id job from ingest_source_item((select id from sources where name='EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/retained-pipeline-fixture','Official privacy guidelines','2026-10-28',null,now(),'en','news','The board published final guidelines on personal data.',repeat('a',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
+update source_items set relevance_status='relevant' where id=(select item from retained_context);
+select is((select metadata->>'retention_decision' from source_items where id=(select item from retained_context)),'keep','keep decision automatically connects the writer without a second manual step');
 select is(collector_retain_for_draft((select item from retained_context),(select revision from retained_context),repeat('a',64),'개인정보 처리에 관한 최종 지침')->>'status','draft_required','retention queues mandatory Korean drafting');
 select collector_retain_for_draft((select item from retained_context),(select revision from retained_context),repeat('a',64),'개인정보 처리에 관한 최종 지침');
 select is((select count(*)::integer from draft_jobs where source_item_id=(select item from retained_context)),1,'repeated retention does not duplicate work');
