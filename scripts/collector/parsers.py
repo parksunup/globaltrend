@@ -41,6 +41,26 @@ def parse_date(text):
     except ValueError: pass
     return None
 
+def oecd_certainly_outside_window(item, since, until):
+    """Exclude a dated OECD detail only if every official time observation agrees on scope.
+
+    A disagreement still leaves published_date unresolved; this check does not
+    select a date or make the item eligible for a draft.
+    """
+    observations=item.get('metadata',{}).get('date_observations',[])
+    dates=[]
+    for observation in observations:
+        if observation.get('meaning') not in ('published_display','published_attribute'):
+            continue
+        if observation.get('locator') not in ('time','time@datetime',
+                'main [itemtype="https://schema.org/Article"] .cmp-article-header__date time[itemprop="datePublished"]'):
+            continue
+        date=parse_date(observation.get('value',''))
+        if date is None:
+            return False
+        dates.append(date)
+    return bool(dates) and all(date < since or date > until for date in dates)
+
 def pdpc_detail_published_date(value):
     """Only accept the exact PDPC detail-page publication label."""
     value=normalize(value)
