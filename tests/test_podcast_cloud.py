@@ -96,6 +96,24 @@ class SessionRunTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(next(k for a,k in cloud.calls if a=='session_fail')['data']['category'],'auth')
         self.assertNotIn('secret-must-not-appear',captured.getvalue())
 
+    async def test_extraction_failure_is_not_reported_as_expired_login(self):
+        class AuthExtractionError(Exception): pass
+        cloud=self.cloud(); captured=io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            await worker.run_session(cloud,session_store.SessionVault(KEY,EMAIL,state()),
+                {'version':0,'envelope':None,'auth_only':True},
+                self.factory([],AuthExtractionError('secret-response-body')))
+        self.assertFalse(worker.auth_failure(AuthExtractionError()))
+        self.assertIn('reason=token_extraction',captured.getvalue())
+        self.assertIn('stage=list_notebooks',captured.getvalue())
+        self.assertNotIn('secret-response-body',captured.getvalue())
+        self.assertNotIn(('health',{'ok':False}),cloud.calls)
+
+    def test_diagnostic_codes_never_include_sdk_messages(self):
+        error=ValueError("Google's CookieMismatch page was reached secret-url-cookie")
+        self.assertEqual(worker.failure_reason(error),'cookie_scope')
+        self.assertEqual(worker.failure_reason(ValueError('secret-value')),'unclassified')
+
     async def test_non_auth_production_failure_still_persists_verified_rotation(self):
         cloud=self.cloud(); original_call=cloud.call
         def call(action,job=None,**kw):
