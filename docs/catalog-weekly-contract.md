@@ -19,3 +19,5 @@
 일일 Codex 작성 워커는 `collector_claim_retained_draft(worker)`를 반복 소비해 이 실행에서 한국어 원고를 직접 작성하고 기존 검사와 `submit_trend_draft`를 실행합니다. 수집 commit 이후에도 곧바로 작성 워커를 소비합니다. Edge가 원문을 저장한 경우에도 다음 생산 실행에서 보존 판정·동일 작성 큐로 이어집니다. DB 자체가 한국어를 생성하거나 별도 생성 API를 호출하는 구조는 아닙니다. 새 자료 저장 즉시 별도 Codex 프로세스를 깨우는 이벤트 기능이 생긴 것은 아니며 기존 클라우드 생산 예약이 작성 소비자입니다.
 
 `collector_retained_draft_status()`가 unfinished=0이 될 때까지 확정 작업은 생산자 책임입니다. 유효 임대·원문 검증·실제 플랫폼 제한으로 이번 실행에서 끝내지 못하면 DB 작업과 오류를 보존해 다음 실행이 이어받습니다. `guard_retained_draft_completion`은 확정 자료에 한국어 원고가 없는데 생산자 요약이 success로 들어오면 DB에서 partial로 고칩니다. 재시도 횟수나 임대, 검증 gate를 초기화해 성공으로 꾸미지 않습니다.
+
+DB에서 relevance_status를 relevant로 확정하는 순간에도 enqueue_retained_korean_draft 트리거가 동일 작성 작업을 자동 연결합니다. 원문 검증이나 작업 등록을 빼먹으면 보존 확정 자체가 실패하며, 작업 등록 없이 보존 자료만 남기는 분리 상태를 허용하지 않습니다.
