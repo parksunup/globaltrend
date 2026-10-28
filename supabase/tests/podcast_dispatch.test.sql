@@ -16,7 +16,9 @@ begin
   perform vault.create_secret(repeat('synthetic-test-only-',3),'globaltrend_podcast_github_dispatch');
   update private.podcast_dispatch_state set enabled=true,last_requested_at=null;
   update private.podcast_session_state set enabled=true,test_until=now()+interval '1 hour',
-    consecutive_failures=0,last_verified_at=null,lease_until=null;
+    consecutive_failures=0,last_verified_at=now()-interval '7 minutes',lease_until=null;
+  if private.podcast_dispatch_tick() is not null then raise exception 'fresh session dispatched early'; end if;
+  update private.podcast_session_state set last_verified_at=now()-interval '9 minutes';
   r=private.podcast_dispatch_tick();
   select count(*) into n from net.http_request_queue where id=r
     and url='https://api.github.com/repos/parksunup/globaltrend/actions/workflows/podcast-cloud.yml/dispatches'
