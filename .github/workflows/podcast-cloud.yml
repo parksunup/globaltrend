@@ -12,20 +12,43 @@ concurrency:
 jobs:
   produce:
     # No private, self-hosted, or larger paid runners.
-    if: github.repository == 'parksunup/globaltrend' && github.event.repository.private == false && github.ref == 'refs/heads/main' && vars.PODCAST_CLOUD_ENABLED == 'true'
+    if: github.repository == 'parksunup/globaltrend' && github.event.repository.private == false && github.ref == 'refs/heads/main' && (vars.PODCAST_CLOUD_ENABLED == 'true' || vars.PODCAST_SESSION_ENABLED == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with:
           persist-credentials: false
+      - name: Stop authentication trial at its deadline
+        id: gate
+        env:
+          TRIAL_UNTIL: ${{ vars.PODCAST_SESSION_TEST_UNTIL }}
+          PRODUCE: ${{ vars.PODCAST_CLOUD_ENABLED }}
+        run: |
+          python3 - <<'PY'
+          import datetime, os
+          active = os.environ.get('PRODUCE') == 'true'
+          try:
+              deadline = datetime.datetime.fromisoformat(os.environ['TRIAL_UNTIL'].replace('Z', '+00:00'))
+              active |= datetime.datetime.now(datetime.timezone.utc) < deadline
+          except (ValueError, KeyError, TypeError):
+              pass
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as out:
+              out.write('active=' + str(active).lower() + '\n')
+          PY
       - uses: actions/setup-python@v5
+        if: steps.gate.outputs.active == 'true'
         with:
           python-version: '3.12'
       - name: Install pinned NotebookLM implementation
+        if: steps.gate.outputs.active == 'true'
         run: python -m pip install -r scripts/podcast-cloud/requirements.txt
       - name: Cloud worker (no browser, no credential artifacts)
+        if: steps.gate.outputs.active == 'true'
         env:
+          PODCAST_SESSION_KEY: ${{ secrets.PODCAST_SESSION_KEY }}
+          PODCAST_ACCOUNT_EMAIL: ${{ secrets.PODCAST_ACCOUNT_EMAIL }}
           NOTEBOOKLM_AUTH_JSON: ${{ secrets.NOTEBOOKLM_AUTH_JSON }}
+          PODCAST_PRODUCE_ENABLED: ${{ vars.PODCAST_CLOUD_ENABLED }}
           PODCAST_ENDPOINT: https://emlgwhkgaihhrirhdpnp.supabase.co/functions/v1/podcast-cloud
         run: python scripts/podcast-cloud/worker.py

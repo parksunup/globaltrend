@@ -8,7 +8,7 @@
 
 GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`는 모두 **꺼져 있습니다**. 새 자동 제작은 시작되지 않습니다.
 
-**남은 문제:** 현재 GitHub Secret의 Google 로그인 쿠키는 짧은 기간에 만료될 수 있습니다. 2026-10-28에 실제로 만료를 확인하고 다시 연결했습니다. 전용 계정 장기 토큰 발급도 시도했지만 Google이 일회용 인증값을 거절하여 성공하지 못했습니다. 따라서 “컴퓨터를 끈 채 매주 계속 자동 제작”은 아직 안정적으로 보장할 수 없습니다. 장기 토큰이 실제로 발급되고 클라우드 재발급 시험을 통과한 뒤에만 예약 실행을 켭니다.
+로그인 정보는 이제 파일 기반으로 갱신하고 **갱신된 상태를 암호화해 다음 클라우드 실행에 넘깁니다**. 기존 방식처럼 매번 처음의 쿠키를 불러오지 않습니다. 전용 세션을 로컬과 함께 사용하지 않습니다. Google이 직접 재로그인을 요구하는 경우까지 자동 복구하지는 못하므로, 72시간 인증 시험 후 주간 제작을 활성화합니다. 시험 중에는 음성을 새로 만들거나 공개하지 않습니다.
 
 ## 관리자가 제작하는 방법
 
@@ -23,9 +23,11 @@ GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`�
 
 ## 계정과 비밀정보
 
-- Google 공식 NotebookLM API가 아닌 `notebooklm-py==0.8.5`를 사용합니다. 현재 GitHub Secret `NOTEBOOKLM_AUTH_JSON`에는 Google 로그인 세션이 암호화되어 보관됩니다. 비밀번호는 저장하지 않습니다.
+- Google 공식 NotebookLM API가 아닌 `notebooklm-py==0.8.5`를 사용합니다. 최초 전달용 `NOTEBOOKLM_AUTH_JSON`은 암호화 상태가 없는 첫 실행에서만 사용합니다. 최초 저장이 확인되면 이 Secret을 삭제합니다. 이후에는 DB의 최신 암호문만 읽습니다.
+- AES-256-GCM 암호문은 `private.podcast_session_state`, 복호화 키는 GitHub Secret `PODCAST_SESSION_KEY`에 둡니다. 계정 확인값은 `PODCAST_ACCOUNT_EMAIL` Secret입니다. DB에는 평문 쿠키나 복호화 키를 보관하지 않습니다. 암호화할 때마다 새 nonce를 쓰고 세션 버전을 인증 데이터에 묶습니다.
+- 해당 비공개 테이블과 RPC는 일반 로그인 계정과 익명 계정이 읽거나 실행할 수 없습니다. 기존 OIDC를 통과한 main의 worker만 세션을 선점합니다. 한 번에 한 실행만 접근하고, 이전 버전의 저장은 거절합니다. 연속 3회 실패하면 갱신을 자동 중단합니다.
 - 세션은 저장소 코드, GitHub artifact/cache, PR, 사이트 화면, 실행 로그에 넣지 않습니다. GitHub 실행기는 표준 공개 저장소용 `ubuntu-latest`입니다.
-- 연결 스크립트 `scripts/podcast-cloud/connect.ps1`은 별도 Chrome 프로필로 전용 계정에 로그인한 뒤 세션을 Secret에 보냅니다. 이 컴퓨터의 로컬 인증 파일은 Git에서 제외된 `.podcast-private/`에 둡니다.
+- 연결 스크립트 `scripts/podcast-cloud/connect.ps1`은 별도 Chrome 프로필로 전용 계정에 로그인한 뒤 최초 전달용 Secret을 준비합니다. 기존 암호화 키는 덮어쓰지 않습니다. 넘긴 로컬 세션은 다시 사용하지 않습니다. 전용 계정을 다른 브라우저에서 별도로 로그인하는 것과 같은 쿠키 파일을 복제해 쓰는 것은 다릅니다.
 - Google 쿠키 파일은 정기 실행의 영구 인증 수단이 아닙니다. [도구의 설치 안내](https://github.com/teng-lin/notebooklm-py/blob/main/docs/installation.md)는 GitHub처럼 매번 새 실행기를 쓰는 환경에 장기 토큰을 권장합니다. 장기 토큰은 계정 접근 권한이 큰 비밀정보이므로 팟캐스트 전용 계정인지 확인하고, 실제 발급과 검증에 성공하기 전에는 운영 Secret으로 전환하지 않습니다.
 - 신원 검증은 GitHub의 짧은 OIDC 토큰을 사용합니다. Supabase Edge Function이 저장소 ID, 소유자 ID, 공개 여부, `main` 브랜치, 정확한 workflow, GitHub 실행기를 확인합니다. [PR #64](https://github.com/parksunup/globaltrend/pull/64)에서 운영 토큰의 저장소 ID 포함 형식으로 수정했고, 실제 클라우드 실행에서 연결을 확인했습니다.
 
@@ -37,10 +39,18 @@ GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`�
 
 ## 실패했을 때
 
-- 작업실에 `needs_login`이 나오면 Google 로그인이 만료된 것입니다. 전용 계정 세션을 다시 연결한 뒤 관리자가 제작을 재개합니다.
+- 작업실에 `needs_login`이 나오면 Google이 재로그인을 요구한 것입니다. 운영자는 먼저 GitHub의 `PODCAST_SESSION_ENABLED`, `PODCAST_CLOUD_ENABLED`와 DB의 두 실행 스위치를 끄고, 진행 중인 실행이 끝났는지 확인합니다. 새 전용 세션을 준비한 뒤 기존 암호문을 의도적으로 초기화하는 절차가 필요합니다. 연결 스크립트만 반복해 기존 상태를 덮어쓰지 않습니다.
 - NotebookLM 요청의 완료 여부가 불명확하면 같은 음성을 중복 생성하지 않고 `blocked`로 멈춥니다. 먼저 NotebookLM에서 실제 작업 상태를 확인합니다.
 - 음성이 만들어져도 공개 설정을 끈 원고는 게시되지 않습니다. 제작 중 자료가 바뀌면 공개 단계에서 최신 자료와 다시 대조합니다.
 - Google 연결이 마지막으로 확인된 지 2시간이 넘으면 클라우드 제작 요청을 새로 받지 않습니다.
+
+## 로그인 유지 시험 (운영자용)
+
+- `PODCAST_SESSION_ENABLED=true`, `PODCAST_CLOUD_ENABLED=false`로 인증 검사만 실행합니다. GitHub 변수 `PODCAST_SESSION_TEST_UNTIL`과 DB의 `private.podcast_session_state.test_until`에 같은 종료 시각을 지정합니다. DB에서는 `enabled=true`로 시험을 시작합니다. `podcast_cloud_runtime.enabled`는 false로 둡니다.
+- 약 15분마다 worker가 최신 암호문을 임시 파일에 복원하고 실제 NotebookLM 접속을 확인합니다. SDK의 쿠키 갱신을 거친 뒤 파일을 다시 암호화해 저장합니다. 복원 파일의 수정 시각을 과거로 두어 갱신이 잘못 생략되지 않도록 합니다.
+- 각 실행은 버전·검사 시각·성공 여부만 `private.podcast_session_checks`에 기록합니다. 인증값은 기록하지 않으며 기록은 10일간 보관합니다. Google 세션은 runner의 소유자 전용 임시 파일에만 풀고 실행 뒤 삭제합니다. artifact/cache에 저장하지 않습니다.
+- DB 종료 시각이 지나면 다음 선점 때 자동 중단됩니다. GitHub도 종료 시각 이후 패키지 설치와 Google 접속을 건너뜁니다. GitHub 예약 지연·누락이 있으므로 72시간이 지났다는 이유만으로 통과로 판정하지 않습니다. 성공 횟수, 실행 간격, 재로그인 요구, 서로 다른 runner에서의 복원 결과를 확인합니다.
+- 시험이 통과해도 주간 제작은 별도 활성화합니다. DB의 시험 종료 시각을 해제하고 세션·제작 스위치를 명시적으로 켜야 합니다.
 
 ## 시험 기록
 

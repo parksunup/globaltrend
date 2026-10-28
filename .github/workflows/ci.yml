@@ -75,6 +75,7 @@ jobs:
         with:
           deno-version: v2.9.6
       - run: deno check --config supabase/functions/trend-collector/deno.json supabase/functions/trend-collector/index.ts
+      - run: deno check --no-config supabase/functions/podcast-cloud/index.ts
       - run: deno test --config supabase/functions/trend-collector/deno.json supabase/functions/trend-collector/adapter_test.ts supabase/functions/trend-collector/runtime_test.ts
       - name: Verify Edge registry matches the approved collector registry
         run: cmp config/trend-collector.json supabase/functions/trend-collector/registry.json
