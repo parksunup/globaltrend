@@ -23,6 +23,15 @@ test('proposals stay labelled as proposals, and background proposals do not rela
  const court=story(6,{title:'법원, 국외이전 관련 판결 선고',summary:'기존 지침 초안과 별개로 정보주체 권리 판단'});
  assert.equal(rankPodcastStories([court],start,end)[0].stage,'법원 판단');
 });
+test('consultation and incident-response wording used in published reports is recognised without calling it law',()=>{
+ const consultation=story(7,{title:'감독기관, 파운데이션 모델 개발사 보호조치 개선 현황 공개 및 에이전트 AI 의견 모집',summary:'주요 파운데이션 모델 개발사 10곳의 보호조치 개선 현황과 의견 모집 개시'});
+ const ranked=rankPodcastStories([consultation],start,end);
+ assert.equal(recommendedPodcastStory(ranked).story.id,consultation.id);
+ assert.equal(ranked[0].stage,'초안·제안·의견수렴');
+ const response=story(8,{title:'감독기관, 대규모 개인정보 유출 사례에 따른 안전관리 대응 촉구',summary:'사업자의 안전관리 조치 재점검 촉구'});
+ const result=rankPodcastStories([response],start,end)[0];
+ assert.equal(result.stage,'대응·권고');assert.equal(result.criteria[0].points,20);assert.equal(result.recommended,true);
+});
 test('unknown dates, outside periods, missing content and unsafe source URLs are excluded',()=>{
  const bad=[story(1,{officialDate:''}),story(2,{officialDate:'2026-10-26'}),story(3,{officialDate:'2026-02-30'}),story(4,{details:''}),story(5,{officialUrl:'http://example.test'}),story(6,{officialUrl:'https://user:secret@example.test'})];
  assert.deepEqual(rankPodcastStories(bad,start,end),[]);
