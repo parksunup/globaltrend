@@ -381,6 +381,50 @@ class OECDPressReleaseTests(unittest.TestCase):
         self.assertIsNone(item['published_date'])
         self.assertTrue(item['metadata']['requires_review'])
         self.assertEqual(len(item['metadata']['date_observations']),2)
+        self.assertTrue(parsers.oecd_certainly_outside_window(item,'2026-10-26','2026-10-28'))
+        self.assertFalse(parsers.oecd_certainly_outside_window(item,'2022-12-13','2022-12-14'))
+
+    def test_unparseable_oecd_date_cannot_prove_outside_window(self):
+        item=parsers.extract('oecd',self.html.replace('14 December 2022','Date pending'),self.url)
+        self.assertFalse(parsers.oecd_certainly_outside_window(item,'2026-10-26','2026-10-28'))
+
+    def test_conflicted_old_detail_is_outside_daily_window_without_ingest(self):
+        from scripts.collector.core import collect
+        from scripts.collector.cloud_step import PreparedStore
+        config={'source':'oecd','source_id':'source','language':'en',
+                'listing':'https://www.oecd.org/en/about/newsroom.html',
+                'hosts':['www.oecd.org'],'enabled':True,
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            def get(self, url):
+                return self_outer.html.replace('datetime="2022-12-14"','datetime="2022-12-13"').encode(),url,'text/html'
+        self_outer=self
+        store=PreparedStore(None)
+        with patch('scripts.collector.core.fetch_listing',return_value=([{'url':self.url,'title':'Privacy agreement'}],None)):
+            result=collect(config,Client(),store,'2026-10-26','2026-10-28',max_pages=1,max_items=1)
+        self.assertEqual(result['out_of_range'],1)
+        self.assertEqual(result['range_filter_read_scope'],'official_detail_time_observations')
+        self.assertEqual(len(result['date_observations']),2)
+        self.assertEqual(store.operations,[])
+
+    def test_old_conflicted_backlog_resolves_without_ingest(self):
+        from scripts.collector import cloud_step
+        import json
+        config=next(s for s in json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text())['sources'] if s['source']=='oecd')
+        class Client:
+            def __init__(self,*args,**kwargs): self.budget={'requests':0,'bytes':0}
+            def get(self,url):
+                self.budget['requests']+=1
+                return self_outer.html.replace('datetime="2022-12-14"','datetime="2022-12-13"').encode(),url,'text/html'
+        self_outer=self
+        claim={'slug':'oecd','source_id':config['source_id'],'since':'2026-10-26','until':'2026-10-28',
+               'cursor':None,'lease_until':'2099-01-01T00:00:00+00:00',
+               'backlog_id':'old','detail':{'url':self.url,'title':'Privacy agreement'}}
+        with patch('scripts.collector.cloud_step.HttpClient',Client):
+            bundle=cloud_step.prepare(claim)
+        self.assertTrue(bundle['backlog_resolved'])
+        self.assertEqual(bundle['operations'],[])
+        self.assertEqual(bundle['result']['reason'],'backlog_out_of_range')
 
     def test_unverified_article_template_does_not_broaden_publication_parser(self):
         with self.assertRaisesRegex(ValueError,'title_or_body_missing'):
