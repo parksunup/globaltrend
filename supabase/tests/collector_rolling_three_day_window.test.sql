@@ -12,7 +12,7 @@ select id, 'test-rolling-window',
   '{"since":"2026-09-21","until":"2026-10-28","page":"https://www.edpb.europa.eu/news_en","offset":0,"exhausted":true}'::jsonb,
   false
 from public.sources where name = 'EDPB 뉴스·보도자료'
-on conflict (source_id) do update set state = excluded.state, queued = false;
+on conflict (source_id) do update set slug = excluded.slug, state = excluded.state, queued = false;
 
 insert into public.collector_edge_backlog(source_id, url, range_start, range_end, state)
 select source_id, 'https://www.edpb.europa.eu/news/test_en', '2026-09-21', '2026-10-28',
