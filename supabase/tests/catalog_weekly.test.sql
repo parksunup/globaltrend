@@ -1,0 +1,10 @@
+begin;
+select plan(6);
+select ok(has_function_privilege('anon','public.get_trend_catalog(integer,integer,uuid)','execute'),'catalog metadata is publicly searchable');
+select ok(not has_function_privilege('anon','public.save_written_weekly_draft(text,text,date,date,jsonb)','execute'),'anonymous cannot select issue articles');
+select ok(not has_function_privilege('anon','public.publish_written_weekly_issue(text)','execute'),'anonymous cannot publish');
+select ok(has_function_privilege('service_role','public.save_written_weekly_draft(text,text,date,date,jsonb)','execute'),'scheduled editor can save a draft');
+select ok(not has_function_privilege('service_role','public.publish_written_weekly_issue(text)','execute'),'producer has no automatic publication grant');
+select is((select count(*)::integer from get_trend_catalog(0,200)),least(200,(select count(*)::integer from source_items i join sources s on s.id=i.source_id where s.is_active and s.terms_reviewed_at is not null)),'catalog includes unwritten source items');
+select * from finish();
+rollback;
