@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const db = await podcastAdmin();
     const [stories, jobs, cloud] = await Promise.all([new URL(request.url).searchParams.has('jobsOnly') ? Promise.resolve(undefined) : podcastStories(db), db.from('podcast_production_jobs').select('*').order('created_at',{ascending:false}).limit(30), db.from('podcast_cloud_runtime').select('enabled,status,last_seen_at').eq('id',true).maybeSingle()]);
     const cloudReady = !!cloud.data?.enabled && cloud.data.status === 'ready' && recentCloudCheck(cloud.data.last_seen_at);
-    return Response.json({stories, jobs:jobs.data ?? [], cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}, {headers});
+    return Response.json({stories, jobs:jobs.data ?? [], cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:process.env.NODE_ENV === 'production'}, {headers});
   } catch (error) {return podcastError(error);}
 }
 export async function POST(request: Request) {
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
         if (existing.source_hash !== sourceHash || Object.keys(packet).some(key => JSON.stringify(existing.packet[key]) !== JSON.stringify(packet[key as keyof typeof packet]))) throw Error('이 주간호에는 다른 제작 자료가 있습니다. 기존 제작 기록을 확인해 주세요.');
         return Response.json({job:existing}, {headers});
       }
-      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:issueKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}).select().single();
+      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:issueKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && process.env.NODE_ENV === 'production'}).select().single();
       if (error) throw Error(error.code === '23505' ? '같은 주간호가 방금 만들어졌습니다. 목록을 새로 확인해 주세요.' : '제작 자료를 저장하지 못했습니다.');
       return Response.json({job:data}, {headers});
     }
