@@ -2,6 +2,7 @@ import {revalidatePath} from 'next/cache';
 import {createClient} from '../../../../lib/supabase/server';
 import {createLiveWorkspaceReader} from '../../../../lib/live-team-workspace';
 import {loadTeamTrendRows} from '../../../../lib/team-trends';
+import {trendEditMatchesRow} from '../../../../lib/team-trend-publication';
 import {prepareLegalCandidate,prepareTrendCandidate} from '../../../../lib/workspace-submissions';
 
 export const runtime='nodejs';
@@ -38,7 +39,7 @@ export async function POST(request:Request) {
    if(uuid(body.itemId)) {
     const rows=await loadTeamTrendRows({readPage:async offset=>{const {data,error}=await db.rpc('get_team_trend_workspace',{p_offset:offset,p_limit:200});if(error)throw error;return data;}});
     const row=rows.find(item=>item.id===body.itemId);if(!row)throw Object.assign(new Error('동향 원고가 작업실 목록에 없습니다. 최신 화면을 다시 불러와 주세요.'),{status:404});
-    if(action==='publish'&&row.workspaceEdit) {
+    if(action==='publish'&&row.workspaceEdit&&!trendEditMatchesRow(row.workspaceEdit,row)) {
      if(row.workspaceEdit.base_revision!==row.revision)throw Object.assign(new Error('기준 원고가 달라 Codex 수정본을 공개하지 않았습니다. 최신 원고와 다시 대조해 주세요.'),{status:409});
      const copy=await db.from('publication_working_copies').select('revision,payload,trashed_at').eq('entity_type','report').eq('entity_id',row.id).maybeSingle();
      if(copy.error||!copy.data?.payload||copy.data.trashed_at)throw Object.assign(new Error('게시 작업본을 확인할 수 없습니다. 작업실 자료를 새로고침해 주세요.'),{status:409});

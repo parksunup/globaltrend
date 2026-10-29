@@ -1,11 +1,12 @@
 import { createHash } from 'node:crypto';
 import type { LiveWorkspace } from './live-team-workspace.ts';
+import {trendEditMatchesRow} from './team-trend-publication.ts';
 
 export type TeamTrend = {
   id:string; revision:string; title_ko:string; summary_ko:string; details_ko:string;
   original_title:string; official_url:string; source_name:string; published_date:string;
   jurisdictions:string[]; topics:string[]; status:string;
-  editFile?:string; editState?:'applied'|'conflict'; proposedEdit?:TrendEdit;
+  editFile?:string; editState?:'applied'|'synced'|'conflict'; proposedEdit?:TrendEdit;
   workspace_revision?:number; workspaceEdit?:TrendEdit;
 };
 export type TrendEdit = {report_id:string;base_revision:string;title_ko:string;summary_ko:string;details_ko:string};
@@ -27,6 +28,9 @@ export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:
     const edit=byId.get(row.id);
     const editFile=`.team-workspace/edits/${row.id}.json`;
     if(!edit)return {...row,editFile};
+    // Publishing changes the report status and its calculated revision. An edit
+    // already present in the working copy is synchronized, not a conflict.
+    if(trendEditMatchesRow(edit,row))return {...row,editFile,editState:'synced' as const};
     if(edit.base_revision!==row.revision){warnings.push(`${row.id}: 기준 원고가 바뀌어 수정본 자동 적용을 보류했습니다.`);return {...row,editFile,editState:'conflict' as const,proposedEdit:edit};}
     return {...row,title_ko:edit.title_ko,summary_ko:edit.summary_ko,details_ko:edit.details_ko,editFile,editState:'applied' as const};
   });
