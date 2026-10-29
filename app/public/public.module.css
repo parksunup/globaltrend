@@ -599,3 +599,9 @@
 .visitorCounts span{display:inline-flex;align-items:center;gap:8px}.visitorCounts strong{color:var(--cyan);font-variant-numeric:tabular-nums;font-size:15px}.visitorCounts small{align-self:center;color:var(--muted);font-size:10px}
 @media(max-width:620px){.visitorCounts{justify-content:space-between;flex-wrap:wrap;padding:13px 15px;gap:10px}.visitorCounts span{gap:5px;font-size:11px}.visitorCounts small{flex-basis:100%}}
 
+
+/* Shared podcast colors follow the public theme, including native audio controls. */
+.site{--public-color-scheme:dark}.themeLight .site{--public-color-scheme:light}
+.workspaceLink{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;margin-left:14px;border:1px solid var(--line);border-radius:9px;color:var(--cyan);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}.workspaceLink:hover{border-color:var(--cyan)}.workspaceLink:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.weeklyContents ol{display:grid;gap:10px;margin:16px 0 0;padding-left:25px;line-height:1.7}.weeklyContents a{color:var(--cyan)}.weeklyContents a:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+@media(max-width:620px){.header{gap:8px}.workspaceLink{min-height:36px;margin-left:0;padding:0 9px;font-size:12px}.mobileSearch{display:none}}

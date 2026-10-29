@@ -2,7 +2,7 @@ import Link from 'next/link';
 import styles from './weekly-formats.module.css';
 
 export default function WeeklyFormats({active}:{active:'written'|'podcast'}) {
-  return <nav className={styles.formats} aria-label="주간호 자료 형식">
+  return <nav className={styles.formats} aria-label="주간 동향과 팟캐스트">
     <Link href="/public/weekly" aria-current={active==='written'?'page':undefined}>
       <span aria-hidden="true">▤</span><span><strong>주간 동향</strong><small>한 주의 동향을 글로 읽기</small></span>
     </Link>
