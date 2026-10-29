@@ -17,17 +17,18 @@ type Props = {
   canPublish: boolean;
   readOnly?: boolean;
   initialKind?: "all" | WorkspaceKind;
+  initialStatus?: "all" | WorkspaceFilters["status"];
   executeAction: (command: WorkspaceCommand) => Promise<WorkspaceActionResult>;
 };
 type DetailTab = "preview" | "edit" | "history";
 const actionNames: Record<WorkspaceOperation,string> = {publish:"공개",request_publication:"공개 요청",unpublish:"공개 취소",trash:"휴지통 이동",restore:"복원",save_trend:"수정 저장"};
 const csv = (value: FormDataEntryValue | null) => String(value ?? "").split(",").map(part=>part.trim()).filter(Boolean);
 
-export default function Workspace({items,canEdit,canPublish,readOnly=false,initialKind="all",executeAction}:Props) {
+export default function Workspace({items,canEdit,canPublish,readOnly=false,initialKind="all",initialStatus="all",executeAction}:Props) {
   const router=useRouter();
   const inFlight=useRef(false);
   const dialog=useRef<HTMLElement|null>(null);
-  const [filters,setFilters]=useState<WorkspaceFilters>({query:"",kind:initialKind,status:"all"});
+  const [filters,setFilters]=useState<WorkspaceFilters>({query:"",kind:initialKind,status:initialStatus});
   const [page,setPage]=useState(1);
   const [selected,setSelected]=useState<string[]>([]);
   const selectedRevisions=useRef(new Map<string,string>());

@@ -93,7 +93,7 @@ export default function LiveTeamWorkspace({role:initialRole='trends',lawId,view,
     <header className={styles.header}>
       <h1>{role==='legal'?'법제':'동향'} 작업실</h1>
       <p>자료를 읽고, 고칠 점을 평소 사용하시는 Codex에 말씀해 주세요. Codex가 저장한 수정본을 이 화면에서 다시 확인하실 수 있습니다.</p>
-      <nav aria-label="담당 선택"><button aria-pressed={role==='trends'} onClick={()=>{setRole('trends');setQuery('');}}>동향 담당</button><button aria-pressed={role==='legal'} onClick={()=>setRole('legal')}>법제 담당</button><a href="/work/weekly" aria-current={role==='trends'&&trendView==='weekly'?'page':undefined}>주간 동향 8건 선정</a><a href="/team/podcast">팟캐스트 제작</a><a href="/public">공개 페이지 ↗</a></nav>
+      <nav aria-label="담당 선택"><button aria-pressed={role==='trends'} onClick={()=>{setRole('trends');setQuery('');}}>동향 담당</button><button aria-pressed={role==='legal'} onClick={()=>setRole('legal')}>법제 담당</button><a href="/work/weekly" aria-current={role==='trends'&&trendView==='weekly'?'page':undefined}>주간 동향 8건 선정</a><a href="/team/podcast">팟캐스트 제작</a><a href="/work/materials?kind=trend&status=trashed">동향 휴지통</a><a href="/public">공개 페이지 ↗</a></nav>
       <div role="status" aria-live="polite">{loading?'최신 자료를 불러오는 중입니다…':loginRequired?'팀 계정 로그인이 필요합니다.':data?'자료 '+data.commitSha.slice(0,7)+' · 연결 확인 '+checked:'아직 최신 자료를 읽지 못했습니다.'}</div>
       <button onClick={()=>setRefresh(value=>value+1)}>지금 새로 확인</button>
       {role==='trends'&&data?.databaseAvailable&&<button onClick={async()=>{await createClient().auth.signOut();setData(null);setConnection(undefined);setRefresh(value=>value+1);}}>로그아웃</button>}
