@@ -71,6 +71,20 @@
     "card": ".item",
     "card_date": ".date"
   },
+  "es-aepd": {
+    "host": "www.aepd.es",
+    "listing": "https://www.aepd.es/prensa-y-comunicacion/notas-de-prensa",
+    "links": ".view-solr-news .list-view article.node--view-mode-teaser a.more-link[href]",
+    "article_path": "^/prensa-y-comunicacion/notas-de-prensa/[^/]+$",
+    "card": "article.node--view-mode-teaser",
+    "card_title": ".field--name-title h2",
+    "card_date": ".field--name-fecha-publicacion time[datetime]",
+    "card_date_attribute": "datetime",
+    "title": "article.node--view-mode-full .field--name-title h1",
+    "body": "article.node--view-mode-full .field--name-body",
+    "date": "article.node--view-mode-full .field--name-fecha-publicacion time[datetime]",
+    "date_attribute": "datetime"
+  },
   "ec": {
     "host": "ec.europa.eu",
     "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",

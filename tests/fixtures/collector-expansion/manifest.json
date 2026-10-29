@@ -40,5 +40,11 @@
     "published_date": "2026-10-28",
     "observed_at": "2026-10-28T14:40:11.425880+00:00",
     "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "es-aepd": {
+    "url": "https://www.aepd.es/prensa-y-comunicacion/notas-de-prensa/la-agencia-y-la-autoridad-de-luxemburgo-firman-un-memorando-cooperaci%C3%B3n",
+    "published_date": "2026-10-19",
+    "observed_at": "2026-10-29T09:05:00Z",
+    "fixture_scope": "Observed selectors and shortened official body excerpt; live HTTP checked full detail"
   }
 }

@@ -2,7 +2,7 @@
 
 ## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
 
-기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처18개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
+기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처19개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
 
 1. 시작 시 `collector_writing_policy()`의 정책ID·지침해시를 로컬 `config/trend-writing-policy.json`과 비교한다. 지침과 DB판본이 다르면 해당 제출을 보류해 정확한 오류·재개 위치를 기록하되 다른 출처의 수집을 임의로 중단하지 않는다. 기존 `trend-ko-v1` 작업 임대·해시 계약은 그대로 유지한다.
 2. 실제 claim 반환JSON을 ignored `work/claim-<job>.json`에 저장하고 `node scripts/trend-report.mjs --packet work/claim-<job>.json --out work/writing-packet-<job>.json`을 실행한다. 반환된 원문 전문과 최신 지침·용어집·유형별검토항목을 실제로 읽는다. 패킷 생성은 읽기 완료가 아니다.
@@ -16,7 +16,7 @@
 
 ## 2026-10-29 사용자 보류 지시 — 아래 과거 활성4개 표현보다 우선
 
-EDPS와 EUR-Lex는 사용자 지시로 보류한다. 두 출처는 일일 검색·RSS 조회·본문 재시도·수집·한국어 초안 신규 생성 대상에서 제외하고 기존 발견·실패·원문 기록을 보존한다. 보류를 성공·무자료로 기록하지 않는다. 활성 대상은 18개(Edge12·cloud-python4·chatgpt-web2)이며 웹2개는 홍콩 PCPD와 EU 이사회이다. 나머지18개는 최근3일 일일 수집·보존자료 한국어 작성·검사·/work 저장을 계속하고, 월요일 주요 약8건 주간호 초안 계약을 유지한다. 출처 보류 때문에 다른 출처 실행을 멈추지 않는다.
+EDPS와 EUR-Lex는 사용자 지시로 보류한다. 두 출처는 일일 검색·RSS 조회·본문 재시도·수집·한국어 초안 신규 생성 대상에서 제외하고 기존 발견·실패·원문 기록을 보존한다. 보류를 성공·무자료로 기록하지 않는다. 활성 대상은 19개(Edge13·cloud-python4·chatgpt-web2)이며 웹2개는 홍콩 PCPD와 EU 이사회이다. 나머지19개는 최근3일 일일 수집·보존자료 한국어 작성·검사·/work 저장을 계속하고, 월요일 주요 약8건 주간호 초안 계약을 유지한다. 출처 보류 때문에 다른 출처 실행을 멈추지 않는다.
 
 
 ## 2026-10-29 웹 예외 경로 추가
@@ -82,3 +82,5 @@ main 병합, 기존 보고서 덮어쓰기, 자동 승인·공개 발행, 미확
 현재 제출 RPC는 근거 인용이 정확한 source_item_revision의 `content_text`에 존재하는지를 검사한다. 연결 PDF에서만 확인되는 방법·수치·판단을 본문의 ‘보고서를 발간했다’는 문장에 연결해서 제출하면 안 된다. 첨부에만 있는 사실이 필요하면 기존 `ingest_source_item`으로 근거를 보강한 새 원문 판본을 먼저 보존한다. 주 출처의 source_id·canonical URL·제목·발표일을 유지하고, 기존 본문과 실제 읽은 공식 문서의 필요한 쪽/절 텍스트를 문서 경계·URL·위치와 함께 입력한다. metadata.evidence_documents에 각 URL·문서역할·열람범위·본문해시를 보존하고, 결합 본문의 실제 SHA256을 p_content_hash로 사용한다. 기존 판본은 삭제하거나 수정하지 않는다.
 
 이후 기존 claim으로 제출하지 않고 새 current_revision_id/input_hash를 확인해 보존확정·새 작업 임대·패킷 작성부터 다시 진행한다. 새 판본의 정확한 본문에 들어간 실제 인용만 evidence로 사용한다. 실질 자료나 적절한 근거 판본을 확보하지 못하면 해당 원고는 실패·재시도 사유를 보존한다. 서버의 원문 인용 존재 검사를 약화하거나, 첨부를 읽었다는 검토 메모만으로 첨부의 사실을 뒷받침하지 않는다.
+
+2026-10-29 AEPD 추가: 스페인 AEPD(`es-aepd`) 공식 보도자료를 Edge 일일 3일 조회 대상으로 포함한다. 공식 robots 규칙상 목록 `?page=`는 접근하지 않으므로 첫 페이지 밖은 수집 완료로 표시하지 않고 `listing_exhaustiveness_unverified`를 유지한다. 상세 HTTP 실패는 URL과 함께 기존 backlog에 남긴다.
