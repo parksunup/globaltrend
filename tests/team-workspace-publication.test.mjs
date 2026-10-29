@@ -13,6 +13,7 @@ function route({vercelEnv='production',user=null,member=null}={}) {
     if(name.endsWith('supabase/server'))return {createClient:async()=>{dbReads++;return db;}};
     if(name.endsWith('live-team-workspace'))return {createLiveWorkspaceReader:()=>async()=>{branchReads++;return {commitSha:'a'.repeat(40)};}};
     if(name.endsWith('team-trends'))return {loadTeamTrendRows:async()=>[]};
+    if(name.endsWith('team-trend-publication'))return {trendEditMatchesRow:()=>false};
     if(name.endsWith('workspace-submissions'))return {prepareLegalCandidate:async()=>{},prepareTrendCandidate:async()=>{}};
     throw Error(name);
   }});
