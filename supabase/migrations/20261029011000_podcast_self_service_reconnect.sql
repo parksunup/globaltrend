@@ -141,4 +141,3 @@ end;
 $$;
 revoke all on function public.podcast_session_step(text,text,jsonb) from public,anon,authenticated;
 grant execute on function public.podcast_session_step(text,text,jsonb) to service_role;
-
