@@ -9,6 +9,7 @@ reset role;
 update public.weekly_podcast_episodes set status='withdrawn' where issue_key='2098-W50';
 set local role anon;
 select results_eq($$select count(*) from storage.objects where bucket_id='weekly-podcasts' and name like '2098-W50/%'$$,array[0::bigint],'withdrawn and unpublished files remain hidden');
+reset role;
 select ok(not has_function_privilege('anon','private.is_team_member(text)','execute'),'playback does not expose administrator membership checks');
 reset role;
 select * from finish();
