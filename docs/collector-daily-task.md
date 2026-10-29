@@ -1,5 +1,16 @@
 # 정기 클라우드 수집·일일 초안 및 주간 보고 운영
 
+## 수집→한국어 작성 완료 장벽 (2026-10-30)
+
+Edge 수집은 매일 07:17 KST에 먼저 실행하고, 일일 생산자는 모든 Edge 결과가 들어올 시간을 둔 뒤 **09:00 KST 정각**에 실행한다. 생산자는 시작·각 수집 commit 직후·종료 직전에 `collector_daily_pipeline_status(대상시작일, 대상종료일)`를 확인한다.
+
+상태에 나온 모든 미완료 자료는 다음 둘 중 하나로 끝낸다.
+
+1. 원문 전체를 확인해 개인정보 동향이 아니거나 중복이면 구체적인 제외 근거를 저장한다.
+2. 보존 대상이면 `collector_retain_for_draft` → `collector_claim_retained_draft` → 원문·첨부 확인 → 한국어 제목·요약·본문 작성 → seal/check → `submit_trend_draft` → reports와 publication_working_copies 재조회까지 끝낸다.
+
+종료 요약은 직접 INSERT/UPDATE하지 않고 `collector_finalize_daily_producer(...)`로 기록한다. `collector_daily_pipeline_status(...).ready_to_complete=false`인 동안 DB는 성공 요약을 자동으로 `partial`로 바꾼다. INSERT 뒤 UPDATE로 성공을 덮어쓰는 것도 같은 장벽이 막는다. 따라서 원문만 저장됐거나 관련성 판정·한국어 초안·검사·작업실 저장 중 하나라도 남으면 그 실행은 성공이 아니다. 다음 실행은 새 수집 전에 이 미완료 목록부터 이어받는다.
+
 ## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
 
 기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처19개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
