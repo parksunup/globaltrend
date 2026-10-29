@@ -12,10 +12,14 @@ const evidenceLabels: Record<string, string> = {
   official_guidance: "공식 지침 근거 초안 · 법령 전문 대조 필요",
   official_legislative_summary_and_regulator_guidance: "공식 입법 요약·규제기관 지침 근거 초안 · 법령 전문 대조 필요",
   official_summary_and_secondary_statute: "공식 채택 요약·비공식 법문 재게시본 대조 초안 · 공식 현행 조문 확인 필요",
+  selected_statute_and_public_institution_gazette_copy: "선택 본법·공공기관 재게시 관보 대조 초안 · 현행성 추가 확인",
+  official_state_published_statute_excerpt: "주정부 발행 법령집 대조 초안 · 후속 개정 확인 필요",
 };
 
 function sourceLabel(url: string) {
   const host = new URL(url).hostname;
+  if (host === "pdp.aiti.gov.bn") return "공공기관 재게시 관보";
+  if (host === "www.dre.ca.gov" || host === "dre.ca.gov") return "주정부 발행 자료";
   return host === "legiscan.com" || host === "law.justia.com" ? "법문 재게시 자료" : "공식 근거";
 }
 
