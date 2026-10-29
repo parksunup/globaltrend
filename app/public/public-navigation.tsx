@@ -1,13 +1,17 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./public.module.css";
 import { usePublicTheme } from "./public-theme";
 
-const entries = [["/public", "동향"], ["/public/weekly", "주간호"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
+const entries = [["/public", "동향"], ["/public/weekly", "주간호"], ["/public/weekly/podcast", "주간 팟캐스트"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
 export function PublicHeader({ active }: { active: string }) {
   const { theme, toggleTheme } = usePublicTheme();
   const [menuOpen, setMenuOpen] = useState(false);
+  useEffect(() => {
+    if (active === "/public") return;
+    fetch("/api/public/visitors", { method: "POST", cache: "no-store" }).catch(() => {});
+  }, [active]);
   return <header className={styles.header}>
     <Link className={styles.brand} href="/public" aria-label="GlobalTrend 홈" onClick={() => setMenuOpen(false)}><span className={styles.brandText}>Global<span>Trend</span></span><small className={styles.brandTagline}>세계의 개인정보 보호 동향을 한눈에</small></Link>
     <div className={styles.mobileHeaderActions}>

@@ -41,7 +41,7 @@ export default async function PublishedPodcastsPage() {
   const schemaNotReady = error?.code === "PGRST205" || error?.code === "42P01";
 
   return <main className={styles.site}>
-    <PublicHeader active="/public/weekly" />
+    <PublicHeader active="/public/weekly/podcast" />
     <section className={styles.searchPage}>
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간호</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
       <WeeklyFormats active="podcast" />

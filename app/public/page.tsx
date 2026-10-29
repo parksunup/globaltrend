@@ -4,16 +4,13 @@ import styles from "./public.module.css";
 import { loadPublicStories } from "../../lib/public-content";
 import { publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
 import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
-import { loadPublicLegal } from "../../lib/public-legal";
 import { PublicHeader, PublicFooter } from "./public-navigation";
+import HomeVisitorCounts from "./home-visitor-counts";
 
 export const dynamic = "force-dynamic";
 
 export default async function PublicHome() {
   const draftMode = publicSubmissionPreviewEnabled();
-  const legal = await loadPublicLegal();
-  const legalItems = legal.instruments;
-  const comparisonCount = legal.cells.length;
   let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
   try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
@@ -23,7 +20,6 @@ export default async function PublicHome() {
   return <main className={styles.site}>
     <PublicHeader active="/public" />
     {draftMode && <div className={styles.draftNotice}>미리보기 환경 · 조사한 자료와 공식 출처를 살펴보실 수 있습니다.</div>}
-    {draftMode && <section className={styles.submissionStats} aria-label="담당자 제출 자료 현황"><Link href="/public/search"><strong>{allStories.length}건</strong><span>동향 표본</span></Link><Link href="/public/laws"><strong>{legalItems.length}개</strong><span>조사한 법률</span></Link><Link href="/public/laws?view=compare"><strong>{comparisonCount}칸</strong><span>17개 기준 비교표</span></Link></section>}
 
     <section className={styles.hero}>
       <div className={styles.heroTitle}>
@@ -65,9 +61,10 @@ export default async function PublicHome() {
 
     <section className={styles.weeklyStrip} id="weekly">
       <div className={styles.weeklyLead}><h2>주간호</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
-      <div className={styles.weekCardActive}><span>WEEKLY BRIEFING</span><strong>주간호 준비 중</strong><small>첫 주간호가 아직 없습니다.</small></div>
+      <Link className={styles.weekCardActive} href="/public/weekly/podcast"><span>WEEKLY PODCAST</span><strong>주간 팟캐스트 듣기 →</strong><small>공개된 에피소드 바로가기</small></Link>
       <Link href="/public/weekly">주간호 전체 보기 →</Link>
     </section>
+    <HomeVisitorCounts />
     <PublicFooter />
   </main>;
 }
