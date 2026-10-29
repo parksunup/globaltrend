@@ -14,6 +14,29 @@ async function handler(message,sender) {
   const isApp=allowedOrigins.includes(origin) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
   if (message.type==='GT_PING' && isApp) return {ok:true,version:1,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_RECONNECT_OPEN' && isApp) {
+    if(!chrome.cookies)throw Error('업데이트된 연결 도구를 팟캐스트 전용 Chrome 프로필에 설치해 주세요.');
+    const tab=await chrome.tabs.create({url:'https://notebooklm.google.com/',active:true});
+    await chrome.storage.local.set({reconnect:{origin,appTabId:sender.tab.id,notebookTabId:tab.id,openedAt:Date.now()}});
+    return {ok:true};
+  }
+  if (message.type==='GT_RECONNECT_SAVE' && isApp) {
+    const {reconnect}=await chrome.storage.local.get('reconnect');
+    if(!reconnect||reconnect.origin!==origin||reconnect.appTabId!==sender.tab.id||Date.now()-reconnect.openedAt>900000)throw Error('먼저 Google 로그인 열기를 눌러 주세요.');
+    const tab=await chrome.tabs.get(reconnect.notebookTabId);
+    if(!['https://notebooklm.google.com','https://notebook.google.com'].includes(new URL(tab.url).origin))throw Error('Google 로그인을 끝낸 뒤 다시 눌러 주세요.');
+    const results=await chrome.scripting.executeScript({target:{tabId:tab.id},func:()=>Array.from(document.querySelectorAll('a[href*="accounts.google.com"], [data-email]')).map(e=>(e.getAttribute('aria-label')??'')+' '+(e.getAttribute('data-email')??'')).join(' ')});
+    const text=results[0]?.result??'';
+    const emails=[...new Set(text.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)??[])];
+    if(emails.length!==1||emails[0]!=='psunup@gmail.com')throw Error('다른 Google 계정이 없는 전용 프로필에서 psunup@gmail.com으로 로그인하고, NotebookLM 오른쪽 위 계정 메뉴를 연 뒤 다시 눌러 주세요.');
+    const names=['SID','HSID','SSID','APISID','SAPISID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
+    const cookies=(await chrome.cookies.getAll({domain:'google.com'})).filter(c=>names.includes(c.name)&&['.google.com','google.com','notebooklm.google.com','notebook.google.com'].includes(c.domain)&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
+    const reply=await chrome.scripting.executeScript({target:{tabId:sender.tab.id},func:async cookies=>{const r=await fetch('/api/podcast/reconnect',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'psunup@gmail.com',cookies})});const body=await r.json();return r.ok?{ok:true}:{error:body.error??'연결 실패'};},args:[cookies]});
+    const result=reply[0]?.result;if(!result?.ok)throw Error(result?.error??'연결 결과를 확인하지 못했습니다.');
+    await chrome.storage.local.remove('reconnect');
+    await chrome.tabs.remove(tab.id);
+    return {ok:true};
+  }
   if (message.type==='GT_BEGIN' && isApp) {
     if (!validPacket(message.job)) throw Error('제작 자료 형식이 올바르지 않습니다.');
     if (job && !TERMINAL.includes(job.phase) && job.id!==message.job.id) {

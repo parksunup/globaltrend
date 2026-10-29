@@ -42,6 +42,17 @@ class SessionCryptoTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':1,'envelope':{}})
 
+    def test_explicit_admin_recovery_preserves_version_and_rejects_other_accounts(self):
+        v=session_store.SessionVault(KEY,EMAIL)
+        recovery=json.loads(state('new-dedicated-login'))
+        with tempfile.TemporaryDirectory() as folder:
+            p=v.restore(folder,{'version':12,'envelope':{},'recovery':recovery})
+            self.assertEqual(json.loads(p.read_bytes()),recovery)
+            self.assertEqual(v.unseal(v.seal(p.read_bytes(),13),13),p.read_bytes())
+        recovery['notebooklm']['account']['email']='other@example.invalid'
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaises(ValueError): v.restore(folder,{'version':12,'recovery':recovery})
+
     def test_restore_is_private_and_forces_rotation_guard_to_expire(self):
         with tempfile.TemporaryDirectory() as folder:
             p=session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':0,'envelope':None})
