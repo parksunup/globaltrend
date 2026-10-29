@@ -32,7 +32,7 @@ insert into public.written_weekly_issues(issue_key,title,description,week_start,
 insert into public.written_weekly_issue_reports(issue_key,report_id,sort_order)
  select r.issue_key,r.report_id,r.sort_order from public.weekly_issue_reports r join public.written_weekly_issues w on w.issue_key=r.issue_key;
 
-create or replace function public.save_written_weekly_draft(p_issue_key text,p_title text,p_start date,p_end date,p_selection jsonb)
+create function public.save_written_weekly_edition(p_issue_key text,p_title text,p_start date,p_end date,p_selection jsonb)
 returns text language plpgsql security invoker set search_path=public,pg_temp as $$
 declare n integer; entry jsonb;
 begin
@@ -55,7 +55,7 @@ begin
 end; $$;
 
 
-create or replace function public.publish_written_weekly_issue(p_issue_key text) returns void language plpgsql security invoker set search_path=public,pg_temp as $$
+create function public.publish_written_weekly_edition(p_issue_key text) returns void language plpgsql security invoker set search_path=public,pg_temp as $$
 begin
  if not coalesce(private.is_team_member('admin'),false) then raise exception 'admin required' using errcode='42501'; end if;
  perform 1 from written_weekly_issues where issue_key=p_issue_key and status='draft' for update;
@@ -63,10 +63,8 @@ begin
  if not exists(select 1 from written_weekly_issue_reports where issue_key=p_issue_key) or exists(select 1 from written_weekly_issue_reports w join reports r on r.id=w.report_id where w.issue_key=p_issue_key and (r.status<>'published' or not r.human_reviewed)) then raise exception 'all selected reports must be reviewed and published'; end if;
  update written_weekly_issues set status='published',published_at=now() where issue_key=p_issue_key;
 end; $$;
-revoke all on function public.publish_written_weekly_issue(text) from public;
-grant execute on function public.publish_written_weekly_issue(text) to authenticated;
-
-revoke all on function public.save_written_weekly_draft(text,text,date,date,jsonb) from public,anon,authenticated,service_role;
-grant execute on function public.save_written_weekly_draft(text,text,date,date,jsonb) to authenticated,service_role;
-revoke all on function public.publish_written_weekly_issue(text) from public,anon,authenticated,service_role;
-grant execute on function public.publish_written_weekly_issue(text) to authenticated;
+-- Existing RPCs continue to serve the currently deployed site during rollout.
+revoke all on function public.save_written_weekly_edition(text,text,date,date,jsonb) from public,anon,authenticated,service_role;
+grant execute on function public.save_written_weekly_edition(text,text,date,date,jsonb) to authenticated,service_role;
+revoke all on function public.publish_written_weekly_edition(text) from public,anon,authenticated,service_role;
+grant execute on function public.publish_written_weekly_edition(text) to authenticated;
