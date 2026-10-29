@@ -52,3 +52,17 @@ test('written weekly view renders the eight selected reports and no podcast sele
  assert.ok(!html.includes('팟캐스트용 주요 주제'));
  assert.ok(html.includes('본문 첫 문단')&&html.includes('둘째 문단'));
 });
+
+test('written and podcast archives offer every issue as a selectable link',()=>{
+ const source=fs.readFileSync(new URL('../app/public/weekly/weekly-issue-picker.tsx',import.meta.url),'utf8');
+ const code=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
+ const mod={exports:{}};
+ new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/link'?({href,children,...rest})=>React.createElement('a',{href,...rest},children):require(name),mod,mod.exports);
+ const issues=Array.from({length:60},(_,i)=>({issue_key:`2026-W${String(i).padStart(2,'0')}`,title:`제${i}호`,week_start:'2026-01-01',week_end:'2026-01-07'}));
+ for(const basePath of ['/public/weekly','/public/weekly/podcast']){
+  const html=renderToStaticMarkup(React.createElement(mod.exports.default,{issues,selectedKey:issues[59].issue_key,basePath,label:'지난 호'}));
+  assert.equal((html.match(/aria-current="page"/g)??[]).length,1);
+  assert.equal((html.match(/<li>/g)??[]).length,60);
+  assert.ok(html.includes(`${basePath}?issue=2026-W59`));
+ }
+});
