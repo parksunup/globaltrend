@@ -5,7 +5,7 @@ import ts from 'typescript';
 import {createRequire} from 'node:module';
 import React from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
-import {loadLatestPublicPodcast} from '../lib/public-podcast.ts';
+import {loadLatestPublicPodcast,podcastDisplayTitle} from '../lib/public-podcast.ts';
 
 function fakeDb({episodes=[],issues=[],audio={signedUrl:'https://audio.example.test/episode'}}={}){
  const tables={weekly_podcast_episodes:episodes,weekly_issues:issues};
@@ -18,11 +18,16 @@ function fakeDb({episodes=[],issues=[],audio={signedUrl:'https://audio.example.t
 }
 
 test('home player reads the published podcast and its published issue',async()=>{
- const db=fakeDb({episodes:[{issue_key:'2026-W43',audio_path:'episode.mp4',audio_mime_type:'audio/mp4',published_at:'2026-10-29',status:'published'},{issue_key:'2026-W44',audio_path:'draft.mp4',status:'draft'}],issues:[{issue_key:'2026-W43',title:'심층 팟캐스트',description:'설명',week_start:'2026-10-05',week_end:'2026-10-11',status:'published'}]});
+ const db=fakeDb({episodes:[{issue_key:'2026-W43',audio_path:'episode.mp4',audio_mime_type:'audio/mp4',published_at:'2026-10-29',status:'published'},{issue_key:'2026-W44',audio_path:'draft.mp4',status:'draft'}],issues:[{issue_key:'2026-W43',title:'국제요정: 심층 팟캐스트',description:'설명',week_start:'2026-10-05',week_end:'2026-10-11',status:'published'}]});
  const result=await loadLatestPublicPodcast(db);
  assert.equal(result.podcast?.title,'심층 팟캐스트');
  assert.equal(result.podcast?.audioUrl,'https://audio.example.test/episode');
  assert.deepEqual(db.calls,['weekly_podcast_episodes','weekly_issues']);
+});
+
+test('podcast display title only drops the leading brand prefix',()=>{
+ assert.equal(podcastDisplayTitle('국제요정: 영국 ICO 발표'),'영국 ICO 발표');
+ assert.equal(podcastDisplayTitle('국제요정이 분석한 발표'),'국제요정이 분석한 발표');
 });
 
 test('home player does not expose a podcast without a published issue or readable audio',async()=>{

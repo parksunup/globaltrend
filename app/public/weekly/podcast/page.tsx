@@ -4,6 +4,7 @@ import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
 import podcastStyles from './podcast.module.css';
 import WeeklyFormats from '../weekly-formats';
+import {podcastDisplayTitle} from '../../../../lib/public-podcast';
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +58,7 @@ export default async function PublishedPodcastsPage() {
         const audio = audioMap.get(episode.issue_key);
         return <article key={episode.issue_key} className={podcastStyles.card}>
           <p className={styles.overline}>{episode.issue_key} · {issue?.week_start}–{issue?.week_end}</p>
-          <h2>{issue?.title ?? episode.issue_key}</h2>
+          <h2>{podcastDisplayTitle(issue?.title ?? episode.issue_key)}</h2>
           {issue?.description ? <p>{issue.description}</p> : null}
           {audio ? <audio controls preload="none" className={podcastStyles.audio}><source src={audio} type={episode.audio_mime_type} />브라우저에서 오디오를 재생할 수 없습니다.</audio> : <p role="alert">오디오를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>}
           <h3>이번 호에 포함된 동향</h3>
