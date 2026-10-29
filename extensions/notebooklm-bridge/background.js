@@ -11,7 +11,7 @@ async function appRpc(job,method,payload) {
 async function handler(message,sender) {
   const {allowedOrigins=[]}=await chrome.storage.local.get('allowedOrigins');
   const origin=sender.url ? new URL(sender.url).origin : '';
-  const isApp=allowedOrigins.includes(origin) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
+  const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
   if (message.type==='GT_PING' && isApp) return {ok:true,version:1,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_RECONNECT_OPEN' && isApp) {
