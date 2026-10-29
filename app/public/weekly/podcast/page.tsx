@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "../../../../lib/supabase/server";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
+import podcastStyles from './podcast.module.css';
 import WeeklyFormats from '../weekly-formats';
 
 export const dynamic = "force-dynamic";
@@ -54,11 +55,11 @@ export default async function PublishedPodcastsPage() {
         const included = (linksByIssue.get(episode.issue_key) ?? [])
           .map(link => reportMap.get(link.report_id)).filter(Boolean);
         const audio = audioMap.get(episode.issue_key);
-        return <article key={episode.issue_key} style={{maxWidth:1000,margin:"24px auto",padding:"28px",border:"1px solid var(--line,#d9e1dd)",borderRadius:16,background:"var(--surface,#fff)"}}>
+        return <article key={episode.issue_key} className={podcastStyles.card}>
           <p className={styles.overline}>{episode.issue_key} · {issue?.week_start}–{issue?.week_end}</p>
           <h2>{issue?.title ?? episode.issue_key}</h2>
           {issue?.description ? <p>{issue.description}</p> : null}
-          {audio ? <audio controls preload="none" style={{width:"100%",margin:"18px 0"}}><source src={audio} type={episode.audio_mime_type} />브라우저에서 오디오를 재생할 수 없습니다.</audio> : <p role="alert">오디오를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>}
+          {audio ? <audio controls preload="none" className={podcastStyles.audio}><source src={audio} type={episode.audio_mime_type} />브라우저에서 오디오를 재생할 수 없습니다.</audio> : <p role="alert">오디오를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>}
           <h3>이번 호에 포함된 동향</h3>
           {linksError ? <p role="alert">포함된 동향 목록을 불러오지 못했습니다.</p> :
             <ul>{included.map(report => report ? <li key={report.id}><Link href={`/public/trends/${report.id}`}>{report.title_ko}</Link>{report.one_line_summary_ko ? <p>{report.one_line_summary_ko}</p> : null}</li> : null)}</ul>}
