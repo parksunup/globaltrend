@@ -8,7 +8,7 @@
 
 GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`는 모두 **꺼져 있습니다**. 새 자동 제작은 시작되지 않습니다.
 
-로그인 정보는 파일 기반으로 갱신하고 **갱신된 상태를 암호화해 다음 클라우드 실행에 넘깁니다**. 전용 세션을 로컬과 함께 사용하지 않습니다. GitHub 예약 실행이 수 시간 누락된 뒤 Google이 저장 세션을 거절한 것을 확인해, 전용 브라우저 연결을 복구하고 Supabase Cron으로 실행을 시작하는 경로를 추가했습니다. 인증 갱신 간격은 SDK의 600초 기본값에 맞춘 10분입니다. 이는 Codex나 유료 생성 API를 사용하는 원고 제작이 아닙니다. 강제 로그아웃까지 자동 복구하거나 영구 로그인을 보장하지 않습니다. [타이머 연결 안내](podcast-dispatch-clock.md)를 참고하세요.
+로그인 정보는 파일 기반으로 갱신하고 **갱신된 상태를 암호화해 다음 클라우드 실행에 넘깁니다**. 전용 세션을 로컬과 함께 사용하지 않습니다. GitHub 예약 실행이 수 시간 누락된 뒤 Google이 저장 세션을 거절한 것을 확인해, 전용 브라우저 연결을 복구하고 Supabase Cron으로 실행을 시작하는 경로를 추가했습니다. 주 실행 시계는 10분 간격으로 로그인 상태를 확인합니다. 이는 Codex나 유료 생성 API를 사용하는 원고 제작이 아닙니다. 강제 로그아웃까지 자동 복구하거나 영구 로그인을 보장하지 않습니다. [타이머 연결 안내](podcast-dispatch-clock.md)를 참고하세요.
 
 ## 관리자가 제작하는 방법
 
@@ -23,7 +23,7 @@ GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`�
 
 ## 계정과 비밀정보
 
-- Google 공식 NotebookLM API가 아닌 `notebooklm-py==0.8.5`를 사용합니다. 최초 전달용 `NOTEBOOKLM_AUTH_JSON`은 암호화 상태가 없는 첫 실행에서만 사용합니다. 최초 저장이 확인되면 이 Secret을 삭제합니다. 이후에는 DB의 최신 암호문만 읽습니다.
+- Google 공식 NotebookLM API가 아닌 `notebooklm-py[mcp]==0.8.5`의 **NotebookLM MCP 서버**를 사용합니다. GitHub Actions 실행기는 임시 인증 프로필로 stdio MCP 서버를 시작하고 `notebook_list` → `notebook_create` → `source_add` → `studio_generate` → `studio_status` → `studio_download` 도구를 호출합니다. Python SDK를 직접 호출하지 않습니다. 최초 전달용 `NOTEBOOKLM_AUTH_JSON`은 암호화 상태가 없는 첫 실행에서만 사용합니다. 최초 저장이 확인되면 이 Secret을 삭제합니다. 이후에는 DB의 최신 암호문만 읽습니다.
 - AES-256-GCM 암호문은 `private.podcast_session_state`, 복호화 키는 GitHub Secret `PODCAST_SESSION_KEY`에 둡니다. 계정 확인값은 `PODCAST_ACCOUNT_EMAIL` Secret입니다. DB에는 평문 쿠키나 복호화 키를 보관하지 않습니다. 암호화할 때마다 새 nonce를 쓰고 세션 버전을 인증 데이터에 묶습니다.
 - 해당 비공개 테이블과 RPC는 일반 로그인 계정과 익명 계정이 읽거나 실행할 수 없습니다. 기존 OIDC를 통과한 main의 worker만 세션을 선점합니다. 한 번에 한 실행만 접근하고, 이전 버전의 저장은 거절합니다. 연속 3회 실패하면 갱신을 자동 중단합니다.
 - 세션은 저장소 코드, GitHub artifact/cache, PR, 사이트 화면, 실행 로그에 넣지 않습니다. GitHub 실행기는 표준 공개 저장소용 `ubuntu-latest`입니다.
@@ -47,7 +47,7 @@ GitHub 변수 `PODCAST_CLOUD_ENABLED`와 DB의 `podcast_cloud_runtime.enabled`�
 ## 로그인 유지 시험 (운영자용)
 
 - `PODCAST_SESSION_ENABLED=true`, `PODCAST_CLOUD_ENABLED=false`로 인증 검사만 실행합니다. GitHub 변수 `PODCAST_SESSION_TEST_UNTIL`과 DB의 `private.podcast_session_state.test_until`에 같은 종료 시각을 지정합니다. DB에서는 `enabled=true`로 시험을 시작합니다. `podcast_cloud_runtime.enabled`는 false로 둡니다.
-- 주 실행 시계는 Supabase Cron의 10분 간격입니다. 8분 이내에 인증하거나 실행을 요청한 기록이 있으면 중복 요청하지 않습니다. GitHub 자체 예약은 매시 17분(UTC)의 보조 경로이며 지연·누락될 수 있습니다. worker가 최신 암호문을 임시 파일에 복원하고 실제 NotebookLM 접속을 확인한 뒤 SDK 갱신 결과를 다시 암호화해 저장합니다. 복원 파일의 수정 시각을 과거로 두어 갱신이 잘못 생략되지 않도록 합니다. 실패 로그에는 고정된 단계·원인 코드만 남기며, SDK 오류 메시지·응답·URL은 출력하지 않습니다. `token_extraction`을 Google 로그인 만료로 단정하지 않습니다.
+- 주 실행 시계는 Supabase Cron의 10분 간격입니다. 8분 이내에 인증하거나 실행을 요청한 기록이 있으면 중복 요청하지 않습니다. GitHub 자체 예약은 매시 17분(UTC)의 보조 경로이며 지연·누락될 수 있습니다. worker가 최신 암호문을 임시 MCP 프로필에 복원하고 `notebook_list`로 실제 접속을 확인한 뒤 서버가 갱신한 프로필을 다시 암호화해 저장합니다. 복원 파일의 수정 시각을 과거로 두어 갱신이 잘못 생략되지 않도록 합니다. 실패 로그에는 고정된 단계·원인 코드만 남기며, MCP 오류 메시지·응답·URL은 출력하지 않습니다. `token_extraction`을 Google 로그인 만료로 단정하지 않습니다.
 - 각 실행은 버전·검사 시각·성공 여부만 `private.podcast_session_checks`에 기록합니다. 인증값은 기록하지 않으며 기록은 10일간 보관합니다. Google 세션은 runner의 소유자 전용 임시 파일에만 풀고 실행 뒤 삭제합니다. artifact/cache에 저장하지 않습니다.
 - DB 종료 시각이 지나면 다음 선점 또는 Supabase 타이머 호출 때 자동 중단됩니다. GitHub도 종료 시각 이후 패키지 설치와 Google 접속을 건너뜁니다. 72시간·180회 같은 반복 횟수는 통과 기준으로 사용하지 않습니다. 실제 타이머 실행 두 번 사이에 서로 다른 실행기에서 복원·실접속·암호화 저장과 버전 증가를 확인합니다. Supabase가 시작한 GitHub 실행의 이벤트명은 `workflow_dispatch`입니다. 따라서 이벤트 이름만으로 예약 성공을 판단하지 않고 `cron.job_run_details`, 요청 시각과 HTTP 상태, 대응하는 GitHub 실행을 함께 대조합니다. 수동 호출을 예약 성공으로 세지 않습니다. 이 검사는 연결 동작 확인이며 장기 로그인 보장은 아닙니다.
 - 시험이 통과해도 주간 제작은 별도 활성화합니다. DB의 시험 종료 시각을 해제하고 세션·제작 스위치를 명시적으로 켜야 합니다.

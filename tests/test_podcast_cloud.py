@@ -17,6 +17,9 @@ spec.loader.exec_module(worker)
 vault_spec = importlib.util.spec_from_file_location('session_store', Path(__file__).parents[1] / 'scripts/podcast-cloud/session_store.py')
 session_store = importlib.util.module_from_spec(vault_spec)
 vault_spec.loader.exec_module(session_store)
+mcp_spec = importlib.util.spec_from_file_location('notebook_mcp', Path(__file__).parents[1] / 'scripts/podcast-cloud/notebook_mcp.py')
+notebook_mcp = importlib.util.module_from_spec(mcp_spec)
+mcp_spec.loader.exec_module(notebook_mcp)
 EMAIL = 'podcast@example.invalid'
 KEY = base64.b64encode(bytes(range(32))).decode()
 def state(value='initial-secret'):
@@ -196,6 +199,44 @@ class PodcastCloudTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(RuntimeError):
             await worker.produce(client,cloud,job())
         client.notebooks.create.assert_not_awaited()
+
+class NotebookMCPAdapterTests(unittest.IsolatedAsyncioTestCase):
+    async def test_every_generation_step_uses_mcp_tools(self):
+        seen=[]
+        responses={
+            'notebook_list': {'notebooks': []},
+            'notebook_create': {'status':'created','notebook_id':'nb'},
+            'source_add': {'source_id':'src','ok':True},
+            'studio_generate': {'task_id':'audio'},
+            'studio_status': {'status':'completed','is_complete':True},
+            'studio_download': {'status':'downloaded'},
+        }
+        async def call(name, arguments):
+            seen.append((name, arguments))
+            if name=='studio_download': Path(arguments['path']).write_bytes(b'audio')
+            return types.SimpleNamespace(is_error=False, structured_content=responses[name])
+        client=notebook_mcp.NotebookMCP(types.SimpleNamespace(call_tool=call))
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertEqual(await client.notebooks.list(),[])
+            nb=await client.notebooks.create('title')
+            source=await client.sources.add_text(nb.id,'sources','body')
+            result=await client.artifacts.generate_audio(nb.id,[source.id],'ko','prompt','deep-dive','default')
+            status=await client.artifacts.poll_status(nb.id,result.task_id)
+            self.assertTrue(status.is_complete)
+            await client.artifacts.download_audio(nb.id,str(Path(folder)/'audio.m4a'),result.task_id)
+        self.assertEqual([name for name,_ in seen], list(responses))
+        self.assertEqual(seen[4][1]['task_id'],'audio')
+        self.assertEqual(seen[3][1]['source_ids'],['src'])
+
+    async def test_mcp_errors_are_reduced_to_safe_codes(self):
+        async def call(name, arguments):
+            return types.SimpleNamespace(is_error=True, structured_content=None,
+                                         content=[types.SimpleNamespace(text='AUTH: secret-cookie')])
+        client=notebook_mcp.NotebookMCP(types.SimpleNamespace(call_tool=call))
+        with self.assertRaises(notebook_mcp.MCPAuthFailure) as caught:
+            await client.notebooks.list()
+        self.assertEqual(str(caught.exception),'AUTH')
+        self.assertTrue(worker.auth_failure(caught.exception))
 
 if __name__=='__main__':
     unittest.main()

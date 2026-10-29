@@ -43,7 +43,7 @@ class SessionVault:
 
     @classmethod
     def from_environment(cls):
-        # Remove credentials before the SDK or any child process can inherit them.
+        # Remove credentials before the MCP server child process can inherit them.
         key = os.environ.pop("PODCAST_SESSION_KEY", "")
         account = os.environ.pop("PODCAST_ACCOUNT_EMAIL", "")
         bootstrap = os.environ.pop("NOTEBOOKLM_AUTH_JSON", "")
@@ -77,8 +77,6 @@ class SessionVault:
     def restore(self, folder, lease):
         if lease.get("recovery") is not None:
             raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
-        elif lease.get("recovery") is not None:
-            raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
         elif lease.get("envelope") is None:
             if lease["version"] != 0 or self.bootstrap is None:
                 raise ValueError("dedicated session setup required")
@@ -86,11 +84,13 @@ class SessionVault:
         else:
             raw = self.unseal(lease["envelope"], lease["version"])
         self.bootstrap = None
-        path = Path(folder) / "storage_state.json"
+        # The MCP server resolves credentials from an isolated NotebookLM home.
+        path = Path(folder) / "profiles" / "default" / "storage_state.json"
+        path.parent.mkdir(parents=True, mode=0o700)
         # TemporaryDirectory is owner-only; the file is too. No symlinks/overwrite.
         fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         with os.fdopen(fd, "wb") as handle:
             handle.write(raw)
-        # Restoring a fresh file must not fool the SDK's 60-second mtime guard.
+        # Restoring a fresh file must not fool NotebookLM's mtime guard.
         os.utime(path, (1, 1))
         return path
