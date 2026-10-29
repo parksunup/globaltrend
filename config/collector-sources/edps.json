@@ -6,18 +6,18 @@
     "www.edps.europa.eu"
   ],
   "language": "en",
-  "enabled": true,
+  "enabled": false,
   "permissions": {
-    "collect": true,
-    "store": true,
-    "ai": true
+    "collect": false,
+    "store": false,
+    "ai": false
   },
-  "hold_reason": null,
+  "hold_reason": "user_deferred_2026_10_29",
   "adapter_scope": "official_press_or_news_body",
   "executor": "chatgpt-web",
   "cadence": "daily",
   "lookback_days": 3,
   "expansion_phase": 1,
   "verification": "RSS discovery verified; substantive linked body access remains blocked",
-  "verification_status": "conditional_web_attempt"
+  "verification_status": "held_by_user"
 }

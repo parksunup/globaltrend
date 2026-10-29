@@ -1,5 +1,10 @@
 # Four-source ChatGPT web executor — 2026-10-29
 
+## 2026-10-29 사용자 보류 지시 — 아래 과거 활성4개 표현보다 우선
+
+EDPS와 EUR-Lex는 사용자 지시로 보류한다. 두 출처는 일일 검색·RSS 조회·본문 재시도·수집·한국어 초안 신규 생성 대상에서 제외하고 기존 발견·실패·원문 기록을 보존한다. 보류를 성공·무자료로 기록하지 않는다. 활성 대상은 18개(Edge12·cloud-python4·chatgpt-web2)이며 웹2개는 홍콩 PCPD와 EU 이사회이다. 나머지18개는 최근3일 일일 수집·보존자료 한국어 작성·검사·/work 저장을 계속하고, 월요일 주요 약8건 주간호 초안 계약을 유지한다. 출처 보류 때문에 다른 출처 실행을 멈추지 않는다.
+
+
 Use this with AGENTS.md, docs/collector-daily-task.md, docs/catalog-weekly-contract.md, docs/trend-report-style.md and docs/translation/glossary.md. The four sources have executor `chatgpt-web`: they are neither Edge queue consumers nor cloud-python workers. Enabling these routes means daily attempts, **not four fully working crawlers**. Existing 12 Edge and 4 Python routes remain unchanged.
 
 ## Daily execution
