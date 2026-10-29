@@ -1,3 +1,5 @@
+import {monthlyWeekIssueKey} from './weekly-label.ts';
+
 export const PODCAST_MAX_AUDIO_BYTES = 50 * 1024 * 1024;
 export const PODCAST_BRIDGE_VERSION = 1;
 export type PodcastStory = {
@@ -16,7 +18,12 @@ export function validDay(value: unknown): value is string {
   return !Number.isNaN(date.valueOf()) && date.toISOString().slice(0, 10) === value;
 }
 export function makePodcastPacket(input: {issueKey: string; weekStart: string; weekEnd: string; main: PodcastStory; brief?: PodcastStory; context?: PodcastStory[]}): PodcastPacket {
-  if (!/^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/.test(input.issueKey) || !validDay(input.weekStart) || !validDay(input.weekEnd) || input.weekStart > input.weekEnd) throw Error('주간호 번호와 기간을 확인해 주세요.');
+  const monday = validDay(input.weekStart) ? new Date(`${input.weekStart}T00:00:00Z`) : null;
+  if (!/^(?:\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])|\d{4}-\d{2}-W[1-5])(?:-\d+)?$/.test(input.issueKey) || !validDay(input.weekStart) || !validDay(input.weekEnd) || !monday || monday.getUTCDay()!==1 || input.weekEnd!==new Date(monday.valueOf()+6*86400000).toISOString().slice(0,10)) throw Error('주간호 번호와 기간을 확인해 주세요.');
+  if(!/^\d{4}-W\d{2}/.test(input.issueKey)){
+    const monthlyBase=input.issueKey.replace(/-\d+$/,'');
+    if(monthlyBase!==monthlyWeekIssueKey(input.weekStart))throw Error('주간호 번호와 기간을 확인해 주세요.');
+  }
   const stories = [input.main, ...(input.context ?? []), ...(input.brief ? [input.brief] : [])];
   for (const story of [input.main, ...(input.brief ? [input.brief] : [])]) {
     if (!validDay(story.officialDate) || story.officialDate < input.weekStart || story.officialDate > input.weekEnd) throw Error('메인 주제와 짧은 소식은 선택한 기간의 공식 발표일이 확인된 자료여야 합니다.');

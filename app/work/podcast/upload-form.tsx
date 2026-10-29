@@ -2,6 +2,7 @@
 import { useState, type FormEvent } from "react";
 import { createClient } from "../../../lib/supabase/client";
 import styles from "../work.module.css";
+import {formatMonthlyWeek} from "../../../lib/weekly-label";
 
 type Report = { id: string; title_ko: string; one_line_summary_ko: string | null; published_at: string | null };
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -14,6 +15,10 @@ function extensionFor(type: string) {
 export default function PodcastUploadForm({ reports }: { reports: Report[] }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [weekStart, setWeekStart] = useState("");
+  const [weekEnd, setWeekEnd] = useState("");
+  const startDate=new Date(`${weekStart}T00:00:00Z`);
+  const weekLabel=weekStart&&/^\d{4}-\d{2}-\d{2}$/.test(weekStart)&&!Number.isNaN(startDate.valueOf())&&startDate.toISOString().slice(0,10)===weekStart&&startDate.getUTCDay()===1?formatMonthlyWeek(weekStart):"";
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
@@ -24,12 +29,23 @@ export default function PodcastUploadForm({ reports }: { reports: Report[] }) {
       return;
     }
 
-    setBusy(true); setMessage("");
-    const issueKey = String(data.get("issueKey") ?? "").trim();
+    setMessage("");
+    const selectedWeekStart=String(data.get("weekStart")??"");
+    const selectedWeekEnd=String(data.get("weekEnd")??"");
+    if(!weekLabel||selectedWeekStart!==weekStart||selectedWeekEnd!==new Date(startDate.valueOf()+6*86400000).toISOString().slice(0,10)){
+      setMessage("월요일 시작일과 그 주 일요일을 선택해 주세요.");
+      return;
+    }
     const reportIds = Array.from(form.querySelectorAll<HTMLInputElement>('input[name="report"]:checked'), input => input.value);
-    const audioPath = `${issueKey}/${crypto.randomUUID()}.${extensionFor(file.type)}`;
-    const storage = createClient().storage.from("weekly-podcasts");
+    if(!reportIds.length){setMessage('팟캐스트에 포함할 공개 동향을 하나 이상 선택해 주세요.');return;}
+    setBusy(true);
     try {
+      const reservation=await fetch('/api/podcast/next-issue',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({weekStart:selectedWeekStart})});
+      const reserved=await reservation.json();
+      if(!reservation.ok||typeof reserved.issueKey!=='string')throw Error(reserved.error??'새 팟캐스트 회차를 예약하지 못했습니다.');
+      const issueKey=reserved.issueKey;
+      const audioPath = `${issueKey}/${crypto.randomUUID()}.${extensionFor(file.type)}`;
+      const storage = createClient().storage.from("weekly-podcasts");
       const { error: uploadError } = await storage.upload(audioPath, file, {
         contentType: file.type,
         cacheControl: "3600",
@@ -62,9 +78,9 @@ export default function PodcastUploadForm({ reports }: { reports: Report[] }) {
         return;
       }
       setMessage(result.message ?? "주간 팟캐스트를 게시했습니다.");
-      form.reset();
-    } catch {
-      setMessage("연결이 끊겼습니다. 게시 상태를 새로고침해 확인한 뒤 다시 시도해 주세요. 같은 파일을 바로 다시 올리면 중복 게시될 수 있습니다.");
+      form.reset();setWeekStart('');setWeekEnd('');
+    } catch(error) {
+      setMessage(error instanceof Error?error.message:"연결이 끊겼습니다. 게시 상태를 새로고침해 확인한 뒤 다시 시도해 주세요.");
     } finally { setBusy(false); }
   }
 
@@ -72,9 +88,9 @@ export default function PodcastUploadForm({ reports }: { reports: Report[] }) {
     <h2>NotebookLM 오디오 게시</h2>
     <p>주간호 정보와 실제 포함된 공개 동향, NotebookLM 오디오를 한 번 등록하면 주간호와 팟캐스트가 함께 공개됩니다. 이미 공개된 자료만 선택할 수 있습니다.</p>
     <form className={styles.form} onSubmit={submit}>
-      <label>주간호 표기<input name="issueKey" placeholder="예: 2026-W43" pattern="[0-9]{4}-W[0-9]{2}" required /></label>
+      <p>{weekLabel?`호 표기: ${weekLabel} · 회차 번호 자동 지정`:'월요일 시작일을 선택하면 월 기준 호 표기를 표시합니다.'}</p>
       <label>팟캐스트 제목<input name="title" maxLength={160} required /></label>
-      <div className={styles.fields}><label>주 시작일<input name="weekStart" type="date" required /></label><label>주 종료일<input name="weekEnd" type="date" required /></label></div>
+      <div className={styles.fields}><label>주 시작일<input name="weekStart" type="date" value={weekStart} onChange={event=>{const value=event.target.value;setWeekStart(value);const date=new Date(`${value}T00:00:00Z`);setWeekEnd(!Number.isNaN(date.valueOf())?new Date(date.valueOf()+6*86400000).toISOString().slice(0,10):'');}} required /></label><label>주 종료일<input name="weekEnd" type="date" value={weekEnd} onChange={event=>setWeekEnd(event.target.value)} required /></label></div>
       <label>간단한 소개<textarea name="description" rows={3} maxLength={1000} /></label>
       <label>NotebookLM에서 받은 오디오<input name="audio" type="file" accept=".mp3,.wav,.m4a,audio/mpeg,audio/wav,audio/mp4,audio/x-m4a" required /></label>
       <fieldset style={{border:"1px solid #d8e5db",borderRadius:8,padding:16}}>

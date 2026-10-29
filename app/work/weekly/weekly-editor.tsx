@@ -1,6 +1,7 @@
 'use client';
 import {useState} from 'react';
 import {weeklyPriority} from '../../../lib/weekly-priority';
+import {formatMonthlyWeek} from '../../../lib/weekly-label';
 import styles from './weekly.module.css';
 export type WeeklyCandidate={id:string;title:string;summary:string;details:string;date:string;source:string;url:string;status:string;documentType:string;topics:string[];jurisdictions:string[]};
 export default function WeeklyEditor({candidates,initialIds,notes,issueKey,title,start,end,save,readOnly=false,published=false,onDirty}:{candidates:WeeklyCandidate[];initialIds:string[];notes:Record<string,string>;issueKey:string;title:string;start:string;end:string;save:(form:FormData)=>Promise<void>;readOnly?:boolean;published?:boolean;onDirty?:()=>void}){
@@ -28,7 +29,7 @@ export default function WeeklyEditor({candidates,initialIds,notes,issueKey,title
   {limitMessage&&<p className={styles.alert} role="alert">8건이 모두 선택되었습니다. 위에서 한 건을 해제한 뒤 다른 자료를 선택해 주세요.</p>}
   {readOnly&&<p className={styles.notice}>미리보기에서는 선택만 시험할 수 있으며 저장되지 않습니다.</p>}
   <section className={styles.issue} aria-label="작업실 주간호 편집본">
-   <header className={styles.issueHeader}><p className={styles.eyebrow}>{issueKey} · {start}–{end}</p><label className={styles.titleLabel}>주간 동향 제목<input name="title" defaultValue={title} onChange={()=>onDirty?.()} required/></label><p>{published?'공개 중 · 변경 사항은 저장 즉시 반영':'작업실 편집본 · 공개 전'}</p><p>같은 주 한국어 동향 {candidates.length}건 중 주요 동향 {selected.length}건</p></header>
+   <header className={styles.issueHeader}><p className={styles.eyebrow}>{formatMonthlyWeek(start)} · {start}–{end}</p><label className={styles.titleLabel}>주간 동향 제목<input name="title" defaultValue={title} onChange={()=>onDirty?.()} required/></label><p>{published?'공개 중 · 변경 사항은 저장 즉시 반영':'작업실 편집본 · 공개 전'}</p><p>같은 주 한국어 동향 {candidates.length}건 중 주요 동향 {selected.length}건</p></header>
    <div className={styles.issueBody}><h2>이번 주 주요 동향</h2><ol className={styles.contents}>{selected.map(candidate=><li key={candidate.id}>{candidate.status==='missing'?candidate.title:<a href={`#selected-${candidate.id}`}>{candidate.title}</a>}<span>{candidate.source}</span></li>)}</ol>
    <div className={styles.stories}>{selected.map((candidate,index)=><article id={`selected-${candidate.id}`} className={styles.story} key={candidate.id}><header><span className={styles.number}>{String(index+1).padStart(2,'0')}</span><h3>{candidate.title}</h3>{check(candidate)}</header>{candidate.status==='missing'?<p className={styles.alert}>이 자료를 찾을 수 없어 공개된 주간호에서 제외할 수만 있습니다.</p>:<><p className={styles.reason}>선정 근거 · {notes[candidate.id]??weeklyPriority(candidate).reasons.join(' · ')}</p><p className={styles.lead}>{candidate.summary}</p>{candidate.details.split(/\n\s*\n/).filter(Boolean).map((paragraph,part)=><p className={styles.bodyText} key={part}>{paragraph}</p>)}<footer>{candidate.source} · {candidate.date} · {candidate.status} <a href={candidate.url} target="_blank" rel="noreferrer">공식 원문 ↗</a></footer></>}</article>)}{!selected.length&&<p>아래 후보에서 자료를 선택해 주세요.</p>}</div></div>
   </section>

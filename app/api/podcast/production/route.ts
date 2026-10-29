@@ -1,5 +1,7 @@
 import {revalidatePath} from 'next/cache';
 import {makePodcastPacket, PODCAST_MAX_AUDIO_BYTES, uuid} from '../../../../lib/podcast-production';
+import {monthlyWeekIssueKey} from '../../../../lib/weekly-label';
+import {readAllPages} from '../../../../lib/read-all-pages';
 import {podcastAdmin, podcastError, podcastStories, storyHash, productionPublication} from '../../../../lib/podcast-server';
 
 export const runtime = 'nodejs';
@@ -9,9 +11,14 @@ const recentCloudCheck = (value:unknown) => typeof value === 'string' && Number.
 export async function GET(request: Request) {
   try {
     const db = await podcastAdmin();
-    const [stories, jobs, cloud] = await Promise.all([new URL(request.url).searchParams.has('jobsOnly') ? Promise.resolve(undefined) : podcastStories(db), db.from('podcast_production_jobs').select('*').order('created_at',{ascending:false}).limit(30), db.from('podcast_cloud_runtime').select('enabled,status,last_seen_at').eq('id',true).maybeSingle()]);
+    const [stories, jobs, cloud, episodeRows] = await Promise.all([new URL(request.url).searchParams.has('jobsOnly') ? Promise.resolve(undefined) : podcastStories(db), db.from('podcast_production_jobs').select('*').order('created_at',{ascending:false}).limit(30), db.from('podcast_cloud_runtime').select('enabled,status,last_seen_at').eq('id',true).maybeSingle(),readAllPages(async(offset,count)=>{const {data,error}=await db.from('weekly_podcast_episodes').select('issue_key,status,published_at').order('published_at',{ascending:false}).range(offset,offset+count-1);if(error)throw error;return data??[];})]);
+    const issueBatches=await Promise.all(Array.from({length:Math.ceil(episodeRows.length/100)},(_,index)=>db.from('weekly_issues').select('issue_key,title,week_start,week_end').in('issue_key',episodeRows.slice(index*100,(index+1)*100).map(episode=>episode.issue_key))));
+    const issueError=issueBatches.find(result=>result.error)?.error;
+    if(issueError)throw issueError;
+    const episodeIssues=issueBatches.flatMap(result=>result.data??[]);
+    const episodes=episodeRows.flatMap(episode=>{const issue=episodeIssues.find(row=>row.issue_key===episode.issue_key);return issue?[{...episode,...issue}]:[];});
     const cloudReady = !!cloud.data?.enabled && cloud.data.status === 'ready' && recentCloudCheck(cloud.data.last_seen_at);
-    return Response.json({stories, jobs:jobs.data ?? [], cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}, {headers});
+    return Response.json({stories, jobs:jobs.data ?? [],episodes, cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}, {headers});
   } catch (error) {return podcastError(error);}
 }
 export async function POST(request: Request) {
@@ -24,33 +31,51 @@ export async function POST(request: Request) {
         const {data:cloud} = await db.from('podcast_cloud_runtime').select('enabled,status,last_seen_at').eq('id',true).maybeSingle();
         if (!cloud?.enabled || cloud.status !== 'ready' || !recentCloudCheck(cloud.last_seen_at)) throw Error('클라우드 연결이 아직 준비되지 않았습니다. 전용 Google 계정 연결과 클라우드 실행 상태를 확인해 주세요.');
       }
-      const {mainId, briefId, contextIds = [], issueKey, weekStart, weekEnd} = body;
+      const {mainId, briefId, contextIds = [], weekStart, weekEnd} = body;
       if (!uuid(mainId) || (briefId && !uuid(briefId)) || !Array.isArray(contextIds) || contextIds.length > 8 || !contextIds.every(uuid)) throw Error('메인 주제와 추가 소식을 확인해 주세요.');
       const stories = await podcastStories(db, [mainId, ...contextIds, ...(briefId ? [briefId] : [])]);
-      const packet = makePodcastPacket({issueKey, weekStart, weekEnd, main:stories[0], context:stories.slice(1,1+contextIds.length), brief:briefId ? stories.at(-1) : undefined});
+      const startDate=typeof weekStart==='string'?new Date(`${weekStart}T00:00:00Z`):null;
+      if(typeof weekStart!=='string'||typeof weekEnd!=='string'||!/^\d{4}-\d{2}-\d{2}$/.test(weekStart)||!startDate||Number.isNaN(startDate.valueOf())||startDate.toISOString().slice(0,10)!==weekStart||startDate.getUTCDay()!==1||weekEnd!==new Date(startDate.valueOf()+6*86400000).toISOString().slice(0,10))throw Error('주간호 시작일과 종료일을 확인해 주세요.');
+      const previewPacket=makePodcastPacket({issueKey:monthlyWeekIssueKey(weekStart), weekStart, weekEnd, main:stories[0], context:stories.slice(1,1+contextIds.length), brief:briefId ? stories.at(-1) : undefined});
+      const {data:reservedKey,error:reserveError}=await db.rpc('reserve_weekly_podcast_issue_key',{p_week_start:weekStart});
+      if(reserveError||typeof reservedKey!=='string')throw Error('새 팟캐스트 회차를 준비하지 못했습니다. DB 변경 적용 여부를 확인해 주세요.');
+      const packet={...previewPacket,issueKey:reservedKey};
       const sourceHash = storyHash(stories);
-      const {data:existing, error:lookupError} = await db.from('podcast_production_jobs').select('*').eq('issue_key',issueKey).neq('phase','cancelled').maybeSingle();
+      const {data:existing, error:lookupError} = await db.from('podcast_production_jobs').select('*').eq('issue_key',reservedKey).maybeSingle();
       if (lookupError) throw Error('제작 기록을 준비하지 못했습니다. 팟캐스트 DB 변경 적용 여부를 확인해 주세요.');
       if (existing) {
         if (existing.execution_mode !== mode) throw Error('이 회차는 다른 방식으로 제작 중입니다. 기존 제작 기록을 확인해 주세요.');
         if (existing.source_hash !== sourceHash || Object.keys(packet).some(key => JSON.stringify(existing.packet[key]) !== JSON.stringify(packet[key as keyof typeof packet]))) throw Error('이 주간호에는 다른 제작 자료가 있습니다. 기존 제작 기록을 확인해 주세요.');
         return Response.json({job:existing}, {headers});
       }
-      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:issueKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}).select().single();
+      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:reservedKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}).select().single();
       if (error) throw Error(error.code === '23505' ? '같은 주간호가 방금 만들어졌습니다. 목록을 새로 확인해 주세요.' : '제작 자료를 저장하지 못했습니다.');
       return Response.json({job:data}, {headers});
+    }
+    if(body.action==='unpublishIssue'){
+      if(typeof body.issueKey!=='string'||!/^\d{4}-\d{2}-W[1-5]-[1-9]\d*$/.test(body.issueKey))throw Error('공개 취소할 팟캐스트 회차를 확인해 주세요.');
+      const {error}=await db.rpc('unpublish_weekly_podcast_issue',{p_issue_key:body.issueKey});
+      if(error)throw Error('팟캐스트 공개를 취소하지 못했습니다. 상태를 새로고침해 주세요.');
+      revalidatePath('/public','layout');
+      return Response.json({ok:true},{headers});
     }
     if (!uuid(body.jobId)) throw Error('제작 기록을 확인해 주세요.');
     const {data:job,error:jobError} = await db.from('podcast_production_jobs').select('*').eq('id',body.jobId).single();
     if (jobError || !job) throw Error('제작 기록을 찾지 못했습니다.');
     if (body.action === 'status') return Response.json({job}, {headers});
+    if (body.action === 'unpublish') {
+      const {error}=await db.rpc('unpublish_podcast_production_job',{p_job_id:job.id});
+      if(error)throw Error('팟캐스트 공개를 취소하지 못했습니다. 상태를 새로고침해 주세요.');
+      revalidatePath('/public','layout');
+      return Response.json({job:{...job,phase:'unpublished'}},{headers});
+    }
     if (body.action === 'listen') {
       if (!job.audio_path) throw Error('아직 완성된 오디오가 없습니다.');
       const {data,error} = await db.storage.from('weekly-podcasts').createSignedUrl(job.audio_path,300);
       if (error || !data) throw Error('오디오를 열지 못했습니다.');
       return Response.json({url:data.signedUrl}, {headers});
     }
-    if (job.phase === 'published') return Response.json({job}, {headers});
+    if (['published','unpublished'].includes(job.phase)) return Response.json({job}, {headers});
     if (body.action === 'resumeCloud') {
       if (job.execution_mode !== 'cloud' || !['failed','needs_login'].includes(job.phase)) throw Error('진행 중인 제작은 기다려 주세요. 완료 여부가 불명확한 요청은 NotebookLM에서 먼저 확인해야 합니다.');
       if (['creating_notebook','adding_source','requesting_audio'].includes(job.cloud_checkpoint?.stage)) throw Error('외부 요청의 완료 여부를 먼저 확인해 주세요. 중복 생성을 막기 위해 자동 재시도하지 않습니다.');
