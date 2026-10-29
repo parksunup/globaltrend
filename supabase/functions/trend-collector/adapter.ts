@@ -1,4 +1,5 @@
 import { DOMParser, parseHTML } from "npm:linkedom@0.18.12";
+import { discoverExpansion, extractExpansion, isExpansion } from "./expansion.ts";
 export type Row = {
   url: string;
   title: string;
@@ -132,6 +133,7 @@ export function discover(
   html: string,
   url: string,
 ): { rows: Row[]; next: string | null } {
+  if (isExpansion(source)) return discoverExpansion(source, html, url);
   const { document } = parseHTML(html);
   const abs = (s: string) => new URL(s, url).href;
   if (source === "ftc" && /<rss/i.test(html.slice(0, 1000))) {
@@ -391,6 +393,7 @@ export async function extract(
   url: string,
   row?: Row,
 ) {
+  if (isExpansion(source)) return extractExpansion(source, html, url, row);
   const { document } = parseHTML(html);
   const selectors: Record<string, [string, string | null, string[]]> = {
     edpb: [".node-article-full__title", "time.node-article-full__date", [

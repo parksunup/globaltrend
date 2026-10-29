@@ -1,9 +1,17 @@
 import { parseHTML } from "npm:linkedom@0.18.12";
 import {
+  detailRequestUrl,
+  expansionListingDate,
+  isExpansion,
+  listingRequestUrl,
+  nextWithinWindow,
+  verifyDetailResponse,
+} from "./expansion.ts";
+import {
   canonical,
   cnilListingDate,
-  dpcListingDate,
   discover,
+  dpcListingDate,
   extract,
   icoPublishedDate,
   normalize,
@@ -41,7 +49,14 @@ type HTTP = {
     body?: string,
   ) => Promise<{ bytes: Uint8Array; url: string; type: string }>;
 };
-export type Item = Awaited<ReturnType<typeof extract>>;
+type Extracted = Awaited<ReturnType<typeof extract>>;
+export type Item = {
+  title_original: string;
+  content_text: string;
+  content_hash: string;
+  published_date: string | null;
+  metadata: Extracted["metadata"];
+};
 // PDPC's media listing also links to other Singapore agencies. These hosts
 // are recognised referrals, not PDPC articles. Never ingest them under the
 // PDPC source identity, even when the linked agency is an approved host.
@@ -72,7 +87,13 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
     ) return null;
 
     const safe = new URL(parsed.origin + parsed.pathname);
-    const allowedParams = new Set(["page", "offset", "pagenumber", "from", "to"]);
+    const allowedParams = new Set([
+      "page",
+      "offset",
+      "pagenumber",
+      "from",
+      "to",
+    ]);
     for (const key of allowedParams) {
       const values = parsed.searchParams.getAll(key);
       if (values.length !== 1) continue;
@@ -131,11 +152,18 @@ async function listing(c: Config, http: HTTP, page: string) {
       throw new Error("ico_listing_template_changed");
     }
     const query = new URL(page).searchParams;
-    if ([...query.keys()].some((k) => !["from", "to", "page"].includes(k)) ||
-      ["page", "from", "to"].some((k) => query.getAll(k).length > 1)) throw new Error("unverified_listing_query");
+    if (
+      [...query.keys()].some((k) => !["from", "to", "page"].includes(k)) ||
+      ["page", "from", "to"].some((k) => query.getAll(k).length > 1)
+    ) throw new Error("unverified_listing_query");
     const n = Number(query.get("page") || 1);
-    if (!Number.isInteger(n) || n < 1 || n > 1000) throw new Error("invalid_listing_page");
-    const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({ key, values: query.getAll(key) }));
+    if (!Number.isInteger(n) || n < 1 || n > 1000) {
+      throw new Error("invalid_listing_page");
+    }
+    const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({
+      key,
+      values: query.getAll(key),
+    }));
     const response = await http.request(
       new URL("/api/search", page).href,
       "POST",
@@ -150,14 +178,29 @@ async function listing(c: Config, http: HTTP, page: string) {
     if (
       !Array.isArray(data.results) ||
       data.pagination?.showingPageNumber !== n ||
-      !Number.isInteger(data.pagination.totalResults) || data.pagination.totalResults < 0 ||
-      !Number.isInteger(data.pagination.perPage) || data.pagination.perPage <= 0 ||
+      !Number.isInteger(data.pagination.totalResults) ||
+      data.pagination.totalResults < 0 ||
+      !Number.isInteger(data.pagination.perPage) ||
+      data.pagination.perPage <= 0 ||
       !Number.isInteger(data.pagination.totalPages) ||
-      data.pagination.totalPages !== Math.max(1, Math.ceil(data.pagination.totalResults / data.pagination.perPage)) ||
+      data.pagination.totalPages !==
+        Math.max(
+          1,
+          Math.ceil(data.pagination.totalResults / data.pagination.perPage),
+        ) ||
       typeof data.pagination?.hasMore !== "boolean" ||
       data.pagination.hasMore !== (n < data.pagination.totalPages)
     ) throw new Error("ico_pagination_changed_or_stale");
-    if (data.results.length !== Math.max(0, Math.min(data.pagination.perPage, data.pagination.totalResults - (n - 1) * data.pagination.perPage))) {
+    if (
+      data.results.length !==
+        Math.max(
+          0,
+          Math.min(
+            data.pagination.perPage,
+            data.pagination.totalResults - (n - 1) * data.pagination.perPage,
+          ),
+        )
+    ) {
       throw new Error("ico_listing_page_incomplete");
     }
     const rows: Row[] = data.results.map(
@@ -179,6 +222,7 @@ async function listing(c: Config, http: HTTP, page: string) {
       "application/rss+xml",
       "text/xml",
       "application/xml",
+      ...(c.source === "ec" ? ["application/json"] : []),
     ].includes(r.type)
   ) throw new Error("unsupported_listing_type");
   return discover(c.source, text, r.url);
@@ -189,15 +233,28 @@ export async function extractPressReleasePDF(
 ): Promise<Item> {
   return extractTextPDF(bytes, row, "curia");
 }
-export async function extractPDPCPDF(bytes: Uint8Array, row: Row): Promise<Item> {
+export async function extractPDPCPDF(
+  bytes: Uint8Array,
+  row: Row,
+): Promise<Item> {
   const target = new URL(canonical(row.url, ["www.pdpc.gov.sg"]));
-  if (!/^\/assets\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(target.pathname)) {
+  if (
+    !/^\/assets\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/.test(
+      target.pathname,
+    )
+  ) {
     throw new Error("unapproved_pdpc_pdf_asset");
   }
-  if (!normalize(row.title || "")) throw new Error("pdf_listing_evidence_missing");
+  if (!normalize(row.title || "")) {
+    throw new Error("pdf_listing_evidence_missing");
+  }
   return extractTextPDF(bytes, row, "pdpc");
 }
-async function extractTextPDF(bytes: Uint8Array, row: Row, source: "curia" | "pdpc"): Promise<Item> {
+async function extractTextPDF(
+  bytes: Uint8Array,
+  row: Row,
+  source: "curia" | "pdpc",
+): Promise<Item> {
   // Text-only PDF adapter; no Node canvas, OCR, browser, Python or paid service.
   const lib = await import("npm:pdfjs-dist@4.10.38/legacy/build/pdf.mjs");
   const worker = await import(
@@ -261,7 +318,10 @@ async function extractTextPDF(bytes: Uint8Array, row: Row, source: "curia" | "pd
     }
     // A PDPC listing date is not yet verified as the PDF publication date.
     const obs = source === "pdpc"
-      ? (row.date_observations || []).map(o => ({...o, meaning: "listing_date_candidate"}))
+      ? (row.date_observations || []).map((o) => ({
+        ...o,
+        meaning: "listing_date_candidate",
+      }))
       : [...(row.date_observations || [])];
     const dateline = pages[0].text.match(
       /Luxembourg,\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})/,
@@ -295,14 +355,20 @@ async function extractTextPDF(bytes: Uint8Array, row: Row, source: "curia" | "pd
       published_date: date,
       metadata: {
         normalization_version: "edge-pdf-text-nfc-v1",
-        parser_version: source === "curia" ? "edge-curia-pdf-v1" : "edge-pdpc-asset-pdf-text-v1",
-        read_scope: source === "curia" ? "press_release_pdf_not_judgment" : "pdf_text_only",
+        parser_version: source === "curia"
+          ? "edge-curia-pdf-v1"
+          : "edge-pdpc-asset-pdf-text-v1",
+        read_scope: source === "curia"
+          ? "press_release_pdf_not_judgment"
+          : "pdf_text_only",
         date_observations: obs,
         requires_review: true,
         related_documents: related,
         unresolved_links: unresolved,
         unread_attachments: related.map((x) => x.url),
-        factual_status: source === "curia" ? "nonbinding_press_release_not_judgment" : "official_pdf_text_not_visual_or_independent_legal_finding",
+        factual_status: source === "curia"
+          ? "nonbinding_press_release_not_judgment"
+          : "official_pdf_text_not_visual_or_independent_legal_finding",
         ai_ready: false,
         pdf_pages: pages,
       } as Item["metadata"],
@@ -360,6 +426,14 @@ export async function advance(
     }
     state.adapter_version = c.source === "cnil" ? "edge-cnil-v3" : "edge-v2";
     state.page ||= c.listing;
+    if (c.source === "ec" && !state.is_backlog) {
+      state.page = listingRequestUrl(
+        c.source,
+        state.page,
+        state.since,
+        state.until,
+      );
+    }
     if (c.source === "ico" && !state.is_backlog) {
       // A finished full scan's unresolved count describes that past scan. The
       // next scan must recompute it from zero; in-flight scans and exact
@@ -370,12 +444,20 @@ export async function advance(
           throw new Error("invalid_ico_listing_range");
         }
       }
-      if (state.since > state.until) throw new Error("invalid_ico_listing_range");
+      if (state.since > state.until) {
+        throw new Error("invalid_ico_listing_range");
+      }
       const scoped = new URL(state.page);
-      if (scoped.searchParams.get("from") !== state.since || scoped.searchParams.get("to") !== state.until) {
+      if (
+        scoped.searchParams.get("from") !== state.since ||
+        scoped.searchParams.get("to") !== state.until
+      ) {
         state.legacy_cursor ||= { page: state.page, offset: state.offset || 0 };
         const first = new URL(c.listing);
-        first.search = new URLSearchParams({ from: state.since, to: state.until }).toString();
+        first.search = new URLSearchParams({
+          from: state.since,
+          to: state.until,
+        }).toString();
         state.page = first.href;
         delete state.rows;
         delete state.next;
@@ -391,7 +473,7 @@ export async function advance(
       if (safeListingUrl) result.url = safeListingUrl;
       else delete result.url;
       const found = await listing(c, diagnosticHttp, listingUrl);
-      if (!found.rows.length) {
+      if (!found.rows.length && c.source !== "ec") {
         throw new Error("listing_empty_or_structure_changed");
       }
       if (found.rows.length > 400) throw new Error("listing_row_limit");
@@ -406,7 +488,9 @@ export async function advance(
       state.seen_pages = [...(state.seen_pages || []), fingerprint].slice(-50);
       state.failures = 0;
       state.rows = found.rows;
-      state.next = found.next;
+      state.next = isExpansion(c.source)
+        ? nextWithinWindow(c.source, found, state.since)
+        : found.next;
       state.offset = 0;
       state.exhausted = false;
       // A Python offset is not transferable to a different parser's row sequence.
@@ -466,7 +550,10 @@ export async function advance(
           return { state, result, continue: true, delay: 0 };
         }
         const target = new URL(row.url);
-        if (target.protocol === "https:" && pdpcExternalReferralHosts.has(target.hostname)) {
+        if (
+          target.protocol === "https:" &&
+          pdpcExternalReferralHosts.has(target.hostname)
+        ) {
           result.stage = "detail_scope_check";
           result.saved = "external_referral";
           result.reason = "different_agency_source";
@@ -483,7 +570,11 @@ export async function advance(
         }
       }
       const url = canonical(row.url, c.hosts);
-      const dpcDate = c.source === "dpc" ? dpcListingDate(row) : null;
+      const dpcDate = c.source === "dpc"
+        ? dpcListingDate(row)
+        : isExpansion(c.source)
+        ? expansionListingDate(row)
+        : null;
       if (dpcDate && (dpcDate < state.since || dpcDate > state.until)) {
         state.failures = 0;
         result.stage = "listing_date_scope_check";
@@ -528,14 +619,25 @@ export async function advance(
         state.offset = (state.offset || 0) + 1;
         return { state, result, continue: true, delay: 0 };
       }
-      const response = await diagnosticHttp.request(url);
+      const response = await diagnosticHttp.request(
+        detailRequestUrl(c.source, url),
+      );
       let item: Item;
       if (c.source === "curia" && response.type === "application/pdf") {
         item = await extractPressReleasePDF(response.bytes, row);
       } else if (c.source === "pdpc" && response.type === "application/pdf") {
-        item = await extractPDPCPDF(response.bytes, {...row, url: canonical(response.url, c.hosts)});
+        item = await extractPDPCPDF(response.bytes, {
+          ...row,
+          url: canonical(response.url, c.hosts),
+        });
       } else {
-        if (!["text/html", "application/xhtml+xml"].includes(response.type)) {
+        if (
+          ![
+            "text/html",
+            "application/xhtml+xml",
+            ...(c.source === "ec" ? ["application/json"] : []),
+          ].includes(response.type)
+        ) {
           throw new Error("unsupported_document_type");
         }
         // Retired article URLs can redirect to unrelated HTML pages with a
@@ -544,13 +646,18 @@ export async function advance(
         const requested = new URL(url);
         const received = new URL(canonical(response.url, c.hosts));
         const documentPath = (u: URL) => u.pathname.replace(/\/+$/, "") || "/";
-        if (
+        if (isExpansion(c.source)) {
+          verifyDetailResponse(c.source, url, response.url);
+        } else if (
           requested.origin !== received.origin ||
-          documentPath(requested) !== documentPath(received)
+          documentPath(new URL(detailRequestUrl(c.source, url))) !==
+            documentPath(received)
         ) throw new Error("detail_redirect_target_mismatch");
         const html = new TextDecoder().decode(response.bytes);
         const icoDate = c.source === "ico" ? icoPublishedDate(html) : null;
-        if (icoDate && (icoDate.date < state.since || icoDate.date > state.until)) {
+        if (
+          icoDate && (icoDate.date < state.since || icoDate.date > state.until)
+        ) {
           result.stage = "detail_scope_check";
           result.saved = "out_of_range";
           result.published_date = icoDate.date;
@@ -568,7 +675,12 @@ export async function advance(
           state.offset = (state.offset || 0) + 1;
           return { state, result, continue: true, delay: 0 };
         }
-        item = await extract(c.source, html, response.url, row);
+        item = await extract(
+          c.source,
+          html,
+          c.source === "ec" ? url : response.url,
+          row,
+        );
       }
       if (
         item.published_date &&
@@ -652,7 +764,9 @@ export async function advance(
       ? reason
       : "runtime_" + (e instanceof Error ? e.name : "error");
     result.offset = state.offset || 0;
-    const safeFailurePage = typeof state.page === "string" ? safeDiagnosticUrl(state.page, c.hosts) : null;
+    const safeFailurePage = typeof state.page === "string"
+      ? safeDiagnosticUrl(state.page, c.hosts)
+      : null;
     if (safeFailurePage) result.page = safeFailurePage;
     else delete result.page;
     if (
