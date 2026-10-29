@@ -1,0 +1,27 @@
+{
+  "source": "cn-cac",
+  "source_id": "d743f9ab-5194-5263-ab22-ef127336e2f2",
+  "listing": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+  "hosts": [
+    "www.cac.gov.cn"
+  ],
+  "language": "zh",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "edge",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 2,
+  "name": "Cyberspace Administration of China",
+  "publisher_id": "74938d27-f657-5232-baf1-e0e4c5ad901f",
+  "jurisdiction": "CN",
+  "publisher_type": "government",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}

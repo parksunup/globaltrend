@@ -1,0 +1,27 @@
+{
+  "source": "cn-tc260",
+  "source_id": "caa6854c-3e3a-5879-bbb2-fc66b648d923",
+  "listing": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+  "hosts": [
+    "www.tc260.org.cn"
+  ],
+  "language": "zh",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "edge",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 2,
+  "name": "National Technical Committee 260 on Cybersecurity",
+  "publisher_id": "ecbad586-09d0-5855-b2d9-9c30fb04cc36",
+  "jurisdiction": "CN",
+  "publisher_type": "other",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}

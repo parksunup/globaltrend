@@ -1,0 +1,27 @@
+{
+  "source": "eu-parliament",
+  "source_id": "0d91c2b9-8884-5533-95c2-09469c6db19b",
+  "listing": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+  "hosts": [
+    "www.europarl.europa.eu"
+  ],
+  "language": "en",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "cloud-python",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 2,
+  "name": "European Parliament Press Releases",
+  "publisher_id": "96dee017-b390-50e6-8052-0aea73bfc9f5",
+  "jurisdiction": "EU",
+  "publisher_type": "government",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}
