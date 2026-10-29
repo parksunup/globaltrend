@@ -27,19 +27,25 @@ function fail(error:unknown) {
 export async function POST(request:Request) {
  let body:{role?:unknown;action?:unknown;branchSha?:unknown;itemId?:unknown;officialUrl?:unknown};
  try {body=await request.json();}catch{return Response.json({error:'요청 내용을 읽지 못했습니다.'},{status:400,headers});}
- if(!['legal','trends'].includes(String(body.role))||!['publish','unpublish'].includes(String(body.action))||typeof body.branchSha!=='string'||!/^[a-f0-9]{40}$/.test(body.branchSha)||typeof body.itemId!=='string')return Response.json({error:'담당·자료·판본을 다시 확인해 주세요.'},{status:400,headers});
+ if(!['legal','trends'].includes(String(body.role))||!['publish','unpublish','trash'].includes(String(body.action))||typeof body.branchSha!=='string'||!/^[a-f0-9]{40}$/.test(body.branchSha)||typeof body.itemId!=='string')return Response.json({error:'담당·자료·판본을 다시 확인해 주세요.'},{status:400,headers});
  try {
-  const db=await authorized(request),role=body.role as 'legal'|'trends',action=body.action as 'publish'|'unpublish';
+  const db=await authorized(request),role=body.role as 'legal'|'trends',action=body.action as 'publish'|'unpublish'|'trash';
+  if(action==='trash'&&role!=='trends')throw Object.assign(new Error('동향 원고만 휴지통으로 이동할 수 있습니다.'),{status:400});
   const snapshot=await readLiveWorkspace(role);
   if(snapshot.stale||snapshot.commitSha!==body.branchSha)throw Object.assign(new Error('담당 브랜치가 바뀌었습니다. 화면을 새로고침해 최신 자료를 확인한 뒤 다시 실행해 주세요.'),{status:409});
   const inputs=snapshot.publicationInputs;
   if(!inputs)throw Object.assign(new Error('공개 자료를 준비하지 못했습니다. 최신 자료를 다시 불러와 주세요.'),{status:503});
-  let entityId='',revision='';
+  let entityId='',revision='',rpcAction=action==='publish'?'publish_publication_draft':'unpublish_publication';
   if(role==='trends') {
    if(uuid(body.itemId)) {
     const rows=await loadTeamTrendRows({readPage:async offset=>{const {data,error}=await db.rpc('get_team_trend_workspace',{p_offset:offset,p_limit:200});if(error)throw error;return data;}});
     const row=rows.find(item=>item.id===body.itemId);if(!row)throw Object.assign(new Error('동향 원고가 작업실 목록에 없습니다. 최신 화면을 다시 불러와 주세요.'),{status:404});
-    if(action==='publish'&&row.workspaceEdit&&!trendEditMatchesRow(row.workspaceEdit,row)) {
+    if(action==='trash') {
+     if(row.status==='published')throw Object.assign(new Error('먼저 공개를 취소한 뒤 휴지통으로 이동해 주세요.'),{status:409});
+     const copy=await db.from('publication_working_copies').select('revision,trashed_at').eq('entity_type','report').eq('entity_id',row.id).maybeSingle();
+     if(copy.error||!copy.data||copy.data.trashed_at)throw Object.assign(new Error('게시 작업본을 찾을 수 없거나 이미 휴지통에 있습니다.'),{status:409});
+     entityId=row.id;revision=String(copy.data.revision);rpcAction='trash_publication_draft';
+    } else if(action==='publish'&&row.workspaceEdit&&!trendEditMatchesRow(row.workspaceEdit,row)) {
      if(row.workspaceEdit.base_revision!==row.revision)throw Object.assign(new Error('기준 원고가 달라 Codex 수정본을 공개하지 않았습니다. 최신 원고와 다시 대조해 주세요.'),{status:409});
      const copy=await db.from('publication_working_copies').select('revision,payload,trashed_at').eq('entity_type','report').eq('entity_id',row.id).maybeSingle();
      if(copy.error||!copy.data?.payload||copy.data.trashed_at)throw Object.assign(new Error('게시 작업본을 확인할 수 없습니다. 작업실 자료를 새로고침해 주세요.'),{status:409});
@@ -69,9 +75,9 @@ export async function POST(request:Request) {
    }
   }
   if(!revision||!uuid(entityId)||!Number.isSafeInteger(Number(revision)))throw Object.assign(new Error('공개 작업본 판본을 확인하지 못했습니다.'),{status:409});
-  const result=await db.rpc(action==='publish'?'publish_publication_draft':'unpublish_publication',{p_entity_type:role==='trends'?'report':'law',p_entity_id:entityId,p_expected_revision:Number(revision)});
+  const result=await db.rpc(rpcAction,{p_entity_type:role==='trends'?'report':'law',p_entity_id:entityId,p_expected_revision:Number(revision)});
   if(result.error)throw Object.assign(new Error(result.error.code==='40001'?'게시 자료가 바뀌었습니다. 최신 내용을 확인하고 다시 시도해 주세요.':result.error.code==='42501'?'로그인한 계정의 공개 권한이 확인되지 않았습니다. 관리자에게 편집 담당자 권한을 확인해 달라고 해 주세요.':'공개 상태를 바꾸지 못했습니다. 자료 상태와 공식 출처를 확인해 주세요.'),{status:result.error.code==='40001'?409:result.error.code==='42501'?403:400});
-  revalidatePath('/public','layout');revalidatePath('/team');revalidatePath('/');
+  revalidatePath('/public','layout');revalidatePath('/team');revalidatePath('/work');revalidatePath('/');
   return Response.json({ok:true,status:result.data?.status,entityId},{headers});
  } catch(error) {return fail(error);}
 }
