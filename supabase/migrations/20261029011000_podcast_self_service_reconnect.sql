@@ -129,7 +129,7 @@ begin
   elsif p_action='fail' then
     failure=p_data->>'category';
     if failure is null or failure not in ('auth','transport','storage','invalid_state') then raise exception 'invalid failure'; end if;
-    if failure='auth' then perform private.podcast_reconnect_finish(p_run,false); end if;
+    if failure='auth' or s.consecutive_failures>=2 then perform private.podcast_reconnect_finish(p_run,false); end if;
     update private.podcast_session_state set lease_run=null,lease_until=null,
       consecutive_failures=consecutive_failures+1,last_failure=failure,
       enabled=enabled and consecutive_failures < 2 where id;
