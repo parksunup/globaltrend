@@ -1,14 +1,14 @@
 begin;
 select plan(19);
 update public.collector_edge_control set enabled=true where singleton;
-select is((select count(*)::integer from public.sources where parser_config->>'collector_executor'='chatgpt-web' and is_active),4,'four scheduled web attempts');
+select is((select count(*)::integer from public.sources where parser_config->>'collector_executor'='chatgpt-web' and is_active),2,'two scheduled web attempts; EDPS and EUR-Lex deferred');
 select ok(not has_function_privilege('anon','public.collector_web_ingest(text,jsonb,text)','EXECUTE') and not has_function_privilege('authenticated','public.collector_web_ingest(text,jsonb,text)','EXECUTE'),'web ingest is private');
 select ok(not has_function_privilege('anon','public.collector_web_record_attempt(text,date,date,jsonb,text)','EXECUTE'),'web event recording is private');
 select ok(position('chatgpt-web' in pg_get_functiondef('public.collector_edge_enqueue(text)'::regprocedure))>0,'Edge enqueue excludes web sources');
 select ok(position('chatgpt-web' in pg_get_functiondef('public.collector_edge_take()'::regprocedure))>0,'Edge take excludes web sources');
 select throws_ok($$select public.collector_web_ingest('eu-council','{"since":"2026-10-27","until":"2026-10-29","published_date":"2026-10-28","url":"https://evil.example/a"}', 'web-test')$$,'22023','canonical official article path required','external host rejected');
-select throws_ok($$select public.collector_web_ingest('eur-lex','{"since":"2026-10-27","until":"2026-10-29","published_date":"2026-10-28","url":"https://eur-lex.europa.eu/legal-content/EN/TXT/"}', 'web-test')$$,'22023','canonical official article path required','law full texts rejected');
-select throws_ok($$select public.collector_web_ingest('edps','{"since":"2026-10-27","until":"2026-10-29","published_date":"2026-10-28","url":"https://www.edps.europa.eu/press-publications/press-news/news/2026/test","read_scope":"official_rss_notice"}', 'web-test')$$,'22023','full official article evidence required; RSS discovery and snippets cannot be ingested','RSS discovery cannot masquerade as full article');
+select throws_ok($$select public.collector_web_ingest('eur-lex','{"since":"2026-10-27","until":"2026-10-29","published_date":"2026-10-28","url":"https://eur-lex.europa.eu/legal-content/EN/TXT/"}', 'web-test')$$,'P0001','source approval or capacity gate failed','held EUR-Lex rejects collection');
+select throws_ok($$select public.collector_web_ingest('edps','{"since":"2026-10-27","until":"2026-10-29","published_date":"2026-10-28","url":"https://www.edps.europa.eu/press-publications/press-news/news/2026/test","read_scope":"official_rss_notice"}', 'web-test')$$,'P0001','source approval or capacity gate failed','held EDPS rejects collection');
 select throws_ok($$select public.collector_web_record_attempt('edps','2026-10-27','2026-10-29','{"status":"success","coverage_complete":true}', 'web-test')$$,'22023','bounded web attempt required','attempt cannot claim successful full coverage');
 select lives_ok($$select public.collector_web_record_attempt('edps','2026-10-27','2026-10-29','{"status":"blocked","reason":"full body inaccessible","coverage_complete":true}', 'web-test-event')$$,'blocked result can be persisted');
 select ok((select result->'coverage_complete'='false'::jsonb and result->>'status'='blocked' from public.collector_edge_events where execution_id='web-test-event'),'coverage forced false without hiding failure');

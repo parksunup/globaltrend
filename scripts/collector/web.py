@@ -18,6 +18,8 @@ CHALLENGE = re.compile(r"^\s*(?:verify that you.re not a robot|in order to conti
 
 def normalize_document(source, document, since, until):
     config = ROUTES[source]
+    if config.get('enabled') is False:
+        raise ValueError('web_source_held_by_user')
     start, end = dt.date.fromisoformat(since), dt.date.fromisoformat(until)
     if (end-start).days != 2 or end > dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).date():
         raise ValueError('three_calendar_day_window_required')
