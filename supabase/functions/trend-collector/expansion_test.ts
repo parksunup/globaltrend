@@ -116,6 +116,29 @@ Deno.test("OAIC unwrapped article identity excludes tracking tokens and rejects 
   }
   assert(rejected);
 });
+Deno.test("AEPD uses the card heading and its official publication time, never the 'read more' link text", async () => {
+  const found = discover(
+    "es-aepd",
+    await fixture("es-aepd-listing.html"),
+    routes["es-aepd"].listing,
+  );
+  assert(found.rows.length === 1);
+  assert(found.rows[0].title.startsWith("La Agencia y la autoridad"));
+  assert(expansionListingDate(found.rows[0]) === "2026-10-19");
+  const detail = await extract(
+    "es-aepd",
+    await fixture("es-aepd-detail.html"),
+    found.rows[0].url,
+    found.rows[0],
+  );
+  assert(detail.published_date === "2026-10-19");
+  assert(detail.metadata.date_conflict === false);
+  let rejected = false;
+  try {
+    discover("es-aepd", '<a class="more-link" href="https://evil.example/noticia">X</a>', routes["es-aepd"].listing);
+  } catch { rejected = true; }
+  assert(rejected);
+});
 Deno.test("EC retrieves official body API using document reference, never SPA shell or law text", () => {
   assert(
     detailRequestUrl(

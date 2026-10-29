@@ -9,6 +9,8 @@ type Route = {
   links?: string;
   card?: string;
   card_date?: string;
+  card_title?: string;
+  card_date_attribute?: string;
   unwrap_query?: string;
   next?: string;
   feed?: boolean;
@@ -245,10 +247,14 @@ export function discoverExpansion(
       new URL(raw, url).hostname === c.host &&
       !new RegExp(c.article_path).test(new URL(raw, url).pathname)
     ) continue;
-    const date = c.card && c.card_date
-      ? a.closest(c.card)?.querySelector(c.card_date)?.textContent || undefined
+    const card = c.card ? a.closest(c.card) : null;
+    const dateNode = c.card_date ? card?.querySelector(c.card_date) : null;
+    const date = dateNode
+      ? (c.card_date_attribute
+        ? dateNode.getAttribute(c.card_date_attribute)
+        : dateNode.textContent) || undefined
       : undefined;
-    add(raw, a.textContent || "", date, c.card_date);
+    add(raw, c.card_title ? card?.querySelector(c.card_title)?.textContent || "" : a.textContent || "", date, c.card_date);
   }
   if (!rows.size) throw new Error("listing_empty_or_structure_changed");
   let next: string | null = null;

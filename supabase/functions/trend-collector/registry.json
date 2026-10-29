@@ -393,6 +393,29 @@
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 2
+    },
+    {
+      "source": "es-aepd",
+      "source_id": "5310c233-56e1-5a53-9ade-f7373140e4dc",
+      "listing": "https://www.aepd.es/prensa-y-comunicacion/notas-de-prensa",
+      "hosts": [
+        "www.aepd.es"
+      ],
+      "language": "es",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 3,
+      "verification": "Official listing, dated teaser, full press release body, and robots tested; listing pagination blocked by robots, discovery is first page only",
+      "verification_status": "bounded_first_page"
     }
   ]
 }
