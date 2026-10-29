@@ -6,22 +6,18 @@
     "eur-lex.europa.eu"
   ],
   "language": "en",
-  "enabled": false,
+  "enabled": true,
   "permissions": {
-    "collect": false,
-    "store": false,
-    "ai": false
+    "collect": true,
+    "store": true,
+    "ai": true
   },
-  "hold_reason": "empty_response_no_news_body",
+  "hold_reason": null,
   "adapter_scope": "official_press_or_news_body",
-  "executor": "hold",
+  "executor": "chatgpt-web",
   "cadence": "daily",
   "lookback_days": 3,
   "expansion_phase": 2,
-  "name": "EUR-Lex News",
-  "publisher_id": "9b111660-4f4f-56e0-b488-e395c364abc3",
-  "jurisdiction": "EU",
-  "publisher_type": "government",
-  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
-  "verification": "blocked; not admitted to collection queue"
+  "verification": "Challenge remains; developments are site updates; no verified in-scope full article",
+  "verification_status": "conditional_web_attempt"
 }
