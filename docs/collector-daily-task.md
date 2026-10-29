@@ -1,5 +1,10 @@
 # 정기 클라우드 수집·일일 초안 및 주간 보고 운영
 
+## 2026-10-29 웹 예외 경로 추가
+
+EDPS·홍콩 PCPD·EU 이사회·EUR-Lex는 이제 기존 일일 예약 안의 독립 `chatgpt-web` 확인 대상이다. `docs/collector-web-task.md`와 `config/collector-web.json`을 읽고 매일 최근 3일의 공식 웹 자료를 확인한다. 기존 12개 Edge·4개 cloud-python과 별도로 웹 4개를 시도한다. 아래 과거 4개 hold 표현은 폐기하되, 활성화가 본문 수집 성공을 뜻하지 않는다. EDPS RSS 소개문·검색 스니펫을 전문으로 제출하지 않으며 EUR-Lex 법령 전문으로 대체하지 않는다. 미접근 본문·실패 URL은 기존 이벤트에 보존하고 실제 확보 자료만 기존 한국어 작성·검사·/work 제출까지 처리한다.
+
+
 ## 2026-10-28 사용자 확장 지시 (아래 과거 9곳 고정 표현보다 우선)
 
 1·2차 11곳의 경로와 판정은 `docs/collector-source-expansion-20261028.md`와 `config/trend-collector.json`을 읽습니다. 활성화된 전체 출처가 일일 최근 3일 범위 수집·한국어 초안 작성 대상입니다. 신규 Edge 5곳은 calprivacy, oaic, ca-opc, cn-cac, cn-tc260이고 신규 cloud-python 2곳은 ec, eu-parliament입니다. 기존 OECD·FTC를 포함한 모든 활성 클라우드 경로를 독립 worker로 처리합니다. EDPS·hk-pcpd·eu-council·eur-lex는 보류이며 성공·무자료로 바꾸지 않습니다. 등록·예약 변경만으로 실제 실행이나 한국어 작성 완료를 주장하지 않습니다.

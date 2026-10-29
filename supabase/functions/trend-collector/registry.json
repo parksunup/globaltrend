@@ -162,18 +162,20 @@
         "www.edps.europa.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "detail_empty_response_and_edge_403",
+      "hold_reason": null,
       "adapter_scope": "official_press_or_news_body",
-      "executor": "hold",
+      "executor": "chatgpt-web",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 1
+      "expansion_phase": 1,
+      "verification": "RSS discovery verified; substantive linked body access remains blocked",
+      "verification_status": "conditional_web_attempt"
     },
     {
       "source": "ec",
@@ -264,21 +266,24 @@
       "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
       "listing": "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
       "hosts": [
-        "www.pcpd.org.hk"
+        "www.pcpd.org.hk",
+        "www.info.gov.hk"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "bot_challenge_not_article",
+      "hold_reason": null,
       "adapter_scope": "official_press_or_news_body",
-      "executor": "hold",
+      "executor": "chatgpt-web",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 1
+      "expansion_phase": 1,
+      "verification": "Official government republication body verified; not all PCPD releases are republished",
+      "verification_status": "conditional_web_attempt"
     },
     {
       "source": "eu-parliament",
@@ -309,18 +314,20 @@
         "www.consilium.europa.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "edge_403_and_cloud_robots_unavailable",
+      "hold_reason": null,
       "adapter_scope": "official_press_or_news_body",
-      "executor": "hold",
+      "executor": "chatgpt-web",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 2
+      "expansion_phase": 2,
+      "verification": "Official full article and publication date verified through web open",
+      "verification_status": "conditional_web_attempt"
     },
     {
       "source": "eur-lex",
@@ -330,18 +337,20 @@
         "eur-lex.europa.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "empty_response_no_news_body",
+      "hold_reason": null,
       "adapter_scope": "official_press_or_news_body",
-      "executor": "hold",
+      "executor": "chatgpt-web",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 2
+      "expansion_phase": 2,
+      "verification": "Challenge remains; developments are site updates; no verified in-scope full article",
+      "verification_status": "conditional_web_attempt"
     },
     {
       "source": "cn-cac",

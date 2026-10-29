@@ -1,0 +1,26 @@
+{
+  "edps": {
+    "source_id": "2239debc-9ce2-5cfd-99f3-c555b7cd0c94",
+    "routes": ["^https://www[.]edps[.]europa[.]eu/(press-publications/|system/files/)[^?#]+$"],
+    "discovery": ["https://www.edps.europa.eu/feed/news_en", "https://www.edps.europa.eu/press-publications/press-news/press-releases_en"],
+    "verification": "RSS discovery verified; substantive linked body access remains blocked"
+  },
+  "hk-pcpd": {
+    "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
+    "routes": ["^https://www[.]pcpd[.]org[.]hk/english/(news_events/media_statements/press_[0-9]+[.]html|whatsnew/[0-9]+[.]html)$", "^https://www[.]info[.]gov[.]hk/gia/general/[0-9]{6}/[0-9]{2}/P[0-9]+[.]htm$"],
+    "discovery": ["https://www.pcpd.org.hk/english/news_events/media_statements/index.html", "https://www.info.gov.hk/gia/general/today.htm"],
+    "verification": "Official government republication body verified; not all PCPD releases are republished"
+  },
+  "eu-council": {
+    "source_id": "f4dc010a-0c02-5b24-8799-bd64f20b2e25",
+    "routes": ["^https://www[.]consilium[.]europa[.]eu/en/press/press-releases/[0-9]{4}/[0-9]{2}/[0-9]{2}/[^?#]+/$"],
+    "discovery": ["https://www.consilium.europa.eu/en/press/press-releases/"],
+    "verification": "Official full article and publication date verified through web open"
+  },
+  "eur-lex": {
+    "source_id": "76ed096b-7297-5e5a-b85d-bda00b89a82f",
+    "routes": ["^https://eur-lex[.]europa[.]eu/content/(news|development)/[^/?#]+[.]html$"],
+    "discovery": ["https://eur-lex.europa.eu/content/news/index.html", "https://eur-lex.europa.eu/content/development/index.html"],
+    "verification": "Challenge remains; developments are site updates; no verified in-scope full article"
+  }
+}

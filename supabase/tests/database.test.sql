@@ -84,7 +84,7 @@ select ok(
 
 select results_eq(
   'select count(*)::bigint from public.sources',
-  array[10::bigint],
+  array[14::bigint],
   'anonymous users can read active source metadata'
 );
 select results_eq(
