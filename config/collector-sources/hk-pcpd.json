@@ -3,25 +3,22 @@
   "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
   "listing": "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
   "hosts": [
-    "www.pcpd.org.hk"
+    "www.pcpd.org.hk",
+    "www.info.gov.hk"
   ],
   "language": "en",
-  "enabled": false,
+  "enabled": true,
   "permissions": {
-    "collect": false,
-    "store": false,
-    "ai": false
+    "collect": true,
+    "store": true,
+    "ai": true
   },
-  "hold_reason": "bot_challenge_not_article",
+  "hold_reason": null,
   "adapter_scope": "official_press_or_news_body",
-  "executor": "hold",
+  "executor": "chatgpt-web",
   "cadence": "daily",
   "lookback_days": 3,
   "expansion_phase": 1,
-  "name": "Privacy Commissioner for Personal Data Hong Kong",
-  "publisher_id": "7ab700b9-c283-5143-ac22-15b3b308c40d",
-  "jurisdiction": "HK",
-  "publisher_type": "supervisory_authority",
-  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
-  "verification": "blocked; not admitted to collection queue"
+  "verification": "Official government republication body verified; not all PCPD releases are republished",
+  "verification_status": "conditional_web_attempt"
 }
