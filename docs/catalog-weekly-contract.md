@@ -14,6 +14,8 @@
 
 ## 보존 확정에서 작성까지의 실제 연결
 
+일일 생산자는 `collector_daily_pipeline_status(대상시작일, 대상종료일)`의 `ready_to_complete`가 true가 될 때까지 관련성 미판정과 한국어 초안 미완료를 같은 종료 장벽으로 처리합니다. 실행 요약은 `collector_finalize_daily_producer(...)`로만 마감하며, 미완료가 있으면 DB가 INSERT와 UPDATE 모두를 `partial`로 고정합니다. 이 장벽을 통과하지 않은 자료는 완료 동향이나 주간호 후보로 세지 않습니다.
+
 원문 발견/임시 저장은 수집 후보 단계입니다. 본문 전체를 읽어 개인정보 관련성과 중복·출처·날짜를 확인한 뒤 보존할 자료는 반드시 `collector_retain_for_draft(item_id,revision_id,input_hash,reason)`로 확정합니다. 이 RPC는 보존 결정과 기존 작성 작업의 연결을 같은 트랜잭션에서 보장합니다. 이후 선택 표본으로 다시 거르지 않습니다.
 
 일일 Codex 작성 워커는 `collector_claim_retained_draft(worker)`를 반복 소비해 이 실행에서 한국어 원고를 직접 작성하고 기존 검사와 `submit_trend_draft`를 실행합니다. 수집 commit 이후에도 곧바로 작성 워커를 소비합니다. Edge가 원문을 저장한 경우에도 다음 생산 실행에서 보존 판정·동일 작성 큐로 이어집니다. DB 자체가 한국어를 생성하거나 별도 생성 API를 호출하는 구조는 아닙니다. 새 자료 저장 즉시 별도 Codex 프로세스를 깨우는 이벤트 기능이 생긴 것은 아니며 기존 클라우드 생산 예약이 작성 소비자입니다.
