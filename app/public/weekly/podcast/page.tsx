@@ -4,6 +4,7 @@ import { PublicHeader, PublicFooter } from "../../public-navigation";
 import styles from "../../public.module.css";
 import podcastStyles from './podcast.module.css';
 import WeeklyFormats from '../weekly-formats';
+import {podcastDisplayTitle} from '../../../../lib/public-podcast';
 
 export const dynamic = "force-dynamic";
 
@@ -44,11 +45,11 @@ export default async function PublishedPodcastsPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/weekly" />
     <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간호</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
+      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간 동향</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
       <WeeklyFormats active="podcast" />
       <h2>주간 동향 팟캐스트</h2><p>주요 주제 한 가지를 깊이 살펴보고, 짧은 추가 소식을 두 진행자의 대화로 들어보세요.</p>
       {error ? schemaNotReady
-        ? <div className={styles.weeklyEmpty}><strong>팟캐스트 공개를 준비하고 있습니다</strong><p>게시 기능을 배포한 뒤 주간호 오디오가 공개됩니다.</p></div>
+        ? <div className={styles.weeklyEmpty}><strong>팟캐스트 공개를 준비하고 있습니다</strong><p>게시 기능을 배포한 뒤 팟캐스트를 들으실 수 있습니다.</p></div>
         : <p role="alert">팟캐스트 목록을 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p>
         : episodeRows.length ? episodeRows.map(episode => {
         const issue = issueMap.get(episode.issue_key);
@@ -57,14 +58,14 @@ export default async function PublishedPodcastsPage() {
         const audio = audioMap.get(episode.issue_key);
         return <article key={episode.issue_key} className={podcastStyles.card}>
           <p className={styles.overline}>{episode.issue_key} · {issue?.week_start}–{issue?.week_end}</p>
-          <h2>{issue?.title ?? episode.issue_key}</h2>
+          <h2>{podcastDisplayTitle(issue?.title ?? episode.issue_key)}</h2>
           {issue?.description ? <p>{issue.description}</p> : null}
           {audio ? <audio controls preload="none" className={podcastStyles.audio}><source src={audio} type={episode.audio_mime_type} />브라우저에서 오디오를 재생할 수 없습니다.</audio> : <p role="alert">오디오를 불러오지 못했습니다. 잠시 후 새로고침해 주세요.</p>}
           <h3>이번 호에 포함된 동향</h3>
           {linksError ? <p role="alert">포함된 동향 목록을 불러오지 못했습니다.</p> :
             <ul>{included.map(report => report ? <li key={report.id}><Link href={`/public/trends/${report.id}`}>{report.title_ko}</Link>{report.one_line_summary_ko ? <p>{report.one_line_summary_ko}</p> : null}</li> : null)}</ul>}
         </article>;
-      }) : <div className={styles.weeklyEmpty}><strong>아직 공개된 팟캐스트가 없습니다</strong><p>주간호 오디오가 게시되면 이곳에서 들으실 수 있습니다.</p></div>}
+      }) : <div className={styles.weeklyEmpty}><strong>아직 공개된 팟캐스트가 없습니다</strong><p>새 오디오가 게시되면 이곳에서 들으실 수 있습니다.</p></div>}
     </section>
     <PublicFooter />
   </main>;

@@ -8,6 +8,7 @@ import urllib.request
 import urllib.robotparser
 from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
+from . import expansion
 
 MAX_BYTES=2_000_000
 MAX_PROCESSED_URL_HASHES=50
@@ -106,7 +107,10 @@ class HttpClient:
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname
         if origin not in self.robots:
             try: data,_,_=self.request(origin+'/robots.txt')
-            except FetchError as e: raise FetchError('robots_fetch_failed:'+str(e)) from None
+            except FetchError as e:
+                if str(e) not in ('http_404','http_410'):
+                    raise FetchError('robots_fetch_failed:'+str(e)) from None
+                data=b''
             robot=urllib.robotparser.RobotFileParser(); robot.parse(data.decode('utf-8','replace').splitlines())
             self.robots[origin]=robot
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
@@ -126,7 +130,7 @@ def fetch_listing(source,client,page):
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
     if is_pdpc_api:
         return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
-    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source=='ec' and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 
@@ -136,6 +140,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
             'excluded_unapproved_host_count':0,'pages':0}
     if not config.get('enabled') or not all(config.get('permissions',{}).get(k) for k in ('collect','store','ai')):
         result['reason']='source_permissions_or_operation_unapproved'; return result
+    if config['source'] in expansion.CLOUD_SOURCES:
+        return expansion.collect_frozen(config,client,store,since,until)
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
     # A mutable feed's titles/order can change between one-document commits.
@@ -158,6 +164,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
             if page in seen_pages: raise FetchError('pagination_cycle')
             if result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
+            if config['source'] in expansion.ROUTES:
+                next_page=expansion.next_within_window(config['source'],rows,next_page,since)
             if not rows: raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
             fingerprint=hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest()
@@ -205,7 +213,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                 seen_items.add(url); result['discovered']+=1
                 try:
                     listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
-                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else None)
+                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else
+                                  expansion.listing_date(row) if config['source'] in expansion.ROUTES else None)
                     if listing_date and not since<=listing_date<=until:
                         # An individually dated CNIL/FTC row can be excluded
                         # without reading its body. This says nothing about
@@ -215,8 +224,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         result['range_filter_read_scope']='listing_date_only'
                         result['listing_date_evidence']={'url':url,'date':listing_date,'observations':row['date_observations']}
                     else:
-                        body,detail,ctype=client.get(url)
-                        item=parsers.extract_document(config['source'],body,detail,ctype,row)
+                        body,detail,ctype=client.get(expansion.detail_request_url(config['source'],url))
+                        item=parsers.extract_document(config['source'],body,url if config['source']=='ec' else detail,ctype,row)
                         date=item['published_date']
                         if (config['source']=='oecd' and
                                 parsers.oecd_certainly_outside_window(item,since,until)):

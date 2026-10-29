@@ -1,0 +1,23 @@
+{
+  "source": "eur-lex",
+  "source_id": "76ed096b-7297-5e5a-b85d-bda00b89a82f",
+  "listing": "https://eur-lex.europa.eu/content/news/index.html",
+  "hosts": [
+    "eur-lex.europa.eu"
+  ],
+  "language": "en",
+  "enabled": false,
+  "permissions": {
+    "collect": false,
+    "store": false,
+    "ai": false
+  },
+  "hold_reason": "user_deferred_2026_10_29",
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "chatgpt-web",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 2,
+  "verification": "Challenge remains; developments are site updates; no verified in-scope full article",
+  "verification_status": "held_by_user"
+}

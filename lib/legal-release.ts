@@ -71,5 +71,12 @@ export function reviewedDraftLegalBundle(rows: {status: string; review_payload: 
 /** A CSV's citation and link arrays are not parallel arrays. Match actual article identifiers. */
 export function citedLegalPreview(law: LegalTranslationDocument, citation: string) {
   if (/규칙|조례|시행령|부칙|별표|부속서|개정법|S\.I\.|\bAct\s+\d+|DPA\s*2018/i.test(citation)) return null;
+  if (law.id === "pipa") {
+    const label = citation.match(/제\d+조(?:의\d+)?/)?.[0];
+    const section = label && law.sections.find((item) => item.group === "main" && item.title.startsWith(`${label}(`));
+    if (!section) return null;
+    const text = [section.title, ...section.lines.map((line) => line.text)].join("\n");
+    return { anchorId: section.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
+  }
   return findLegalArticlePreview(law, citation);
 }

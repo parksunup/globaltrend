@@ -1,0 +1,306 @@
+{
+  "observed_at": "2026-10-28T14:48:31.908Z",
+  "scope": "Read-only listing and entire article body probes. No source item or draft writes; no period-completeness claim.",
+  "edge_initial": [
+    {
+      "id": 17255,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.edps.europa.eu/press-publications/press-news/news_en",
+        "reason": "http_403",
+        "source": "edps",
+        "status": "failed",
+        "elapsed_ms": 852,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17256,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://ec.europa.eu/commission/presscorner/home/en",
+        "reason": "network_failure",
+        "source": "ec",
+        "status": "failed",
+        "elapsed_ms": 2140,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17257,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://privacy.ca.gov/about-us/newsroom/",
+        "type": "text/html",
+        "bytes": 230962,
+        "title": "Newsroom - privacy.ca.gov",
+        "source": "calprivacy",
+        "status": "fetched",
+        "elapsed_ms": 3164,
+        "bot_challenge": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17258,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.oaic.gov.au/news/media-centre",
+        "type": "text/html",
+        "bytes": 83097,
+        "title": "Media centre | OAIC",
+        "source": "oaic",
+        "status": "fetched",
+        "elapsed_ms": 4363,
+        "bot_challenge": false,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17259,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+        "reason": "http_404",
+        "source": "ca-opc",
+        "status": "failed",
+        "elapsed_ms": 1282,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17260,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
+        "type": "text/html",
+        "bytes": 987,
+        "title": "",
+        "source": "hk-pcpd",
+        "status": "fetched",
+        "elapsed_ms": 2068,
+        "bot_challenge": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17261,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+        "reason": "http_403",
+        "source": "eu-parliament",
+        "status": "failed",
+        "elapsed_ms": 753,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17262,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.consilium.europa.eu/en/press/press-releases/",
+        "reason": "http_403",
+        "source": "eu-council",
+        "status": "failed",
+        "elapsed_ms": 449,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17263,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://eur-lex.europa.eu/content/news/index.html",
+        "reason": "empty_response",
+        "source": "eur-lex",
+        "status": "failed",
+        "elapsed_ms": 855,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17264,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+        "type": "text/html",
+        "bytes": 40296,
+        "title": "网信政务_中央网络安全和信息化委员会办公室",
+        "source": "cn-cac",
+        "status": "fetched",
+        "elapsed_ms": 2138,
+        "bot_challenge": false,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17265,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.tc260.org.cn/tc260/tzgg/",
+        "reason": "http_403",
+        "source": "cn-tc260",
+        "status": "failed",
+        "elapsed_ms": 9215,
+        "writes_performed": false
+      }
+    }
+  ],
+  "edge_verified_routes": [
+    {
+      "id": 17276,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://ec.europa.eu/commission/presscorner/api/latestnews?language=en&pagesize=100&pagenumber=1",
+        "stage": "listing_fetch",
+        "reason": "network_failure",
+        "source": "ec",
+        "status": "failed",
+        "elapsed_ms": 3607,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17277,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://privacy.ca.gov/about-us/newsroom/",
+        "next": null,
+        "rows": 10,
+        "type": "text/html",
+        "bytes": 230962,
+        "title": "CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information",
+        "source": "calprivacy",
+        "status": "fetched",
+        "body_chars": 2494,
+        "elapsed_ms": 5542,
+        "read_scope": "official_press_or_news_body",
+        "sample_url": "https://privacy.ca.gov/2026/10/calprivacy-launches-first-ever-delete-week-to-help-californians-protect-their-personal-information/",
+        "bot_challenge": false,
+        "published_date": "2026-10-12",
+        "parser_verified": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17278,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.oaic.gov.au/news/media-centre",
+        "next": "https://www.oaic.gov.au/news/media-centre?collection=113e9365-ffcc-4320-a995-5c1b98bea3bb%7Esp-oaic-web-new&form=result&num_ranks=10&profile=news-results-page&sort=dmetapublishedDateISO&start_rank=11",
+        "rows": 10,
+        "type": "text/html",
+        "bytes": 83097,
+        "title": "Large-scale data breaches on the rise, latest OAIC statistics reveal",
+        "source": "oaic",
+        "status": "fetched",
+        "body_chars": 3425,
+        "elapsed_ms": 5370,
+        "read_scope": "official_press_or_news_body",
+        "sample_url": "https://www.oaic.gov.au/news/media-centre/large-scale-data-breaches-on-the-rise,-latest-oaic-statistics-reveal",
+        "bot_challenge": false,
+        "published_date": "2026-10-26",
+        "parser_verified": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17279,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+        "next": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/?Filter=True&Page=2&o=d",
+        "rows": 10,
+        "type": "text/html",
+        "bytes": 62515,
+        "title": "Privacy Commissioner of Canada to investigate data breach involving Crime Stoppers",
+        "source": "ca-opc",
+        "status": "fetched",
+        "body_chars": 1791,
+        "elapsed_ms": 4468,
+        "read_scope": "official_press_or_news_body",
+        "sample_url": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/2026/nr-c_261027/",
+        "bot_challenge": false,
+        "published_date": "2026-10-27",
+        "parser_verified": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17280,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+        "stage": "listing_fetch",
+        "reason": "http_403",
+        "source": "eu-parliament",
+        "status": "failed",
+        "elapsed_ms": 744,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17281,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+        "next": null,
+        "rows": 54,
+        "type": "text/html",
+        "bytes": 40296,
+        "title": "2026年未成年人网络保护国际研讨会在北京举行",
+        "source": "cn-cac",
+        "status": "fetched",
+        "body_chars": 625,
+        "elapsed_ms": 4145,
+        "read_scope": "official_press_or_news_body",
+        "sample_url": "https://www.cac.gov.cn/2026-10/23/c_1794509594997937.htm",
+        "bot_challenge": false,
+        "published_date": "2026-10-23",
+        "parser_verified": true,
+        "writes_performed": false
+      }
+    },
+    {
+      "id": 17282,
+      "status_code": 200,
+      "error_msg": null,
+      "probe": {
+        "url": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+        "next": null,
+        "rows": 10,
+        "type": "text/html",
+        "bytes": 12969,
+        "title": "关于下达25项网络安全推荐性国家标准计划的通知",
+        "source": "cn-tc260",
+        "status": "fetched",
+        "body_chars": 274,
+        "elapsed_ms": 4707,
+        "read_scope": "official_press_or_news_body",
+        "sample_url": "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml",
+        "bot_challenge": false,
+        "published_date": "2026-10-13",
+        "parser_verified": true,
+        "writes_performed": false
+      }
+    }
+  ]
+}

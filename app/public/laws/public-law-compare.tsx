@@ -34,7 +34,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
   const [selected, setSelected] = useState(() => { const valid = initialSelected?.filter((code) => countries.some((country) => country.code === code)).slice(0, 3); return valid?.length ? valid : ["KR", "JP"]; });
   const [countryPickerOpen, setCountryPickerOpen] = useState(false);
   const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
-  const [activeCountry, setActiveCountry] = useState("JP");
+  const [activeCountry, setActiveCountry] = useState("KR");
   const [activeCriterion, setActiveCriterion] = useState(criteria.some((item) => item.id === initialCriterion) ? initialCriterion! : criteria[0]?.id ?? "");
   useEffect(() => setView(initialView), [initialView]);
   useEffect(() => { const params = new URLSearchParams({ view }); if (view === "compare") { params.set("countries", selected.join(",")); if (activeCriterion) params.set("criterion", activeCriterion); } window.history.replaceState(null, "", `/public/laws?${params}`); }, [view, selected, activeCriterion]);
@@ -44,7 +44,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
   const recordsFor = (code: string) => instruments.filter((item) =>
     item.kind === "법제 목록" && item.fields.some((field) => field.label === "관할권" && field.value === code));
   const translationFor = (code: string, record?: SubmissionItem) => translations.find((item) =>
-    item.jurisdiction === code && (!record || record.id.endsWith(item.id)));
+    item.jurisdiction === code && (code === "KR" || !record || record.id.endsWith(item.id)));
   const toggle = (code: string) => {
     if (view === "full") { setActiveCountry(code); return; }
     if (selected.includes(code)) {
@@ -94,7 +94,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
           return <article className={styles.lawCatalogCard} key={record.id}>
             <h3>{record.title}</h3><p>{record.subtitle}</p>
             {translation ? <>
-              <small>한국어 전문 · {translation.articleCount}개 조문 · 시행일 {translation.version}</small>
+              <small>{translation.reviewStatus === "official" ? `공식 한국어 원문 · 본칙 조문 표제 ${translation.articleCount}개` : `한국어 전문 · ${translation.articleCount}개 조문`} · 시행일 {translation.version}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
             </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 한국어 전문은 아직 제공되지 않습니다" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}

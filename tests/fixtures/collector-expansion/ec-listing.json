@@ -1,0 +1,61 @@
+{
+  "totalNumber": 3,
+  "pageSize": 10,
+  "pageNumber": 1,
+  "docuLanguageListResources": [
+    {
+      "ky": 706077,
+      "languageCode": "EN",
+      "docuky": 213163,
+      "eventDate": "2026-10-28",
+      "title": "New Eurobarometer survey shows young people's growing engagement and views on participatory democracy, youth issues, and EU's added value in their lives ",
+      "leadText": "Today, the European Commission published a Eurobarometer survey showing young Europeans' growing engagement with and views on democracy. ",
+      "docutype": {
+        "ky": 1,
+        "code": "IP",
+        "description": "Press release",
+        "order": 1
+      },
+      "mainPicture": null,
+      "refCode": "IP/26/2274",
+      "estimatedTimeReading": 3,
+      "isETranslated": false
+    },
+    {
+      "ky": 706080,
+      "languageCode": "EN",
+      "docuky": 213164,
+      "eventDate": "2026-10-27",
+      "title": "Joint statement by High Representative/Vice-President Kallas and Commissioner Kos on the early parliamentary elections in Serbia",
+      "leadText": "On Sunday 25 October, the people of Serbia turned out in historic numbers to make their voices heard. Voters have given the next government a strong mandate for change. We look forward to seeing this being realised in practice.",
+      "docutype": {
+        "ky": 7,
+        "code": "STATEMENT",
+        "description": "Statement",
+        "order": 4
+      },
+      "mainPicture": null,
+      "refCode": "STATEMENT/26/2275",
+      "estimatedTimeReading": 2,
+      "isETranslated": false
+    },
+    {
+      "ky": 706075,
+      "languageCode": "EN",
+      "docuky": 213161,
+      "eventDate": "2026-10-27",
+      "title": "Remarks by Executive Vice-President Virkkunen and Commissioner Brunner on strengthening Frontex and the digitalisation of the return process",
+      "leadText": null,
+      "docutype": {
+        "ky": 4,
+        "code": "SPEECH",
+        "description": "Speech",
+        "order": 3
+      },
+      "mainPicture": null,
+      "refCode": "SPEECH/26/2272",
+      "estimatedTimeReading": 8,
+      "isETranslated": false
+    }
+  ]
+}

@@ -16,12 +16,12 @@ select has_function(
 );
 
 select results_eq(
-  'select count(*)::bigint from public.publishers',
+  'select count(*)::bigint from public.publishers where id in (select publisher_id from public.sources where parser_config->>''expansion_phase'' is null)',
   array[3::bigint],
   'three initial publishers are seeded'
 );
 select results_eq(
-  'select count(*)::bigint from public.sources',
+  'select count(*)::bigint from public.sources where parser_config->>''expansion_phase'' is null',
   array[3::bigint],
   'three initial sources are seeded'
 );
@@ -84,7 +84,7 @@ select ok(
 
 select results_eq(
   'select count(*)::bigint from public.sources',
-  array[3::bigint],
+  array[12::bigint],
   'anonymous users can read active source metadata'
 );
 select results_eq(

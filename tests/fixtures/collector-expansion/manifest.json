@@ -1,0 +1,44 @@
+{
+  "calprivacy": {
+    "url": "https://privacy.ca.gov/2026/10/calprivacy-launches-first-ever-delete-week-to-help-californians-protect-their-personal-information/",
+    "published_date": "2026-10-12",
+    "observed_at": "2026-10-28T14:40:11.425856+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "oaic": {
+    "url": "https://www.oaic.gov.au/news/media-centre/large-scale-data-breaches-on-the-rise,-latest-oaic-statistics-reveal",
+    "published_date": "2026-10-26",
+    "observed_at": "2026-10-28T14:40:11.425873+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "ca-opc": {
+    "url": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/2026/nr-c_261027/",
+    "published_date": "2026-10-27",
+    "observed_at": "2026-10-28T14:40:11.425875+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "eu-parliament": {
+    "url": "https://www.europarl.europa.eu/news/en/press-room/20261020IPR48312/",
+    "published_date": "2026-10-23",
+    "observed_at": "2026-10-28T14:40:11.425876+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "cn-cac": {
+    "url": "https://www.cac.gov.cn/2026-10/23/c_1794509594997937.htm",
+    "published_date": "2026-10-23",
+    "observed_at": "2026-10-28T14:40:11.425877+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "cn-tc260": {
+    "url": "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml",
+    "published_date": "2026-10-13",
+    "observed_at": "2026-10-28T14:40:11.425879+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  },
+  "ec": {
+    "url": "https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2274",
+    "published_date": "2026-10-28",
+    "observed_at": "2026-10-28T14:40:11.425880+00:00",
+    "fixture_scope": "observed selectors with shortened body excerpt; live probe reads entire original body"
+  }
+}

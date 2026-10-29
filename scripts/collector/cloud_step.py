@@ -19,7 +19,9 @@ MAX_FTC_SNAPSHOT_ROWS=100
 
 def validate_claim(claim):
     if claim.get('slug') not in ('oecd', 'ftc'):
-        raise ValueError('cloud_source_not_assigned')
+        configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+        if not any(c['source']==claim.get('slug') and c['source_id']==claim.get('source_id') and c.get('enabled') and c.get('executor')=='cloud-python' for c in configs):
+            raise ValueError('cloud_source_not_assigned')
     expires = dt.datetime.fromisoformat(claim['lease_until'].replace('Z', '+00:00'))
     if expires <= dt.datetime.now(dt.timezone.utc):
         raise ValueError('lease_expired')
@@ -143,8 +145,11 @@ def prepare(claim):
         result = {'source': claim['slug'], 'since': claim['since'], 'until': claim['until'],
                   'coverage_complete': False, 'status': 'partial', 'reason': 'backlog_detail_saved'}
         try:
-            body, url, ctype = client.get(detail['url'])
-            item = parsers.extract_document(claim['slug'], body, url, ctype, detail)
+            body, url, ctype = client.get(parsers.expansion.detail_request_url(claim['slug'],detail['url']))
+            if claim['slug'] in parsers.expansion.ROUTES:
+                parsers.expansion.verify_detail_response(claim['slug'],detail['url'],url)
+            canonical_detail=detail['url'] if claim['slug']=='ec' else url
+            item = parsers.extract_document(claim['slug'], body, canonical_detail, ctype, detail)
             item['metadata'].update(ai_ready=item['published_date'] is not None and not item['metadata']['requires_review'],
                                     relevance_reason='full_body_available_human_relevance_review_pending')
             if (claim['slug']=='oecd' and parsers.oecd_certainly_outside_window(item,claim['since'],claim['until'])):
@@ -154,7 +159,7 @@ def prepare(claim):
             elif item['published_date'] and not claim['since'] <= item['published_date'] <= claim['until']:
                 result['reason'] = 'backlog_out_of_range'
             else:
-                store.ingest(config, url, item)
+                store.ingest(config, canonical_detail, item)
         except (FetchError, ValueError) as error:
             result.update(status='failed', reason=str(error), failed_url=detail['url'])
     elif snapshot_start_error is not None:
