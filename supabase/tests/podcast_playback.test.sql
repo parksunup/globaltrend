@@ -1,0 +1,16 @@
+begin;
+select plan(3);
+insert into public.weekly_issues(issue_key,title,week_start,week_end,status,published_at) values('2098-W50','Synthetic playback test','2098-12-08','2098-12-14','published',now());
+insert into public.weekly_podcast_episodes(issue_key,audio_path,audio_mime_type,file_size_bytes) values('2098-W50','2098-W50/75000000-0000-0000-0000-000000000001.m4a','audio/mp4',32);
+insert into storage.objects(bucket_id,name) values('weekly-podcasts','2098-W50/75000000-0000-0000-0000-000000000001.m4a'),('weekly-podcasts','2098-W50/75000000-0000-0000-0000-000000000002.m4a');
+set local role anon;
+select results_eq($$select count(*) from storage.objects where bucket_id='weekly-podcasts' and name like '2098-W50/%'$$,array[1::bigint],'public visitors can read exactly the published file without membership access');
+reset role;
+update public.weekly_podcast_episodes set status='withdrawn' where issue_key='2098-W50';
+set local role anon;
+select results_eq($$select count(*) from storage.objects where bucket_id='weekly-podcasts' and name like '2098-W50/%'$$,array[0::bigint],'withdrawn and unpublished files remain hidden');
+reset role;
+select ok(not has_function_privilege('anon','private.is_team_member(text)','execute'),'playback does not expose administrator membership checks');
+reset role;
+select * from finish();
+rollback;

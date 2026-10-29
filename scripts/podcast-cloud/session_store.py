@@ -75,7 +75,11 @@ class SessionVault:
             raise ValueError("encrypted session validation failed") from None
 
     def restore(self, folder, lease):
-        if lease.get("envelope") is None:
+        if lease.get("recovery") is not None:
+            raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
+        elif lease.get("recovery") is not None:
+            raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
+        elif lease.get("envelope") is None:
             if lease["version"] != 0 or self.bootstrap is None:
                 raise ValueError("dedicated session setup required")
             raw = validate_state(self.bootstrap, self.expected_email)

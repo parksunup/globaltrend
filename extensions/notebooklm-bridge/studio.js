@@ -6,7 +6,7 @@
     if(event.source!==window || event.origin!==location.origin) return;
     const m=event.data;
     if(m?.type==='GT_RPC_RESULT' && pending.has(m.requestId)) {const item=pending.get(m.requestId);clearTimeout(item.timer);pending.delete(m.requestId);item.reply(m.result);return;}
-    if(m?.type!=='GT_COMMAND' || !['GT_PING','GT_BEGIN','GT_CANCEL'].includes(m.command?.type)) return;
+    if(m?.type!=='GT_COMMAND' || !['GT_PING','GT_BEGIN','GT_CANCEL','GT_RECONNECT_OPEN','GT_RECONNECT_SAVE'].includes(m.command?.type)) return;
     const result=await chrome.runtime.sendMessage(m.command).catch(error=>({error:error.message}));
     window.postMessage({type:'GT_RESPONSE',requestId:m.requestId,result},location.origin);
   });
