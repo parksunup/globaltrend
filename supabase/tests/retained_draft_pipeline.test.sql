@@ -1,4 +1,5 @@
 begin;
+\ir fixtures/writing-review.inc
 set local search_path=public,extensions;
 select plan(12);
 update sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
@@ -12,7 +13,7 @@ select is(collector_claim_retained_draft('pipeline-fixture')->>'status','claimed
 select is(collector_claim_retained_draft('other-worker')->>'status','no_claimable_retained_job','active lease cannot be stolen');
 insert into collector_edge_events(source_id,trigger_kind,execution_id,started_at,result) values(null,'cloud-automation-summary','pipeline-incomplete-fixture',now(),'{"role":"daily-producer","status":"success"}');
 select is((select result->>'status' from collector_edge_events where execution_id='pipeline-incomplete-fixture'),'partial','source-only storage cannot be logged as producer success');
-select lives_ok(format('select submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from retained_context),'pipeline-fixture','{"title_ko":"유럽 EDPB, 개인정보 처리 최종 지침 발표","summary_ko":"유럽정보보호이사회, 개인정보 처리에 관한 최종 지침 발표","details_ko":"- 이사회는 개인정보에 관한 최종 지침을 발표","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"본문 첫 문장","claim":"최종 지침 발표"}],"limitations":[]}'),'exact-input Korean draft reaches workspace');
+select lives_ok(format('select submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from retained_context),'pipeline-fixture',pg_temp.test_writing_review('{"title_ko":"유럽 EDPB, 개인정보 처리 최종 지침 발표","summary_ko":"유럽정보보호이사회, 개인정보 처리에 관한 최종 지침 발표","details_ko":"- 이사회는 개인정보에 관한 최종 지침을 발표","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"본문 첫 문장","claim":"최종 지침 발표"}],"limitations":[]}'::jsonb,(select job from retained_context))::text),'exact-input Korean draft reaches workspace');
 select is((select status from reports where source_item_id=(select item from retained_context)),'draft','stored Korean report stays unapproved');
 select is((collector_retained_draft_status()->>'unfinished')::integer,0,'retained pipeline closes only after Korean report storage');
 select is(collector_retain_for_draft((select item from retained_context),(select revision from retained_context),repeat('a',64),'같은 자료')->>'status','existing_report_preserved','completed report is not regenerated');

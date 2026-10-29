@@ -1,0 +1,72 @@
+{
+  "policy_id": "privacy-report-ko-48-reference-v2",
+  "job_instruction_version": "trend-ko-v1",
+  "required_documents": [
+    "docs/trend-report-style.md",
+    "docs/trend-reference-reading-notes.md",
+    "docs/translation/glossary.md"
+  ],
+  "common_aspects": [
+    "context",
+    "action",
+    "scope",
+    "grounds",
+    "follow_up"
+  ],
+  "article_types": {
+    "enforcement": [
+      "conduct",
+      "decision"
+    ],
+    "court": [
+      "question",
+      "procedural_effect"
+    ],
+    "legislation": [
+      "changes",
+      "exceptions",
+      "legal_stage"
+    ],
+    "guidance": [
+      "practical_requirements",
+      "document_status"
+    ],
+    "report": [
+      "method",
+      "findings",
+      "limits"
+    ],
+    "technology": [
+      "mechanism",
+      "applications",
+      "limits"
+    ],
+    "event": [
+      "substantive_outputs",
+      "speaker_attribution"
+    ],
+    "cooperation": [
+      "commitments",
+      "implementation"
+    ],
+    "brief_notice": []
+  },
+  "editorial_checks": [
+    "content",
+    "flow",
+    "legal_stage",
+    "terminology",
+    "numbers_dates",
+    "reader_notes"
+  ],
+  "thin_draft_warning": {
+    "details_chars_below": 700,
+    "source_chars_at_least": 1500
+  },
+  "semantics": "Checks establish recorded review and source/draft binding, not truth, literary quality, human approval or publication. Length is a review signal, not a universal minimum.",
+  "instruction_hashes": {
+    "docs/trend-report-style.md": "71c73f5b4e96bec88ba750dacfacd51ebab015653edcf7bd704063a1b1504f49",
+    "docs/trend-reference-reading-notes.md": "06178ac572f978c7140c2fc4ab3e13955ee324b4b15d53a1fcdfe2d9f8f1452f",
+    "docs/translation/glossary.md": "50cd3d64f063088e1e11b7e98537b19609b383bd864c31be98c828317726f5f3"
+  }
+}
