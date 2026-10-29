@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "국제요정 NotebookLM 연결",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "연결한 국제요정 작업실의 공개 자료를 NotebookLM에 전달하고 생성된 음성을 돌려보냅니다.",
   "permissions": [
     "storage",
@@ -10,6 +10,7 @@
     "cookies"
   ],
   "host_permissions": [
+    "https://globaltrend-six.vercel.app/*",
     "https://notebook.google.com/*",
     "https://notebooklm.google.com/*",
     "https://*.google.com/*"
@@ -27,6 +28,11 @@
     "default_title": "국제요정 작업실 연결"
   },
   "content_scripts": [
+    {
+      "matches": ["https://globaltrend-six.vercel.app/*"],
+      "js": ["studio.js"],
+      "run_at": "document_idle"
+    },
     {
       "matches": [
         "https://notebook.google.com/*",

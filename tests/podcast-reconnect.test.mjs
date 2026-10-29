@@ -19,6 +19,16 @@ test('an unpaired origin cannot capture any Google authentication data',async()=
  assert.ok(result.error);assert.equal(read,0);
 });
 
+test('only the exact production studio is paired automatically',async()=>{
+ let listener;
+ const chrome={storage:{local:{get:async()=>({allowedOrigins:[]})}},runtime:{onMessage:{addListener:fn=>listener=fn}}};
+ vm.runInNewContext(readFileSync(new URL('../extensions/notebooklm-bridge/background.js',import.meta.url),'utf8'),{chrome,URL,Error,Set,Promise,Date});
+ const call=url=>new Promise(resolve=>listener({type:'GT_PING'},{url,tab:{id:1}},resolve));
+ assert.equal((await call('https://globaltrend-six.vercel.app/team/podcast')).ok,true);
+ assert.ok((await call('https://globaltrend-six.vercel.app/other')).error);
+ assert.ok((await call('https://globaltrend-six.attacker.vercel.app/team/podcast')).error);
+});
+
 test('paired reconnect uses its exact tab, filters cookies, closes capture tab and never stores credential values',async()=>{
  const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,reads=0,delivered,closed;
  const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
