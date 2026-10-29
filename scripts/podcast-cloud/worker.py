@@ -1,6 +1,6 @@
-"""Bounded cloud runner using the same SDK as notebooklm-py's MCP server.
+"""Bounded cloud runner using the NotebookLM MCP stdio tools.
 
-Never print SDK exceptions, notebook contents, cookies or signed download URLs.
+Never print MCP exceptions, notebook contents, cookies or signed download URLs.
 Google login is bootstrapped interactively on a separate, dedicated account.
 """
 import asyncio
@@ -72,7 +72,6 @@ class Cloud:
 
 async def produce(client, cloud, job, clock=time.monotonic, sleep=asyncio.sleep, budget=360):
     """Persist before every external mutation. Resume polls the exact artifact ID."""
-    from notebooklm.types import AudioFormat, AudioLength
     cp = dict(job.get("cloud_checkpoint") or {})
     if cp.get("stage") in AMBIGUOUS:
         cloud.checkpoint(job, cp, "blocked", "외부 요청의 완료 여부를 NotebookLM에서 확인해 주세요.")
@@ -93,7 +92,7 @@ async def produce(client, cloud, job, clock=time.monotonic, sleep=asyncio.sleep,
     if not cp.get("artifact_id"):
         cp["stage"] = "requesting_audio"
         cloud.checkpoint(job, cp, "generating")
-        status = await client.artifacts.generate_audio(cp["notebook_id"], source_ids=[cp["source_id"]], language="ko", instructions=packet["instructions"], audio_format=AudioFormat.DEEP_DIVE, audio_length=AudioLength.DEFAULT)
+        status = await client.artifacts.generate_audio(cp["notebook_id"], source_ids=[cp["source_id"]], language="ko", instructions=packet["instructions"], audio_format="deep-dive", audio_length="default")
         if not status.task_id or status.is_failed:
             raise RuntimeError("generation not accepted")
         cp.update(artifact_id=status.task_id, stage="watch")
@@ -120,6 +119,8 @@ async def produce(client, cloud, job, clock=time.monotonic, sleep=asyncio.sleep,
 
 
 def auth_failure(exc):
+    if getattr(exc, "code", None) == "AUTH":
+        return True
     # AuthExtractionError is a response/parser failure, not proof of sign-out.
     # Match the SDK's explicit signals, including subclasses, never substrings.
     return any(cls.__name__ in {"AuthError", "_LoginRedirectError", "HeadlessLoginRequiredError"}
@@ -130,6 +131,8 @@ def failure_reason(exc):
     """Closed diagnostic codes only. Never emit messages, URLs or responses."""
     if auth_failure(exc):
         return "login_rejected"
+    if getattr(exc, "code", None) in {"RATE_LIMITED", "TIMEOUT", "NETWORK", "SERVER", "MCP_SCHEMA", "MCP_SHAPE"}:
+        return "mcp_" + exc.code.lower()
     names = {cls.__name__ for cls in type(exc).__mro__}
     if "AuthExtractionError" in names:
         return "token_extraction"
@@ -190,7 +193,7 @@ async def run_session(cloud, vault, lease, client_factory, production_enabled=Fa
                             result = 1
                     else:
                         print("No queued episode.")
-            # The SDK saves rotated cookies on clean context exit. Store only
+            # The MCP server saves rotated cookies on clean context exit. Store only
             # after successful live verification; never replace a good jar on failure.
             category = "storage"
             stage = "save_session"
@@ -218,16 +221,14 @@ async def main():
     logging.disable(logging.CRITICAL)
     try:
         from session_store import SessionVault
-        from notebooklm import NotebookLMClient
+        from notebook_mcp import open_notebook_mcp
         cloud = Cloud()
         vault = SessionVault.from_environment()
         lease = cloud.call("session_acquire").get("session")
         if not lease:
             print("Session checks paused, finished, or already leased. No work was claimed.")
             return 0
-        factory = lambda path: NotebookLMClient.from_storage(
-            path=str(path), keepalive=600, allow_headless=False,
-            rate_limit_max_retries=0, server_error_max_retries=0)
+        factory = open_notebook_mcp
         return await run_session(cloud, vault, lease, factory,
                                  production_enabled=os.environ.get("PODCAST_PRODUCE_ENABLED") == "true")
     except Exception:
