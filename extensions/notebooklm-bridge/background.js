@@ -3,7 +3,7 @@ const getJob = async () => (await chrome.storage.local.get('job')).job;
 async function save(job) {await chrome.storage.local.set({job}); return job;}
 function validPacket(job) {
   const p=job?.packet;
-  return typeof job?.id==='string' && /^[a-f0-9-]{36}$/.test(job.id) && p?.version===1 && /^\d{4}-W\d{2}$/.test(p.issueKey) && typeof p.sourceText==='string' && p.sourceText.length<=200000 && typeof p.instructions==='string' && p.instructions.length<=20000 && typeof p.title==='string' && p.title.length<=160;
+  return typeof job?.id==='string' && /^[a-f0-9-]{36}$/.test(job.id) && p?.version===1 && /^(?:\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])|\d{4}-(?:0[1-9]|1[0-2])-W[1-5]-[1-9]\d*)$/.test(p.issueKey) && typeof p.sourceText==='string' && p.sourceText.length<=200000 && typeof p.instructions==='string' && p.instructions.length<=20000 && typeof p.title==='string' && p.title.length<=160;
 }
 async function appRpc(job,method,payload) {
   return chrome.tabs.sendMessage(job.appTabId,{type:'GT_RPC',jobId:job.id,method,payload});
@@ -13,7 +13,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:1,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:2,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_RECONNECT_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구를 팟캐스트 전용 Chrome 프로필에 설치해 주세요.');
     const tab=await chrome.tabs.create({url:'https://notebooklm.google.com/',active:true});
