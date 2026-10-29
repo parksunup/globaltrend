@@ -16,11 +16,11 @@
 
 ## 동향 작성·수정
 
-- 모든 출처·모든 개별 동향의 한국어 작성은 `docs/trend-report-style.md`를 먼저 읽고 적용해. 주간 선정 7건에만 한정하지 마.
+- 모든 출처·모든 개별 동향의 한국어 작성은 `docs/trend-report-style.md`, `docs/trend-reference-reading-notes.md`와 용어집을 먼저 읽고 기준 `privacy-report-ko-48-reference-v2`를 적용해. 주간 선정 7건에만 한정하지 마.
 - 수집기는 공식 제목·본문·날짜·근거를 확보하고, Codex가 보고서체 제목·핵심 요약·상세 본문을 작성해. 별도 유료 생성 API는 추가하지 마.
 - 기존 수집 표본은 `data/trends/editorial/report-drafts.json`의 대응 ID 편집본을 수정하고 `node scripts/trend-report.mjs --render`로 사람이 읽는 완성본을 갱신해. 근거가 담긴 원 조사 기록과 편집본의 제목·날짜·수치·범위를 대조해.
 - 새 수집 표본을 추가할 때에도 같은 ID의 보고서 편집본을 추가해. 기존 21건을 하드코딩한 자료 수집 상한으로 사용하지 마.
-- 저장소 산출물은 `npm run validate:data`, DB 작업 제출 JSON은 `node scripts/trend-report.mjs --check <파일경로>`를 제출 전에 실행해. 문체 검사 통과를 사실 확인이나 사람 승인으로 표현하지 마.
+- 저장소 산출물은 `npm run validate:data`, DB 작업 제출 JSON은 `node scripts/trend-report.mjs --check <파일경로>`를 제출 전에 실행해. 새 자동 초안은 정확한 claim으로 작성 패킷을 만들고 실제 `writing_review`를 기록한 뒤 `--seal`과 `--check <원고> --source <claim>`를 통과시켜. 문체·검토기록 검사 통과를 사실 확인이나 사람 승인으로 표현하지 마.
 
 ## 번역 용어
 

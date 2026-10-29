@@ -1,5 +1,19 @@
 # 한국어 초안 편집 실행 지침 v1
 
+## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
+
+기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처18개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
+
+1. 시작 시 `collector_writing_policy()`의 정책ID·지침해시를 로컬 `config/trend-writing-policy.json`과 비교한다. 지침과 DB판본이 다르면 해당 제출을 보류해 정확한 오류·재개 위치를 기록하되 다른 출처의 수집을 임의로 중단하지 않는다. 기존 `trend-ko-v1` 작업 임대·해시 계약은 그대로 유지한다.
+2. 실제 claim 반환JSON을 ignored `work/claim-<job>.json`에 저장하고 `node scripts/trend-report.mjs --packet work/claim-<job>.json --out work/writing-packet-<job>.json`을 실행한다. 반환된 원문 전문과 최신 지침·용어집·유형별검토항목을 실제로 읽는다. 패킷 생성은 읽기 완료가 아니다.
+3. 짧은 발표가 가리키는 보고서·결정·지침 등 실질 자료를 확인한다. 현재 기사 사실은 공식 원문으로 검증하고 레퍼런스의 과거 사실을 새 기사 근거로 쓰지 않는다. 연결 법령·판결을 검증용으로 읽는 것을 새 법률전문 자동수집 경로 추가로 해석하지 않는다.
+4. 제목·핵심요약·본문을 작성한 뒤 전체 글을 다시 읽어 배경·조치·대상·근거·후속절차와 유형별 핵심 내용을 보완한다. 문장 말끝만 바꾸거나 고정3개항목·소제목·일반론으로 채우지 않는다. 700~1200자 등 지침의 범위는 검토 신호이며 강제 분량이 아니다. 원문이 충분한데 얇으면 누락을 재대조하고 의도적 압축 사유를 기록한다.
+5. 패킷의 `review_template`을 실제 검토 내용으로 채워 제출JSON의 `writing_review`에 넣는다. 정책ID·지침해시·원문판본/해시, 실제 읽은 공식본문 URL/위치/시각, 연결자료의 중요도와 열람상태, 유형별 coverage(근거인덱스·구체내용 또는 구체적 비해당사유), 내용·흐름·법적단계·용어·수치/날짜·편집메모 제거 검토를 기록한다. boolean체크나 TODO를 읽기·윤문 기록으로 대신하지 않는다. 핵심 연결자료 미확보는 실패·재시도 범위로 남기며 완성초안으로 제출하지 않는다.
+6. 원고가 완성되고 검토기록도 실제로 작성한 뒤 `node scripts/trend-report.mjs --seal work/draft-<job>.json`, 이어 `node scripts/trend-report.mjs --check work/draft-<job>.json --source work/claim-<job>.json`을 실제 통과시킨다. seal은 현재 제목·요약·본문 해시만 기록하며 검토나 원고를 생성하지 않는다. 이후 문장을 바꾸면 다시 원문대조·윤문·seal·검사한다.
+7. 기존 `submit_trend_draft`가 같은 정책·원문·원고의 검토기록을 서버에서 재검사한다. 실패를 억지로 통과시키거나 서버검사 없는 우회 경로를 쓰지 않는다. 제출 후 reports와 publication_working_copies의 제목·요약·본문 전체문자열, 입력revision, 정책ID·검토기록 및 미검수draft 상태를 재조회한다. 자동검사 통과는 의미 정확성·사람 승인·공개 발행을 뜻하지 않는다. 기존 원고를 대량 덮어쓰지 않는다.
+
+
+
 ## 필수 편집 기준 · 2026-10-18 개정
 
 매 실행에서 [보고서 작성 기준](trend-report-style.md)을 먼저 읽고 모든 새 동향에 적용합니다. 기준 ID는 `privacy-report-ko-2026-10`이며 RPC 제출 계약 `trend-ko-v1`과 구분합니다. 아래 과거 지침의 문체·구성과 충돌하면 이 개정의 보고서 형식을 우선합니다. 주간 예시 7건에 한정하지 않습니다.
@@ -114,3 +128,11 @@
 ## 용어집 적용
 
 매 실행에서 [프로젝트 용어집](translation/glossary.md)을 보고 사용자 지정 표기를 적용합니다. 법률별 정의 차이를 확인하고 PET·TEE의 첫 등장에는 한국어 명칭과 영문 약자를 함께 씁니다.
+
+### 연결 문서의 사실을 원고에 사용할 때
+
+`writing_review.supplements`에는 수집 metadata의 `related_documents`와 `unread_attachments` URL을 빠짐없이 분류한다. 중요하지 않은 링크도 왜 기사의 핵심 근거가 아닌지 기록한다. `read`인 문서는 `complete=true`, `read_scope=full_document` 또는 `complete_relevant_sections`, 실제 문서·쪽·절의 locator를 적는다. 필요한 핵심 쪽을 읽지 못했으면 부분 열람이며, `material=true` 문서를 읽은 것으로 통과시키지 않는다.
+
+현재 제출 RPC는 근거 인용이 정확한 source_item_revision의 `content_text`에 존재하는지를 검사한다. 연결 PDF에서만 확인되는 방법·수치·판단을 본문의 ‘보고서를 발간했다’는 문장에 연결해서 제출하면 안 된다. 첨부에만 있는 사실이 필요하면 기존 `ingest_source_item`으로 근거를 보강한 새 원문 판본을 먼저 보존한다. 주 출처의 source_id·canonical URL·제목·발표일을 유지하고, 기존 본문과 실제 읽은 공식 문서의 필요한 쪽/절 텍스트를 문서 경계·URL·위치와 함께 입력한다. metadata.evidence_documents에 각 URL·문서역할·열람범위·본문해시를 보존하고, 결합 본문의 실제 SHA256을 p_content_hash로 사용한다. 기존 판본은 삭제하거나 수정하지 않는다.
+
+이후 기존 claim으로 제출하지 않고 새 current_revision_id/input_hash를 확인해 보존확정·새 작업 임대·패킷 작성부터 다시 진행한다. 새 판본의 정확한 본문에 들어간 실제 인용만 evidence로 사용한다. 실질 자료나 적절한 근거 판본을 확보하지 못하면 해당 원고는 실패·재시도 사유를 보존한다. 서버의 원문 인용 존재 검사를 약화하거나, 첨부를 읽었다는 검토 메모만으로 첨부의 사실을 뒷받침하지 않는다.
