@@ -5,6 +5,9 @@ import { loadPublicStories } from "../../lib/public-content";
 import { publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
 import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
 import { PublicHeader, PublicFooter } from "./public-navigation";
+import {createClient} from '../../lib/supabase/server';
+import {loadLatestPublicPodcast} from '../../lib/public-podcast';
+import HomePodcastPlayer from './home-podcast-player';
 import HomeVisitorCounts from "./home-visitor-counts";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +17,7 @@ export default async function PublicHome() {
   let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
   try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
+  const {podcast}=await loadLatestPublicPodcast(await createClient());
   const stories = allStories.slice(0, 3);
   const featured = allStories[3] ?? stories[0];
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
@@ -30,6 +34,8 @@ export default async function PublicHome() {
       <div className={styles.globe} aria-hidden="true" />
       <div className={styles.heroMotto}>PEOPLE<br />LAW<br />SOCIETY<br /><b>A SAFER DIGITAL TOMORROW</b></div>
     </section>
+
+    {podcast&&<HomePodcastPlayer podcast={podcast}/>}
 
     <section className={styles.observatoryGrid}>
       <div className={styles.timelinePanel}>
@@ -60,9 +66,8 @@ export default async function PublicHome() {
     </section>
 
     <section className={styles.weeklyStrip} id="weekly">
-      <div className={styles.weeklyLead}><h2>주간호</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
-      <Link className={styles.weekCardActive} href="/public/weekly/podcast"><span>WEEKLY PODCAST</span><strong>주간 팟캐스트 듣기 →</strong><small>공개된 에피소드 바로가기</small></Link>
-      <Link href="/public/weekly">주간호 전체 보기 →</Link>
+      <div className={styles.weeklyLead}><h2>주간 동향</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
+      <Link href="/public/weekly">주간 동향 전체 보기 →</Link>
     </section>
     <HomeVisitorCounts />
     <PublicFooter />

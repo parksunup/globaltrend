@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./public.module.css";
 import { usePublicTheme } from "./public-theme";
 
-const entries = [["/public", "동향"], ["/public/weekly", "주간호"], ["/public/weekly/podcast", "주간 팟캐스트"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
+const entries = [["/public", "Main"], ["/public/weekly", "주간 동향"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
 export function PublicHeader({ active }: { active: string }) {
   const { theme, toggleTheme } = usePublicTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,17 +13,18 @@ export function PublicHeader({ active }: { active: string }) {
     fetch("/api/public/visitors", { method: "POST", cache: "no-store" }).catch(() => {});
   }, [active]);
   return <header className={styles.header}>
-    <Link className={styles.brand} href="/public" aria-label="GlobalTrend 홈" onClick={() => setMenuOpen(false)}><span className={styles.brandText}>Global<span>Trend</span></span><small className={styles.brandTagline}>세계의 개인정보 보호 동향을 한눈에</small></Link>
+    <Link className={styles.brand} href="/public" aria-label="국제요정 홈" onClick={() => setMenuOpen(false)}><span className={styles.brandText}>국제<span>요정</span></span><small className={styles.brandTagline}>세계의 개인정보 보호 동향을 한눈에</small></Link>
     <div className={styles.mobileHeaderActions}>
       <Link href="/public/search" aria-label="동향 검색" className={styles.mobileSearch}>검색</Link>
       <button type="button" className={styles.mobileMenuButton} aria-expanded={menuOpen} aria-controls="public-navigation" onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? "닫기" : "메뉴"}</button>
     </div>
     <nav id="public-navigation" className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`} aria-label="주요 메뉴">{entries.map(([href, label]) => <Link key={href} href={href} className={active === href ? styles.navActive : ""} aria-current={active === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}</Link>)}</nav>
+    <Link href="/work" className={styles.workspaceLink}>작업실</Link>
     <button type="button" className={styles.themeToggle} onClick={toggleTheme} aria-label={theme === "dark" ? "밝은 테마로 전환" : "어두운 테마로 전환"} aria-pressed={theme === "light"}>
       <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>{theme === "dark" ? "밝게" : "어둡게"}
     </button>
   </header>;
 }
 export function PublicFooter() {
-  return <footer className={styles.footer}><Link href="/public">GlobalTrend</Link><p>글로벌 개인정보 보호 동향과 법제</p></footer>;
+  return <footer className={styles.footer}><Link href="/public">국제요정</Link><p>글로벌 개인정보 보호 동향과 법제</p></footer>;
 }
