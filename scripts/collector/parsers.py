@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qs, urlencode
 from zoneinfo import ZoneInfo
 from bs4 import BeautifulSoup
+from . import expansion
 
 NORMALIZATION_VERSION = 'main-body-nfc-v1'
 MONTHS = {name: i for i, name in enumerate(['january','february','march','april','may','june','july','august','september','october','november','december'],1)}
@@ -142,6 +143,7 @@ def pdpc_body_nodes(soup):
         raise ValueError('pdpc_embedded_data_changed') from None
 
 def extract(source, html, url):
+    if source in expansion.ROUTES:return expansion.extract(source,html,url)
     soup=BeautifulSoup(html,'html.parser')
     selectors={
         'edpb':('.node-article-full__title','time.node-article-full__date',['.node-article-full__body']),
@@ -302,6 +304,9 @@ def extract_pdpc_pdf(data,url,row):
         'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':None,'metadata':metadata}
 
 def extract_document(source,data,url,content_type,row=None):
+    if source in expansion.ROUTES:
+        if content_type not in ('text/html','application/xhtml+xml') and not (source=='ec' and content_type=='application/json'):raise ValueError('unsupported_document_type')
+        return expansion.extract(source,data.decode('utf-8','replace'),url,row)
     if content_type in ('text/html','application/xhtml+xml'):
         item=extract(source,data.decode('utf-8','replace'),url)
         if source in ('pdpc','cnil') and row and row.get('date_observations'):
@@ -507,6 +512,7 @@ def discover_pdpc_listing(data,url,page):
     return rows,next_url if page*10<total else None
 
 def discover_listing(source,html,url,fetch):
+    if source in expansion.ROUTES:return expansion.discover(source,html,url)
     if source=='ico':
         payload=ico_search_request(html,url)
         endpoint=urljoin(url,'/api/search')

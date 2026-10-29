@@ -1,0 +1,80 @@
+{
+  "calprivacy": {
+    "host": "privacy.ca.gov",
+    "listing": "https://privacy.ca.gov/about-us/newsroom/",
+    "links": "main h2.entry-title a[href]",
+    "article_path": "^/\\d{4}/\\d{2}/[^/]+/$",
+    "card": "article",
+    "card_date": ".published",
+    "title": "main .et_pb_text_1 h2",
+    "body": "main .et_pb_text_1 .et_pb_text_inner",
+    "date": "meta[property=\"article:published_time\"]",
+    "date_attribute": "content",
+    "next": "a[rel=\"next\"]"
+  },
+  "oaic": {
+    "host": "www.oaic.gov.au",
+    "listing": "https://www.oaic.gov.au/news/media-centre",
+    "links": "main a.card-title[href]",
+    "article_path": "^/news/media-centre/[^/]+$",
+    "card": ".card",
+    "card_date": ".info .date",
+    "unwrap_query": "url",
+    "title": "main h1",
+    "body": "main article",
+    "date": "meta[name=\"publishedDate_ISO\"]",
+    "date_attribute": "content",
+    "next": "a[rel=\"next\"]"
+  },
+  "ca-opc": {
+    "host": "www.priv.gc.ca",
+    "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+    "links": "main h2.item-title a[href]",
+    "article_path": "^/en/opc-news/(?:news-and-announcements|speeches-and-statements)/\\d{4}/[^/]+/$",
+    "title": "main section h2",
+    "body": "main section[aria-label=\"Main content\"]",
+    "date": "meta[name=\"dcterms.issued\"]",
+    "date_attribute": "content",
+    "next": "a[rel=\"next\"],li.next a",
+    "card": ".item",
+    "card_date": "time.item-date"
+  },
+  "eu-parliament": {
+    "host": "www.europarl.europa.eu",
+    "listing": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+    "feed": true,
+    "article_path": "^/news/en/press-room/\\d{8}IPR\\d+/[^/]*$",
+    "title": "h1.ep_title",
+    "body": "article#website-body .ep-a_text",
+    "date": "time[itemprop=\"datePublished\"]",
+    "date_attribute": "datetime"
+  },
+  "cn-cac": {
+    "host": "www.cac.gov.cn",
+    "listing": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+    "links": "h5 a[href]",
+    "article_path": "^/\\d{4}-\\d{2}/\\d{2}/c_\\d+\\.htm$",
+    "card": "li",
+    "card_date": ".times",
+    "title": ".main-title h1.title",
+    "body": "#BodyLabel",
+    "date": "#pubtime"
+  },
+  "cn-tc260": {
+    "host": "www.tc260.org.cn",
+    "listing": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+    "links": ".publication .right .item a[href]",
+    "article_path": "^/tc260/tzgg/\\d{6}/[a-f0-9]+\\.shtml$",
+    "title": ".content2025 h1",
+    "body": "#xw_box ucapcontent",
+    "date": ".content2025 publishtime",
+    "card": ".item",
+    "card_date": ".date"
+  },
+  "ec": {
+    "host": "ec.europa.eu",
+    "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
+    "json_api": true,
+    "article_path": "^/commission/presscorner/detail/en/(?:ip|qanda|statement|speech|memo|mex)_\\d{2}_\\d+$"
+  }
+}

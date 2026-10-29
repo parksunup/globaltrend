@@ -23,15 +23,26 @@ export class OfficialHTTP {
   ): Promise<{ bytes: Uint8Array; url: string; type: string }> {
     let url = canonical(raw, this.hosts);
     if (robots && !this.robot) {
-      const r = await this.request(
-        new URL("/robots.txt", url).href,
-        "GET",
-        undefined,
-        false,
-      );
+      let body = "";
+      try {
+        const r = await this.request(
+          new URL("/robots.txt", url).href,
+          "GET",
+          undefined,
+          false,
+        );
+        body = new TextDecoder().decode(r.bytes);
+      } catch (error) {
+        // A missing robots file is not a transport/permission failure. Keep
+        // 401/403, timeouts and 5xx fail-closed; never turn those into permission.
+        if (
+          !(error instanceof Error) ||
+          !["http_404", "http_410"].includes(error.message)
+        ) throw error;
+      }
       this.robot = robotsParser(
         new URL("/robots.txt", url).href,
-        new TextDecoder().decode(r.bytes),
+        body,
       );
       this.interval = Math.max(
         2000,

@@ -153,6 +153,237 @@
       },
       "hold_reason": null,
       "adapter_scope": "limited_html_or_rss"
+    },
+    {
+      "source": "edps",
+      "source_id": "2239debc-9ce2-5cfd-99f3-c555b7cd0c94",
+      "listing": "https://www.edps.europa.eu/feed/news_en",
+      "hosts": [
+        "www.edps.europa.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "detail_empty_response_and_edge_403",
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "ec",
+      "source_id": "5e5d193b-d98c-524a-9949-c35e8938caad",
+      "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
+      "hosts": [
+        "ec.europa.eu"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "calprivacy",
+      "source_id": "b064fc3c-766d-540f-9b65-3aa71e632663",
+      "listing": "https://privacy.ca.gov/about-us/newsroom/",
+      "hosts": [
+        "privacy.ca.gov"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "oaic",
+      "source_id": "be57ed94-3216-5c00-bc22-63c1db22e5e0",
+      "listing": "https://www.oaic.gov.au/news/media-centre",
+      "hosts": [
+        "www.oaic.gov.au"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "ca-opc",
+      "source_id": "2cf414f7-68d3-59a0-98cb-8eaca785a9d0",
+      "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+      "hosts": [
+        "www.priv.gc.ca"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "hk-pcpd",
+      "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
+      "listing": "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
+      "hosts": [
+        "www.pcpd.org.hk"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "bot_challenge_not_article",
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 1
+    },
+    {
+      "source": "eu-parliament",
+      "source_id": "0d91c2b9-8884-5533-95c2-09469c6db19b",
+      "listing": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+      "hosts": [
+        "www.europarl.europa.eu"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 2
+    },
+    {
+      "source": "eu-council",
+      "source_id": "f4dc010a-0c02-5b24-8799-bd64f20b2e25",
+      "listing": "https://www.consilium.europa.eu/en/press/press-releases/",
+      "hosts": [
+        "www.consilium.europa.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "edge_403_and_cloud_robots_unavailable",
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 2
+    },
+    {
+      "source": "eur-lex",
+      "source_id": "76ed096b-7297-5e5a-b85d-bda00b89a82f",
+      "listing": "https://eur-lex.europa.eu/content/news/index.html",
+      "hosts": [
+        "eur-lex.europa.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "empty_response_no_news_body",
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 2
+    },
+    {
+      "source": "cn-cac",
+      "source_id": "d743f9ab-5194-5263-ab22-ef127336e2f2",
+      "listing": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+      "hosts": [
+        "www.cac.gov.cn"
+      ],
+      "language": "zh",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 2
+    },
+    {
+      "source": "cn-tc260",
+      "source_id": "caa6854c-3e3a-5879-bbb2-fc66b648d923",
+      "listing": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+      "hosts": [
+        "www.tc260.org.cn"
+      ],
+      "language": "zh",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_press_or_news_body",
+      "executor": "edge",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 2
     }
   ]
 }

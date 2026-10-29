@@ -1,0 +1,27 @@
+{
+  "source": "ec",
+  "source_id": "5e5d193b-d98c-524a-9949-c35e8938caad",
+  "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
+  "hosts": [
+    "ec.europa.eu"
+  ],
+  "language": "en",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "cloud-python",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 1,
+  "name": "European Commission Press Corner",
+  "publisher_id": "96191444-95f6-5553-8f3e-eb8e18ed205a",
+  "jurisdiction": "EU",
+  "publisher_type": "government",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}
