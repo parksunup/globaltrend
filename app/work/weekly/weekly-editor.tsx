@@ -18,7 +18,7 @@ export default function WeeklyEditor({candidates,initialIds,notes,issueKey,title
    setLimitMessage(false);return [...previous,id];
   });
  }
- function check(candidate:WeeklyCandidate){return <label className={styles.check}><input type="checkbox" checked={ids.includes(candidate.id)} onChange={()=>toggle(candidate.id)} aria-label={`${candidate.title} 주간호 포함`}/><span>주간호 포함</span></label>;}
+ function check(candidate:WeeklyCandidate){const checked=ids.includes(candidate.id);return <label className={styles.check}><input type="checkbox" checked={checked} disabled={!checked&&candidate.status!=='published'} onChange={()=>toggle(candidate.id)} aria-label={`${candidate.title} 주간호 포함`}/><span>{candidate.status==='published'?'주간호 포함':checked?'공개 취소됨 · 체크 해제해 제외':'공개 취소됨'}</span></label>;}
  return <form className={styles.editor} action={async form=>{setBusy(true);try{await save(form);}finally{setBusy(false);}}}>
   <input type="hidden" name="key" value={issueKey}/><input type="hidden" name="start" value={start}/><input type="hidden" name="end" value={end}/>
   {selected.map(candidate=><span key={candidate.id}><input type="hidden" name="report" value={candidate.id}/><input type="hidden" name={`reason-${candidate.id}`} value={notes[candidate.id]??weeklyPriority(candidate).reasons.join(' · ')}/></span>)}

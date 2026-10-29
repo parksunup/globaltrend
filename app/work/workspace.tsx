@@ -175,7 +175,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
               {publishedHref&&item.status==="published"&&<a href={publishedHref} target="_blank" rel="noopener noreferrer">현재 공개본 보기 ↗</a>}
               {canEdit&&item.status==="trashed"&&<button className={styles.secondary} disabled={disabled} type="button" onClick={()=>void run("restore",[item])}>자료 복원</button>}
               {canPublish&&item.status==="published"&&<button className={styles.secondary} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"unpublish",item})}>공개 취소</button>}
-              {canEdit&&item.status!=="trashed"&&<button className={styles.quietDanger} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"trash",item})}>휴지통으로 이동</button>}
+              {canEdit&&item.status!=="trashed"&&<button className={styles.quietDanger} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"trash",item})}>삭제 · 휴지통으로 이동</button>}
               {canEdit&&canSelectForPublication(item)&&<button className={styles.primary} disabled={disabled} type="button" onClick={()=>void run(canPublish?"publish":"request_publication",[item])}>{pending?"처리 중…":canPublish?item.hasUnpublishedChanges?"수정본 공개":"이 자료 공개":"관리자에게 공개 요청"}</button>}
             </div>
           </section>}
