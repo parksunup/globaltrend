@@ -11,6 +11,12 @@ test('one major topic and one optional brief are fixed while older contextual ev
  assert.match(packet.instructions,/메인 주제는 “소식 1” 한 가지/);assert.match(packet.instructions,/“소식 2” 소식 한 건만 짧게/);assert.match(packet.sourceText,/2025-01-01/);
  assert.match(makePodcastPacket({...input,brief:undefined}).instructions,/짧은 추가 소식은 없습니다/);
 });
+
+test('monthly episode identifiers support multiple numbered editions in Monday-to-Sunday weeks',()=>{
+ const monthly=makePodcastPacket({...input,issueKey:'2026-10-W3-2',weekStart:'2026-10-19',weekEnd:'2026-10-25'});
+ assert.equal(monthly.issueKey,'2026-10-W3-2');
+ assert.throws(()=>makePodcastPacket({...input,issueKey:'2026-10-W3-2',weekStart:'2026-10-18',weekEnd:'2026-10-24'}),/주간호 번호와 기간/);
+});
 test('unknown/out-of-week main dates, duplicate reports and invalid official URLs cannot create an episode',()=>{
  assert.equal(validDay('2026-02-30'),false);assert.throws(()=>makePodcastPacket({...input,main:story(1,'')}),/공식 발표일/);
  assert.throws(()=>makePodcastPacket({...input,brief:story(2,'2026-10-26')}),/공식 발표일/);

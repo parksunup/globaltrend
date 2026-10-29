@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "../../../../lib/supabase/server";
+import {monthlyWeekIssueKey,podcastEditionNumber} from "../../../../lib/weekly-label";
 
 export const runtime = "nodejs";
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
   const fileSizeBytes = Number(payload.fileSizeBytes);
   const reportIds = payload.reportIds;
 
-  if (!/^\d{4}-W(?:0[1-9]|[1-4]\d|5[0-3])$/.test(issueKey) ||
+  if (!/^\d{4}-\d{2}-W[1-5]-[1-9]\d*$/.test(issueKey) ||
       !title || title.length > 160 || description.length > 1000 ||
       !isRealDate(weekStart) || !isRealDate(weekEnd) || weekStart > weekEnd ||
       !Array.isArray(reportIds) || reportIds.length < 1 || reportIds.length > 20 ||
@@ -45,6 +46,9 @@ export async function POST(request: Request) {
       !Number.isInteger(fileSizeBytes) || fileSizeBytes < 1 || fileSizeBytes > MAX_FILE_SIZE ||
       !ALLOWED_TYPES.has(audioMimeType)) {
     return NextResponse.json({ error: "주간호 정보, 포함 동향, 오디오 파일을 확인해 주세요." }, { status: 400 });
+  }
+  if(new Date(`${weekStart}T00:00:00Z`).getUTCDay()!==1||weekEnd!==new Date(new Date(`${weekStart}T00:00:00Z`).valueOf()+6*86400000).toISOString().slice(0,10)||!issueKey.startsWith(`${monthlyWeekIssueKey(weekStart)}-`)||podcastEditionNumber(issueKey)<1){
+    return NextResponse.json({ error: "주 시작일과 회차 식별자가 일치하지 않습니다." }, { status: 400 });
   }
 
   const extension = audioMimeType === "audio/mpeg" ? "mp3" : audioMimeType === "audio/wav" ? "wav" : "m4a";

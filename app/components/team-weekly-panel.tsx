@@ -2,12 +2,13 @@
 import {useEffect,useMemo,useState} from 'react';
 import type {TeamTrend} from '../../lib/team-trends';
 import {rankWeeklyCandidates} from '../../lib/weekly-priority';
+import {monthlyWeekIssueKey} from '../../lib/weekly-label';
 import WeeklyEditor,{type WeeklyCandidate} from '../work/weekly/weekly-editor';
 import styles from './live-team-workspace.module.css';
 
 const reportId=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 function previousMonday(){const current=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Seoul'}));current.setDate(current.getDate()-((current.getDay()+6)%7)-7);return `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,'0')}-${String(current.getDate()).padStart(2,'0')}`;}
-function week(start:string){if(!/^\d{4}-\d{2}-\d{2}$/.test(start))return null;const monday=new Date(`${start}T00:00:00Z`);if(Number.isNaN(monday.valueOf())||monday.toISOString().slice(0,10)!==start||monday.getUTCDay()!==1)return null;const sunday=new Date(monday);sunday.setUTCDate(sunday.getUTCDate()+6);const thursday=new Date(monday);thursday.setUTCDate(thursday.getUTCDate()+3);const year=thursday.getUTCFullYear(),jan4=new Date(Date.UTC(year,0,4));jan4.setUTCDate(jan4.getUTCDate()-((jan4.getUTCDay()+6)%7));return {start,end:sunday.toISOString().slice(0,10),key:`${year}-W${String(1+Math.round((monday.valueOf()-jan4.valueOf())/604800000)).padStart(2,'0')}`};}
+function week(start:string){if(!/^\d{4}-\d{2}-\d{2}$/.test(start))return null;const monday=new Date(`${start}T00:00:00Z`);if(Number.isNaN(monday.valueOf())||monday.toISOString().slice(0,10)!==start||monday.getUTCDay()!==1)return null;const sunday=new Date(monday);sunday.setUTCDate(sunday.getUTCDate()+6);return {start,end:sunday.toISOString().slice(0,10),key:monthlyWeekIssueKey(start)};}
 type Issue={issue_key:string;title:string;status:string;selection_notes:{report_id:string;reason:string}[]};
 export default function TeamWeeklyPanel({trends,canManage,readOnly=false}:{trends:TeamTrend[];canManage:boolean;readOnly?:boolean}){
  const [start,setStart]=useState(previousMonday);
