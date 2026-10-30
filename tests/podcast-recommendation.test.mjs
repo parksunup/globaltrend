@@ -48,3 +48,10 @@ test('ties are deterministic and a manual choice survives changed ranking on ref
  assert.equal(resolvePodcastMain(ranked,period,{period:'other period',id:b.id}),a.id);
  assert.equal(resolvePodcastMain([],period),'');
 });
+test('a low-scoring published story remains selectable when no story reaches the recommendation threshold',()=>{
+ const quiet=story(10,{title:'개인정보 정책 토론회 개최',summary:'관련 논의 소개',details:'공식 발표 내용과 논의 배경을 설명합니다.'});
+ const ranked=rankPodcastStories([quiet],start,end);
+ assert.equal(recommendedPodcastStory(ranked),undefined);
+ assert.equal(resolvePodcastMain(ranked,period),quiet.id);
+ assert.equal(resolvePodcastMain(ranked,period,{period,id:quiet.id}),quiet.id);
+});
