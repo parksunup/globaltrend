@@ -44,6 +44,7 @@ export default function PodcastStudio(){
  const [masterStatus,setMasterStatus]=useState<'idle'|'pending'|'verified'|'failed'>('idle'),[masterOpened,setMasterOpened]=useState(false),[masterAvailable,setMasterAvailable]=useState(false);
  const [period,setPeriod]=useState<Period>(initialPeriod),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefChoice,setBriefChoice]=useState<Choice>();
  const [contextIds,setContextIds]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
+ const [connectionDiagnostics,setConnectionDiagnostics]=useState<Record<string,unknown>|null>(null);
  const [audio,setAudio]=useState<{id:string;url:string}>();
  const periodChosen=useRef(false),pendingSelection=useRef<{selection:Selection;packet:string}|null>(null),submitting=useRef(false);
  const reconnectSaving=useRef(false),reconnectQueued=useRef(false);
@@ -88,7 +89,7 @@ export default function PodcastStudio(){
    if(message?.type!=='GT_RESPONSE')return;
    const pending=bridgePending.current.get(message.requestId);if(!pending)return;
    clearTimeout(pending.timer);bridgePending.current.delete(message.requestId);
-   if(message.result?.error)pending.reject(Error(message.result.error));
+   if(message.result?.error)pending.reject(Object.assign(Error(message.result.error),{diagnostics:message.result.diagnostics}));
    else{setConnected(true);pending.resolve(message.result);}
   }
   window.addEventListener('message',onMessage);
@@ -106,12 +107,13 @@ export default function PodcastStudio(){
   try{
    await bridge({type:'GT_RECONNECT_SAVE'});
    reconnectQueued.current=true;
-   setReconnectOpened(false);setError('');
+   setReconnectOpened(false);setError('');setConnectionDiagnostics(null);
    setNotice('로그인 정보를 전달했습니다. 클라우드 연결을 확인한 뒤 제작을 이어갑니다.');
    await load(true);
   }catch(cause){
    const message=cause instanceof Error?cause.message:'로그인 완료 여부를 확인하지 못했습니다.';
    setError(message);
+   setConnectionDiagnostics((cause as Error & {diagnostics?:Record<string,unknown>})?.diagnostics??null);
   }finally{reconnectSaving.current=false;}
  }
  useEffect(()=>{
@@ -218,9 +220,10 @@ export default function PodcastStudio(){
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'NotebookLM 연결 확인 중…':'제작 후 자동으로 게시'}</button>
     {!cloudReady&&<div className={styles.actions} aria-label="Google 로그인 확인"><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>Google 로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>{setError('');setNotice('');void openReconnect(false);}}>Google 로그인 창 열기</button></div>}
     {!cloudReady&&<p role="status">연결 도구: {connected?'연결됨':'연결되지 않음'}{bridgeVersion>0?` · 버전 ${bridgeVersion}`:''}</p>}
-    {!cloudReady&&bridgeVersion>0&&bridgeVersion<9&&<p role="alert" className={styles.error}>연결 도구 업데이트(0.4.7)가 필요합니다. 아래에서 새 연결 도구를 받아 Chrome 확장 프로그램 화면에서 기존 도구를 새 파일로 교체한 뒤 새로고침해 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
+    {!cloudReady&&bridgeVersion>0&&bridgeVersion<10&&<p role="alert" className={styles.error}>연결 도구 업데이트(0.4.8)가 필요합니다. 아래에서 새 연결 도구를 받아 Chrome 확장 프로그램 화면에서 기존 도구를 새 파일로 교체한 뒤 새로고침해 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
+    {connectionDiagnostics&&<details open><summary>연결 진단 · 인증값 제외</summary><p>선택한 저장소, 조회별 쿠키 수, 필수 인증 쿠키의 유무를 표시합니다. 쿠키 값과 이메일은 포함하지 않습니다.</p><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(connectionDiagnostics,null,2)}</pre></details>}
     {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
     <details className={styles.setup}><summary>Google 로그인을 오래 유지하기 · 처음 한 번</summary><p>기관망에서 막히는 장기 로그인 발급은 클라우드에서 진행합니다. 이 브라우저에 최신 연결 도구를 설치한 뒤 아래 버튼을 누르고, 열린 Google 화면에서 팟캐스트 전용 계정으로 로그인해 주세요. 완료 후에는 클라우드가 결과를 확인합니다.</p><p role="status">{!masterAvailable?'장기 로그인 연결을 준비 중입니다.':masterStatus==='verified'?'장기 로그인 연결 완료':masterStatus==='pending'?'클라우드에서 장기 로그인 발급 중':masterStatus==='failed'?'발급 실패 · 다시 로그인해 주세요':'아직 장기 로그인 연결 전'}</p>{masterStatus!=='verified'&&<button type="button" className={styles.secondary} disabled={!masterAvailable||!connected||masterOpened||masterStatus==='pending'} onClick={()=>void bridge({type:'GT_MASTER_OPEN'}).then(()=>{setMasterOpened(true);setError('');}).catch(cause=>setError(cause.message))}>{masterOpened?'Google 로그인 확인 중…':'장기 로그인 연결'}</button>}<p>기존 도구를 설치하셨다면 새 연결 도구를 다시 내려받아 같은 폴더에 압축을 풀고 Chrome 확장 프로그램 화면에서 새로고침해 주세요.</p></details>
     {!cloudReady&&<details className={styles.setup}><summary>첫 연결 안내 · Google 로그인이 안 열릴 때</summary><ol><li>Chrome의 팟캐스트 전용 프로필에서 이 작업실을 엽니다.</li><li><a href="/api/podcast/extension">NotebookLM 연결 도구 받기</a>를 눌러 압축을 푼 뒤, Chrome의 <code>chrome://extensions</code>에서 ‘압축해제된 확장 프로그램을 로드합니다’로 폴더를 선택합니다. 처음 한 번만 하면 됩니다.</li><li>이 페이지를 새로고침하고 ‘제작 후 자동으로 게시’를 누릅니다.</li><li>NotebookLM이 바로 열리면 이미 로그인된 상태이므로 기다리세요. 로그인 화면이 열릴 때만 팟캐스트 전용 계정으로 로그인하세요. 비밀번호는 국제요정 사이트에 입력하지 않습니다.</li></ol><p>{connected?'연결 도구가 이 브라우저에 연결됐습니다.':'연결 도구가 아직 보이지 않습니다.'}</p></details>}
