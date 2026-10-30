@@ -13,7 +13,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:2,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:3,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
@@ -48,7 +48,7 @@ async function handler(message,sender) {
     const tab=await chrome.tabs.get(reconnect.notebookTabId);
     if(!['https://notebooklm.google.com','https://notebook.google.com'].includes(new URL(tab.url).origin))throw Error('Google 로그인을 끝낸 뒤 다시 눌러 주세요.');
     const results=await chrome.scripting.executeScript({target:{tabId:tab.id},func:()=>{
-      const accountText=()=>Array.from(document.querySelectorAll('a[href*="accounts.google.com"], [data-email]')).map(e=>(e.getAttribute('aria-label')??'')+' '+(e.getAttribute('data-email')??'')).join(' ');
+      const accountText=()=>Array.from(document.querySelectorAll('a[href*="accounts.google.com"], [data-email], button[aria-label*="@"], [role="button"][aria-label*="@"]')).map(e=>(e.getAttribute('aria-label')??'')+' '+(e.getAttribute('data-email')??'')).join(' ');
       const text=accountText();
       if(!text.includes('@gmail.com')){
         const button=Array.from(document.querySelectorAll('button,a,[role="button"]')).find(e=>/google account|google 계정|account menu|계정 메뉴/i.test(e.getAttribute('aria-label')??''));

@@ -39,7 +39,7 @@ async function api(body:Record<string,unknown>){
 export default function PodcastStudio(){
  const [stories,setStories]=useState<PodcastStory[]>([]),[jobs,setJobs]=useState<Job[]>([]),[episodes,setEpisodes]=useState<Episode[]>([]);
  const [login,setLogin]=useState(false),[loaded,setLoaded]=useState(false),[setup,setSetup]=useState(false),[canPublish,setCanPublish]=useState(false);
- const [cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required'),[connected,setConnected]=useState(false);
+ const [cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required'),[connected,setConnected]=useState(false),[bridgeVersion,setBridgeVersion]=useState(0);
  const [reconnectAvailable,setReconnectAvailable]=useState(false),[reconnectOpened,setReconnectOpened]=useState(false);
  const [masterStatus,setMasterStatus]=useState<'idle'|'pending'|'verified'|'failed'>('idle'),[masterOpened,setMasterOpened]=useState(false),[masterAvailable,setMasterAvailable]=useState(false);
  const [period,setPeriod]=useState<Period>(initialPeriod),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefChoice,setBriefChoice]=useState<Choice>();
@@ -81,7 +81,7 @@ export default function PodcastStudio(){
    else{setConnected(true);pending.resolve(message.result);}
   }
   window.addEventListener('message',onMessage);
-  void bridge({type:'GT_PING'}).catch(()=>{});
+  void bridge({type:'GT_PING'}).then(status=>setBridgeVersion(Number(status.version)||0)).catch(()=>{});
   return()=>{window.removeEventListener('message',onMessage);for(const item of bridgePending.current.values()){clearTimeout(item.timer);item.reject(Error('화면이 닫혔습니다.'));}bridgePending.current.clear();};
  },[]);
  useEffect(()=>{void load().catch(cause=>{setError(cause.message);setLoaded(true);});},[]);
@@ -89,6 +89,18 @@ export default function PodcastStudio(){
   const timer=setInterval(()=>void load(true).catch(cause=>setError(cause.message)),pendingSelection.current||reconnectOpened?10000:30000);
   return()=>clearInterval(timer);
  },[reconnectOpened,cloudReady]);
+ async function confirmReconnect(){
+  try{
+   await bridge({type:'GT_RECONNECT_SAVE'});
+   setReconnectOpened(false);setError('');
+   setNotice('로그인 정보를 전달했습니다. 클라우드 연결을 확인한 뒤 제작을 이어갑니다.');
+   await load(true);
+  }catch(cause){
+   const message=cause instanceof Error?cause.message:'로그인 완료 여부를 확인하지 못했습니다.';
+   setError(message);
+   if(message.includes('계정 메뉴'))setNotice('NotebookLM 오른쪽 위의 계정 아이콘을 한 번 누른 뒤 다시 확인해 주세요.');
+  }
+ }
  useEffect(()=>{
   if(!reconnectOpened||!connected||!reconnectAvailable)return;
   let stopped=false,inFlight=false;
@@ -97,8 +109,7 @@ export default function PodcastStudio(){
    if(stopped||inFlight)return;
    if(Date.now()>until){setReconnectOpened(false);pendingSelection.current=null;setError('Google 로그인 확인 시간이 지났습니다. 다시 눌러 주세요.');return;}
    inFlight=true;
-   try{await bridge({type:'GT_RECONNECT_SAVE'});if(!stopped){setReconnectOpened(false);setNotice('로그인 상태를 확인하고 있습니다. 확인되면 자동으로 제작을 시작합니다.');await load(true);}}
-   catch(cause){if(!stopped&&cause instanceof Error&&cause.message.includes('계정 메뉴'))setNotice('NotebookLM 오른쪽 위의 계정 아이콘을 한 번 눌러 주세요. 계정이 확인되면 자동으로 이어집니다.');}
+   try{if(!stopped)await confirmReconnect();}
    finally{inFlight=false;}
   }
   void check();const timer=setInterval(()=>void check(),7000);
@@ -188,6 +199,8 @@ export default function PodcastStudio(){
    <section className={styles.panel} aria-label="제작과 게시"><h2>제작과 게시</h2><p>버튼을 누르면 클라우드의 NotebookLM MCP가 자료 전달, 음성 제작, 저장, 게시를 이어서 처리합니다. 화면을 닫거나 컴퓨터를 꺼도 진행됩니다.</p>
     <p className={styles.connection} role="status">{cloudReady?'● NotebookLM 연결됨':reconnectOpened?'○ Google 로그인을 기다리는 중':cloudStatus==='needs_login'?'○ Google 로그인이 필요합니다':'○ NotebookLM 연결 확인 중'}</p>
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'Google 로그인 완료 대기 중…':'제작 후 자동으로 게시'}</button>
+    {reconnectOpened&&<div className={styles.actions}><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>void bridge({type:'GT_RECONNECT_OPEN'}).then(()=>setError('')).catch(cause=>setError(cause.message))}>Google 로그인 창 다시 열기</button></div>}
+    {reconnectOpened&&bridgeVersion>0&&bridgeVersion<3&&<p role="alert" className={styles.error}>연결 도구가 이전 버전입니다. 아래에서 새 연결 도구를 받은 뒤 Chrome 확장 프로그램 화면에서 새로고침하고, 이 페이지도 다시 열어 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
     {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
