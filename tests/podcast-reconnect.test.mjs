@@ -9,6 +9,8 @@ test('reconnection accepts only the dedicated account and required scoped sessio
  assert.equal(reconnectStorage(valid()).notebooklm.account.email,PODCAST_DEDICATED_ACCOUNT);
  assert.throws(()=>reconnectStorage({...valid(),email:'other@example.test'}),/전용/);
  assert.throws(()=>reconnectStorage({...valid(),cookies:[cookie('SID')]}),/로그인/);
+ assert.equal(reconnectStorage({...valid(),cookies:[cookie('SID'),cookie('OSID')]}).cookies.length,2);
+ assert.equal(reconnectStorage({...valid(),cookies:[cookie('SID'),cookie('APISID'),cookie('SAPISID')]}).cookies.length,3);
  const result=reconnectStorage({...valid(),cookies:[...valid().cookies,cookie('password'),cookie('SID',{domain:'.example.test'}),cookie('HSID',{path:'/other'})]});
  assert.equal(result.cookies.length,2);assert.deepEqual(result.origins,[]);
 });
@@ -114,4 +116,19 @@ test('reconnect still refuses a visibly different Google account',async()=>{
  await call('GT_RECONNECT_OPEN');
  assert.match((await call('GT_RECONNECT_SAVE')).error,/다른 Google 계정/);
  assert.equal(delivered,false);
+});
+
+test('browser reconnect passes a rotatable session without PSIDTS to cloud verification',async()=>{
+ const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered;
+ const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
+ cookies:{getAll:async()=>[cookie('SID'),cookie('OSID')]},
+ tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'}),remove:async()=>{}},
+ scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:''}];delivered=options.args[0];return[{result:{ok:true}}];}},
+ runtime:{onMessage:{addListener:fn=>listener=fn}}};
+ vm.runInNewContext(readFileSync(new URL('../extensions/notebooklm-bridge/background.js',import.meta.url),'utf8'),{chrome,URL,Error,Set,Promise,Date});
+ const sender={url:'https://globaltrend-example.vercel.app/work/podcast',tab:{id:2}};
+ const call=type=>new Promise(resolve=>listener({type},sender,resolve));
+ await call('GT_RECONNECT_OPEN');
+ assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
+ assert.equal(delivered.some(c=>c.name==='OSID'),true);
 });

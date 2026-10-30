@@ -46,7 +46,7 @@ export default function PodcastStudio(){
  const [contextIds,setContextIds]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [audio,setAudio]=useState<{id:string;url:string}>();
  const periodChosen=useRef(false),pendingSelection=useRef<{selection:Selection;packet:string}|null>(null),submitting=useRef(false);
- const reconnectSaving=useRef(false);
+ const reconnectSaving=useRef(false),reconnectQueued=useRef(false);
  const bridgePending=useRef(new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>());
 
  async function load(jobsOnly=false){
@@ -59,7 +59,13 @@ export default function PodcastStudio(){
   setSetup(result.setupRequired===true);setCanPublish(result.canPublish===true);
   if(result.stories){setStories(result.stories);if(!periodChosen.current)setPeriod(current=>latestCandidatePeriod(result.stories,current));}
   const reconnect=await fetch('/api/podcast/reconnect',{cache:'no-store'});
-  if(reconnect.ok){const status=await reconnect.json();setReconnectAvailable(status.available===true);}
+  if(reconnect.ok){
+   const status=await reconnect.json();setReconnectAvailable(status.available===true);
+   if(reconnectQueued.current&&status.result==='failed'){
+    reconnectQueued.current=false;pendingSelection.current=null;
+    setError('클라우드에서 NotebookLM 로그인을 확인하지 못했습니다. 장기 로그인 연결 상태를 확인해 주세요.');
+   }
+  }
   const master=await fetch('/api/podcast/bootstrap',{cache:'no-store'});
   setMasterAvailable(master.ok);
   if(master.ok){const status=await master.json();setMasterStatus(status.result??'idle');}
@@ -95,6 +101,7 @@ export default function PodcastStudio(){
   reconnectSaving.current=true;
   try{
    await bridge({type:'GT_RECONNECT_SAVE'});
+   reconnectQueued.current=true;
    setReconnectOpened(false);setError('');
    setNotice('로그인 정보를 전달했습니다. 클라우드 연결을 확인한 뒤 제작을 이어갑니다.');
    await load(true);
@@ -158,7 +165,7 @@ export default function PodcastStudio(){
  useEffect(()=>{
   const pending=pendingSelection.current;
   if(!pending||!cloudReady)return;
-  pendingSelection.current=null;
+  pendingSelection.current=null;reconnectQueued.current=false;
   if(!packetSignature||packetSignature!==pending.packet){setError('로그인하는 동안 후보 자료가 달라졌습니다. 다시 읽고 제작 버튼을 눌러 주세요.');return;}
   void submit(pending.selection);
  },[cloudReady,packetSignature]);
@@ -203,7 +210,7 @@ export default function PodcastStudio(){
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'NotebookLM 연결 확인 중…':'제작 후 자동으로 게시'}</button>
     {!cloudReady&&<div className={styles.actions} aria-label="Google 로그인 확인"><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>Google 로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>void start()}>Google 로그인 창 열기</button></div>}
     {!cloudReady&&<p role="status">연결 도구: {connected?'연결됨':'연결되지 않음'}{bridgeVersion>0?` · 버전 ${bridgeVersion}`:''}</p>}
-    {!cloudReady&&bridgeVersion>0&&bridgeVersion<5&&<p role="alert" className={styles.error}>연결 도구가 이전 버전입니다. 아래에서 새 연결 도구를 받은 뒤 Chrome 확장 프로그램 화면에서 새로고침하고, 이 페이지도 다시 열어 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
+    {!cloudReady&&bridgeVersion>0&&bridgeVersion<6&&<p role="alert" className={styles.error}>연결 도구가 이전 버전입니다. 아래에서 새 연결 도구를 받은 뒤 Chrome 확장 프로그램 화면에서 새로고침하고, 이 페이지도 다시 열어 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
     {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
