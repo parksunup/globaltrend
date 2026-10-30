@@ -80,6 +80,16 @@ class SessionCryptoTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             session_store.SessionVault(KEY,EMAIL,state(),token.replace(EMAIL.encode(),b'other@example.invalid'))
 
+    def test_database_master_envelope_restores_without_plaintext_in_lease(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        vault=session_store.SessionVault(KEY,EMAIL,state())
+        envelope=vault.seal_master(token)
+        with tempfile.TemporaryDirectory() as folder:
+            path=vault.restore(folder,{'version':0,'envelope':None},envelope)
+            self.assertEqual(path.with_name('master_token.json').read_bytes(),token)
+        with self.assertRaises(ValueError):
+            vault.unseal_master({**envelope,'ciphertext':'AAAA'})
+
 class SessionRunTests(unittest.IsolatedAsyncioTestCase):
     def cloud(self):
         cloud=types.SimpleNamespace(calls=[])
@@ -97,6 +107,25 @@ class SessionRunTests(unittest.IsolatedAsyncioTestCase):
             yield client
             Path(path).write_bytes(state('rotated-secret'))
         return factory
+
+    async def test_one_time_cloud_bootstrap_saves_only_encrypted_outputs(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        async def bootstrapper(**kwargs):
+            path=kwargs['storage_path']
+            path.write_bytes(state())
+            path.with_name('master_token.json').write_bytes(token)
+            return 0
+        cloud=self.cloud();captured=io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            result=await worker.run_master_bootstrap(cloud,session_store.SessionVault(KEY,EMAIL),
+                {'oauthToken':'one-use-test-secret','version':12},bootstrapper)
+        self.assertEqual(result,0)
+        saved=next(kw['data'] for action,kw in cloud.calls if action=='master_complete')
+        self.assertEqual(saved['version'],12)
+        self.assertEqual(session_store.SessionVault(KEY,EMAIL).unseal_master(saved['masterEnvelope']),token)
+        self.assertEqual(session_store.SessionVault(KEY,EMAIL).unseal(saved['sessionEnvelope'],13),state())
+        self.assertNotIn('one-use-test-secret',captured.getvalue())
+        self.assertNotIn('claim',[action for action,_ in cloud.calls])
 
     async def test_independent_runners_use_saved_rotation_and_auth_trial_cannot_claim_jobs(self):
         cloud=self.cloud(); seen=[]

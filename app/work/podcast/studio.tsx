@@ -41,6 +41,7 @@ export default function PodcastStudio(){
  const [login,setLogin]=useState(false),[loaded,setLoaded]=useState(false),[setup,setSetup]=useState(false),[canPublish,setCanPublish]=useState(false);
  const [cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required'),[connected,setConnected]=useState(false);
  const [reconnectAvailable,setReconnectAvailable]=useState(false),[reconnectOpened,setReconnectOpened]=useState(false);
+ const [masterStatus,setMasterStatus]=useState<'idle'|'pending'|'verified'|'failed'>('idle'),[masterOpened,setMasterOpened]=useState(false),[masterAvailable,setMasterAvailable]=useState(false);
  const [period,setPeriod]=useState<Period>(initialPeriod),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefChoice,setBriefChoice]=useState<Choice>();
  const [contextIds,setContextIds]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [audio,setAudio]=useState<{id:string;url:string}>();
@@ -58,6 +59,9 @@ export default function PodcastStudio(){
   if(result.stories){setStories(result.stories);if(!periodChosen.current)setPeriod(current=>latestCandidatePeriod(result.stories,current));}
   const reconnect=await fetch('/api/podcast/reconnect',{cache:'no-store'});
   if(reconnect.ok){const status=await reconnect.json();setReconnectAvailable(status.available===true);}
+  const master=await fetch('/api/podcast/bootstrap',{cache:'no-store'});
+  setMasterAvailable(master.ok);
+  if(master.ok){const status=await master.json();setMasterStatus(status.result??'idle');}
  }
  function bridge(command:Record<string,unknown>){return new Promise<any>((resolve,reject)=>{
   const requestId=crypto.randomUUID();
@@ -100,6 +104,21 @@ export default function PodcastStudio(){
   void check();const timer=setInterval(()=>void check(),7000);
   return()=>{stopped=true;clearInterval(timer);};
  },[reconnectOpened,connected,reconnectAvailable]);
+ useEffect(()=>{
+  if(!masterOpened||!connected)return;
+  let stopped=false,inFlight=false;
+  const until=Date.now()+15*60*1000;
+  async function check(){
+   if(stopped||inFlight)return;
+   if(Date.now()>until){setMasterOpened(false);setError('장기 로그인 연결 시간이 지났습니다. 다시 눌러 주세요.');return;}
+   inFlight=true;
+   try{await bridge({type:'GT_MASTER_SAVE'});if(!stopped){setMasterOpened(false);setNotice('장기 로그인 정보를 클라우드에 전달했습니다. 발급 결과를 확인하는 중입니다.');await load(true);}}
+   catch(cause){if(!stopped&&cause instanceof Error&&!cause.message.includes('기다리는 중'))setError(cause.message);}
+   finally{inFlight=false;}
+  }
+  void check();const timer=setInterval(()=>void check(),7000);
+  return()=>{stopped=true;clearInterval(timer);};
+ },[masterOpened,connected]);
 
  const ranked=rankPodcastStories(stories,period.start,period.end),candidates=ranked.map(item=>item.story);
  const periodKey=period.start+'/'+period.end;
@@ -169,9 +188,10 @@ export default function PodcastStudio(){
    <section className={styles.panel} aria-label="제작과 게시"><h2>제작과 게시</h2><p>버튼을 누르면 클라우드의 NotebookLM MCP가 자료 전달, 음성 제작, 저장, 게시를 이어서 처리합니다. 화면을 닫거나 컴퓨터를 꺼도 진행됩니다.</p>
     <p className={styles.connection} role="status">{cloudReady?'● NotebookLM 연결됨':reconnectOpened?'○ Google 로그인을 기다리는 중':cloudStatus==='needs_login'?'○ Google 로그인이 필요합니다':'○ NotebookLM 연결 확인 중'}</p>
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'Google 로그인 완료 대기 중…':'제작 후 자동으로 게시'}</button>
-    {!canPublish&&loaded&&<p>자동 게시는 운영 사이트의 작업실에서 실행할 수 있습니다.</p>}
+    {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
     {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
+    <details className={styles.setup}><summary>Google 로그인을 오래 유지하기 · 처음 한 번</summary><p>기관망에서 막히는 장기 로그인 발급은 클라우드에서 진행합니다. 이 브라우저에 최신 연결 도구를 설치한 뒤 아래 버튼을 누르고, 열린 Google 화면에서 팟캐스트 전용 계정으로 로그인해 주세요. 완료 후에는 클라우드가 결과를 확인합니다.</p><p role="status">{!masterAvailable?'장기 로그인 연결을 준비 중입니다.':masterStatus==='verified'?'장기 로그인 연결 완료':masterStatus==='pending'?'클라우드에서 장기 로그인 발급 중':masterStatus==='failed'?'발급 실패 · 다시 로그인해 주세요':'아직 장기 로그인 연결 전'}</p>{masterStatus!=='verified'&&<button type="button" className={styles.secondary} disabled={!masterAvailable||!connected||masterOpened||masterStatus==='pending'} onClick={()=>void bridge({type:'GT_MASTER_OPEN'}).then(()=>{setMasterOpened(true);setError('');}).catch(cause=>setError(cause.message))}>{masterOpened?'Google 로그인 확인 중…':'장기 로그인 연결'}</button>}<p>기존 도구를 설치하셨다면 새 연결 도구를 다시 내려받아 같은 폴더에 압축을 풀고 Chrome 확장 프로그램 화면에서 새로고침해 주세요.</p></details>
     {!cloudReady&&<details className={styles.setup}><summary>첫 연결 안내 · Google 로그인이 안 열릴 때</summary><ol><li>Chrome의 팟캐스트 전용 프로필에서 이 작업실을 엽니다.</li><li><a href="/api/podcast/extension">NotebookLM 연결 도구 받기</a>를 눌러 압축을 푼 뒤, Chrome의 <code>chrome://extensions</code>에서 ‘압축해제된 확장 프로그램을 로드합니다’로 폴더를 선택합니다. 처음 한 번만 하면 됩니다.</li><li>이 페이지를 새로고침하고 ‘제작 후 자동으로 게시’를 누릅니다.</li><li>Google 로그인 화면이 열리면 팟캐스트 전용 계정으로 로그인하고, NotebookLM 오른쪽 위 계정 아이콘을 한 번 누릅니다. 비밀번호는 국제요정 사이트에 입력하지 않습니다.</li></ol><p>{connected?'연결 도구가 이 브라우저에 연결됐습니다.':'연결 도구가 아직 보이지 않습니다.'}</p>{reconnectOpened&&<button type="button" className={styles.secondary} onClick={()=>void bridge({type:'GT_RECONNECT_SAVE'}).then(()=>load(true)).catch(cause=>setError(cause.message))}>로그인 완료 다시 확인</button>}</details>}
    </section>
    <section className={styles.panel}><h2>제작 현황</h2>{!jobs.length?<p>제작 중인 회차가 없습니다.</p>:jobs.map(job=><article className={styles.job} key={job.id}><span>{formatMonthlyWeek(job.packet.weekStart)}-{podcastEditionNumber(job.packet.issueKey)} · {labels[job.phase]??job.phase}</span><h3>{job.packet.title}</h3>{job.message&&<p>{job.message}</p>}{job.execution_mode==='browser'&&job.phase==='queued'&&<p>이전 브라우저 제작 요청입니다. 새 자동 제작은 위 버튼에서 시작해 주세요.</p>}<div className={styles.actions}>{job.audio_path&&<button disabled={busy} onClick={()=>void act(job,'listen')}>완성본 듣기</button>}{job.phase==='ready'&&canPublish&&<button disabled={busy} onClick={()=>void act(job,'publish')}>게시하기</button>}{job.phase==='published'&&<><a href="/public/weekly/podcast">공개 페이지 보기 ↗</a><button disabled={busy} onClick={()=>void act(job,'unpublish')}>게시 취소</button></>}{!['ready','published','cancelled','unpublished'].includes(job.phase)&&<button disabled={busy} onClick={()=>void act(job,'cancel')}>제작 중단</button>}</div>{audio?.id===job.id&&<audio controls src={audio.url} preload="none"/>}</article>)}</section>

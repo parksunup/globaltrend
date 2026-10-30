@@ -14,6 +14,28 @@ async function handler(message,sender) {
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
   if (message.type==='GT_PING' && isApp) return {ok:true,version:2,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_MASTER_OPEN' && isApp) {
+    if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
+    await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
+    const tab=await chrome.tabs.create({url:'https://accounts.google.com/EmbeddedSetup',active:true});
+    await chrome.storage.local.set({masterBootstrap:{origin,appTabId:sender.tab.id,googleTabId:tab.id,openedAt:Date.now()}});
+    return {ok:true};
+  }
+  if (message.type==='GT_MASTER_SAVE' && isApp) {
+    const {masterBootstrap}=await chrome.storage.local.get('masterBootstrap');
+    if(!masterBootstrap||masterBootstrap.origin!==origin||masterBootstrap.appTabId!==sender.tab.id||Date.now()-masterBootstrap.openedAt>900000)throw Error('먼저 장기 로그인 연결을 눌러 주세요.');
+    await chrome.tabs.get(masterBootstrap.googleTabId);
+    const cookie=await chrome.cookies.get({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
+    if(!cookie?.value||cookie.value.length<20||cookie.value.length>4096)throw Error('Google 로그인 완료를 기다리는 중입니다.');
+    const reply=await chrome.scripting.executeScript({target:{tabId:sender.tab.id},func:async token=>{
+      const response=await fetch('/api/podcast/bootstrap',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({oauthToken:token})});
+      const body=await response.json();return response.ok?{ok:true}:{error:body.error??'장기 로그인 연결 실패'};
+    },args:[cookie.value]});
+    const result=reply[0]?.result;if(!result?.ok)throw Error(result?.error??'장기 로그인 요청을 확인하지 못했습니다.');
+    await chrome.storage.local.remove('masterBootstrap');
+    await chrome.tabs.remove(tab.id);
+    return {ok:true};
+  }
   if (message.type==='GT_RECONNECT_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구를 팟캐스트 전용 Chrome 프로필에 설치해 주세요.');
     const tab=await chrome.tabs.create({url:'https://notebooklm.google.com/',active:true});

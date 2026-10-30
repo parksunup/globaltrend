@@ -35,6 +35,3 @@ export async function podcastStories(db: Awaited<ReturnType<typeof podcastAdmin>
   }
   return ids ? ids.map(id => {const story = result.find(row => row.id === id); if (!story) throw Error('선택한 동향이 공개 상태가 아닙니다.'); return story;}) : result;
 }
-export function productionPublication() {
-  if (process.env.VERCEL_ENV === 'preview' || process.env.NODE_ENV !== 'production') throw Object.assign(Error('오디오는 준비됐습니다. 실제 공개는 운영 사이트에서 실행해 주세요.'), {status:409});
-}

@@ -12,6 +12,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 MAX_STATE_BYTES = 131072
 CONTEXT = b"globaltrend:podcast:dedicated-session:v1:"
+MASTER_CONTEXT = b"globaltrend:podcast:dedicated-master:v1"
 
 
 def validate_state(raw, expected_email):
@@ -93,7 +94,31 @@ class SessionVault:
         except Exception:
             raise ValueError("encrypted session validation failed") from None
 
-    def restore(self, folder, lease):
+    def seal_master(self, raw):
+        raw = self._validate_master_token(raw)
+        if raw is None:
+            raise ValueError("dedicated master token missing")
+        nonce = os.urandom(12)
+        ciphertext = AESGCM(self.key).encrypt(nonce, raw, MASTER_CONTEXT)
+        return {"format": 1, "key_id": self.key_id,
+                "nonce": base64.b64encode(nonce).decode(),
+                "ciphertext": base64.b64encode(ciphertext).decode()}
+
+    def unseal_master(self, envelope):
+        try:
+            if not isinstance(envelope, dict) or set(envelope) != {"format", "key_id", "nonce", "ciphertext"}:
+                raise ValueError()
+            if envelope["format"] != 1 or envelope["key_id"] != self.key_id:
+                raise ValueError()
+            nonce = base64.b64decode(envelope["nonce"], validate=True)
+            ciphertext = base64.b64decode(envelope["ciphertext"], validate=True)
+            if len(nonce) != 12 or len(ciphertext) > 8208:
+                raise ValueError()
+            return self._validate_master_token(AESGCM(self.key).decrypt(nonce, ciphertext, MASTER_CONTEXT))
+        except Exception:
+            raise ValueError("encrypted master token validation failed") from None
+
+    def restore(self, folder, lease, master_envelope=None):
         if lease.get("recovery") is not None:
             raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
         elif lease.get("envelope") is None:
@@ -110,11 +135,12 @@ class SessionVault:
         fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         with os.fdopen(fd, "wb") as handle:
             handle.write(raw)
-        if self.master_token is not None:
+        master_token = self.unseal_master(master_envelope) if master_envelope is not None else self.master_token
+        if master_token is not None:
             token_path = path.parent / "master_token.json"
             token_fd = os.open(token_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
             with os.fdopen(token_fd, "wb") as handle:
-                handle.write(self.master_token)
+                handle.write(master_token)
         # Restoring a fresh file must not fool NotebookLM's mtime guard.
         os.utime(path, (1, 1))
         return path
