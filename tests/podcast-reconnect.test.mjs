@@ -85,3 +85,33 @@ test('reconnect recognises the dedicated account shown inside a Google account f
  assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
  assert.equal(delivered,true);
 });
+
+test('reconnect accepts an already signed-in NotebookLM tab when its account label is hidden',async()=>{
+ const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered=false;
+ const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
+ cookies:{getAll:async()=>valid().cookies},
+ tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'}),remove:async()=>{}},
+ scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:''}];delivered=true;return[{result:{ok:true}}];}},
+ runtime:{onMessage:{addListener:fn=>listener=fn}}};
+ vm.runInNewContext(readFileSync(new URL('../extensions/notebooklm-bridge/background.js',import.meta.url),'utf8'),{chrome,URL,Error,Set,Promise,Date});
+ const sender={url:'https://globaltrend-example.vercel.app/work/podcast',tab:{id:2}};
+ const call=type=>new Promise(resolve=>listener({type},sender,resolve));
+ await call('GT_RECONNECT_OPEN');
+ assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
+ assert.equal(delivered,true);
+});
+
+test('reconnect still refuses a visibly different Google account',async()=>{
+ const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered=false;
+ const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value)}},
+ cookies:{getAll:async()=>valid().cookies},
+ tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'})},
+ scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:'other@gmail.com'}];delivered=true;return[{result:{ok:true}}];}},
+ runtime:{onMessage:{addListener:fn=>listener=fn}}};
+ vm.runInNewContext(readFileSync(new URL('../extensions/notebooklm-bridge/background.js',import.meta.url),'utf8'),{chrome,URL,Error,Set,Promise,Date});
+ const sender={url:'https://globaltrend-example.vercel.app/work/podcast',tab:{id:2}};
+ const call=type=>new Promise(resolve=>listener({type},sender,resolve));
+ await call('GT_RECONNECT_OPEN');
+ assert.match((await call('GT_RECONNECT_SAVE')).error,/다른 Google 계정/);
+ assert.equal(delivered,false);
+});
