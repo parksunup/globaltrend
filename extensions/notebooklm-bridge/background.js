@@ -9,42 +9,55 @@ async function appRpc(job,method,payload) {
   return chrome.tabs.sendMessage(job.appTabId,{type:'GT_RPC',jobId:job.id,method,payload});
 }
 async function googleCookiesForTab(tabId) {
-  const stores=chrome.cookies.getAllCookieStores?await chrome.cookies.getAllCookieStores():[];
+  // Metadata only: never put cookie values, page text or account addresses in diagnostics.
+  const diagnostics={stage:'cookie_lookup',bridge:10,queries:[],stores:[],partition:'unavailable'};
+  diagnostics.browser=typeof navigator!=='undefined'?(navigator.userAgent.match(/(?:Chrome|Chromium|Edg)\/[\d.]+/g)??[]):[];
+  if(chrome.permissions?.contains)diagnostics.googleHostPermission=await chrome.permissions.contains({origins:['https://*.google.com/*']});
+  let stores=[];
+  try{stores=chrome.cookies.getAllCookieStores?await chrome.cookies.getAllCookieStores():[];}
+  catch{diagnostics.storeLookup='failed';}
+  diagnostics.stores=stores.map(store=>({id:store.id,containsNotebookTab:store.tabIds.includes(tabId)}));
   const storeId=stores.find(store=>store.tabIds.includes(tabId))?.id;
+  diagnostics.selectedStore=storeId??'default';
   const details=storeId?{storeId}:{};
-  const urls=['https://accounts.google.com/','https://notebooklm.google.com/','https://notebook.google.com/','https://google.com/'];
   let partitionKey;
   try {
-    if(chrome.cookies.getPartitionKey)partitionKey=await chrome.cookies.getPartitionKey({tabId,frameId:0});
-  } catch {/* Older Chrome versions may not expose partition keys. */}
+    if(chrome.cookies.getPartitionKey){partitionKey=await chrome.cookies.getPartitionKey({tabId,frameId:0});diagnostics.partition='available';}
+  }catch{diagnostics.partition='lookup_failed';}
   const batches=[];
-  if(partitionKey){
+  async function query(filter,partitioned=false){
+    const entry={filter:filter.url??'domain:google.com',partitioned,count:0,authNames:[]};
+    diagnostics.queries.push(entry);
     try{
-      batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url,partitionKey}))));
-    }catch{
-      // Some Chrome builds expose getPartitionKey but reject partitionKey in
-      // getAll(). A partition query is best-effort; it must never block the
-      // ordinary cookie-store lookup below.
-      batches.length=0;
+      const result=await chrome.cookies.getAll({...details,...filter,...(partitioned?{partitionKey}:{})});
+      entry.count=result.length;
+      entry.authNames=[...new Set(result.filter(cookie=>['SID','OSID','APISID','SAPISID','__Secure-1PSIDTS'].includes(cookie.name)).map(cookie=>cookie.name))];
+      batches.push(result);
+    }catch(error){
+      // Do not forward arbitrary browser errors that might contain credentials.
+      entry.error=String(error?.message??'').includes('partitionKey')?'partition_parameter_rejected':'cookie_query_failed';
     }
   }
-  // Prefer partitioned cookies when supported, then fall back to ordinary
-  // Google cookies. An unsupported partition query must not abort reconnection.
-  batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url}))));
+  if(partitionKey)await query({domain:'google.com'},true);
+  // A domain lookup avoids URL/path matching excluding an existing cookie.
+  await query({domain:'google.com'});
+  for(const url of ['https://accounts.google.com/','https://notebooklm.google.com/','https://notebook.google.com/','https://google.com/'])await query({url});
   const seen=new Set();
-  return batches.flat().filter(cookie=>{
+  const cookies=batches.flat().filter(cookie=>{
     const key=[cookie.name,cookie.domain,cookie.path,cookie.storeId??storeId??''].join('|');
-    if(seen.has(key))return false;
-    seen.add(key);
-    return true;
+    if(seen.has(key))return false;seen.add(key);return true;
   });
+  diagnostics.totalUnique=cookies.length;
+  diagnostics.authCookies=cookies.filter(cookie=>['SID','OSID','APISID','SAPISID','__Secure-1PSIDTS'].includes(cookie.name)).map(cookie=>({name:cookie.name,domain:cookie.domain,path:cookie.path,hasValue:typeof cookie.value==='string'&&cookie.value.length>0}));
+  cookies.diagnostics=diagnostics;
+  return cookies;
 }
 async function handler(message,sender) {
   const {allowedOrigins=[]}=await chrome.storage.local.get('allowedOrigins');
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:9,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:10,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
@@ -93,9 +106,11 @@ async function handler(message,sender) {
     if(emails.length>0&&(emails.length!==1||emails[0]!=='psunup@gmail.com'))throw Error('NotebookLM에 다른 Google 계정이 표시됩니다. 팟캐스트 전용 계정으로 전환해 주세요.');
     const names=['SID','HSID','SSID','APISID','SAPISID','LSID','OSID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
     const allowedDomains=['google.com','accounts.google.com','notebooklm.google.com','notebook.google.com'];
-    const cookies=(await googleCookiesForTab(tab.id)).filter(c=>names.includes(c.name)&&allowedDomains.includes(c.domain.replace(/^\./,''))&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
+    const captured=await googleCookiesForTab(tab.id);
+    const diagnostics=captured.diagnostics;
+    const cookies=captured.filter(c=>names.includes(c.name)&&allowedDomains.includes(c.domain.replace(/^\./,''))&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
     const cookieNames=new Set(cookies.map(cookie=>cookie.name));
-    if(!cookieNames.has('SID'))throw Error('이 Chrome 프로필에서 Google 로그인 세션을 찾지 못했습니다. NotebookLM을 연 프로필과 작업실 프로필이 같은지 확인해 주세요.');
+    if(!cookieNames.has('SID')){const error=Error('Google 인증 쿠키를 조회하지 못했습니다. 아래 연결 진단에서 조회 단계별 결과를 확인할 수 있습니다.');error.diagnostics={...diagnostics,stage:'required_cookie_missing',acceptedCookieNames:[...cookieNames]};throw error;}
     if(!cookieNames.has('__Secure-1PSIDTS')&&!cookieNames.has('OSID')&&!(cookieNames.has('APISID')&&cookieNames.has('SAPISID')))throw Error('Google 로그인은 확인했지만 NotebookLM 자동 제작에 필요한 인증 쿠키가 부족합니다. 아래 장기 로그인 연결을 사용해 주세요.');
     const reply=await chrome.scripting.executeScript({target:{tabId:sender.tab.id},func:async cookies=>{const r=await fetch('/api/podcast/reconnect',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'psunup@gmail.com',cookies})});const body=await r.json();return r.ok?{ok:true}:{error:body.error??'연결 실패'};},args:[cookies]});
     const result=reply[0]?.result;if(!result?.ok)throw Error(result?.error??'연결 결과를 확인하지 못했습니다.');
@@ -147,4 +162,4 @@ async function handler(message,sender) {
   }
   throw Error('지원하지 않는 연결 명령입니다.');
 }
-chrome.runtime.onMessage.addListener((message,sender,reply)=>{handler(message,sender).then(reply,error=>reply({error:error.message}));return true;});
+chrome.runtime.onMessage.addListener((message,sender,reply)=>{handler(message,sender).then(reply,error=>reply({error:error.message,...(error.diagnostics?{diagnostics:error.diagnostics}:{})}));return true;});
