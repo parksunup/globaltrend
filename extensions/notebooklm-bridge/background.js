@@ -13,7 +13,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:3,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:4,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
