@@ -152,3 +152,27 @@ test('browser reconnect passes a rotatable session without PSIDTS to cloud verif
  assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
  assert.equal(delivered.some(c=>c.name==='OSID'),true);
 });
+
+
+test('reconnect falls back to ordinary cookies when Chrome rejects partitionKey in getAll',async()=>{
+ const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered,partitionReads=0,ordinaryReads=0;
+ const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
+ cookies:{
+  getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],
+  getPartitionKey:async()=>({topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false}),
+  getAll:async details=>{
+   if(details.partitionKey){partitionReads++;throw new TypeError("Unexpected property: 'partitionKey'.");}
+   ordinaryReads++;
+   return details.storeId==='notebook-profile'&&details.url==='https://accounts.google.com/'?valid().cookies:[];
+  }
+ },
+ tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'}),remove:async()=>{}},
+ scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:''}];delivered=options.args[0];return[{result:{ok:true}}];}},
+ runtime:{onMessage:{addListener:fn=>listener=fn}}};
+ vm.runInNewContext(readFileSync(new URL('../extensions/notebooklm-bridge/background.js',import.meta.url),'utf8'),{chrome,URL,Error,Set,Promise,Date});
+ const sender={url:'https://globaltrend-example.vercel.app/work/podcast',tab:{id:2}};
+ const call=type=>new Promise(resolve=>listener({type},sender,resolve));
+ await call('GT_RECONNECT_OPEN');
+ assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
+ assert.equal(partitionReads,4);assert.equal(ordinaryReads,4);assert.equal(delivered.length,2);
+});
