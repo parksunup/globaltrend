@@ -46,6 +46,7 @@ export default function PodcastStudio(){
  const [contextIds,setContextIds]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [audio,setAudio]=useState<{id:string;url:string}>();
  const periodChosen=useRef(false),pendingSelection=useRef<{selection:Selection;packet:string}|null>(null),submitting=useRef(false);
+ const reconnectSaving=useRef(false);
  const bridgePending=useRef(new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>());
 
  async function load(jobsOnly=false){
@@ -90,6 +91,8 @@ export default function PodcastStudio(){
   return()=>clearInterval(timer);
  },[reconnectOpened,cloudReady]);
  async function confirmReconnect(){
+  if(reconnectSaving.current)return;
+  reconnectSaving.current=true;
   try{
    await bridge({type:'GT_RECONNECT_SAVE'});
    setReconnectOpened(false);setError('');
@@ -99,7 +102,7 @@ export default function PodcastStudio(){
    const message=cause instanceof Error?cause.message:'로그인 완료 여부를 확인하지 못했습니다.';
    setError(message);
    if(message.includes('계정 메뉴'))setNotice('NotebookLM 오른쪽 위의 계정 아이콘을 한 번 누른 뒤 다시 확인해 주세요.');
-  }
+  }finally{reconnectSaving.current=false;}
  }
  useEffect(()=>{
   if(!reconnectOpened||!connected||!reconnectAvailable)return;
