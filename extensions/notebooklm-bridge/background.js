@@ -13,7 +13,18 @@ async function googleCookiesForTab(tabId) {
   const storeId=stores.find(store=>store.tabIds.includes(tabId))?.id;
   const details=storeId?{storeId}:{};
   const urls=['https://accounts.google.com/','https://notebooklm.google.com/','https://notebook.google.com/','https://google.com/'];
-  const batches=await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url})));
+  let partitionKey;
+  try {
+    if(chrome.cookies.getPartitionKey)partitionKey=await chrome.cookies.getPartitionKey({tabId,frameId:0});
+  } catch {/* Older Chrome versions may not expose partition keys. */}
+  const batches=[];
+  if(partitionKey){
+    batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url,partitionKey}))));
+  }
+  // Chrome's cookies API reads only unpartitioned cookies unless partitionKey
+  // is supplied. Keep the active NotebookLM partition first, then fall back to
+  // ordinary Google cookies if a name/domain/path exists in both stores.
+  batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url}))));
   const seen=new Set();
   return batches.flat().filter(cookie=>{
     const key=[cookie.name,cookie.domain,cookie.path,cookie.storeId??storeId??''].join('|');
@@ -27,7 +38,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:7,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:8,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});

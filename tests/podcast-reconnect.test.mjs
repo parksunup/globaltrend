@@ -51,7 +51,7 @@ test('paired reconnect uses its exact tab, filters cookies, closes capture tab a
 test('reconnect reads the NotebookLM tab cookie store and Google account host',async()=>{
  const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered,queries=[];
  const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
- cookies:{getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],getAll:async details=>{queries.push(details);return details.storeId==='notebook-profile'&&details.url==='https://accounts.google.com/'?valid().cookies:[];}},
+ cookies:{getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],getPartitionKey:async details=>{assert.equal(details.tabId,77);assert.equal(details.frameId,0);return {topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false};},getAll:async details=>{queries.push(details);return details.storeId==='notebook-profile'&&details.partitionKey?.topLevelSite==='https://notebooklm.google.com'&&details.url==='https://accounts.google.com/'?valid().cookies:[];}},
  tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'}),remove:async()=>{}},
  scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:''}];delivered=options.args[0];return[{result:{ok:true}}];}},
  runtime:{onMessage:{addListener:fn=>listener=fn}}};
@@ -60,8 +60,10 @@ test('reconnect reads the NotebookLM tab cookie store and Google account host',a
  const call=type=>new Promise(resolve=>listener({type},sender,resolve));
  await call('GT_RECONNECT_OPEN');
  assert.equal((await call('GT_RECONNECT_SAVE')).ok,true);
- assert.equal(queries.length,4);
+ assert.equal(queries.length,8);
  assert.equal(queries.every(query=>query.storeId==='notebook-profile'),true);
+ assert.equal(queries.slice(0,4).every(query=>query.partitionKey?.topLevelSite==='https://notebooklm.google.com'),true);
+ assert.equal(queries.slice(4).every(query=>!query.partitionKey),true);
  assert.equal(delivered.length,2);
 });
 
