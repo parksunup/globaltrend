@@ -19,11 +19,17 @@ async function googleCookiesForTab(tabId) {
   } catch {/* Older Chrome versions may not expose partition keys. */}
   const batches=[];
   if(partitionKey){
-    batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url,partitionKey}))));
+    try{
+      batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url,partitionKey}))));
+    }catch{
+      // Some Chrome builds expose getPartitionKey but reject partitionKey in
+      // getAll(). A partition query is best-effort; it must never block the
+      // ordinary cookie-store lookup below.
+      batches.length=0;
+    }
   }
-  // Chrome's cookies API reads only unpartitioned cookies unless partitionKey
-  // is supplied. Keep the active NotebookLM partition first, then fall back to
-  // ordinary Google cookies if a name/domain/path exists in both stores.
+  // Prefer partitioned cookies when supported, then fall back to ordinary
+  // Google cookies. An unsupported partition query must not abort reconnection.
   batches.push(...await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url}))));
   const seen=new Set();
   return batches.flat().filter(cookie=>{
