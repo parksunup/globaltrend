@@ -8,12 +8,26 @@ function validPacket(job) {
 async function appRpc(job,method,payload) {
   return chrome.tabs.sendMessage(job.appTabId,{type:'GT_RPC',jobId:job.id,method,payload});
 }
+async function googleCookiesForTab(tabId) {
+  const stores=chrome.cookies.getAllCookieStores?await chrome.cookies.getAllCookieStores():[];
+  const storeId=stores.find(store=>store.tabIds.includes(tabId))?.id;
+  const details=storeId?{storeId}:{};
+  const urls=['https://accounts.google.com/','https://notebooklm.google.com/','https://notebook.google.com/','https://google.com/'];
+  const batches=await Promise.all(urls.map(url=>chrome.cookies.getAll({...details,url})));
+  const seen=new Set();
+  return batches.flat().filter(cookie=>{
+    const key=[cookie.name,cookie.domain,cookie.path,cookie.storeId??storeId??''].join('|');
+    if(seen.has(key))return false;
+    seen.add(key);
+    return true;
+  });
+}
 async function handler(message,sender) {
   const {allowedOrigins=[]}=await chrome.storage.local.get('allowedOrigins');
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:6,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:7,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
@@ -61,7 +75,8 @@ async function handler(message,sender) {
     const emails=[...new Set(text.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)??[])];
     if(emails.length>0&&(emails.length!==1||emails[0]!=='psunup@gmail.com'))throw Error('NotebookLM에 다른 Google 계정이 표시됩니다. 팟캐스트 전용 계정으로 전환해 주세요.');
     const names=['SID','HSID','SSID','APISID','SAPISID','LSID','OSID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
-    const cookies=(await chrome.cookies.getAll({domain:'google.com'})).filter(c=>names.includes(c.name)&&['.google.com','google.com','accounts.google.com','notebooklm.google.com','notebook.google.com'].includes(c.domain)&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
+    const allowedDomains=['google.com','accounts.google.com','notebooklm.google.com','notebook.google.com'];
+    const cookies=(await googleCookiesForTab(tab.id)).filter(c=>names.includes(c.name)&&allowedDomains.includes(c.domain.replace(/^\./,''))&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
     const cookieNames=new Set(cookies.map(cookie=>cookie.name));
     if(!cookieNames.has('SID'))throw Error('이 Chrome 프로필에서 Google 로그인 세션을 찾지 못했습니다. NotebookLM을 연 프로필과 작업실 프로필이 같은지 확인해 주세요.');
     if(!cookieNames.has('__Secure-1PSIDTS')&&!cookieNames.has('OSID')&&!(cookieNames.has('APISID')&&cookieNames.has('SAPISID')))throw Error('Google 로그인은 확인했지만 NotebookLM 자동 제작에 필요한 인증 쿠키가 부족합니다. 아래 장기 로그인 연결을 사용해 주세요.');

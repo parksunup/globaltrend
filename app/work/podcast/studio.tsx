@@ -80,7 +80,11 @@ export default function PodcastStudio(){
   function onMessage(event:MessageEvent){
    if(event.source!==window||event.origin!==location.origin)return;
    const message=event.data;
-   if(message?.type==='GT_CONNECTED'){setConnected(true);return;}
+   if(message?.type==='GT_CONNECTED'){
+    setConnected(true);
+    void bridge({type:'GT_PING'}).then(status=>setBridgeVersion(Number(status.version)||0)).catch(()=>{});
+    return;
+   }
    if(message?.type!=='GT_RESPONSE')return;
    const pending=bridgePending.current.get(message.requestId);if(!pending)return;
    clearTimeout(pending.timer);bridgePending.current.delete(message.requestId);
@@ -169,15 +173,19 @@ export default function PodcastStudio(){
   if(!packetSignature||packetSignature!==pending.packet){setError('로그인하는 동안 후보 자료가 달라졌습니다. 다시 읽고 제작 버튼을 눌러 주세요.');return;}
   void submit(pending.selection);
  },[cloudReady,packetSignature]);
+ async function openReconnect(continueProduction:boolean){
+  if(!reconnectAvailable){pendingSelection.current=null;setError('NotebookLM 연결 기능이 준비되지 않았습니다. 잠시 후 다시 열어 주세요.');return;}
+  if(!connected){pendingSelection.current=null;setError('처음 한 번은 이 브라우저에 연결 도구를 설치해야 합니다. 아래 ‘첫 연결 안내’를 열어 주세요.');return;}
+  if(!continueProduction)pendingSelection.current=null;
+  try{await bridge({type:'GT_RECONNECT_OPEN'});setReconnectOpened(true);setNotice('NotebookLM에 이미 로그인되어 있으면 연결을 자동 확인합니다. 로그인 화면이 나오면 전용 계정으로 로그인해 주세요.');}
+  catch(cause){pendingSelection.current=null;setError(cause instanceof Error?cause.message:'Google 로그인 화면을 열지 못했습니다.');}
+ }
  async function start(){
   if(!packet||busy||!canPublish)return;
   setError('');setNotice('');
   if(cloudReady){await submit(selection);return;}
-  if(!reconnectAvailable){setError('NotebookLM 연결 기능이 준비되지 않았습니다. 잠시 후 다시 열어 주세요.');return;}
-  if(!connected){setError('처음 한 번은 이 브라우저에 연결 도구를 설치해야 합니다. 아래 ‘첫 연결 안내’를 열어 주세요.');return;}
   pendingSelection.current={selection,packet:packetSignature};
-  try{await bridge({type:'GT_RECONNECT_OPEN'});setReconnectOpened(true);setNotice('NotebookLM에 이미 로그인되어 있으면 연결을 자동 확인합니다. 로그인 화면이 나오면 전용 계정으로 로그인해 주세요.');}
-  catch(cause){pendingSelection.current=null;setError(cause instanceof Error?cause.message:'Google 로그인 화면을 열지 못했습니다.');}
+  await openReconnect(true);
  }
  async function act(job:Job,action:'cancel'|'listen'|'publish'|'unpublish'){
   setBusy(true);setError('');
@@ -208,7 +216,7 @@ export default function PodcastStudio(){
    <section className={styles.panel} aria-label="제작과 게시"><h2>제작과 게시</h2><p>버튼을 누르면 클라우드의 NotebookLM MCP가 자료 전달, 음성 제작, 저장, 게시를 이어서 처리합니다. 화면을 닫거나 컴퓨터를 꺼도 진행됩니다.</p>
     <p className={styles.connection} role="status">{cloudReady?'● NotebookLM 연결됨':reconnectOpened?'○ NotebookLM 로그인 확인 중':cloudStatus==='needs_login'?'○ Google 로그인이 필요합니다':'○ NotebookLM 연결 확인 중'}</p>
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'NotebookLM 연결 확인 중…':'제작 후 자동으로 게시'}</button>
-    {!cloudReady&&<div className={styles.actions} aria-label="Google 로그인 확인"><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>Google 로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>void start()}>Google 로그인 창 열기</button></div>}
+    {!cloudReady&&<div className={styles.actions} aria-label="Google 로그인 확인"><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>Google 로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>{setError('');setNotice('');void openReconnect(false);}}>Google 로그인 창 열기</button></div>}
     {!cloudReady&&<p role="status">연결 도구: {connected?'연결됨':'연결되지 않음'}{bridgeVersion>0?` · 버전 ${bridgeVersion}`:''}</p>}
     {!cloudReady&&bridgeVersion>0&&bridgeVersion<6&&<p role="alert" className={styles.error}>연결 도구가 이전 버전입니다. 아래에서 새 연결 도구를 받은 뒤 Chrome 확장 프로그램 화면에서 새로고침하고, 이 페이지도 다시 열어 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
