@@ -13,7 +13,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:4,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:5,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
@@ -47,7 +47,8 @@ async function handler(message,sender) {
     if(!reconnect||reconnect.origin!==origin||reconnect.appTabId!==sender.tab.id||Date.now()-reconnect.openedAt>900000)throw Error('먼저 Google 로그인 열기를 눌러 주세요.');
     const tab=await chrome.tabs.get(reconnect.notebookTabId);
     if(!['https://notebooklm.google.com','https://notebook.google.com'].includes(new URL(tab.url).origin))throw Error('Google 로그인을 끝낸 뒤 다시 눌러 주세요.');
-    const results=await chrome.scripting.executeScript({target:{tabId:tab.id,allFrames:true},func:()=>{
+    let results=[];
+    try{results=await chrome.scripting.executeScript({target:{tabId:tab.id,allFrames:true},func:()=>{
       const accountText=()=>Array.from(document.querySelectorAll('a[href*="accounts.google.com"], [data-email], button[aria-label*="@"], [role="button"][aria-label*="@"]')).map(e=>(e.getAttribute('aria-label')??'')+' '+(e.getAttribute('data-email')??'')).join(' ');
       const text=accountText();
       if(!text.includes('@gmail.com')){
@@ -55,12 +56,13 @@ async function handler(message,sender) {
         button?.click();
       }
       return text;
-    }});
+    }});}catch{/* Google account frames may disallow script injection. The cloud verifies the session. */}
     const text=results.map(frame=>typeof frame.result==='string'?frame.result:'').join(' ');
     const emails=[...new Set(text.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)??[])];
-    if(emails.length!==1||emails[0]!=='psunup@gmail.com')throw Error('다른 Google 계정이 없는 전용 프로필에서 psunup@gmail.com으로 로그인하고, NotebookLM 오른쪽 위 계정 메뉴를 연 뒤 다시 눌러 주세요.');
+    if(emails.length>0&&(emails.length!==1||emails[0]!=='psunup@gmail.com'))throw Error('NotebookLM에 다른 Google 계정이 표시됩니다. 팟캐스트 전용 계정으로 전환해 주세요.');
     const names=['SID','HSID','SSID','APISID','SAPISID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
     const cookies=(await chrome.cookies.getAll({domain:'google.com'})).filter(c=>names.includes(c.name)&&['.google.com','google.com','notebooklm.google.com','notebook.google.com'].includes(c.domain)&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
+    if(!['SID','__Secure-1PSIDTS'].every(name=>cookies.some(cookie=>cookie.name===name)))throw Error('NotebookLM 로그인 세션이 확인되지 않았습니다. 전용 계정으로 로그인해 주세요.');
     const reply=await chrome.scripting.executeScript({target:{tabId:sender.tab.id},func:async cookies=>{const r=await fetch('/api/podcast/reconnect',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'psunup@gmail.com',cookies})});const body=await r.json();return r.ok?{ok:true}:{error:body.error??'연결 실패'};},args:[cookies]});
     const result=reply[0]?.result;if(!result?.ok)throw Error(result?.error??'연결 결과를 확인하지 못했습니다.');
     await chrome.storage.local.remove('reconnect');
