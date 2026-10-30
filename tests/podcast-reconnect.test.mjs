@@ -51,7 +51,7 @@ test('paired reconnect uses its exact tab, filters cookies, closes capture tab a
 test('reconnect reads the NotebookLM tab cookie store and Google account host',async()=>{
  const state={allowedOrigins:['https://globaltrend-example.vercel.app']};let listener,delivered,queries=[];
  const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
- cookies:{getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],getPartitionKey:async details=>{assert.equal(details.tabId,77);assert.equal(details.frameId,0);return {topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false};},getAll:async details=>{queries.push(details);return details.storeId==='notebook-profile'&&details.partitionKey?.topLevelSite==='https://notebooklm.google.com'&&details.domain==='google.com'?valid().cookies:[];}},
+ cookies:{getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],getPartitionKey:async details=>{assert.equal(details.tabId,77);assert.equal(details.frameId,0);return {partitionKey:{topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false}};},getAll:async details=>{queries.push(details);return details.storeId==='notebook-profile'&&details.partitionKey?.topLevelSite==='https://notebooklm.google.com'&&details.domain==='google.com'?valid().cookies:[];}},
  tabs:{create:async()=>({id:77}),get:async()=>({id:77,url:'https://notebooklm.google.com/'}),remove:async()=>{}},
  scripting:{executeScript:async options=>{if(options.target.tabId===77)return[{result:''}];delivered=options.args[0];return[{result:{ok:true}}];}},
  runtime:{onMessage:{addListener:fn=>listener=fn}}};
@@ -159,7 +159,7 @@ test('reconnect falls back to ordinary cookies when Chrome rejects partitionKey 
  const chrome={storage:{local:{get:async key=>({[key]:state[key]}),set:async value=>Object.assign(state,value),remove:async key=>{delete state[key];}}},
  cookies:{
   getAllCookieStores:async()=>[{id:'default',tabIds:[2]},{id:'notebook-profile',tabIds:[77]}],
-  getPartitionKey:async()=>({topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false}),
+  getPartitionKey:async()=>({partitionKey:{topLevelSite:'https://notebooklm.google.com',hasCrossSiteAncestor:false}}),
   getAll:async details=>{
    if(details.partitionKey){partitionReads++;throw new TypeError("Unexpected property: 'partitionKey'.");}
    ordinaryReads++;
@@ -181,7 +181,7 @@ test('missing-session diagnostics distinguish query rejection and filtering with
  let listener;
  const state={allowedOrigins:[],reconnect:{origin:'https://globaltrend-six.vercel.app',appTabId:2,notebookTabId:77,openedAt:Date.now()}};
  const chrome={storage:{local:{get:async key=>({[key]:state[key]})}},
- cookies:{getAllCookieStores:async()=>[{id:'0',tabIds:[77]}],getPartitionKey:async()=>({topLevelSite:'https://notebooklm.google.com'}),getAll:async details=>{
+ cookies:{getAllCookieStores:async()=>[{id:'0',tabIds:[77]}],getPartitionKey:async()=>({partitionKey:{topLevelSite:'https://notebooklm.google.com'}}),getAll:async details=>{
  if(details.partitionKey)throw Error("Unexpected property: 'partitionKey'.");
  return [cookie('SID',{path:'/excluded',value:'secret-must-never-leak'})];
  }},
