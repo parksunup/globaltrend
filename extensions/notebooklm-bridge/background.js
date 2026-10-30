@@ -47,7 +47,7 @@ async function handler(message,sender) {
     if(!reconnect||reconnect.origin!==origin||reconnect.appTabId!==sender.tab.id||Date.now()-reconnect.openedAt>900000)throw Error('먼저 Google 로그인 열기를 눌러 주세요.');
     const tab=await chrome.tabs.get(reconnect.notebookTabId);
     if(!['https://notebooklm.google.com','https://notebook.google.com'].includes(new URL(tab.url).origin))throw Error('Google 로그인을 끝낸 뒤 다시 눌러 주세요.');
-    const results=await chrome.scripting.executeScript({target:{tabId:tab.id},func:()=>{
+    const results=await chrome.scripting.executeScript({target:{tabId:tab.id,allFrames:true},func:()=>{
       const accountText=()=>Array.from(document.querySelectorAll('a[href*="accounts.google.com"], [data-email], button[aria-label*="@"], [role="button"][aria-label*="@"]')).map(e=>(e.getAttribute('aria-label')??'')+' '+(e.getAttribute('data-email')??'')).join(' ');
       const text=accountText();
       if(!text.includes('@gmail.com')){
@@ -56,7 +56,7 @@ async function handler(message,sender) {
       }
       return text;
     }});
-    const text=results[0]?.result??'';
+    const text=results.map(frame=>typeof frame.result==='string'?frame.result:'').join(' ');
     const emails=[...new Set(text.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)??[])];
     if(emails.length!==1||emails[0]!=='psunup@gmail.com')throw Error('다른 Google 계정이 없는 전용 프로필에서 psunup@gmail.com으로 로그인하고, NotebookLM 오른쪽 위 계정 메뉴를 연 뒤 다시 눌러 주세요.');
     const names=['SID','HSID','SSID','APISID','SAPISID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
