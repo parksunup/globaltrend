@@ -22,7 +22,7 @@ async function googleCookiesForTab(tabId) {
   const details=storeId?{storeId}:{};
   let partitionKey;
   try {
-    if(chrome.cookies.getPartitionKey){partitionKey=await chrome.cookies.getPartitionKey({tabId,frameId:0});diagnostics.partition='available';}
+    if(chrome.cookies.getPartitionKey){const result=await chrome.cookies.getPartitionKey({tabId,frameId:0});partitionKey=result?.partitionKey;diagnostics.partition=partitionKey?'available':'missing_in_response';}
   }catch{diagnostics.partition='lookup_failed';}
   const batches=[];
   async function query(filter,partitioned=false){
