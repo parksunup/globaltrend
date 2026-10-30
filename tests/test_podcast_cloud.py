@@ -65,9 +65,20 @@ class SessionCryptoTests(unittest.TestCase):
                 session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':0,'envelope':None})
 
     def test_secrets_are_removed_from_environment_before_sdk_load(self):
-        with patch.dict(os.environ,{'PODCAST_SESSION_KEY':KEY,'PODCAST_ACCOUNT_EMAIL':EMAIL,'NOTEBOOKLM_AUTH_JSON':state().decode()}):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'})
+        with patch.dict(os.environ,{'PODCAST_SESSION_KEY':KEY,'PODCAST_ACCOUNT_EMAIL':EMAIL,'NOTEBOOKLM_AUTH_JSON':state().decode(),'NOTEBOOKLM_MASTER_TOKEN_JSON':token}):
             session_store.SessionVault.from_environment()
-            self.assertFalse(any(k in os.environ for k in ('PODCAST_SESSION_KEY','PODCAST_ACCOUNT_EMAIL','NOTEBOOKLM_AUTH_JSON')))
+            self.assertFalse(any(k in os.environ for k in ('PODCAST_SESSION_KEY','PODCAST_ACCOUNT_EMAIL','NOTEBOOKLM_AUTH_JSON','NOTEBOOKLM_MASTER_TOKEN_JSON')))
+
+    def test_dedicated_master_token_is_private_and_bound_to_account(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        with tempfile.TemporaryDirectory() as folder:
+            path=session_store.SessionVault(KEY,EMAIL,state(),token).restore(folder,{'version':0,'envelope':None})
+            saved=path.with_name('master_token.json')
+            self.assertEqual(saved.read_bytes(),token)
+            if os.name != 'nt': self.assertEqual(saved.stat().st_mode & 0o777,0o600)
+        with self.assertRaises(ValueError):
+            session_store.SessionVault(KEY,EMAIL,state(),token.replace(EMAIL.encode(),b'other@example.invalid'))
 
 class SessionRunTests(unittest.IsolatedAsyncioTestCase):
     def cloud(self):

@@ -1,149 +1,181 @@
 'use client';
+
 import {useEffect,useRef,useState} from 'react';
-import {createClient} from '../../../lib/supabase/client';
-import {makePodcastPacket,type PodcastPacket,type PodcastStory,PODCAST_MAX_AUDIO_BYTES} from '../../../lib/podcast-production';
+import {makePodcastPacket,validDay,type PodcastPacket,type PodcastStory} from '../../../lib/podcast-production';
 import {rankPodcastStories,recommendedPodcastStory,resolvePodcastMain,type PodcastMainChoice} from '../../../lib/podcast-recommendation';
 import {formatMonthlyWeek,monthlyWeekIssueKey,podcastEditionNumber} from '../../../lib/weekly-label';
 import TeamLogin from '../../components/team-login';
 import styles from './studio.module.css';
-type Job={id:string;packet:PodcastPacket;phase:string;notebook_url?:string;message:string;audio_path?:string;auto_publish:boolean;execution_mode?:'browser'|'cloud'};
-type Episode={issue_key:string;status:string;week_start:string;week_end:string;title:string;published_at:string|null};
-type Transfer={parts:Uint8Array[];size:number;mime:string;received:number};
-const labels:Record<string,string>={queued:'제작 준비',opening:'NotebookLM 여는 중',adding_sources:'자료와 지시문 전달 중',generating:'음성 만드는 중',collecting:'완성된 음성 가져오는 중',uploading:'국제요정에 저장 중',ready:'음성 완성',published:'공개 완료',unpublished:'공개 취소',needs_login:'Google 로그인 필요',blocked:'확인 후 이어서 진행',failed:'확인 필요',cancelled:'제작 중단'};
-function previousWeek(){
- const now=new Date(new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'})+'T00:00:00Z');
- const monday=new Date(now);monday.setUTCDate(now.getUTCDate()-((now.getUTCDay()+6)%7)-7);
- const end=new Date(monday);end.setUTCDate(monday.getUTCDate()+6);
- const start=monday.toISOString().slice(0,10);
+
+type Job={id:string;packet:PodcastPacket;phase:string;message:string;audio_path?:string;auto_publish:boolean;execution_mode?:'browser'|'cloud'};
+type Episode={issue_key:string;status:string;week_start:string;week_end:string;title:string};
+type Period={start:string;end:string;key:string};
+type Choice={period:string;id:string};
+type Selection={weekStart:string;weekEnd:string;mainId:string;briefId:string;contextIds:string[]};
+const labels:Record<string,string>={queued:'제작 대기',opening:'NotebookLM 연결 중',adding_sources:'자료 전달 중',generating:'음성 제작 중',collecting:'완성된 음성 가져오는 중',uploading:'사이트에 저장 중',ready:'음성 완성',published:'게시 완료',unpublished:'게시 취소',needs_login:'Google 로그인 필요',blocked:'확인 필요',failed:'제작 오류',cancelled:'제작 중단'};
+
+function periodFor(day:string):Period{
+ const date=new Date(`${day}T00:00:00Z`);
+ date.setUTCDate(date.getUTCDate()-((date.getUTCDay()+6)%7));
+ const end=new Date(date);end.setUTCDate(end.getUTCDate()+6);
+ const start=date.toISOString().slice(0,10);
  return {start,end:end.toISOString().slice(0,10),key:monthlyWeekIssueKey(start)};
 }
-async function api(body:Record<string,unknown>){const r=await fetch('/api/podcast/production',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const v=await r.json();if(!r.ok)throw Error(v.error);return v;}
+function initialPeriod():Period{
+ const today=new Date(new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'})+'T00:00:00Z');
+ today.setUTCDate(today.getUTCDate()-7);
+ return periodFor(today.toISOString().slice(0,10));
+}
+export function latestCandidatePeriod(stories:PodcastStory[],fallback:Period):Period{
+ const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});
+ const latest=stories.map(story=>story.officialDate).filter(day=>validDay(day)&&day<=today).sort().at(-1);
+ return latest?periodFor(latest):fallback;
+}
+async function api(body:Record<string,unknown>){
+ const response=await fetch('/api/podcast/production',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+ const result=await response.json();if(!response.ok)throw Error(result.error??'요청을 처리하지 못했습니다.');return result;
+}
+
 export default function PodcastStudio(){
  const [stories,setStories]=useState<PodcastStory[]>([]),[jobs,setJobs]=useState<Job[]>([]),[episodes,setEpisodes]=useState<Episode[]>([]);
  const [login,setLogin]=useState(false),[loaded,setLoaded]=useState(false),[setup,setSetup]=useState(false),[canPublish,setCanPublish]=useState(false);
- const [error,setError]=useState(''),[busy,setBusy]=useState(false),[connected,setConnected]=useState(false);
- const [mode,setMode]=useState<'cloud'|'browser'>('browser'),[cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required');
- const [dates,setDates]=useState(previousWeek),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefId,setBriefId]=useState(''),[contextIds,setContextIds]=useState<string[]>([]),[autoPublish,setAutoPublish]=useState(false);
- const [reconnectInfo,setReconnectInfo]=useState<{available?:boolean;result?:string}>({}),[reconnecting,setReconnecting]=useState(false),[reconnectOpened,setReconnectOpened]=useState(false),[reconnectHint,setReconnectHint]=useState('');
+ const [cloudReady,setCloudReady]=useState(false),[cloudStatus,setCloudStatus]=useState('setup_required'),[connected,setConnected]=useState(false);
+ const [reconnectAvailable,setReconnectAvailable]=useState(false),[reconnectOpened,setReconnectOpened]=useState(false);
+ const [period,setPeriod]=useState<Period>(initialPeriod),[mainChoice,setMainChoice]=useState<PodcastMainChoice>(),[briefChoice,setBriefChoice]=useState<Choice>();
+ const [contextIds,setContextIds]=useState<string[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('');
  const [audio,setAudio]=useState<{id:string;url:string}>();
- const pending=useRef(new Map<string,{resolve:(v:any)=>void;reject:(e:Error)=>void;timer:ReturnType<typeof setTimeout>}>());
- const transfers=useRef(new Map<string,Transfer>());
- async function reconnect(action:'open'|'save'){
-  setReconnecting(true);setError('');try{
-   await bridge({type:action==='open'?'GT_RECONNECT_OPEN':'GT_RECONNECT_SAVE'});
-   if(action==='open'){setReconnectOpened(true);setReconnectHint('NotebookLM에서 Google 로그인을 마치면 자동으로 연결합니다.');}
-   else{setReconnectOpened(false);setReconnectHint('');setReconnectInfo(previous=>({...previous,result:'pending'}));await load(true);}
-  }catch(e){setError(e instanceof Error?e.message:'다시 연결하지 못했습니다.');}finally{setReconnecting(false);}
- }
- async function storeAudio(jobId:string,blob:Blob){
-  const target=await api({action:'upload',jobId,size:blob.size,mime:blob.type});
-  if(!target.alreadyUploaded){const {error}=await createClient().storage.from('weekly-podcasts').uploadToSignedUrl(target.path,target.token,blob,{contentType:blob.type});if(error)throw Error('오디오 저장에 실패했습니다. 이어서 진행을 눌러 주세요.');}
-  return api({action:'complete',jobId,size:blob.size,mime:blob.type});
- }
+ const periodChosen=useRef(false),pendingSelection=useRef<{selection:Selection;packet:string}|null>(null),submitting=useRef(false);
+ const bridgePending=useRef(new Map<string,{resolve:(value:any)=>void;reject:(error:Error)=>void;timer:ReturnType<typeof setTimeout>}>());
+
  async function load(jobsOnly=false){
-  const r=await fetch('/api/podcast/production'+(jobsOnly?'?jobsOnly=1':''),{cache:'no-store'}),v=await r.json();
-  if(r.status===401){setLogin(true);setLoaded(true);return;}if(!r.ok)throw Error(v.error);
-  setLogin(false);if(v.stories)setStories(v.stories);setJobs(v.jobs);setEpisodes(v.episodes??[]);setSetup(v.setupRequired);setCanPublish(v.canPublish);setCloudReady(v.cloudReady===true);setCloudStatus(v.cloudStatus);setLoaded(true);
-  const reconnectResponse=await fetch('/api/podcast/reconnect',{cache:'no-store'});if(reconnectResponse.ok)setReconnectInfo(await reconnectResponse.json());
+  const response=await fetch('/api/podcast/production'+(jobsOnly?'?jobsOnly=1':''),{cache:'no-store'});
+  const result=await response.json();
+  if(response.status===401){setLogin(true);setLoaded(true);return;}
+  if(!response.ok)throw Error(result.error??'제작 화면을 불러오지 못했습니다.');
+  setLogin(false);setLoaded(true);setJobs(result.jobs??[]);setEpisodes(result.episodes??[]);
+  setCloudReady(result.cloudReady===true);setCloudStatus(result.cloudStatus??'setup_required');
+  setSetup(result.setupRequired===true);setCanPublish(result.canPublish===true);
+  if(result.stories){setStories(result.stories);if(!periodChosen.current)setPeriod(current=>latestCandidatePeriod(result.stories,current));}
+  const reconnect=await fetch('/api/podcast/reconnect',{cache:'no-store'});
+  if(reconnect.ok){const status=await reconnect.json();setReconnectAvailable(status.available===true);}
  }
  function bridge(command:Record<string,unknown>){return new Promise<any>((resolve,reject)=>{
-  const requestId=crypto.randomUUID(),timer=setTimeout(()=>{pending.current.delete(requestId);reject(Error('브라우저 연결 도구를 설치하고 이 작업실에 연결해 주세요.'));},30000);
-  pending.current.set(requestId,{resolve,reject,timer});window.postMessage({type:'GT_COMMAND',requestId,command},location.origin);
+  const requestId=crypto.randomUUID();
+  const timer=setTimeout(()=>{bridgePending.current.delete(requestId);reject(Error('이 브라우저에 NotebookLM 연결 도구가 없습니다. 아래 첫 연결 안내를 확인해 주세요.'));},15000);
+  bridgePending.current.set(requestId,{resolve,reject,timer});
+  window.postMessage({type:'GT_COMMAND',requestId,command},location.origin);
  });}
  useEffect(()=>{
-  if(!reconnectOpened||!connected||!reconnectInfo.available)return;
+  function onMessage(event:MessageEvent){
+   if(event.source!==window||event.origin!==location.origin)return;
+   const message=event.data;
+   if(message?.type==='GT_CONNECTED'){setConnected(true);return;}
+   if(message?.type!=='GT_RESPONSE')return;
+   const pending=bridgePending.current.get(message.requestId);if(!pending)return;
+   clearTimeout(pending.timer);bridgePending.current.delete(message.requestId);
+   if(message.result?.error)pending.reject(Error(message.result.error));
+   else{setConnected(true);pending.resolve(message.result);}
+  }
+  window.addEventListener('message',onMessage);
+  void bridge({type:'GT_PING'}).catch(()=>{});
+  return()=>{window.removeEventListener('message',onMessage);for(const item of bridgePending.current.values()){clearTimeout(item.timer);item.reject(Error('화면이 닫혔습니다.'));}bridgePending.current.clear();};
+ },[]);
+ useEffect(()=>{void load().catch(cause=>{setError(cause.message);setLoaded(true);});},[]);
+ useEffect(()=>{
+  const timer=setInterval(()=>void load(true).catch(cause=>setError(cause.message)),pendingSelection.current||reconnectOpened?10000:30000);
+  return()=>clearInterval(timer);
+ },[reconnectOpened,cloudReady]);
+ useEffect(()=>{
+  if(!reconnectOpened||!connected||!reconnectAvailable)return;
   let stopped=false,inFlight=false;
   const until=Date.now()+15*60*1000;
   async function check(){
    if(stopped||inFlight)return;
-   if(Date.now()>until){setReconnectOpened(false);setReconnectHint('연결 시간이 지났습니다. 다시 연결 버튼을 눌러 주세요.');return;}
+   if(Date.now()>until){setReconnectOpened(false);pendingSelection.current=null;setError('Google 로그인 확인 시간이 지났습니다. 다시 눌러 주세요.');return;}
    inFlight=true;
-   try{
-    await bridge({type:'GT_RECONNECT_SAVE'});
-    if(stopped)return;
-    setReconnectOpened(false);setReconnectHint('');setReconnectInfo(previous=>({...previous,result:'pending'}));
-    await load(true);
-   }catch(error){
-    if(!stopped&&error instanceof Error&&/계정 메뉴/.test(error.message))setReconnectHint('NotebookLM 오른쪽 위 계정 아이콘을 한 번 눌러 주세요. 확인되면 자동으로 연결합니다.');
-   }finally{inFlight=false;}
+   try{await bridge({type:'GT_RECONNECT_SAVE'});if(!stopped){setReconnectOpened(false);setNotice('로그인 상태를 확인하고 있습니다. 확인되면 자동으로 제작을 시작합니다.');await load(true);}}
+   catch(cause){if(!stopped&&cause instanceof Error&&cause.message.includes('계정 메뉴'))setNotice('NotebookLM 오른쪽 위의 계정 아이콘을 한 번 눌러 주세요. 계정이 확인되면 자동으로 이어집니다.');}
+   finally{inFlight=false;}
   }
-  const timer=setInterval(()=>void check(),7000);
-  void check();
+  void check();const timer=setInterval(()=>void check(),7000);
   return()=>{stopped=true;clearInterval(timer);};
- },[reconnectOpened,connected,reconnectInfo.available]);
- useEffect(()=>{void load().catch(e=>{setError(e.message);setLoaded(true);});const timer=setInterval(()=>void load(true).catch(e=>setError(e.message)),30000);return()=>clearInterval(timer);},[]);
+ },[reconnectOpened,connected,reconnectAvailable]);
+
+ const ranked=rankPodcastStories(stories,period.start,period.end),candidates=ranked.map(item=>item.story);
+ const periodKey=period.start+'/'+period.end;
+ const mainId=resolvePodcastMain(ranked,periodKey,mainChoice);
+ const main=candidates.find(story=>story.id===mainId);
+ const briefId=briefChoice?.period===periodKey?briefChoice.id:(ranked.find(item=>item.story.id!==mainId)?.story.id??'');
+ const brief=candidates.find(story=>story.id===briefId&&story.id!==mainId);
+ const context=stories.filter(story=>contextIds.includes(story.id)&&story.id!==mainId&&story.id!==briefId);
+ const selection:Selection={weekStart:period.start,weekEnd:period.end,mainId,briefId:brief?.id??'',contextIds:context.map(story=>story.id)};
+ let packet:PodcastPacket|undefined;
+ try{if(main)packet=makePodcastPacket({issueKey:period.key,weekStart:period.start,weekEnd:period.end,main,brief,context});}catch{}
+ const packetSignature=packet?JSON.stringify(packet):'';
+ const recommendation=recommendedPodcastStory(ranked);
+
+ async function submit(selected:Selection){
+  if(submitting.current)return;submitting.current=true;setBusy(true);setError('');
+  try{
+   const result=await api({action:'prepare',executionMode:'cloud',...selected,autoPublish:true});
+   setNotice(result.job?.phase==='published'?'이 회차는 이미 게시됐습니다.':'제작을 요청했습니다. NotebookLM MCP가 음성을 만들고 완성되면 자동으로 게시합니다.');
+   await load(true);
+  }catch(cause){setError(cause instanceof Error?cause.message:'제작 요청에 실패했습니다.');}
+  finally{setBusy(false);submitting.current=false;}
+ }
  useEffect(()=>{
-  async function onMessage(event:MessageEvent){
-   if(event.source!==window||event.origin!==location.origin)return;const m=event.data;
-   if(m?.type==='GT_CONNECTED'){setConnected(true);return;}
-   if(m?.type==='GT_RESPONSE'){const item=pending.current.get(m.requestId);if(!item)return;clearTimeout(item.timer);pending.current.delete(m.requestId);if(m.result?.error)item.reject(Error(m.result.error));else{setConnected(true);item.resolve(m.result);}return;}
-   if(m?.type!=='GT_RPC')return;
-   let result:Record<string,unknown>;
-   try{
-    if(m.method==='status'){result=await api({action:'status',jobId:m.jobId});}
-    else if(m.method==='progress'){result=await api({action:'progress',jobId:m.jobId,...m.payload});void load(true);}
-    else if(m.method==='GT_AUDIO_BEGIN'){
-     if(!Number.isSafeInteger(m.payload.size)||m.payload.size<1||m.payload.size>PODCAST_MAX_AUDIO_BYTES||!['audio/mpeg','audio/wav','audio/mp4','audio/x-m4a'].includes(m.payload.mime))throw Error('오디오 형식 또는 크기를 확인해 주세요.');
-     transfers.current.set(m.jobId,{parts:[],size:m.payload.size,mime:m.payload.mime,received:0});result={ok:true};
-    }else if(m.method==='GT_AUDIO_CHUNK'){
-     const transfer=transfers.current.get(m.jobId);if(!transfer||m.payload.index!==transfer.parts.length||typeof m.payload.data!=='string'||m.payload.data.length>262144)throw Error('오디오 연결이 끊겼습니다. 이어서 진행을 눌러 주세요.');
-     const bytes=Uint8Array.from(atob(m.payload.data),c=>c.charCodeAt(0));transfer.received+=bytes.length;if(transfer.received>transfer.size)throw Error('오디오 크기가 일치하지 않습니다.');transfer.parts.push(bytes);result={ok:true};
-    }else if(m.method==='GT_AUDIO_END'){
-     const transfer=transfers.current.get(m.jobId);if(!transfer||transfer.received!==transfer.size||m.payload.size!==transfer.size||m.payload.mime!==transfer.mime)throw Error('오디오가 끝까지 전달되지 않았습니다. 이어서 진행을 눌러 주세요.');
-     const blob=new Blob(transfer.parts as BlobPart[],{type:transfer.mime});
-     const completed=await storeAudio(m.jobId,blob);transfers.current.delete(m.jobId);result={phase:completed.job.phase};void load(true);
-    }else throw Error('지원하지 않는 연결 요청입니다.');
-   }catch(e){result={error:e instanceof Error?e.message:'연결 실패'};setError(String(result.error));}
-   window.postMessage({type:'GT_RPC_RESULT',requestId:m.requestId,result},location.origin);
-  }
-  window.addEventListener('message',onMessage);void bridge({type:'GT_PING'}).catch(()=>{});
-  return()=>{window.removeEventListener('message',onMessage);for(const item of pending.current.values()){clearTimeout(item.timer);item.reject(Error('화면이 닫혔습니다.'));}pending.current.clear();};
- },[]);
- const period=dates.start+'/'+dates.end,ranked=rankPodcastStories(stories,dates.start,dates.end),recommendation=recommendedPodcastStory(ranked);
- const candidates=ranked.map(r=>r.story),mainId=resolvePodcastMain(ranked,period,mainChoice);
- const main=candidates.find(s=>s.id===mainId),brief=candidates.find(s=>s.id===briefId&&s.id!==mainId);
- const selectedContext=stories.filter(s=>contextIds.includes(s.id)&&s.id!==mainId&&s.id!==brief?.id);let packet:PodcastPacket|undefined;
- function changePeriod(field:'start'|'end',value:string){setDates(d=>{if(field!=='start')return {...d,end:value};try{return {...d,start:value,key:monthlyWeekIssueKey(value)};}catch{return {...d,start:value,key:''};}});setMainChoice(undefined);setBriefId('');setContextIds([]);}
- function chooseMain(id:string,automatic=false){setMainChoice(automatic?undefined:{period,id});if(briefId===id)setBriefId('');setContextIds(ids=>ids.filter(value=>value!==id));}
- try{if(main)packet=makePodcastPacket({issueKey:dates.key,weekStart:dates.start,weekEnd:dates.end,main,brief,context:selectedContext});}catch{}
- let plannedLabel='월요일 시작일을 선택해 주세요.';try{plannedLabel=formatMonthlyWeek(dates.start);}catch{}
- async function start(){if(busy||!packet)return;setBusy(true);setError('');try{if(mode==='browser'){const bridgeStatus=await bridge({type:'GT_PING'});if(bridgeStatus?.version!==2)throw Error('Chrome 연결 도구를 업데이트해 주세요. 이 화면의 ‘연결 도구 받기’를 다시 받고 chrome://extensions에서 기존 도구를 새로고침한 뒤 다시 연결해 주세요.');}const v=await api({action:'prepare',executionMode:mode,weekStart:dates.start,weekEnd:dates.end,mainId,briefId:brief?.id??'',contextIds:selectedContext.map(s=>s.id),autoPublish:canPublish&&autoPublish});await load(true);if(mode==='browser')await bridge({type:'GT_BEGIN',job:v.job});}catch(e){setError(e instanceof Error?e.message:'제작 시작 실패');}finally{setBusy(false);}}
- async function act(job:Job,action:string){setBusy(true);setError('');try{if(action==='resume'){if(job.execution_mode==='cloud')await api({action:'resumeCloud',jobId:job.id});else await bridge({type:'GT_BEGIN',job});}else if(action==='cancel'){await api({action:'progress',jobId:job.id,phase:'cancelled'});if(job.execution_mode!=='cloud')await bridge({type:'GT_CANCEL',jobId:job.id}).catch(()=>{});}else if(action==='listen'){const v=await api({action:'listen',jobId:job.id});setAudio({id:job.id,url:v.url});}else await api({action,jobId:job.id});await load(true);}catch(e){setError(e instanceof Error?e.message:'처리 실패');}finally{setBusy(false);}}
- async function unpublishEpisode(episode:Episode){setBusy(true);setError('');try{await api({action:'unpublishIssue',issueKey:episode.issue_key});await load(true);}catch(e){setError(e instanceof Error?e.message:'처리 실패');}finally{setBusy(false);}}
+  const pending=pendingSelection.current;
+  if(!pending||!cloudReady)return;
+  pendingSelection.current=null;
+  if(!packetSignature||packetSignature!==pending.packet){setError('로그인하는 동안 후보 자료가 달라졌습니다. 다시 읽고 제작 버튼을 눌러 주세요.');return;}
+  void submit(pending.selection);
+ },[cloudReady,packetSignature]);
+ async function start(){
+  if(!packet||busy||!canPublish)return;
+  setError('');setNotice('');
+  if(cloudReady){await submit(selection);return;}
+  if(!reconnectAvailable){setError('NotebookLM 연결 기능이 준비되지 않았습니다. 잠시 후 다시 열어 주세요.');return;}
+  if(!connected){setError('처음 한 번은 이 브라우저에 연결 도구를 설치해야 합니다. 아래 ‘첫 연결 안내’를 열어 주세요.');return;}
+  pendingSelection.current={selection,packet:packetSignature};
+  try{await bridge({type:'GT_RECONNECT_OPEN'});setReconnectOpened(true);setNotice('열린 Google 화면에서 전용 계정으로 로그인해 주세요. 완료되면 제작이 자동으로 이어집니다.');}
+  catch(cause){pendingSelection.current=null;setError(cause instanceof Error?cause.message:'Google 로그인 화면을 열지 못했습니다.');}
+ }
+ async function act(job:Job,action:'cancel'|'listen'|'publish'|'unpublish'){
+  setBusy(true);setError('');
+  try{
+   if(action==='listen'){const result=await api({action:'listen',jobId:job.id});setAudio({id:job.id,url:result.url});}
+   else if(action==='cancel')await api({action:'progress',jobId:job.id,phase:'cancelled'});
+   else await api({action,jobId:job.id});
+   await load(true);
+  }catch(cause){setError(cause instanceof Error?cause.message:'작업을 처리하지 못했습니다.');}
+  finally{setBusy(false);}
+ }
+ function choosePeriod(day:string){if(!validDay(day))return;periodChosen.current=true;setPeriod(periodFor(day));setMainChoice(undefined);setBriefChoice(undefined);setContextIds([]);pendingSelection.current=null;}
+ function chooseMain(id:string){setMainChoice({period:periodKey,id});if(briefId===id)setBriefChoice({period:periodKey,id:''});setContextIds(ids=>ids.filter(value=>value!==id));pendingSelection.current=null;}
  return <div className={styles.studio}>
-  <header className={styles.hero}><span>국제요정 · PODCAST STUDIO</span><h1>한 가지 주제를, 깊이 있게.</h1><p>메인 주제와 짧은 추가 소식을 고르면 NotebookLM이 한국어 대화를 만듭니다. 완성된 음성은 이곳으로 돌아옵니다.</p><a href="/work">← 동향 작업실</a> · <a href="/public/weekly/podcast">공개 팟캐스트 ↗</a></header>
-  {!login&&<section className={styles.panel} aria-label="NotebookLM 다시 연결"><h2>NotebookLM 연결</h2>
-   <p className={styles.connection}>{cloudReady?'● 클라우드 제작 연결됨':reconnectInfo.result==='pending'?'○ Google 로그인 확인 중':'○ Google 다시 연결 필요'}</p>
-   {!cloudReady&&<p>전용 Chrome 프로필에서 한 번만 연결 도구를 설치하면, 다음부터는 버튼을 눌러 Google 로그인만 하시면 됩니다.</p>}
-   {!connected&&<p role="alert">이 Chrome에 연결 도구가 없습니다. 아래 ‘처음 한 번 설치하기’를 열어 설치한 뒤 이 페이지를 새로고침해 주세요.</p>}
-   {connected&&!cloudReady&&<div className={styles.actions}><button type="button" disabled={reconnecting||!reconnectInfo.available||reconnectOpened} onClick={()=>reconnect('open')}>{reconnecting?'여는 중…':'NotebookLM 다시 연결'}</button>{reconnectOpened&&<button type="button" disabled={reconnecting} onClick={()=>reconnect('save')}>자동 연결이 안 되면 확인</button>}</div>}
-   <p role="status">{reconnectHint||(!reconnectInfo.available?'다시 연결 기능을 준비 중입니다.':reconnectInfo.result==='pending'?'클라우드에서 로그인 상태를 확인하고 있습니다. 다음 실행까지 약 10분이 걸릴 수 있습니다.':reconnectInfo.result==='verified'?'클라우드 인증 확인 완료':reconnectInfo.result==='failed'?'로그인 확인에 실패했습니다. 다시 연결을 눌러 주세요.':cloudReady?'연결이 유지되고 있습니다.':'전용 계정으로 다시 연결해 주세요.')}</p>
-  <details><summary>처음 한 번 설치하기 · 연결이 안 될 때</summary><ol><li>Chrome에서 팟캐스트 전용 프로필을 만듭니다. 이 프로필에는 <strong>psunup@gmail.com</strong>만 로그인합니다.</li><li><a href="/api/podcast/extension">연결 도구 받기</a>를 눌러 압축을 풉니다.</li><li>Chrome 주소창에 <code>chrome://extensions</code>를 입력하고 개발자 모드를 켠 뒤 ‘압축해제된 확장 프로그램을 로드합니다’로 폴더를 선택합니다. 업데이트할 때는 새 압축을 풀어 기존 폴더를 덮어쓴 뒤 확장 프로그램 카드의 새로고침 버튼을 누르고 이 페이지도 새로고침합니다.</li><li>이 운영 사이트에서는 도구가 자동으로 연결됩니다. 미리보기 주소에서는 확장 도구 아이콘의 ‘이 작업실 연결’을 한 번 누릅니다.</li><li>‘NotebookLM 다시 연결’을 누르고 Google 로그인을 마칩니다. 자동 확인이 멈추면 NotebookLM 오른쪽 위 계정 아이콘을 누르고 이 화면의 ‘자동 연결이 안 되면 확인’을 누릅니다.</li></ol><p>비밀번호와 인증 코드는 이 사이트에 입력하지 않습니다. 연결 도구가 전용 계정의 로그인 상태를 클라우드 제작기에 안전하게 전달합니다.</p></details>
-  </section>}
-  <section className={styles.panel}><h2>어디에서 만들까요?</h2><label>제작 방식<select value={mode} onChange={e=>setMode(e.target.value as 'cloud'|'browser')}><option value="cloud">클라우드에서 만들기 · 컴퓨터를 꺼도 계속 진행</option><option value="browser">내 Chrome에서 만들기 · 기존 연결 도구 사용</option></select></label>{mode==='cloud'?<><p className={styles.connection}>{cloudReady?'● 클라우드 연결 준비됨':cloudStatus==='needs_login'?'○ 전용 Google 계정의 다시 로그인이 필요합니다':'○ 클라우드 연결을 준비하고 있습니다'}</p><ol><li>이 화면에서 기간과 깊이 다룰 주제 한 가지를 고릅니다.</li><li>원하시면 짧게 소개할 소식 한 가지를 더 고릅니다.</li><li>아래 제작 버튼을 누릅니다. 요청이 제작 현황에 나타나면 화면을 닫거나 컴퓨터를 꺼도 됩니다.</li><li>클라우드가 약 10분 간격으로 요청을 확인합니다. GitHub 사정에 따라 시작이 늦어질 수 있습니다.</li><li>완성되면 ‘완성본 듣기’로 확인하세요. 자동 공개를 켰다면 완성 직후 공개됩니다.</li></ol><p>연결 준비가 끝나기 전에는 제작 버튼이 켜지지 않습니다. Google 로그인이 만료되거나 무료 사용 한도에 도달하면 중단 이유를 알려드립니다.</p></>:<><ol><li><a href="https://notebook.google.com/" target="_blank" rel="noreferrer">NotebookLM 열기</a>에서 Google에 로그인해 주세요.</li><li><a href="/api/podcast/extension">연결 도구 받기</a> → 압축을 풀고 Chrome 확장 프로그램 관리 화면에서 폴더를 불러옵니다.</li><li>연결 도구 아이콘을 눌러 <strong>‘이 작업실 연결’</strong>을 선택해 주세요.</li></ol><p className={styles.connection}>{connected?'● 브라우저 연결됨':'○ 브라우저 연결을 기다립니다'}</p><p>이 방식에서는 제작 화면과 NotebookLM 탭을 열어 두어야 합니다.</p></>}</section>
-  {login&&<section className={styles.panel}><TeamLogin onSuccess={()=>void load().catch(e=>setError(e.message))}/></section>}
-  {error&&<p role="alert" className={styles.error}>{error}</p>}{setup&&<p className={styles.error}>제작 기록을 아직 준비하지 못했습니다. 팟캐스트 DB 변경 적용 여부를 확인해 주세요.</p>}
-  {!login&&<section className={styles.panel}><h2>이번 회차 만들기</h2><p>예정 호: {plannedLabel} · 회차 번호는 자동으로 붙습니다.</p><div className={styles.fields}><label>자료 시작일<input type="date" value={dates.start} onChange={e=>changePeriod('start',e.target.value)}/></label><label>자료 종료일<input type="date" value={dates.end} onChange={e=>changePeriod('end',e.target.value)}/></label></div><p>공식 발표일이 이 기간에 해당하고 제목·본문·출처가 있는 공개 동향 {candidates.length}건입니다.</p>
-   {recommendation?<aside className={styles.recommendation} aria-label="이번 주 메인 추천"><p className={styles.recommendationHeading}><strong>이번 주 메인 추천</strong><span>{recommendation.score} / 100점</span></p><h3>{recommendation.story.title}</h3><p>선택한 기간의 자료를 비교해 기본으로 골랐습니다. 아래에서 다른 주제로 바꿀 수 있습니다.</p><details><summary>이 주제를 추천한 이유</summary><ul>{recommendation.criteria.map(c=><li key={c.label}><strong>{c.label} {c.points}/{c.max}점</strong><br/>{c.reason}</li>)}</ul></details>{mainId!==recommendation.story.id&&<><p>현재는 직접 선택한 주제를 사용합니다.</p><button type="button" className={styles.secondary} onClick={()=>chooseMain(recommendation.story.id,true)}>추천 주제로 바꾸기</button></>}</aside>:loaded&&<p className={styles.summary}>{candidates.length?'심층 주제로 자동 추천할 만큼 근거가 충분한 자료를 찾지 못했습니다. 아래에서 직접 골라 주세요.':'이 기간에는 제작할 공개 동향이 없습니다. 자료가 있는 기간을 골라 주세요.'}</p>}
-   <details className={styles.selectionGuide}><summary>주제 선정 기준과 후보 비교</summary><p>제도·판단 변화 35점, 영향 범위 25점, 실무 관련성 25점, 설명할 근거 15점으로 비교합니다. 65점 이상이면서 설명 근거가 있고, 변화나 영향 범위가 뚜렷한 후보를 추천합니다.</p><p>제목·요약·본문의 표현을 찾는 규칙에 따른 편집상 추천입니다. 법률의 실제 효력이나 대중의 관심을 측정한 점수는 아닙니다. 초안은 확정 조치와 구분하고, 금액이 크거나 최신이라는 이유만으로 우선하지 않습니다. 동점일 때만 발표일, 자료 ID 순으로 정합니다.</p><ol className={styles.candidateScores}>{ranked.map(r=><li key={r.story.id}><strong>{r.story.title}</strong><span>{r.score}점 · {r.stage}</span><small>{r.criteria.map(c=>`${c.label} ${c.points}/${c.max}`).join(' · ')}</small></li>)}</ol></details>
-   {mainChoice?.period===period&&mainChoice.id&&!main&&<p role="status">직접 고른 자료가 현재 후보에서 빠졌습니다. 주제를 다시 골라 주세요.</p>}
-   <label>깊이 다룰 메인 주제<select value={mainId} onChange={e=>chooseMain(e.target.value)}><option value="">주제를 골라 주세요</option>{candidates.map(s=><option key={s.id} value={s.id}>{s.id===recommendation?.story.id?'추천 · ':''}{s.officialDate} · {s.title}</option>)}</select></label>{main&&<p className={styles.summary}>{main.summary}</p>}
-   <label>짧게 짚을 추가 소식 (선택)<select value={brief?.id??''} onChange={e=>{setBriefId(e.target.value);setContextIds(ids=>ids.filter(id=>id!==e.target.value));}}><option value="">추가 소식 없이 만들기</option>{candidates.filter(s=>s.id!==mainId).map(s=><option key={s.id} value={s.id}>{s.title}</option>)}</select></label>
-   <details><summary>메인 주제를 설명할 관련 자료 추가</summary><p>관련 자료는 이전 시기의 자료도 고를 수 있습니다. 별도의 메인 소식으로 다루지 않습니다.</p><div className={styles.context}>{stories.filter(s=>s.id!==mainId&&s.id!==briefId).map(s=><label key={s.id}><input type="checkbox" checked={contextIds.includes(s.id)} onChange={e=>setContextIds(ids=>e.target.checked?[...ids,s.id]:ids.filter(id=>id!==s.id))}/><span>{s.officialDate} · {s.title}</span></label>)}</div></details>
-   {packet&&<details><summary>전달할 자료와 지시문 확인</summary><pre>{packet.instructions+'\n\n'+packet.sourceText}</pre></details>}
-   <label className={styles.check}><input type="checkbox" checked={autoPublish&&canPublish} disabled={!canPublish} onChange={e=>setAutoPublish(e.target.checked)}/>완성되면 이 회차를 바로 공개</label>{!canPublish&&<p>제작 시험 화면에서는 오디오를 준비하고, 실제 공개는 운영 사이트에서 실행합니다.</p>}
-   <button className={styles.primary} disabled={!loaded||busy||!packet||setup||(mode==='cloud'&&!cloudReady)} onClick={start}>{busy?'요청 저장 중…':autoPublish&&canPublish?'팟캐스트 만들고 자동 게시':'팟캐스트 만들기'}</button>
-  </section>}
-  <section className={styles.panel}><h2>공개된 팟캐스트</h2>{episodes.filter(episode=>episode.status==='published'&&!jobs.some(job=>job.packet.issueKey===episode.issue_key)).length===0?<p>별도 게시된 회차가 없습니다.</p>:episodes.filter(episode=>episode.status==='published'&&!jobs.some(job=>job.packet.issueKey===episode.issue_key)).map(episode=><article className={styles.job} key={episode.issue_key}><span>{formatMonthlyWeek(episode.week_start)}-{podcastEditionNumber(episode.issue_key)} · 공개 완료</span><h3>{episode.title}</h3><p>{episode.week_start}–{episode.week_end}</p><div className={styles.actions}><button disabled={busy} onClick={()=>void unpublishEpisode(episode)}>게시 취소</button><a href="/public/weekly/podcast">공개 페이지 보기 ↗</a></div></article>)}</section>
-  <section className={styles.panel}><h2>제작 현황</h2>{!loaded?<p>자료를 불러오는 중입니다…</p>:!jobs.length?<p>아직 제작 중인 회차가 없습니다.</p>:jobs.map(job=><article className={styles.job} key={job.id}>
-   <span>{formatMonthlyWeek(job.packet.weekStart)}-{podcastEditionNumber(job.packet.issueKey)} · {job.execution_mode==='cloud'?'클라우드 · ':''}{labels[job.phase]??job.phase}</span><h3>{job.packet.title}</h3>{job.message&&<p>{job.message}</p>}
-   {job.execution_mode==='cloud'&&job.phase==='queued'&&<p>요청을 저장했습니다. 컴퓨터를 꺼도 클라우드가 이어서 처리합니다.</p>}
-   <div className={styles.actions}>{!['ready','published','cancelled'].includes(job.phase)&&<>
-    {(job.execution_mode!=='cloud'||['failed','needs_login'].includes(job.phase))&&<button disabled={busy} onClick={()=>act(job,'resume')}>이어서 진행</button>}
-    <button disabled={busy} onClick={()=>act(job,'cancel')}>중단</button></>}
-    {job.notebook_url&&<a href={job.notebook_url} target="_blank" rel="noreferrer">NotebookLM 보기 ↗</a>}{job.audio_path&&<button disabled={busy} onClick={()=>act(job,'listen')}>완성본 듣기</button>}
-    {job.phase==='ready'&&canPublish&&<button disabled={busy} onClick={()=>act(job,'publish')}>공개하기</button>}{job.phase==='published'&&<><a href="/public/weekly/podcast">공개 페이지 보기 ↗</a><button disabled={busy} onClick={()=>act(job,'unpublish')}>게시 취소</button></>}</div>
-   {job.execution_mode!=='cloud'&&!['published','unpublished','cancelled'].includes(job.phase)&&<details><summary>자동 회수가 멈췄다면 파일 직접 연결</summary><p>이 회차의 NotebookLM에서 받은 오디오 파일을 선택하면 같은 제작 기록에 연결합니다.</p><input aria-label="완성된 오디오 직접 연결" type="file" accept=".mp3,.m4a,.wav" disabled={busy} onChange={async event=>{const file=event.currentTarget.files?.[0];if(!file)return;setBusy(true);setError('');try{await storeAudio(job.id,file);await load(true);}catch(e){setError(e instanceof Error?e.message:'파일 연결 실패');}finally{setBusy(false);}}}/></details>}
-   {audio?.id===job.id&&<audio controls src={audio.url} preload="none"/>}</article>)}</section>
+  <header className={styles.hero}><span>국제요정 · PODCAST</span><h1>이번 주 팟캐스트</h1><p>추천된 동향을 읽어보시고, 괜찮으면 제작 버튼 하나만 누르세요.</p><a href="/work">← 작업실</a> · <a href="/public/weekly/podcast">공개 팟캐스트 ↗</a></header>
+  {login?<section className={styles.panel}><TeamLogin onSuccess={()=>void load().catch(cause=>setError(cause.message))}/></section>:<>
+   <section className={styles.panel} aria-label="이번 주 제작 후보">
+    <div className={styles.topline}><div><h2>자동으로 고른 후보</h2><p>{formatMonthlyWeek(period.start)} · {period.start}–{period.end} · 발표된 동향 {candidates.length}건</p></div><label>다른 주 보기<input type="date" value={period.start} onChange={event=>choosePeriod(event.target.value)}/></label></div>
+    {main?<><article className={styles.storyCard}><span>깊이 다룰 주제 · {recommendation?.story.id===main.id?'자동 추천':'직접 선택'}</span><h3>{main.title}</h3><p>{main.summary}</p><div className={styles.storyBody}>{main.details}</div><a href={main.officialUrl} target="_blank" rel="noopener noreferrer">공식 자료 보기 ↗</a></article>
+      <label>메인 주제 바꾸기<select value={mainId} onChange={event=>chooseMain(event.target.value)}>{candidates.map(story=><option key={story.id} value={story.id}>{story.title}</option>)}</select></label>
+      {brief&&<article className={styles.briefCard}><span>끝에서 짧게 짚을 소식</span><h3>{brief.title}</h3><p>{brief.summary}</p><details><summary>본문 읽기</summary><div className={styles.storyBody}>{brief.details}</div><a href={brief.officialUrl} target="_blank" rel="noopener noreferrer">공식 자료 보기 ↗</a></details></article>}
+      <label>짧은 소식 바꾸기<select value={brief?.id??''} onChange={event=>{setBriefChoice({period:periodKey,id:event.target.value});pendingSelection.current=null;}}><option value="">짧은 소식 없이 만들기</option>{candidates.filter(story=>story.id!==mainId).map(story=><option key={story.id} value={story.id}>{story.title}</option>)}</select></label>
+      <details><summary>나머지 후보와 추천 기준 보기</summary><p>제도·판단 변화, 영향 범위, 실무 관련성, 설명할 근거를 비교해 추천합니다. 점수는 편집을 돕는 참고값입니다.</p><ol className={styles.candidateScores}>{ranked.map(item=><li key={item.story.id}><strong>{item.story.title}</strong><span>{item.score}점 · {item.stage}</span><small>{item.story.summary}</small></li>)}</ol></details>
+      <details><summary>메인 주제의 관련 자료 더하기</summary><div className={styles.context}>{stories.filter(story=>story.id!==mainId&&story.id!==briefId).map(story=><label key={story.id}><input type="checkbox" checked={contextIds.includes(story.id)} onChange={event=>{setContextIds(ids=>event.target.checked?[...ids,story.id]:ids.filter(id=>id!==story.id));pendingSelection.current=null;}}/>{story.title}</label>)}</div></details>
+      <details><summary>NotebookLM에 전달할 내용 보기</summary><pre>{packet?.instructions+'\n\n'+packet?.sourceText}</pre></details>
+     </>:loaded?<p>이 기간에는 제작 가능한 공개 동향이 없습니다. 다른 주를 골라 주세요.</p>:<p>동향 후보를 불러오는 중입니다…</p>}
+   </section>
+   <section className={styles.panel} aria-label="제작과 게시"><h2>제작과 게시</h2><p>버튼을 누르면 클라우드의 NotebookLM MCP가 자료 전달, 음성 제작, 저장, 게시를 이어서 처리합니다. 화면을 닫거나 컴퓨터를 꺼도 진행됩니다.</p>
+    <p className={styles.connection} role="status">{cloudReady?'● NotebookLM 연결됨':reconnectOpened?'○ Google 로그인을 기다리는 중':cloudStatus==='needs_login'?'○ Google 로그인이 필요합니다':'○ NotebookLM 연결 확인 중'}</p>
+    <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'Google 로그인 완료 대기 중…':'제작 후 자동으로 게시'}</button>
+    {!canPublish&&loaded&&<p>자동 게시는 운영 사이트의 작업실에서 실행할 수 있습니다.</p>}
+    {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
+    {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
+    {!cloudReady&&<details className={styles.setup}><summary>첫 연결 안내 · Google 로그인이 안 열릴 때</summary><ol><li>Chrome의 팟캐스트 전용 프로필에서 이 작업실을 엽니다.</li><li><a href="/api/podcast/extension">NotebookLM 연결 도구 받기</a>를 눌러 압축을 푼 뒤, Chrome의 <code>chrome://extensions</code>에서 ‘압축해제된 확장 프로그램을 로드합니다’로 폴더를 선택합니다. 처음 한 번만 하면 됩니다.</li><li>이 페이지를 새로고침하고 ‘제작 후 자동으로 게시’를 누릅니다.</li><li>Google 로그인 화면이 열리면 팟캐스트 전용 계정으로 로그인하고, NotebookLM 오른쪽 위 계정 아이콘을 한 번 누릅니다. 비밀번호는 국제요정 사이트에 입력하지 않습니다.</li></ol><p>{connected?'연결 도구가 이 브라우저에 연결됐습니다.':'연결 도구가 아직 보이지 않습니다.'}</p>{reconnectOpened&&<button type="button" className={styles.secondary} onClick={()=>void bridge({type:'GT_RECONNECT_SAVE'}).then(()=>load(true)).catch(cause=>setError(cause.message))}>로그인 완료 다시 확인</button>}</details>}
+   </section>
+   <section className={styles.panel}><h2>제작 현황</h2>{!jobs.length?<p>제작 중인 회차가 없습니다.</p>:jobs.map(job=><article className={styles.job} key={job.id}><span>{formatMonthlyWeek(job.packet.weekStart)}-{podcastEditionNumber(job.packet.issueKey)} · {labels[job.phase]??job.phase}</span><h3>{job.packet.title}</h3>{job.message&&<p>{job.message}</p>}{job.execution_mode==='browser'&&job.phase==='queued'&&<p>이전 브라우저 제작 요청입니다. 새 자동 제작은 위 버튼에서 시작해 주세요.</p>}<div className={styles.actions}>{job.audio_path&&<button disabled={busy} onClick={()=>void act(job,'listen')}>완성본 듣기</button>}{job.phase==='ready'&&canPublish&&<button disabled={busy} onClick={()=>void act(job,'publish')}>게시하기</button>}{job.phase==='published'&&<><a href="/public/weekly/podcast">공개 페이지 보기 ↗</a><button disabled={busy} onClick={()=>void act(job,'unpublish')}>게시 취소</button></>}{!['ready','published','cancelled','unpublished'].includes(job.phase)&&<button disabled={busy} onClick={()=>void act(job,'cancel')}>제작 중단</button>}</div>{audio?.id===job.id&&<audio controls src={audio.url} preload="none"/>}</article>)}</section>
+   {episodes.filter(episode=>episode.status==='published'&&!jobs.some(job=>job.packet.issueKey===episode.issue_key)).length>0&&<section className={styles.panel}><h2>이전 공개 회차</h2>{episodes.filter(episode=>episode.status==='published'&&!jobs.some(job=>job.packet.issueKey===episode.issue_key)).map(episode=><p key={episode.issue_key}>{episode.title} · {episode.week_start}–{episode.week_end}</p>)}</section>}
+  </>}
  </div>;
 }

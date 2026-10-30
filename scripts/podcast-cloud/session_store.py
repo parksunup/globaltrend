@@ -33,13 +33,30 @@ def validate_state(raw, expected_email):
 
 
 class SessionVault:
-    def __init__(self, key, expected_email, bootstrap=None):
+    def __init__(self, key, expected_email, bootstrap=None, master_token=None):
         self.key = base64.b64decode(key.strip(), validate=True)
         if len(self.key) != 32:
             raise ValueError("invalid encryption key")
         self.key_id = hashlib.sha256(self.key).hexdigest()[:16]
         self.expected_email = expected_email.strip()
         self.bootstrap = bootstrap
+        self.master_token = self._validate_master_token(master_token)
+
+    def _validate_master_token(self, raw):
+        if raw is None:
+            return None
+        if not isinstance(raw, bytes) or len(raw) > 8192:
+            raise ValueError("invalid dedicated master token")
+        try:
+            value = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            raise ValueError("invalid dedicated master token") from None
+        if (not isinstance(value, dict) or value.get("version") != 1
+                or value.get("email") != self.expected_email
+                or not isinstance(value.get("master_token"), str)
+                or not value["master_token"].startswith("aas_et/")):
+            raise ValueError("invalid dedicated master token")
+        return raw
 
     @classmethod
     def from_environment(cls):
@@ -47,7 +64,9 @@ class SessionVault:
         key = os.environ.pop("PODCAST_SESSION_KEY", "")
         account = os.environ.pop("PODCAST_ACCOUNT_EMAIL", "")
         bootstrap = os.environ.pop("NOTEBOOKLM_AUTH_JSON", "")
-        return cls(key, account, bootstrap.encode() if bootstrap else None)
+        master_token = os.environ.pop("NOTEBOOKLM_MASTER_TOKEN_JSON", "")
+        return cls(key, account, bootstrap.encode() if bootstrap else None,
+                   master_token.encode() if master_token else None)
 
     def seal(self, raw, version):
         validate_state(raw, self.expected_email)
@@ -91,6 +110,11 @@ class SessionVault:
         fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         with os.fdopen(fd, "wb") as handle:
             handle.write(raw)
+        if self.master_token is not None:
+            token_path = path.parent / "master_token.json"
+            token_fd = os.open(token_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            with os.fdopen(token_fd, "wb") as handle:
+                handle.write(self.master_token)
         # Restoring a fresh file must not fool NotebookLM's mtime guard.
         os.utime(path, (1, 1))
         return path
