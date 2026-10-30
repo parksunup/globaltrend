@@ -12,6 +12,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 MAX_STATE_BYTES = 131072
 CONTEXT = b"globaltrend:podcast:dedicated-session:v1:"
+MASTER_CONTEXT = b"globaltrend:podcast:dedicated-master:v1"
 
 
 def validate_state(raw, expected_email):
@@ -33,13 +34,30 @@ def validate_state(raw, expected_email):
 
 
 class SessionVault:
-    def __init__(self, key, expected_email, bootstrap=None):
+    def __init__(self, key, expected_email, bootstrap=None, master_token=None):
         self.key = base64.b64decode(key.strip(), validate=True)
         if len(self.key) != 32:
             raise ValueError("invalid encryption key")
         self.key_id = hashlib.sha256(self.key).hexdigest()[:16]
         self.expected_email = expected_email.strip()
         self.bootstrap = bootstrap
+        self.master_token = self._validate_master_token(master_token)
+
+    def _validate_master_token(self, raw):
+        if raw is None:
+            return None
+        if not isinstance(raw, bytes) or len(raw) > 8192:
+            raise ValueError("invalid dedicated master token")
+        try:
+            value = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            raise ValueError("invalid dedicated master token") from None
+        if (not isinstance(value, dict) or value.get("version") != 1
+                or value.get("email") != self.expected_email
+                or not isinstance(value.get("master_token"), str)
+                or not value["master_token"].startswith("aas_et/")):
+            raise ValueError("invalid dedicated master token")
+        return raw
 
     @classmethod
     def from_environment(cls):
@@ -47,7 +65,9 @@ class SessionVault:
         key = os.environ.pop("PODCAST_SESSION_KEY", "")
         account = os.environ.pop("PODCAST_ACCOUNT_EMAIL", "")
         bootstrap = os.environ.pop("NOTEBOOKLM_AUTH_JSON", "")
-        return cls(key, account, bootstrap.encode() if bootstrap else None)
+        master_token = os.environ.pop("NOTEBOOKLM_MASTER_TOKEN_JSON", "")
+        return cls(key, account, bootstrap.encode() if bootstrap else None,
+                   master_token.encode() if master_token else None)
 
     def seal(self, raw, version):
         validate_state(raw, self.expected_email)
@@ -74,7 +94,31 @@ class SessionVault:
         except Exception:
             raise ValueError("encrypted session validation failed") from None
 
-    def restore(self, folder, lease):
+    def seal_master(self, raw):
+        raw = self._validate_master_token(raw)
+        if raw is None:
+            raise ValueError("dedicated master token missing")
+        nonce = os.urandom(12)
+        ciphertext = AESGCM(self.key).encrypt(nonce, raw, MASTER_CONTEXT)
+        return {"format": 1, "key_id": self.key_id,
+                "nonce": base64.b64encode(nonce).decode(),
+                "ciphertext": base64.b64encode(ciphertext).decode()}
+
+    def unseal_master(self, envelope):
+        try:
+            if not isinstance(envelope, dict) or set(envelope) != {"format", "key_id", "nonce", "ciphertext"}:
+                raise ValueError()
+            if envelope["format"] != 1 or envelope["key_id"] != self.key_id:
+                raise ValueError()
+            nonce = base64.b64decode(envelope["nonce"], validate=True)
+            ciphertext = base64.b64decode(envelope["ciphertext"], validate=True)
+            if len(nonce) != 12 or len(ciphertext) > 8208:
+                raise ValueError()
+            return self._validate_master_token(AESGCM(self.key).decrypt(nonce, ciphertext, MASTER_CONTEXT))
+        except Exception:
+            raise ValueError("encrypted master token validation failed") from None
+
+    def restore(self, folder, lease, master_envelope=None):
         if lease.get("recovery") is not None:
             raw = validate_state(json.dumps(lease["recovery"], ensure_ascii=False).encode(), self.expected_email)
         elif lease.get("envelope") is None:
@@ -91,6 +135,12 @@ class SessionVault:
         fd = os.open(path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
         with os.fdopen(fd, "wb") as handle:
             handle.write(raw)
+        master_token = self.unseal_master(master_envelope) if master_envelope is not None else self.master_token
+        if master_token is not None:
+            token_path = path.parent / "master_token.json"
+            token_fd = os.open(token_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+            with os.fdopen(token_fd, "wb") as handle:
+                handle.write(master_token)
         # Restoring a fresh file must not fool NotebookLM's mtime guard.
         os.utime(path, (1, 1))
         return path

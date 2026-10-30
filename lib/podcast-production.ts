@@ -34,7 +34,7 @@ export function makePodcastPacket(input: {issueKey: string; weekStart: string; w
     const url = new URL(story.officialUrl);
     if (url.protocol !== 'https:' || url.username || url.password) throw Error('공식 출처 링크를 확인해 주세요.');
   }
-  const title = `국제요정: ${input.main.title}`.slice(0, 160);
+  const title = input.main.title.slice(0, 160);
   const instructions = [
     '국제요정의 한국어 주간 개인정보 동향 팟캐스트를 만드세요. 형식은 두 진행자의 심층 분석 대화입니다.',
     `이번 회차의 메인 주제는 “${input.main.title}” 한 가지입니다. 대화의 대부분을 이 주제에 배분하세요. 관련 자료는 이 주제를 설명하는 근거이며 별도의 메인 소식으로 늘리지 마세요.`,

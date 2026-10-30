@@ -2,12 +2,17 @@ import {revalidatePath} from 'next/cache';
 import {makePodcastPacket, PODCAST_MAX_AUDIO_BYTES, uuid} from '../../../../lib/podcast-production';
 import {monthlyWeekIssueKey} from '../../../../lib/weekly-label';
 import {readAllPages} from '../../../../lib/read-all-pages';
-import {podcastAdmin, podcastError, podcastStories, storyHash, productionPublication} from '../../../../lib/podcast-server';
+import {podcastAdmin, podcastError, podcastStories, storyHash} from '../../../../lib/podcast-server';
+import {podcastPublishingAllowed} from '../../../../lib/podcast-publishing-access';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 const headers = {'Cache-Control':'private, no-store'};
 const recentCloudCheck = (value:unknown) => typeof value === 'string' && Number.isFinite(Date.parse(value)) && Date.now()-Date.parse(value) < 7200000;
+function canPublishFrom(request:Request){
+  return podcastPublishingAllowed({nodeEnv:process.env.NODE_ENV,vercelEnv:process.env.VERCEL_ENV,
+    branch:process.env.VERCEL_GIT_COMMIT_REF,hostname:new URL(request.url).hostname});
+}
 export async function GET(request: Request) {
   try {
     const db = await podcastAdmin();
@@ -18,7 +23,7 @@ export async function GET(request: Request) {
     const episodeIssues=issueBatches.flatMap(result=>result.data??[]);
     const episodes=episodeRows.flatMap(episode=>{const issue=episodeIssues.find(row=>row.issue_key===episode.issue_key);return issue?[{...episode,...issue}]:[];});
     const cloudReady = !!cloud.data?.enabled && cloud.data.status === 'ready' && recentCloudCheck(cloud.data.last_seen_at);
-    return Response.json({stories, jobs:jobs.data ?? [],episodes, cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}, {headers});
+    return Response.json({stories, jobs:jobs.data ?? [],episodes, cloudReady, cloudStatus:cloud.data?.status??'setup_required', setupRequired:!!jobs.error, canPublish:canPublishFrom(request)}, {headers});
   } catch (error) {return podcastError(error);}
 }
 export async function POST(request: Request) {
@@ -48,7 +53,7 @@ export async function POST(request: Request) {
         if (existing.source_hash !== sourceHash || Object.keys(packet).some(key => JSON.stringify(existing.packet[key]) !== JSON.stringify(packet[key as keyof typeof packet]))) throw Error('이 주간호에는 다른 제작 자료가 있습니다. 기존 제작 기록을 확인해 주세요.');
         return Response.json({job:existing}, {headers});
       }
-      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:reservedKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && process.env.VERCEL_ENV !== 'preview' && process.env.NODE_ENV === 'production'}).select().single();
+      const {data,error} = await db.from('podcast_production_jobs').insert({execution_mode:mode,issue_key:reservedKey,packet,source_hash:sourceHash,report_snapshot:stories,auto_publish:body.autoPublish === true && canPublishFrom(request)}).select().single();
       if (error) throw Error(error.code === '23505' ? '같은 주간호가 방금 만들어졌습니다. 목록을 새로 확인해 주세요.' : '제작 자료를 저장하지 못했습니다.');
       return Response.json({job:data}, {headers});
     }
@@ -117,7 +122,7 @@ export async function POST(request: Request) {
       if (error) throw Error('오디오 완료 상태를 저장하지 못했습니다.');
       if (!job.auto_publish) return Response.json({job:{...job,phase:'ready',audio_path:path}}, {headers});
     } else if (body.action !== 'publish') throw Error('지원하지 않는 작업입니다.');
-    productionPublication();
+    if (!canPublishFrom(request)) throw Object.assign(Error('이 주소에서는 게시할 수 없습니다. 승인된 작업실에서 실행해 주세요.'), {status:409});
     const current = await podcastStories(db, job.packet.reportIds);
     if (storyHash(current) !== job.source_hash) throw Error('제작 중 동향 내용이 바뀌었습니다. 오디오와 최신 내용을 대조한 뒤 다시 제작해 주세요.');
     const {error} = await db.rpc('publish_podcast_production_job',{p_job_id:job.id});

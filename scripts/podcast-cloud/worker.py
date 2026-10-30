@@ -163,14 +163,44 @@ def report_job_failure(cloud, job, exc):
         pass
 
 
-async def run_session(cloud, vault, lease, client_factory, production_enabled=False):
+async def run_master_bootstrap(cloud, vault, request, bootstrapper=None):
+    """Exchange a one-use token only on the cloud runner; never log its value."""
+    if bootstrapper is None:
+        from notebooklm.auth import master_token_bootstrap
+        bootstrapper = master_token_bootstrap
+    try:
+        with tempfile.TemporaryDirectory(prefix="podcast-master-") as folder:
+            path = Path(folder) / "profiles" / "default" / "storage_state.json"
+            path.parent.mkdir(parents=True, mode=0o700)
+            await bootstrapper(email=vault.expected_email,
+                               oauth_token=request["oauthToken"],
+                               storage_path=path, verify=True)
+            master = vault.seal_master(path.with_name("master_token.json").read_bytes())
+            session = vault.seal(path.read_bytes(), request["version"] + 1)
+            cloud.call("master_complete", data={"version": request["version"],
+                                                "masterEnvelope": master,
+                                                "sessionEnvelope": session})
+            print("Dedicated master credential verified and encrypted in the cloud.")
+            return 0
+    except Exception as exc:
+        reason = failure_reason(exc)
+        category = "auth" if auth_failure(exc) else "network" if reason in {"timeout", "http_status"} else "unknown"
+        try:
+            cloud.call("master_fail", data={"category": category})
+        except Exception:
+            pass
+        print("Cloud master credential exchange stopped safely (" + category + "). No credential details were logged.")
+        return 1
+
+
+async def run_session(cloud, vault, lease, client_factory, production_enabled=False, master_envelope=None):
     """Always persist verified rotations, including after a non-auth job failure."""
     job = None
     category = "invalid_state"
     stage = "restore"
     try:
         with tempfile.TemporaryDirectory(prefix="podcast-auth-") as folder:
-            path = vault.restore(folder, lease)
+            path = vault.restore(folder, lease, master_envelope)
             category = "transport"
             result = 0
             # HTTP only; no browser or copied browser profile in the runner.
@@ -228,9 +258,11 @@ async def main():
         if not lease:
             print("Session checks paused, finished, or already leased. No work was claimed.")
             return 0
+        master_envelope = cloud.call("master_read").get("envelope")
         factory = open_notebook_mcp
         return await run_session(cloud, vault, lease, factory,
-                                 production_enabled=os.environ.get("PODCAST_PRODUCE_ENABLED") == "true")
+                                 production_enabled=os.environ.get("PODCAST_PRODUCE_ENABLED") == "true",
+                                 master_envelope=master_envelope)
     except Exception:
         print("Cloud session setup unavailable. No credential details were logged.")
         return 1

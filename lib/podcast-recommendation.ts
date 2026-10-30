@@ -67,5 +67,5 @@ export function recommendedPodcastStory(ranked:RankedPodcastStory[]){return rank
 /** Preserve an explicit choice across refreshes. Missing selections never silently switch topics. */
 export function resolvePodcastMain(ranked:RankedPodcastStory[],period:string,choice?:PodcastMainChoice){
  if(choice?.period===period)return ranked.some(r=>r.story.id===choice.id)?choice.id:'';
- return recommendedPodcastStory(ranked)?.story.id??'';
+ return recommendedPodcastStory(ranked)?.story.id??ranked[0]?.story.id??'';
 }
