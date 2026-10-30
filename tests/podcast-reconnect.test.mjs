@@ -11,6 +11,7 @@ test('reconnection accepts only the dedicated account and required scoped sessio
  assert.throws(()=>reconnectStorage({...valid(),cookies:[cookie('SID')]}),/로그인/);
  assert.equal(reconnectStorage({...valid(),cookies:[cookie('SID'),cookie('OSID')]}).cookies.length,2);
  assert.equal(reconnectStorage({...valid(),cookies:[cookie('SID'),cookie('APISID'),cookie('SAPISID')]}).cookies.length,3);
+ assert.equal(reconnectStorage({...valid(),cookies:[cookie('SID',{domain:'.accounts.google.com'}),cookie('OSID')]}).cookies.length,2);
  const result=reconnectStorage({...valid(),cookies:[...valid().cookies,cookie('password'),cookie('SID',{domain:'.example.test'}),cookie('HSID',{path:'/other'})]});
  assert.equal(result.cookies.length,2);assert.deepEqual(result.origins,[]);
 });

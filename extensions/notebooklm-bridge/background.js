@@ -75,7 +75,8 @@ async function handler(message,sender) {
     const emails=[...new Set(text.match(/[a-zA-Z0-9._%+-]+@gmail\.com/g)??[])];
     if(emails.length>0&&(emails.length!==1||emails[0]!=='psunup@gmail.com'))throw Error('NotebookLM에 다른 Google 계정이 표시됩니다. 팟캐스트 전용 계정으로 전환해 주세요.');
     const names=['SID','HSID','SSID','APISID','SAPISID','LSID','OSID','__Secure-1PSID','__Secure-3PSID','__Secure-1PAPISID','__Secure-3PAPISID','__Secure-1PSIDTS','__Secure-3PSIDTS','__Secure-1PSIDCC','__Secure-3PSIDCC','SIDCC','NID','AEC','SOCS'];
-    const cookies=(await googleCookiesForTab(tab.id)).filter(c=>names.includes(c.name)&&['.google.com','google.com','accounts.google.com','notebooklm.google.com','notebook.google.com'].includes(c.domain)&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
+    const allowedDomains=['google.com','accounts.google.com','notebooklm.google.com','notebook.google.com'];
+    const cookies=(await googleCookiesForTab(tab.id)).filter(c=>names.includes(c.name)&&allowedDomains.includes(c.domain.replace(/^\./,''))&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
     const cookieNames=new Set(cookies.map(cookie=>cookie.name));
     if(!cookieNames.has('SID'))throw Error('이 Chrome 프로필에서 Google 로그인 세션을 찾지 못했습니다. NotebookLM을 연 프로필과 작업실 프로필이 같은지 확인해 주세요.');
     if(!cookieNames.has('__Secure-1PSIDTS')&&!cookieNames.has('OSID')&&!(cookieNames.has('APISID')&&cookieNames.has('SAPISID')))throw Error('Google 로그인은 확인했지만 NotebookLM 자동 제작에 필요한 인증 쿠키가 부족합니다. 아래 장기 로그인 연결을 사용해 주세요.');
