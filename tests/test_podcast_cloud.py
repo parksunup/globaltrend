@@ -27,6 +27,16 @@ def state(value='initial-secret'):
                        'notebooklm':{'account':{'email':EMAIL}}}).encode()
 
 class SessionCryptoTests(unittest.TestCase):
+    def test_secondary_binding_can_enter_file_backed_rotation(self):
+        recovery=json.loads(state())
+        recovery['cookies']=[{'name':'SID','value':'synthetic-only'},
+                             {'name':'OSID','value':'synthetic-only'}]
+        raw=json.dumps(recovery).encode()
+        vault=session_store.SessionVault(KEY,EMAIL)
+        self.assertEqual(vault.unseal(vault.seal(raw,1),1),raw)
+        recovery['cookies']=[{'name':'SID','value':'synthetic-only'}]
+        with self.assertRaises(ValueError): vault.seal(json.dumps(recovery).encode(),1)
+
     def test_ciphertext_is_random_and_authenticated_for_version_and_key(self):
         v=session_store.SessionVault(KEY,EMAIL)
         a=v.seal(state(),1); b=v.seal(state(),1)

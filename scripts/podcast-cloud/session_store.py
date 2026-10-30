@@ -25,7 +25,11 @@ def validate_state(raw, expected_email):
     if any(not isinstance(c, dict) or not isinstance(c.get("name"), str)
            or not isinstance(c.get("value"), str) for c in cookies):
         raise ValueError("invalid session")
-    if not {"SID", "__Secure-1PSIDTS"} <= {c["name"] for c in cookies if c["value"]}:
+    names = {c["name"] for c in cookies if c["value"]}
+    # notebooklm-py can rotate a missing PSIDTS from a file-backed session
+    # when the browser export contains a secondary Google binding.
+    if "SID" not in names or not ("__Secure-1PSIDTS" in names or "OSID" in names
+                                  or {"APISID", "SAPISID"} <= names):
         raise ValueError("incomplete session")
     account = state.get("notebooklm", {}).get("account", {}).get("email")
     if not expected_email or account != expected_email:
