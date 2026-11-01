@@ -196,3 +196,13 @@ test('missing-session diagnostics distinguish query rejection and filtering with
  assert.equal(result.diagnostics.acceptedCookieNames.length,0);
  assert.equal(JSON.stringify(result).includes('secret-must-never-leak'),false);
 });
+
+test('Google host permissions cover secure and non-Secure auth cookie visibility',()=>{
+ const manifest=JSON.parse(readFileSync(new URL('../extensions/notebooklm-bridge/manifest.json',import.meta.url),'utf8'));
+ const permitted=secure=>manifest.host_permissions.some(pattern=>pattern===(secure?'https':'http')+'://*.google.com/*'||pattern==='*://*.google.com/*');
+ // Chromium maps Secure cookies to https and other cookies to http before host permission filtering.
+ const browserCookies=[cookie('SID',{secure:false}),cookie('HSID',{secure:false}),cookie('APISID',{secure:false}),cookie('SAPISID'),cookie('__Secure-1PSIDTS')];
+ assert.deepEqual(browserCookies.filter(c=>permitted(c.secure)).map(c=>c.name),browserCookies.map(c=>c.name));
+ const recovered=reconnectStorage({...valid(),cookies:browserCookies.filter(c=>permitted(c.secure))});
+ assert.equal(recovered.cookies.some(c=>c.name==='SID'&&c.secure===false),true);
+});
