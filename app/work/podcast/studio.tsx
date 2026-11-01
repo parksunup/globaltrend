@@ -220,7 +220,7 @@ export default function PodcastStudio(){
     <button className={styles.primary} type="button" disabled={!loaded||busy||!packet||setup||!canPublish||Boolean(pendingSelection.current)} onClick={()=>void start()}>{busy?'제작 요청 중…':reconnectOpened?'NotebookLM 연결 확인 중…':'제작 후 자동으로 게시'}</button>
     {!cloudReady&&<div className={styles.actions} aria-label="Google 로그인 확인"><button type="button" className={styles.secondary} onClick={()=>void confirmReconnect()}>Google 로그인 완료 확인</button><button type="button" className={styles.secondary} onClick={()=>{setError('');setNotice('');void openReconnect(false);}}>Google 로그인 창 열기</button></div>}
     {!cloudReady&&<p role="status">연결 도구: {connected?'연결됨':'연결되지 않음'}{bridgeVersion>0?` · 버전 ${bridgeVersion}`:''}</p>}
-    {!cloudReady&&bridgeVersion>0&&bridgeVersion<10&&<p role="alert" className={styles.error}>연결 도구 업데이트(0.4.8)가 필요합니다. 아래에서 새 연결 도구를 받아 Chrome 확장 프로그램 화면에서 기존 도구를 새 파일로 교체한 뒤 새로고침해 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
+    {!cloudReady&&bridgeVersion>0&&bridgeVersion<11&&<p role="alert" className={styles.error}>연결 도구 업데이트(0.4.9)가 필요합니다. 아래에서 새 연결 도구를 받아 Chrome 확장 프로그램 화면에서 기존 도구를 새 파일로 교체한 뒤 새로고침해 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
     {connectionDiagnostics&&<details open><summary>연결 진단 · 인증값 제외</summary><p>선택한 저장소, 조회별 쿠키 수, 필수 인증 쿠키의 유무를 표시합니다. 쿠키 값과 이메일은 포함하지 않습니다.</p><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(connectionDiagnostics,null,2)}</pre></details>}
