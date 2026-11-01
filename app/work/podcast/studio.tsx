@@ -62,6 +62,11 @@ export default function PodcastStudio(){
   const reconnect=await fetch('/api/podcast/reconnect',{cache:'no-store'});
   if(reconnect.ok){
    const status=await reconnect.json();setReconnectAvailable(status.available===true);
+   if(status.result==='pending'){
+    reconnectQueued.current=true;setReconnectOpened(false);
+    setNotice('연결 요청이 접수됐습니다. 클라우드에서 실제 접속을 확인하고 있습니다.');
+    setConnectionDiagnostics({stage:'cloud_verify',code:'RECONNECT_PENDING',requestedAt:status.requestedAt});
+   }
    if(reconnectQueued.current&&status.result==='failed'){
     reconnectQueued.current=false;pendingSelection.current=null;
     setError('클라우드에서 NotebookLM 로그인을 확인하지 못했습니다. 장기 로그인 연결 상태를 확인해 주세요.');
@@ -107,13 +112,13 @@ export default function PodcastStudio(){
   try{
    await bridge({type:'GT_RECONNECT_SAVE'});
    reconnectQueued.current=true;
-   setReconnectOpened(false);setError('');setConnectionDiagnostics(null);
+   setReconnectOpened(false);setError('');setConnectionDiagnostics({stage:'queue_reconnect',code:'RECONNECT_ACCEPTED'});
    setNotice('로그인 정보를 전달했습니다. 클라우드 연결을 확인한 뒤 제작을 이어갑니다.');
    await load(true);
   }catch(cause){
    const message=cause instanceof Error?cause.message:'로그인 완료 여부를 확인하지 못했습니다.';
    setError(message);
-   setConnectionDiagnostics((cause as Error & {diagnostics?:Record<string,unknown>})?.diagnostics??null);
+   setConnectionDiagnostics((cause as Error & {diagnostics?:Record<string,unknown>})?.diagnostics??{stage:'reconnect',code:message.match(/\[([A-Z_]+)\]/)?.[1]??'RECONNECT_CLIENT_ERROR',message});
   }finally{reconnectSaving.current=false;}
  }
  useEffect(()=>{
@@ -223,7 +228,7 @@ export default function PodcastStudio(){
     {!cloudReady&&bridgeVersion>0&&bridgeVersion<11&&<p role="alert" className={styles.error}>연결 도구 업데이트(0.4.9)가 필요합니다. 아래에서 새 연결 도구를 받아 Chrome 확장 프로그램 화면에서 기존 도구를 새 파일로 교체한 뒤 새로고침해 주세요. <a href="/api/podcast/extension">새 연결 도구 받기</a></p>}
     {canPublish&&<p>누르면 이 회차가 완성되는 대로 실제 공개 페이지에 게시됩니다.</p>}
     {notice&&<p role="status" className={styles.summary}>{notice}</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}
-    {connectionDiagnostics&&<details open><summary>연결 진단 · 인증값 제외</summary><p>선택한 저장소, 조회별 쿠키 수, 필수 인증 쿠키의 유무를 표시합니다. 쿠키 값과 이메일은 포함하지 않습니다.</p><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(connectionDiagnostics,null,2)}</pre></details>}
+    {<details open={Boolean(connectionDiagnostics)}><summary>연결 진단 · 인증값 제외</summary><p>선택한 저장소, 조회별 쿠키 수, 필수 인증 쿠키의 유무를 표시합니다. 쿠키 값과 이메일은 포함하지 않습니다.</p><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere'}}>{JSON.stringify(connectionDiagnostics??{stage:'idle',code:'NO_DIAGNOSTIC_YET'},null,2)}</pre></details>}
     {setup&&<p role="alert" className={styles.error}>제작 기록 연결을 확인하지 못했습니다.</p>}
     <details className={styles.setup}><summary>Google 로그인을 오래 유지하기 · 처음 한 번</summary><p>기관망에서 막히는 장기 로그인 발급은 클라우드에서 진행합니다. 이 브라우저에 최신 연결 도구를 설치한 뒤 아래 버튼을 누르고, 열린 Google 화면에서 팟캐스트 전용 계정으로 로그인해 주세요. 완료 후에는 클라우드가 결과를 확인합니다.</p><p role="status">{!masterAvailable?'장기 로그인 연결을 준비 중입니다.':masterStatus==='verified'?'장기 로그인 연결 완료':masterStatus==='pending'?'클라우드에서 장기 로그인 발급 중':masterStatus==='failed'?'발급 실패 · 다시 로그인해 주세요':'아직 장기 로그인 연결 전'}</p>{masterStatus!=='verified'&&<button type="button" className={styles.secondary} disabled={!masterAvailable||!connected||masterOpened||masterStatus==='pending'} onClick={()=>void bridge({type:'GT_MASTER_OPEN'}).then(()=>{setMasterOpened(true);setError('');}).catch(cause=>setError(cause.message))}>{masterOpened?'Google 로그인 확인 중…':'장기 로그인 연결'}</button>}<p>기존 도구를 설치하셨다면 새 연결 도구를 다시 내려받아 같은 폴더에 압축을 풀고 Chrome 확장 프로그램 화면에서 새로고침해 주세요.</p></details>
     {!cloudReady&&<details className={styles.setup}><summary>첫 연결 안내 · Google 로그인이 안 열릴 때</summary><ol><li>Chrome의 팟캐스트 전용 프로필에서 이 작업실을 엽니다.</li><li><a href="/api/podcast/extension">NotebookLM 연결 도구 받기</a>를 눌러 압축을 푼 뒤, Chrome의 <code>chrome://extensions</code>에서 ‘압축해제된 확장 프로그램을 로드합니다’로 폴더를 선택합니다. 처음 한 번만 하면 됩니다.</li><li>이 페이지를 새로고침하고 ‘제작 후 자동으로 게시’를 누릅니다.</li><li>NotebookLM이 바로 열리면 이미 로그인된 상태이므로 기다리세요. 로그인 화면이 열릴 때만 팟캐스트 전용 계정으로 로그인하세요. 비밀번호는 국제요정 사이트에 입력하지 않습니다.</li></ol><p>{connected?'연결 도구가 이 브라우저에 연결됐습니다.':'연결 도구가 아직 보이지 않습니다.'}</p></details>}

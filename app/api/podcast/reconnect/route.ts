@@ -1,5 +1,5 @@
 import {podcastAdmin,podcastError} from '../../../../lib/podcast-server';
-import {PODCAST_DEDICATED_ACCOUNT,reconnectStorage,PODCAST_RECONNECT_MAX_BYTES} from '../../../../lib/podcast-reconnect';
+import {PODCAST_DEDICATED_ACCOUNT,reconnectStorage,PODCAST_RECONNECT_MAX_BYTES,reconnectQueueError,reconnectIsPending} from '../../../../lib/podcast-reconnect';
 export const runtime='nodejs';
 export const dynamic='force-dynamic';
 const headers={'Cache-Control':'private, no-store'};
@@ -9,7 +9,16 @@ export async function POST(req:Request){try{
  if(Number(req.headers.get('content-length')??0)>PODCAST_RECONNECT_MAX_BYTES)throw Error('로그인 정보 크기를 확인해 주세요.');
  const raw=await req.text();if(Buffer.byteLength(raw)>PODCAST_RECONNECT_MAX_BYTES)throw Error('로그인 정보 크기를 확인해 주세요.');
  let input;try{input=JSON.parse(raw);}catch{throw Error('로그인 정보를 확인할 수 없습니다.');}
+ const status=await db.rpc('podcast_reconnect_status');
+ if(!status.error&&reconnectIsPending(status.data))return Response.json({ok:true,result:'pending',alreadyQueued:true},{status:202,headers});
  const {data,error}=await db.rpc('queue_podcast_reconnect',{p_storage:reconnectStorage(input)});
- if(error)throw Error('연결 요청을 저장하지 못했습니다. 제작 중이면 잠시 후 다시 시도해 주세요.');
+ if(error){
+  if(error.message==='reconnection busy'){
+   const current=await db.rpc('podcast_reconnect_status');
+   if(!current.error&&reconnectIsPending(current.data))return Response.json({ok:true,result:'pending',alreadyQueued:true},{status:202,headers});
+  }
+  const failure=reconnectQueueError(error);
+  return Response.json({error:failure.error,diagnostics:failure.diagnostics},{status:failure.status,headers});
+ }
  return Response.json(data,{headers});
  }catch(e){return podcastError(e);}}
