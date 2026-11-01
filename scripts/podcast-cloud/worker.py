@@ -249,22 +249,32 @@ async def run_session(cloud, vault, lease, client_factory, production_enabled=Fa
 
 async def main():
     logging.disable(logging.CRITICAL)
+    cloud = None
+    lease = None
+    stage = 'configuration'
     try:
         from session_store import SessionVault
         from notebook_mcp import open_notebook_mcp
         cloud = Cloud()
         vault = SessionVault.from_environment()
+        stage = "session_acquire"
         lease = cloud.call("session_acquire").get("session")
         if not lease:
             print("Session checks paused, finished, or already leased. No work was claimed.")
             return 0
+        stage = "master_read"
         master_envelope = cloud.call("master_read").get("envelope")
         factory = open_notebook_mcp
         return await run_session(cloud, vault, lease, factory,
                                  production_enabled=os.environ.get("PODCAST_PRODUCE_ENABLED") == "true",
                                  master_envelope=master_envelope)
     except Exception:
-        print("Cloud session setup unavailable. No credential details were logged.")
+        if cloud is not None and lease:
+            try:
+                cloud.call("session_fail", data={"category": "transport"})
+            except Exception:
+                pass
+        print("Cloud session setup unavailable (stage=" + stage + "). No credential details were logged.")
         return 1
 
 
