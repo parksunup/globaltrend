@@ -13,3 +13,19 @@ export function reconnectStorage(value:unknown){
  if(Buffer.byteLength(JSON.stringify(result))>PODCAST_RECONNECT_MAX_BYTES)throw Error('로그인 정보 크기를 확인해 주세요.');
  return result;
 }
+
+export function reconnectQueueError(error:{code?:string;message?:string}){
+ const known:Record<string,[string,string,number]>={
+  'reconnection busy':['RECONNECT_BUSY','다른 연결 확인이 진행 중입니다. 기존 요청 상태를 확인하고 있습니다.',409],
+  'invalid cookie scope':['RECONNECT_COOKIE_SCOPE','허용된 Google 쿠키 범위를 확인하지 못했습니다.',400],
+  'incomplete dedicated session':['RECONNECT_COOKIE_INCOMPLETE','필수 Google 인증 쿠키가 부족합니다.',400],
+  'reconnection rollout pending':['RECONNECT_NOT_READY','서버 연결 기능이 아직 준비되지 않았습니다.',503],
+  'administrator only':['RECONNECT_ADMIN_REQUIRED','관리자 로그인을 확인해 주세요.',403]
+ };
+ const [code,message,status]=known[error.message??'']??['RECONNECT_QUEUE_FAILED','서버가 연결 요청을 저장하지 못했습니다.',500];
+ return {status,error:'['+code+'] '+message,diagnostics:{stage:'queue_reconnect',code,sqlState:/^[A-Z0-9]{5}$/.test(error.code??'')?error.code:undefined}};
+}
+export function reconnectIsPending(value:{result?:string;requestedAt?:string}|null){
+ const age=Date.now()-Date.parse(value?.requestedAt??'');
+ return value?.result==='pending'&&age>=0&&age<15*60*1000;
+}
