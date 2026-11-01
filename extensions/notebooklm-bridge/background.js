@@ -10,9 +10,12 @@ async function appRpc(job,method,payload) {
 }
 async function googleCookiesForTab(tabId) {
   // Metadata only: never put cookie values, page text or account addresses in diagnostics.
-  const diagnostics={stage:'cookie_lookup',bridge:10,queries:[],stores:[],partition:'unavailable'};
+  const diagnostics={stage:'cookie_lookup',bridge:11,queries:[],stores:[],partition:'unavailable'};
   diagnostics.browser=typeof navigator!=='undefined'?(navigator.userAgent.match(/(?:Chrome|Chromium|Edg)\/[\d.]+/g)??[]):[];
-  if(chrome.permissions?.contains)diagnostics.googleHostPermission=await chrome.permissions.contains({origins:['https://*.google.com/*']});
+  if(chrome.permissions?.contains){
+    diagnostics.googleHostPermission=await chrome.permissions.contains({origins:['https://*.google.com/*']});
+    diagnostics.googleHttpHostPermission=await chrome.permissions.contains({origins:['http://*.google.com/*']});
+  }
   let stores=[];
   try{stores=chrome.cookies.getAllCookieStores?await chrome.cookies.getAllCookieStores():[];}
   catch{diagnostics.storeLookup='failed';}
@@ -48,7 +51,7 @@ async function googleCookiesForTab(tabId) {
     if(seen.has(key))return false;seen.add(key);return true;
   });
   diagnostics.totalUnique=cookies.length;
-  diagnostics.authCookies=cookies.filter(cookie=>['SID','OSID','APISID','SAPISID','__Secure-1PSIDTS'].includes(cookie.name)).map(cookie=>({name:cookie.name,domain:cookie.domain,path:cookie.path,hasValue:typeof cookie.value==='string'&&cookie.value.length>0}));
+  diagnostics.authCookies=cookies.filter(cookie=>['SID','OSID','APISID','SAPISID','__Secure-1PSIDTS'].includes(cookie.name)).map(cookie=>({name:cookie.name,domain:cookie.domain,path:cookie.path,secure:cookie.secure,hasValue:typeof cookie.value==='string'&&cookie.value.length>0}));
   cookies.diagnostics=diagnostics;
   return cookies;
 }
@@ -57,7 +60,7 @@ async function handler(message,sender) {
   const origin=sender.url ? new URL(sender.url).origin : '';
   const isApp=(origin==='https://globaltrend-six.vercel.app'||allowedOrigins.includes(origin)) && ['/team/podcast','/work/podcast'].includes(new URL(sender.url).pathname);
   let job=await getJob();
-  if (message.type==='GT_PING' && isApp) return {ok:true,version:10,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
+  if (message.type==='GT_PING' && isApp) return {ok:true,version:11,job:job?.origin===origin?{id:job.id,phase:job.phase}:null};
   if (message.type==='GT_MASTER_OPEN' && isApp) {
     if(!chrome.cookies)throw Error('업데이트된 연결 도구가 필요합니다.');
     await chrome.cookies.remove({url:'https://accounts.google.com/EmbeddedSetup',name:'oauth_token'});
@@ -110,7 +113,7 @@ async function handler(message,sender) {
     const diagnostics=captured.diagnostics;
     const cookies=captured.filter(c=>names.includes(c.name)&&allowedDomains.includes(c.domain.replace(/^\./,''))&&c.path==='/').map(c=>({name:c.name,value:c.value,domain:c.domain,path:c.path,expires:c.expirationDate??-1,httpOnly:c.httpOnly,secure:c.secure,sameSite:c.sameSite==='strict'?'Strict':c.sameSite==='lax'?'Lax':'None'}));
     const cookieNames=new Set(cookies.map(cookie=>cookie.name));
-    if(!cookieNames.has('SID')){const error=Error('Google 인증 쿠키를 조회하지 못했습니다. 아래 연결 진단에서 조회 단계별 결과를 확인할 수 있습니다.');error.diagnostics={...diagnostics,stage:'required_cookie_missing',acceptedCookieNames:[...cookieNames]};throw error;}
+    if(!cookieNames.has('SID')){const error=Error(diagnostics.googleHttpHostPermission===false?'Google 쿠키 조회 권한이 부족합니다. 최신 연결 도구를 적용하고 Chrome에서 추가된 Google 사이트 권한을 허용해 주세요.':'Google 인증 쿠키를 조회하지 못했습니다. 아래 연결 진단에서 조회 단계별 결과를 확인할 수 있습니다.');error.diagnostics={...diagnostics,stage:'required_cookie_missing',acceptedCookieNames:[...cookieNames]};throw error;}
     if(!cookieNames.has('__Secure-1PSIDTS')&&!cookieNames.has('OSID')&&!(cookieNames.has('APISID')&&cookieNames.has('SAPISID')))throw Error('Google 로그인은 확인했지만 NotebookLM 자동 제작에 필요한 인증 쿠키가 부족합니다. 아래 장기 로그인 연결을 사용해 주세요.');
     const reply=await chrome.scripting.executeScript({target:{tabId:sender.tab.id},func:async cookies=>{const r=await fetch('/api/podcast/reconnect',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:'psunup@gmail.com',cookies})});const body=await r.json();return r.ok?{ok:true}:{error:body.error??'연결 실패'};},args:[cookies]});
     const result=reply[0]?.result;if(!result?.ok)throw Error(result?.error??'연결 결과를 확인하지 못했습니다.');
