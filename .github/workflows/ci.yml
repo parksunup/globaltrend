@@ -37,6 +37,11 @@ jobs:
       - uses: supabase/setup-cli@v3
         with:
           version: 2.118.0
+      - name: Prepare disabled schedule fixture for the isolated CI database
+        if: hashFiles('supabase/migrations/20261030091000_reschedule_daily_collection_and_drafting.sql') != ''
+        run: |
+          cp scripts/ci/collector-schedule-fixture.sql supabase/migrations/20261030090959_ci_collector_schedule_fixture.sql
+          cp scripts/ci/collector-schedule-fixture.test.sql supabase/tests/ci_collector_schedule_fixture.test.sql
       - name: Start local database and replay migrations
         run: |
           supabase db start
