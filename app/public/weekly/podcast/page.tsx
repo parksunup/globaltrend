@@ -8,6 +8,7 @@ import WeeklyIssuePicker from '../weekly-issue-picker';
 import {podcastDisplayTitle} from '../../../../lib/public-podcast';
 import {readAllPages} from '../../../../lib/read-all-pages';
 import {formatMonthlyWeek,podcastEditionNumber} from '../../../../lib/weekly-label';
+import {PODCAST_BRAND} from '../../../../lib/podcast-brand';
 
 export const dynamic = "force-dynamic";
 
@@ -60,7 +61,7 @@ export default async function PublishedPodcastsPage({searchParams}:{searchParams
     <section className={styles.searchPage}>
       <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY PODCAST</p><h1>주간 동향</h1><p>한 주의 동향을 읽고, 주요 주제를 깊이 다루는 팟캐스트도 들어보세요.</p></div>
       <WeeklyFormats active="podcast" />
-      <h2>주간 동향 팟캐스트</h2><p>주요 주제 한 가지를 깊이 살펴보고, 짧은 추가 소식을 두 진행자의 대화로 들어보세요.</p>
+      <h2>{PODCAST_BRAND}</h2><p>주요 주제 한 가지를 깊이 살펴보고, 짧은 추가 소식을 호스트와 에디터의 대화로 들어보세요.</p>
       {!listError&&<WeeklyIssuePicker issues={options} selectedKey={selected?.issue_key??''} basePath="/public/weekly/podcast" label="공개된 팟캐스트 호 선택" podcast/>}
       {listError ? schemaNotReady
         ? <div className={styles.weeklyEmpty}><strong>팟캐스트 공개를 준비하고 있습니다</strong><p>게시 기능을 배포한 뒤 팟캐스트를 들으실 수 있습니다.</p></div>
