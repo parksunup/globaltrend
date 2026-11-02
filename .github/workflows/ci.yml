@@ -42,6 +42,13 @@ jobs:
         run: |
           cp scripts/ci/collector-schedule-fixture.sql supabase/migrations/20261030090959_ci_collector_schedule_fixture.sql
           cp scripts/ci/collector-schedule-fixture.test.sql supabase/tests/ci_collector_schedule_fixture.test.sql
+      - name: Align legacy playback fixture with the monthly issue key schema
+        if: hashFiles('supabase/migrations/20261029170000_monthly_week_keys_and_podcast_editions.sql') != ''
+        run: |
+          if git grep -q '2098-W50' -- supabase/tests/podcast_playback.test.sql; then
+            git apply --check scripts/ci/podcast-playback-monthly-id.patch
+            git apply scripts/ci/podcast-playback-monthly-id.patch
+          fi
       - name: Start local database and replay migrations
         run: |
           supabase db start
