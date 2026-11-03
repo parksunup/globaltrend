@@ -400,9 +400,24 @@ export async function advance(
       const diagnosticUrl = safeDiagnosticUrl(raw, c.hosts);
       if (diagnosticUrl) result.url = diagnosticUrl;
       else delete result.url;
-      const response = await http.request(raw, method, body);
-      result.stage = `${requestStage}_parse`;
-      return response;
+      try {
+        const response = await http.request(raw, method, body);
+        result.stage = `${requestStage}_parse`;
+        return response;
+      } catch (error) {
+        const requestError = error as {
+          requestUrl?: unknown;
+          requestKind?: unknown;
+        };
+        if (typeof requestError.requestUrl === "string") {
+          const failedUrl = safeDiagnosticUrl(requestError.requestUrl, c.hosts);
+          if (failedUrl) result.failed_request_url = failedUrl;
+        }
+        if (requestError.requestKind === "robots") {
+          result.stage = `${requestStage}_robots_fetch`;
+        }
+        throw error;
+      }
     },
   };
   try {
