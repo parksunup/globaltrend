@@ -369,7 +369,10 @@ Deno.test("ICO records the robots URL for a 403 and preserves the listing cursor
   eq(step.result.stage, "listing_robots_fetch");
   eq(step.result.failed_request_url, "https://ico.org.uk/robots.txt");
   eq(step.result.coverage_complete, false);
-  eq(step.state.page, c.listing);
+  eq(
+    step.state.page,
+    `${c.listing}?from=2026-11-01&to=2026-11-03`,
+  );
   eq(step.state.offset, 0);
 });
 
