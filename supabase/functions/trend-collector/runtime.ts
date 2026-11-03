@@ -112,7 +112,17 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
   }
 }
 async function listing(c: Config, http: HTTP, page: string) {
-  const r = await http.request(page);
+  // ICO accepts date filters in its /api/search POST body. Keep the browser
+  // listing request on the original unfiltered page; putting from/to on this
+  // GET URL caused 403s before the documented search API was reached.
+  let listingPage = page;
+  if (c.source === "ico") {
+    const base = new URL(page);
+    base.searchParams.delete("from");
+    base.searchParams.delete("to");
+    listingPage = base.href;
+  }
+  const r = await http.request(listingPage);
   const text = new TextDecoder().decode(r.bytes);
   if (c.source === "pdpc") {
     const data = JSON.parse(text);
