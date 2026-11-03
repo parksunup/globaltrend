@@ -50,6 +50,24 @@ class ExpansionTests(unittest.TestCase):
         item=expansion.extract('ec',(FIXTURES/'ec-detail.json').read_text(),url)
         self.assertIn('Roxana Mînzatu',item['content_text'])
         self.assertIn('We can see from the findings',item['content_text'])
+    def test_ec_accepts_observed_zero_based_response_page_and_keeps_event_date(self):
+        data=json.loads((FIXTURES/'ec-listing.json').read_text())
+        data['pageNumber']=0
+        data['docuLanguageListResources'][0]['eventDate']='2026-10-28T09:00:00+02:00'
+        rows,nxt=expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
+        self.assertEqual(len(rows),data['totalNumber'])
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-10-28')
+        data['pageNumber']=7
+        with self.assertRaisesRegex(ValueError,'ec_listing_schema_or_page_changed'):
+            expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
+    def test_ca_opc_advice_to_parliament_is_an_approved_paginated_listing(self):
+        route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][0]
+        html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
+        rows,nxt=expansion.discover('ca-opc',html,listing)
+        self.assertEqual(len(rows),2)
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-11-02')
+        self.assertTrue(rows[0]['url'].endswith('/parl_261102/'))
+        self.assertIn('Page=2',nxt)
     def test_modified_date_and_cookie_challenge_never_become_valid_articles(self):
         html=(FIXTURES/'ca-opc-detail.html').read_text().replace('name="dcterms.issued"','name="dcterms.modified"')
         self.assertIsNone(expansion.extract('ca-opc',html,json.loads((FIXTURES/'manifest.json').read_text())['ca-opc']['url'])['published_date'])
