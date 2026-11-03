@@ -55,6 +55,34 @@ Deno.test("successful duplicate advances only after ingest and preserves incompl
   eq(result.result.saved, "duplicate");
   eq(result.result.coverage_complete, false);
 });
+Deno.test("CA OPC moves from the news list to its approved advice list before exhausting", async () => {
+  const opc = {
+    source: "ca-opc",
+    source_id: "opc-source",
+    listing: "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+    hosts: ["www.priv.gc.ca"],
+    language: "en",
+  };
+  const state: State = {
+    since: "2026-11-01",
+    until: "2026-11-03",
+    page: opc.listing,
+    rows: [{
+      url: "https://www.priv.gc.ca/en/opc-news/news-and-announcements/2026/nr-c_261027/",
+      title: "Known official news item",
+    }],
+    offset: 1,
+    listing_index: 0,
+  };
+  const step = await advance(opc, state, {
+    request: () => Promise.reject(new Error("unexpected fetch")),
+  }, async () => ({}));
+  eq(step.continue, true);
+  eq(step.result.stage, "next_listing_stream");
+  eq(step.state.listing_index, 1);
+  eq(step.state.page, "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d");
+  eq(step.state.offset, 0);
+});
 Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
   const ico = {
     source: "ico",
