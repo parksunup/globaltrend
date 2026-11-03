@@ -1,0 +1,12 @@
+begin;
+select plan(8);
+select ok(to_regclass('public.written_weekly_issues') is not null,'written weekly has a separate issue table');
+select ok(to_regclass('public.written_weekly_issue_reports') is not null,'written weekly has a separate report selection table');
+select ok(to_regclass('public.weekly_podcast_episodes') is not null,'podcast episode table stays in place');
+select ok(exists(select 1 from pg_constraint where conrelid='public.written_weekly_issue_reports'::regclass and confrelid='public.written_weekly_issues'::regclass and contype='f'),'written selections belong to written issues');
+select ok(not has_function_privilege('anon','public.save_written_weekly_edition(text,text,date,date,jsonb)','execute'),'anonymous cannot save written selection');
+select ok(not has_function_privilege('anon','public.publish_written_weekly_edition(text)','execute'),'anonymous cannot publish written issue');
+select ok(not has_function_privilege('service_role','public.publish_written_weekly_edition(text)','execute'),'automated producer cannot publish written issue');
+select ok(position('insert into written_weekly_issues' in pg_get_functiondef('public.save_written_weekly_edition(text,text,date,date,jsonb)'::regprocedure))>0,'save function targets the written issue table');
+select * from finish();
+rollback;

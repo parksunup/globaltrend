@@ -1,0 +1,5 @@
+.picker{display:grid;grid-template-columns:auto minmax(260px,560px);align-items:center;gap:16px;margin:28px 0 36px;padding:22px;border:1px solid var(--line,rgba(151,180,199,.2));border-radius:16px;background:var(--panel,#101f2d)}
+.picker label{font-size:20px;font-weight:700;line-height:1.4}
+.picker select{width:100%;min-height:48px;padding:10px 38px 10px 13px;border:1px solid var(--line,rgba(151,180,199,.35));border-radius:9px;background:var(--panel,#101f2d);color:inherit;font:inherit}
+.picker select:focus-visible{outline:2px solid var(--cyan,#78dcf6);outline-offset:3px}
+@media(max-width:620px){.picker{grid-template-columns:1fr;gap:10px}.picker label{font-size:18px}}

@@ -1,0 +1,137 @@
+-- Run after the new migration, inside an explicit BEGIN ... ROLLBACK.
+do $$
+begin
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 17:59:59+00')
+  is distinct from timestamptz '2026-10-25 18:00:00+00' then raise exception 'pre-03:00 target is incorrect'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 18:00:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'exact-03:00 target must be next day'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 18:15:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'post-03:00 target is incorrect'; end if;
+ if private.collector_cloud_daily_recheck_at(timestamptz '2026-10-25 23:15:00+00')
+  is distinct from timestamptz '2026-10-26 18:00:00+00' then raise exception 'long-run completion target is incorrect'; end if;
+end $$;
+do $$
+declare claim jsonb; second jsonb; output jsonb; bundle jsonb; original_edge jsonb; sid uuid;
+begin
+ select source_id,state into sid,original_edge from public.collector_edge_sources where slug='ftc';
+ if has_function_privilege('anon','public.collector_cloud_take(text,text)','execute') then raise exception 'anonymous claim allowed'; end if;
+ if has_function_privilege('authenticated','public.collector_cloud_commit(uuid,text,uuid,jsonb,text)','execute') then raise exception 'browser commit allowed'; end if;
+ -- Test data and visibility changes are all rolled back by the caller.
+ update pgmq.q_trend_collect set vt=now()-interval '1 second' where (message->>'source_id')::uuid=sid;
+ perform public.collector_cloud_route('ftc',true);
+ perform pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','rollback-validation'));
+ claim=public.collector_cloud_take('rollback-worker','ftc');
+ if claim is null then raise exception 'expected a claim'; end if;
+ second=public.collector_cloud_take('other-worker','ftc');
+ if second is not null then raise exception 'duplicate concurrent source claim'; end if;
+ begin
+  perform public.collector_cloud_route('ftc',false);
+  raise exception 'route changed during active lease';
+ exception when others then if sqlerrm='route changed during active lease' then raise; end if; end;
+ second=public.collector_edge_take();
+ if second->>'slug'='ftc' then raise exception 'Edge consumed cloud source'; end if;
+ bundle=jsonb_build_object('cursor',jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml','offset',7),
+  'operations','[]'::jsonb,'result',jsonb_build_object('since',claim->>'since','until',claim->>'until',
+  'status','failed','reason','http_503','started_at',now(),'coverage_complete',true));
+ begin
+  perform public.collector_cloud_commit(sid,'wrong-worker',(claim->>'lease_token')::uuid,bundle,'rollback-test');
+  raise exception 'wrong worker accepted';
+ exception when others then if sqlerrm='wrong worker accepted' then raise; end if; end;
+ begin
+  perform public.collector_cloud_commit(sid,'rollback-worker',(claim->>'lease_token')::uuid,jsonb_set(bundle,'{cursor}','42'::jsonb),'bad-cursor-test');
+  raise exception 'malformed cursor accepted';
+ exception when others then if sqlerrm='malformed cursor accepted' then raise; end if; end;
+ output=public.collector_cloud_commit(sid,'rollback-worker',(claim->>'lease_token')::uuid,bundle,'rollback-test');
+ if output->>'retry_after_seconds'<>'3600' or output->>'coverage_complete'<>'false' then raise exception 'failure coverage/retry incorrect'; end if;
+ if (select cursor->>'offset' from public.collector_cloud_routes where source_id=sid)<>'7' then raise exception 'cursor not saved'; end if;
+ if (select state from public.collector_edge_sources where source_id=sid) is distinct from original_edge then raise exception 'Edge state overwritten'; end if;
+ begin
+  perform public.collector_cloud_commit(sid,'rollback-worker',(claim->>'lease_token')::uuid,bundle,'rollback-test-duplicate');
+  raise exception 'duplicate commit accepted';
+ exception when others then if sqlerrm='duplicate commit accepted' then raise; end if; end;
+ -- Expired queue visibility or source lease must never commit.
+ update pgmq.q_trend_collect set vt=now()-interval '1 second' where (message->>'source_id')::uuid=sid;
+ claim=public.collector_cloud_take('expired-worker','ftc');
+ update public.collector_cloud_routes set lease_until=now()-interval '1 second' where source_id=sid;
+ begin
+  perform public.collector_cloud_commit(sid,'expired-worker',(claim->>'lease_token')::uuid,bundle,'expired-test');
+  raise exception 'expired lease accepted';
+ exception when others then if sqlerrm='expired lease accepted' then raise; end if; end;
+ update public.collector_cloud_routes set lease_until=transaction_timestamp()+interval '1 microsecond' where source_id=sid;
+ update pgmq.q_trend_collect set vt=transaction_timestamp()+interval '1 microsecond' where msg_id=(claim->>'msg_id')::bigint;
+ begin
+  perform public.collector_cloud_commit(sid,'expired-worker',(claim->>'lease_token')::uuid,bundle,'transaction-time-test');
+  raise exception 'transaction-stable time accepted expired lease';
+ exception when others then if sqlerrm='transaction-stable time accepted expired lease' then raise; end if; end;
+end $$;
+do $$
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb; backlog uuid; cur jsonb;
+ target text='https://www.ftc.gov/news-events/news/press-releases/__collector_rollback_test__';
+begin
+ select source_id into sid from public.collector_edge_sources where slug='ftc';
+ update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null where source_id=sid;
+ update pgmq.q_trend_collect set vt=clock_timestamp()-interval '1 second' where (message->>'source_id')::uuid=sid;
+ claim=public.collector_cloud_take('parking-worker','ftc');
+ cur=jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml','offset',0);
+ bundle=jsonb_build_object('cursor',cur||'{"offset":1}'::jsonb,'operations','[]'::jsonb,
+  'failure',jsonb_build_object('url',target,'title','Synthetic rollback failure','reason','unsupported_type','cursor',cur),
+  'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','partial','reason','detail_failure_parked','failed_url',target));
+ result=public.collector_cloud_commit(sid,'parking-worker',(claim->>'lease_token')::uuid,bundle,'parking-rollback-test');
+ select id into strict backlog from public.collector_edge_backlog where source_id=sid and url=target and not resolved;
+ if (select cursor->>'offset' from public.collector_cloud_routes where source_id=sid)<>'1' then raise exception 'parking did not advance'; end if;
+ update pgmq.q_trend_collect set vt=clock_timestamp()+interval '2 hours' where (message->>'source_id')::uuid=sid;
+ update pgmq.q_trend_collect set vt=clock_timestamp()-interval '1 second' where message->>'backlog_id'=backlog::text;
+ claim=public.collector_cloud_take('backlog-worker','ftc');
+ if claim->>'backlog_id' is distinct from backlog::text or claim#>>'{detail,url}'<>target then raise exception 'backlog not consumable'; end if;
+ bundle=jsonb_build_object('cursor',null,'operations','[]'::jsonb,'backlog_resolved',false,
+  'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','failed','reason','http_503','failed_url',target));
+ result=public.collector_cloud_commit(sid,'backlog-worker',(claim->>'lease_token')::uuid,bundle,'backlog-rollback-test');
+ if result->>'retry_after_seconds'<>'3600' or (select resolved from public.collector_edge_backlog where id=backlog) then raise exception 'failed backlog lost'; end if;
+ if (select cursor->>'offset' from public.collector_cloud_routes where source_id=sid)<>'1' then raise exception 'backlog overwrote main cursor'; end if;
+end $$;
+do $$
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb; due_at timestamptz;
+begin
+ select source_id into sid from public.collector_edge_sources where slug='ftc';
+ update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null,msg_id=null,read_ct=null where source_id=sid;
+ -- Hide earlier rollback fixtures so the newly queued regular route is selected.
+ update pgmq.q_trend_collect set vt=clock_timestamp()+interval '2 days' where (message->>'source_id')::uuid=sid;
+ perform pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','daily-window-validation'));
+ claim=public.collector_cloud_take('daily-window-worker','ftc');
+ if claim is null or claim ? 'backlog_id' then raise exception 'expected a regular cloud route claim'; end if;
+ bundle=jsonb_build_object('cursor',null,'operations','[]'::jsonb,
+  'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','success'));
+ result=public.collector_cloud_commit(sid,'daily-window-worker',(claim->>'lease_token')::uuid,bundle,'daily-window-rollback-test');
+ if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'daily queue recheck delay is out of bounds'; end if;
+ select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
+  and message->>'kind'='daily-window-validation' order by msg_id desc limit 1;
+ if due_at<=clock_timestamp() then raise exception 'daily queue recheck is not in the future'; end if;
+ if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'queue will not be visible before the next producer window'; end if;
+end $$;
+do $$
+declare sid uuid; claim jsonb; bundle jsonb; result jsonb; due_at timestamptz;
+begin
+ select source_id into sid from public.collector_edge_sources where slug='ftc';
+ update public.collector_cloud_routes set worker=null,lease_until=null,lease_token=null,msg_id=null,read_ct=null where source_id=sid;
+ update pgmq.q_trend_collect set vt=clock_timestamp()+interval '2 days' where (message->>'source_id')::uuid=sid;
+ perform pgmq.send('trend_collect',jsonb_build_object('source_id',sid,'kind','completed-feed-validation'));
+ claim=public.collector_cloud_take('completed-feed-worker','ftc');
+ if claim is null then raise exception 'expected a completed feed claim'; end if;
+ bundle=jsonb_build_object('cursor',jsonb_build_object(
+   'page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml','offset',0,
+   'processed_url_hashes',jsonb_build_array(repeat('a',64))),
+  'operations','[]'::jsonb,
+  'result',jsonb_build_object('since',claim->>'since','until',claim->>'until','status','partial','listing_scan_complete',true));
+ begin
+  perform public.collector_cloud_commit(sid,'completed-feed-worker',(claim->>'lease_token')::uuid,
+   jsonb_set(bundle,'{cursor,processed_url_hashes}',jsonb_build_array('not-a-sha256-hash')),'malformed-hash-test');
+  raise exception 'malformed persisted FTC hash accepted';
+ exception when others then if sqlerrm='malformed persisted FTC hash accepted' then raise; end if; end;
+ result=public.collector_cloud_commit(sid,'completed-feed-worker',(claim->>'lease_token')::uuid,bundle,'completed-feed-rollback-test');
+ if (result->>'retry_after_seconds')::integer not between 1 and 86400 then raise exception 'completed feed recheck delay is out of bounds'; end if;
+ select vt into strict due_at from pgmq.q_trend_collect where (message->>'source_id')::uuid=sid
+  and message->>'kind'='completed-feed-validation' order by msg_id desc limit 1;
+ if due_at<=clock_timestamp() then raise exception 'completed feed recheck is not in the future'; end if;
+ if timezone('Asia/Seoul',due_at)::time>=time '04:00' then raise exception 'completed feed will not be visible before the next producer window'; end if;
+end $$;
+select 'cloud connector rollback checks passed' as result;

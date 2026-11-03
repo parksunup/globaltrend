@@ -1,0 +1,668 @@
+import { DOMParser, parseHTML } from "npm:linkedom@0.18.12";
+import { discoverExpansion, extractExpansion, isExpansion } from "./expansion.ts";
+export type Row = {
+  url: string;
+  title: string;
+  topic?: string;
+  date_observations?: Observation[];
+};
+type Observation = { meaning: string; locator: string; value: string };
+export const normalize = (x: string) =>
+  x.normalize("NFC").replace(/\s+/gu, " ").trim();
+export function canonical(value: string, hosts: string[]): string {
+  const u = new URL(value);
+  if (
+    u.protocol !== "https:" || !hosts.includes(u.hostname) || u.username ||
+    u.password || u.port && u.port !== "443"
+  ) throw new Error("unapproved_url");
+  for (const k of [...u.searchParams.keys()]) {
+    if (/^utm_|^(fbclid|gclid)$/i.test(k)) u.searchParams.delete(k);
+  }
+  u.hash = "";
+  u.searchParams.sort();
+  return u.href;
+}
+export function parseDate(value: string): string | null {
+  const s = normalize(value).replace(
+    /[０-９]/g,
+    (c) => String(c.charCodeAt(0) - 0xFF10),
+  ).toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g, "$1");
+  let y: number, m: number, d: number;
+  const iso = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:t.*)?$/);
+  const era = s.match(/(令和|平成)(元|\d+)年\s*(\d+)月\s*(\d+)日/);
+  const months = [
+    "january",
+    "february",
+    "march",
+    "april",
+    "may",
+    "june",
+    "july",
+    "august",
+    "september",
+    "october",
+    "november",
+    "december",
+  ];
+  const fr = [
+    "janvier",
+    "février",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "décembre",
+  ];
+  if (iso) [y, m, d] = iso.slice(1).map(Number);
+  else if (era) {
+    const n = era[2] === "元" ? 1 : Number(era[2]);
+    if (n < 1) return null;
+    [y, m, d] = [
+      (era[1] === "令和" ? 2018 : 1988) + n,
+      Number(era[3]),
+      Number(era[4]),
+    ];
+  } else {
+    const a = s.match(/(\d{1,2})\s+([a-zéû]+)\s+(\d{4})/),
+      b = s.match(/([a-z]+)\s+(\d{1,2}),?\s+(\d{4})/);
+    if (!a && !b) return null;
+    const mon = a ? a[2] : b![1];
+    m = months.findIndex((x) => x === mon || x.slice(0, 3) === mon) + 1;
+    if (!m) m = fr.indexOf(mon) + 1;
+    y = Number((a || b)![3]);
+    d = Number(a ? a[1] : b![2]);
+  }
+  const date = new Date(Date.UTC(y, m - 1, d));
+  if (
+    date.getUTCFullYear() !== y || date.getUTCMonth() !== m - 1 ||
+    date.getUTCDate() !== d
+  ) return null;
+  const out = date.toISOString().slice(0, 10);
+  if (
+    era &&
+    (era[1] === "令和" && out < "2019-05-01" ||
+      era[1] === "平成" && (out < "1989-01-08" || out > "2019-04-30"))
+  ) return null;
+  return out;
+}
+/** Accept only the complete publication label shown on a PDPC detail page. */
+export function pdpcDetailPublishedDate(value: string): string | null {
+  const match = normalize(value).match(/^Published on\s+(\d{1,2}\s+[A-Za-z]+\s+\d{4})$/i);
+  return match ? parseDate(match[1]) : null;
+}
+/** CNIL article-page date line, kept distinct from archive card dates. */
+export function cnilDetailPublishedDate(
+  meaning: string,
+  locator: string,
+  value: string,
+): string | null {
+  const normalized = normalize(value).toLowerCase();
+  if (meaning !== "published_display" || locator !== "main .ctn-gen-auteur" ||
+    !/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/.test(normalized)) return null;
+  return parseDate(normalized);
+}
+/** DPC detail-page publication label, distinct from the teaser-card date. */
+export function dpcDetailPublishedDate(observation: Observation): string | null {
+  const value = normalize(observation.value);
+  if (observation.meaning !== "published_display" || observation.locator !== "main p.date" ||
+    !/^\d{1,2}(?:st|nd|rd|th)?\s+[A-Za-z]+\s+\d{4}$/i.test(value)) return null;
+  return parseDate(value);
+}
+/** Read only ICO's explicit Dublin Core publication date; never infer from URL/title. */
+export function icoPublishedDate(html: string): { date: string; value: string } | null {
+  const { document } = parseHTML(html);
+  const value = normalize(
+    document.querySelector('meta[name="DC.Date"]')?.getAttribute("content") || "",
+  );
+  const date = value ? parseDate(value) : null;
+  return date ? { date, value } : null;
+}
+export const sha = async (s: string) =>
+  [
+    ...new Uint8Array(
+      await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)),
+    ),
+  ].map((x) => x.toString(16).padStart(2, "0")).join("");
+export function discover(
+  source: string,
+  html: string,
+  url: string,
+): { rows: Row[]; next: string | null } {
+  if (isExpansion(source)) return discoverExpansion(source, html, url);
+  const { document } = parseHTML(html);
+  const abs = (s: string) => new URL(s, url).href;
+  if (source === "ftc" && /<rss/i.test(html.slice(0, 1000))) {
+    if (/<!DOCTYPE|<!ENTITY/i.test(html)) {
+      throw new Error("xml_entities_rejected");
+    }
+    const xml = new DOMParser().parseFromString(html, "text/xml");
+    return {
+      rows: [...xml.querySelectorAll("item")].map((x) => ({
+        url: normalize(x.querySelector("link")?.textContent || ""),
+        title: normalize(x.querySelector("title")?.textContent || ""),
+      })).filter((x) => x.url),
+      next: null,
+    };
+  }
+  const selectors: Record<string, string> = {
+    edpb: 'main a[href*="/news/"]',
+    cnil: "main .ctn-gen-liste-titre a[href]",
+    dpc: "main article.node--view-mode-teaser h2 a[href]",
+    ppc: "main .news-list .news-text a[href]",
+    oecd:
+      'main a[href*="/publications/"],main a[href*="/about/news/press-releases/"]',
+    ftc: 'main a[href*="/news-events/news/press-releases/"]',
+    curia: "main .curia-itemlist-item .curia-itemlist-item-title a[href]",
+  };
+  if (!selectors[source]) throw new Error("dynamic_listing_requires_adapter");
+  let base = url;
+  const baseHref = document.querySelector("base[href]")?.getAttribute("href");
+  if (baseHref) {
+    base = canonical(new URL(baseHref, url).href, [new URL(url).hostname]);
+  }
+  const rows = new Map<string, Row>();
+  for (const a of document.querySelectorAll(selectors[source])) {
+    const target = new URL(a.getAttribute("href")!, base).href;
+    if (source === "curia" && !new URL(target).pathname.endsWith("en.pdf")) {
+      continue;
+    }
+    let title = normalize(a.textContent || "");
+    if (!title && source === "edpb") {
+      title = normalize(
+        a.closest(".node-article-card")?.querySelector(
+          ".node-article-card__title",
+        )?.textContent || "",
+      );
+    }
+    const row: Row = { url: target, title };
+    if (source === "cnil") {
+      row.date_observations = [
+        ...(a.closest(".list-inner")?.querySelectorAll(".attributes p.date") ||
+          []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing .list-inner .attributes p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
+    if (source === "dpc") {
+      const card = a.closest("article.node--view-mode-teaser");
+      row.date_observations = [
+        ...(card?.querySelectorAll("p.date") || []),
+      ].map((n) => ({
+        meaning: "listing_published_display",
+        locator: "listing article.node--view-mode-teaser p.date",
+        value: normalize(n.textContent || ""),
+      }));
+    }
+    if (source === "curia") {
+      const t = a.closest(".curia-itemlist-item")?.querySelector("time");
+      row.date_observations = t
+        ? [
+          {
+            meaning: "published_display",
+            locator: "listing time",
+            value: normalize(t.textContent || ""),
+          },
+          ...(t.getAttribute("datetime")
+            ? [{
+              meaning: "published_attribute",
+              locator: "listing time@datetime",
+              value: t.getAttribute("datetime")!,
+            }]
+            : []),
+        ]
+        : [];
+    }
+    rows.set(target, row);
+  }
+  const next = document.querySelector(
+    'a[rel~="next"],.pager__item--next a,.pager-next a,.pagination li.next:not(.disabled) a[href]',
+  );
+  return {
+    rows: [...rows.values()],
+    next: next ? abs(next.getAttribute("href")!) : null,
+  };
+}
+export function pdpcContent(document: Document): Element[] {
+  // PDPC's Next.js payload can advertise a 404 article root even when the
+  // official page HTML contains the rendered article. Prefer the narrowly
+  // scoped main-column article, then remove navigation, galleries and teasers.
+  const renderedArticle = document.querySelector(
+    "main.col-lg-9 > article.layout.layout--standard",
+  );
+  if (renderedArticle) {
+    const readable = renderedArticle.cloneNode(true) as Element;
+    // Some PDPC campaign/event pages place one promotional video card inside
+    // an otherwise empty article shell. That card is a teaser, not the
+    // page's report body. Classify this narrow shape separately so it can be
+    // skipped without turning it into a content fetch failure.
+    const hasPromoCard = Boolean(readable.querySelector(".article-card-cta"));
+    const richTextNodes = [...readable.querySelectorAll(".rte")];
+    const hasEmptyRichText = richTextNodes.length > 0 &&
+      richTextNodes.every((node) =>
+        normalize(node.textContent || "").length < 60
+      );
+    const isEventsCategory = normalize(
+      document.querySelector(".page-banner__category")?.textContent || "",
+    ).toLowerCase() === "events";
+    for (const node of readable.querySelectorAll(
+      ".article-footer,.article-card-cta,.image-gallery,.slick-slider,.progress-wrapper,.tabs__mobile-controls,button",
+    )) node.remove();
+    const remaining = normalize(readable.textContent || "").length;
+    if (
+      isEventsCategory && hasPromoCard && hasEmptyRichText && remaining < 60
+    ) {
+      throw new Error("pdpc_promotional_landing_without_article");
+    }
+    if (remaining >= 60) return [readable];
+  }
+  const chunks: string[] = [];
+  for (const script of document.querySelectorAll("script:not([src])")) {
+    const text = (script.textContent || "").trim();
+    if (!text.startsWith("self.__next_f.push(")) continue;
+    const v = JSON.parse(
+      text.slice("self.__next_f.push(".length).replace(/\);?$/, ""),
+    );
+    if (Array.isArray(v) && v[0] === 1 && typeof v[1] === "string") {
+      chunks.push(v[1]);
+    }
+  }
+  const stream = new TextEncoder().encode(chunks.join("")),
+    decoder = new TextDecoder("utf-8", { fatal: true });
+  const records = new Map<string, unknown>();
+  let pos = 0;
+  while (pos < stream.length) {
+    if (stream[pos] === 10) {
+      pos++;
+      continue;
+    }
+    const end = stream.indexOf(58, pos);
+    if (end < pos) throw new Error("pdpc_record_header");
+    const id = decoder.decode(stream.slice(pos, end));
+    if (!/^[a-f0-9]*$/.test(id)) throw new Error("pdpc_record_header");
+    pos = end + 1;
+    let value: unknown;
+    if (stream[pos] === 84) {
+      const comma = stream.indexOf(44, pos);
+      const count = parseInt(decoder.decode(stream.slice(pos + 1, comma)), 16);
+      if (
+        !Number.isFinite(count) || comma < 0 ||
+        comma + 1 + count > stream.length
+      ) throw new Error("pdpc_text_truncated");
+      pos = comma + 1;
+      value = decoder.decode(stream.slice(pos, pos + count));
+      pos += count;
+    } else {
+      let e = stream.indexOf(10, pos);
+      if (e < 0) e = stream.length;
+      const s = decoder.decode(stream.slice(pos, e));
+      pos = e;
+      if (!/^[\[{"]|^(null|true|false)$/.test(s)) continue;
+      value = JSON.parse(s);
+    }
+    if (records.has(id)) throw new Error("pdpc_duplicate_record");
+    records.set(id, value);
+  }
+
+  type FlightNode = unknown[] & [unknown, unknown, unknown, Record<string, unknown>];
+  const isElement = (value: unknown): value is FlightNode =>
+    Array.isArray(value) && typeof value[1] === "string" &&
+    !!value[3] && typeof value[3] === "object";
+  const nodes: Element[] = [];
+  const seenContent = new Set<string>();
+  const visited = new Set<object>();
+  const childValues = (value: unknown): unknown[] => {
+    if (!isElement(value)) return [];
+    const children = value[3].children;
+    return Array.isArray(children) ? children : children == null ? [] : [children];
+  };
+  const resolveContent = (content: unknown): string | null => {
+    if (typeof content !== "string") return null;
+    if (!/^\$[a-f0-9]+$/.test(content)) return content;
+    const resolved = records.get(content.slice(1));
+    return typeof resolved === "string" && !resolved.startsWith("$")
+      ? resolved
+      : null;
+  };
+  const collectArticle = (value: unknown) => {
+    if (!value || typeof value !== "object" || visited.has(value as object)) return;
+    visited.add(value as object);
+    if (isElement(value)) {
+      const data = value[3].data;
+      if (data && typeof data === "object" && "content" in data) {
+        const content = resolveContent((data as { content?: unknown }).content);
+        if (content === null) throw new Error("pdpc_content_unresolved");
+        if (!seenContent.has(content)) {
+          seenContent.add(content);
+          nodes.push(
+            parseHTML("<div>" + content + "</div>").document.querySelector(
+              "div",
+            )!,
+          );
+        }
+      }
+      for (const child of childValues(value)) collectArticle(child);
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) collectArticle(child);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        collectArticle(child);
+      }
+    }
+  };
+  const findMainArticles = (
+    value: unknown,
+    insideMain = false,
+    seen = new Set<object>(),
+  ) => {
+    if (!value || typeof value !== "object" || seen.has(value as object)) return;
+    seen.add(value as object);
+    if (isElement(value)) {
+      const inMain = insideMain || value[1] === "main";
+      if (inMain && value[1] === "article") collectArticle(value);
+      for (const child of childValues(value)) {
+        findMainArticles(child, inMain, seen);
+      }
+      return;
+    }
+    if (Array.isArray(value)) {
+      for (const child of value) findMainArticles(child, insideMain, seen);
+    } else {
+      for (const child of Object.values(value as Record<string, unknown>)) {
+        findMainArticles(child, insideMain, seen);
+      }
+    }
+  };
+  // Flight layouts may add container/row/main wrappers. Anchor extraction to an
+  // article nested anywhere below a main element; never fall back to page shell text.
+  for (const value of records.values()) findMainArticles(value);
+  if (!nodes.length) throw new Error("pdpc_article_missing");
+  return nodes;
+}
+export async function extract(
+  source: string,
+  html: string,
+  url: string,
+  row?: Row,
+) {
+  if (isExpansion(source)) return extractExpansion(source, html, url, row);
+  const { document } = parseHTML(html);
+  const selectors: Record<string, [string, string | null, string[]]> = {
+    edpb: [".node-article-full__title", "time.node-article-full__date", [
+      ".node-article-full__body",
+    ]],
+    cnil: ["main h1", "main .ctn-gen-auteur", [
+      "main .page-introduction",
+      "main .ctn-gen-body",
+      "main .ctn-gen-after .ctn-gen-ascenseur",
+    ]],
+    dpc: ["h1", "main p.date", ["main .field--name-body"]],
+    ftc: ["h1", "article.node--view-mode-banner time", [
+      "main article.node--view-mode-full .field--name-body",
+    ]],
+    ppc: ["h1.page-ttl", null, ["main.l-main"]],
+    ico: ["h1", null, ["main .rich-text .prose"]],
+    oecd: ["h1.cmp-report-header__title", "time", []],
+    pdpc: ["header.page-banner h1, main h1", "main .page-banner__date", []],
+  };
+  if (!selectors[source]) throw new Error("unverified_template");
+  const [ts, ds, bs] = selectors[source];
+  let title = document.querySelector(ts);
+  let dateNode = ds ? document.querySelector(ds) : null;
+  if (source === "ico") {
+    dateNode = [...document.querySelectorAll("span")].find((x) =>
+      x.textContent?.trim() === "Date"
+    )?.nextElementSibling || null;
+  }
+  let ppcOpeningDateline = false;
+  let nodes = bs.flatMap((x) => [...document.querySelectorAll(x)]);
+  let scope = "news_html";
+  if (source === "pdpc") {
+    nodes = pdpcContent(document as unknown as Document);
+    scope = "official_article_html_or_embedded_rsc";
+  }
+  if (source === "oecd") {
+    scope = "official_abstract";
+    const h = [...document.querySelectorAll("h2.cmp-title__text")].find((x) =>
+      normalize(x.textContent || "").toLowerCase() === "abstract"
+    );
+    nodes = h
+      ? [
+        ...h.closest(".cmp-two-column-container")!.querySelectorAll(
+          ".cmp-text p",
+        ),
+      ]
+      : [];
+    // A press release is a separate template, never mislabeled as a publication abstract.
+    if (new URL(url).pathname.includes("/about/news/press-releases/")) {
+      title = document.querySelector("h1");
+      nodes = [...document.querySelectorAll("main .cmp-text")];
+      scope = "press_release_html";
+    }
+  }
+  if (!title || !nodes.length) throw new Error("title_or_body_missing");
+  nodes = nodes.filter((n) =>
+    !nodes.some((other) => other !== n && other.contains(n))
+  );
+  const related: { url: string; title: string; read: boolean }[] = [];
+  const unresolvedLinks: { href: string; title: string; reason: string }[] = [];
+  for (const n of nodes) {
+    for (const a of n.querySelectorAll("a[href]")) {
+      const href = a.getAttribute("href")!;
+      const title = normalize(a.textContent || "");
+      try {
+        const target = new URL(href, url);
+        if (target.protocol === "https:") {
+          related.push({ url: target.href, title, read: false });
+        }
+      } catch {
+        unresolvedLinks.push({ href, title, reason: "malformed_source_href" });
+      }
+    }
+  }
+  for (const n of nodes) {
+    for (
+      const x of n.querySelectorAll(
+        "nav,footer,script,style,.cookie-banner,.related-content,.field--name-field-related-content",
+      )
+    ) x.remove();
+  }
+  // Match BeautifulSoup get_text(' ', strip=True): separators between every
+  // nonempty text node, including inline anchors and punctuation.
+  const textNodes = (node: Node): string[] => {
+    if (node.nodeType === 3) {
+      return node.textContent?.trim() ? [node.textContent.trim()] : [];
+    }
+    return [...node.childNodes].flatMap(textNodes);
+  };
+  const body = normalize(
+    nodes.map((n) => textNodes(n as unknown as Node).join(" ")).join(" "),
+  );
+  if (body.length < 10) throw new Error("empty_body");
+  if (body.length > 80000) {
+    throw new Error("long_document_requires_chunked_reading");
+  }
+  const observations: Observation[] = dateNode
+    ? [
+      {
+        meaning: "published_display",
+        locator: ds || "Date + strong",
+        value: normalize(dateNode.textContent || ""),
+      },
+      ...(dateNode.getAttribute("datetime")
+        ? [{
+          meaning: "published_attribute",
+          locator: "time@datetime",
+          value: dateNode.getAttribute("datetime")!,
+        }]
+        : []),
+    ]
+    : [];
+  if (row?.date_observations) observations.push(...row.date_observations);
+  if (source === "ico") {
+    // Use the same explicit Dublin Core publication date for in-range items
+    // that the range guard already uses for out-of-range backlog items.
+    const published = icoPublishedDate(html);
+    if (published) {
+      observations.push({
+        meaning: "official_published_attribute",
+        locator: 'meta[name="DC.Date"]@content',
+        value: published.value,
+      });
+    }
+  }
+  if (source === "ppc") {
+    // The dedicated notice header excludes enactment/revision dates in prose.
+    for (const dateline of document.querySelectorAll("main.l-main .l-article > .date-box")) {
+      observations.push({
+        meaning: "published_notice_dateline",
+        locator: "main.l-main .l-article > .date-box",
+        value: normalize(dateline.textContent || ""),
+      });
+    }
+    // Some PPC notices place the publication date at the very start of the
+    // main content, immediately followed by the Commission name, instead of
+    // using .date-box. Keep this strict opening pattern so later dates in the
+    // body (for example enactment or revision dates) cannot become publish dates.
+    const main = document.querySelector("main.l-main");
+    const opening = main
+      ? normalize(textNodes(main as unknown as Node).join(" "))
+      : "";
+    const openingDate = opening.match(
+      /^((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)\s*個人情報保護委員会(?:\s|$)/,
+    );
+    if (openingDate) {
+      ppcOpeningDateline = true;
+      observations.push({
+        meaning: "published_opening_dateline",
+        locator: "main.l-main opening date",
+        value: openingDate[1],
+      });
+    }
+    const match = document.title.match(
+      /公表[（(]((?:令和|平成)(?:元|[0-9０-９]+)年\s*[0-9０-９]+月\s*[0-9０-９]+日)[）)]/,
+    );
+    if (match) {
+      observations.push({
+        meaning: "published_title",
+        locator: "document_title",
+        value: match[1],
+      });
+    }
+  }
+  const dpcListing = source === "dpc" ? dpcListingDate(row) : null;
+  const dateObservations = source === "dpc"
+    ? observations.filter((x) =>
+      x.meaning !== "listing_published_display" ||
+      x.locator !== "listing article.node--view-mode-teaser p.date"
+    )
+    : observations;
+  const dates = [
+    ...new Set([
+      ...dateObservations.map((x) => parseDate(x.value)).filter(Boolean),
+      ...(dpcListing ? [dpcListing] : []),
+    ]),
+  ];
+  let date = dates.length === 1 ? dates[0] : null;
+  const explicitDetailDates = source === "dpc"
+    ? observations.map((x) => dpcDetailPublishedDate(x)).filter((x): x is string => Boolean(x))
+    : source === "pdpc"
+    ? observations.filter((x) => x.meaning === "published_display" && x.locator === "main .page-banner__date")
+      .map((x) => pdpcDetailPublishedDate(x.value)).filter((x): x is string => Boolean(x))
+    : source === "cnil"
+    ? observations.map((x) => cnilDetailPublishedDate(x.meaning, x.locator, x.value))
+      .filter((x): x is string => Boolean(x))
+    : [];
+  const explicitDetailDate = new Set(explicitDetailDates);
+  const cnilListingObservations = source === "cnil"
+    ? (row?.date_observations || []).filter((x) =>
+      x.meaning === "listing_published_display" &&
+      x.locator === "listing .list-inner .attributes p.date"
+    )
+    : [];
+  const cnilListingIsAmbiguous = cnilListingObservations.length > 0 && cnilListingDate(row!) === null;
+  const dateConflict = explicitDetailDate.size === 1 && dates.some((x) => x != null && !explicitDetailDate.has(x));
+  const canSelectDetailDate = explicitDetailDate.size === 1 &&
+    (!dateConflict || source === "dpc" || source === "pdpc" || source === "cnil" && !cnilListingIsAmbiguous);
+  if (canSelectDetailDate) date = [...explicitDetailDate][0];
+  const dateResolution = canSelectDetailDate
+    ? { selected: "explicit_detail_page_published_display", published_date: date, conflicting_dates: dates.filter((x) => x !== date) }
+    : null;
+  const requiresReview = unresolvedLinks.length > 0 || !date ||
+    dateConflict ||
+    source === "ppc" &&
+      (related.some((x) => new URL(x.url).pathname.endsWith(".pdf")) ||
+        ppcOpeningDateline);
+  return {
+    title_original: normalize(title.textContent || ""),
+    content_text: body,
+    content_hash: await sha(body),
+    published_date: date,
+    metadata: {
+      normalization_version: "main-body-nfc-v1",
+      parser_version: source === "pdpc" ? "edge-pdpc-article-v3" : "edge-adapter-v2",
+      read_scope: scope,
+      date_observations: observations,
+      ...(dateConflict ? { date_conflict: true } : {}),
+      ...(dateResolution ? { date_resolution: dateResolution } : {}),
+      requires_review: requiresReview,
+      related_documents: related,
+      unresolved_links: unresolvedLinks,
+      unread_attachments: related.map((x) => x.url),
+      factual_status: "original_statement_not_independent_legal_finding",
+      ai_ready: !requiresReview,
+    },
+  };
+}
+
+export function cnilListingDate(row: Row): string | null {
+  const obs = row.date_observations || [];
+  if (
+    obs.length !== 1 || obs[0].meaning !== "listing_published_display" ||
+    obs[0].locator !== "listing .list-inner .attributes p.date"
+  ) return null;
+  const value = normalize(obs[0].value).toLowerCase();
+  // Only an exact single French date may skip the detail request. Generic
+  // parseDate accepts dates embedded in prose, which could mistake an update
+  // date or label for the publication date and silently skip an in-range card.
+  if (!/^\d{1,2}\s+(?:janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)\s+\d{4}$/u.test(value)) {
+    return null;
+  }
+  return parseDate(value);
+}
+
+export function dpcListingDate(row?: Row): string | null {
+  const observations = row?.date_observations || [];
+  if (
+    observations.length !== 1 ||
+    observations[0].meaning !== "listing_published_display" ||
+    observations[0].locator !==
+      "listing article.node--view-mode-teaser p.date"
+  ) return null;
+  const value = normalize(observations[0].value);
+  const match = value.match(
+    /^(\d{1,2})(st|nd|rd|th)?\s+(january|february|march|april|may|june|july|august|september|october|november|december)\s+(\d{4})$/i,
+  );
+  if (!match) return null;
+  const day = Number(match[1]);
+  const suffix = match[2]?.toLowerCase();
+  const expectedSuffix = day % 100 >= 11 && day % 100 <= 13
+    ? "th"
+    : day % 10 === 1
+    ? "st"
+    : day % 10 === 2
+    ? "nd"
+    : day % 10 === 3
+    ? "rd"
+    : "th";
+  if (suffix && suffix !== expectedSuffix) return null;
+  return parseDate(value);
+}

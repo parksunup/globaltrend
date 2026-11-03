@@ -1,6 +1,7 @@
 begin;
 set local search_path = public, extensions;
 select plan(21);
+\ir fixtures/writing-review.inc
 select has_function('public','claim_trend_draft_jobs',array['text','integer'],'claim function exists');
 select ok(not has_function_privilege('anon','public.claim_trend_draft_jobs(text,integer)','execute'),'anonymous cannot claim');
 select ok(not has_function_privilege('authenticated','public.submit_trend_draft(uuid,text,jsonb)','execute'),'team browser cannot submit as worker');
@@ -10,7 +11,7 @@ create temporary table test_context (job uuid, item uuid, revision uuid, report 
 update public.sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
 insert into test_context(job,item,revision)
 select draft_job_id,source_item_id,source_item_revision_id from public.ingest_source_item(
- (select id from public.sources where name='EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector',
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector',
  'Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. The consultation closes on 20 November 2026.',
  repeat('c',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
@@ -23,6 +24,7 @@ select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-two',1)),1,'e
 select is((select attempts from public.draft_jobs where id=(select job from test_context)),2,'reclaim increments attempts');
 
 create temporary table test_payload as select '{"title_ko":"개인정보 지침 발표","summary_ko":"위원회가 지침을 발표했습니다. 의견 제출 기한은 원문을 다시 확인해야 합니다.","details_ko":"위원회가 개인정보에 관한 최종 지침을 발표했다고 설명했습니다.","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"작성자 해석: 지침 적용 범위를 확인해야 합니다.","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"본문 첫 문장","claim":"최종 지침 발표"}],"limitations":["연결 지침 전문 미열람"]}'::jsonb as draft;
+update test_payload set draft=pg_temp.test_writing_review(draft || jsonb_build_object('summary_ko','이사회, 개인정보 처리 최종 지침 발표','details_ko','- 이사회는 개인정보 처리에 관한 최종 지침을 발표'),(select job from test_context));
 update public.sources set terms_reviewed_at=null where name='EDPB 뉴스·보도자료';
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
  '42501','Source approval was revoked','revoked terms approval blocks active lease submission');
@@ -40,20 +42,18 @@ select results_eq('select status,human_reviewed from public.reports where source
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
  '42501','Active job lease is required','duplicate submit is rejected');
 
--- A changed body creates a second exact revision; the existing report must survive.
+-- A changed body for an already-reported item must not consume another draft lease.
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
  'https://www.edpb.europa.eu/test-collector','Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. Updated later.',repeat('d',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
-select public.claim_trend_draft_jobs('worker-three',1);
-select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',
- (select id from public.draft_jobs where input_hash=repeat('d',64)),'worker-three',(select draft::text from test_payload)),
- 'existing report moves proposed update to human review');
+select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-three',1)),0,
+ 'existing report blocks a new revision claim');
+select is((select status from public.draft_jobs where input_hash=repeat('d',64)),
+ 'pending','reported revision remains pending without consuming a lease');
 select is((select title_ko from public.reports where source_item_id=(select item from test_context)),
  '개인정보 지침 발표','existing report is never overwritten by automatic update');
-select is((select status from public.draft_jobs where input_hash=repeat('d',64)),
- 'needs_human_review','new revision remains waiting for human review');
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
- 'https://www.edpb.europa.eu/test-stale','Stale input',null,null,now(),'en','news',
+ 'https://www.edpb.europa.eu/test-stale','Stale input','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data.',repeat('e',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
 select public.claim_trend_draft_jobs('stale-worker',1);
 update public.source_items set current_revision_id=null where canonical_url='https://www.edpb.europa.eu/test-stale';

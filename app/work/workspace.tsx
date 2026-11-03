@@ -17,17 +17,18 @@ type Props = {
   canPublish: boolean;
   readOnly?: boolean;
   initialKind?: "all" | WorkspaceKind;
+  initialStatus?: "all" | WorkspaceFilters["status"];
   executeAction: (command: WorkspaceCommand) => Promise<WorkspaceActionResult>;
 };
 type DetailTab = "preview" | "edit" | "history";
 const actionNames: Record<WorkspaceOperation,string> = {publish:"공개",request_publication:"공개 요청",unpublish:"공개 취소",trash:"휴지통 이동",restore:"복원",save_trend:"수정 저장"};
 const csv = (value: FormDataEntryValue | null) => String(value ?? "").split(",").map(part=>part.trim()).filter(Boolean);
 
-export default function Workspace({items,canEdit,canPublish,readOnly=false,initialKind="all",executeAction}:Props) {
+export default function Workspace({items,canEdit,canPublish,readOnly=false,initialKind="all",initialStatus="all",executeAction}:Props) {
   const router=useRouter();
   const inFlight=useRef(false);
   const dialog=useRef<HTMLElement|null>(null);
-  const [filters,setFilters]=useState<WorkspaceFilters>({query:"",kind:initialKind,status:"all"});
+  const [filters,setFilters]=useState<WorkspaceFilters>({query:"",kind:initialKind,status:initialStatus});
   const [page,setPage]=useState(1);
   const [selected,setSelected]=useState<string[]>([]);
   const selectedRevisions=useRef(new Map<string,string>());
@@ -175,7 +176,7 @@ export default function Workspace({items,canEdit,canPublish,readOnly=false,initi
               {publishedHref&&item.status==="published"&&<a href={publishedHref} target="_blank" rel="noopener noreferrer">현재 공개본 보기 ↗</a>}
               {canEdit&&item.status==="trashed"&&<button className={styles.secondary} disabled={disabled} type="button" onClick={()=>void run("restore",[item])}>자료 복원</button>}
               {canPublish&&item.status==="published"&&<button className={styles.secondary} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"unpublish",item})}>공개 취소</button>}
-              {canEdit&&item.status!=="trashed"&&<button className={styles.quietDanger} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"trash",item})}>휴지통으로 이동</button>}
+              {canEdit&&item.status!=="trashed"&&<button className={styles.quietDanger} disabled={disabled} type="button" onClick={()=>setConfirmation({operation:"trash",item})}>삭제 · 휴지통으로 이동</button>}
               {canEdit&&canSelectForPublication(item)&&<button className={styles.primary} disabled={disabled} type="button" onClick={()=>void run(canPublish?"publish":"request_publication",[item])}>{pending?"처리 중…":canPublish?item.hasUnpublishedChanges?"수정본 공개":"이 자료 공개":"관리자에게 공개 요청"}</button>}
             </div>
           </section>}

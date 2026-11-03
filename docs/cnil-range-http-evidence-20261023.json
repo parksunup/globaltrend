@@ -1,0 +1,105 @@
+{
+  "checked_at": "2026-10-23T12:05:15.416728+00:00",
+  "trigger": "manual-read-only-http",
+  "since": "2026-09-21",
+  "until": "2026-10-23",
+  "coverage_complete": false,
+  "ordering_verified": false,
+  "pinned_policy_verified": false,
+  "pages": [
+    {
+      "url": "https://www.cnil.fr/fr/actualites",
+      "http_status": 200,
+      "sha256": "477e652a77190ca8634fd7fa34de1debf3be89781baf82ce2409e723106c67b4",
+      "rows": 25,
+      "dated_cards": 25,
+      "outside_requested_range": 12,
+      "next": "https://www.cnil.fr/fr/actualites?page=1",
+      "sort_by_options": [
+        {
+          "value": "field_type_article_target_id",
+          "text": "Type d&#039;article (field_type_article)"
+        }
+      ],
+      "first_card": {
+        "url": "https://www.cnil.fr/fr/journee-rgpd-2026-poitiers",
+        "title": "Journée RGPD à Poitiers : cybersécurité, IA et conformité au cœur des enjeux de protection des données",
+        "date_observations": [
+          {
+            "meaning": "listing_published_display",
+            "locator": "listing .list-inner .attributes p.date",
+            "value": "20 octobre 2026"
+          }
+        ]
+      },
+      "last_card": {
+        "url": "https://www.cnil.fr/fr/dpo-identifier-gerer-conflits-interets",
+        "title": "Délégué à la protection des données : identifier et gérer les conflits d’intérêts liés à la fonction de DPO",
+        "date_observations": [
+          {
+            "meaning": "listing_published_display",
+            "locator": "listing .list-inner .attributes p.date",
+            "value": "10 août 2026"
+          }
+        ]
+      }
+    },
+    {
+      "url": "https://www.cnil.fr/fr/actualites?page=15",
+      "http_status": 200,
+      "sha256": "8b63e436a55fd341f94445695bd8f7309b7b87449623a605937ce6222f4bb201",
+      "rows": 25,
+      "dated_cards": 25,
+      "outside_requested_range": 25,
+      "next": "https://www.cnil.fr/fr/actualites?page=16",
+      "sort_by_options": [
+        {
+          "value": "field_type_article_target_id",
+          "text": "Type d&#039;article (field_type_article)"
+        }
+      ],
+      "first_card": {
+        "url": "https://www.cnil.fr/fr/violations-de-donnees-personnelles-bilan-de-5-annees-de-rgpd",
+        "title": "Violations de données personnelles : bilan de 5 années de RGPD",
+        "date_observations": [
+          {
+            "meaning": "listing_published_display",
+            "locator": "listing .list-inner .attributes p.date",
+            "value": "27 mars 2024"
+          }
+        ]
+      },
+      "last_card": {
+        "url": "https://www.cnil.fr/fr/courtiers-en-donnees-sanction-de-75-000-euros-lencontre-de-la-societe-tagadamedia",
+        "title": "Courtiers en données : sanction de 75 000 euros à l’encontre de la société TAGADAMEDIA",
+        "date_observations": [
+          {
+            "meaning": "listing_published_display",
+            "locator": "listing .list-inner .attributes p.date",
+            "value": "30 janvier 2024"
+          }
+        ]
+      }
+    }
+  ],
+  "detail_sample": {
+    "url": "https://www.cnil.fr/fr/violations-de-donnees-personnelles-bilan-de-5-annees-de-rgpd",
+    "http_status": 200,
+    "sha256": "14b74f125338afc40ce50cfab5236ca3e15fd63a181cb5fb0408033186bd1d0e",
+    "date": "27 mars 2024"
+  },
+  "cached_http_runtime_replay": {
+    "stage": "listing_date_filter",
+    "read_scope": "listing_date_only",
+    "listing_date_excluded": 25,
+    "offset": 25,
+    "next": "https://www.cnil.fr/fr/actualites?page=16",
+    "unknown_dates_before": 2,
+    "unknown_dates_after": 2,
+    "continue": true,
+    "coverage_complete": false,
+    "listing_requests": 1,
+    "detail_requests": 0,
+    "database_writes": 0
+  }
+}

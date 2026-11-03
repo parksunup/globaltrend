@@ -1,0 +1,27 @@
+{
+  "source": "oaic",
+  "source_id": "be57ed94-3216-5c00-bc22-63c1db22e5e0",
+  "listing": "https://www.oaic.gov.au/news/media-centre",
+  "hosts": [
+    "www.oaic.gov.au"
+  ],
+  "language": "en",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "edge",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 1,
+  "name": "Office of the Australian Information Commissioner",
+  "publisher_id": "ebfe4668-e5ee-5115-a1a0-6f6f9807da40",
+  "jurisdiction": "AU",
+  "publisher_type": "supervisory_authority",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}

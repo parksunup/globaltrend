@@ -56,6 +56,15 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(created, 0)
         self.assertEqual(result['stop_reason'], 'schedule_not_enabled')
 
+    def test_write_on_mismatched_runner_never_creates_database_client(self):
+        code, result, created, calls = self.execute([self.config()], env={
+            'GITHUB_ACTIONS':'true', 'COLLECTOR_RUNNER':'self-hosted',
+            'COLLECTOR_ACTUAL_RUNNER':'github-hosted'})
+        self.assertEqual(code, 2)
+        self.assertEqual(created, 0)
+        self.assertEqual(calls, 0)
+        self.assertEqual(result['stop_reason'], 'runner_selection_mismatch')
+
     def test_database_approval_precedes_range_lookup_and_blocks_collection(self):
         class Store:
             run_id='test'
@@ -157,6 +166,7 @@ class AutomationTests(unittest.TestCase):
         self.assertIsNotNone(store.cursor, 'failed detail must retain a retry cursor')
         self.assertEqual(store.cursor['offset'],0)
         self.assertEqual(first['status'],'failed')
+        self.assertEqual(first['failed_url'],'https://www.edpb.europa.eu/news/a_en')
         client.failed=False
         second=collect(cfg,client,store,'2026-10-01','2026-10-13')
         self.assertEqual(client.fetched,['https://www.edpb.europa.eu/news/a_en','https://www.edpb.europa.eu/news/a_en','https://www.edpb.europa.eu/news/b_en'])

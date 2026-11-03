@@ -1,0 +1,23 @@
+{
+  "source": "edps",
+  "source_id": "2239debc-9ce2-5cfd-99f3-c555b7cd0c94",
+  "listing": "https://www.edps.europa.eu/feed/news_en",
+  "hosts": [
+    "www.edps.europa.eu"
+  ],
+  "language": "en",
+  "enabled": false,
+  "permissions": {
+    "collect": false,
+    "store": false,
+    "ai": false
+  },
+  "hold_reason": "user_deferred_2026_10_29",
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "chatgpt-web",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 1,
+  "verification": "RSS discovery verified; substantive linked body access remains blocked",
+  "verification_status": "held_by_user"
+}

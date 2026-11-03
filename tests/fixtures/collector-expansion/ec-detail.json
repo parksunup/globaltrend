@@ -1,0 +1,60 @@
+{
+  "ky": 213163,
+  "docuLanguageResource": {
+    "ky": 706077,
+    "title": "New Eurobarometer survey shows young people's growing engagement and views on participatory democracy, youth issues, and EU's added value in their lives ",
+    "subtitle": "New Eurobarometer survey shows young people's growing engagement and views",
+    "htmlContent": "<p>Today, the European Commission published a Eurobarometer survey showing young Europeans' growing engagement with and views on democracy. The survey also shows their perceptions of key concerns facing young people, such as employment and the cost of living, as well as the EU's impact on their daily lives, youth policies, and intergenerational fairness. These findings come as preparations are underway for the EU Youth Strategy post 2027. The survey, targeted  ages between 15 and 30 years old,  shows growing engagement among young people. 75% of y</p>",
+    "pdfContent": null,
+    "hasPdf": true,
+    "pdfContentSize": 83890,
+    "language": "EN",
+    "dolaAvResources": [],
+    "dolaQuoteResources": [
+      {
+        "ky": 113593,
+        "author": {
+          "ky": 5770,
+          "authorName": "Roxana Mînzatu, Executive Vice-President for Social Rights and Skills, Quality Jobs and Preparedness",
+          "language": {
+            "langCd": "EN"
+          },
+          "pictureUri": "https://ec.europa.eu/commission/presscorner/api/image/content/roxana-minzatu-cards-author-nms-120x120-v2.png"
+        },
+        "extract": "We can see from the findings of this Eurobarometer on Youth and Democracy that young people are dire",
+        "extractDateDt": "2026-10-28T00:00:00.000+01:00",
+        "orderNb": 1,
+        "type": "TEXTEXTREA"
+      }
+    ],
+    "attachmentResources": [],
+    "linkResources": [],
+    "dolaRLinkResources": [],
+    "original": true,
+    "etranslated": false
+  },
+  "refCd": "IP/26/2274",
+  "isSpeechWarning": false,
+  "docutypeResource": {
+    "ky": 1,
+    "code": "IP",
+    "description": "Press release",
+    "order": 1
+  },
+  "placeResource": {
+    "ky": 1,
+    "code": null,
+    "description": "Brussels",
+    "order": null,
+    "parentPlace": null
+  },
+  "eventDate": "2026-10-28",
+  "publishDate": "2026-10-28T11:45:00.000+01:00",
+  "countriesResource": [],
+  "isPriority": false,
+  "isEmbargo": false,
+  "isNoAlert": false,
+  "originalLanguage": "EN",
+  "estimatedTimeReading": 3,
+  "globalImg": null
+}

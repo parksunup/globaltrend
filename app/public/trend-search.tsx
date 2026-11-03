@@ -51,7 +51,7 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
     const filtered = stories.filter((story) => {
       const countryMatch = countries.length === 0 || countries.some((country) => (story.jurisdictions?.length ? story.jurisdictions : [story.country]).includes(country));
       const topicMatch = !topicId || matchesPublicTopic(story.tags, topicId);
-      const searchable = [story.title, story.summary, story.institution, ...story.tags].join(" ").toLocaleLowerCase();
+      const searchable = [story.title, story.originalTitle, story.summary, story.institution, ...story.tags].join(" ").toLocaleLowerCase();
       const queryMatch = !terms.length || (mode === "concept" ? terms.some((term) => searchable.includes(term)) : terms.every((term) => searchable.includes(term)));
       const ageInMonths = period === "최근 1개월" ? 1 : period === "최근 6개월" ? 6 : period === "최근 1년" ? 12 : 0;
       const published = new Date(story.date.replaceAll(".", "-"));

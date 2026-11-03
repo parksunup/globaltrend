@@ -1,7 +1,7 @@
 import {createHash} from 'node:crypto';
 import type {SupabaseClient} from '@supabase/supabase-js';
-import {loadSubmittedStories} from './public-submission-preview';
-import {buildLegalReviewPackages} from './legal-release';
+import {loadSubmittedStories} from './public-submission-preview.ts';
+import {buildLegalReviewPackages} from './legal-release.ts';
 import type {WorkspaceKind} from './workspace-model';
 
 export type WorkspaceTrendCandidate = {
@@ -43,7 +43,7 @@ async function workingRevision(db:Db,kind:WorkspaceKind,id:string,expected:unkno
  else if(hashSubmission(result.data.payload)!==hashSubmission(expected))throw fail('40001','등록된 법제 수정본이 제출 파일과 다릅니다. 작업 공간의 최신 판본을 확인해 주세요.');
  return {id,revision:String(result.data.revision)};
 }
-async function prepareTrend(db:Db,candidate:WorkspaceTrendCandidate) {
+export async function prepareTrendCandidate(db:Db,candidate:WorkspaceTrendCandidate) {
  if(!candidate.originalTitle.trim()||!candidate.title.trim()||!candidate.summary.trim()||!candidate.details.trim()||!/^\d{4}-\d{2}-\d{2}$/.test(candidate.publishedDate))throw fail('22023','제출 동향의 원문 제목·내용·날짜를 확인해 주세요.');
  const acronym=candidate.source==='curia'?'CJEU':candidate.source.toUpperCase();
  const sourceResult=await db.from('sources').select('id,publishers!inner(acronym)').eq('is_active',true).eq('publishers.acronym',acronym).limit(2);
@@ -65,6 +65,13 @@ async function prepareTrend(db:Db,candidate:WorkspaceTrendCandidate) {
  return workingRevision(db,'trend',created.data,candidate);
 }
 
+export async function prepareLegalCandidate(db:Db,candidate:ReturnType<typeof buildLegalReviewPackages>[number]) {
+ const result=await db.rpc('import_legal_review',{p_payload:candidate});
+ if(result.error){if(result.error.code==='22023'&&/different content/i.test(result.error.message))throw fail('40001','같은 판본으로 등록된 법제 내용이 현재 자료와 다릅니다. 최신 판본을 새로 확인해 주세요.');throw result.error;}
+ if(!uuid(result.data))throw fail('40001','법제 등록 결과를 확인하지 못했습니다. 최신 자료를 다시 확인해 주세요.');
+ return workingRevision(db,'law',result.data,candidate);
+}
+
 /** Import the exact selected repository snapshot, never an unrelated/edited existing draft. */
 export async function prepareWorkspaceSubmission(db:Db,kind:WorkspaceKind,id:string,expectedHash:string):Promise<{id:string;revision:string}> {
  if(typeof expectedHash!=='string'||!/^[a-f0-9]{64}$/i.test(expectedHash))throw fail('40001','선택한 자료의 판본을 새로 확인해 주세요.');
@@ -73,13 +80,10 @@ export async function prepareWorkspaceSubmission(db:Db,kind:WorkspaceKind,id:str
   if(!id.startsWith('repo-trend:'))throw fail('40001','선택한 동향 자료를 다시 확인해 주세요.');
   const candidate=loadAllTrendImportCandidates().find(item=>item.id===id.slice('repo-trend:'.length));
   if(!candidate||hashSubmission(candidate)!==expectedHash)throw fail('40001','선택한 뒤 제출 자료가 변경됐습니다. 최신 내용을 보고 다시 선택해 주세요.');
-  return prepareTrend(db,candidate);
+  return prepareTrendCandidate(db,candidate);
  }
  if(kind!=='law'||!id.startsWith('repo-law:'))throw fail('40001','선택한 법제 자료를 다시 확인해 주세요.');
  const candidate=buildLegalReviewPackages().find(item=>item.recordId===id.slice('repo-law:'.length));
  if(!candidate||candidate.contentHash!==expectedHash)throw fail('40001','선택한 뒤 법제 제출 판본이 변경됐습니다. 최신 내용을 보고 다시 선택해 주세요.');
- const result=await db.rpc('import_legal_review',{p_payload:candidate});
- if(result.error){if(result.error.code==='22023'&&/different content/i.test(result.error.message))throw fail('40001','같은 판본으로 등록된 법제 내용이 제출 자료와 다릅니다. 최신 판본을 확인해 주세요.');throw result.error;}
- if(!uuid(result.data))throw fail('40001','법제 등록 결과를 확인하지 못했습니다. 자료 목록을 새로고침해 주세요.');
- return workingRevision(db,'law',result.data,candidate);
+ return prepareLegalCandidate(db,candidate);
 }

@@ -21,11 +21,11 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
   const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
     <Link href={returnTo}>← {returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
-    <p className={styles.lawOverline}>KOREAN TRANSLATION</p>
+    <p className={styles.lawOverline}>{law.reviewStatus === "official" ? "OFFICIAL KOREAN TEXT" : "KOREAN TRANSLATION"}</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
-    <p>{dateLabel}: {law.version} · 조문 {law.articleCount}개</p>
-    {law.scopeNote && <details className={styles.lawScopeNote}><summary>번역 범위와 판본 안내</summary><p>{law.scopeNote}</p></details>}
+    <p>{dateLabel}: {law.version} · {law.reviewStatus === "official" ? "본칙 조문 표제" : "조문"} {law.articleCount}개</p>
+    {law.scopeNote && <details className={styles.lawScopeNote}><summary>{law.reviewStatus === "official" ? "원문 범위와 판본 안내" : "번역 범위와 판본 안내"}</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
     <div className={styles.lawSearchBar}><label htmlFor="law-article-search">조문 검색</label><input id="law-article-search" type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="조문 번호나 단어를 입력하세요 (예: 제2조, 개인정보)" />{articleQuery && <button type="button" onClick={() => setArticleQuery("")}>검색 지우기</button>}</div>
     {query && <div className={styles.lawSearchResults} role="status"><strong>검색 결과 {matchingSections.length}개</strong>{matchingSections.length ? <div>{matchingSections.slice(0, 20).map((section) => <a href={`#${section.id}`} key={section.id} onClick={() => setTocOpen(false)}>{section.title}</a>)}{matchingSections.length > 20 && <span>처음 20개를 표시했습니다. 목차에서 나머지도 확인할 수 있습니다.</span>}</div> : <p>일치하는 조문이 없습니다. 다른 단어나 조문 번호로 검색해 보세요.</p>}</div>}
@@ -66,7 +66,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
         </div>
       </div>
     </div>
-    <p className={styles.lawDisclaimer}>비공식 한국어 번역입니다. 법률의 정확한 내용은 공식 원문을 확인해 주세요.</p>
+    <p className={styles.lawDisclaimer}>{law.reviewStatus === "official" ? "국가법령정보센터의 공식 한국어 본칙을 옮겨 제공하며, 최신 개정과 부칙은 공식 원문에서 확인해 주세요." : "비공식 한국어 번역입니다. 법률의 정확한 내용은 공식 원문을 확인해 주세요."}</p>
     <div className={styles.lawMobileReaderTools}><button type="button" onClick={() => setTocOpen(true)}>목차·조문 찾기</button><button type="button" disabled={fontSize <= 14} onClick={() => setFontSize((size) => Math.max(14, size - 2))} aria-label="본문 글자 작게">가−</button><button type="button" disabled={fontSize >= 20} onClick={() => setFontSize((size) => Math.min(20, size + 2))} aria-label="본문 글자 크게">가＋</button></div>
   </section>;
 }

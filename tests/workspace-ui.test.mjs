@@ -91,6 +91,12 @@ test('initial legal filter preserves the unified screen and omits unrelated tren
   const html=render({initialKind:'law',items:[item(1,{title:'보여주지 않을 동향'}),item(2,{kind:'law',title:'법제 번역'})]});
   assert.match(html,/법제 번역/);assert.doesNotMatch(html,/보여주지 않을 동향/);
 });
+test('trash view can be opened directly from the materials screen and offers restore',()=>{
+  const html=render({initialStatus:'trashed',items:[item(1,{status:'trashed'})]});
+  assert.match(html,/option value="trashed" selected=""/);
+  assert.match(html,/휴지통/);
+  assert.match(html,/선택한 0건 복원/);
+});
 test('rows mark published content with unpublished changes without treating published rows as drafts',()=>{
   const html=render({items:[item(1,{status:'published',hasUnpublishedChanges:true})]});
   assert.match(html,/공개 중/);assert.match(html,/수정본 있음/);assert.doesNotMatch(html,/사람 검수 전/);

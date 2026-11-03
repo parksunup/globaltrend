@@ -1,0 +1,27 @@
+{
+  "source": "calprivacy",
+  "source_id": "b064fc3c-766d-540f-9b65-3aa71e632663",
+  "listing": "https://privacy.ca.gov/about-us/newsroom/",
+  "hosts": [
+    "privacy.ca.gov"
+  ],
+  "language": "en",
+  "enabled": true,
+  "permissions": {
+    "collect": true,
+    "store": true,
+    "ai": true
+  },
+  "hold_reason": null,
+  "adapter_scope": "official_press_or_news_body",
+  "executor": "edge",
+  "cadence": "daily",
+  "lookback_days": 3,
+  "expansion_phase": 1,
+  "name": "California Privacy Protection Agency / CalPrivacy",
+  "publisher_id": "04d37540-3bd3-5f51-b006-17ea5b9ab5a2",
+  "jurisdiction": "US-CA",
+  "publisher_type": "supervisory_authority",
+  "approval_basis": "2026-10-28 user requested phase 1 and 2 expansion; public route and access tested; no grant of public draft access",
+  "verification": "listing and detail parsed; scheduled run not yet observed"
+}

@@ -1,0 +1,292 @@
+import asyncio
+import base64
+import contextlib
+import importlib.util
+import io
+import json
+import os
+import tempfile
+import types
+import unittest
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+spec = importlib.util.spec_from_file_location('podcast_worker', Path(__file__).parents[1] / 'scripts/podcast-cloud/worker.py')
+worker = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(worker)
+vault_spec = importlib.util.spec_from_file_location('session_store', Path(__file__).parents[1] / 'scripts/podcast-cloud/session_store.py')
+session_store = importlib.util.module_from_spec(vault_spec)
+vault_spec.loader.exec_module(session_store)
+mcp_spec = importlib.util.spec_from_file_location('notebook_mcp', Path(__file__).parents[1] / 'scripts/podcast-cloud/notebook_mcp.py')
+notebook_mcp = importlib.util.module_from_spec(mcp_spec)
+mcp_spec.loader.exec_module(notebook_mcp)
+EMAIL = 'podcast@example.invalid'
+KEY = base64.b64encode(bytes(range(32))).decode()
+def state(value='initial-secret'):
+    return json.dumps({'cookies':[{'name':'SID','value':value},{'name':'__Secure-1PSIDTS','value':value}],
+                       'notebooklm':{'account':{'email':EMAIL}}}).encode()
+
+class SessionCryptoTests(unittest.TestCase):
+    def test_secondary_binding_can_enter_file_backed_rotation(self):
+        recovery=json.loads(state())
+        recovery['cookies']=[{'name':'SID','value':'synthetic-only'},
+                             {'name':'OSID','value':'synthetic-only'}]
+        raw=json.dumps(recovery).encode()
+        vault=session_store.SessionVault(KEY,EMAIL)
+        self.assertEqual(vault.unseal(vault.seal(raw,1),1),raw)
+        recovery['cookies']=[{'name':'SID','value':'synthetic-only'}]
+        with self.assertRaises(ValueError): vault.seal(json.dumps(recovery).encode(),1)
+
+    def test_ciphertext_is_random_and_authenticated_for_version_and_key(self):
+        v=session_store.SessionVault(KEY,EMAIL)
+        a=v.seal(state(),1); b=v.seal(state(),1)
+        self.assertNotEqual(a['nonce'],b['nonce'])
+        self.assertNotIn('initial-secret',json.dumps(a))
+        self.assertEqual(v.unseal(a,1),state())
+        for bad in ({**a,'ciphertext':a['ciphertext'][:-4]+'AAAA'}, {**a,'nonce':'A'*16}):
+            with self.assertRaises(ValueError): v.unseal(bad,1)
+        with self.assertRaises(ValueError): v.unseal(a,2)
+        with self.assertRaises(ValueError):
+            session_store.SessionVault(base64.b64encode(b'x'*32).decode(),EMAIL).unseal(a,1)
+
+    def test_account_mismatch_and_existing_ciphertext_never_fall_back_to_bootstrap(self):
+        with self.assertRaises(ValueError): session_store.SessionVault(KEY,'other@example.invalid').seal(state(),1)
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaises(ValueError):
+                session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':1,'envelope':{}})
+
+    def test_explicit_admin_recovery_preserves_version_and_rejects_other_accounts(self):
+        v=session_store.SessionVault(KEY,EMAIL)
+        recovery=json.loads(state('new-dedicated-login'))
+        with tempfile.TemporaryDirectory() as folder:
+            p=v.restore(folder,{'version':12,'envelope':{},'recovery':recovery})
+            self.assertEqual(json.loads(p.read_bytes()),recovery)
+            self.assertEqual(v.unseal(v.seal(p.read_bytes(),13),13),p.read_bytes())
+        recovery['notebooklm']['account']['email']='other@example.invalid'
+        with tempfile.TemporaryDirectory() as folder:
+            with self.assertRaises(ValueError): v.restore(folder,{'version':12,'recovery':recovery})
+
+    def test_restore_is_private_and_forces_rotation_guard_to_expire(self):
+        with tempfile.TemporaryDirectory() as folder:
+            p=session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':0,'envelope':None})
+            self.assertEqual(p.stat().st_mtime,1)
+            if os.name != 'nt': self.assertEqual(p.stat().st_mode & 0o777,0o600)
+            with self.assertRaises(FileExistsError):
+                session_store.SessionVault(KEY,EMAIL,state()).restore(folder,{'version':0,'envelope':None})
+
+    def test_secrets_are_removed_from_environment_before_sdk_load(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'})
+        with patch.dict(os.environ,{'PODCAST_SESSION_KEY':KEY,'PODCAST_ACCOUNT_EMAIL':EMAIL,'NOTEBOOKLM_AUTH_JSON':state().decode(),'NOTEBOOKLM_MASTER_TOKEN_JSON':token}):
+            session_store.SessionVault.from_environment()
+            self.assertFalse(any(k in os.environ for k in ('PODCAST_SESSION_KEY','PODCAST_ACCOUNT_EMAIL','NOTEBOOKLM_AUTH_JSON','NOTEBOOKLM_MASTER_TOKEN_JSON')))
+
+    def test_dedicated_master_token_is_private_and_bound_to_account(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        with tempfile.TemporaryDirectory() as folder:
+            path=session_store.SessionVault(KEY,EMAIL,state(),token).restore(folder,{'version':0,'envelope':None})
+            saved=path.with_name('master_token.json')
+            self.assertEqual(saved.read_bytes(),token)
+            if os.name != 'nt': self.assertEqual(saved.stat().st_mode & 0o777,0o600)
+        with self.assertRaises(ValueError):
+            session_store.SessionVault(KEY,EMAIL,state(),token.replace(EMAIL.encode(),b'other@example.invalid'))
+
+    def test_database_master_envelope_restores_without_plaintext_in_lease(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        vault=session_store.SessionVault(KEY,EMAIL,state())
+        envelope=vault.seal_master(token)
+        with tempfile.TemporaryDirectory() as folder:
+            path=vault.restore(folder,{'version':0,'envelope':None},envelope)
+            self.assertEqual(path.with_name('master_token.json').read_bytes(),token)
+        with self.assertRaises(ValueError):
+            vault.unseal_master({**envelope,'ciphertext':'AAAA'})
+
+class SessionRunTests(unittest.IsolatedAsyncioTestCase):
+    def cloud(self):
+        cloud=types.SimpleNamespace(calls=[])
+        def call(action,job=None,**kw):
+            cloud.calls.append((action,kw))
+            return {'job':None}
+        cloud.call=call
+        return cloud
+
+    def factory(self, seen, error=None):
+        @contextlib.asynccontextmanager
+        async def factory(path):
+            seen.append(Path(path).read_bytes())
+            client=types.SimpleNamespace(notebooks=types.SimpleNamespace(list=AsyncMock(side_effect=error)))
+            yield client
+            Path(path).write_bytes(state('rotated-secret'))
+        return factory
+
+    async def test_one_time_cloud_bootstrap_saves_only_encrypted_outputs(self):
+        token=json.dumps({'version':1,'email':EMAIL,'android_id':'abc123','master_token':'aas_et/test-only'}).encode()
+        async def bootstrapper(**kwargs):
+            path=kwargs['storage_path']
+            path.write_bytes(state())
+            path.with_name('master_token.json').write_bytes(token)
+            return 0
+        cloud=self.cloud();captured=io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            result=await worker.run_master_bootstrap(cloud,session_store.SessionVault(KEY,EMAIL),
+                {'oauthToken':'one-use-test-secret','version':12},bootstrapper)
+        self.assertEqual(result,0)
+        saved=next(kw['data'] for action,kw in cloud.calls if action=='master_complete')
+        self.assertEqual(saved['version'],12)
+        self.assertEqual(session_store.SessionVault(KEY,EMAIL).unseal_master(saved['masterEnvelope']),token)
+        self.assertEqual(session_store.SessionVault(KEY,EMAIL).unseal(saved['sessionEnvelope'],13),state())
+        self.assertNotIn('one-use-test-secret',captured.getvalue())
+        self.assertNotIn('claim',[action for action,_ in cloud.calls])
+
+    async def test_independent_runners_use_saved_rotation_and_auth_trial_cannot_claim_jobs(self):
+        cloud=self.cloud(); seen=[]
+        vault=session_store.SessionVault(KEY,EMAIL,state())
+        result=await worker.run_session(cloud,vault,{'version':0,'envelope':None,'auth_only':True},self.factory(seen),True)
+        self.assertEqual(result,0)
+        self.assertNotIn('claim',[a for a,k in cloud.calls])
+        saved=next(k['data']['envelope'] for a,k in cloud.calls if a=='session_save')
+        next_cloud=self.cloud()
+        await worker.run_session(next_cloud,session_store.SessionVault(KEY,EMAIL),
+             {'version':1,'envelope':saved,'auth_only':True},self.factory(seen))
+        self.assertEqual(seen,[state(),state('rotated-secret')])
+
+    async def test_failed_auth_does_not_overwrite_last_good_ciphertext_or_leak_error(self):
+        class AuthError(Exception): pass
+        cloud=self.cloud(); captured=io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            result=await worker.run_session(cloud,session_store.SessionVault(KEY,EMAIL,state()),
+                 {'version':0,'envelope':None,'auth_only':True},self.factory([],AuthError('secret-must-not-appear')))
+        self.assertEqual(result,1)
+        self.assertNotIn('session_save',[a for a,k in cloud.calls])
+        self.assertEqual(next(k for a,k in cloud.calls if a=='session_fail')['data']['category'],'auth')
+        self.assertNotIn('secret-must-not-appear',captured.getvalue())
+
+    async def test_extraction_failure_is_not_reported_as_expired_login(self):
+        class AuthExtractionError(Exception): pass
+        cloud=self.cloud(); captured=io.StringIO()
+        with contextlib.redirect_stdout(captured):
+            await worker.run_session(cloud,session_store.SessionVault(KEY,EMAIL,state()),
+                {'version':0,'envelope':None,'auth_only':True},
+                self.factory([],AuthExtractionError('secret-response-body')))
+        self.assertFalse(worker.auth_failure(AuthExtractionError()))
+        self.assertIn('reason=token_extraction',captured.getvalue())
+        self.assertIn('stage=list_notebooks',captured.getvalue())
+        self.assertNotIn('secret-response-body',captured.getvalue())
+        self.assertNotIn(('health',{'ok':False}),cloud.calls)
+
+    def test_diagnostic_codes_never_include_sdk_messages(self):
+        error=ValueError("Google's CookieMismatch page was reached secret-url-cookie")
+        self.assertEqual(worker.failure_reason(error),'cookie_scope')
+        self.assertEqual(worker.failure_reason(ValueError('secret-value')),'unclassified')
+
+    async def test_non_auth_production_failure_still_persists_verified_rotation(self):
+        cloud=self.cloud(); original_call=cloud.call
+        def call(action,job=None,**kw):
+            value=original_call(action,job,**kw)
+            return {'job':{'id':'synthetic','cloud_checkpoint':{}}} if action=='claim' else value
+        cloud.call=call
+        with patch.object(worker,'produce',AsyncMock(side_effect=RuntimeError('production failure'))):
+            result=await worker.run_session(cloud,session_store.SessionVault(KEY,EMAIL,state()),
+                {'version':0,'envelope':None,'auth_only':False},self.factory([]),True)
+        self.assertEqual(result,1)
+        self.assertIn('session_save',[a for a,k in cloud.calls])
+        self.assertNotIn('session_fail',[a for a,k in cloud.calls])
+
+class Cloud:
+    def __init__(self):
+        self.calls = []
+    def checkpoint(self, job, cp, phase, message=''):
+        self.calls.append(('checkpoint', phase, dict(cp)))
+        job['cloud_checkpoint'] = dict(cp)
+    def call(self, action, job):
+        self.calls.append((action,))
+    def upload(self, job, path):
+        assert path.exists()
+        self.calls.append(('complete',))
+
+def job(cp=None):
+    return {'id':'test-job','packet':{'issueKey':'2026-W43','sourceText':'public sources','instructions':'one main topic'},'cloud_checkpoint':cp or {}}
+
+class PodcastCloudTests(unittest.IsolatedAsyncioTestCase):
+    def client(self, status):
+        return types.SimpleNamespace(
+            notebooks=types.SimpleNamespace(create=AsyncMock(return_value=types.SimpleNamespace(id='nb'))),
+            sources=types.SimpleNamespace(add_text=AsyncMock(return_value=types.SimpleNamespace(id='src'))),
+            artifacts=types.SimpleNamespace(generate_audio=AsyncMock(return_value=types.SimpleNamespace(task_id='audio',is_failed=False)),poll_status=AsyncMock(return_value=status),download_audio=AsyncMock()))
+
+    async def test_first_run_persists_ids_and_completes(self):
+        client=self.client(types.SimpleNamespace(is_complete=True))
+        async def download(nb,path,artifact_id):
+            Path(path).write_bytes(b'fake audio')
+        client.artifacts.download_audio.side_effect=download
+        cloud=Cloud(); j=job()
+        await worker.produce(client,cloud,j)
+        self.assertEqual(j['cloud_checkpoint']['artifact_id'],'audio')
+        self.assertEqual(cloud.calls[-1],('complete',))
+        self.assertEqual(client.artifacts.generate_audio.await_args.kwargs['language'],'ko')
+        self.assertEqual(client.artifacts.generate_audio.await_args.kwargs['source_ids'],['src'])
+
+    async def test_next_run_polls_exact_existing_audio_without_regeneration(self):
+        client=self.client(types.SimpleNamespace(is_complete=False,is_terminal=False))
+        cloud=Cloud(); ticks=iter([0,0,400])
+        await worker.produce(client,cloud,job({'notebook_id':'nb','source_id':'src','artifact_id':'original','stage':'watch'}),clock=lambda:next(ticks),sleep=AsyncMock())
+        client.notebooks.create.assert_not_awaited()
+        client.sources.add_text.assert_not_awaited()
+        client.artifacts.generate_audio.assert_not_awaited()
+        client.artifacts.poll_status.assert_awaited_once_with('nb','original')
+        self.assertEqual(cloud.calls[-1],('release',))
+
+    async def test_uncertain_external_creation_is_not_repeated(self):
+        for stage in worker.AMBIGUOUS:
+            cloud=Cloud();client=self.client(None)
+            await worker.produce(client,cloud,job({'stage':stage}))
+            client.notebooks.create.assert_not_awaited()
+            client.artifacts.generate_audio.assert_not_awaited()
+            self.assertEqual(cloud.calls[-1][1],'blocked')
+
+    async def test_cancelled_lease_stops_before_google_mutations(self):
+        cloud=Cloud();client=self.client(None)
+        cloud.checkpoint=lambda *a: (_ for _ in ()).throw(RuntimeError('cancelled'))
+        with self.assertRaises(RuntimeError):
+            await worker.produce(client,cloud,job())
+        client.notebooks.create.assert_not_awaited()
+
+class NotebookMCPAdapterTests(unittest.IsolatedAsyncioTestCase):
+    async def test_every_generation_step_uses_mcp_tools(self):
+        seen=[]
+        responses={
+            'notebook_list': {'notebooks': []},
+            'notebook_create': {'status':'created','notebook_id':'nb'},
+            'source_add': {'source_id':'src','ok':True},
+            'studio_generate': {'task_id':'audio'},
+            'studio_status': {'status':'completed','is_complete':True},
+            'studio_download': {'status':'downloaded'},
+        }
+        async def call(name, arguments):
+            seen.append((name, arguments))
+            if name=='studio_download': Path(arguments['path']).write_bytes(b'audio')
+            return types.SimpleNamespace(is_error=False, structured_content=responses[name])
+        client=notebook_mcp.NotebookMCP(types.SimpleNamespace(call_tool=call))
+        with tempfile.TemporaryDirectory() as folder:
+            self.assertEqual(await client.notebooks.list(),[])
+            nb=await client.notebooks.create('title')
+            source=await client.sources.add_text(nb.id,'sources','body')
+            result=await client.artifacts.generate_audio(nb.id,[source.id],'ko','prompt','deep-dive','default')
+            status=await client.artifacts.poll_status(nb.id,result.task_id)
+            self.assertTrue(status.is_complete)
+            await client.artifacts.download_audio(nb.id,str(Path(folder)/'audio.m4a'),result.task_id)
+        self.assertEqual([name for name,_ in seen], list(responses))
+        self.assertEqual(seen[4][1]['task_id'],'audio')
+        self.assertEqual(seen[3][1]['source_ids'],['src'])
+
+    async def test_mcp_errors_are_reduced_to_safe_codes(self):
+        async def call(name, arguments):
+            return types.SimpleNamespace(is_error=True, structured_content=None,
+                                         content=[types.SimpleNamespace(text='AUTH: secret-cookie')])
+        client=notebook_mcp.NotebookMCP(types.SimpleNamespace(call_tool=call))
+        with self.assertRaises(notebook_mcp.MCPAuthFailure) as caught:
+            await client.notebooks.list()
+        self.assertEqual(str(caught.exception),'AUTH')
+        self.assertTrue(worker.auth_failure(caught.exception))
+
+if __name__=='__main__':
+    unittest.main()

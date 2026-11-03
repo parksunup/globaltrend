@@ -1,0 +1,529 @@
+{
+  "observed_at": "2026-10-21T13:37:38.702498+00:00",
+  "deployed_code_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+  "project": "emlgwhkgaihhrirhdpnp",
+  "automatic_drafting_verified": false,
+  "draft_trigger": "manual_codex_cloud_session",
+  "schedules": [
+    {
+      "jobid": 1,
+      "jobname": "trend-collector-daily",
+      "schedule": "17 22 * * *",
+      "active": true
+    },
+    {
+      "jobid": 2,
+      "jobname": "trend-collector-consumer",
+      "schedule": "* * * * *",
+      "active": true
+    }
+  ],
+  "cron_execution": [
+    {
+      "runid": 1,
+      "jobid": 2,
+      "status": "succeeded",
+      "start_time": "2026-10-21 13:05:00.14896+00",
+      "end_time": "2026-10-21 13:05:00.171785+00",
+      "return_message": "1 row"
+    },
+    {
+      "runid": 11,
+      "jobid": 3,
+      "status": "succeeded",
+      "start_time": "2026-10-21 13:14:00.075325+00",
+      "end_time": "2026-10-21 13:14:00.120537+00",
+      "return_message": "DO"
+    },
+    {
+      "runid": 12,
+      "jobid": 2,
+      "status": "succeeded",
+      "start_time": "2026-10-21 13:15:00.091634+00",
+      "end_time": "2026-10-21 13:15:00.105558+00",
+      "return_message": "1 row"
+    },
+    {
+      "runid": 13,
+      "jobid": 2,
+      "status": "succeeded",
+      "start_time": "2026-10-21 13:16:00.038441+00",
+      "end_time": "2026-10-21 13:16:00.059331+00",
+      "return_message": "1 row"
+    }
+  ],
+  "scheduled_enqueue": [
+    {
+      "id": "97d97918-b676-4e84-b508-e0b0b676655e",
+      "execution_id": "enqueue-once-validation",
+      "started_at": "2026-10-21 13:14:00.075698+00",
+      "result": {
+        "status": "scheduled_enqueue",
+        "runtime": "supabase-postgres",
+        "enqueued": 1
+      }
+    }
+  ],
+  "scheduled_collection": [
+    {
+      "id": "cc75e7e3-dbce-4d9e-ba5d-be2d8f863633",
+      "execution_id": "9674f153-c41e-419b-85a6-e1ef8bcc8077",
+      "started_at": "2026-10-21 13:15:01.999+00",
+      "result": {
+        "next": null,
+        "since": "2026-09-21",
+        "stage": "listing",
+        "until": "2026-10-21",
+        "source": "ppc",
+        "status": "partial",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "discovered": 4,
+        "execution_id": "9674f153-c41e-419b-85a6-e1ef8bcc8077",
+        "coverage_complete": false,
+        "platform_execution_id": "759e842b-c829-4d6e-a842-bbcfd587c23d"
+      }
+    },
+    {
+      "id": "171d9afc-943f-44ec-a8f7-aa19d4e7d943",
+      "execution_id": "4b8faf8a-9659-4a55-a9a2-592d3493769a",
+      "started_at": "2026-10-21 13:16:01.594+00",
+      "result": {
+        "url": "https://www.ppc.go.jp/news/press/2026/261021_houdou",
+        "saved": "duplicate",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "ppc",
+        "status": "partial",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "draft_job_id": "0304036a-5b20-4488-83a3-e099eeba41da",
+        "execution_id": "4b8faf8a-9659-4a55-a9a2-592d3493769a",
+        "item_created": false,
+        "unknown_date": true,
+        "published_date": null,
+        "source_item_id": "464e081b-9a4b-4a85-9138-89e758d20e95",
+        "content_changed": false,
+        "coverage_complete": false,
+        "platform_execution_id": "82cce715-1dc4-445c-98fc-1402879f1e28",
+        "source_item_revision_id": "6f97d486-17a2-41aa-af88-d1028706306c"
+      }
+    },
+    {
+      "id": "5fc242a1-7ee9-4f60-b782-84f11c151b41",
+      "execution_id": "6da9b959-4fc5-4a65-a529-080ca0b741a7",
+      "started_at": "2026-10-21 13:17:01.305+00",
+      "result": {
+        "url": "https://www.ppc.go.jp/news/press/2026/261007_houdou",
+        "saved": "duplicate",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "ppc",
+        "status": "partial",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "draft_job_id": "bb693d94-f190-4694-88f3-28cedd49ede4",
+        "execution_id": "6da9b959-4fc5-4a65-a529-080ca0b741a7",
+        "item_created": false,
+        "published_date": "2026-10-07",
+        "source_item_id": "4956ff71-faf3-4ea6-89c2-541d46d39d5c",
+        "content_changed": false,
+        "coverage_complete": false,
+        "platform_execution_id": "574a315c-3603-405d-8347-4d4d83ab0e7d",
+        "source_item_revision_id": "29e61c49-eb09-4038-86ba-315f75540f8e"
+      }
+    }
+  ],
+  "source_latest": [
+    {
+      "id": "ab2bdb29-a994-4ac2-92a4-737d13510022",
+      "execution_id": "e87e5050-c5eb-4210-88f8-b2c5e48910cb",
+      "started_at": "2026-10-21 13:22:01.349+00",
+      "result": {
+        "page": "https://www.cnil.fr/fr/actualites",
+        "since": "2026-09-21",
+        "until": "2026-10-21",
+        "offset": 0,
+        "reason": "http_503",
+        "source": "cnil",
+        "status": "failed",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "execution_id": "e87e5050-c5eb-4210-88f8-b2c5e48910cb",
+        "coverage_complete": false,
+        "platform_execution_id": "7aa67245-08f0-4bc8-aa09-88df018c6e43"
+      }
+    },
+    {
+      "id": "3f896f9d-1bfe-4e6e-86b3-acf5229f6cfa",
+      "execution_id": "d6ba8694-9664-4db2-85ba-9683163f7344",
+      "started_at": "2026-10-21 13:37:01.323+00",
+      "result": {
+        "url": "https://curia.europa.eu/site/upload/docs/application/pdf/2026-09/cp260130en.pdf",
+        "saved": "out_of_range",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "curia",
+        "status": "partial",
+        "git_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "press_release_pdf_not_judgment",
+        "execution_id": "d6ba8694-9664-4db2-85ba-9683163f7344",
+        "published_date": "2026-09-17",
+        "coverage_complete": false,
+        "platform_execution_id": "cacb7023-f4c9-4126-8dad-e5ac8230bae7"
+      }
+    },
+    {
+      "id": "8e6f591a-42a3-41fe-8d70-8f85f6f6cf3c",
+      "execution_id": "c71a1a01-a1ff-4bdd-804b-67cbb00dd367",
+      "started_at": "2026-10-21 13:37:01.374+00",
+      "result": {
+        "url": "https://www.dataprotection.ie/en/news-media/latest-news/german-federal-dpa-ongoing-public-consultation-ai-and-memorisation",
+        "saved": "out_of_range",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "dpc",
+        "status": "partial",
+        "git_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "execution_id": "c71a1a01-a1ff-4bdd-804b-67cbb00dd367",
+        "published_date": "2025-08-06",
+        "coverage_complete": false,
+        "platform_execution_id": "012cd0a9-d7d6-4cd8-b4a2-75cf06ada206"
+      }
+    },
+    {
+      "id": "fb324414-86ac-492b-8124-a48560ed000f",
+      "execution_id": "fed54e96-b42f-4b31-a3e1-6b58627842c8",
+      "started_at": "2026-10-21 13:37:01.423+00",
+      "result": {
+        "url": "https://www.edpb.europa.eu/news/data-protection-commission-announces-final-decision-following-inquiry-into-the-health-service_en",
+        "saved": "out_of_range",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "edpb",
+        "status": "partial",
+        "git_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "execution_id": "fed54e96-b42f-4b31-a3e1-6b58627842c8",
+        "published_date": "2026-09-03",
+        "coverage_complete": false,
+        "platform_execution_id": "6561f75f-924a-4f67-8444-6e365d55ffe8"
+      }
+    },
+    {
+      "id": "dde555a6-6b36-42e1-b031-de9a169de5e6",
+      "execution_id": "b5a37c64-1d81-4bcf-82ae-d780c7e901a5",
+      "started_at": "2026-10-21 13:22:01.468+00",
+      "result": {
+        "page": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+        "since": "2026-10-16",
+        "until": "2026-10-21",
+        "offset": 0,
+        "reason": "http_403",
+        "source": "ftc",
+        "status": "failed",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "execution_id": "b5a37c64-1d81-4bcf-82ae-d780c7e901a5",
+        "coverage_complete": false,
+        "platform_execution_id": "985777e1-0b51-4408-b0a8-1cd9182e1ae2"
+      }
+    },
+    {
+      "id": "9d8838c4-9c4a-44a6-b410-2db840250d40",
+      "execution_id": "2189b64c-0ad6-4cbb-9d32-1013b657fd47",
+      "started_at": "2026-10-21 13:37:01.505+00",
+      "result": {
+        "url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/08/boost-your-business-fitness-ico-offers-new-free-data-protection-training-for-smes/",
+        "saved": "out_of_range",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "ico",
+        "status": "partial",
+        "git_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "execution_id": "2189b64c-0ad6-4cbb-9d32-1013b657fd47",
+        "published_date": "2026-08-11",
+        "coverage_complete": false,
+        "platform_execution_id": "eb78403b-f402-4d78-bde4-b764ce114184"
+      }
+    },
+    {
+      "id": "33dd7b8c-b4f3-4d18-97f3-ce9814edc59b",
+      "execution_id": "cc70bb9c-4839-4d51-b11e-1bf72b4c80c8",
+      "started_at": "2026-10-21 13:22:01.49+00",
+      "result": {
+        "page": "https://www.oecd.org/en/topics/privacy-and-data-protection.html",
+        "since": "2026-10-16",
+        "until": "2026-10-21",
+        "offset": 0,
+        "reason": "http_403",
+        "source": "oecd",
+        "status": "failed",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "execution_id": "cc70bb9c-4839-4d51-b11e-1bf72b4c80c8",
+        "coverage_complete": false,
+        "platform_execution_id": "f1987209-8a96-4ebb-8aba-3b5cddd97fef"
+      }
+    },
+    {
+      "id": "b4976b8a-42a1-44ba-b519-eb9ddb9a9231",
+      "execution_id": "762e69bd-daca-4377-adf5-0c16263dcfd4",
+      "started_at": "2026-10-21 13:35:05.073+00",
+      "result": {
+        "page": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&page=2&pathname=%2Fmedia-events",
+        "since": "2026-10-16",
+        "until": "2026-10-21",
+        "offset": 1,
+        "reason": "pdpc_article_missing",
+        "source": "pdpc",
+        "status": "failed",
+        "git_sha": "93686aaa7480fca67d9d496f978f6a5231bc3faa",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "execution_id": "762e69bd-daca-4377-adf5-0c16263dcfd4",
+        "coverage_complete": false,
+        "platform_execution_id": "3262e469-07e5-4a90-8ecc-60d783729709"
+      }
+    },
+    {
+      "id": "0e76f647-80a0-4b8c-880b-72a3815bb769",
+      "execution_id": "709c14c1-c812-417d-b287-9d9431c421c1",
+      "started_at": "2026-10-21 13:20:02.55+00",
+      "result": {
+        "since": "2026-09-21",
+        "stage": "range_incomplete",
+        "until": "2026-10-21",
+        "reason": "listing_exhaustiveness_unverified",
+        "source": "ppc",
+        "status": "partial",
+        "git_sha": "c175ca315bbf4a529fcf272baecc27a9cb587dda",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "execution_id": "709c14c1-c812-417d-b287-9d9431c421c1",
+        "coverage_complete": false,
+        "platform_execution_id": "d4163ba5-1b19-4190-b464-0552032b2c7e"
+      }
+    }
+  ],
+  "source_progress": [
+    {
+      "slug": "cnil",
+      "queued": true,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://www.cnil.fr/fr/actualites",
+      "offset": "0",
+      "failures": "4",
+      "unknown_dates": null,
+      "exhausted": null
+    },
+    {
+      "slug": "curia",
+      "queued": true,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://curia.europa.eu/site/jcms/d2_5158/en/press-releases",
+      "offset": "21",
+      "failures": "0",
+      "unknown_dates": null,
+      "exhausted": "false"
+    },
+    {
+      "slug": "dpc",
+      "queued": true,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://www.dataprotection.ie/en/news-media/latest-news?page=4",
+      "offset": "4",
+      "failures": "0",
+      "unknown_dates": "6",
+      "exhausted": "false"
+    },
+    {
+      "slug": "edpb",
+      "queued": true,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://www.edpb.europa.eu/news_en",
+      "offset": "15",
+      "failures": "0",
+      "unknown_dates": null,
+      "exhausted": "false"
+    },
+    {
+      "slug": "ftc",
+      "queued": true,
+      "since": "2026-10-16",
+      "until": "2026-10-21",
+      "page": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "offset": "0",
+      "failures": "4",
+      "unknown_dates": null,
+      "exhausted": null
+    },
+    {
+      "slug": "ico",
+      "queued": true,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "offset": "23",
+      "failures": "0",
+      "unknown_dates": "1",
+      "exhausted": "false"
+    },
+    {
+      "slug": "oecd",
+      "queued": true,
+      "since": "2026-10-16",
+      "until": "2026-10-21",
+      "page": "https://www.oecd.org/en/topics/privacy-and-data-protection.html",
+      "offset": "0",
+      "failures": "4",
+      "unknown_dates": null,
+      "exhausted": null
+    },
+    {
+      "slug": "pdpc",
+      "queued": true,
+      "since": "2026-10-16",
+      "until": "2026-10-21",
+      "page": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&page=2&pathname=%2Fmedia-events",
+      "offset": "1",
+      "failures": "1",
+      "unknown_dates": null,
+      "exhausted": "false"
+    },
+    {
+      "slug": "ppc",
+      "queued": false,
+      "since": "2026-09-21",
+      "until": "2026-10-21",
+      "page": "https://www.ppc.go.jp/news/press/",
+      "offset": "0",
+      "failures": "0",
+      "unknown_dates": "7",
+      "exhausted": "true"
+    }
+  ],
+  "report": [
+    {
+      "id": "43fe9b9e-09c3-4b4e-8345-3cbf43a188d5",
+      "source_item_id": "793a5618-eb85-43da-908a-3735ff01a2eb",
+      "source_item_revision_id": "d399eee3-3850-4071-836c-750923b82e2e",
+      "status": "draft",
+      "human_reviewed": false,
+      "published_at": null,
+      "reviewed_at": null,
+      "codex_run_id": "codex-cloud-manual-validation-20261021-dc9ed828a60b",
+      "created_at": "2026-10-21 13:16:09.631443+00",
+      "reports_for_source": 1
+    }
+  ],
+  "policy": [
+    {
+      "policy": {
+        "policy_version": "trend-draft-unlimited-v2",
+        "daily_claim_limit": null,
+        "targeted_claim_supported": true
+      }
+    }
+  ],
+  "capacity": [
+    {
+      "capacity": {
+        "can_write": true,
+        "stop_bytes": 400000000,
+        "database_bytes": 27159699
+      }
+    }
+  ],
+  "backlog": [
+    {
+      "id": "036869ff-6fde-4aaa-93b5-dfb733b2a2e1",
+      "source_id": "a23ccfc6-4ad0-4ae7-bc85-0da35cfd2c1e",
+      "url": "https://www.edpb.europa.eu/news/dutch-dpa-fines-uber-eur-824-990-000-for-unlawful-automated-decision-making-and-insufficient_en",
+      "range_start": "2026-09-21",
+      "range_end": "2026-10-21",
+      "resolved": true,
+      "updated_at": "2026-10-21 13:34:04.097084+00"
+    },
+    {
+      "id": "f23af4ab-d06f-40e5-9412-2dfa39e347e3",
+      "source_id": "ea7465ec-48fb-4b6e-8f82-7345da7e6a75",
+      "url": "https://www.mddi.gov.sg/newsroom/opening-speech-by-minister-josephine-teo-at-singapore-data-festival-at-sands-expo-and-convention-centre/",
+      "range_start": "2026-10-16",
+      "range_end": "2026-10-21",
+      "resolved": false,
+      "updated_at": "2026-10-21 13:29:01.800407+00"
+    }
+  ],
+  "backlog_resume": [
+    {
+      "id": "e6f9f06a-faca-4676-8c35-4be97e99134e",
+      "execution_id": "937383bc-ecf3-45e4-b1a4-91ba62ce3e97",
+      "started_at": "2026-10-21 13:34:01.506+00",
+      "result": {
+        "url": "https://www.edpb.europa.eu/news/dutch-dpa-fines-uber-eur-824-990-000-for-unlawful-automated-decision-making-and-insufficient_en",
+        "saved": "duplicate",
+        "since": "2026-09-21",
+        "stage": "detail",
+        "until": "2026-10-21",
+        "source": "edpb",
+        "status": "partial",
+        "git_sha": "9c78c4f5c3d528c1c6f94a698ce0413becdde977",
+        "read_ct": 1,
+        "runtime": "supabase-edge",
+        "read_scope": "news_html",
+        "draft_job_id": "7889961a-5869-4550-baa7-7d3bf4aa9463",
+        "execution_id": "937383bc-ecf3-45e4-b1a4-91ba62ce3e97",
+        "item_created": false,
+        "published_date": "2026-10-08",
+        "source_item_id": "aaa3692d-eb61-4f4a-ba7f-b9d3a9b0395a",
+        "content_changed": false,
+        "coverage_complete": false,
+        "platform_execution_id": "ec2c805f-ace4-475d-bbf0-50a25aa9ae3e",
+        "source_item_revision_id": "e70b2039-ad7e-4ca6-84a0-e1223fad076f"
+      }
+    }
+  ],
+  "runtime_migrations": [
+    {
+      "version": "20261021130000",
+      "name": "collector_edge_runtime"
+    },
+    {
+      "version": "20261021131500",
+      "name": "collector_edge_backlog"
+    },
+    {
+      "version": "20261021133000",
+      "name": "collector_backlog_dedup"
+    }
+  ]
+}

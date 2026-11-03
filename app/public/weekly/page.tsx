@@ -1,42 +1,44 @@
-import Link from "next/link";
-import { PublicHeader, PublicFooter } from "../public-navigation";
-import styles from "../public.module.css";
-import { publicSubmissionPreviewEnabled } from "../../../lib/public-submission-preview";
-import { loadWeeklySample } from "../../../lib/weekly-sample";
-import type { WeeklyIssueItem } from "../../../lib/weekly-sample";
+import Link from 'next/link';
+import {createClient} from '../../../lib/supabase/server';
+import {PublicHeader,PublicFooter} from '../public-navigation';
+import styles from '../public.module.css';
+import WeeklyFormats from './weekly-formats';
+import WrittenWeeklyReport from './written-weekly-report';
+import WeeklyIssuePicker from './weekly-issue-picker';
+import {readAllPages} from '../../../lib/read-all-pages';
 
-export const dynamic="force-dynamic";
+export const dynamic='force-dynamic';
 
-export default function WeeklyPage() {
-  const example=publicSubmissionPreviewEnabled()?loadWeeklySample():null;
-  return <main className={styles.site}>
-    <PublicHeader active="/public/weekly" />
-    <section className={styles.searchPage}>
-      <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향 자료</h1><p>한 주의 개인정보 보호 동향을 호별로 모아 읽습니다.</p></div>
-      {example?<div className={styles.weeklyReport}>
-        <div className={styles.weeklyReportHeader}>
-          <p className={styles.draftNotice}>주간호 구성 예시</p>
-          <p className={styles.weeklyReportKicker}>개인정보 주간동향 분석</p>
-          <h2>{example.title}</h2>
-          <p className={styles.weeklyReportMeta}>예시 호 · 해외·국제 {example.issue.contents.length}건 · 국내 0건</p>
-          <p className={styles.weeklyReportNotice}>{example.notice}</p>
-        </div>
-        <section className={styles.weeklyContents} aria-labelledby="weekly-contents-title">
-          <div className={styles.weeklySectionHeading}><span>CONTENTS</span><h3 id="weekly-contents-title">목차</h3></div>
-          <div className={styles.weeklyTableWrap}><table className={styles.weeklyTable}><thead><tr><th>No.</th><th>분류</th><th>제목</th><th>출처</th></tr></thead><tbody>{example.issue.contents.map((item:WeeklyIssueItem)=><tr key={item.id}><td>{item.number}</td><td>{item.category}</td><td><a href={`#weekly-${item.id}`}>{item.title}</a><small>{item.originalTitle}</small></td><td>{item.organization}</td></tr>)}</tbody></table></div>
-        </section>
-        <section className={styles.weeklyArticles} aria-labelledby="weekly-articles-title">
-          <div className={styles.weeklySectionHeading}><span>OVERSEAS &amp; INTERNATIONAL</span><h3 id="weekly-articles-title">해외·국제 개인정보 주간 동향</h3></div>
-          {example.issue.contents.map((item:WeeklyIssueItem)=><article className={styles.weeklyArticle} id={`weekly-${item.id}`} key={item.id}>
-            <header><div><span className={styles.weeklyArticleNo}>{item.number}</span><h4>{item.title}</h4></div><span className={styles.weeklyCategory}>{item.category}</span></header>
-            <p className={styles.weeklyLead}>{item.leadSummary}</p>
-            <ul className={styles.weeklyPoints}>{item.bodyPoints.map((point:{label:string;text:string},index:number)=><li key={`${item.id}-${index}`}>{point.text}</li>)}</ul>
-            {item.editorialNote?<aside><strong>편집자 해설</strong><p>{item.editorialNote}</p></aside>:null}
-            <footer><span>출처 · {item.originalTitle} ({item.organization}, {item.date})</span><Link href={`/public/trends/${item.id}`}>상세 자료 보기 →</Link><a href={item.officialUrl} target="_blank" rel="noreferrer">원문 보기 ↗</a></footer>
-          </article>)}
-        </section>
-      </div>:<div className={styles.weeklyEmpty}><strong>첫 주간호를 준비하고 있습니다</strong><p>지금은 개별 동향과 국가별 법제를 살펴보실 수 있습니다.</p><div><Link href="/public/search">동향 살펴보기 →</Link><Link href="/public/laws">국가별 법제 보기 →</Link></div></div>}
-    </section>
-    <PublicFooter />
-  </main>;
+export default async function WeeklyPage({searchParams}:{searchParams:Promise<{issue?:string}>}){
+ const db=await createClient();
+ let issues:{issue_key:string;title:string;description:string;week_start:string;week_end:string;published_at:string|null}[]=[];
+ let listError=false;
+ try{issues=await readAllPages(async(offset,count)=>{
+  const {data,error}=await db.from('written_weekly_issues')
+   .select('issue_key,title,description,week_start,week_end,published_at')
+   .eq('status','published').order('week_start',{ascending:false}).order('issue_key').range(offset,offset+count-1);
+  if(error)throw error;
+  return data??[];
+ });}catch(error){console.error('Written weekly list unavailable:',error);listError=true;}
+ const requested=(await searchParams).issue;
+ const selected=issues.find(issue=>issue.issue_key===requested)??issues[0];
+ const {data:links,error:linkError}=selected?await db.from('written_weekly_issue_reports')
+  .select('issue_key,report_id,sort_order').eq('issue_key',selected.issue_key).order('sort_order',{ascending:true}):{data:[],error:null};
+ const ids=[...new Set((links??[]).map(link=>link.report_id))];
+ const {data:reports,error:reportError}=ids.length?await db.from('reports')
+  .select('id,title_ko,one_line_summary_ko,detailed_summary_ko').eq('status','published').in('id',ids):{data:[],error:null};
+ const byId=new Map((reports??[]).map(report=>[report.id,report]));
+ const ready=!listError&&!linkError&&!reportError;
+ return <main className={styles.site}>
+  <PublicHeader active="/public/weekly"/>
+  <section className={styles.searchPage}>
+   <div className={styles.searchIntro}><p className={styles.overline}>WEEKLY BRIEFING</p><h1>주간 동향</h1><p>작업실에서 선정해 공개한 해외 개인정보 보호 동향을 읽어보세요.</p></div>
+   <WeeklyFormats active="written"/>
+   {ready&&<WeeklyIssuePicker issues={issues} selectedKey={selected?.issue_key??''} basePath="/public/weekly" label="공개된 주간 동향 호 선택"/>}
+   {ready&&selected?<WrittenWeeklyReport issue={selected} reports={(links??[]).map(link=>byId.get(link.report_id)).filter((report):report is NonNullable<typeof report>=>Boolean(report))}/>:null}
+   {!ready?<p role="alert">주간 동향을 불러오지 못했습니다. 잠시 후 다시 이용해 주세요.</p>:null}
+   {ready&&!issues.length?<div className={styles.weeklyEmpty}><strong>아직 공개된 주간 동향이 없습니다</strong><p>작업실에서 선정하고 공개한 주간 동향이 이곳에 표시됩니다. 팟캐스트는 별도 메뉴에서 들으실 수 있습니다.</p><Link href="/public/search">동향 검색하기 →</Link></div>:null}
+  </section>
+  <PublicFooter/>
+ </main>;
 }

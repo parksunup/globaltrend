@@ -1,0 +1,17 @@
+begin;
+select plan(13);
+select is(public.monthly_week_issue_key('2026-10-05'::date),'2026-10-W1','October 5 is October week 1');
+select is(public.monthly_week_issue_key('2026-10-12'::date),'2026-10-W2','October 12 is October week 2');
+select is(public.monthly_week_issue_key('2026-09-28'::date),'2026-09-W4','a month-boundary week follows its Monday');
+select is(public.monthly_week_issue_key('2025-12-29'::date),'2025-12-W5','a year-boundary week follows its Monday');
+select ok(not exists(select 1 from public.written_weekly_issues i where regexp_replace(i.issue_key,'-[0-9]+$','')<>public.monthly_week_issue_key(i.week_start)),'written weekly identifiers match stored Monday dates');
+select ok(not exists(select 1 from public.weekly_issues i where regexp_replace(i.issue_key,'-[0-9]+$','')<>public.monthly_week_issue_key(i.week_start)),'podcast issue identifiers match stored Monday dates');
+select ok(not exists(select 1 from public.podcast_production_jobs j where j.issue_key is distinct from j.packet->>'issueKey'),'job identifiers and packets stay aligned');
+select ok(has_function_privilege('authenticated','public.reserve_weekly_podcast_issue_key(date)','execute'),'administrators can reserve episode keys');
+select ok(not has_function_privilege('anon','public.unpublish_podcast_production_job(uuid)','execute'),'anonymous users cannot unpublish episodes');
+select ok(has_function_privilege('authenticated','public.unpublish_weekly_podcast_issue(text)','execute'),'admins can unpublish episodes without production jobs');
+select ok(position('pg_advisory_xact_lock' in pg_get_functiondef('public.reserve_weekly_podcast_issue_key(date)'::regprocedure))>0,'edition reservations serialize on their Monday');
+select ok(position('update public.weekly_issues' in pg_get_functiondef('public.unpublish_podcast_production_job(uuid)'::regprocedure))=0 and position('update public.written_weekly_issues' in pg_get_functiondef('public.unpublish_podcast_production_job(uuid)'::regprocedure))=0,'podcast unpublish preserves written weekly issues');
+select ok(position('audio_path' in pg_get_functiondef('public.unpublish_podcast_production_job(uuid)'::regprocedure))=0,'podcast unpublish preserves stored audio paths');
+select * from finish();
+rollback;
