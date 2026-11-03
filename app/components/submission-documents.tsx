@@ -30,7 +30,7 @@ function LegalDocument({ cells, branch, commitSha }: { cells: LegalComparisonCel
   const selectedSources = selected ? [...new Set([selected.sourceUrl, ...(selected.sourceLinks ?? [])].filter(Boolean))] : [];
   const lookup = new Map(cells.map((cell) => [`${cell.criterionId}:${cell.jurisdiction}`, cell]));
   return <>
-    <div className="document-heading"><span className="panel-kicker">LEGAL COMPARISON</span><h2>개인정보 보호법 비교표</h2><p>17개 기준 × 7개 법제 · {cells.length}셀. 각 셀은 운영 기록과 대조한 발행 상태를 표시합니다. 판본·근거·예외도 함께 확인할 수 있습니다. ‘미검토’는 규정이 없다는 뜻이 아닙니다.</p><p><a href="/legal-translation">법률별 전체 번역과 조문별 의견 보기 →</a></p></div>
+    <div className="document-heading"><span className="panel-kicker">LEGAL COMPARISON</span><h2>개인정보 보호법 비교표</h2><p>{criteria.length}개 기준 × {new Set(cells.map((cell) => cell.jurisdiction)).size}개 법제 · {cells.length}셀. 각 셀은 운영 기록과 대조한 발행 상태를 표시합니다. 판본·근거·예외도 함께 확인할 수 있습니다. ‘미검토’는 규정이 없다는 뜻이 아닙니다.</p><p><a href="/legal-translation">법률별 전체 번역과 조문별 의견 보기 →</a></p></div>
     <div className="comparison-scroll"><table className="comparison-table"><thead><tr><th scope="col">비교 기준</th>{jurisdictions.map((code) => <th scope="col" key={code}>{code}</th>)}</tr></thead><tbody>
       {criteria.map((criterion) => <tr key={criterion.id}><th scope="row">{criterion.order}. {criterion.name}</th>{jurisdictions.map((code) => {
         const cell = lookup.get(`${criterion.id}:${code}`);

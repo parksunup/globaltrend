@@ -46,7 +46,7 @@ export default function SubmissionPreview({ items, documents, branch, commitSha 
       <Link href={branch ? `/feedback?branch=${encodeURIComponent(branch)}` : "/feedback"}>이 브랜치에 저장된 피드백 전체 보기 →</Link>
     </div>
     {hasDocument && <div className="document-tabs" role="group" aria-label="검수 화면 선택">
-      <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>17개 기준 비교표</button>
+      <button type="button" className={showDocument ? "selected" : ""} onClick={() => setShowDocument(true)}>{new Set(documents.legal.map((cell) => cell.criterionId)).size}개 기준 비교표</button>
       <button type="button" className={!showDocument ? "selected" : ""} onClick={() => setShowDocument(false)}>제출 자료 목록</button>
     </div>}
     {showDocument && hasDocument ? <SubmissionDocumentsView documents={documents} branch={branch} commitSha={commitSha} /> : <>
