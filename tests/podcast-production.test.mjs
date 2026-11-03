@@ -12,6 +12,19 @@ test('one major topic and one optional brief are fixed while older contextual ev
  assert.match(makePodcastPacket({...input,brief:undefined}).instructions,/짧은 추가 소식은 없습니다/);
 });
 
+test('every episode receives the same podcast brand and named roles without personal names',()=>{
+ const first=makePodcastPacket(input),next=makePodcastPacket({...input,main:story(4)});
+ for(const packet of [first,next]){
+  assert.match(packet.instructions,/이번 주, 프라이버시/);
+  assert.match(packet.instructions,/여성 호스트/);
+  assert.match(packet.instructions,/남성 에디터/);
+  assert.match(packet.instructions,/“에디터님”/);
+  assert.match(packet.instructions,/“호스트님”/);
+  assert.match(packet.instructions,/안녕하세요\. 이번 주, 프라이버시입니다\./);
+ }
+ assert.equal(first.title,'소식 1');assert.equal(next.title,'소식 4');
+});
+
 test('monthly episode identifiers support multiple numbered editions in Monday-to-Sunday weeks',()=>{
  const monthly=makePodcastPacket({...input,issueKey:'2026-10-W3-2',weekStart:'2026-10-19',weekEnd:'2026-10-25'});
  assert.equal(monthly.issueKey,'2026-10-W3-2');

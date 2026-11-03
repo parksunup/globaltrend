@@ -1,4 +1,5 @@
 import {monthlyWeekIssueKey} from './weekly-label.ts';
+import {PODCAST_BRAND} from './podcast-brand.ts';
 
 export const PODCAST_MAX_AUDIO_BYTES = 50 * 1024 * 1024;
 export const PODCAST_BRIDGE_VERSION = 1;
@@ -36,7 +37,9 @@ export function makePodcastPacket(input: {issueKey: string; weekStart: string; w
   }
   const title = input.main.title.slice(0, 160);
   const instructions = [
-    '국제요정의 한국어 주간 개인정보 동향 팟캐스트를 만드세요. 형식은 두 진행자의 심층 분석 대화입니다.',
+    `프로그램 이름은 “${PODCAST_BRAND}”입니다. 한국어로 두 사람이 대화하는 심층 분석 팟캐스트를 만드세요. 회차별 주제 제목은 프로그램 이름과 구분하세요.`,
+    `역할과 호칭을 모든 회차에서 유지하세요. 여성 호스트가 청자의 궁금증을 질문하며 대화를 이끌고, 남성 에디터가 공식 자료를 바탕으로 설명하며 조건과 한계를 짚습니다. 호스트는 상대를 “에디터님”, 에디터는 상대를 “호스트님”이라고 부릅니다. 사람 이름이나 별명은 붙이지 마세요. 두 사람의 목소리도 각 역할에 맞게 유지해 주세요.`,
+    `첫머리에서 호스트가 “안녕하세요. ${PODCAST_BRAND}입니다.”라고 인사하고 이번 회차의 주요 주제를 소개한 뒤 에디터에게 첫 질문을 하세요. 마칠 때는 프로그램 이름을 다시 한 번 말하세요. 역할과 호칭을 소개하기 위해 별도의 긴 자기소개는 하지 마세요.`,
     `이번 회차의 메인 주제는 “${input.main.title}” 한 가지입니다. 대화의 대부분을 이 주제에 배분하세요. 관련 자료는 이 주제를 설명하는 근거이며 별도의 메인 소식으로 늘리지 마세요.`,
     input.brief ? `마무리 전에 “${input.brief.title}” 소식 한 건만 짧게 짚으세요. 메인 주제와 억지로 연결하지 마세요.` : '짧은 추가 소식은 없습니다. 억지로 새 주제를 추가하지 마세요.',
     '무슨 일이 있었는지, 기존과 무엇이 달라졌는지, 적용 대상과 조건·예외, 실무상 의미와 남은 불확실성을 자연스러운 질문·설명·반론으로 풀어 주세요.',

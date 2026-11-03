@@ -4,6 +4,7 @@ import {useEffect,useRef,useState} from 'react';
 import {makePodcastPacket,validDay,type PodcastPacket,type PodcastStory} from '../../../lib/podcast-production';
 import {rankPodcastStories,recommendedPodcastStory,resolvePodcastMain,type PodcastMainChoice} from '../../../lib/podcast-recommendation';
 import {formatMonthlyWeek,monthlyWeekIssueKey,podcastEditionNumber} from '../../../lib/weekly-label';
+import {PODCAST_BRAND} from '../../../lib/podcast-brand';
 import TeamLogin from '../../components/team-login';
 import styles from './studio.module.css';
 
@@ -207,7 +208,7 @@ export default function PodcastStudio(){
  function choosePeriod(day:string){if(!validDay(day))return;periodChosen.current=true;setPeriod(periodFor(day));setMainChoice(undefined);setBriefChoice(undefined);setContextIds([]);pendingSelection.current=null;}
  function chooseMain(id:string){setMainChoice({period:periodKey,id});if(briefId===id)setBriefChoice({period:periodKey,id:''});setContextIds(ids=>ids.filter(value=>value!==id));pendingSelection.current=null;}
  return <div className={styles.studio}>
-  <header className={styles.hero}><span>국제요정 · PODCAST</span><h1>이번 주 팟캐스트</h1><p>추천된 동향을 읽어보시고, 괜찮으면 제작 버튼 하나만 누르세요.</p><a href="/work">← 작업실</a> · <a href="/public/weekly/podcast">공개 팟캐스트 ↗</a></header>
+  <header className={styles.hero}><span>국제요정 · PODCAST</span><h1>{PODCAST_BRAND}</h1><p>추천된 동향을 읽어보시고, 괜찮으면 제작 버튼 하나만 누르세요.</p><a href="/work">← 작업실</a> · <a href="/public/weekly/podcast">공개 팟캐스트 ↗</a></header>
   {login?<section className={styles.panel}><TeamLogin onSuccess={()=>void load().catch(cause=>setError(cause.message))}/></section>:<>
    <section className={styles.panel} aria-label="이번 주 제작 후보">
     <div className={styles.topline}><div><h2>자동으로 고른 후보</h2><p>{formatMonthlyWeek(period.start)} · {period.start}–{period.end} · 발표된 동향 {candidates.length}건</p></div><label>다른 주 보기<input type="date" value={period.start} onChange={event=>choosePeriod(event.target.value)}/></label></div>
