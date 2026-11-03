@@ -1,5 +1,6 @@
 import { parseHTML } from "npm:linkedom@0.18.12";
 import {
+  additionalListing,
   detailRequestUrl,
   expansionListingDate,
   isExpansion,
@@ -36,6 +37,7 @@ export type State = {
   rows?: Row[];
   next?: string | null;
   offset?: number;
+  listing_index?: number;
   failures?: number;
   unknown_dates?: number;
   exhausted?: boolean;
@@ -413,6 +415,7 @@ export async function advance(
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];
+      state.listing_index = 0;
     }
     // Refresh legacy CNIL row snapshots once, at their current page. Never
     // transfer a stale offset to rows with newly observed dates. Backlog is exact.
@@ -713,8 +716,24 @@ export async function advance(
       state.offset = 0;
       result.stage = "next_page";
     } else {
+      const nextListing = isExpansion(c.source) && !state.is_backlog
+        ? additionalListing(c.source, state.listing_index || 0)
+        : null;
+      if (nextListing) {
+        state.listing_index = (state.listing_index || 0) + 1;
+        state.page = nextListing;
+        delete state.rows;
+        delete state.next;
+        state.offset = 0;
+        state.seen_pages = [];
+        result.stage = "next_listing_stream";
+        result.reason = "additional_approved_official_listing";
+        result.url = safeDiagnosticUrl(nextListing, c.hosts) || undefined;
+        return { state, result, continue: true, delay: 0 };
+      }
       // Exhausting a bounded feed/listing does not establish period completeness.
       state.exhausted = true;
+      state.listing_index = 0;
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];
