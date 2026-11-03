@@ -9,10 +9,10 @@ import {teamWorkspacePrompt} from '../lib/team-workspace-prompts.ts';
 function route(state) {
   const exports={};
   const code=ts.transpileModule(fs.readFileSync('app/api/team-workspace/route.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS}}).outputText;
-  vm.runInNewContext(code,{exports,Response,Request,URL,Error,console,process:{env:{}},fetch,require(name){
+  vm.runInNewContext(code,{exports,Response,Request,URL,Error,console,process:{env:state.env??{}},fetch,require(name){
     if(name.endsWith('live-team-workspace'))return {createLiveWorkspaceReader:()=>async()=>{state.gitReads++;return {role:'trends',commitSha:'a'.repeat(40),items:[],trendEdits:[]};}};
     if(name.endsWith('team-trends'))return trendTools;
-    if(name.endsWith('supabase/server'))return {createClient:async()=>({auth:{getUser:async()=>({data:{user:state.user}})},rpc:async(_name,args)=>{state.args=args;return state.result;}})};
+    if(name.endsWith('supabase/server'))return {createClient:async()=>({auth:{getUser:async()=>({data:{user:state.user}})},rpc:async(_name,args)=>{state.args=args;return state.result;},from:()=>{const query={select:()=>query,eq:()=>query,maybeSingle:async()=>({data:state.membership??null})};return query;}})};
     throw Error(name);
   }});
   return Object.assign(exports.GET,{PUT:exports.PUT});
@@ -54,4 +54,12 @@ test('workspace save rejects extra publication fields and reports concurrency co
   state.result={data:{saved:1,published:false}};
   const saved=await put(request([entry]));assert.equal(saved.status,200);assert.deepEqual(await saved.json(),{saved:1,published:false});
   assert.equal((await put(new Request('https://example.test/api/team-workspace?role=trends',{method:'PUT',headers:{Origin:'https://evil.test'},body:JSON.stringify({edits:[entry]})}))).status,403);
+});
+
+test('Preview never advertises publication permission even for a registered editor',async()=>{
+ const state={gitReads:0,user:{id:'editor'},membership:{role:'editor',is_active:true},result:{data:{items:[row],total:1,nextOffset:null}},env:{VERCEL_ENV:'preview'}};
+ const response=await route(state)(new Request('https://example.test/api/team-workspace?role=trends'));
+ const preview=await response.json();assert.equal(response.status,200);assert.equal(preview.trends.length,1);assert.equal(preview.canPublish,false);
+ state.env={VERCEL_ENV:'production'};
+ const production=await (await route(state)(new Request('https://example.test/api/team-workspace?role=trends'))).json();assert.equal(production.canPublish,true);
 });
