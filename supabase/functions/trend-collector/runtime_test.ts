@@ -331,13 +331,16 @@ Deno.test("ICO restarts an unfiltered cursor in its period and validates full pa
   for (const size of [20, 0, 25]) {
     const state: State = { since: "2026-09-21", until: "2026-10-23", page: c.listing + "?page=13" };
     let payload: {pageNumber: number; filters: unknown} | undefined;
+    let htmlRequestUrl: string | undefined;
     const step = await advance(c, state, { request: async (url, method, body) => {
       if (method === "POST") {
         payload = JSON.parse(body!);
         return { bytes: new TextEncoder().encode(JSON.stringify({ results: Array.from({ length: size }, (_, i) => ({ url: `/news/${i}`, title: "A" })), pagination: { showingPageNumber: 1, totalPages: 17, hasMore: true, perPage: 25, totalResults: 421 } })), url, type: "application/json" };
       }
+      htmlRequestUrl = url;
       return { bytes: new TextEncoder().encode('<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>'), url, type: "text/html" };
     } }, async () => { throw new Error("unexpected ingest"); });
+    eq(htmlRequestUrl, c.listing);
     eq(payload!.pageNumber, 1);
     eq(payload!.filters, [{ key: "from", values: [state.since] }, { key: "to", values: [state.until] }]);
     eq(step.result.coverage_complete, false);
