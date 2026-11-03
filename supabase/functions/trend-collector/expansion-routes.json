@@ -29,15 +29,19 @@
   "ca-opc": {
     "host": "www.priv.gc.ca",
     "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
-    "links": "main h2.item-title a[href]",
-    "article_path": "^/en/opc-news/(?:news-and-announcements|speeches-and-statements)/\\d{4}/[^/]+/$",
-    "title": "main section h2",
+    "additional_listings": [
+      "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d"
+    ],
+    "links": "main h2.item-title a[href], main a[href]",
+    "article_path": "^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\\d{4}/[^/]+/$",
+    "title": "main section h2, main h1#wb-cont",
     "body": "main section[aria-label=\"Main content\"]",
     "date": "meta[name=\"dcterms.issued\"]",
     "date_attribute": "content",
     "next": "a[rel=\"next\"],li.next a",
     "card": ".item",
-    "card_date": "time.item-date"
+    "card_date": "time.item-date, time[datetime]",
+    "card_date_attribute": "datetime"
   },
   "eu-parliament": {
     "host": "www.europarl.europa.eu",

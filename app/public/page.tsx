@@ -9,7 +9,7 @@ import {createClient} from '../../lib/supabase/server';
 import {loadLatestPublicPodcast} from '../../lib/public-podcast';
 import HomePodcastPlayer from './home-podcast-player';
 import HomeVisitorCounts from "./home-visitor-counts";
-import {rankWeeklyCandidates} from '../../lib/weekly-priority';
+import {rankWeeklyCandidates,weeklyPriority} from '../../lib/weekly-priority';
 import {formatMonthlyWeek} from '../../lib/weekly-label';
 
 export const dynamic = "force-dynamic";
@@ -48,7 +48,7 @@ export default async function PublicHome() {
     ...story,date:story.date==='날짜 미상'?'00000000':story.date,documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
   })));
   const featured=rankedWeekly[0]?.story;
-  const featuredReasons=rankedWeekly[0]?rankedWeekly[0].reasons:[];
+  const featuredReasons=rankedWeekly[0]?weeklyPriority(rankedWeekly[0]).reasons:[];
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
