@@ -8,9 +8,12 @@ begin
   where jobname = 'trend-collector-daily';
 
   if v_job_id is null then
-    raise exception 'trend-collector-daily cron job is missing';
+    -- Local migration replay does not provision the externally managed Edge
+    -- cron job. Keep replayable schema changes independent from that setup;
+    -- emit a visible warning so a deployment can provision/check the schedule.
+    raise warning 'trend-collector-daily cron job is not provisioned; expected schedule remains 04:00 KST (0 19 * * *)';
+  else
+    perform cron.alter_job(job_id := v_job_id, schedule := '0 19 * * *');
   end if;
-
-  perform cron.alter_job(job_id := v_job_id, schedule := '0 19 * * *');
 end;
 $$;
