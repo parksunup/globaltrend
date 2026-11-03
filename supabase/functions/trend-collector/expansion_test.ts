@@ -53,7 +53,7 @@ Deno.test("EC accepts observed zero-based response page and retains eventDate", 
     JSON.stringify(data),
     listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
   );
-  assert(found.rows.length === data.pageSize);
+  assert(found.rows.length === data.totalNumber);
   assert(expansionListingDate(found.rows[0]) === "2026-10-28");
 });
 Deno.test("CA OPC Advice to Parliament is an approved paginated listing stream", async () => {
