@@ -9,6 +9,8 @@ import {createClient} from '../../lib/supabase/server';
 import {loadLatestPublicPodcast} from '../../lib/public-podcast';
 import HomePodcastPlayer from './home-podcast-player';
 import HomeVisitorCounts from "./home-visitor-counts";
+import {rankWeeklyCandidates} from '../../lib/weekly-priority';
+import {formatMonthlyWeek} from '../../lib/weekly-label';
 
 export const dynamic = "force-dynamic";
 
@@ -17,9 +19,36 @@ export default async function PublicHome() {
   let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
   let loadError = false;
   try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
-  const {podcast}=await loadLatestPublicPodcast(await createClient());
-  const stories = allStories.slice(0, 3);
-  const featured = allStories[3] ?? stories[0];
+  const db=await createClient();
+  const {podcast}=await loadLatestPublicPodcast(db);
+  let stories: typeof allStories = [];
+  let weeklyIssueError = false;
+  let weeklyStart = '';
+  try {
+    const {data:issue,error:issueError}=await db.from('written_weekly_issues')
+      .select('issue_key,week_start').eq('status','published')
+      .order('week_start',{ascending:false}).order('issue_key',{ascending:false}).limit(1).maybeSingle();
+    if(issueError)throw issueError;
+    if(issue){
+      weeklyStart=issue.week_start;
+      const {data:links,error:linksError}=await db.from('written_weekly_issue_reports')
+        .select('report_id,sort_order').eq('issue_key',issue.issue_key).order('sort_order',{ascending:true});
+      if(linksError)throw linksError;
+      const byId=new Map(allStories.map(story=>[story.id,story] as const));
+      stories=(links??[]).map(link=>byId.get(link.report_id)).filter((story):story is (typeof allStories)[number]=>Boolean(story))
+        .sort((a,b)=>{
+          const dateA=a.date==='날짜 미상'?'00000000':a.date.replaceAll('.','');
+          const dateB=b.date==='날짜 미상'?'00000000':b.date.replaceAll('.','');
+          return dateB.localeCompare(dateA);
+        });
+    }
+  } catch(error) { console.error('Unable to load the published weekly selection:',error); weeklyIssueError=true; }
+  const documentTypes:Record<string,string>={'법령':'legislation','가이드라인':'guidance','판례':'judgment','결정':'decision','의견':'opinion','보고서':'report','기관 발표':'press_release','뉴스':'news'};
+  const rankedWeekly=rankWeeklyCandidates(stories.map(story=>({
+    ...story,date:story.date==='날짜 미상'?'00000000':story.date,documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
+  })));
+  const featured=rankedWeekly[0]?.story;
+  const featuredReasons=rankedWeekly[0]?rankedWeekly[0].reasons:[];
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
@@ -39,19 +68,19 @@ export default async function PublicHome() {
 
     <section className={styles.observatoryGrid}>
       <div className={styles.timelinePanel}>
-        <div className={styles.panelTitle}><h2>주요 동향</h2><span /><Link href="/public/search">더보기 →</Link></div>
+        <div className={styles.panelTitle}><h2>주간 동향 {stories.length?`${stories.length}건`:''}</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
         {stories.length ? <ol className={styles.timeline}>{stories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
           <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
-        </li>)}</ol> : <p className={styles.homeEmpty}>{loadError ? "자료를 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 표시할 동향이 없습니다."}</p>}
+        </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
       </div>
 
       <article className={styles.featured}>
-        <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span></div>
-        <p className={styles.featureKicker}>{draftMode ? "최근 제출된 동향 표본" : "이번 주 주목할 흐름"}</p>
-        <h2>{featured ? featured.title : "새로운 동향을 살펴보세요"}</h2>
-        <h3>{featured ? featured.summary : "각국의 개인정보 보호 정책과 감독기구 발표를 한눈에 모읍니다."}</h3>
-        <div className={styles.featureSource}><span>{featured ? "공식 출처" : "초기 관측 출처"}</span><b>{featured?.institution ?? "EDPB"}</b>{!featured && <><b>OECD</b><b>CURIA</b></>}</div>
-        <p className={styles.featureBody}>{featured?.details || "각국의 주요 이슈와 공식 원문 출처를 함께 살펴보세요."}</p>
+        <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span>{featured&&<><i>·</i><time>{featured.date}</time></>}</div>
+        <p className={styles.featureKicker}>{featured ? `${weeklyStart?formatMonthlyWeek(weeklyStart)+' · ':''}주간 동향 중 중요도 우선 자료` : "공개된 주간 동향이 없습니다"}</p>
+        <h2>{featured ? featured.title : "주간 동향을 준비하고 있습니다"}</h2>
+        <h3>{featured ? featured.summary : "작업실에서 주간 동향을 공개하면 이곳에 표시됩니다."}</h3>
+        {featured&&<div className={styles.featureSource}><span>선정 기준</span><b>{featuredReasons.join(' · ')}</b><span>공식 출처</span><b>{featured.institution}</b></div>}
+        <p className={styles.featureBody}>{featured?.details || ""}</p>
         <Link className={styles.featureLink} href={featured ? `/public/trends/${featured.id}` : "/public/search"}>{featured ? "동향 자세히 보기" : "동향 검색 열기"} <span>→</span></Link>
       </article>
 
@@ -73,3 +102,4 @@ export default async function PublicHome() {
     <PublicFooter />
   </main>;
 }
+
