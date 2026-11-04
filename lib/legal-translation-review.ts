@@ -30,6 +30,7 @@ export type LegalTranslationSummary = {
   version: string;
   reviewStatus: string;
   articleCount: number;
+  officialUrl?: string;
 };
 
 export type LegalTranslationDocument = LegalTranslationSummary & {
@@ -39,6 +40,21 @@ export type LegalTranslationDocument = LegalTranslationSummary & {
 };
 
 const validId = /^[a-z0-9][a-z0-9-]*$/;
+
+function readableOfficialUrl(value?: string): string {
+  if (!value) return "";
+  try {
+    const url = new URL(value);
+    if (url.hostname === "laws.e-gov.go.jp" && url.pathname.startsWith("/api/2/law_data/")) {
+      const lawId = url.pathname.split("/").at(-1)?.split("_")[0];
+      return lawId ? `https://laws.e-gov.go.jp/document?lawid=${lawId}` : "";
+    }
+    if (url.hostname === "www.legislation.gov.uk" && url.pathname.endsWith("/data.xml")) {
+      url.pathname = url.pathname.slice(0, -"/data.xml".length);
+    } else if (/\/api\/|\.(?:json|xml)$/i.test(url.pathname)) return "";
+    return url.protocol === "https:" ? url.toString() : "";
+  } catch { return ""; }
+}
 
 function translationsDir(root: string) {
   return join(root, "data", "legal", "translations");
@@ -84,6 +100,7 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
     reviewStatus: corpus.translation?.human_review_status || "검토 필요",
     articleCount: provisions.filter((node) => node.tag === "Article").length,
+    officialUrl: readableOfficialUrl(corpus.source?.original_url),
   };
 }
 
@@ -148,7 +165,7 @@ export function loadLegalTranslation(id: string, root = process.cwd()): LegalTra
   }
   return {
     ...summary(id, corpus),
-    officialUrl: corpus.source?.original_url || "",
+    officialUrl: readableOfficialUrl(corpus.source?.original_url),
     scopeNote: corpus.source?.scope_note || "",
     sections: [...sectionById.values()],
   };
@@ -198,3 +215,4 @@ export function findLegalArticlePreview(law: LegalTranslationDocument, citation:
   if (!section.lines.some((line) => line.id === requestedId)) return null;
   return excerpt(section.lines.filter((line) => line.id === requestedId || line.id.startsWith(`${requestedId}-`)), requestedId);
 }
+
