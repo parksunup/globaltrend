@@ -201,10 +201,7 @@ export function findLegalArticlePreview(law: LegalTranslationDocument, citation:
     if (!section) return null;
     const paragraph = english[2] ? `${section.id}-p${english[2]}` : null;
     if (paragraph) {
-      // Some source corpora keep subsection numbering inside the article text
-      // instead of exposing separate paragraph nodes. Link to the article in
-      // that case so the citation remains navigable and the full text appears.
-      if (!section.lines.some(line => line.id === paragraph)) return excerpt(section.lines, section.id);
+      if (!section.lines.some(line => line.id === paragraph)) return null;
       return excerpt(section.lines.filter(line => line.id === paragraph || line.id.startsWith(`${paragraph}-`)), paragraph);
     }
     return excerpt(section.lines, section.id);

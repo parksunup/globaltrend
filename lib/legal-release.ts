@@ -119,10 +119,24 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
     const text = [section.title, ...section.lines.map((line) => line.text)].join("\n");
     return { anchorId: section.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
   }
+  // A citation to a separate statute or instrument must never resolve to a
+  // similarly numbered article in the main law.
+  if (/규칙|조례|시행령|개정법|S\.I\.|\bAct\s+\d+|DPA\s*2018|DPA\s+Schedule|DUAA|\bCCR\b|\bSB\s*\d+|별도 민법|별도 법령집|공식 .*지침|공식 Key Concepts/i.test(citation)) return null;
   // Keep the proven article-number lookup as the primary path; explicit anchors
   // supplement it for recitals, schedules, and provisions outside the main body.
   const directPreview = findLegalArticlePreview(law, citation);
   if (directPreview) return directPreview;
+  // Singapore's corpus keeps some subsection labels inside one article line.
+  // Link those citations to that article when no paragraph anchor exists.
+  if (law.id === "pdpa") {
+    const article = citation.match(/^(\d+(?:\.\d+)*[a-zA-Z]?)(?:\((\d+)\))?/);
+    const sectionId = article && `main-a${article[1].replaceAll(".", "-").toLowerCase()}`;
+    const section = sectionId && law.sections.find(item => item.group === "main" && item.id.toLowerCase() === sectionId);
+    if (section) {
+      const text = section.lines.map(line => line.text.trim()).filter(Boolean).join("\n");
+      return text ? { anchorId: section.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text } : null;
+    }
+  }
   // Use a cell's explicit translation anchor where it identifies the cited provision.
   // The CSV arrays are not parallel, so match the article identifier in the anchor.
   const references: { article: string; paragraph: string | undefined; item: string | undefined }[] = Array.from(citation.matchAll(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/g), match => ({ article: `${match[1]}${match[2] ? `-${match[2]}` : ""}`.toLowerCase(), paragraph: match[3], item: match[4] }));
@@ -146,7 +160,7 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
     const text = distinct.map(preview => preview.text).join("\n\n");
     return { anchorId: distinct[0].anchorId, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
   }
-  if (/규칙|조례|시행령|부칙|별표|부속서|개정법|S\.I\.|\bAct\s+\d+|DPA\s*2018/i.test(citation)) return null;
+  if (/부칙|별표|부속서/i.test(citation)) return null;
   return findLegalArticlePreview(law, citation);
 }
 
