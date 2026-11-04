@@ -55,6 +55,34 @@ Deno.test("successful duplicate advances only after ingest and preserves incompl
   eq(result.result.saved, "duplicate");
   eq(result.result.coverage_complete, false);
 });
+Deno.test("CA OPC moves from the news list to its approved advice list before exhausting", async () => {
+  const opc = {
+    source: "ca-opc",
+    source_id: "opc-source",
+    listing: "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+    hosts: ["www.priv.gc.ca"],
+    language: "en",
+  };
+  const state: State = {
+    since: "2026-11-01",
+    until: "2026-11-03",
+    page: opc.listing,
+    rows: [{
+      url: "https://www.priv.gc.ca/en/opc-news/news-and-announcements/2026/nr-c_261027/",
+      title: "Known official news item",
+    }],
+    offset: 1,
+    listing_index: 0,
+  };
+  const step = await advance(opc, state, {
+    request: () => Promise.reject(new Error("unexpected fetch")),
+  }, async () => ({}));
+  eq(step.continue, true);
+  eq(step.result.stage, "next_listing_stream");
+  eq(step.state.listing_index, 1);
+  eq(step.state.page, "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d");
+  eq(step.state.offset, 0);
+});
 Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
   const ico = {
     source: "ico",
@@ -303,13 +331,16 @@ Deno.test("ICO restarts an unfiltered cursor in its period and validates full pa
   for (const size of [20, 0, 25]) {
     const state: State = { since: "2026-09-21", until: "2026-10-23", page: c.listing + "?page=13" };
     let payload: {pageNumber: number; filters: unknown} | undefined;
+    let htmlRequestUrl: string | undefined;
     const step = await advance(c, state, { request: async (url, method, body) => {
       if (method === "POST") {
         payload = JSON.parse(body!);
         return { bytes: new TextEncoder().encode(JSON.stringify({ results: Array.from({ length: size }, (_, i) => ({ url: `/news/${i}`, title: "A" })), pagination: { showingPageNumber: 1, totalPages: 17, hasMore: true, perPage: 25, totalResults: 421 } })), url, type: "application/json" };
       }
+      htmlRequestUrl = url;
       return { bytes: new TextEncoder().encode('<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>'), url, type: "text/html" };
     } }, async () => { throw new Error("unexpected ingest"); });
+    eq(htmlRequestUrl, c.listing);
     eq(payload!.pageNumber, 1);
     eq(payload!.filters, [{ key: "from", values: [state.since] }, { key: "to", values: [state.until] }]);
     eq(step.result.coverage_complete, false);
@@ -320,6 +351,32 @@ Deno.test("ICO restarts an unfiltered cursor in its period and validates full pa
       eq(step.state.next, c.listing + "?from=2026-09-21&to=2026-10-23&page=2");
     }
   }
+});
+Deno.test("ICO records the robots URL for a 403 and preserves the listing cursor", async () => {
+  const c = { ...config, source: "ico", listing: "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/", hosts: ["ico.org.uk"] };
+  const state: State = {
+    since: "2026-11-01",
+    until: "2026-11-03",
+    page: c.listing,
+    offset: 0,
+  };
+  const error = Object.assign(new Error("http_403"), {
+    requestUrl: "https://ico.org.uk/robots.txt",
+    requestKind: "robots",
+  });
+  const step = await advance(c, state, {
+    request: async () => { throw error; },
+  }, async () => { throw Error("403 must not ingest anything"); });
+  eq(step.result.status, "failed");
+  eq(step.result.reason, "http_403");
+  eq(step.result.stage, "listing_robots_fetch");
+  eq(step.result.failed_request_url, "https://ico.org.uk/robots.txt");
+  eq(step.result.coverage_complete, false);
+  eq(
+    step.state.page,
+    `${c.listing}?from=2026-11-01&to=2026-11-03`,
+  );
+  eq(step.state.offset, 0);
 });
 
 Deno.test("ICO exhausted full rescan recomputes unknown-date count but keeps coverage incomplete", async () => {

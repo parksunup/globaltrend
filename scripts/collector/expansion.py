@@ -152,11 +152,16 @@ def discover(source,html,url):
         if value:rows[target]['date_observations']=[{'meaning':meaning,'locator':source+' '+locator,'value':normalize(value)}]
     if c.get('json_api'):
         data=json.loads(html);params=parse_qs(urlsplit(url).query);page=int(params.get('pagenumber',['1'])[0]);size=int(params.get('pagesize',['100'])[0])
-        if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or data.get('pageNumber')!=page or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
+        response_page=data.get('pageNumber')
+        # Presscorner accepts one-based `pagenumber` requests but its JSON
+        # response has been observed to report a zero-based `pageNumber`.
+        # Accept only those two exact conventions; never ignore a mismatch.
+        if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or type(response_page) is not int or response_page not in (page,page-1) or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
         for row in data['docuLanguageListResources']:
             if not isinstance(row.get('refCode'),str) or not isinstance(row.get('title'),str):raise ValueError('ec_listing_schema_changed')
             if not re.fullmatch(r'(IP|QANDA|STATEMENT|SPEECH|MEMO|MEX)/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
-            add('/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),row['title'])
+            event_date=row.get('eventDate')
+            add('/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),row['title'],event_date if isinstance(event_date,str) else None,'EC API eventDate')
         params={k:v[0] for k,v in params.items()};params['pagenumber']=str(page+1)
         nxt=urlsplit(url)._replace(query=urlencode(params)).geturl() if page*size<data['totalNumber'] else None
     elif c.get('feed'):
@@ -173,10 +178,21 @@ def discover(source,html,url):
                 if urlsplit(wrapper).path!='/s/redirect' or len(values)!=1:raise ValueError('unverified_redirect_wrapper')
                 raw=values[0]
             target=urljoin(url,raw)
+            if source=='ca-opc' and (urlsplit(target).hostname!=c['host'] or not re.fullmatch(c['article_path'],urlsplit(target).path)):continue
             if urlsplit(target).hostname==c['host'] and not re.fullmatch(c['article_path'],urlsplit(target).path):continue
             card=a.find_parent(class_=c['card'][1:]) if c.get('card','').startswith('.') else a.find_parent(c.get('card')) if c.get('card') else None
             node=card.select_one(c['card_date']) if card and c.get('card_date') else None
-            add(raw,a.get_text(' ',strip=True),node.get_text(' ',strip=True) if node else None,c.get('card_date',''))
+            if source=='ca-opc' and node is None:
+                for parent in a.parents:
+                    candidate=parent.select_one('time.item-date, time[datetime]')
+                    if candidate is not None:
+                        node=candidate;break
+            card_value=None
+            if node:
+                attribute=c.get('card_date_attribute')
+                card_value=node.get(attribute) if attribute else None
+                if not card_value:card_value=node.get_text(' ',strip=True)
+            add(raw,a.get_text(' ',strip=True),card_value,c.get('card_date',''))
         node=soup.select_one(c['next']) if c.get('next') else None
         nxt=canonical_url(urljoin(url,node['href']),[c['host']]) if node else None
         if source=='oaic':

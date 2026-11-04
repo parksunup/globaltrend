@@ -1,5 +1,6 @@
 import { parseHTML } from "npm:linkedom@0.18.12";
 import {
+  additionalListing,
   detailRequestUrl,
   expansionListingDate,
   isExpansion,
@@ -36,6 +37,7 @@ export type State = {
   rows?: Row[];
   next?: string | null;
   offset?: number;
+  listing_index?: number;
   failures?: number;
   unknown_dates?: number;
   exhausted?: boolean;
@@ -110,7 +112,17 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
   }
 }
 async function listing(c: Config, http: HTTP, page: string) {
-  const r = await http.request(page);
+  // ICO accepts date filters in its /api/search POST body. Keep the browser
+  // listing request on the original unfiltered page; putting from/to on this
+  // GET URL caused 403s before the documented search API was reached.
+  let listingPage = page;
+  if (c.source === "ico") {
+    const base = new URL(page);
+    base.searchParams.delete("from");
+    base.searchParams.delete("to");
+    listingPage = base.href;
+  }
+  const r = await http.request(listingPage);
   const text = new TextDecoder().decode(r.bytes);
   if (c.source === "pdpc") {
     const data = JSON.parse(text);
@@ -398,9 +410,24 @@ export async function advance(
       const diagnosticUrl = safeDiagnosticUrl(raw, c.hosts);
       if (diagnosticUrl) result.url = diagnosticUrl;
       else delete result.url;
-      const response = await http.request(raw, method, body);
-      result.stage = `${requestStage}_parse`;
-      return response;
+      try {
+        const response = await http.request(raw, method, body);
+        result.stage = `${requestStage}_parse`;
+        return response;
+      } catch (error) {
+        const requestError = error as {
+          requestUrl?: unknown;
+          requestKind?: unknown;
+        };
+        if (typeof requestError.requestUrl === "string") {
+          const failedUrl = safeDiagnosticUrl(requestError.requestUrl, c.hosts);
+          if (failedUrl) result.failed_request_url = failedUrl;
+        }
+        if (requestError.requestKind === "robots") {
+          result.stage = `${requestStage}_robots_fetch`;
+        }
+        throw error;
+      }
     },
   };
   try {
@@ -413,6 +440,7 @@ export async function advance(
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];
+      state.listing_index = 0;
     }
     // Refresh legacy CNIL row snapshots once, at their current page. Never
     // transfer a stale offset to rows with newly observed dates. Backlog is exact.
@@ -713,8 +741,24 @@ export async function advance(
       state.offset = 0;
       result.stage = "next_page";
     } else {
+      const nextListing = isExpansion(c.source) && !state.is_backlog
+        ? additionalListing(c.source, state.listing_index || 0)
+        : null;
+      if (nextListing) {
+        state.listing_index = (state.listing_index || 0) + 1;
+        state.page = nextListing;
+        delete state.rows;
+        delete state.next;
+        state.offset = 0;
+        state.seen_pages = [];
+        result.stage = "next_listing_stream";
+        result.reason = "additional_approved_official_listing";
+        result.url = safeDiagnosticUrl(nextListing, c.hosts) || undefined;
+        return { state, result, continue: true, delay: 0 };
+      }
       // Exhausting a bounded feed/listing does not establish period completeness.
       state.exhausted = true;
+      state.listing_index = 0;
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];

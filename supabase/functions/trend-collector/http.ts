@@ -7,6 +7,16 @@ const robotsParser = robotsModule as unknown as (
   url: string,
   body: string,
 ) => Robots;
+export class OfficialHTTPError extends Error {
+  constructor(
+    message: string,
+    readonly requestUrl: string,
+    readonly requestKind: "robots" | "resource",
+  ) {
+    super(message);
+    this.name = "OfficialHTTPError";
+  }
+}
 import { canonical } from "./adapter.ts";
 import { requestTimeoutMs } from "./http-timeout.mjs";
 export class OfficialHTTP {
@@ -25,12 +35,20 @@ export class OfficialHTTP {
     if (robots && !this.robot) {
       let body = "";
       try {
-        const r = await this.request(
-          new URL("/robots.txt", url).href,
-          "GET",
-          undefined,
-          false,
-        );
+        let r: { bytes: Uint8Array; url: string; type: string };
+        try {
+          r = await this.request(
+            new URL("/robots.txt", url).href,
+            "GET",
+            undefined,
+            false,
+          );
+        } catch (error) {
+          if (error instanceof OfficialHTTPError) {
+            throw new OfficialHTTPError(error.message, error.requestUrl, "robots");
+          }
+          throw error;
+        }
         body = new TextDecoder().decode(r.bytes);
       } catch (error) {
         // A missing robots file is not a transport/permission failure. Keep
@@ -89,7 +107,7 @@ export class OfficialHTTP {
       }
       if (!r.ok) {
         await r.body?.cancel();
-        throw new Error("http_" + r.status);
+        throw new OfficialHTTPError("http_" + r.status, url, "resource");
       }
       if (Number(r.headers.get("content-length") || 0) > 2000000) {
         await r.body?.cancel();

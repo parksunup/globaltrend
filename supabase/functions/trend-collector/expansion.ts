@@ -5,6 +5,7 @@ import { canonical, normalize, parseDate, type Row, sha } from "./adapter.ts";
 type Route = {
   host: string;
   listing: string;
+  additional_listings?: string[];
   article_path: string;
   links?: string;
   card?: string;
@@ -23,6 +24,11 @@ type Route = {
 export const expansionRoutes: Record<string, Route> = routes;
 export const isExpansion = (source: string) =>
   Object.hasOwn(expansionRoutes, source);
+export function additionalListing(source: string, index: number): string | null {
+  const c = route(source);
+  const value = c.additional_listings?.[index];
+  return value ? canonical(value, [c.host]) : null;
+}
 export function listingRequestUrl(
   source: string,
   raw: string,
@@ -181,7 +187,7 @@ export function discoverExpansion(
       size = Number(u.searchParams.get("pagesize") || 100);
     if (
       !Number.isInteger(data.totalNumber) || data.totalNumber < 0 ||
-      data.pageNumber !== page || data.pageSize !== size ||
+      ![page, page - 1].includes(data.pageNumber) || data.pageSize !== size ||
       !Array.isArray(data.docuLanguageListResources) ||
       data.docuLanguageListResources.length !==
         Math.max(0, Math.min(size, data.totalNumber - (page - 1) * size))
@@ -199,6 +205,8 @@ export function discoverExpansion(
           row.refCode.toLowerCase().replaceAll("/", "_")
         }`,
         row.title,
+        typeof row.eventDate === "string" ? row.eventDate : undefined,
+        "EC API eventDate",
       );
     }
     u.searchParams.set("pagenumber", String(page + 1));
@@ -243,15 +251,30 @@ export function discoverExpansion(
       ) throw new Error("unverified_redirect_wrapper");
       raw = wrapper.searchParams.get(c.unwrap_query)!;
     }
+    const target = new URL(raw, url);
     if (
-      new URL(raw, url).hostname === c.host &&
-      !new RegExp(c.article_path).test(new URL(raw, url).pathname)
+      source === "ca-opc" &&
+      (target.hostname !== c.host || !new RegExp(c.article_path).test(target.pathname))
+    ) continue;
+    if (
+      target.hostname === c.host &&
+      !new RegExp(c.article_path).test(target.pathname)
     ) continue;
     const card = c.card ? a.closest(c.card) : null;
-    const dateNode = c.card_date ? card?.querySelector(c.card_date) : null;
+    let dateNode = c.card_date ? card?.querySelector(c.card_date) : null;
+    if (source === "ca-opc" && !dateNode) {
+      for (
+        let parent = a.parentElement;
+        parent && parent !== document.querySelector("main");
+        parent = parent.parentElement
+      ) {
+        dateNode = parent.querySelector("time.item-date, time[datetime]");
+        if (dateNode) break;
+      }
+    }
     const date = dateNode
       ? (c.card_date_attribute
-        ? dateNode.getAttribute(c.card_date_attribute)
+        ? dateNode.getAttribute(c.card_date_attribute) || dateNode.textContent
         : dateNode.textContent) || undefined
       : undefined;
     add(raw, c.card_title ? card?.querySelector(c.card_title)?.textContent || "" : a.textContent || "", date, c.card_date);

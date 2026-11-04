@@ -1,6 +1,7 @@
 import { discover, extract } from "./adapter.ts";
 import { advance } from "./runtime.ts";
 import {
+  additionalListing,
   detailRequestUrl,
   expansionListingDate,
   listingRequestUrl,
@@ -42,6 +43,31 @@ Deno.test("an empty validated date-scoped EC result is a normal no-material resu
     listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
   );
   assert(found.rows.length === 0 && found.next === null);
+});
+Deno.test("EC accepts observed zero-based response page and retains eventDate", async () => {
+  const data = JSON.parse(await fixture("ec-listing.json"));
+  data.pageNumber = 0;
+  data.docuLanguageListResources[0].eventDate = "2026-10-28T09:00:00+02:00";
+  const found = discover(
+    "ec",
+    JSON.stringify(data),
+    listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
+  );
+  assert(found.rows.length === data.totalNumber);
+  assert(expansionListingDate(found.rows[0]) === "2026-10-28");
+});
+Deno.test("CA OPC Advice to Parliament is an approved paginated listing stream", async () => {
+  const listing = additionalListing("ca-opc", 0)!;
+  assert(listing === "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d");
+  const found = discover(
+    "ca-opc",
+    '<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>',
+    listing,
+  );
+  assert(found.rows.length === 2);
+  assert(expansionListingDate(found.rows[0]) === "2026-11-02");
+  assert(found.rows[0].url.endsWith("/parl_261102/"));
+  assert(found.next?.includes("Page=2"));
 });
 Deno.test("Parliament canonical slugs may change but the official article ID must match", () => {
   const u = manifest["eu-parliament"].url!;
