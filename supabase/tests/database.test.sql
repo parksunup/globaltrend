@@ -32,8 +32,8 @@ select results_eq(
 );
 select results_eq(
   'select count(*)::bigint from public.criteria',
-  array[17::bigint],
-  'seventeen comparison criteria are seeded'
+  array[35::bigint],
+  'legacy 17 and current 18 comparison criteria are seeded'
 );
 
 insert into auth.users (id, email, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
@@ -94,7 +94,7 @@ select results_eq(
 );
 select results_eq(
   'select count(*)::bigint from public.criteria',
-  array[17::bigint],
+  array[35::bigint],
   'anonymous visitors can read the comparison criteria on /team'
 );
 select ok(
@@ -168,7 +168,7 @@ select results_eq(
 );
 select results_eq(
   'select count(*)::bigint from public.criteria',
-  array[17::bigint],
+  array[35::bigint],
   'reviewers can read unpublished criteria'
 );
 select throws_ok(

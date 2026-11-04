@@ -14,7 +14,7 @@ export default function PublicDraftViewer({documents, gdpr, branch, commitSha}: 
     <header className={styles.header}>
       <a href="/team">← 제출 자료로 돌아가기</a>
       <h1>법제 비교와 한국어 번역</h1>
-      <p>17개 기준 비교 {documents.legal.length}셀 · 검수 완료·발행된 비교 내용 {published}셀</p>
+      <p>{new Set(documents.legal.map((cell) => cell.criterionId)).size}개 기준 비교 {documents.legal.length}셀 · 검수 완료·발행된 비교 내용 {published}셀</p>
       <p>자료별 운영 발행 상태를 표시합니다. 작성 당시의 추가 확인 메모는 현재 상태와 구분해서 보관합니다.</p>
       <p>한국어 번역은 자체 번역입니다. 공식 원문과 판본·번역 범위는 각 자료에서 확인할 수 있습니다.</p>
     </header>

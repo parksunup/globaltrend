@@ -32,19 +32,19 @@ test("legal comparison remains readable while weekly example is removed from Pre
   assert.equal(documents.weekly, null);
 });
 
-test("17-criterion review table uses the same complete draft as the 119-cell public view", () => {
+test("18-criterion review table uses the same complete draft as the 126-cell public view", () => {
   const repo = join(import.meta.dirname, "..");
   for (const format of ["csv", "md"]) {
     assert.equal(readFileSync(join(repo, "data/legal", `criteria-mapping.${format}`), "utf8"),
       readFileSync(join(repo, "public/review-drafts", `criteria-mapping.${format}`), "utf8"));
   }
   const cells = loadSubmissionDocuments(repo).legal;
-  assert.equal(cells.length, 119);
-  assert.equal(new Set(cells.map((cell) => cell.criterionId)).size, 17);
-  assert.equal(new Set(cells.map((cell) => cell.id)).size, 119);
+  assert.equal(cells.length, 126);
+  assert.equal(new Set(cells.map((cell) => cell.criterionId)).size, 18);
+  assert.equal(new Set(cells.map((cell) => cell.id)).size, 126);
   for (const code of ["KR", "JP", "CN", "EU", "GB", "US-CA", "SG"]) {
     const country = cells.filter((cell) => cell.jurisdiction === code);
-    assert.equal(country.length, 17);
+    assert.equal(country.length, 18);
     assert.ok(country.every((cell) => cell.status === "unreviewed" && cell.summary && cell.summary !== "미검토"));
     if (["CN", "GB", "US-CA", "SG"].includes(code)) assert.ok(country.every((cell) => cell.sourceLinks.length > 0));
   }

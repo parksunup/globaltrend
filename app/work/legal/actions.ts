@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../lib/supabase/server";
+import { hasCompleteLegalCriteria } from "../../../lib/legal-criteria";
 import { buildLegalReviewPackages } from "../../../lib/legal-release";
 
 async function writableTeam(admin = false) {
@@ -18,7 +19,7 @@ async function writableTeam(admin = false) {
 export async function importLegalReview(form: FormData) {
   const db = await writableTeam();
   const candidate = buildLegalReviewPackages().find(p => p.recordId === form.get("record_id") && p.contentHash === form.get("content_hash"));
-  if (!candidate || candidate.cells.length !== 17) redirect("/work/legal?notice=stale_package");
+  if (!candidate || !hasCompleteLegalCriteria(candidate.cells, true)) redirect("/work/legal?notice=stale_package");
   const { error } = await db.rpc("import_legal_review", { p_payload: candidate });
   if (error) redirect("/work/legal?notice=save_failed");
   revalidatePath("/work/legal");

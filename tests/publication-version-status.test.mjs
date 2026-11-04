@@ -66,7 +66,7 @@ test('only the matching published legal package gains reviewed status throughout
   const row = { status: 'published', review_payload: structuredClone(translated) };
   const before = structuredClone(row);
   const result = reviewedDraftLegalBundle([row]);
-  assert.equal(result.cells.length, 119);
+  assert.equal(result.cells.length, 126);
   assert.equal(result.instruments.length, 7);
   assert.equal(result.documents.length, 6);
   assert.equal(result.instruments.find(p => p.id === translated.instrument.id).status, 'published');
@@ -147,7 +147,7 @@ for (const status of ['draft', 'verified', 'superseded']) {
 
 test('failed legal DB lookup marks every retained draft unknown without losing text', () => {
   const result = reviewedDraftLegalBundle(null);
-  assert.equal(result.cells.length, 119);
+  assert.equal(result.cells.length, 126);
   assert.equal(result.documents.length, 6);
   assert.ok(result.cells.every(cell => cell.status === 'unknown'));
   assert.ok(result.instruments.every(instrument => instrument.status === 'unknown'));

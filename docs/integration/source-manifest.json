@@ -79,12 +79,16 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab"
+      "sha256": "2e06fbf35d70a46127f9107f2030b928275f96f38a35aed288a577519ed0e7ff",
+      "imported_sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존"
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f"
+      "sha256": "ed813080241971b839648a2963159bc386434c34762bf568415e0f12584a3b70",
+      "imported_sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존"
     },
     {
       "path": "data/legal/gdpr-comparison-review.md",
@@ -334,12 +338,16 @@
     {
       "path": "data/legal/translation-progress.md",
       "pr": 15,
-      "sha256": "7385804bd3a24ff30f0c666ae767ee90116ae641859b3f1edd6daaa5479a3bf7"
+      "sha256": "2dd035cb930a133313db85fdb3a2383acd5137768b393159d67e8215a61bdf4b",
+      "imported_sha256": "7385804bd3a24ff30f0c666ae767ee90116ae641859b3f1edd6daaa5479a3bf7",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi-review-notes.md",
       "pr": 15,
-      "sha256": "c271550956fe36857ccd07be37c2d5713ef41a4f3002ed0609cad12c0499a9b8"
+      "sha256": "798381f4b841696fbd36ca69baa3b367827e2056124b32e454b3238dd00763ea",
+      "imported_sha256": "c271550956fe36857ccd07be37c2d5713ef41a4f3002ed0609cad12c0499a9b8",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi-status.md",
@@ -349,77 +357,107 @@
     {
       "path": "data/legal/translations/appi.json",
       "pr": 15,
-      "sha256": "44de5b48da400d797160da9b0686d03075ed9643cd14cb47ae3e54aa71b04fd0"
+      "sha256": "1606ae58a96792c9df39fc287406aa4cb831032836f0a526db10c98a16db7345",
+      "imported_sha256": "44de5b48da400d797160da9b0686d03075ed9643cd14cb47ae3e54aa71b04fd0",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi.md",
       "pr": 15,
-      "sha256": "2edac6e948000c959ce8f28e276bc802efcada77f5b10c020faca2e2333a4bcf"
+      "sha256": "a827abd261e4cecaf1ecb09594ba0b7f5eea38fefdab30ef6550622a816caf1a",
+      "imported_sha256": "2edac6e948000c959ce8f28e276bc802efcada77f5b10c020faca2e2333a4bcf",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa-review-notes.md",
       "pr": 15,
-      "sha256": "91e42087ed2cb8cf8aa8c7b511e3429642632dbd94b764332fa5daf98a4e1262"
+      "sha256": "85b8ad050c14c35664daa80b6314d720bd48065de86c955e0455f209d31dcdbc",
+      "imported_sha256": "91e42087ed2cb8cf8aa8c7b511e3429642632dbd94b764332fa5daf98a4e1262",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa.json",
       "pr": 15,
-      "sha256": "6d94990a5c5eb90d6b867fa462dd7fdbfa403100cb1f278b7cfaabbb8e7fd49b"
+      "sha256": "2d19b85d640d1e757e0aac68cebd453c900b584c283a976871746670e4bb7ed0",
+      "imported_sha256": "6d94990a5c5eb90d6b867fa462dd7fdbfa403100cb1f278b7cfaabbb8e7fd49b",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa.md",
       "pr": 15,
-      "sha256": "14c373e8c03020974789296f15e7c4983d2bfc5f9289e950415b7f6d5fbca2bf"
+      "sha256": "b7530d2a9cb4b599d1781ddc1510bdc31e03b1ea2ba263a011708d859ac3be1e",
+      "imported_sha256": "14c373e8c03020974789296f15e7c4983d2bfc5f9289e950415b7f6d5fbca2bf",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/gdpr-review-notes.md",
       "pr": 15,
-      "sha256": "53b3560fde556298e7aa323ecbda67bf60b47c43b038986bdaf332b7ef1f4f52"
+      "sha256": "15628d814a0e35e9171ffe8eeb107011e329175f15a650da9305eb6372c5dd79",
+      "imported_sha256": "53b3560fde556298e7aa323ecbda67bf60b47c43b038986bdaf332b7ef1f4f52",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa-review-notes.md",
       "pr": 15,
-      "sha256": "9db303861e3d86ba15128598bbfb25672cdebc6628fcd5c2eb4235f97968858b"
+      "sha256": "26d740b9e961fcda239b2a834628b2c6448bf25800f6a175b33815740dc64a32",
+      "imported_sha256": "9db303861e3d86ba15128598bbfb25672cdebc6628fcd5c2eb4235f97968858b",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa.json",
       "pr": 15,
-      "sha256": "98a54c3651a2e9361c1e445dc6d82fc62c05ad55d33686f4efa902c1ad3404e6"
+      "sha256": "2a2094469fc0b05917b83c07e1785ccec71c1b11978e6677f1dc9def1150b8a3",
+      "imported_sha256": "98a54c3651a2e9361c1e445dc6d82fc62c05ad55d33686f4efa902c1ad3404e6",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa.md",
       "pr": 15,
-      "sha256": "48b6685fd521846317a379c50e8ba491ec7442f0a13499c872643441f1d6a1a5"
+      "sha256": "4700d571c58a3032c1dcbe145640315443deda8201db828292f83b342478c2f7",
+      "imported_sha256": "48b6685fd521846317a379c50e8ba491ec7442f0a13499c872643441f1d6a1a5",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl-review-notes.md",
       "pr": 15,
-      "sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86"
+      "sha256": "739e906e06c9be06d70fd46eb17f6f276148c03f0444e10166c0f52c71b120d4",
+      "imported_sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl.json",
       "pr": 15,
-      "sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39"
+      "sha256": "ad7b809887229a45850e236046410f344587719c09ddc37258091f705fdd469b",
+      "imported_sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl.md",
       "pr": 15,
-      "sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885"
+      "sha256": "7a7df10d1d917c4c14276a2f93e9070a44bb023e6d87ae035cf204a6c6f64397",
+      "imported_sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr-review-notes.md",
       "pr": 15,
-      "sha256": "12fb6eedf70b0118b1856c1c98e2f4723ae52103eb1d7e77d73e972a16a68a65"
+      "sha256": "f3129b71a20e54ca274cc52fa40406461d9eaacf05212076d3871b8d084dd5f9",
+      "imported_sha256": "12fb6eedf70b0118b1856c1c98e2f4723ae52103eb1d7e77d73e972a16a68a65",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr.json",
       "pr": 15,
-      "sha256": "0b53fbcdafb4cc4f04202834d496b336faa6184afcc92a22a609ee60280e9ab3"
+      "sha256": "9df93be9f6e50e9c3f2b708dab6b41eaaa7181d4bc4de681de692155b2683023",
+      "imported_sha256": "0b53fbcdafb4cc4f04202834d496b336faa6184afcc92a22a609ee60280e9ab3",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr.md",
       "pr": 15,
-      "sha256": "ec001253df46433eea664949ce06ce37e27b8fd764a0fdf3604dd59f77a24a75"
+      "sha256": "c5bbf467adc9755941cb39ff8e1407fbe3dcdb3ac31891007e2ce556d46402a3",
+      "imported_sha256": "ec001253df46433eea664949ce06ce37e27b8fd764a0fdf3604dd59f77a24a75",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/validate-corpus.py",
@@ -434,28 +472,32 @@
     {
       "path": "public/review-drafts/comparison.html",
       "pr": 15,
-      "sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613"
+      "sha256": "79198f391641cfa15f30bcc0c092d2ee8a12a5b0d91174099a0987628932ccb2",
+      "imported_sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존"
     },
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
+      "sha256": "2e06fbf35d70a46127f9107f2030b928275f96f38a35aed288a577519ed0e7ff",
       "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
       "derived_from": "data/legal/criteria-mapping.csv",
-      "transformation_reason": "2026-10-19: synchronize public mirror with the current reviewed terminology source; original imported digest retained"
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존"
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
+      "sha256": "ed813080241971b839648a2963159bc386434c34762bf568415e0f12584a3b70",
       "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
       "derived_from": "data/legal/criteria-mapping.md",
-      "transformation_reason": "2026-10-19: synchronize public mirror with the current reviewed terminology source; original imported digest retained"
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존"
     },
     {
       "path": "public/review-drafts/gdpr.html",
       "pr": 15,
-      "sha256": "04b5deb13e33eebe2f6d6faf31935dae92f2fd39c3fe8f1b05fcfa8c366c8c0d"
+      "sha256": "f8fe0598eac0894ff8ac567293f4d4bf455cc8b1dc9879929f936dbedda1bd77",
+      "imported_sha256": "04b5deb13e33eebe2f6d6faf31935dae92f2fd39c3fe8f1b05fcfa8c366c8c0d",
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "public/review-drafts/publication-notice.txt",

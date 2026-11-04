@@ -31,7 +31,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
     [cell.criterionId, { id: cell.criterionId, name: cell.criterionName, order: cell.criterionOrder }]
   )).values()).sort((a, b) => a.order - b.order), [cells]);
   const [view, setView] = useState<"full" | "compare">(initialView);
-  const [selected, setSelected] = useState(() => { const valid = initialSelected?.filter((code) => countries.some((country) => country.code === code)).slice(0, 3); return valid?.length ? valid : ["KR", "JP"]; });
+  const [selected, setSelected] = useState(() => { const valid = initialSelected && [...new Set(initialSelected.filter((code) => countries.some((country) => country.code === code)))]; return valid?.length ? valid : ["KR", "JP"]; });
   const [countryPickerOpen, setCountryPickerOpen] = useState(false);
   const [expandedArticles, setExpandedArticles] = useState<Record<string, boolean>>({});
   const [activeCountry, setActiveCountry] = useState("KR");
@@ -49,7 +49,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
     if (view === "full") { setActiveCountry(code); return; }
     if (selected.includes(code)) {
       if (selected.length > 1) setSelected(selected.filter((item) => item !== code));
-    } else if (selected.length < 3) setSelected([...selected, code]);
+    } else setSelected([...selected, code]);
   };
   const setSection = (next: "full" | "compare") => {
     setView(next);
@@ -77,7 +77,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
         const chosen = view === "full" ? activeCountry === law.code : selected.includes(law.code);
         return <button key={law.code} type="button" className={chosen ? styles.countryCardSelected : styles.countryCard}
           onClick={() => { toggle(law.code); if (view === "full") setCountryPickerOpen(false); }} aria-pressed={chosen}
-          disabled={view === "compare" && !chosen && selected.length >= 3}>
+          >
           <Image className={styles.flag} src={law.flag} width={42} height={28} alt="" aria-hidden="true" />
           <strong>{law.country}</strong><small>{recordsFor(law.code)[0]?.title ?? law.law}</small>
         </button>;
@@ -96,21 +96,22 @@ export default function PublicLawCompare({ cells, instruments, translations, art
             {translation ? <>
               <small>{translation.reviewStatus === "official" ? `공식 한국어 원문 · 본칙 조문 표제 ${translation.articleCount}개` : `한국어 전문 · ${translation.articleCount}개 조문`} · 시행일 {translation.version}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
-            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 한국어 전문은 아직 제공되지 않습니다" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>17개 기준 비교 요약 보기 →</button></>}
+            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 한국어 전문은 아직 제공되지 않습니다" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>{criteria.length}개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
           </article>;
         })}
       </div> : <p className={styles.lawCatalogEmpty}>이 국가·지역의 법률 자료가 아직 준비되지 않았습니다.</p>}
     </section> : <section id="comparison" className={styles.compareSection}>
-      <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>17개 기준으로 비교하기</h2></div>
+      <div className={styles.compareTitle}><div><p className={styles.lawOverline}>COMPARE PRIVACY LAWS</p><h2>{criteria.length}개 기준으로 비교하기</h2></div>
         <p>선택한 국가·지역의 요약과 관련 조항을 같은 순서로 비교합니다.</p>
-        <span className={styles.selectCount}>{selected.length}/3개 국가·지역 선택</span></div>
+        <button type="button" onClick={() => setSelected(countries.map((country) => country.code))} disabled={selected.length === countries.length}>전체 국가·지역 선택</button>
+        <span className={styles.selectCount}>{selected.length}/{countries.length}개 국가·지역 선택</span></div>
       {criteria.length ? <><div className={styles.mobileCriterion}><label htmlFor="mobile-criterion">비교 기준</label><select id="mobile-criterion" value={criterion?.id ?? ""} onChange={(event) => setActiveCriterion(event.target.value)}>{criteria.map((item, index) => <option key={item.id} value={item.id}>{index + 1}. {item.name}</option>)}</select><div><button type="button" disabled={criterionIndex <= 0} onClick={() => setActiveCriterion(criteria[criterionIndex - 1].id)}>← 이전</button><button type="button" disabled={criterionIndex >= criteria.length - 1} onClick={() => setActiveCriterion(criteria[criterionIndex + 1].id)}>다음 →</button></div></div><div className={styles.compareGrid}>
         <aside className={styles.criteriaList}><h3>비교 기준 <small>{criteria.length}</small></h3><ol>{criteria.map((item, index) =>
           <li key={item.id}><button type="button" onClick={() => setActiveCriterion(item.id)}
             aria-pressed={criterion?.id === item.id} className={criterion?.id === item.id ? styles.criteriaActive : ""}>
             <span>{String(index + 1).padStart(2, "0")}</span>{item.name}<i>›</i></button></li>)}</ol></aside>
-        <div className={`${styles.compareCards} ${selected.length === 3 ? styles.compareCardsThree : selected.length === 1 ? styles.compareCardsOne : ""}`}>
+        <div className={`${styles.compareCards} ${selected.length >= 3 ? styles.compareCardsThree : selected.length === 1 ? styles.compareCardsOne : ""}`}>
           {selectedLaws.map((law) => {
             const cell = cells.find((item) => item.criterionId === criterion?.id && item.jurisdiction === law.code);
             const record = recordsFor(law.code)[0];
