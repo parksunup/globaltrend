@@ -12,6 +12,12 @@ from bs4 import BeautifulSoup
 ROUTES=json.loads((Path(__file__).resolve().parents[2]/'supabase/functions/trend-collector/expansion-routes.json').read_text())
 CLOUD_SOURCES=('ec','eu-parliament')
 
+class ListingRows(list):
+    def __init__(self, values, held_documents):
+        super().__init__(values)
+        self.held_documents = held_documents
+
+
 def listing_request_url(source,url,since,until):
     from .core import canonical_url
     if source!='ec':return url
@@ -61,11 +67,14 @@ def collect_frozen(config,client,store,since,until):
         if 'frozen_urls' not in cursor:
             page=listing_request_url(source,cursor.get('page') or config['listing'],since,until)
             rows,nxt=fetch_listing(source,client,page);result['pages']=1
+            held_documents=getattr(rows,'held_documents',[])
+            if held_documents:
+                result.update(held=len(held_documents),held_documents=held_documents)
             if not rows:
                 if source=='ec':
                     if nxt:store.progress(config,since,until,dict(page=nxt,offset=0))
                     else:store.progress(config,since,until,None);store.checkpoint(config,until)
-                    result.update(listing_scan_complete=not bool(nxt),reason='scoped_official_listing_empty')
+                    result.update(listing_scan_complete=not bool(nxt),reason='listing_contains_held_document_types' if held_documents else 'scoped_official_listing_empty')
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
             cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],frozen_next=nxt)
@@ -144,7 +153,7 @@ def detail_request_url(source,url):
 def discover(source,html,url):
     from .parsers import normalize
     from .core import canonical_url
-    c=ROUTES[source];canonical_url(url,[c['host']]);rows={}
+    c=ROUTES[source];canonical_url(url,[c['host']]);rows={};held_documents=[]
     def add(raw,title,value=None,locator='',meaning='expansion_listing_published'):
         target=_canonical(raw,source,url)
         if not normalize(title):raise ValueError('listing_title_missing')
@@ -152,10 +161,16 @@ def discover(source,html,url):
         if value:rows[target]['date_observations']=[{'meaning':meaning,'locator':source+' '+locator,'value':normalize(value)}]
     if c.get('json_api'):
         data=json.loads(html);params=parse_qs(urlsplit(url).query);page=int(params.get('pagenumber',['1'])[0]);size=int(params.get('pagesize',['100'])[0])
-        if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or data.get('pageNumber')!=page or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
+        if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or data.get('pageNumber')!=(page-1 if urlsplit(url).path.endswith('/api/search') else page) or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
         for row in data['docuLanguageListResources']:
             if not isinstance(row.get('refCode'),str) or not isinstance(row.get('title'),str):raise ValueError('ec_listing_schema_changed')
-            if not re.fullmatch(r'(IP|QANDA|STATEMENT|SPEECH|MEMO|MEX)/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
+            if not re.fullmatch(r'(IP|QANDA|STATEMENT|SPEECH|MEMO|MEX)/\d{2}/\d+',row['refCode'],re.I):
+                if not re.fullmatch(r'[A-Z]+/\d{2}/\d+',row['refCode'],re.I):
+                    raise ValueError('ec_listing_reference_invalid')
+                held_documents.append({'reference':row['refCode'],'title':row['title'],
+                    'url':'https://ec.europa.eu/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),
+                    'reason':'ec_listing_document_type_unverified','body_read':False})
+                continue
             add('/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),row['title'])
         params={k:v[0] for k,v in params.items()};params['pagenumber']=str(page+1)
         nxt=urlsplit(url)._replace(query=urlencode(params)).geturl() if page*size<data['totalNumber'] else None
@@ -191,7 +206,7 @@ def discover(source,html,url):
             if not paging or int(paging[2])!=current or int(paging[1])<current:raise ValueError('tc260_pagination_changed')
             nxt=urljoin(url,f'list_{current+1}.shtml') if current<int(paging[1]) else None
     if not rows and not c.get('json_api'):raise ValueError('listing_empty_or_structure_changed')
-    return list(rows.values()),nxt
+    return ListingRows(rows.values(),held_documents),nxt
 
 def extract(source,input,url,row=None):
     from .parsers import normalize

@@ -95,3 +95,10 @@ main 병합, 기존 보고서 덮어쓰기, 자동 승인·공개 발행, 미확
 이후 기존 claim으로 제출하지 않고 새 current_revision_id/input_hash를 확인해 보존확정·새 작업 임대·패킷 작성부터 다시 진행한다. 새 판본의 정확한 본문에 들어간 실제 인용만 evidence로 사용한다. 실질 자료나 적절한 근거 판본을 확보하지 못하면 해당 원고는 실패·재시도 사유를 보존한다. 서버의 원문 인용 존재 검사를 약화하거나, 첨부를 읽었다는 검토 메모만으로 첨부의 사실을 뒷받침하지 않는다.
 
 2026-10-29 AEPD 추가: 스페인 AEPD(`es-aepd`) 공식 보도자료를 Edge 일일 3일 조회 대상으로 포함한다. 공식 robots 규칙상 목록 `?page=`는 접근하지 않으므로 첫 페이지 밖은 수집 완료로 표시하지 않고 `listing_exhaustiveness_unverified`를 유지한다. 상세 HTTP 실패는 URL과 함께 기존 backlog에 남긴다.
+
+## 2026-11-04 응답 해석·중단 복구 보완
+
+- SQL 연결 도구 응답의 설명문에도 `<untrusted-data-...>`가 등장한다. 설명문부터 정규식으로 잡으면 JSON 해석이 실패한다. 응답 원본을 ignored `work/`에 먼저 저장하고 `python -m scripts.collector.connector_response --response work/response.json --out work/rows.json`으로 독립된 데이터 경계 줄만 해석한다. 오류를 빈 작업 목록으로 바꾸지 않는다.
+- claim 응답을 받은 뒤 해석 오류가 나면 저장한 같은 응답을 다시 처리한다. 새 take를 반복해 임대를 추가로 선점하지 않는다. 유효 claim을 파일로 보존한 뒤 즉시 cloud_step, commit까지 이어간다. 만료된 임대는 재사용하지 않는다.
+- claim, bundle, commit 응답을 단계별로 보존한다. bundle 생성만으로 저장 성공이라 기록하지 않는다. commit 성공 뒤에만 다음 수집 작업을 선점한다.
+- 초안 gap=0은 수집 실행 성공을 의미하지 않는다. 출처별 take/step/commit, 실제 실패·재시도 및 미확인 출처를 별도로 기록한다. 한국어 작성 완료와 함께 대조한 뒤에만 전체 성공을 판정한다.
