@@ -59,7 +59,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
                 <small>{section.context}</small>
                 <h3>{section.title}</h3>
                 {section.lines.length ? section.lines.map((line) => <p key={line.id} id={line.id}><strong>{line.label ? `${line.label}. ` : ""}</strong>{line.text}</p>)
-                  : <p>이 조문 본문은 위의 공식 원문 링크에서 확인해 주세요.</p>}
+                  : <p>이 항목에는 번역 본문이 없습니다.</p>}
               </article>)}
             </section>;
           })}
@@ -70,4 +70,3 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
     <div className={styles.lawMobileReaderTools}><button type="button" onClick={() => setTocOpen(true)}>목차·조문 찾기</button><button type="button" disabled={fontSize <= 14} onClick={() => setFontSize((size) => Math.max(14, size - 2))} aria-label="본문 글자 작게">가−</button><button type="button" disabled={fontSize >= 20} onClick={() => setFontSize((size) => Math.min(20, size + 2))} aria-label="본문 글자 크게">가＋</button></div>
   </section>;
 }
-

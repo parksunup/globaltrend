@@ -75,7 +75,7 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
     const articleNumber = citation.match(/제(\d+)조/)?.[1];
     const supplement = law.sections.find(section => section.group === "supplementary" && (!lawNumber || section.title.includes(`제${lawNumber}호`)));
     if (supplement) {
-      const articleLine = articleNumber && supplement.lines.find(line => new RegExp(`(?:^|\\s)제${articleNumber}조(?:\\s|[.(])`).test(line.text));
+      const articleLine = articleNumber ? supplement.lines.find(line => new RegExp(`(?:^|\\s)제${articleNumber}조(?:\\s|[.(])`).test(line.text)) : undefined;
       const lines = articleLine ? [articleLine] : supplement.lines;
       const text = [supplement.title, ...lines.map(line => line.text)].join("\n");
       return { anchorId: articleLine?.id ?? supplement.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
@@ -114,7 +114,7 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
   }
   // Use a cell's explicit translation anchor where it identifies the cited provision.
   // The CSV arrays are not parallel, so match the article identifier in the anchor.
-  const references = Array.from(citation.matchAll(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/g), match => ({ article: `${match[1]}${match[2] ? `-${match[2]}` : ""}`.toLowerCase(), paragraph: match[3], item: match[4] }));
+  const references: { article: string; paragraph: string | undefined; item: string | undefined }[] = Array.from(citation.matchAll(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/g), match => ({ article: `${match[1]}${match[2] ? `-${match[2]}` : ""}`.toLowerCase(), paragraph: match[3], item: match[4] }));
   if (!references.length) {
     references.push(...Array.from(citation.matchAll(/(?:(?:Article|section)\s+)?(\d+(?:\.\d+)*[a-zA-Z]?)(?:\((\d+)\))?/gi), match => ({ article: match[1].replaceAll(".", "-").toLowerCase(), paragraph: match[2], item: undefined })));
   }
