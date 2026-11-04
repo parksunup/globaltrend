@@ -16,7 +16,9 @@ export default async function PublicLawComparePage({ searchParams }: { searchPar
     if (!law) continue;
     for (const cell of cells.filter((item) => item.jurisdiction === translation.jurisdiction)) {
       for (const citation of cell.articleNumbers) {
-        const preview = citedLegalPreview(law, citation);
+        const links = cells.filter((item) => item.jurisdiction === translation.jurisdiction && item.articleNumbers.includes(citation))
+          .flatMap((item) => item.translationLinks);
+        const preview = citedLegalPreview(law, citation, links);
         if (preview) articlePreviews[`${translation.id}:${citation}`] = preview;
       }
     }
@@ -24,7 +26,7 @@ export default async function PublicLawComparePage({ searchParams }: { searchPar
   return <PublicLawCompare
     cells={cells}
     instruments={instruments}
-    translations={translations.map(({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount }) => ({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount }))}
+    translations={translations.map(({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount, officialUrl }) => ({ id, jurisdiction, title, officialName, version, reviewStatus, articleCount, officialUrl }))}
     articlePreviews={articlePreviews}
     draftMode={draftMode}
     initialView={view === "compare" ? "compare" : "full"}
@@ -32,3 +34,4 @@ export default async function PublicLawComparePage({ searchParams }: { searchPar
     initialCriterion={criterion}
   />;
 }
+

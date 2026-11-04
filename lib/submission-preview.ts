@@ -55,7 +55,16 @@ function label(value: unknown, fallback = "검토 필요"): string {
 function officialLink(value: unknown, title = "공식 원문") {
   if (typeof value !== "string") return [];
   try {
-    const url = new URL(value);
+    let url = new URL(value);
+    if (/laws\.e-gov\.go\.jp$/i.test(url.hostname) && url.pathname.startsWith("/api/2/law_data/")) {
+      const lawId = url.pathname.split("/").at(-1)?.split("_")[0];
+      if (!lawId) return [];
+      url = new URL(`https://laws.e-gov.go.jp/document?lawid=${lawId}`);
+    } else if (url.hostname === "www.legislation.gov.uk" && url.pathname.endsWith("/data.xml")) {
+      url.pathname = url.pathname.slice(0, -"/data.xml".length);
+    } else if (/\/api\/|\.(?:json|xml)$/i.test(url.pathname)) {
+      return [];
+    }
     return url.protocol === "https:" ? [{ label: title, url: url.toString() }] : [];
   } catch {
     return [];
@@ -296,3 +305,4 @@ export function submissionPreviewEnabled() {
   // Public publication is controlled separately by publicSubmissionPreviewEnabled/RLS.
   return true;
 }
+

@@ -23,6 +23,58 @@ function relatedArticleUrl(translationId: string, article: string, anchorId?: st
   return `/public/laws/${translationId}${back ? `?back=${encodeURIComponent(back)}` : ""}${anchorId ? `#${anchorId}` : ""}`;
 }
 
+function readableOfficialUrl(url: string, translation?: LegalTranslationSummary): string {
+  let candidate = translation?.officialUrl || url;
+  if (/laws\.e-gov\.go\.jp\/api\/2\/law_data\//i.test(candidate)) {
+    const lawId = candidate.match(/law_data\/([^_/?]+)/i)?.[1];
+    if (lawId) return `https://laws.e-gov.go.jp/document?lawid=${lawId}`;
+  }
+  if (/www\.legislation\.gov\.uk\/[^?#]*\/data\.xml/i.test(candidate)) candidate = candidate.replace(/\/data\.xml(?=[?#]|$)/i, "");
+  if (/\/api\/|\.(?:json|xml)(?:[?#]|$)/i.test(candidate)) return "";
+  return candidate;
+}
+
+function citationSourceUrl(citation: string, cell: LegalComparisonCell, index: number): string {
+  const sources = (cell.sourceLinks ?? []).map((url) => readableOfficialUrl(url)).filter(Boolean);
+  if (sources.length === cell.articleNumbers.length) return sources[index] ?? "";
+  const find = (pattern: RegExp) => sources.find((url) => pattern.test(url)) ?? "";
+  if (/^DPA\s*2018\b/i.test(citation)) {
+    const section = citation.match(/제(\d+[A-Z]?)조(?:\D|$)/i)?.[1];
+    if (section) return find(new RegExp(`/ukpga/2018/12/section/${section}(?:$|[?#])`, "i"));
+    const schedule = citation.match(/Schedule\s+(\d+)/i)?.[1];
+    const paragraph = citation.match(/제(\d+)문단/i)?.[1];
+    if (schedule && paragraph) return find(new RegExp(`/ukpga/2018/12/schedule/${schedule}/paragraph/${paragraph}(?:$|[?#])`, "i"));
+  }
+  const dpaSchedule = citation.match(/^DPA\s+Schedule\s+(\d+)/i)?.[1];
+  if (dpaSchedule) {
+    const paragraph = citation.match(/제(\d+)문단/i)?.[1];
+    if (paragraph) return find(new RegExp(`/ukpga/2018/12/schedule/${dpaSchedule}/paragraph/${paragraph}(?:$|[?#])`, "i"));
+  }
+  const si = citation.match(/S\.I\.\s*(\d{4})\/(\d+)/i);
+  if (si) return find(new RegExp(`/uksi/${si[1]}/${si[2]}/`, "i"));
+  if (/DUAA/i.test(citation)) return find(/\/ukpga\/2025\/18\/schedule\//i);
+  if (/네트워크 데이터 안전관리 조례/.test(citation)) return find(/gov\.cn\/gongbao\/2024|govdata\/gov\/202409\/30/i);
+  if (/얼굴인식 기술 응용 안전관리 방법/.test(citation)) return find(/cac\.gov\.cn\/2025-03\/21/i);
+  if (/미성년자 네트워크 보호 조례/.test(citation)) return find(/govdata\/gov\/202310\/24/i);
+  if (/2025 준수감사 관리방법/.test(citation)) return find(/cac\.gov\.cn\/2025-02\/14/i);
+  if (/아동 개인정보 네트워크 보호 규정/.test(citation)) return find(/gov\.cn\/gongbao\/content\/2019|govdata\/gov\/202310\/24/i);
+  if (/2024 국외 데이터 흐름 규칙/.test(citation)) return find(/cac\.gov\.cn\/2024-03\/22/i);
+  if (/국가 네트워크 안전사고 보고 관리방법/.test(citation)) return find(/cac\.gov\.cn\/2025-09\/15/i);
+  if (/Act\s+2\/2026/i.test(citation)) return find(/sso\.agc\.gov\.sg\/Acts-Supp\/2-2026/i);
+  if (/2020 개정법/.test(citation)) return find(/sso\.agc\.gov\.sg\/Acts-Supp\/40-2020/i);
+  if (/불복 개정 규칙 S576\/2024/i.test(citation)) return find(/sso\.agc\.gov\.sg\/SL-Supp\/S576-2024/i);
+  if (/불복 규칙 S65\/2021/i.test(citation)) return find(/sso\.agc\.gov\.sg\/SL\/PDPA2012-S62-2021/i);
+  if (/일반 규칙|유출 통지 규칙|집행 규칙/.test(citation)) return find(/sso\.agc\.gov\.sg\/SL\/PDPA2012-/i);
+  if (/Basic Anonymisation/i.test(citation)) return find(/pdpc\.gov\.sg\/.*Basic-Anonymisation/i);
+  if (/Children Digital Environment/i.test(citation)) return find(/pdpc\.gov\.sg\/.*Children/i);
+  if (/^CCR\s/i.test(citation)) return find(/cppa\.ca\.gov\/regulations\//i);
+  if (/1798\.82/.test(citation)) return find(/leginfo\.legislature\.ca\.gov\/faces\/codes_displaySection/i);
+  if (/SB\s*446/i.test(citation)) return find(/apcp\.assembly\.ca\.gov\/.*2025-legislative-bill-summary/i);
+  if (/DRE\s+2026/i.test(citation)) return find(/dre\.ca\.gov\/files\/pdf\/relaw\//i);
+  if (/개인정보보호위원회/.test(citation)) return find(/pipc\.go\.kr/i);
+  return "";
+}
+
 export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView, initialSelected, initialCriterion }: {
   cells: LegalComparisonCell[]; instruments: SubmissionItem[];
   translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare"; initialSelected?: string[]; initialCriterion?: string;
@@ -96,7 +148,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
             {translation ? <>
               <small>{translation.reviewStatus === "official" ? `공식 한국어 원문 · 본칙 조문 표제 ${translation.articleCount}개` : `한국어 전문 · ${translation.articleCount}개 조문`} · 시행일 {translation.version}</small>
               <Link className={styles.catalogPrimary} href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>제1조부터 전문 읽기 →</Link>
-            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 아래 공식 원문에서 본문 열람" : activeCountry === "EU" ? "GDPR 한국어 전문은 아직 제공되지 않습니다" : "한국어 전문 준비 중"}</small><button type="button" onClick={() => setSection("compare")}>{criteria.length}개 기준 비교 요약 보기 →</button></>}
+            </> : <><small>{activeCountry === "KR" ? "한국어 공식 원문 조문 색인 · 본문은 공식 원문에서 열람" : activeCountry === "EU" ? "한국어 번역 없이 영어 공식 원문과 비교 요약 제공" : "공식 원문과 비교 요약 제공"}</small><button type="button" onClick={() => setSection("compare")}>{criteria.length}개 기준 비교 요약 보기 →</button></>}
             {official && <a href={official.url} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
           </article>;
         })}
@@ -128,9 +180,20 @@ export default function PublicLawCompare({ cells, instruments, translations, art
                   const preview = translation ? articlePreviews[`${translation.id}:${number}`] : undefined;
                   const articleKey = `${law.code}:${criterion?.id ?? ""}`;
                   const tooltipId = `article-${law.code}-${criterion?.id ?? "none"}-${index}`;
+                  const separateDpa = /\bDPA\s*2018\b/i.test(number);
+                  const citationSource = citationSourceUrl(number, cell, index);
+                  const euRegulation = number.match(/Regulation\s*\(EU\)\s*(\d{4})\/(\d+)/i);
                   const destination = preview && translation
-                    ? relatedArticleUrl(translation.id, number, preview?.anchorId, currentPath)
-                    : cell.sourceUrl;
+                    ? relatedArticleUrl(translation.id, number, preview.anchorId, currentPath)
+                    : citationSource
+                    ? citationSource
+                    : separateDpa
+                    ? "https://www.legislation.gov.uk/ukpga/2018/12"
+                    : euRegulation
+                      ? `https://eur-lex.europa.eu/eli/reg/${euRegulation[1]}/${euRegulation[2]}/oj`
+                    : readableOfficialUrl(cell.sourceUrl) || (translation
+                      ? relatedArticleUrl(translation.id, number, undefined, currentPath)
+                      : "");
                   return <span key={`${number}-${index}`} className={index >= 4 && !expandedArticles[articleKey] ? styles.articleExtra : undefined}><RelatedArticlePreview
                     citation={number} destination={destination} internal={Boolean(preview && translation)}
                     text={preview?.text} tooltipId={tooltipId} /></span>;
@@ -138,7 +201,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
               {cell?.exceptions && cell.exceptions !== "미검토" && <details className={styles.lawExceptions}><summary>주의·예외 보기</summary><p>{cell.exceptions}</p></details>}
               <div className={styles.lawCardLinks}>
                 {translation && <Link href={`/public/laws/${translation.id}?back=${encodeURIComponent(currentPath)}`}>법률 전문 읽기 →</Link>}
-                {cell?.sourceUrl && <a href={cell.sourceUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
+              {cell?.sourceUrl && readableOfficialUrl(cell.sourceUrl, translation) && <a href={readableOfficialUrl(cell.sourceUrl, translation)} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
               </div>
             </article>;
           })}
@@ -149,3 +212,4 @@ export default function PublicLawCompare({ cells, instruments, translations, art
     <PublicFooter />
   </main>;
 }
+
