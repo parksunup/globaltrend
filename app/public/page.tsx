@@ -49,6 +49,7 @@ export default async function PublicHome() {
   })));
   const featured=rankedWeekly[0]?.story;
   const featuredReasons=rankedWeekly[0]?weeklyPriority(rankedWeekly[0]).reasons:[];
+  const timelineStories=featured?stories.filter(story=>story.id!==featured.id):stories;
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
@@ -68,8 +69,8 @@ export default async function PublicHome() {
 
     <section className={styles.observatoryGrid}>
       <div className={styles.timelinePanel}>
-        <div className={styles.panelTitle}><h2>주간 동향 {stories.length?`${stories.length}건`:''}</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
-        {stories.length ? <ol className={styles.timeline}>{stories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
+        <div className={styles.panelTitle}><h2>주간 동향</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
+        {timelineStories.length ? <ol className={styles.timeline}>{timelineStories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
           <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
         </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
       </div>
@@ -94,10 +95,6 @@ export default async function PublicHome() {
       </aside>
     </section>
 
-    <section className={styles.weeklyStrip} id="weekly">
-      <div className={styles.weeklyLead}><h2>주간 동향</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
-      <Link href="/public/weekly">주간 동향 전체 보기 →</Link>
-    </section>
     <HomeVisitorCounts />
     <PublicFooter />
   </main>;
