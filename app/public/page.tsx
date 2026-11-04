@@ -70,7 +70,7 @@ export default async function PublicHome() {
 
     <section className={styles.observatoryGrid}>
       <div className={styles.timelinePanel}>
-        <div className={styles.panelTitle}><h2>주간 동향 {timelineStories.length?`${timelineStories.length}건`:''}</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
+        <div className={styles.panelTitle}><h2>주간 동향</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
         {timelineStories.length ? <ol className={styles.timeline}>{timelineStories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
           <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
         </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
