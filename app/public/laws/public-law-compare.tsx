@@ -191,9 +191,9 @@ export default function PublicLawCompare({ cells, instruments, translations, art
                     ? "https://www.legislation.gov.uk/ukpga/2018/12"
                     : euRegulation
                       ? `https://eur-lex.europa.eu/eli/reg/${euRegulation[1]}/${euRegulation[2]}/oj`
-                    : translation
+                    : readableOfficialUrl(cell.sourceUrl) || (translation
                       ? relatedArticleUrl(translation.id, number, undefined, currentPath)
-                      : readableOfficialUrl(cell.sourceUrl);
+                      : "");
                   return <span key={`${number}-${index}`} className={index >= 4 && !expandedArticles[articleKey] ? styles.articleExtra : undefined}><RelatedArticlePreview
                     citation={number} destination={destination} internal={Boolean(preview && translation)}
                     text={preview?.text} tooltipId={tooltipId} /></span>;
