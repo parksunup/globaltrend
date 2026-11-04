@@ -112,6 +112,17 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
       }
     }
   }
+  if (law.id === "pipa") {
+    const label = citation.match(/제\d+조(?:의\d+)?/)?.[0];
+    const section = label && law.sections.find((item) => item.group === "main" && item.title.startsWith(`${label}(`));
+    if (!section) return null;
+    const text = [section.title, ...section.lines.map((line) => line.text)].join("\n");
+    return { anchorId: section.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
+  }
+  // Keep the proven article-number lookup as the primary path; explicit anchors
+  // supplement it for recitals, schedules, and provisions outside the main body.
+  const directPreview = findLegalArticlePreview(law, citation);
+  if (directPreview) return directPreview;
   // Use a cell's explicit translation anchor where it identifies the cited provision.
   // The CSV arrays are not parallel, so match the article identifier in the anchor.
   const references: { article: string; paragraph: string | undefined; item: string | undefined }[] = Array.from(citation.matchAll(/제(\d+[a-zA-Z]?)조(?:의(\d+))?(?:\s*제(\d+)항)?(?:\s*제(\d+)호)?/g), match => ({ article: `${match[1]}${match[2] ? `-${match[2]}` : ""}`.toLowerCase(), paragraph: match[3], item: match[4] }));
@@ -136,13 +147,6 @@ export function citedLegalPreview(law: LegalTranslationDocument, citation: strin
     return { anchorId: distinct[0].anchorId, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
   }
   if (/규칙|조례|시행령|부칙|별표|부속서|개정법|S\.I\.|\bAct\s+\d+|DPA\s*2018/i.test(citation)) return null;
-  if (law.id === "pipa") {
-    const label = citation.match(/제\d+조(?:의\d+)?/)?.[0];
-    const section = label && law.sections.find((item) => item.group === "main" && item.title.startsWith(`${label}(`));
-    if (!section) return null;
-    const text = [section.title, ...section.lines.map((line) => line.text)].join("\n");
-    return { anchorId: section.id, text: text.length > 360 ? `${text.slice(0, 360).trimEnd()}…` : text };
-  }
   return findLegalArticlePreview(law, citation);
 }
 
