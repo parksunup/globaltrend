@@ -24,6 +24,7 @@ export default async function PublicHome() {
   let stories: typeof allStories = [];
   let weeklyIssueError = false;
   let weeklyStart = '';
+  let featuredReportId:string|null=null;
   try {
     const {data:issue,error:issueError}=await db.from('written_weekly_issues')
       .select('issue_key,week_start').eq('status','published')
@@ -31,6 +32,9 @@ export default async function PublicHome() {
     if(issueError)throw issueError;
     if(issue){
       weeklyStart=issue.week_start;
+      const {data:manualFeature,error:featureError}=await db.from('homepage_featured_weekly_reports').select('report_id').eq('issue_key',issue.issue_key).maybeSingle();
+      if(featureError)throw featureError;
+      featuredReportId=manualFeature?.report_id??null;
       const {data:links,error:linksError}=await db.from('written_weekly_issue_reports')
         .select('report_id,sort_order').eq('issue_key',issue.issue_key).order('sort_order',{ascending:true});
       if(linksError)throw linksError;
@@ -47,8 +51,9 @@ export default async function PublicHome() {
   const rankedWeekly=rankWeeklyCandidates(stories.map(story=>({
     ...story,date:story.date==='날짜 미상'?'00000000':story.date,documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
   })));
-  const featured=rankedWeekly[0]?.story;
-  const featuredReasons=rankedWeekly[0]?weeklyPriority(rankedWeekly[0]).reasons:[];
+  const featuredEntry=featuredReportId?rankedWeekly.find(candidate=>candidate.id===featuredReportId)??rankedWeekly[0]:rankedWeekly[0];
+  const featured=featuredEntry?.story;
+  const featuredReasons=featuredEntry?weeklyPriority(featuredEntry).reasons:[];
   const timelineStories=featured?stories.filter(story=>story.id!==featured.id):stories;
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
@@ -77,7 +82,7 @@ export default async function PublicHome() {
 
       <article className={styles.featured}>
         <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span>{featured&&<><i>·</i><time>{featured.date}</time></>}</div>
-        <p className={styles.featureKicker}>{featured ? `${weeklyStart?formatMonthlyWeek(weeklyStart)+' · ':''}주간 동향 중 중요도 우선 자료` : "공개된 주간 동향이 없습니다"}</p>
+        <p className={styles.featureKicker}>{featured ? `${weeklyStart?formatMonthlyWeek(weeklyStart)+' · ':''}${featuredReportId?'담당자 추천 자료':'주간 동향 중 중요도 우선 자료'}` : "공개된 주간 동향이 없습니다"}</p>
         <h2>{featured ? featured.title : "주간 동향을 준비하고 있습니다"}</h2>
         <h3>{featured ? featured.summary : "작업실에서 주간 동향을 공개하면 이곳에 표시됩니다."}</h3>
         {featured&&<div className={styles.featureSource}><span>선정 기준</span><b>{featuredReasons.join(' · ')}</b><span>공식 출처</span><b>{featured.institution}</b></div>}
@@ -99,4 +104,5 @@ export default async function PublicHome() {
     <PublicFooter />
   </main>;
 }
+
 

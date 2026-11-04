@@ -9,23 +9,26 @@ import styles from './live-team-workspace.module.css';
 const reportId=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 function previousMonday(){const current=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Seoul'}));current.setDate(current.getDate()-((current.getDay()+6)%7)-7);return `${current.getFullYear()}-${String(current.getMonth()+1).padStart(2,'0')}-${String(current.getDate()).padStart(2,'0')}`;}
 function week(start:string){if(!/^\d{4}-\d{2}-\d{2}$/.test(start))return null;const monday=new Date(`${start}T00:00:00Z`);if(Number.isNaN(monday.valueOf())||monday.toISOString().slice(0,10)!==start||monday.getUTCDay()!==1)return null;const sunday=new Date(monday);sunday.setUTCDate(sunday.getUTCDate()+6);return {start,end:sunday.toISOString().slice(0,10),key:monthlyWeekIssueKey(start)};}
-type Issue={issue_key:string;title:string;status:string;selection_notes:{report_id:string;reason:string}[]};
+type Issue={issue_key:string;title:string;status:string;selection_notes:{report_id:string;reason:string}[];featured_report_id:string|null};
 export default function TeamWeeklyPanel({trends,canManage,readOnly=false}:{trends:TeamTrend[];canManage:boolean;readOnly?:boolean}){
  const [start,setStart]=useState(previousMonday);
  const [issue,setIssue]=useState<Issue|null>(null),[loading,setLoading]=useState(true),[error,setError]=useState(''),[saved,setSaved]=useState('');
  const [dirty,setDirty]=useState(false),[publishing,setPublishing]=useState(false);
+ const [featureSaving,setFeatureSaving]=useState(false);
  const period=week(start);
  const candidates=useMemo(()=>rankWeeklyCandidates(trends.filter(row=>reportId.test(row.id)&&row.published_date?.slice(0,10)>=start&&row.published_date?.slice(0,10)<=(period?.end??'')).map(row=>({id:row.id,title:row.title_ko,summary:row.summary_ko,details:row.details_ko,date:row.published_date.slice(0,10),source:row.source_name,url:row.official_url,status:row.status,documentType:'',topics:row.topics,jurisdictions:row.jurisdictions} satisfies WeeklyCandidate))),[trends,start,period?.end]);
  useEffect(()=>{if(!period){setLoading(false);setError('월요일 날짜를 선택해 주세요.');return;}let active=true;setLoading(true);setError('');setSaved('');setDirty(false);fetch(`/api/team-workspace/weekly?start=${period.start}`,{cache:'no-store'}).then(async response=>{const result=await response.json();if(!response.ok)throw Error(result.error??'주간 동향을 불러오지 못했습니다.');if(active)setIssue(result.issue??null);}).catch(cause=>{if(active)setError(cause instanceof Error?cause.message:'주간 동향 조회 실패');}).finally(()=>{if(active)setLoading(false);});return()=>{active=false};},[period?.start]);
  const entries=Array.isArray(issue?.selection_notes)?issue.selection_notes:[];
  const missing=entries.filter(entry=>!candidates.some(candidate=>candidate.id===entry.report_id));
  const editorCandidates=[...candidates,...missing.map(entry=>({id:entry.report_id,title:`원고를 찾을 수 없습니다 (${entry.report_id.slice(0,8)})`,summary:'현재 원고 목록에서 찾지 못한 저장 자료입니다. 주간호에서 제외한 뒤 저장해 주세요.',details:'',date:'',source:'',url:'',status:'missing',documentType:'',topics:[],jurisdictions:[]} satisfies WeeklyCandidate))];
+ const autoFeatured=issue?.status==='published'?rankWeeklyCandidates(entries.map(entry=>editorCandidates.find(candidate=>candidate.id===entry.report_id)).filter((candidate):candidate is WeeklyCandidate=>Boolean(candidate&&candidate.status==='published')))[0]:undefined;
+ async function chooseFeatured(reportId:string){if(!period||!issue||issue.status!=='published'||featureSaving)return;setFeatureSaving(true);setError('');setSaved('');try{const response=await fetch('/api/team-workspace/weekly',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'set-featured',start:period.start,end:period.end,key:period.key,report_id:reportId||null})});const result=await response.json();if(!response.ok)throw Error(result.error??'메인 추천을 저장하지 못했습니다.');setIssue({...issue,featured_report_id:reportId||null});setSaved(reportId?'메인 추천 자료를 변경했습니다. 공개 메인에 반영됩니다.':'자동 추천으로 돌아갔습니다.');}catch(cause){setError(cause instanceof Error?cause.message:'메인 추천을 저장하지 못했습니다.');}finally{setFeatureSaving(false);}}
  async function save(form:FormData){
   setError('');setSaved('');
   const selection=form.getAll('report').map(value=>({report_id:String(value),reason:String(form.get(`reason-${value}`)??'담당자 선정')}));
   try{const response=await fetch('/api/team-workspace/weekly',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({start:period!.start,end:period!.end,key:period!.key,title:String(form.get('title')??''),selection})});
   const result=await response.json();if(!response.ok)throw Error(result.error??'선정안을 저장하지 못했습니다.');
-  setIssue(result.issue);setDirty(false);setSaved(result.issue.status==='published'?'공개된 주간호의 변경 사항을 저장했습니다. 공개 페이지에 바로 반영됩니다.':'선정안을 저장했습니다. 내용을 확인한 뒤 공개 버튼을 누르세요.');}
+  setIssue({...result.issue,featured_report_id:result.issue.status==='published'?issue?.featured_report_id??null:null});setDirty(false);setSaved(result.issue.status==='published'?'공개된 주간호의 변경 사항을 저장했습니다. 공개 페이지에 바로 반영됩니다.':'선정안을 저장했습니다. 내용을 확인한 뒤 공개 버튼을 누르세요.');}
   catch(cause){setError(cause instanceof Error?cause.message:'선정안을 저장하지 못했습니다.');}
  }
  async function publish(){
@@ -42,6 +45,7 @@ export default function TeamWeeklyPanel({trends,canManage,readOnly=false}:{trend
  {loading&&<p>선정안을 불러오는 중입니다…</p>}{error&&<p role="alert" className={styles.error}>{error}</p>}{saved&&<p role="status" className={styles.publicationMessage}>{saved}</p>}
  {!loading&&period&&<>
   {issue?.status==='published'?<p>이 주간 동향은 공개 중입니다. <a href="/public/weekly">공개 페이지 보기 →</a></p>:null}
+  {issue?.status==='published'&&<section className={styles.weeklyFeatured} aria-label="메인 페이지 추천 동향"><h3>메인 페이지 추천 동향</h3><p>기본값은 현재 중요도 기준으로 자동 선정됩니다. 직접 고르면 이 주간호의 큰 메인 카드에 표시됩니다.</p><label>메인에 크게 표시할 자료<select value={issue.featured_report_id??''} disabled={!canManage||readOnly||featureSaving} onChange={event=>chooseFeatured(event.target.value)}><option value="">자동 추천{autoFeatured?` · ${autoFeatured.title}`:' · 후보 없음'}</option>{entries.map(entry=>{const candidate=editorCandidates.find(item=>item.id===entry.report_id);return candidate&&candidate.status==='published'?<option key={entry.report_id} value={entry.report_id}>{candidate.title}</option>:null;})}</select></label><small>{featureSaving?'저장 중…':issue.featured_report_id?'담당자가 고정한 자료':'자동 추천 기준: 법·정책 변경, 중요 판결·집행, 개인정보 처리 영향, 국경 간·신기술 쟁점'}</small></section>}
   {issue&&issue.status!=='draft'&&issue.status!=='published'?<p>이 주간 동향은 이 화면에서 수정할 수 없습니다.</p>:null}
   {(!issue||issue.status==='draft'||issue.status==='published')&&<>
    <p>{issue?.status==='published'?'공개된 호를 편집 중입니다. 자료를 체크해 넣거나 빼고 저장하면 변경 사항이 바로 공개됩니다.':issue?'저장된 주간 선정안을 불러왔습니다.':'해당 주의 동향 중 최대 8건을 기본 선택했습니다. 선정안을 저장하고 내용을 확인한 뒤 공개할 수 있습니다.'} 공개 취소된 자료는 표시되어도 주간호에 포함할 수 없으며, 체크를 해제해 제외해 주세요.</p>
@@ -52,3 +56,4 @@ export default function TeamWeeklyPanel({trends,canManage,readOnly=false}:{trend
  </>}
  </div>;
 }
+
