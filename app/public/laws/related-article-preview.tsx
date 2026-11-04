@@ -90,8 +90,8 @@ export default function RelatedArticlePreview({ citation, destination, internal,
       : <a href={destination} target="_blank" rel="noopener noreferrer" ref={(node) => { trigger.current = node; }} {...events}>{citation}</a>
       : <span tabIndex={0} ref={(node) => { trigger.current = node; }} {...events}>{citation}</span>}
     {mobileOpen && <div className={styles.articleSheetBackdrop} onClick={() => setMobileOpen(false)}>
-      <div className={styles.articleSheet} role="dialog" aria-modal="true" aria-label={`${citation} 조문 미리보기`} onClick={(event) => event.stopPropagation()}>
-        <div className={styles.articleSheetHeader}><strong>{citation} 조문 미리보기</strong><button type="button" onClick={() => setMobileOpen(false)} aria-label="조문 미리보기 닫기">닫기</button></div>
+      <div className={styles.articleSheet} role="dialog" aria-modal="true" aria-label={citation} onClick={(event) => event.stopPropagation()}>
+        <div className={styles.articleSheetHeader}><strong>{citation}</strong><button type="button" onClick={() => setMobileOpen(false)} aria-label="닫기">닫기</button></div>
         <p>{text ?? unavailableBody}</p>
         <small>{text ? "공식 원문과 함께 확인해 주세요." : destination ? "연결된 자료에서 조문을 확인해 주세요." : "확인할 수 있는 본문이 없습니다."}</small>
         {destination && <div className={styles.articleSheetActions}>{internal ? <Link href={destination} onClick={() => setMobileOpen(false)}>전문에서 보기 →</Link> : <a href={destination} target="_blank" rel="noopener noreferrer" onClick={() => setMobileOpen(false)}>공식 원문 보기 ↗</a>}</div>}
@@ -99,7 +99,7 @@ export default function RelatedArticlePreview({ citation, destination, internal,
     </div>}
     {position && <div className={styles.articleTooltip} style={position} id={tooltipId} role="tooltip"
       onMouseEnter={cancelClose} onMouseLeave={scheduleClose}>
-      <strong>{citation} 조문 미리보기</strong>
+      <strong>{citation}</strong>
       <p>{text ?? unavailableBody}</p>
       <small>{destination ? "클릭하면 관련 법률 자료로 이동" : "연결된 본문이 없습니다."}</small>
     </div>}
