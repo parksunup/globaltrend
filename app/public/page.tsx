@@ -96,10 +96,6 @@ export default async function PublicHome() {
       </aside>
     </section>
 
-    <section className={styles.weeklyStrip} id="weekly">
-      <div className={styles.weeklyLead}><h2>주간 동향</h2><p>한 주의 주요 개인정보 이슈를 선별해 전합니다.</p></div>
-      <Link href="/public/weekly">주간 동향 전체 보기 →</Link>
-    </section>
     <HomeVisitorCounts />
     <PublicFooter />
   </main>;
