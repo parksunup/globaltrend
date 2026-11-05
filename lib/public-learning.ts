@@ -38,12 +38,12 @@ export const learningTopics: LearningTopic[] = [
     questions:["요청하려는 권리는 열람·정정·삭제·이동 중 무엇이며 대상 정보는 무엇인가요?", "요청 창구와 본인 확인 방법은 어디에 안내되어 있나요?", "처리 기한·회신 절차와 권리 행사의 조건·제한은 무엇인가요?", "요청 처리 결과나 제한 사유는 어떻게 기록하고 안내하나요?"],
   },
   {
-    id:'ai-and-data',question:'AI 서비스가 내 개인정보를 이용할 때 무엇을 보나요?',
-    introduction:'AI 서비스의 개인정보 이용 목적과 처리근거를 살펴봅니다. 이 안내의 비교 범위는 개인정보 보호법제입니다.',
-    criterion:'processing_basis_use',criterionLabel:'처리근거 — 이용',countries:['KR','EU','JP'],search:'인공지능',
-    terms:['인공지능','생성형','파운데이션 모델','자동화된 의사결정','프로파일링','artificial intelligence','generative ai','ai act','ai'],
-    relevance:"AI 서비스에서 개인정보가 어떤 목적으로 이용되는지 확인할 수 있습니다.",
-    questions:["입력·학습·출력 단계에서 어떤 개인정보를 어떤 목적으로 이용하나요?", "서비스 제공과 그 밖의 이용 목적을 구별하고, 목적별 처리근거와 추가 이용 조건을 확인할 수 있나요?", "이용에 관한 선택과 문의 창구는 어디에 있나요?", "민감정보·아동·국외이전 등 함께 살펴볼 사항이 있나요?"],
+    id:'processing-basis',question:'내 개인정보를 이용하려면 꼭 동의를 받아야 하나요?',
+    introduction:'개인정보 이용의 법적 근거와 동의에 관한 조건을 국가별로 살펴봅니다.',
+    criterion:'processing_basis_use',criterionLabel:'처리근거 — 이용',countries:['KR','EU','JP'],search:'동의',
+    terms:['동의','처리근거','처리 근거','이용근거','이용 근거','목적 외 이용','목적외이용','legal basis','lawful basis','consent'],
+    relevance:"개인정보 이용에 관한 안내를 읽고 어떤 근거와 조건을 확인해야 하는지 살펴볼 수 있습니다.",
+    questions:["어떤 개인정보를 어떤 목적으로 이용하나요?", "동의가 필요한 경우와 그 밖의 처리근거를 구별할 수 있나요?", "이용 목적이 달라질 때 추가로 확인할 조건은 무엇인가요?", "동의·철회 등 이용에 관한 선택과 문의 방법은 어디에 안내되어 있나요?"],
   },
   {
     id:'breaches',question:'개인정보 유출 소식을 들으면 무엇을 확인하나요?',
@@ -55,7 +55,7 @@ export const learningTopics: LearningTopic[] = [
   },
 ];
 export const learningCountries = ['KR','JP','CN','EU','GB','US-CA','SG'];
-export function learningTopic(id?: string): LearningTopic { return learningTopics.find(topic=>topic.id===id)??learningTopics[0]; }
+export function learningTopic(id?: string): LearningTopic { return learningTopics.find(topic=>topic.id===(id==='ai-and-data'?'processing-basis':id))??learningTopics[0]; }
 export function learningCountriesFor(values: string[] | undefined, fallback: string[]): string[] {
   const valid=[...new Set(values?.filter(value=>learningCountries.includes(value))??[])];
   return valid.length?valid:fallback;
@@ -68,9 +68,8 @@ export function learningHref(topicId: string, countries?: string[]): string {
 export function learningComparisonHref(topic: LearningTopic, countries=topic.countries): string {
   return `/public/laws?${new URLSearchParams({view:'compare',countries:learningCountriesFor(countries,topic.countries).join(','),criterion:topic.criterion})}`;
 }
-function matchesTerm(text:string,term:string):boolean { return term==='ai'?/\bai\b/.test(text):text.includes(term); }
 export function matchedLearningTopics(story: {title:string;summary:string;tags:string[]}): LearningTopic[] {
   const title=story.title.toLocaleLowerCase(),tags=story.tags.join(' ').toLocaleLowerCase(),summary=story.summary.toLocaleLowerCase();
-  return learningTopics.map((topic,index)=>({topic,index,score:topic.terms.reduce((score,term)=>score+(matchesTerm(title,term)?3:0)+(matchesTerm(tags,term)?2:0)+(matchesTerm(summary,term)?1:0),0)}))
+  return learningTopics.map((topic,index)=>({topic,index,score:topic.terms.reduce((score,term)=>score+(title.includes(term)?3:0)+(tags.includes(term)?2:0)+(summary.includes(term)?1:0),0)}))
     .filter(item=>item.score>0).sort((a,b)=>b.score-a.score||a.index-b.index).map(item=>item.topic);
 }
