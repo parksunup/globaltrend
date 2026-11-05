@@ -1,5 +1,5 @@
 import TrendRelevance from "../trend-relevance";
-import {matchedLearningTopics,learningAudience} from "../../../../lib/public-learning";
+import {matchedLearningTopics} from "../../../../lib/public-learning";
 import learningStyles from "../../explore/learning.module.css";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -15,10 +15,10 @@ export const dynamic = "force-dynamic";
 
 export default async function TrendDetail({ params, searchParams }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ back?: string; audience?: string }>;
+  searchParams: Promise<{ back?: string }>;
 }) {
   const { id } = await params;
-  const { back, audience } = await searchParams;
+  const { back } = await searchParams;
   const story = await loadPublishedStory(id);
   if (!story) notFound();
   let legalDocuments: LegalTranslationDocument[] = [];
@@ -37,9 +37,9 @@ export default async function TrendDetail({ params, searchParams }: {
         <Link href={returnTo}>← 이전 목록으로</Link>
         <p className={styles.featureMeta}>{story.region} · {story.institution} · {story.date}</p>
         <h1>{story.title}</h1>
-        <nav className={learningStyles.steps} aria-label="동향 읽기 단계"><a href="#trend-summary">1. 핵심 요약</a><a href="#trend-relevance">2. 나와의 관련성</a><a href={story.details?"#trend-body":"#trend-official"}>3. 본문과 근거</a></nav>
+        <nav className={learningStyles.steps} aria-label="동향 읽기 단계"><a href="#trend-summary">1. 핵심 요약</a><a href="#trend-relevance">2. 확인할 사항</a><a href={story.details?"#trend-body":"#trend-official"}>3. 본문과 근거</a></nav>
         <section className={styles.trendSummary} id="trend-summary"><h2>핵심 요약</h2><p><TrendLawCitations text={story.summary} documents={legalDocuments} idPrefix={`${story.id}-summary`} /></p></section>
-        <TrendRelevance topicIds={matchedLearningTopics(story).map(topic=>topic.id)} initialAudience={learningAudience(audience)} countries={story.jurisdictions}/>
+        <TrendRelevance topicIds={matchedLearningTopics(story).map(topic=>topic.id)} countries={story.jurisdictions}/>
         {story.details && <section className={styles.trendBody} id="trend-body"><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p><TrendLawCitations text={point.text} documents={legalDocuments} idPrefix={`${story.id}-${index}`} /></p></li>)}</ul>:<p><TrendLawCitations text={story.details} documents={legalDocuments} idPrefix={`${story.id}-details`} /></p>}</section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>
         <div className={styles.lawEmptyState} id="trend-official"><strong>공식 원문</strong><p>{story.originalTitle}</p><a href={story.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a></div>
