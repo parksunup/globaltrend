@@ -5,6 +5,7 @@ import {trendEditMatchesRow} from './team-trend-publication.ts';
 export type TeamTrend = {
   id:string; revision:string; title_ko:string; summary_ko:string; details_ko:string;
   original_title:string; official_url:string; source_name:string; published_date:string;
+  created_at:string;
   jurisdictions:string[]; topics:string[]; status:string;
   editFile?:string; editState?:'applied'|'synced'|'conflict'; proposedEdit?:TrendEdit;
   workspace_revision?:number; workspaceEdit?:TrendEdit;
@@ -19,12 +20,13 @@ export function parseTrendEdit(value:unknown):TrendEdit {
   return row as unknown as TrendEdit;
 }
 export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:TrendEdit[]) {
-  const ids=new Set(rows.map(row=>row.id));
+  const orderedRows=[...rows].sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at)||a.id.localeCompare(b.id));
+  const ids=new Set(orderedRows.map(row=>row.id));
   if(new Set(edits.map(edit=>edit.report_id)).size!==edits.length)throw Error('같은 원고의 수정본이 중복되었습니다.');
   const warnings:string[]=[];
-  const byId=new Map([...edits,...rows.flatMap(row=>row.workspaceEdit?[row.workspaceEdit]:[])].map(edit=>[edit.report_id,edit]));
+  const byId=new Map([...edits,...orderedRows.flatMap(row=>row.workspaceEdit?[row.workspaceEdit]:[])].map(edit=>[edit.report_id,edit]));
   for(const edit of edits)if(!ids.has(edit.report_id))warnings.push(`원고 ${edit.report_id}가 현재 DB 목록에 없습니다. 수정본을 삭제하지 말고 확인해 주세요.`);
-  const items=rows.map(row=>{
+  const items=orderedRows.map(row=>{
     const edit=byId.get(row.id);
     const editFile=`.team-workspace/edits/${row.id}.json`;
     if(!edit)return {...row,editFile};
@@ -34,7 +36,7 @@ export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:
     if(edit.base_revision!==row.revision){warnings.push(`${row.id}: 기준 원고가 바뀌어 수정본 자동 적용을 보류했습니다.`);return {...row,editFile,editState:'conflict' as const,proposedEdit:edit};}
     return {...row,title_ko:edit.title_ko,summary_ko:edit.summary_ko,details_ko:edit.details_ko,editFile,editState:'applied' as const};
   });
-  const urls=new Set(rows.map(row=>row.official_url));
+  const urls=new Set(orderedRows.map(row=>row.official_url));
   // Newly researched repository articles also participate, without duplicating DB originals.
   for(const item of snapshot.items.filter(item=>item.kind==='동향 표본')) {
     const url=item.links.find(link=>link.label==='공식 원문')?.url??'';
@@ -56,9 +58,9 @@ export async function loadTeamTrendRows(options:{url?:string;key?:string;fetch?:
     const data=await response.json();
     if(!data||!Array.isArray(data.items)||!Number.isInteger(data.total))throw Error('작업실 원고 응답 형식이 올바르지 않습니다.');
     for(const row of data.items){
-      if(!row||typeof row.id!=='string'||typeof row.revision!=='string'||typeof row.title_ko!=='string'||typeof row.summary_ko!=='string'||typeof row.details_ko!=='string')throw Error('작업실 원고 필수 필드가 없습니다.');
+      if(!row||typeof row.id!=='string'||typeof row.revision!=='string'||typeof row.created_at!=='string'||typeof row.title_ko!=='string'||typeof row.summary_ko!=='string'||typeof row.details_ko!=='string')throw Error('작업실 원고 필수 필드가 없습니다.');
       // Whitelist output, even if a future RPC mistakenly adds internal fields.
-      rows.push({id:row.id,revision:row.revision,title_ko:row.title_ko,summary_ko:row.summary_ko,details_ko:row.details_ko,original_title:row.original_title??'',official_url:row.official_url??'',source_name:row.source_name??'',published_date:row.published_date??'',jurisdictions:Array.isArray(row.jurisdictions)?row.jurisdictions:[],topics:Array.isArray(row.topics)?row.topics:[],status:row.status??'draft',workspace_revision:Number.isSafeInteger(row.workspace_revision)?row.workspace_revision:0,...(row.workspace_edit?{workspaceEdit:parseTrendEdit(row.workspace_edit)}:{})});
+      rows.push({id:row.id,revision:row.revision,created_at:row.created_at,title_ko:row.title_ko,summary_ko:row.summary_ko,details_ko:row.details_ko,original_title:row.original_title??'',official_url:row.official_url??'',source_name:row.source_name??'',published_date:row.published_date??'',jurisdictions:Array.isArray(row.jurisdictions)?row.jurisdictions:[],topics:Array.isArray(row.topics)?row.topics:[],status:row.status??'draft',workspace_revision:Number.isSafeInteger(row.workspace_revision)?row.workspace_revision:0,...(row.workspace_edit?{workspaceEdit:parseTrendEdit(row.workspace_edit)}:{})});
     }
     if(data.nextOffset===null)break;
     if(!Number.isInteger(data.nextOffset)||data.nextOffset<=offset||!data.items.length)throw Error('다음 원고 페이지를 확인할 수 없습니다.');
@@ -67,3 +69,4 @@ export async function loadTeamTrendRows(options:{url?:string;key?:string;fetch?:
   if(new Set(rows.map(row=>row.id)).size!==rows.length)throw Error('원고 목록이 조회 중 변경되었습니다. 다시 확인해 주세요.');
   return rows;
 }
+
