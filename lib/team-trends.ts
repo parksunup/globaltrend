@@ -5,7 +5,7 @@ import {trendEditMatchesRow} from './team-trend-publication.ts';
 export type TeamTrend = {
   id:string; revision:string; title_ko:string; summary_ko:string; details_ko:string;
   original_title:string; official_url:string; source_name:string; published_date:string;
-  created_at:string;
+  created_at?:string;
   jurisdictions:string[]; topics:string[]; status:string;
   editFile?:string; editState?:'applied'|'synced'|'conflict'; proposedEdit?:TrendEdit;
   workspace_revision?:number; workspaceEdit?:TrendEdit;
@@ -20,7 +20,7 @@ export function parseTrendEdit(value:unknown):TrendEdit {
   return row as unknown as TrendEdit;
 }
 export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:TrendEdit[]) {
-  const orderedRows=[...rows].sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at)||a.id.localeCompare(b.id));
+  const orderedRows=[...rows].sort((a,b)=>(Date.parse(b.created_at??'')||0)-(Date.parse(a.created_at??'')||0)||a.id.localeCompare(b.id));
   const ids=new Set(orderedRows.map(row=>row.id));
   if(new Set(edits.map(edit=>edit.report_id)).size!==edits.length)throw Error('같은 원고의 수정본이 중복되었습니다.');
   const warnings:string[]=[];
