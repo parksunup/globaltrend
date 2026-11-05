@@ -32,7 +32,8 @@ test('six reading questions refer to real criteria and preserve the existing leg
 });
 test('topic suggestions use visible report metadata and avoid spurious AI substrings or invented matches',()=>{
  assert.equal(matchedLearningTopics({title:'해외사업자 적용 안내',summary:'',tags:[]})[0].id,'overseas-services');
- assert.equal(matchedLearningTopics({title:'AI 서비스',summary:'',tags:[]})[0].id,'ai-and-data');
+ assert.deepEqual(matchedLearningTopics({title:'AI 서비스',summary:'',tags:[]}),[]);
+ assert.equal(matchedLearningTopics({title:'개인정보 이용 동의와 처리근거 안내',summary:'',tags:[]})[0].id,'processing-basis');
  assert.deepEqual(matchedLearningTopics({title:'Daily mail notice',summary:'정기 행사',tags:[]}),[]);
  assert.deepEqual(matchedLearningTopics({title:'청년 행사',summary:'',tags:[]}),[]);
  assert.equal(matchedLearningTopics({title:'안내',summary:'',tags:['개인정보유출']})[0].id,'breaches');
@@ -76,4 +77,11 @@ test('old everyday and work URLs resolve to identical shared content and new lin
  const params={topic:'children',country:['KR','EU']};
  const everyday=await explorer({params:{...params,audience:'everyday'}}),work=await explorer({params:{...params,audience:'work'}});
  assert.equal(everyday,work);assert.doesNotMatch(everyday,/audience=|name="audience"/);
+});
+
+test('the fifth question explains processing grounds rather than an AI-specific service, with compatible old links',async()=>{
+ const topic=learningTopics[4];assert.equal(topic.id,'processing-basis');assert.equal(topic.criterion,'processing_basis_use');assert.equal(topic.question,'내 개인정보를 이용하려면 꼭 동의를 받아야 하나요?');
+ assert.equal(learningTopic('ai-and-data'),topic);assert.match(learningHref('ai-and-data'),/topic=processing-basis/);
+ const current=await explorer({params:{topic:'processing-basis',country:['KR','EU']}}),legacy=await explorer({params:{topic:'ai-and-data',country:['KR','EU']}});
+ assert.equal(current,legacy);assert.match(current,/동의가 필요한 경우와 그 밖의 처리근거/);assert.match(current,/criterion=processing_basis_use/);assert.doesNotMatch(current,/AI 서비스|입력·학습·출력|searchParams.*인공지능/);
 });

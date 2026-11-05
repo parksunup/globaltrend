@@ -1,4 +1,6 @@
-import Link from "next/link";`r`nimport TrendRelevance from "../trend-relevance";`r`nimport {matchedLearningTopics} from "../../../../lib/public-learning";
+import Link from "next/link";
+import TrendRelevance from "../trend-relevance";
+import {matchedLearningTopics} from "../../../../lib/public-learning";
 import { notFound } from "next/navigation";
 import { loadPublishedStory } from "../../../../lib/published-trends";
 import { PublicHeader, PublicFooter } from "../../public-navigation";
@@ -34,7 +36,8 @@ export default async function TrendDetail({ params, searchParams }: {
         <Link href={returnTo}>← 동향 목록으로</Link>
         <p className={styles.featureMeta}>{story.region} · {story.institution} · {story.date}</p>
         <h1>{story.title}</h1>
-        <TrendRelevance topicIds={matchedLearningTopics(story).map(topic=>topic.id)} countries={story.jurisdictions}/>`r`n        <section className={styles.trendSummary}><h2>핵심 요약</h2><p><TrendLawCitations text={story.summary} documents={legalDocuments} idPrefix={`${story.id}-summary`} /></p></section>
+        <TrendRelevance topicIds={matchedLearningTopics(story).map(topic=>topic.id)} countries={story.jurisdictions}/>
+        <section className={styles.trendSummary}><h2>핵심 요약</h2><p><TrendLawCitations text={story.summary} documents={legalDocuments} idPrefix={`${story.id}-summary`} /></p></section>
         {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p><TrendLawCitations text={point.text} documents={legalDocuments} idPrefix={`${story.id}-${index}`} /></p></li>)}</ul>:<p><TrendLawCitations text={story.details} documents={legalDocuments} idPrefix={`${story.id}-details`} /></p>}</section>}
         <div className={styles.tagList}>{story.tags.map((tag) => <Link key={tag} href={"/public/search?q=" + encodeURIComponent(tag)}>#{tag}</Link>)}</div>
         <div className={styles.lawEmptyState}><strong>공식 원문</strong><p>{story.originalTitle}</p><a href={story.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a></div>
