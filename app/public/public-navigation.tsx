@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./public.module.css";
 import { usePublicTheme } from "./public-theme";
 
-const entries = [["/public", "Main"], ["/public/weekly", "주간 동향"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"]];
+const entries = [["/public", "Main"], ["/public/weekly", "주간 동향"], ["/public/search", "동향 검색"], ["/public/laws", "국가별 법제"], ["/public/explore", "질문으로 탐색"]];
 export function PublicHeader({ active }: { active: string }) {
   const { theme, toggleTheme } = usePublicTheme();
   const [menuOpen, setMenuOpen] = useState(false);

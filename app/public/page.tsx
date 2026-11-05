@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuestionStart from "./explore/question-start";
 import styles from "./public.module.css";
 
 import { loadPublicStories } from "../../lib/public-content";
@@ -70,6 +71,7 @@ export default async function PublicHome() {
       <div className={styles.heroMotto}>PEOPLE<br />LAW<br />SOCIETY<br /><b>A SAFER DIGITAL TOMORROW</b></div>
     </section>
 
+    <QuestionStart/>
     {podcast&&<HomePodcastPlayer podcast={podcast}/>}
 
     <section className={styles.observatoryGrid}>
