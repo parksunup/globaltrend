@@ -125,8 +125,14 @@ jobs:
         run: |
           python - <<'PY'
           import os, pathlib
-          result = pathlib.Path('work/collector-result.json')
-          if result.exists():
-              with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
-                  output.write('```json\n' + result.read_text()[:12000] + '\n```\n')
+          paths = [pathlib.Path('work/collector-result.json'),
+                   pathlib.Path('work/collector-v2-probe.json'),
+                   pathlib.Path('work/collector-v2-worker.json')]
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as output:
+              for result in paths:
+                  if result.exists():
+                      output.write(f'### {result.name}\n```json\n')
+                      output.write(result.read_text(encoding='utf-8')[:12000])
+                      output.write('\n```\n')
           PY
+

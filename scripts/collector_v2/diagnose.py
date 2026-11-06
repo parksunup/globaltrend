@@ -93,7 +93,10 @@ def main():
     target.write_text(json.dumps({'sources': results}, ensure_ascii=False, indent=2), encoding='utf-8')
     for item in results:
         print(json.dumps({k: item[k] for k in ('source', 'status', 'stage', 'error', 'characters') if k in item}, ensure_ascii=False))
+    if not results or any(item['status'] != 'parsed_sample' for item in results):
+        raise SystemExit(3)
 
 
 if __name__ == '__main__':
     main()
+
