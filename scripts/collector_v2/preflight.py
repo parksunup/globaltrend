@@ -99,6 +99,8 @@ def main():
         'allowed': sum(item['status'] == 'passed' for item in result['sources']),
         'draft_policy_matches': result['draft_policy']['matches_contract'],
         'writing_policy_matches': result['writing_policy']['matches_contract'],
+        'draft_api_key_configured': result['draft_generation']['api_key_configured'],
+        'draft_model_configured': bool(result['draft_generation']['model']),
         'draft_generation_ready': result['draft_generation']['ready'],
         'writes_performed': False,
     }, ensure_ascii=False))

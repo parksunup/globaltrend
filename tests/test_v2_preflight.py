@@ -79,6 +79,7 @@ class ReadOnlyPreflightTests(unittest.TestCase):
         with patch.dict('os.environ', {'DRAFT_API_KEY': 'secret-value', 'DRAFT_MODEL': 'test-model'}):
             result = run(Store(), [{'source': 'sample', 'source_id': 'source-id'}])
         self.assertTrue(result['draft_generation']['ready'])
+        self.assertTrue(result['draft_generation']['api_key_configured'])
         self.assertEqual(result['draft_generation']['model'], 'test-model')
         self.assertNotIn('secret-value', json.dumps(result))
 
