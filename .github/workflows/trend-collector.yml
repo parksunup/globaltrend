@@ -6,7 +6,7 @@ on:
       mode:
         description: 'preflight checks runtime, DB and sites without writes; write uses verified gates'
         type: choice
-        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, crawlee-worker, preflight, write]
+        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, crawlee-worker, crawlee-preflight, preflight, write]
         default: dry-run
       http_client:
         description: 'Crawlee HTTP transport for read-only probes and collection'
@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        source: ${{ fromJSON(contains(fromJSON('["expansion-probe","crawlee-probe"]'), inputs.mode) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
+        source: ${{ fromJSON(contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight"]'), inputs.mode) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
       PYTHONUTF8: '1'
       COLLECTOR_RUNNER: github-hosted
@@ -102,6 +102,12 @@ jobs:
             python -m scripts.collector_v2.worker "${args[@]}" --output work/collector-v2-worker.json
             exit $?
           fi
+          if [ "$REQUESTED_MODE" = "crawlee-preflight" ]; then
+            args=(--output work/collector-v2-preflight.json)
+            if [ "$SOURCE_SELECTION" != "all" ] && [ "$SOURCE_SELECTION" != "diagnostic" ]; then args+=(--source "$SOURCE_SELECTION"); fi
+            python -m scripts.collector_v2.preflight "${args[@]}"
+            exit $?
+          fi
           if [ "$REQUESTED_MODE" = "expansion-probe" ]; then
             python -m scripts.collector.diagnose --output work/collector-result.json
             exit $?
@@ -136,7 +142,8 @@ jobs:
           import os, pathlib
           paths = [pathlib.Path('work/collector-result.json'),
                    pathlib.Path('work/collector-v2-probe.json'),
-                   pathlib.Path('work/collector-v2-worker.json')]
+                   pathlib.Path('work/collector-v2-worker.json'),
+                   pathlib.Path('work/collector-v2-preflight.json')]
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as output:
               for result in paths:
                   if result.exists():

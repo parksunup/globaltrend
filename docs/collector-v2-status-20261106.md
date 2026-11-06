@@ -10,6 +10,7 @@ The legacy collector remains in place. New code is under `scripts/collector_v2`;
 - Existing source-specific `cloud_step.prepare` bundle contract wrapped by v2; the worker calls the existing `collector_cloud_take` and `collector_cloud_commit` RPCs and keeps the one-document atomic commit behavior.
 - Trafilatura 2.3.1 fallback only when an HTML source parser raises. Such fallback records unknown publication date and `requires_review=true`, so it cannot qualify as an automatic draft.
 - An opt-in `crawlee-worker` workflow-dispatch mode. This workflow has no schedule and must be manually dispatched; no live write run was made.
+- Read-only `crawlee-preflight` checks source activation and storage capacity through existing DB RPCs, then compares the draft and writing-policy contracts without claiming work or writing data.
 
 ## Verification
 
@@ -21,6 +22,7 @@ The legacy collector remains in place. New code is under `scripts/collector_v2`;
 - Latest-code ICO Playwright probe, run https://github.com/parksunup/globaltrend/actions/runs/42144860183, also returned 403 at the official listing URL. Switching from Crawlee HTTP to headless Chromium did not restore ICO access.
 - Latest-code EU Parliament browser probe run https://github.com/parksunup/globaltrend/actions/runs/42144863948 was cancelled before a job started and provides no source-access evidence. A serial retry, https://github.com/parksunup/globaltrend/actions/runs/42145842505, completed but rejected the official RSS/XML with `xml_entities_rejected`, just like the HTTP transport. This is a deliberate safe-parser rejection, not an access block.
 - Latest-code EU Council browser probe, run https://github.com/parksunup/globaltrend/actions/runs/42144866949, completed its unit tests and reached the official listing but also returned 403. HTTP and Playwright both fail to access this source from the cloud runner.
+- OECD Playwright probe, run https://github.com/parksunup/globaltrend/actions/runs/42147239216, also returned 403 at the official listing.
 - Although the PPC parser returned a sample, it contained only 119 characters. Treat this as a weak/possibly truncated extraction until a full article body check succeeds; the 12/19 smoke result counts parse outcomes, not content adequacy.
 - Initial HTTPX comparison run https://github.com/parksunup/globaltrend/actions/runs/42146251827 failed before probes because `crawlee[playwright]` does not install Crawlee's optional HTTPX extra. The worker now imports that client lazily and the manual workflow installs the extra only when auto or explicitly selected; the legacy/shared dependency file remains unchanged. No source-access result came from that attempt.
 - HTTPX all-source comparison, run https://github.com/parksunup/globaltrend/actions/runs/42146454766: 12/19 sources parsed, with California Privacy improved from a 403 to a 2,494-character sample while FTC changed from a 4,084-character sample to a failed listing; the other source outcomes matched the Impit run.
@@ -28,8 +30,8 @@ The legacy collector remains in place. New code is under `scripts/collector_v2`;
 - A route-aware Crawlee probe then parsed PCPD (5,095 characters) in run https://github.com/parksunup/globaltrend/actions/runs/42141228174. A Playwright probe of EU Council received 403 in run https://github.com/parksunup/globaltrend/actions/runs/42141331186. That run appeared green because the diagnostic did not propagate failed samples to the process exit code; v2 now returns partial exit code 3 on any failed or empty probe and prints its result JSON in the Actions summary.
 - Chromium Playwright initially SIGTRAPed; after headless launch flags it ran but ICO still returned 403.
 - Crawlee 1.11 explicitly warns that robots.txt `Crawl-delay` directives are not enforced without its `ThrottlingRequestManager`. The per-host minimum interval limits repeated requests, but is not a substitute for reading and applying a larger site-specific robots delay.
-- Existing Supabase preflight run https://github.com/parksunup/globaltrend/actions/runs/42140900099 performed no writes and failed with `http_403`. This environment therefore did not verify DB authorization/connectivity, active route ownership, or worker commit behavior.
-- The v2 worker remains unexecuted because preflight did not establish connectivity. No schedule was enabled and no source data was written by v2.
+- Existing Supabase preflight run https://github.com/parksunup/globaltrend/actions/runs/42140900099 performed no writes. Its read-only `collector_source_allowed` and `collector_capacity` RPC checks succeeded for OECD (`allowed=true`; database 74,640,531 bytes against a 400,000,000-byte stop), while OECD listing/detail requests independently returned 403. This verifies read RPC access, that source's approval, and current capacity on that run; it does not verify all source routes or the v2 claim/commit path.
+- The v2 worker remains unexecuted. No schedule was enabled and no source data was written by v2.
 
 ## Remaining activation requirements
 
