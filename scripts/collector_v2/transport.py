@@ -7,6 +7,7 @@ from datetime import timedelta
 from urllib.parse import urlsplit
 
 from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
+from crawlee import Request
 
 from scripts.collector.core import FetchError, canonical_url
 
@@ -40,12 +41,11 @@ class CrawleeClient:
 
     def fetch(self, url, *, method='GET', payload=None, headers=None):
         canonical_url(url, self.hosts)
-        if method != 'GET' or payload is not None:
-            # Current adapters use POST only for observed official APIs. Keep
-            # those on the legacy, explicitly validated adapter until v2 has
-            # an equivalent request-body and redirect test contract.
-            raise FetchError('collector_v2_method_not_yet_supported')
-        result = self._submit(self._fetch(url, headers or {}))
+        if method not in ('GET', 'POST'):
+            raise FetchError('collector_v2_method_not_supported')
+        request = Request.from_url(url, method=method, payload=payload, headers=headers or {},
+                                   use_extended_unique_key=True, max_retries=0)
+        result = self._submit(self._fetch(request))
         self.requests += 1
         self.downloaded_bytes += len(result.body)
         if len(result.body) > self.max_bytes:
@@ -67,7 +67,9 @@ class CrawleeClient:
             future.cancel()
             raise FetchError('crawlee_request_timeout') from None
 
-    async def _fetch(self, url, headers):
+    async def _fetch(self, request):
+        url = request.url
+        headers = request.headers
         parsed = urlsplit(url)
         browser = parsed.hostname in self.browser_hosts
         result = {}
@@ -93,7 +95,7 @@ class CrawleeClient:
                               status=response.status or 0,
                               content_type=(response.headers.get('content-type', '').split(';')[0].lower()))
 
-            await crawler.run([url])
+            await crawler.run([request])
         else:
             crawler = HttpCrawler(
                 max_requests_per_crawl=1,
@@ -110,7 +112,7 @@ class CrawleeClient:
                               status=response.status_code,
                               content_type=response.headers.get('content-type', '').split(';')[0].lower())
 
-            await crawler.run([url])
+            await crawler.run([request])
 
         if not result:
             raise FetchError('crawlee_request_skipped_or_failed')
