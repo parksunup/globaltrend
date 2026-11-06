@@ -10,6 +10,10 @@ from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
 
 from scripts.collector.core import FetchError, canonical_url
 
+_LOOP = asyncio.new_event_loop()
+_LOOP_THREAD = threading.Thread(target=_LOOP.run_forever, daemon=True)
+_LOOP_THREAD.start()
+
 
 @dataclass(frozen=True)
 class Response:
@@ -32,9 +36,7 @@ class CrawleeClient:
         self.max_bytes = max_bytes
         self.requests = 0
         self.downloaded_bytes = 0
-        self._loop = asyncio.new_event_loop()
-        self._thread = threading.Thread(target=self._loop.run_forever, daemon=True)
-        self._thread.start()
+        self._loop = _LOOP
 
     def fetch(self, url, *, method='GET', payload=None, headers=None):
         canonical_url(url, self.hosts)

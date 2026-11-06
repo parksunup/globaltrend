@@ -40,11 +40,8 @@ def main():
     parser.add_argument('--output', default='work/collector-v2-probe.json')
     args = parser.parse_args()
     registry = json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
-    results = [run_source(c) for c in registry['sources'] if c.get('enabled') and (not args.source or c['source'] in args.source)]
-    for result in results:
-        if result['source'] in args.browser:
-            config = next(c for c in registry['sources'] if c['source'] == result['source'])
-            result.update(run_source({**config, 'browser_hosts': config['hosts']}))
+    configs = [c for c in registry['sources'] if c.get('enabled') and (not args.source or c['source'] in args.source)]
+    results = [run_source({**c, **({'browser_hosts': c['hosts']} if c['source'] in args.browser else {})}) for c in configs]
     target = Path(args.output)
     if not target.is_absolute(): target = ROOT / target
     target.parent.mkdir(parents=True, exist_ok=True)
