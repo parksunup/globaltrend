@@ -2,6 +2,7 @@
 import argparse
 import datetime as dt
 import json
+import os
 from pathlib import Path
 
 from scripts.collector.environment import runtime_info
@@ -25,6 +26,12 @@ def run(store, configs=None):
         'sources': [],
         'draft_policy': None,
         'writing_policy': None,
+        'draft_generation': {
+            'provider': 'openai',
+            'api_key_configured': bool(os.environ.get('DRAFT_API_KEY')),
+            'model': os.environ.get('DRAFT_MODEL', '').strip() or None,
+            'ready': bool(os.environ.get('DRAFT_API_KEY') and os.environ.get('DRAFT_MODEL', '').strip()),
+        },
         'status': 'failed',
     }
     for config in configs:
@@ -92,6 +99,7 @@ def main():
         'allowed': sum(item['status'] == 'passed' for item in result['sources']),
         'draft_policy_matches': result['draft_policy']['matches_contract'],
         'writing_policy_matches': result['writing_policy']['matches_contract'],
+        'draft_generation_ready': result['draft_generation']['ready'],
         'writes_performed': False,
     }, ensure_ascii=False))
     if result['status'] != 'passed':

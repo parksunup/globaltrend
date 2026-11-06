@@ -1,5 +1,6 @@
 import json
 import unittest
+from unittest.mock import patch
 
 from scripts.collector_v2.preflight import ROOT, run
 
@@ -59,6 +60,27 @@ class ReadOnlyPreflightTests(unittest.TestCase):
         self.assertFalse(result['draft_policy']['matches_contract'])
         self.assertFalse(result['writing_policy']['matches_contract'])
         self.assertFalse(result['writes_performed'])
+
+    def test_draft_generation_readiness_reports_configuration_without_exposing_key(self):
+        policy = self.policy
+
+        class Store:
+            def preflight(self, config):
+                return {'allowed': True}
+
+            def rpc(self, name, payload):
+                if name == 'collector_draft_policy':
+                    return {'policy_version': 'trend-draft-unlimited-v2',
+                            'daily_claim_limit': None, 'targeted_claim_supported': True}
+                return {'policy_id': policy['policy_id'],
+                        'job_instruction_version': policy['job_instruction_version'],
+                        'instruction_hashes': policy['instruction_hashes']}
+
+        with patch.dict('os.environ', {'DRAFT_API_KEY': 'secret-value', 'DRAFT_MODEL': 'test-model'}):
+            result = run(Store(), [{'source': 'sample', 'source_id': 'source-id'}])
+        self.assertTrue(result['draft_generation']['ready'])
+        self.assertEqual(result['draft_generation']['model'], 'test-model')
+        self.assertNotIn('secret-value', json.dumps(result))
 
 
 if __name__ == '__main__':

@@ -70,6 +70,8 @@ jobs:
       CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
       SUPABASE_URL: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_URL || '' }}
       SUPABASE_SECRET_KEY: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_SECRET_KEY || '' }}
+      DRAFT_API_KEY: ${{ inputs.mode == 'crawlee-preflight' && secrets.OPENAI_API_KEY || '' }}
+      DRAFT_MODEL: ${{ inputs.mode == 'crawlee-preflight' && vars.OPENAI_MODEL || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
