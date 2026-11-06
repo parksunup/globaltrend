@@ -14,6 +14,21 @@ from scripts.collector.core import FetchError, canonical_url
 _LOOP = asyncio.new_event_loop()
 _LOOP_THREAD = threading.Thread(target=_LOOP.run_forever, daemon=True)
 _LOOP_THREAD.start()
+_HOST_NEXT_ALLOWED = {}
+_HOST_LOCKS = {}
+
+
+async def _pace(host, interval):
+    """Keep sequential crawler instances from bypassing per-host pacing."""
+    if interval <= 0:
+        return
+    lock = _HOST_LOCKS.setdefault(host, asyncio.Lock())
+    async with lock:
+        loop = asyncio.get_running_loop()
+        delay = _HOST_NEXT_ALLOWED.get(host, 0) - loop.time()
+        if delay > 0:
+            await asyncio.sleep(delay)
+        _HOST_NEXT_ALLOWED[host] = loop.time() + interval
 
 
 @dataclass(frozen=True)
@@ -31,10 +46,11 @@ class CrawleeClient:
     existing source adapters and persistence contracts explicitly.
     """
 
-    def __init__(self, hosts, *, browser_hosts=(), max_bytes=2_000_000):
+    def __init__(self, hosts, *, browser_hosts=(), max_bytes=2_000_000, interval=2):
         self.hosts = set(hosts)
         self.browser_hosts = set(browser_hosts)
         self.max_bytes = max_bytes
+        self.interval = max(0, float(interval))
         self.requests = 0
         self.downloaded_bytes = 0
         self._loop = _LOOP
@@ -73,6 +89,7 @@ class CrawleeClient:
         parsed = urlsplit(url)
         browser = parsed.hostname in self.browser_hosts
         result = {}
+        await _pace(parsed.hostname, self.interval)
 
         if browser:
             crawler = PlaywrightCrawler(

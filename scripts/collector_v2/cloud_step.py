@@ -16,7 +16,7 @@ def prepare(claim, *, browser_hosts=()):
     original_extract = parsers.extract_document
 
     def client_factory(hosts, interval=2, budget=None):
-        return CrawleeClient(hosts, browser_hosts=browser_hosts)
+        return CrawleeClient(hosts, browser_hosts=browser_hosts, interval=interval)
 
     def extract_with_fallback(source, body, url, content_type, row=None):
         try:
