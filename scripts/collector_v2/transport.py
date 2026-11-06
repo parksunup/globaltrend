@@ -125,7 +125,8 @@ class CrawleeClient:
             @crawler.router.default_handler
             async def handle(context):
                 response = context.http_response
-                result.update(body=await response.read(), url=context.request.url,
+                result.update(body=await response.read(),
+                              url=context.request.loaded_url or context.request.url,
                               status=response.status_code,
                               content_type=response.headers.get('content-type', '').split(';')[0].lower())
 
