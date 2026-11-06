@@ -76,6 +76,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - name: Install parallel Crawlee collector dependencies
+        if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
+        run: python -m pip install -r scripts/collector_v2/requirements.txt
       - name: Install optional Crawlee HTTPX client for comparison
         if: (inputs.mode == 'crawlee-probe' || inputs.mode == 'crawlee-worker') && (inputs.http_client == 'httpx' || inputs.http_client == 'auto')
         run: python -m pip install 'crawlee[httpx]==1.11.0'
@@ -83,6 +86,9 @@ jobs:
         if: inputs.mode == 'crawlee-browser-probe'
         run: python -m playwright install --with-deps chromium
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
+      - name: Run parallel Crawlee regression suite
+        if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
+        run: python -m unittest discover -s tests -p 'test_v2_*.py'
       - name: Collect within explicit limits
         shell: bash
         env:
