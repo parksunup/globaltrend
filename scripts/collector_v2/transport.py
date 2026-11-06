@@ -80,6 +80,9 @@ class CrawleeClient:
                 navigation_timeout=timedelta(seconds=30),
                 respect_robots_txt_file=True,
                 configure_logging=False,
+                headless=True,
+                fingerprint_generator=None,
+                browser_launch_options={'args': ['--no-sandbox', '--disable-dev-shm-usage']},
                 browser_new_context_options={'extra_http_headers': headers} if headers else None,
             )
 
