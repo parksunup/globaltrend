@@ -1,5 +1,6 @@
 """Bounded Crawlee HTTP/browser transport for the parallel collector v2."""
 import asyncio
+import os
 import threading
 from concurrent.futures import TimeoutError as FutureTimeout
 from dataclasses import dataclass
@@ -8,6 +9,7 @@ from urllib.parse import urlsplit
 
 from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
 from crawlee import Request
+from crawlee.http_clients import HttpxHttpClient
 
 from scripts.collector.core import FetchError, canonical_url
 
@@ -114,7 +116,11 @@ class CrawleeClient:
 
             await crawler.run([request])
         else:
+            http_client = os.getenv('CRAWLEE_HTTP_CLIENT', 'impit').strip().lower()
+            if http_client not in ('impit', 'httpx'):
+                raise FetchError('crawlee_http_client_not_supported')
             crawler = HttpCrawler(
+                **({'http_client': HttpxHttpClient()} if http_client == 'httpx' else {}),
                 max_requests_per_crawl=1,
                 max_request_retries=0,
                 max_session_rotations=0,
