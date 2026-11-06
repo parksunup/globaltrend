@@ -79,7 +79,7 @@ jobs:
         env:
           COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
         run: |
-          if [ "$REQUESTED_MODE" = "crawlee-probe" ]; then
+          if [ "$REQUESTED_MODE" = "crawlee-probe" ] || [ "$REQUESTED_MODE" = "crawlee-browser-probe" ]; then
             args=(--output work/collector-v2-probe.json)
             if [ "${{ inputs.source }}" != "all" ]; then args+=(--source "${{ inputs.source }}"); fi
             if [ "$REQUESTED_MODE" = "crawlee-browser-probe" ] && [ "${{ inputs.source }}" != "all" ]; then args+=(--browser "${{ inputs.source }}"); fi
