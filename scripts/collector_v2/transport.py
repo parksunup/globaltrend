@@ -17,6 +17,17 @@ _LOOP_THREAD = threading.Thread(target=_LOOP.run_forever, daemon=True)
 _LOOP_THREAD.start()
 _HOST_NEXT_ALLOWED = {}
 _HOST_LOCKS = {}
+HTTPX_HOSTS = {'privacy.ca.gov'}
+
+
+def effective_http_client(host, requested=None):
+    requested = (requested if requested is not None else
+                 os.getenv('CRAWLEE_HTTP_CLIENT', 'auto')).strip().lower()
+    if requested == 'auto':
+        return 'httpx' if host in HTTPX_HOSTS else 'impit'
+    if requested not in ('impit', 'httpx'):
+        raise FetchError('crawlee_http_client_not_supported')
+    return requested
 
 
 async def _pace(host, interval):
@@ -115,9 +126,7 @@ class CrawleeClient:
 
             await crawler.run([request])
         else:
-            http_client = os.getenv('CRAWLEE_HTTP_CLIENT', 'impit').strip().lower()
-            if http_client not in ('impit', 'httpx'):
-                raise FetchError('crawlee_http_client_not_supported')
+            http_client = effective_http_client(parsed.hostname)
             http_client_options = {}
             if http_client == 'httpx':
                 try:
