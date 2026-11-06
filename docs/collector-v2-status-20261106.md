@@ -12,11 +12,13 @@ The legacy collector remains in place. New code is under `scripts/collector_v2`;
 
 ## Verification
 
-- Existing Python collector regression suite: 165 tests passed locally after the v2 additions.
+- Existing Python collector regression suite plus the new v2 diagnostic exit-contract tests: 167 tests passed locally.
 - Trafilatura fallback smoke sample produced 806 characters with an extractor/version marker.
 - Crawlee cloud probe, run https://github.com/parksunup/globaltrend/actions/runs/42140432084: OAIC, Canada OPC, CAC, TC260, and AEPD yielded parsed samples. ICO HTTP and browser probes returned 403. California Privacy, EC, EU Parliament, EU Council and PCPD did not produce parsed samples; see raw action logs for exact request/schema errors. This probe checked one listing/detail sample per enabled config and does not prove full-window coverage.
+- A route-aware Crawlee probe then parsed PCPD (5,095 characters) in run https://github.com/parksunup/globaltrend/actions/runs/42141228174. A Playwright probe of EU Council received 403 in run https://github.com/parksunup/globaltrend/actions/runs/42141331186. That run appeared green because the diagnostic did not propagate failed samples to the process exit code; v2 now returns partial exit code 3 on any failed or empty probe and prints its result JSON in the Actions summary.
 - Chromium Playwright initially SIGTRAPed; after headless launch flags it ran but ICO still returned 403.
 - Existing Supabase preflight run https://github.com/parksunup/globaltrend/actions/runs/42140900099 performed no writes and failed with `http_403`. This environment therefore did not verify DB authorization/connectivity, active route ownership, or worker commit behavior.
+- The v2 worker remains unexecuted because preflight did not establish connectivity. No schedule was enabled and no source data was written by v2.
 
 ## Remaining activation requirements
 
