@@ -9,7 +9,6 @@ from urllib.parse import urlsplit
 
 from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
 from crawlee import Request
-from crawlee.http_clients import HttpxHttpClient
 
 from scripts.collector.core import FetchError, canonical_url
 
@@ -119,8 +118,15 @@ class CrawleeClient:
             http_client = os.getenv('CRAWLEE_HTTP_CLIENT', 'impit').strip().lower()
             if http_client not in ('impit', 'httpx'):
                 raise FetchError('crawlee_http_client_not_supported')
+            http_client_options = {}
+            if http_client == 'httpx':
+                try:
+                    from crawlee.http_clients import HttpxHttpClient
+                except ImportError:
+                    raise FetchError('crawlee_httpx_extra_not_installed') from None
+                http_client_options['http_client'] = HttpxHttpClient()
             crawler = HttpCrawler(
-                **({'http_client': HttpxHttpClient()} if http_client == 'httpx' else {}),
+                **http_client_options,
                 max_requests_per_crawl=1,
                 max_request_retries=0,
                 max_session_rotations=0,

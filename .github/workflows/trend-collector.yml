@@ -76,6 +76,9 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - name: Install optional Crawlee HTTPX client for comparison
+        if: inputs.mode == 'crawlee-probe' && inputs.http_client == 'httpx'
+        run: python -m pip install 'crawlee[httpx]==1.11.0'
       - name: Install Chromium for browser probe
         if: inputs.mode == 'crawlee-browser-probe'
         run: python -m playwright install --with-deps chromium
