@@ -5,12 +5,57 @@ from pathlib import Path
 from scripts.collector import parsers, expansion
 from scripts.collector.core import fetch_listing
 from scripts.collector_v2.transport import CrawleeClient
+from scripts.collector_v2.extraction import fallback_main_text
+import re
+from urllib.parse import urljoin, urlsplit
+from bs4 import BeautifulSoup
 
 ROOT = Path(__file__).resolve().parents[2]
+WEB = json.loads((ROOT/'config/collector-web.json').read_text(encoding='utf-8'))
+
+
+def run_web_source(source, browser=False):
+    spec = WEB[source]
+    hosts = {urlsplit(url).hostname for url in spec['discovery']}
+    hosts.discard(None)
+    client = CrawleeClient(hosts, browser_hosts=hosts if browser else ())
+    record = {'source': source, 'mode': 'crawlee', 'database_writes': False,
+              'coverage_complete': False, 'status': 'failed'}
+    try:
+        candidates = []
+        for listing in spec['discovery']:
+            body, final, ctype = client.get(listing)
+            if ctype not in ('text/html', 'application/xhtml+xml'):
+                continue
+            soup = BeautifulSoup(body, 'html.parser')
+            for anchor in soup.select('a[href]'):
+                target = urljoin(final, anchor['href'])
+                if any(re.fullmatch(pattern, target) for pattern in spec['routes']):
+                    candidates.append((target, anchor.get_text(' ', strip=True)))
+            if candidates:
+                break
+        if not candidates:
+            raise ValueError('no_current_url_matching_verified_official_route')
+        url, title = candidates[0]
+        body, final, ctype = client.get(url)
+        if final != url and not any(re.fullmatch(pattern, final) for pattern in spec['routes']):
+            raise ValueError('detail_redirect_outside_verified_route')
+        item = fallback_main_text(body)
+        if item is None:
+            raise ValueError('trafilatura_body_too_short')
+        record.update(status='parsed_sample', stage='detail', url=final,
+                      title=title or None, characters=len(item['content_text']),
+                      publication_date='unverified', requires_review=True)
+    except Exception as exc:
+        record.update(stage=record.get('stage', 'listing'), error=str(exc)[:300])
+    record.update(requests=client.requests, downloaded_bytes=client.downloaded_bytes)
+    return record
 
 
 def run_source(config):
     name = config['source']
+    if name in WEB and WEB[name].get('enabled', True):
+        return run_web_source(name, browser=bool(config.get('browser_hosts')))
     client = CrawleeClient(config['hosts'], browser_hosts=config.get('browser_hosts', ()))
     result = {'source': name, 'mode': 'crawlee', 'database_writes': False,
               'coverage_complete': False, 'status': 'failed'}

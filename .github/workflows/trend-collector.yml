@@ -11,7 +11,7 @@ on:
       source:
         description: 'Source selection for this manual validation run'
         type: choice
-        options: [all, edpb, oecd, curia, cnil, ico, dpc, pdpc, ppc, ftc, ec, eu-parliament]
+        options: [all, edpb, oecd, curia, cnil, ico, dpc, pdpc, ppc, ftc, ec, calprivacy, oaic, ca-opc, hk-pcpd, eu-parliament, eu-council, cn-cac, cn-tc260, es-aepd]
         default: all
       since:
         description: 'Optional backfill start YYYY-MM-DD (bounded; resume the same range)'
