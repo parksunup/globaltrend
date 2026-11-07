@@ -46,12 +46,24 @@ def run(slugs, *, browser=False, all_owned=False, max_claims=1):
             if not claim:
                 summary['commits'].append({'source': slug, 'status': 'queue_empty'})
                 break
-            bundle = prepare(claim, browser_hosts=config['hosts'] if browser else ())
             source_claims += 1
-            saved = store.rpc('collector_cloud_commit', {
-                'p_source_id': claim['source_id'], 'p_worker': worker,
-                'p_lease_token': claim['lease_token'], 'p_bundle': bundle,
-                'p_execution_id': os.environ.get('GITHUB_RUN_ID', summary['worker'])})
+            try:
+                bundle = prepare(claim, browser_hosts=config['hosts'] if browser else ())
+            except Exception as error:
+                summary['commits'].append({'source': slug, 'status': 'held',
+                                           'reason': 'prepare_error_' + type(error).__name__})
+                break
+            try:
+                saved = store.rpc('collector_cloud_commit', {
+                    'p_source_id': claim['source_id'], 'p_worker': worker,
+                    'p_lease_token': claim['lease_token'], 'p_bundle': bundle,
+                    'p_execution_id': os.environ.get('GITHUB_RUN_ID', summary['worker'])})
+            except Exception as error:
+                # A network error can arrive after the DB committed. Do not
+                # retry blindly or claim success; preserve the lease timeout.
+                summary['commits'].append({'source': slug, 'status': 'held',
+                                           'reason': 'commit_outcome_unknown_' + type(error).__name__})
+                break
             summary['commits'].append({'source': slug, 'status': 'committed',
                 'run_status': bundle['result']['status'], 'saved_result': saved})
             if bundle['result']['status'] == 'failed':

@@ -4,6 +4,21 @@ from scripts.collector_v2.worker import owned_sources, run
 
 
 class SourceOwnershipTests(unittest.TestCase):
+    def test_commit_exception_is_reported_as_unknown_without_retry(self):
+        class Store:
+            def __init__(self): self.calls = []
+            def preflight(self, config): return {'allowed': True}
+            def rpc(self, name, payload):
+                self.calls.append(name)
+                if name == 'collector_cloud_take': return {'source_id': 'id', 'lease_token': 'lease'}
+                raise TimeoutError('sensitive internal details')
+        store = Store()
+        with patch('scripts.collector_v2.worker.SupabaseStore', return_value=store), patch('scripts.collector_v2.worker.prepare', return_value={'result': {'status': 'success'}}):
+            result = run(['ftc'])
+        self.assertEqual(store.calls, ['collector_cloud_take', 'collector_cloud_commit'])
+        self.assertEqual(result['commits'][0]['reason'], 'commit_outcome_unknown_TimeoutError')
+        self.assertEqual(result['status'], 'partial')
+
     def test_worker_passes_lease_and_bundle_to_existing_commit(self):
         claim = {'source_id': 'id', 'lease_token': 'lease'}
         bundle = {'result': {'status': 'success'}, 'operations': [{'test': True}]}
