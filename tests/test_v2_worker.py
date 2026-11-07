@@ -22,11 +22,24 @@ class SourceOwnershipTests(unittest.TestCase):
 
         store = Store()
         with patch('scripts.collector_v2.worker.SupabaseStore', return_value=store), patch('scripts.collector_v2.worker.prepare', return_value=bundle):
-            result = run(['ftc'])
+            result = run(['ftc'], max_claims=2)
         commit = next(payload for name, payload in store.calls if name == 'collector_cloud_commit')
         self.assertEqual(commit['p_lease_token'], 'lease')
         self.assertEqual(commit['p_bundle'], bundle)
         self.assertEqual(result['status'], 'completed')
+
+    def test_unbounded_queue_is_stopped_after_requested_claim_limit(self):
+        class Store:
+            def preflight(self, config): return {'allowed': True}
+            def rpc(self, name, payload):
+                if name == 'collector_cloud_take': return {'source_id': 'id', 'lease_token': 'lease'}
+                return {'saved': True}
+        bundle = {'result': {'status': 'success'}, 'operations': []}
+        with patch('scripts.collector_v2.worker.SupabaseStore', return_value=Store()), patch('scripts.collector_v2.worker.prepare', return_value=bundle):
+            result = run(['ftc'])
+        self.assertEqual(len([c for c in result['commits'] if c['status'] == 'committed']), 1)
+        self.assertEqual(result['commits'][-1]['reason'], 'claim_limit_reached')
+        self.assertEqual(result['status'], 'partial')
 
     def test_all_owned_does_not_take_edge_or_unassigned_sources(self):
         configs = [

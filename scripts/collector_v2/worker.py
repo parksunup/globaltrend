@@ -14,7 +14,9 @@ def owned_sources(configs):
             (c.get('executor') == 'cloud-python' or c['source'] in ('oecd', 'ftc'))]
 
 
-def run(slugs, *, browser=False, all_owned=False):
+def run(slugs, *, browser=False, all_owned=False, max_claims=1):
+    if not 1 <= max_claims <= 100:
+        raise ValueError('max_claims_out_of_range')
     store = SupabaseStore()
     worker = 'collector-v2:' + str(uuid.uuid4())
     summary = {'worker': worker, 'started_at': dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -38,12 +40,14 @@ def run(slugs, *, browser=False, all_owned=False):
         if not gate['allowed']:
             summary['commits'].append({'source': slug, 'status': 'held', 'reason': gate['reason']})
             continue
-        while True:
+        source_claims = 0
+        while source_claims < max_claims:
             claim = store.rpc('collector_cloud_take', {'p_worker': worker, 'p_slug': slug})
             if not claim:
                 summary['commits'].append({'source': slug, 'status': 'queue_empty'})
                 break
             bundle = prepare(claim, browser_hosts=config['hosts'] if browser else ())
+            source_claims += 1
             saved = store.rpc('collector_cloud_commit', {
                 'p_source_id': claim['source_id'], 'p_worker': worker,
                 'p_lease_token': claim['lease_token'], 'p_bundle': bundle,
@@ -52,6 +56,8 @@ def run(slugs, *, browser=False, all_owned=False):
                 'run_status': bundle['result']['status'], 'saved_result': saved})
             if bundle['result']['status'] == 'failed':
                 break
+        else:
+            summary['commits'].append({'source': slug, 'status': 'held', 'reason': 'claim_limit_reached'})
     summary['finished_at'] = dt.datetime.now(dt.timezone.utc).isoformat()
     summary['status'] = 'completed' if all(x['status'] in ('committed', 'queue_empty') and
         x.get('run_status') in (None, 'success') for x in summary['commits']) else 'partial'
@@ -64,9 +70,10 @@ def main():
     selection.add_argument('--source', action='append')
     selection.add_argument('--all-owned', action='store_true')
     parser.add_argument('--browser', action='store_true')
+    parser.add_argument('--max-claims', type=int, default=1, help='maximum claims per source, 1–100')
     parser.add_argument('--output', default='work/collector-v2-worker.json')
     args = parser.parse_args()
-    result = run(args.source, browser=args.browser, all_owned=args.all_owned)
+    result = run(args.source, browser=args.browser, all_owned=args.all_owned, max_claims=args.max_claims)
     from pathlib import Path
     path = Path(args.output); path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
