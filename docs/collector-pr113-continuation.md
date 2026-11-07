@@ -1,6 +1,14 @@
 # PR 113 continuation
 
-Working tree: `globaltrend-collector-pr113`, branch `codex/codex-cloud-handoff-20261105`. Three uncommitted changes connect Crawlee request accounting to the existing cloud step and install Chromium for browser workers. They need tests and review before pushing.
+Historical continuation log for `globaltrend-collector-pr113`, branch `codex/codex-cloud-handoff-20261105`. Earlier entries record the state at the time. The latest safe-request-policy work and its verification are recorded first below; check Git status and PR checks for current branch state.
+
+## Polite request policy follow-up
+
+- Added a shared project `User-Agent` and content-negotiation `Accept` header to both legacy and Crawlee request paths. Caller-supplied content headers remain available, but callers cannot replace these identity headers with a browser-like value.
+- Added a process-wide per-host minimum wait to the legacy `HttpClient`; Crawlee already has its event-loop per-host pacing gate. Both preserve `robots.txt` disallow checks and any longer configured crawl delay.
+- Configured Crawlee's HTTP clients without browser-profile header generation / browser impersonation. Explicit robots checks remain in the shared `HttpClient`, so Crawlee's per-single-request robots fetch is disabled to avoid duplicate traffic.
+- Added `docs/polite-scraping.md` describing the safe usage contract and what we borrow from Scrapling, Crawl4AI, and Scrapy. No stealth headers, proxy rotation, CAPTCHA handling, or anti-bot bypass was added.
+- Verification: `test_safe_http_policy.py` (3 tests), `test_v2_transport.py` (10 tests), `py_compile`, and `git diff --check` passed. A full collector suite and a live source probe were not run for this policy-only change.
 
 The bundled Python runtime exists at `C:/Users/sunup/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe`, but its packages do not include bs4 and its ensurepip failed creating `.venv`; obtain a working isolated Python environment before local tests, or use the GitHub Actions runner. No live DB writes have been made in this continuation.
 
@@ -39,3 +47,4 @@ The corrected ordinary Scrapling probe against the configured OECD privacy page 
 PDPC browser diagnosis in https://github.com/parksunup/globaltrend/actions/runs/42388064389 did not recover its JSON listing: the configured endpoint still returns non-JSON. The official `www.pdpc.gov.sg/media-events` page shown in official search results presents a JavaScript robot-verification challenge in the web view. No challenge solver or stealth browser was used; PDPC remains blocked in cloud and must not be called fixed.
 
 After these changes, local regression tests passed: 22 v2 tests and 167 existing collector tests. Full PR checks on commit 83556ab passed. Full CI on the current commit `2ebd1dc` passed in https://github.com/parksunup/globaltrend/actions/runs/42387739055, including collector, database, edge, podcast, build, and data validation jobs.
+
