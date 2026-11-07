@@ -133,6 +133,10 @@ class CrawleeClient:
                               status=response.status or 0,
                               content_type=(response.headers.get('content-type', '').split(';')[0].lower()))
 
+            @crawler.failed_request_handler
+            async def failed(context, error):
+                result['error'] = classify_crawler_error(error)
+
             await crawler.run([request])
         else:
             http_client = effective_http_client(parsed.hostname)
@@ -160,10 +164,26 @@ class CrawleeClient:
                               status=response.status_code,
                               content_type=response.headers.get('content-type', '').split(';')[0].lower())
 
+            @crawler.failed_request_handler
+            async def failed(context, error):
+                result['error'] = classify_crawler_error(error)
+
             await crawler.run([request])
 
+        if 'error' in result:
+            raise FetchError(result['error'])
         if not result:
             raise FetchError('crawlee_request_skipped_or_failed')
         if result['status'] < 200 or result['status'] >= 400:
             raise FetchError('http_' + str(result['status']))
         return Response(**result)
+
+
+def classify_crawler_error(error):
+    """Keep useful status without leaking URLs, headers or credentials."""
+    import re
+    message = str(error)
+    match = re.search(r'(?:status code|status|HTTP)\s*[:=]?\s*(\d{3})\b', message, re.I)
+    if match:
+        return 'http_' + match.group(1)
+    return 'crawler_' + type(error).__name__

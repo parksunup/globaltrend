@@ -1,12 +1,15 @@
 import unittest
 
 from scripts.collector.core import FetchError
-from scripts.collector_v2.transport import effective_http_client, CrawleeClient, Response
+from scripts.collector_v2.transport import effective_http_client, CrawleeClient, Response, classify_crawler_error
 from unittest.mock import patch
 import time
 
 
 class HttpClientSelectionTests(unittest.TestCase):
+    def test_error_diagnostics_do_not_disclose_exception_details(self):
+        self.assertEqual(classify_crawler_error(RuntimeError('status code 403 secret')), 'http_403')
+        self.assertEqual(classify_crawler_error(RuntimeError('secret')), 'crawler_RuntimeError')
     def test_shared_budget_tracks_requests_and_response_bytes(self):
         budget = {'requests': 0, 'bytes': 0, 'started': time.monotonic()}
         client = CrawleeClient({'example.com'}, budget=budget)
