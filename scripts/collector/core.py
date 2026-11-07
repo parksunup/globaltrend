@@ -129,7 +129,12 @@ def fetch_listing(source,client,page):
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
     if is_pdpc_api:
-        return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        try:
+            return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        except json.JSONDecodeError:
+            # Do not log response bodies: a CDN challenge or proxy error can
+            # contain transient request identifiers or other sensitive data.
+            raise ValueError('pdpc_listing_non_json_response') from None
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source=='ec' and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)

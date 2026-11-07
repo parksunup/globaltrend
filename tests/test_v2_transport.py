@@ -7,6 +7,13 @@ import time
 
 
 class HttpClientSelectionTests(unittest.TestCase):
+    def test_pdpc_non_json_response_is_reported_without_body(self):
+        from scripts.collector.core import fetch_listing
+        class Client:
+            def get(self, url): return b'<html>transient secret</html>', url, 'text/plain'
+        with self.assertRaisesRegex(ValueError, '^pdpc_listing_non_json_response$'):
+            fetch_listing('pdpc', Client(), 'https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events')
+
     def test_error_diagnostics_do_not_disclose_exception_details(self):
         self.assertEqual(classify_crawler_error(RuntimeError('status code 403 secret')), 'http_403')
         self.assertEqual(classify_crawler_error(RuntimeError('secret')), 'crawler_RuntimeError')
