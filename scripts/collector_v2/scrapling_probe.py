@@ -44,6 +44,15 @@ class ProbeClient:
 
 
 def main():
+    if os.getenv('SCRAPLING_FTC_ROBOTS') == '1':
+        response = Fetcher.get('https://www.ftc.gov/robots.txt',
+                               headers={'User-Agent': 'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)', 'Referer': None},
+                               stealthy_headers=False, timeout=20, retries=0, follow_redirects=False)
+        print(json.dumps({'source': 'ftc', 'robots_status': response.status,
+                          'bytes': len(response.body), 'writes_performed': False}))
+        if response.status != 200:
+            raise FetchError('robots_http_' + str(response.status))
+        return
     registry = json.loads((Path(__file__).resolve().parents[2] / 'config/trend-collector.json').read_text(encoding='utf-8'))
     config = next(c for c in registry['sources'] if c['source'] == 'oecd')
     client = ProbeClient(config['hosts'])
