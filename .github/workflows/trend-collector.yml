@@ -6,7 +6,7 @@ on:
       mode:
         description: 'preflight checks runtime, DB and sites without writes; write uses verified gates'
         type: choice
-        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, crawlee-worker, crawlee-preflight, preflight, write]
+        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, crawlee-worker, crawlee-preflight, scrapling-probe, preflight, write]
         default: dry-run
       http_client:
         description: 'Crawlee HTTP transport for read-only probes and collection'
@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
+        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight","scrapling-probe"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
       PYTHONUTF8: '1'
       COLLECTOR_RUNNER: github-hosted
@@ -68,14 +68,17 @@ jobs:
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
       FREE_LIMITS_VERIFIED: ${{ vars.FREE_LIMITS_VERIFIED }}
       CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
-      SUPABASE_URL: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_URL || '' }}
-      SUPABASE_SECRET_KEY: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_SECRET_KEY || '' }}
+      SUPABASE_URL: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_URL || '' }}
+      SUPABASE_SECRET_KEY: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_SECRET_KEY || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - name: Install experimental Scrapling probe
+        if: inputs.mode == 'scrapling-probe'
+        run: python -m pip install 'scrapling[fetchers]==0.5.1'
       - name: Install parallel Crawlee collector dependencies
         if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
         run: python -m pip install -r scripts/collector_v2/requirements.txt
@@ -94,6 +97,10 @@ jobs:
         env:
           COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
         run: |
+          if [ "$REQUESTED_MODE" = "scrapling-probe" ]; then
+            python -m scripts.collector_v2.scrapling_probe
+            exit $?
+          fi
           if [ "$REQUESTED_MODE" = "crawlee-probe" ] || [ "$REQUESTED_MODE" = "crawlee-browser-probe" ]; then
             args=(--output work/collector-v2-probe.json)
             if [ "${{ inputs.source }}" != "all" ]; then args+=(--source "${{ inputs.source }}"); fi
