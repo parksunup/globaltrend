@@ -532,7 +532,7 @@ def discover_listing(source,html,url,fetch):
     return discover(source,html,url)
 
 def discover(source,html,url):
-    if source=='ftc' and '<rss' in html[:1000].lower():
+    if source in ('ftc', 'oecd') and '<rss' in html[:1000].lower():
         if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
         rows=[]
@@ -540,6 +540,10 @@ def discover(source,html,url):
             target=item.findtext('link')
             if not target: continue
             row={'url':target,'title':item.findtext('title') or ''}
+            if source=='oecd':
+                row['summary']=normalize(item.findtext('description') or '')
+                categories=[normalize(node.text or '') for node in item.findall('category') if node.text]
+                if categories: row['categories']=categories
             pubdates=[normalize(node.text or '') for node in item.findall('pubDate')]
             if pubdates:
                 row['date_observations']=[{'meaning':'listing_published_rfc822','locator':'rss item pubDate','value':value} for value in pubdates]

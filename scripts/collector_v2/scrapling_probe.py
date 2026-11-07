@@ -55,12 +55,28 @@ def main():
         return
     registry = json.loads((Path(__file__).resolve().parents[2] / 'config/trend-collector.json').read_text(encoding='utf-8'))
     config = next(c for c in registry['sources'] if c['source'] == 'oecd')
-    client = ProbeClient(config['hosts'])
-    listing = ('https://www.oecd.org/en/topics/policy-issues/privacy-and-data-protection.html'
-               if os.getenv('SCRAPLING_OECD_ALTERNATE') == '1' else config['listing'])
+    rss_alternate = os.getenv('SCRAPLING_OECD_ALTERNATE') == '1'
+    hosts = set(config['hosts']) | ({'api.oecd.org'} if rss_alternate else set())
+    client = ProbeClient(hosts)
+    listing = ('https://api.oecd.org/webcms/search/rss?siteName=oecd&interfaceLanguage=en'
+               '&path=%2Fcontent%2Foecd%2Fen%2Fabout%2Fnews'
+               '&facets=oecd-content-types%3Anews%2Fpress-releases'
+               if rss_alternate else config['listing'])
     rows, _ = fetch_listing('oecd', client, listing)
     if not rows:
         raise ValueError('listing_empty')
+    if rss_alternate:
+        terms = ('privacy', 'personal data', 'data protection', 'surveillance', 'artificial intelligence')
+        relevant = [row for row in rows if any(term in (row['title'] + ' ' + row.get('summary', '')).lower()
+                                                for term in terms)]
+        print(json.dumps({'source': 'oecd', 'status': 'official_rss_listing_sample',
+                          'feed_url': listing, 'entries': len(rows), 'privacy_keyword_matches': len(relevant),
+                          'matches': [{'title': row['title'], 'date_observations': row.get('date_observations', []),
+                                       'summary_characters': len(row.get('summary', ''))}
+                                      for row in relevant[:10]],
+                          'article_bodies_fetched': False, 'coverage_complete': False,
+                          'writes_performed': False}))
+        return
     body, url, content_type = client.get(rows[0]['url'])
     item = parsers.extract_document('oecd', body, url, content_type, rows[0])
     print(json.dumps({'source': 'oecd', 'status': 'parsed_sample', 'url': url,
