@@ -6,6 +6,7 @@ from scripts.collector import parsers, expansion
 from scripts.collector.core import fetch_listing
 from scripts.collector_v2.transport import CrawleeClient
 from scripts.collector_v2.extraction import fallback_main_text
+from scripts.collector_v2.cloud_step import supplement_official_pdf
 import re
 from urllib.parse import urljoin, urlsplit
 from bs4 import BeautifulSoup
@@ -70,8 +71,12 @@ def run_source(config):
         if name in expansion.ROUTES:
             expansion.verify_detail_response(name, row['url'], final)
         item = parsers.extract_document(name, body, row['url'] if name == 'ec' else final, ctype, row)
+        item = supplement_official_pdf(item, name, client)
         result.update(status='parsed_sample', url=row['url'], characters=len(item['content_text']),
-                      published_date=item['published_date'], read_scope=item['metadata'].get('read_scope'))
+                      published_date=item['published_date'], read_scope=item['metadata'].get('read_scope'),
+                      pdf_text_attachment=item['metadata'].get('pdf_text_attachment'),
+                      pdf_attachment_failure=item['metadata'].get('pdf_attachment_failure'),
+                      requires_review=item['metadata'].get('requires_review'))
     except Exception as exc:
         result.update(stage=result.get('stage', 'listing'), error=str(exc)[:300])
     result.update(requests=client.requests, downloaded_bytes=client.downloaded_bytes)
