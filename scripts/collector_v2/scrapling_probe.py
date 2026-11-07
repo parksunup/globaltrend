@@ -47,7 +47,9 @@ def main():
     registry = json.loads((Path(__file__).resolve().parents[2] / 'config/trend-collector.json').read_text(encoding='utf-8'))
     config = next(c for c in registry['sources'] if c['source'] == 'oecd')
     client = ProbeClient(config['hosts'])
-    rows, _ = fetch_listing('oecd', client, config['listing'])
+    listing = ('https://www.oecd.org/en/topics/policy-issues/privacy-and-data-protection.html'
+               if os.getenv('SCRAPLING_OECD_ALTERNATE') == '1' else config['listing'])
+    rows, _ = fetch_listing('oecd', client, listing)
     if not rows:
         raise ValueError('listing_empty')
     body, url, content_type = client.get(rows[0]['url'])

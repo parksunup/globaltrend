@@ -59,6 +59,7 @@ jobs:
       REQUESTED_MODE: ${{ inputs.mode || 'dry-run' }}
       CRAWLEE_HTTP_CLIENT: ${{ inputs.http_client || 'auto' }}
       SCRAPLING_CHROME_TLS: ${{ inputs.mode == 'scrapling-probe' && inputs.http_client == 'httpx' && '1' || '0' }}
+      SCRAPLING_OECD_ALTERNATE: ${{ inputs.mode == 'scrapling-probe' && inputs.http_client == 'impit' && '1' || '0' }}
       RUN_EVENT: ${{ github.event_name }}
       SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
       SOURCE_SELECTION: ${{ matrix.source }}
