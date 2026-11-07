@@ -3,6 +3,7 @@
 No DB credentials or writes; this is not a production collector.
 """
 import json
+import os
 import time
 from pathlib import Path
 from urllib.parse import urljoin
@@ -23,6 +24,7 @@ class ProbeClient:
             time.sleep(max(0, self.last + self.guard.interval - time.monotonic()))
             self.last = time.monotonic()
             response = Fetcher.get(url, headers={'User-Agent': 'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)', 'Referer': None},
+                                   impersonate='chrome' if os.getenv('SCRAPLING_CHROME_TLS') == '1' else None,
                                    stealthy_headers=False, timeout=20, retries=0, follow_redirects=False)
             if response.status in (301, 302, 303, 307, 308):
                 location = response.headers.get('location')
