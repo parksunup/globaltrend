@@ -44,20 +44,6 @@ class ProbeClient:
 
 
 def main():
-    if os.getenv('SCRAPLING_OECD_BROWSER') == '1':
-        from scrapling.fetchers import StealthyFetcher
-        url = 'https://www.oecd.org/en/topics/privacy-and-data-protection.html'
-        HttpClient(['www.oecd.org'], interval=2).check_robots(url)
-        response = StealthyFetcher.fetch(url, headless=True, google_search=False,
-                                          useragent='GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)',
-                                          solve_cloudflare=False, disable_resources=True,
-                                          timeout=30000, retries=0)
-        final = canonical_url(str(response.url), {'www.oecd.org'})
-        print(json.dumps({'source': 'oecd', 'status': response.status, 'url': final,
-                          'bytes': len(response.body), 'writes_performed': False}))
-        if response.status != 200:
-            raise FetchError('http_' + str(response.status))
-        return
     if os.getenv('SCRAPLING_FTC_ROBOTS') == '1':
         response = Fetcher.get('https://www.ftc.gov/robots.txt',
                                headers={'User-Agent': 'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)', 'Referer': None},
