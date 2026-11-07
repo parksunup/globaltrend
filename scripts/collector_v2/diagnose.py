@@ -97,7 +97,8 @@ def main():
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps({'sources': results}, ensure_ascii=False, indent=2), encoding='utf-8')
     for item in results:
-        print(json.dumps({k: item[k] for k in ('source', 'status', 'stage', 'error', 'characters') if k in item}, ensure_ascii=False))
+        print(json.dumps({k: item[k] for k in ('source', 'status', 'stage', 'error', 'characters',
+                         'pdf_text_attachment', 'pdf_attachment_failure', 'requires_review') if k in item}, ensure_ascii=False))
     if not results or any(item['status'] != 'parsed_sample' for item in results):
         raise SystemExit(3)
 
