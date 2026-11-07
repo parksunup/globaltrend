@@ -1,12 +1,41 @@
 import unittest
 
 from scripts.collector.core import FetchError
-from scripts.collector_v2.transport import effective_http_client, CrawleeClient, Response, classify_crawler_error
+from scripts.collector_v2.transport import effective_http_client, CrawleeClient, Response, classify_crawler_error, safe_request_headers, USER_AGENT
 from unittest.mock import patch
 import time
 
 
 class HttpClientSelectionTests(unittest.TestCase):
+    def test_safe_headers_set_project_identity_and_keep_request_headers(self):
+        headers = safe_request_headers({'uSeR-aGeNt': 'Mozilla/5.0', 'ACCEPT': 'text/plain', 'Content-Type': 'application/json'})
+        self.assertEqual(headers['User-Agent'], USER_AGENT)
+        self.assertIn('text/html', headers['Accept'])
+        self.assertEqual(headers['Content-Type'], 'application/json')
+        self.assertNotIn('uSeR-aGeNt', headers)
+        self.assertNotIn('ACCEPT', headers)
+
+    def test_fetch_applies_safe_headers_to_crawlee_request(self):
+        client = CrawleeClient({'example.com'}, interval=0)
+        response = Response(body=b'ok', url='https://example.com/', content_type='text/html', status=200)
+        seen = {}
+
+        def capture_request(*args, **kwargs):
+            seen.update(kwargs)
+            return object()
+
+        def complete(coroutine):
+            coroutine.close()
+            return response
+
+        with patch.object(client.robots_client, 'check_robots'), \
+             patch('scripts.collector_v2.transport.Request.from_url', side_effect=capture_request), \
+             patch.object(client, '_submit', side_effect=complete):
+            client.fetch('https://example.com/', headers={'User-Agent': 'browser spoof', 'X-Trace': 'ok'})
+
+        self.assertEqual(seen['headers']['User-Agent'], USER_AGENT)
+        self.assertEqual(seen['headers']['X-Trace'], 'ok')
+
     def test_pdpc_non_json_response_is_reported_without_body(self):
         from scripts.collector.core import fetch_listing
         class Client:
@@ -53,3 +82,4 @@ class HttpClientSelectionTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
