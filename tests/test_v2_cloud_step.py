@@ -2,10 +2,33 @@ import unittest
 from unittest.mock import patch
 
 from scripts.collector import cloud_step as legacy, parsers
-from scripts.collector_v2.cloud_step import prepare
+from scripts.collector_v2.cloud_step import prepare, supplement_official_pdf
 
 
 class ShortBodyTests(unittest.TestCase):
+    def test_pdf_attachment_is_read_with_review_and_provenance(self):
+        url = 'https://example.com/a.pdf'
+        item = {'content_text': 'notice', 'metadata': {'related_documents': [{'url': url, 'read': False}], 'unread_attachments': [url]}}
+        class Client:
+            hosts = {'example.com'}
+            def get(self, target): return b'%PDF-fake', target, 'application/pdf'
+        with patch.object(parsers, 'extract_pdf', return_value={'pages': [{'text': 'official text'}], 'related_documents': []}):
+            result = supplement_official_pdf(item, 'ppc', Client())
+        self.assertIn('official text', result['content_text'])
+        self.assertEqual(result['metadata']['unread_attachments'], [])
+        self.assertTrue(result['metadata']['requires_review'])
+        self.assertFalse(result['metadata']['ai_ready'])
+
+    def test_pdf_failure_remains_unread(self):
+        url = 'https://example.com/a.pdf'
+        item = {'content_text': 'notice', 'metadata': {'related_documents': [{'url': url, 'read': False}], 'unread_attachments': [url]}}
+        class Client:
+            hosts = {'example.com'}
+            def get(self, target): return b'bad', target, 'text/html'
+        result = supplement_official_pdf(item, 'cn-tc260', Client())
+        self.assertEqual(result['metadata']['unread_attachments'], [url])
+        self.assertEqual(result['metadata']['pdf_attachment_failure'], 'attachment_not_pdf')
+
     def test_short_successful_extraction_remains_for_review(self):
         item = {'content_text': 'short', 'metadata': {'requires_review': False}}
 
