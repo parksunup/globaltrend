@@ -11,7 +11,7 @@ from urllib.parse import urlsplit
 from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
 from crawlee import Request
 
-from scripts.collector.core import FetchError, HttpClient, canonical_url
+from scripts.collector.core import FetchError, HttpClient, canonical_url, USER_AGENT, safe_request_headers
 
 _LOOP = asyncio.new_event_loop()
 _LOOP_THREAD = threading.Thread(target=_LOOP.run_forever, daemon=True)
@@ -79,7 +79,7 @@ class CrawleeClient:
         if self.budget['requests'] >= 1000 or time.monotonic() - self.budget['started'] > 600:
             raise FetchError('request_or_runtime_limit')
         self.budget['requests'] += 1
-        request = Request.from_url(url, method=method, payload=payload, headers=headers or {},
+        request = Request.from_url(url, method=method, payload=payload, headers=safe_request_headers(headers),
                                    use_extended_unique_key=True, max_retries=0)
         result = self._submit(self._fetch(request))
         self.requests += 1
@@ -118,12 +118,15 @@ class CrawleeClient:
                 max_request_retries=0,
                 max_session_rotations=0,
                 navigation_timeout=timedelta(seconds=30),
-                respect_robots_txt_file=True,
+                # The shared HttpClient checks robots.txt and applies its
+                # crawl delay before every URL. Avoid a duplicate robots
+                # request from this one-request crawler instance.
+                respect_robots_txt_file=False,
                 configure_logging=False,
                 headless=True,
                 fingerprint_generator=None,
                 browser_launch_options={'args': ['--no-sandbox', '--disable-dev-shm-usage']},
-                browser_new_context_options={'extra_http_headers': headers} if headers else None,
+                browser_new_context_options={'user_agent': USER_AGENT, 'extra_http_headers': headers},
             )
 
             @crawler.router.default_handler
@@ -146,13 +149,20 @@ class CrawleeClient:
                     from crawlee.http_clients import HttpxHttpClient
                 except ImportError:
                     raise FetchError('crawlee_httpx_extra_not_installed') from None
-                http_client_options['http_client'] = HttpxHttpClient()
+                # Do not generate browser-profile headers. Requests identify
+                # themselves as this project and do not imitate a browser.
+                http_client_options['http_client'] = HttpxHttpClient(header_generator=None)
+            else:
+                from crawlee.http_clients import ImpitHttpClient
+                http_client_options['http_client'] = ImpitHttpClient(browser=None)
             crawler = HttpCrawler(
                 **http_client_options,
                 max_requests_per_crawl=1,
                 max_request_retries=0,
                 max_session_rotations=0,
-                respect_robots_txt_file=True,
+                # Robots was checked explicitly above; avoid repeating that
+                # fetch for every short-lived crawler instance.
+                respect_robots_txt_file=False,
                 configure_logging=False,
             )
 
@@ -187,3 +197,4 @@ def classify_crawler_error(error):
     if match:
         return 'http_' + match.group(1)
     return 'crawler_' + type(error).__name__
+
