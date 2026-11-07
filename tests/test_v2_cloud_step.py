@@ -1,4 +1,5 @@
 import unittest
+import io
 from unittest.mock import patch
 
 from scripts.collector import cloud_step as legacy, parsers
@@ -6,6 +7,28 @@ from scripts.collector_v2.cloud_step import prepare, supplement_official_pdf
 
 
 class ShortBodyTests(unittest.TestCase):
+    def test_public_pdf_with_empty_user_password_is_read(self):
+        from pypdf import PdfWriter
+        from pypdf._page import PageObject
+        writer = PdfWriter()
+        writer.add_blank_page(width=100, height=100)
+        writer.encrypt(user_password='', owner_password='owner')
+        output = io.BytesIO()
+        writer.write(output)
+        with patch.object(PageObject, 'extract_text', return_value='public text content ' * 4):
+            pdf = parsers.extract_pdf(output.getvalue(), 'https://example.com/file.pdf')
+        self.assertEqual(len(pdf['pages']), 1)
+
+    def test_pdf_with_nonempty_user_password_is_held(self):
+        from pypdf import PdfWriter
+        writer = PdfWriter()
+        writer.add_blank_page(width=100, height=100)
+        writer.encrypt(user_password='secret')
+        output = io.BytesIO()
+        writer.write(output)
+        with self.assertRaisesRegex(ValueError, 'pdf_limit_or_encrypted'):
+            parsers.extract_pdf(output.getvalue(), 'https://example.com/file.pdf')
+
     def test_pdf_attachment_is_read_with_review_and_provenance(self):
         url = 'https://example.com/a.pdf'
         item = {'content_text': 'notice', 'metadata': {'related_documents': [{'url': url, 'read': False}], 'unread_attachments': [url]}}

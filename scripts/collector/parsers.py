@@ -263,7 +263,10 @@ def extract_pdf(data,url):
     from pypdf import PdfReader
     try:
         reader=PdfReader(io.BytesIO(data),strict=True)
-        if reader.is_encrypted or not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
+        # Many public PDFs carry an empty user password solely to restrict
+        # editing. Do not try passwords beyond the standard empty one.
+        if reader.is_encrypted and not reader.decrypt(''): raise ValueError('pdf_limit_or_encrypted')
+        if not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
         pages=[]; related=[]
         for i,page in enumerate(reader.pages,1):
             text=page.extract_text(extraction_mode='layout') or ''
