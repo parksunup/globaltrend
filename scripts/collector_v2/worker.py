@@ -77,7 +77,9 @@ def main():
     from pathlib import Path
     path = Path(args.output); path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding='utf-8')
-    print(json.dumps({'status': result['status'], 'claims': len(result['commits'])}, ensure_ascii=False))
+    print(json.dumps({'status': result['status'], 'claims': len(result['commits']),
+                      'results': [{key: entry[key] for key in ('source', 'status', 'reason', 'run_status') if key in entry}
+                                  for entry in result['commits']]}, ensure_ascii=False))
     if result['status'] != 'completed': raise SystemExit(3)
 
 
