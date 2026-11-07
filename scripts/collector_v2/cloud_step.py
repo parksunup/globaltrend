@@ -16,11 +16,19 @@ def prepare(claim, *, browser_hosts=()):
     original_extract = parsers.extract_document
 
     def client_factory(hosts, interval=2, budget=None):
-        return CrawleeClient(hosts, browser_hosts=browser_hosts, interval=interval)
+        return CrawleeClient(hosts, browser_hosts=browser_hosts, interval=interval, budget=budget)
 
     def extract_with_fallback(source, body, url, content_type, row=None):
         try:
-            return original_extract(source, body, url, content_type, row)
+            item = original_extract(source, body, url, content_type, row)
+            # A short page can be a legitimate notice, but it can also be a
+            # landing page whose actual document is an attachment. Do not
+            # silently substitute a different extraction or mark it AI-ready.
+            if len(item.get('content_text', '').strip()) < 300:
+                item['metadata']['requires_review'] = True
+                item['metadata']['short_body_review'] = True
+                item['metadata']['ai_ready'] = False
+            return item
         except (ValueError, UnicodeError) as error:
             if content_type not in ('text/html', 'application/xhtml+xml'):
                 raise

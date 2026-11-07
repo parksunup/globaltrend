@@ -11,6 +11,12 @@ ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/'tests/fixtures/collector-expansion'
 
 class ExpansionTests(unittest.TestCase):
+    def test_tc260_attachment_outside_body_is_not_silently_ignored(self):
+        manifest=json.loads((FIXTURES/'manifest.json').read_text())['cn-tc260']
+        item=parsers.extract_document('cn-tc260',(FIXTURES/'cn-tc260-detail.html').read_bytes(),manifest['url'],'text/html')
+        self.assertTrue(any(url.endswith('.pdf.pdf') for url in item['metadata']['unread_attachments']))
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
     def test_tc260_follows_observed_pagination_and_unknown_dates_never_shorten_a_scan(self):
         rows,nxt=expansion.discover('cn-tc260',(FIXTURES/'cn-tc260-listing.html').read_text(),expansion.ROUTES['cn-tc260']['listing'])
         self.assertEqual(nxt,'https://www.tc260.org.cn/tc260/tzgg/list_2.shtml')

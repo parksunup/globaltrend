@@ -2,6 +2,7 @@
 import asyncio
 import os
 import threading
+import time
 from concurrent.futures import TimeoutError as FutureTimeout
 from dataclasses import dataclass
 from datetime import timedelta
@@ -10,14 +11,14 @@ from urllib.parse import urlsplit
 from crawlee.crawlers import HttpCrawler, PlaywrightCrawler
 from crawlee import Request
 
-from scripts.collector.core import FetchError, canonical_url
+from scripts.collector.core import FetchError, HttpClient, canonical_url
 
 _LOOP = asyncio.new_event_loop()
 _LOOP_THREAD = threading.Thread(target=_LOOP.run_forever, daemon=True)
 _LOOP_THREAD.start()
 _HOST_NEXT_ALLOWED = {}
 _HOST_LOCKS = {}
-HTTPX_HOSTS = {'privacy.ca.gov'}
+HTTPX_HOSTS = {'privacy.ca.gov', 'ec.europa.eu'}
 
 
 def effective_http_client(host, requested=None):
@@ -58,24 +59,32 @@ class CrawleeClient:
     existing source adapters and persistence contracts explicitly.
     """
 
-    def __init__(self, hosts, *, browser_hosts=(), max_bytes=2_000_000, interval=2):
+    def __init__(self, hosts, *, browser_hosts=(), max_bytes=2_000_000, interval=2, budget=None):
         self.hosts = set(hosts)
         self.browser_hosts = set(browser_hosts)
         self.max_bytes = max_bytes
         self.interval = max(0, float(interval))
         self.requests = 0
         self.downloaded_bytes = 0
+        self.budget = budget if budget is not None else {'requests': 0, 'bytes': 0, 'started': time.monotonic()}
+        self.robots_client = HttpClient(self.hosts, interval=self.interval, budget=self.budget)
         self._loop = _LOOP
 
     def fetch(self, url, *, method='GET', payload=None, headers=None):
         canonical_url(url, self.hosts)
         if method not in ('GET', 'POST'):
             raise FetchError('collector_v2_method_not_supported')
+        self.robots_client.check_robots(url)
+        self.interval = max(self.interval, self.robots_client.interval)
+        if self.budget['requests'] >= 1000 or time.monotonic() - self.budget['started'] > 600:
+            raise FetchError('request_or_runtime_limit')
+        self.budget['requests'] += 1
         request = Request.from_url(url, method=method, payload=payload, headers=headers or {},
                                    use_extended_unique_key=True, max_retries=0)
         result = self._submit(self._fetch(request))
         self.requests += 1
         self.downloaded_bytes += len(result.body)
+        self.budget['bytes'] += len(result.body)
         if len(result.body) > self.max_bytes:
             raise FetchError('response_size_limit')
         canonical_url(result.url, self.hosts)

@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        source: ${{ fromJSON(contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight"]'), inputs.mode) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
+        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
       PYTHONUTF8: '1'
       COLLECTOR_RUNNER: github-hosted
@@ -83,7 +83,7 @@ jobs:
         if: (inputs.mode == 'crawlee-probe' || inputs.mode == 'crawlee-worker') && (inputs.http_client == 'httpx' || inputs.http_client == 'auto')
         run: python -m pip install 'crawlee[httpx]==1.11.0'
       - name: Install Chromium for browser probe
-        if: inputs.mode == 'crawlee-browser-probe'
+        if: inputs.mode == 'crawlee-browser-probe' || (inputs.mode == 'crawlee-worker' && (inputs.source == 'ico' || inputs.source == 'eu-parliament'))
         run: python -m playwright install --with-deps chromium
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
       - name: Run parallel Crawlee regression suite
@@ -103,7 +103,7 @@ jobs:
           fi
           if [ "$REQUESTED_MODE" = "crawlee-worker" ]; then
             args=()
-            if [ "$SOURCE_SELECTION" = "all" ]; then args+=(--source oecd --source ftc); else args+=(--source "$SOURCE_SELECTION"); fi
+            if [ "${{ inputs.source }}" = "all" ]; then args+=(--all-owned); else args+=(--source "$SOURCE_SELECTION"); fi
             if [ "${{ inputs.source }}" = "ico" ] || [ "${{ inputs.source }}" = "eu-parliament" ]; then args+=(--browser); fi
             python -m scripts.collector_v2.worker "${args[@]}" --output work/collector-v2-worker.json
             exit $?
