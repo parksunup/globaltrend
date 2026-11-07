@@ -263,7 +263,10 @@ def extract_pdf(data,url):
     from pypdf import PdfReader
     try:
         reader=PdfReader(io.BytesIO(data),strict=True)
-        if reader.is_encrypted or not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
+        # Many public PDFs carry an empty user password solely to restrict
+        # editing. Do not try passwords beyond the standard empty one.
+        if reader.is_encrypted and not reader.decrypt(''): raise ValueError('pdf_limit_or_encrypted')
+        if not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
         pages=[]; related=[]
         for i,page in enumerate(reader.pages,1):
             text=page.extract_text(extraction_mode='layout') or ''
@@ -529,7 +532,7 @@ def discover_listing(source,html,url,fetch):
     return discover(source,html,url)
 
 def discover(source,html,url):
-    if source=='ftc' and '<rss' in html[:1000].lower():
+    if source in ('ftc', 'oecd') and '<rss' in html[:1000].lower():
         if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
         rows=[]
@@ -537,6 +540,10 @@ def discover(source,html,url):
             target=item.findtext('link')
             if not target: continue
             row={'url':target,'title':item.findtext('title') or ''}
+            if source=='oecd':
+                row['summary']=normalize(item.findtext('description') or '')
+                categories=[normalize(node.text or '') for node in item.findall('category') if node.text]
+                if categories: row['categories']=categories
             pubdates=[normalize(node.text or '') for node in item.findall('pubDate')]
             if pubdates:
                 row['date_observations']=[{'meaning':'listing_published_rfc822','locator':'rss item pubDate','value':value} for value in pubdates]

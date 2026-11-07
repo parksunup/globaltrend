@@ -23,6 +23,18 @@ class CollectorTests(unittest.TestCase):
         a=self.parsers.extract('edpb','<h2 class="node-article-full__title">A</h2><div class="node-article-full__body">Data protection policy.</div>','https://www.edpb.europa.eu/news/2026/a')
         self.assertIsNone(a['published_date']); self.assertTrue(a['metadata']['requires_review'])
 
+    def test_oecd_official_rss_discovery_preserves_summary_and_date(self):
+        feed='''<?xml version="1.0"?><rss version="2.0"><channel><item>
+        <title>Privacy safeguards</title><description>Official summary.</description>
+        <link>https://www.oecd.org/en/about/news/press-releases/privacy.html</link>
+        <pubDate>Tue, 03 Nov 2026 13:30:00 GMT</pubDate><category domain="content-type">Press release</category>
+        </item></channel></rss>'''
+        rows,_=self.parsers.discover('oecd',feed,'https://api.oecd.org/webcms/search/rss')
+        self.assertEqual(rows[0]['title'],'Privacy safeguards')
+        self.assertEqual(rows[0]['summary'],'Official summary.')
+        self.assertEqual(rows[0]['categories'],['Press release'])
+        self.assertEqual(rows[0]['date_observations'][0]['value'],'Tue, 03 Nov 2026 13:30:00 GMT')
+
     def test_oecd_disagreeing_dates_leave_null(self):
         a=self.parsers.extract('oecd','<h1 class="cmp-report-header__title">Report</h1><time datetime="2025-06-16">17 June 2025</time><div class="cmp-two-column-container"><h2 class="cmp-title__text">Abstract</h2><div class="cmp-text"><p>Privacy technologies.</p></div></div>','https://www.oecd.org/en/publications/a')
         self.assertIsNone(a['published_date']); self.assertEqual(a['metadata']['read_scope'],'official_abstract')

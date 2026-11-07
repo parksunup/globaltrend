@@ -3,6 +3,7 @@ import email.utils
 import json
 import hashlib
 import time
+import threading
 import urllib.error
 import urllib.request
 import urllib.robotparser
@@ -17,7 +18,29 @@ OECD_NEWSROOM_LISTING='https://www.oecd.org/en/about/newsroom.html'
 # A 100-item backfill also performs progress and database RPC calls; the old
 # value of 100 unintentionally stopped a batch before its document limit.
 MAX_REQUESTS=1000
+USER_AGENT='GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)'
+DEFAULT_ACCEPT='text/html,application/xhtml+xml,application/rss+xml,application/atom+xml,application/xml;q=0.9,application/json;q=0.8,*/*;q=0.5'
+_HOST_PACE_GUARD=threading.Lock()
+_HOST_PACE_LOCKS={}
+_HOST_NEXT_ALLOWED={}
 class FetchError(Exception): pass
+
+def safe_request_headers(headers=None):
+    """Keep a truthful project identity and preserve only caller-specific headers."""
+    supplied=dict(headers or {})
+    supplied={key:value for key,value in supplied.items() if key.lower() not in ('user-agent','accept')}
+    return {'User-Agent':USER_AGENT,'Accept':DEFAULT_ACCEPT,**supplied}
+
+def pace_host(host, interval):
+    """Enforce a process-wide minimum interval across client instances."""
+    interval=max(0,float(interval))
+    if interval==0: return
+    with _HOST_PACE_GUARD:
+        lock=_HOST_PACE_LOCKS.setdefault(host,threading.Lock())
+    with lock:
+        delay=_HOST_NEXT_ALLOWED.get(host,0)-time.monotonic()
+        if delay>0: time.sleep(delay)
+        _HOST_NEXT_ALLOWED[host]=time.monotonic()+interval
 
 def canonical_url(url,hosts):
     p=urlsplit(url)
@@ -71,10 +94,11 @@ class HttpClient:
         url=canonical_url(url,self.hosts)
         for attempt in range(3):
             if self.budget['requests']>=MAX_REQUESTS or time.monotonic()-self.budget['started']>600: raise FetchError('request_or_runtime_limit')
+            pace_host(urlsplit(url).hostname,self.interval)
             time.sleep(max(0,self.last+self.interval-time.monotonic()))
             self.last=time.monotonic(); self.requests+=1
             self.budget['requests']+=1
-            request=urllib.request.Request(url,data=payload,method=method,headers={'User-Agent':'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)',**(headers or {})})
+            request=urllib.request.Request(url,data=payload,method=method,headers=safe_request_headers(headers))
             try:
                 with self.opener.open(request,timeout=20) as response:
                     if int(response.headers.get('Content-Length','0'))>MAX_BYTES: raise FetchError('response_size_limit')
@@ -129,7 +153,12 @@ def fetch_listing(source,client,page):
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
     if is_pdpc_api:
-        return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        try:
+            return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        except json.JSONDecodeError:
+            # Do not log response bodies: a CDN challenge or proxy error can
+            # contain transient request identifiers or other sensitive data.
+            raise ValueError('pdpc_listing_non_json_response') from None
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source=='ec' and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
@@ -340,3 +369,4 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         result['status']='partial' if str(e) in ('document_limit','page_limit') else 'failed'
         result['reason']=str(e); result['coverage_complete']=False
     return result
+

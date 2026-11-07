@@ -58,7 +58,7 @@ export async function loadTeamTrendRows(options:{url?:string;key?:string;fetch?:
     const data=await response.json();
     if(!data||!Array.isArray(data.items)||!Number.isInteger(data.total))throw Error('작업실 원고 응답 형식이 올바르지 않습니다.');
     for(const row of data.items){
-      if(!row||typeof row.id!=='string'||typeof row.revision!=='string'||typeof row.created_at!=='string'||typeof row.title_ko!=='string'||typeof row.summary_ko!=='string'||typeof row.details_ko!=='string')throw Error('작업실 원고 필수 필드가 없습니다.');
+      if(!row||typeof row.id!=='string'||typeof row.revision!=='string'||typeof row.title_ko!=='string'||typeof row.summary_ko!=='string'||typeof row.details_ko!=='string')throw Error('작업실 원고 필수 필드가 없습니다.');
       // Whitelist output, even if a future RPC mistakenly adds internal fields.
       rows.push({id:row.id,revision:row.revision,created_at:row.created_at,title_ko:row.title_ko,summary_ko:row.summary_ko,details_ko:row.details_ko,original_title:row.original_title??'',official_url:row.official_url??'',source_name:row.source_name??'',published_date:row.published_date??'',jurisdictions:Array.isArray(row.jurisdictions)?row.jurisdictions:[],topics:Array.isArray(row.topics)?row.topics:[],status:row.status??'draft',workspace_revision:Number.isSafeInteger(row.workspace_revision)?row.workspace_revision:0,...(row.workspace_edit?{workspaceEdit:parseTrendEdit(row.workspace_edit)}:{})});
     }

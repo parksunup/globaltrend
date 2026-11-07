@@ -229,6 +229,13 @@ def extract(source,input,url,row=None):
             target=urljoin(url,a['href'])
             if urlsplit(target).scheme=='https':related.append({'url':target,'title':normalize(a.get_text(' ',strip=True)),'read':False})
         for x in n.select('script,style,nav,footer,.related-content,.cookie-banner'):x.decompose()
+    # TC260 places its official attachment block outside the body container.
+    # Preserve the link without claiming its contents have been read.
+    if source == 'cn-tc260':
+        for a in soup.select('a.xxgk_list1[href]'):
+            target = urljoin(url, a['href'])
+            if urlsplit(target).scheme == 'https' and urlsplit(target).hostname == c['host'] and target not in {r['url'] for r in related}:
+                related.append({'url': target, 'title': normalize(a.get_text(' ', strip=True)), 'read': False})
     body=normalize(' '.join(n.get_text(' ',strip=True) for n in nodes))
     if len(body)<10:raise ValueError('empty_body')
     if len(body)>80000:raise ValueError('long_document_requires_chunked_reading')
@@ -237,4 +244,5 @@ def extract(source,input,url,row=None):
         if value:observations.append({'meaning':'official_published_attribute','locator':c['date'],'value':normalize(value)})
     dates={date(x['value']) for x in observations}-{None};published=next(iter(dates)) if len(dates)==1 else None
     listed=listing_date(row) if row else None;conflict=len(dates)>1 or bool(published and listed and published!=listed)
-    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':observations+(row or {}).get('date_observations',[]),'date_conflict':conflict,'requires_review':not published or conflict,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'original_statement_not_independent_legal_finding','ai_ready':bool(published) and not conflict}}
+    review = not published or conflict or (source == 'cn-tc260' and bool(related))
+    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':observations+(row or {}).get('date_observations',[]),'date_conflict':conflict,'requires_review':review,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'original_statement_not_independent_legal_finding','ai_ready':not review}}
