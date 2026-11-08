@@ -7,9 +7,9 @@ from scripts.collector import parsers
 
 class CloudStepTests(unittest.TestCase):
     def test_default_response_reader_has_no_fixed_byte_ceiling(self):
-        from scripts.collector.core import read_limited
+        from scripts.collector.core import read_stream
         body=b'x'*(2_000_001)
-        self.assertEqual(read_limited(io.BytesIO(body)),body)
+        self.assertEqual(read_stream(io.BytesIO(body)),body)
 
     def test_oecd_discovers_related_press_release_on_topic_page(self):
         rows, _ = parsers.discover_listing('oecd', '<main><a href="/en/about/news/press-releases/2026/10/privacy.html">Privacy announcement</a></main>', 'https://www.oecd.org/en/topics/privacy-and-data-protection.html', None)

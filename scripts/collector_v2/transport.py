@@ -59,10 +59,9 @@ class CrawleeClient:
     existing source adapters and persistence contracts explicitly.
     """
 
-    def __init__(self, hosts, *, browser_hosts=(), max_bytes=None, interval=2, budget=None):
+    def __init__(self, hosts, *, browser_hosts=(), interval=2, budget=None):
         self.hosts = set(hosts)
         self.browser_hosts = set(browser_hosts)
-        self.max_bytes = max_bytes
         self.interval = max(0, float(interval))
         self.requests = 0
         self.downloaded_bytes = 0
@@ -83,8 +82,6 @@ class CrawleeClient:
         self.requests += 1
         self.downloaded_bytes += len(result.body)
         self.budget['bytes'] += len(result.body)
-        if self.max_bytes is not None and len(result.body) > self.max_bytes:
-            raise FetchError('response_size_limit')
         canonical_url(result.url, self.hosts)
         return result.body, result.url, result.content_type
 

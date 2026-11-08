@@ -240,10 +240,10 @@ class CollectorTests(unittest.TestCase):
             with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_403$'):
                 client.check_robots('https://www.ftc.gov/news')
 
-    def test_size_limit_streaming_and_429_distinct(self):
+    def test_response_stream_reader_has_no_fixed_byte_ceiling(self):
         import io
-        with self.assertRaises(self.core.FetchError): self.core.read_limited(io.BytesIO(b'123456'),5)
-        self.assertEqual(self.core.read_limited(io.BytesIO(b'1234'),5),b'1234')
+        body=b'x'*2_000_001
+        self.assertEqual(self.core.read_stream(io.BytesIO(body)),body)
 
     def test_checkpoint_not_advanced_on_empty_listing_or_network_failure(self):
         cfg={'source':'edpb','enabled':True,'permissions':{'collect':True,'store':True,'ai':True},'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}

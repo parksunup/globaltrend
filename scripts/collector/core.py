@@ -55,13 +55,12 @@ def is_unapproved_https_host(url,hosts):
     except ValueError: return False
     return parsed.scheme=='https' and parsed.hostname not in hosts and not parsed.username and not parsed.password and parsed.port in (None,443)
 
-def read_limited(stream,limit=None):
+def read_stream(stream):
     result=bytearray()
     while True:
-        block=stream.read(65536 if limit is None else min(65536,limit+1-len(result)))
+        block=stream.read(65536)
         if not block: return bytes(result)
         result.extend(block)
-        if limit is not None and len(result)>limit: raise FetchError('response_size_limit')
 
 def retry_delay(value):
     try: delay=float(value)
@@ -94,7 +93,7 @@ class HttpClient:
             request=urllib.request.Request(url,data=payload,method=method,headers=safe_request_headers(headers))
             try:
                 with self.opener.open(request,timeout=20) as response:
-                    data=read_limited(response);self.budget['bytes']+=len(data)
+                    data=read_stream(response);self.budget['bytes']+=len(data)
                     return data,response.url,response.headers.get_content_type()
             except urllib.error.HTTPError as e:
                 if e.code in (301,302,303,307,308):
