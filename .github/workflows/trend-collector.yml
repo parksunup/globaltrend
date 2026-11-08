@@ -23,12 +23,6 @@ on:
       until:
         description: 'Optional end YYYY-MM-DD; default today in Korea'
         type: string
-      max_items:
-        description: 'Optional operator-selected document limit; blank follows all discovered documents'
-        type: string
-      max_pages:
-        description: 'Optional operator-selected page limit; blank follows pagination to its end'
-        type: string
 
 # architecture.md 3.1 assigns collection scheduling to Supabase Cron + Queues.
 # Keep Actions manual-only so merging this workflow cannot enable a second
@@ -62,8 +56,6 @@ jobs:
       SOURCE_SELECTION: ${{ matrix.source }}
       RANGE_START: ${{ inputs.since }}
       RANGE_END: ${{ inputs.until }}
-      MAX_ITEMS: ${{ inputs.max_items }}
-      MAX_PAGES: ${{ inputs.max_pages }}
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
       FREE_LIMITS_VERIFIED: ${{ vars.FREE_LIMITS_VERIFIED }}
       CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
@@ -91,7 +83,7 @@ jobs:
       - name: Run parallel Crawlee regression suite
         if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
         run: python -m unittest discover -s tests -p 'test_v2_*.py'
-      - name: Collect within explicit limits
+      - name: Collect complete selected range
         shell: bash
         env:
           COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
@@ -140,8 +132,6 @@ jobs:
           if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
           if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi
-          if [ -n "$MAX_ITEMS" ]; then args+=(--max-items "$MAX_ITEMS"); fi
-          if [ -n "$MAX_PAGES" ]; then args+=(--max-pages "$MAX_PAGES"); fi
           set +e
           python -m scripts.collector.run "${args[@]}"
           collector_exit=$?

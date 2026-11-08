@@ -104,16 +104,12 @@ def main():
     p.add_argument('--write',action='store_true'); p.add_argument('--probe',action='store_true')
     p.add_argument('--scheduled',action='store_true',help='Scheduled write; requires explicit runtime schedule and operation gates')
     p.add_argument('--source'); p.add_argument('--since'); p.add_argument('--until')
-    p.add_argument('--max-pages',type=int,help='Optional operator-selected page limit; omitted means follow pagination to its end')
-    p.add_argument('--max-items',type=int,help='Optional operator-selected document limit; omitted means process all discovered documents')
     p.add_argument('--output',default='work/collector-result.json')
     args=p.parse_args()
     explicit_until=args.until
     args.until=args.until or dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).date().isoformat()
     dt.date.fromisoformat(args.until)
     if args.since and dt.date.fromisoformat(args.since)>dt.date.fromisoformat(args.until): p.error('since must precede until')
-    if args.max_pages is not None and args.max_pages<1: p.error('max-pages must be positive when supplied')
-    if args.max_items is not None and args.max_items<1: p.error('max-items must be positive when supplied')
     if args.probe and args.write: p.error('probe never writes to Supabase')
     if args.scheduled and (not args.write or args.since or explicit_until): p.error('scheduled mode requires write without range overrides')
     registry=json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
@@ -163,7 +159,7 @@ def main():
                 result['sources'].append(probe); probe_failed=probe_failed or failed
                 continue
             attempted=True
-            collected=collect(config,client,store or DryStore(),since,until,args.max_pages,args.max_items)
+            collected=collect(config,client,store or DryStore(),since,until)
             collected.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))
             if 'preflight' in record: collected['preflight']=record['preflight']
             record=collected
