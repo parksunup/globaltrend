@@ -10,16 +10,30 @@ from urllib.parse import urlsplit
 from .core import collect,HttpClient,FetchError
 from .store import SupabaseStore,DryStore
 from . import parsers
+from . import extraction
 from .environment import runtime_info, runtime_problem
 
 ROOT=Path(__file__).resolve().parents[2]
+
+def explicit_user_hold(config):
+    """Return the configured user hold marker, which probe mode cannot override."""
+    reason=str(config.get('hold_reason') or '')
+    if config.get('verification_status')=='held_by_user' or reason.startswith('user_deferred_'):
+        return reason or 'held_by_user'
+    return None
+
+
 def probe_source(config,client,sample_urls):
     """Robots-aware listing and one detail; no writes or approval changes.
 
     Current discovered URLs take priority over historical research samples.
     Parser failures are distinct from an HTTP response being received.
     """
+    user_hold=explicit_user_hold(config)
     record={'source':config['source'],'status':'held','coverage_complete':False,'requests':[]}
+    if user_hold:
+        record.update(reason=user_hold,hold_reason=user_hold,eligibility_reasons=['source_held_by_user'])
+        return record,False
     failed=False; rows=[]; listing=config['listing']
     def fetch(url,method='GET',payload=None):
         try:
@@ -34,7 +48,8 @@ def probe_source(config,client,sample_urls):
         is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
         if is_pdpc_api:
             rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
-        elif ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+        elif (ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml')
+              or config['source']=='anpd-br' and ctype=='application/json'):
             # Bounded public-page diagnostics help distinguish a changed site
             # template from an access/challenge page; never store the response.
             if ctype in ('text/html','application/xhtml+xml'):
@@ -58,7 +73,7 @@ def probe_source(config,client,sample_urls):
     if row:
         try:
             body,final,ctype=fetch(row['url'])
-            item=parsers.extract_document(config['source'],body,final,ctype,row)
+            item=extraction.extract_document(config['source'],body,final,ctype,row)
             record['detail']={'status':'parsed','url':final,'sample_origin':'current_listing' if rows else 'research_sample',
                 'content_characters':len(item['content_text']),'published_date':item['published_date'],
                 'read_scope':item['metadata']['read_scope'],'requires_review':item['metadata']['requires_review'],
@@ -94,14 +109,16 @@ def main():
     p.add_argument('--write',action='store_true'); p.add_argument('--probe',action='store_true')
     p.add_argument('--scheduled',action='store_true',help='Scheduled write; requires explicit runtime schedule and operation gates')
     p.add_argument('--source'); p.add_argument('--since'); p.add_argument('--until')
-    p.add_argument('--max-pages',type=int,default=10); p.add_argument('--max-items',type=int,default=30)
+    p.add_argument('--max-pages',type=int,default=None,help='Optional resumable stop after this many listing pages; no default ceiling.')
+    p.add_argument('--max-items',type=int,default=None,help='Optional resumable stop after this many documents; no default ceiling.')
     p.add_argument('--output',default='work/collector-result.json')
     args=p.parse_args()
     explicit_until=args.until
     args.until=args.until or dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).date().isoformat()
     dt.date.fromisoformat(args.until)
     if args.since and dt.date.fromisoformat(args.since)>dt.date.fromisoformat(args.until): p.error('since must precede until')
-    if not 1<=args.max_pages<=50 or not 1<=args.max_items<=100: p.error('bounded page/item limits required')
+    if args.max_pages is not None and args.max_pages<1: p.error('max-pages must be positive')
+    if args.max_items is not None and args.max_items<1: p.error('max-items must be positive')
     if args.probe and args.write: p.error('probe never writes to Supabase')
     if args.scheduled and (not args.write or args.since or explicit_until): p.error('scheduled mode requires write without range overrides')
     registry=json.loads((ROOT/'config/trend-collector.json').read_text())
@@ -121,9 +138,14 @@ def main():
         since=args.since or (dt.date.fromisoformat(args.until)-dt.timedelta(days=7)).isoformat()
         until=args.until
         reasons=source_eligibility(config,require_id=args.write)
+        user_hold=explicit_user_hold(config)
         record={'source':config['source'],'status':'held','reason':global_hold or (reasons[0] if reasons else None),
                 'eligibility_reasons':reasons,'hold_reason':config.get('hold_reason'),
                 'coverage_complete':False,'since':since,'until':until}
+        if user_hold:
+            record.update(reason=user_hold,hold_reason=user_hold,eligibility_reasons=['source_held_by_user'])
+            result['sources'].append(record)
+            continue
         if global_hold or (not args.probe and reasons):
             result['sources'].append(record); continue
         if database_stop:

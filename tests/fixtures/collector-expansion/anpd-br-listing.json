@@ -1,0 +1,15 @@
+{
+  "@id": "https://www.gov.br/anpd/@search?portal_type=News+Item",
+  "items_total": 1,
+  "items": [
+    {
+      "@id": "https://www.gov.br/anpd/pt-br/assuntos/noticias/noticia-um",
+      "@type": "News Item",
+      "review_state": "published",
+      "title": "ANPD publica orientação sobre dados pessoais",
+      "description": "A ANPD divulgou orientação sobre proteção de dados pessoais.",
+      "effective": "2026-11-06T12:50:06+00:00"
+    }
+  ],
+  "batching": {"next": null}
+}

@@ -12,10 +12,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class CloudSnapshotCursorTests(unittest.TestCase):
-    def test_completed_ftc_snapshot_copies_claimed_hashes_to_cursor(self):
+    def test_completed_ftc_snapshot_uses_durable_seen_flag_not_a_capped_hash_cursor(self):
         registry = json.loads((ROOT / "config/trend-collector.json").read_text())
         config = next(x for x in registry["sources"] if x["source"] == "ftc")
-        listing_url = "https://www.ftc.gov/feeds/press-release-consumer-protection.xml"
+        listing_url = "https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29"
         item_url = "https://www.ftc.gov/news-events/news/press-releases/example"
         item_hash = hashlib.sha256(item_url.encode()).hexdigest()
         hashes = [
@@ -49,6 +49,7 @@ class CloudSnapshotCursorTests(unittest.TestCase):
                     "title": "Example",
                     "date_observations": [],
                 },
+                "seen_before": True,
                 "url_hashes": hashes,
             },
             "previous_listing_hashes": [],
@@ -57,13 +58,14 @@ class CloudSnapshotCursorTests(unittest.TestCase):
         bundle = prepare(claim)
 
         self.assertTrue(bundle["result"]["listing_scan_complete"])
-        self.assertEqual(bundle["cursor"]["processed_url_hashes"], sorted(hashes)[:50])
-        self.assertEqual(len(bundle["cursor"]["processed_url_hashes"]), 50)
+        self.assertNotIn("processed_url_hashes", bundle["cursor"])
+        self.assertEqual(bundle["operations"], [])
+        self.assertNotIn("duplicate", bundle["result"])
 
-    def test_snapshot_without_hashes_is_rejected_instead_of_silently_empty(self):
+    def test_snapshot_without_hash_array_is_processed_from_its_durable_row(self):
         registry = json.loads((ROOT / "config/trend-collector.json").read_text())
         config = next(x for x in registry["sources"] if x["source"] == "ftc")
-        listing_url = "https://www.ftc.gov/feeds/press-release-consumer-protection.xml"
+        listing_url = "https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29"
         snapshot_id = str(uuid.uuid4())
         claim = {
             "slug": "ftc",
@@ -95,8 +97,16 @@ class CloudSnapshotCursorTests(unittest.TestCase):
             "previous_listing_hashes": [],
         }
 
-        with self.assertRaisesRegex(ValueError, "listing_snapshot_hashes_missing_or_invalid"):
-            prepare(claim)
+        from unittest.mock import patch
+        from scripts.collector.core import HttpClient
+        class Client(HttpClient):
+            def __init__(self,*args,**kwargs): self.budget={'requests':0,'bytes':0}
+            def get(self,url):
+                return b'<h1>Example</h1><time datetime="2026-10-27"></time><main><article class="node--view-mode-full"><div class="field--name-body"><p>Official privacy article body with enough detail for collection.</p></div></article></main>',url,'text/html'
+        with patch('scripts.collector.cloud_step.HttpClient',Client):
+            bundle=prepare(claim)
+        self.assertEqual(bundle['operations'][0]['p_canonical_url'],claim['snapshot']['row']['url'])
+        self.assertNotIn('processed_url_hashes',bundle['cursor'])
 
 
 if __name__ == "__main__":

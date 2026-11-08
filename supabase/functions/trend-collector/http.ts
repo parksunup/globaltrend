@@ -18,7 +18,6 @@ export class OfficialHTTPError extends Error {
   }
 }
 import { canonical } from "./adapter.ts";
-import { requestTimeoutMs } from "./http-timeout.mjs";
 export class OfficialHTTP {
   private robot: ReturnType<typeof robotsParser> | undefined;
   private last = 0;
@@ -72,7 +71,7 @@ export class OfficialHTTP {
       if (
         robots && this.robot?.isAllowed(url, "GlobalTrendResearch") === false
       ) throw new Error("robots_disallowed");
-      if (++this.requests > 12) throw new Error("request_budget");
+      this.requests++;
       await new Promise((r) =>
         setTimeout(r, Math.max(0, this.last + this.interval - Date.now()))
       );
@@ -86,7 +85,6 @@ export class OfficialHTTP {
           ...(body ? { "Content-Type": "application/json" } : {}),
         },
         redirect: "manual",
-        signal: AbortSignal.timeout(requestTimeoutMs(url)),
       });
       if ([301, 302, 303, 307, 308].includes(r.status)) {
         const loc = r.headers.get("location");
@@ -109,10 +107,6 @@ export class OfficialHTTP {
         await r.body?.cancel();
         throw new OfficialHTTPError("http_" + r.status, url, "resource");
       }
-      if (Number(r.headers.get("content-length") || 0) > 2000000) {
-        await r.body?.cancel();
-        throw new Error("response_size_limit");
-      }
       const reader = r.body?.getReader();
       if (!reader) throw new Error("empty_response");
       const chunks: Uint8Array[] = [];
@@ -121,10 +115,6 @@ export class OfficialHTTP {
         const { done, value } = await reader.read();
         if (done) break;
         size += value.length;
-        if (size > 2000000) {
-          await reader.cancel();
-          throw new Error("response_size_limit");
-        }
         chunks.push(value);
       }
       if (!size) throw new Error("empty_response");
