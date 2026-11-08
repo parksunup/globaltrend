@@ -2,6 +2,13 @@
 
 Historical continuation log for `globaltrend-collector-pr113`, branch `codex/codex-cloud-handoff-20261105`. Earlier entries record the state at the time. The latest safe-request-policy work and its verification are recorded first below; check Git status and PR checks for current branch state.
 
+## 2026-11-08 diagnostic follow-up
+
+- Commit `8dc32fac520086ac6bd393f4f6ee37096581b2a4` fixes the read-only Crawlee diagnostic: ICO now gets the same date-filtered WiredGov route as production; date-range workflow inputs reach the diagnostic; and an explicitly selected held source can be probed without changing its `enabled` or permission flags. Local v2 suite: 29 passed; source-selection and ICO URL-range regression cases are included.
+- Cloud run https://github.com/parksunup/globaltrend/actions/runs/42464471890 tested all 19 currently enabled sources without database credentials or writes. ICO now parsed a WiredGov article (4,998 characters). Fourteen of nineteen enabled sources parsed a sample; OECD, PDPC, FTC, European Parliament, and Council of the EU failed at listing retrieval (403/non-JSON). This remains a one-sample diagnostic, not full-period coverage.
+- Cloud run https://github.com/parksunup/globaltrend/actions/runs/42464603897 explicitly probed held EDPS through its configured official Mastodon RSS route. RSS discovery and a public status body parsed (911 characters; human review required); EDPS remains held for production collection. EUR-Lex was not activated or included in the default enabled-source run.
+- The complete source inventory named in the user's earlier scope expansion still needs reconciliation with source configurations and verified route evidence; do not treat the current 19 enabled routes as the entire “all sources tested so far” scope.
+
 ## Polite request policy follow-up
 
 - Added a shared project `User-Agent` and content-negotiation `Accept` header to both legacy and Crawlee request paths. Caller-supplied content headers remain available, but callers cannot replace these identity headers with a browser-like value.
