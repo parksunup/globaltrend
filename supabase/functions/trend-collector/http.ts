@@ -109,10 +109,6 @@ export class OfficialHTTP {
         await r.body?.cancel();
         throw new OfficialHTTPError("http_" + r.status, url, "resource");
       }
-      if (Number(r.headers.get("content-length") || 0) > 2000000) {
-        await r.body?.cancel();
-        throw new Error("response_size_limit");
-      }
       const reader = r.body?.getReader();
       if (!reader) throw new Error("empty_response");
       const chunks: Uint8Array[] = [];
@@ -121,10 +117,6 @@ export class OfficialHTTP {
         const { done, value } = await reader.read();
         if (done) break;
         size += value.length;
-        if (size > 2000000) {
-          await reader.cancel();
-          throw new Error("response_size_limit");
-        }
         chunks.push(value);
       }
       if (!size) throw new Error("empty_response");

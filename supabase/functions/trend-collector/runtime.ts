@@ -169,7 +169,7 @@ async function listing(c: Config, http: HTTP, page: string) {
       ["page", "from", "to"].some((k) => query.getAll(k).length > 1)
     ) throw new Error("unverified_listing_query");
     const n = Number(query.get("page") || 1);
-    if (!Number.isInteger(n) || n < 1 || n > 1000) {
+    if (!Number.isInteger(n) || n < 1) {
       throw new Error("invalid_listing_page");
     }
     const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({
@@ -281,7 +281,7 @@ async function extractTextPDF(
     useWorkerFetch: false,
   }).promise;
   try {
-    if (doc.numPages < 1 || doc.numPages > 50) {
+    if (doc.numPages < 1) {
       throw new Error("pdf_page_limit");
     }
     const pages: { page: number; text: string }[] = [];
@@ -325,9 +325,6 @@ async function extractTextPDF(
       }
     }
     const body = normalize(pages.map((x) => x.text).join(" "));
-    if (body.length > 80000) {
-      throw new Error("long_document_requires_chunked_reading");
-    }
     // A PDPC listing date is not yet verified as the PDF publication date.
     const obs = source === "pdpc"
       ? (row.date_observations || []).map((o) => ({
@@ -513,7 +510,7 @@ export async function advance(
       if (state.seen_pages?.includes(fingerprint)) {
         throw new Error("listing_cycle");
       }
-      state.seen_pages = [...(state.seen_pages || []), fingerprint].slice(-50);
+      state.seen_pages = [...(state.seen_pages || []), fingerprint];
       state.failures = 0;
       state.rows = found.rows;
       state.next = isExpansion(c.source)

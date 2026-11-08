@@ -34,8 +34,6 @@ class ProbeClient:
                 continue
             if response.status != 200:
                 raise FetchError('http_' + str(response.status))
-            if len(response.body) > 2_000_000:
-                raise FetchError('response_size_limit')
             return response.body, str(response.url), response.headers.get('content-type', '').split(';')[0].lower()
         raise FetchError('redirect_limit')
 

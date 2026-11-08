@@ -33,7 +33,7 @@ def normalize_document(source, document, since, until):
     if not start <= day <= end:
         raise ValueError('publication_date_outside_window')
     title, body = document['title'].strip(), document['body'].strip()
-    if not 1 <= len(title) <= 1000 or not 100 <= len(body.encode()) <= 400000 or CHALLENGE.search(body):
+    if not title or not body or CHALLENGE.search(body):
         raise ValueError('verified_article_body_required')
     evidence = document['evidence']
     if evidence.get('complete_body') is not True or not all(isinstance(evidence.get(k), str) and evidence[k].strip() for k in ('ref','publication_locator','body_locator','accessed_at')):

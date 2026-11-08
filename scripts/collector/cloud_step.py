@@ -10,11 +10,10 @@ import hashlib
 import uuid
 import re
 from pathlib import Path
-from .core import HttpClient, FetchError, MAX_PROCESSED_URL_HASHES, canonical_url, collect, fetch_listing
+from .core import HttpClient, FetchError, canonical_url, collect, fetch_listing
 from . import parsers
 
 ROOT = Path(__file__).resolve().parents[2]
-MAX_FTC_SNAPSHOT_ROWS=100
 
 
 def validate_claim(claim):
@@ -43,8 +42,8 @@ class PreparedStore:
     def stage_listing(self, config, listing_url, fingerprint, rows):
         if config.get('source') != 'ftc':
             raise FetchError('listing_snapshot_source_not_supported')
-        if not isinstance(rows, list) or not rows or len(rows) > MAX_FTC_SNAPSHOT_ROWS:
-            raise FetchError('ftc_listing_snapshot_capacity_exceeded')
+        if not isinstance(rows, list) or not rows:
+            raise FetchError('ftc_listing_snapshot_schema_invalid')
         try:
             listing_url=canonical_url(listing_url,set(config['hosts']))
         except ValueError:
@@ -59,18 +58,14 @@ class PreparedStore:
                 url=canonical_url(row['url'],set(config['hosts']))
             except ValueError:
                 raise FetchError('ftc_listing_snapshot_unapproved_url') from None
-            if len(url.encode('utf-8')) > 2048 or len(row['title']) > 1000 or url in seen:
+            if url in seen:
                 raise FetchError('ftc_listing_snapshot_schema_invalid')
             seen.add(url)
             observations=row.get('date_observations',[])
-            if not isinstance(observations,list) or len(observations)>4:
+            if not isinstance(observations,list):
                 raise FetchError('ftc_listing_snapshot_schema_invalid')
             normalized_row={'url':url,'title':row['title'],'date_observations':observations}
-            if len(json.dumps(normalized_row,ensure_ascii=False).encode('utf-8'))>5000:
-                raise FetchError('ftc_listing_snapshot_schema_invalid')
             normalized.append(normalized_row)
-        if len(json.dumps(normalized,ensure_ascii=False).encode('utf-8'))>400000:
-            raise FetchError('ftc_listing_snapshot_payload_too_large')
         snapshot={
             'id':str(uuid.uuid4()),'listing_url':listing_url,'fingerprint':fingerprint,
             'rows':normalized,
@@ -78,8 +73,6 @@ class PreparedStore:
         }
         cursor={**(self.cursor or {}),'page':listing_url,'offset':0,'fingerprint':fingerprint,
                 'snapshot_id':snapshot['id']}
-        if len(json.dumps(cursor,ensure_ascii=False).encode('utf-8'))>4000:
-            raise FetchError('ftc_listing_snapshot_cursor_capacity_exceeded')
         self.listing_snapshot=snapshot
         self.cursor=cursor
 
@@ -180,7 +173,7 @@ def prepare(claim):
         row_count=snapshot.get('row_count')
         row=snapshot.get('row')
         hashes=snapshot.get('url_hashes')
-        if type(ordinal) is not int or ordinal<0 or type(row_count) is not int or not 0<row_count<=MAX_FTC_SNAPSHOT_ROWS or ordinal>=row_count:
+        if type(ordinal) is not int or ordinal<0 or type(row_count) is not int or row_count<=0 or ordinal>=row_count:
             raise ValueError('listing_snapshot_claim_invalid')
         if (claim['cursor'].get('offset') != ordinal or not isinstance(row,dict) or
                 not isinstance(row.get('url'),str) or not isinstance(row.get('title'),str)):
@@ -242,7 +235,7 @@ def prepare(claim):
             store.cursor={**cursor,'offset':ordinal+1}
             result['reason']='snapshot_item_processed'
         if ordinal+1>=row_count:
-            completed_hashes=sorted(snapshot.get('url_hashes',[]))[:MAX_PROCESSED_URL_HASHES]
+            completed_hashes=sorted(snapshot.get('url_hashes',[]))
             store.cursor={k:v for k,v in store.cursor.items() if k!='snapshot_id'}
             store.cursor.update(page=snapshot['listing_url'],offset=0,fingerprint=snapshot['fingerprint'],
                                 processed_url_hashes=completed_hashes)

@@ -1,4 +1,4 @@
-"""Bounded Crawlee HTTP/browser transport for the parallel collector v2."""
+"""Crawlee HTTP/browser transport for the parallel collector v2."""
 import asyncio
 import os
 import threading
@@ -59,7 +59,7 @@ class CrawleeClient:
     existing source adapters and persistence contracts explicitly.
     """
 
-    def __init__(self, hosts, *, browser_hosts=(), max_bytes=2_000_000, interval=2, budget=None):
+    def __init__(self, hosts, *, browser_hosts=(), max_bytes=None, interval=2, budget=None):
         self.hosts = set(hosts)
         self.browser_hosts = set(browser_hosts)
         self.max_bytes = max_bytes
@@ -76,8 +76,6 @@ class CrawleeClient:
             raise FetchError('collector_v2_method_not_supported')
         self.robots_client.check_robots(url)
         self.interval = max(self.interval, self.robots_client.interval)
-        if self.budget['requests'] >= 1000 or time.monotonic() - self.budget['started'] > 600:
-            raise FetchError('request_or_runtime_limit')
         self.budget['requests'] += 1
         request = Request.from_url(url, method=method, payload=payload, headers=safe_request_headers(headers),
                                    use_extended_unique_key=True, max_retries=0)
@@ -85,7 +83,7 @@ class CrawleeClient:
         self.requests += 1
         self.downloaded_bytes += len(result.body)
         self.budget['bytes'] += len(result.body)
-        if len(result.body) > self.max_bytes:
+        if self.max_bytes is not None and len(result.body) > self.max_bytes:
             raise FetchError('response_size_limit')
         canonical_url(result.url, self.hosts)
         return result.body, result.url, result.content_type

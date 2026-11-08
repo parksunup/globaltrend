@@ -1,10 +1,16 @@
 import unittest
+import io
 from unittest.mock import patch
 from scripts.collector.core import FetchError
 from scripts.collector import parsers
 
 
 class CloudStepTests(unittest.TestCase):
+    def test_default_response_reader_has_no_fixed_byte_ceiling(self):
+        from scripts.collector.core import read_limited
+        body=b'x'*(2_000_001)
+        self.assertEqual(read_limited(io.BytesIO(body)),body)
+
     def test_oecd_discovers_related_press_release_on_topic_page(self):
         rows, _ = parsers.discover_listing('oecd', '<main><a href="/en/about/news/press-releases/2026/10/privacy.html">Privacy announcement</a></main>', 'https://www.oecd.org/en/topics/privacy-and-data-protection.html', None)
         self.assertEqual([r['url'] for r in rows], ['https://www.oecd.org/en/about/news/press-releases/2026/10/privacy.html'])
@@ -456,9 +462,7 @@ class FTCBoundedResumeTests(unittest.TestCase):
             store=PreparedStore(cursor)
             result=collect(config,client,store,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
             results.append(result);cursor=store.cursor
-            if cursor is not None:
-                self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
-            if cursor is None or result['reason']=='ftc_resume_cursor_capacity_exceeded':break
+            if result.get('listing_scan_complete'):break
         self.assertEqual(len(client.fetched),len(set(client.fetched)))
         self.assertTrue(all(not r['coverage_complete'] for r in results))
         return client,cursor,results,config
@@ -504,7 +508,6 @@ class FTCBoundedResumeTests(unittest.TestCase):
         expected=sorted(hashlib.sha256(url.encode()).hexdigest() for url in urls)
         self.assertIsNotNone(cursor)
         self.assertEqual(cursor.get('processed_url_hashes'),expected)
-        self.assertLessEqual(len(json.dumps(cursor,ensure_ascii=False).encode()),4000)
         self.assertFalse(result['coverage_complete'])
 
         fetched_before=list(client.fetched)
@@ -517,35 +520,22 @@ class FTCBoundedResumeTests(unittest.TestCase):
         self.assertEqual(next_store.cursor.get('processed_url_hashes'),expected)
         self.assertFalse(next_result['coverage_complete'])
 
-    def test_large_mutable_feed_stops_before_cursor_overflow_without_forgetting_urls(self):
+    def test_large_mutable_feed_finishes_without_an_arbitrary_cursor_ceiling(self):
         import hashlib
         client,cursor,results,config=self.run_feed(65)
-        self.assertEqual(results[-1]['reason'],'ftc_resume_cursor_capacity_exceeded')
+        self.assertTrue(results[-1].get('listing_scan_complete'))
         self.assertIsNotNone(cursor)
-        self.assertGreater(len(client.fetched),30)
-        self.assertLess(len(client.fetched),65)
-        self.assertEqual(len(cursor['processed_url_hashes']),len(client.fetched))
+        self.assertEqual(len(client.fetched),65)
+        self.assertEqual(len(cursor['processed_url_hashes']),65)
         self.assertEqual(set(cursor['processed_url_hashes']),
                          {hashlib.sha256(url.encode()).hexdigest() for url in client.fetched})
         self.assertFalse(results[-1]['coverage_complete'])
-        from scripts.collector.core import collect
-        from scripts.collector.cloud_step import PreparedStore
-        saved_cursor=dict(cursor)
-        fetched=list(client.fetched)
-        retry=PreparedStore(cursor)
-        result=collect(config,client,retry,'2026-10-16','2026-10-23',max_pages=1,max_items=1)
-        self.assertEqual(result['reason'],'ftc_resume_cursor_capacity_exceeded')
-        self.assertEqual(retry.cursor,saved_cursor)
-        self.assertEqual(client.fetched,fetched)
-        self.assertEqual(retry.operations,[])
-        self.assertIsNone(retry.failure)
 
-    def test_fifty_hashes_fit_and_fifty_first_url_is_not_fetched(self):
-        import json
-        client,cursor,results,config=self.run_feed(50)
-        self.assertEqual(len(client.fetched),50)
+    def test_processed_url_identity_set_has_no_arbitrary_fifty_item_ceiling(self):
+        client,cursor,results,config=self.run_feed(125)
+        self.assertEqual(len(client.fetched),125)
         self.assertIsNotNone(cursor)
-        self.assertEqual(len(cursor['processed_url_hashes']),50)
+        self.assertEqual(len(cursor['processed_url_hashes']),125)
 
 
 class DurableFtcListingSnapshotTests(unittest.TestCase):
@@ -611,7 +601,7 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
             self.assertEqual(third['operations'][0]['p_canonical_url'],self.urls['C'])
             self.assertTrue(third['result']['listing_scan_complete'])
             self.assertNotIn('snapshot_id',third['cursor'])
-            self.assertLessEqual(len(third['cursor']['processed_url_hashes']),50)
+            self.assertEqual(len(third['cursor']['processed_url_hashes']),len(snapshot['url_hashes']))
             self.assertFalse(third['result']['coverage_complete'])
 
     def test_uncommitted_claim_retries_same_staged_row_and_lease_is_required(self):
@@ -675,7 +665,7 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
         self.assertEqual(second['operations'][0]['p_canonical_url'],self.urls['B'])
         self.assertEqual(Client.details,[self.urls['B']])
 
-    def test_oversized_live_listing_returns_failed_bundle_without_advancing(self):
+    def test_listing_over_one_hundred_rows_is_staged_without_truncation(self):
         from scripts.collector.cloud_step import prepare
         from scripts.collector.core import HttpClient
         rows=[{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}',
@@ -685,11 +675,10 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
         with patch('scripts.collector.cloud_step.HttpClient',Client), \
              patch('scripts.collector.cloud_step.fetch_listing',return_value=(rows,None)):
             bundle=prepare(self.claim())
-        self.assertEqual(bundle['result']['status'],'failed')
-        self.assertEqual(bundle['result']['reason'],'ftc_listing_snapshot_capacity_exceeded')
-        self.assertIsNone(bundle['cursor'])
+        self.assertEqual(bundle['result']['status'],'partial')
+        self.assertEqual(bundle['result']['reason'],'listing_snapshot_staged')
+        self.assertEqual(len(bundle['listing_snapshot']['rows']),101)
         self.assertEqual(bundle['operations'],[])
-        self.assertIsNone(bundle.get('listing_snapshot'))
 
     def test_snapshot_bounds_and_allowlisted_urls_stop_before_detail_request(self):
         import hashlib, json
@@ -699,27 +688,19 @@ class DurableFtcListingSnapshotTests(unittest.TestCase):
         rows=[{'url':self.urls['A'],'title':'A','date_observations':[]}]
         store.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
         self.assertEqual(len(store.listing_snapshot['rows']),1)
-        self.assertLessEqual(len(__import__('json').dumps(store.cursor).encode()),4000)
         with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_unapproved_url'):
             PreparedStore(None).stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,
               [{'url':'https://www.ftc.gov.evil.test/a','title':'evil','date_observations':[]}])
-        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_capacity_exceeded'):
-            PreparedStore(None).stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,
-              [{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}','title':str(i),'date_observations':[]} for i in range(101)])
-        hashes=[hashlib.sha256(str(i).encode()).hexdigest() for i in range(50)]
+        hashes=[hashlib.sha256(str(i).encode()).hexdigest() for i in range(150)]
         legacy=PreparedStore({'page':self.listing,'offset':0,'fingerprint':'b'*64,'processed_url_hashes':hashes})
         legacy.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
         self.assertEqual(legacy.cursor['processed_url_hashes'],hashes)
-        self.assertLessEqual(len(json.dumps(legacy.cursor,ensure_ascii=False).encode()),4000)
-
-        almost_full={'page':self.listing,'offset':0,'fingerprint':'c'*64,'padding':''}
-        almost_full['padding']='x'*(3950-len(json.dumps(almost_full,ensure_ascii=False).encode()))
-        self.assertLessEqual(len(json.dumps(almost_full,ensure_ascii=False).encode()),4000)
-        bounded=PreparedStore(almost_full)
-        with self.assertRaisesRegex(FetchError,'ftc_listing_snapshot_cursor_capacity_exceeded'):
-            bounded.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,rows)
-        self.assertEqual(bounded.cursor,almost_full)
-        self.assertIsNone(bounded.listing_snapshot)
+        self.assertGreater(len(json.dumps(legacy.cursor,ensure_ascii=False).encode()),4000)
+        large_rows=[{'url':f'https://www.ftc.gov/news-events/news/press-releases/{i}',
+                     'title':str(i),'date_observations':[]} for i in range(150)]
+        unbounded=PreparedStore(None)
+        unbounded.stage_listing({'source':'ftc','hosts':['www.ftc.gov']},self.listing,'a'*64,large_rows)
+        self.assertEqual(len(unbounded.listing_snapshot['rows']),150)
 
 
 

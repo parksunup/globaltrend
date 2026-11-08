@@ -35,35 +35,44 @@ select has_function('public','collector_cloud_take',array['text','text'],
 select has_function('public','collector_cloud_commit',array['uuid','text','uuid','jsonb','text'],
  'commit RPC atomically stages rows and cursor progress');
 
--- Keep the pre-snapshot cursor contract usable during rollout. Fifty SHA-256
--- hashes fit the existing 4 KB limit; the 51st remains rejected by the DB.
+-- Cursor validation must preserve every discovered identity, even beyond the
+-- former 50-entry and 4 KB limits.
 select ok(private.collector_cloud_cursor_valid(
  jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
-  'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
-  (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,50) i)), 'ftc'),
- 'legacy fifty-hash cursor remains valid');
-select ok(octet_length(jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
- 'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
- (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,50) i))::text)<=4000,
- 'legacy cursor with fifty hashes remains below four kilobytes');
-select ok(not private.collector_cloud_cursor_valid(
- jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
-  'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
-  (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,51) i)), 'ftc'),
- '51-hash cursor cannot violate DB bound');
+  'offset',1000000,'fingerprint',repeat('a',64),'processed_url_hashes',
+  (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,150) i)), 'ftc'),
+ 'cursor with 150 hashes, a million-page offset and more than four kilobytes remains valid');
 
-select throws_ok($$
+select lives_ok($$
  insert into public.collector_cloud_listing_scans(id,source_id,listing_url,fingerprint,row_count,status,completed_at)
- select gen_random_uuid(),source_id,'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),101,'completed',now()
+ select 'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',source_id,'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),101,'completed',now()
  from public.collector_edge_sources where slug='ftc'
-$$,'23514',null,'snapshot size above one hundred is rejected');
+$$,'snapshot with more than one hundred discovered rows is accepted');
+
+select lives_ok($$
+ insert into public.collector_cloud_listing_rows(source_id,scan_id,ordinal,canonical_url,url_hash,row_data)
+ select source_id,'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',100,
+  'https://www.ftc.gov/press-release/'||repeat('a',2050),repeat('b',64),
+  jsonb_build_object('url','https://www.ftc.gov/press-release/'||repeat('a',2050),
+   'title',repeat('x',6000),'date_observations',jsonb_build_array(1,2,3,4,5,6))
+ from public.collector_edge_sources where slug='ftc'
+$$,'large listing identity, title and observation list are stored without arbitrary ceilings');
+
+select ok(private.collector_cloud_frozen_cursor_valid(
+ jsonb_build_object('page','https://ec.europa.eu/commission/presscorner/api/search?pagesize=10',
+  'offset',0,'frozen_next',null,'frozen_urls',
+  (select jsonb_agg(case when i=1 then 'https://ec.europa.eu/commission/presscorner/detail/en/ip_26_'||repeat('1',2050)
+    else 'https://ec.europa.eu/commission/presscorner/detail/en/ip_26_'||i::text end)
+   from generate_series(1,101) i)), 'ec'),
+ 'frozen discovery cursor accepts 101 identities and long official URL paths');
+
 insert into public.collector_cloud_listing_scans(id,source_id,listing_url,fingerprint,row_count,status,completed_at)
-select 'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',source_id,
+select 'a9d7e4dd-b013-4c75-9331-ecf7b9f1b930',source_id,
  'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),1,'completed',now()
 from public.collector_edge_sources where slug='ftc';
 select throws_ok($$
  insert into public.collector_cloud_listing_rows(source_id,scan_id,ordinal,canonical_url,url_hash,row_data)
- select source_id,'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',0,
+ select source_id,'a9d7e4dd-b013-4c75-9331-ecf7b9f1b930',0,
   'https://www.ftc.gov.evil.test/press-release',repeat('b',64),
   jsonb_build_object('url','https://www.ftc.gov.evil.test/press-release','title','Not FTC','date_observations','[]'::jsonb)
  from public.collector_edge_sources where slug='ftc'

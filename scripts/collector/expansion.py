@@ -36,22 +36,19 @@ def verify_detail_response(source,requested,received):
     elif canonical_url(expected,[ROUTES[source]['host']])==actual:return
     raise ValueError('detail_redirect_identity_mismatch')
 
-def _bounded_frozen_cursor(cursor,source):
+def _valid_frozen_cursor(cursor,source):
     from .core import canonical_url
     urls=cursor.get('frozen_urls')
-    if not isinstance(urls,list) or not urls or len(urls)>100 or not all(isinstance(u,str) for u in urls) or len(set(urls))!=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
+    if not isinstance(urls,list) or not urls or not all(isinstance(u,str) for u in urls) or len(set(urls))!=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     for url in urls:_canonical(url,source,url)
     if type(cursor.get('offset')) is not int or not 0<=cursor['offset']<=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
-    # PostgreSQL jsonb::text inserts spaces after commas/colons; default JSON
-    # separators conservatively budget that exact durable cursor contract.
-    if len(json.dumps(cursor,ensure_ascii=False).encode('utf-8'))>3900:raise ValueError('expansion_resume_cursor_capacity_exceeded')
 
 def collect_frozen(config,client,store,since,until):
     """Freeze URL identities in the existing atomic DB cursor, one body per commit.
 
-    The cursor is below the existing 4000-byte limit. Titles are read from the
-    actual detail, not cached. A changed feed cannot reset a committed ordinal.
+    Titles are read from the actual detail, not cached. A changed feed cannot
+    reset a committed ordinal.
     """
     from .core import fetch_listing,FetchError
     from . import parsers
@@ -69,7 +66,7 @@ def collect_frozen(config,client,store,since,until):
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
             cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],frozen_next=nxt)
-        _bounded_frozen_cursor(cursor,source)
+        _valid_frozen_cursor(cursor,source)
         ordinal=cursor['offset'];urls=cursor['frozen_urls']
         if ordinal<len(urls):
             url=urls[ordinal];result['discovered']=1
@@ -238,7 +235,6 @@ def extract(source,input,url,row=None):
                 related.append({'url': target, 'title': normalize(a.get_text(' ', strip=True)), 'read': False})
     body=normalize(' '.join(n.get_text(' ',strip=True) for n in nodes))
     if len(body)<10:raise ValueError('empty_body')
-    if len(body)>80000:raise ValueError('long_document_requires_chunked_reading')
     for n in soup.select(c['date']) if c.get('date') else []:
         value=n.get(c['date_attribute']) if c.get('date_attribute') else n.get_text(' ',strip=True)
         if value:observations.append({'meaning':'official_published_attribute','locator':c['date'],'value':normalize(value)})

@@ -57,8 +57,8 @@ class CloudSnapshotCursorTests(unittest.TestCase):
         bundle = prepare(claim)
 
         self.assertTrue(bundle["result"]["listing_scan_complete"])
-        self.assertEqual(bundle["cursor"]["processed_url_hashes"], sorted(hashes)[:50])
-        self.assertEqual(len(bundle["cursor"]["processed_url_hashes"]), 50)
+        self.assertEqual(bundle["cursor"]["processed_url_hashes"], sorted(hashes))
+        self.assertEqual(len(bundle["cursor"]["processed_url_hashes"]), len(hashes))
 
     def test_snapshot_without_hashes_is_rejected_instead_of_silently_empty(self):
         registry = json.loads((ROOT / "config/trend-collector.json").read_text())

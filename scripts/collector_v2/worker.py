@@ -14,9 +14,9 @@ def owned_sources(configs):
             (c.get('executor') == 'cloud-python' or c['source'] in ('oecd', 'ftc'))]
 
 
-def run(slugs, *, browser=False, all_owned=False, max_claims=1):
-    if not 1 <= max_claims <= 100:
-        raise ValueError('max_claims_out_of_range')
+def run(slugs, *, browser=False, all_owned=False, max_claims=None):
+    if max_claims is not None and max_claims < 1:
+        raise ValueError('max_claims_must_be_positive_when_supplied')
     store = SupabaseStore()
     worker = 'collector-v2:' + str(uuid.uuid4())
     summary = {'worker': worker, 'started_at': dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -41,7 +41,7 @@ def run(slugs, *, browser=False, all_owned=False, max_claims=1):
             summary['commits'].append({'source': slug, 'status': 'held', 'reason': gate['reason']})
             continue
         source_claims = 0
-        while source_claims < max_claims:
+        while max_claims is None or source_claims < max_claims:
             claim = store.rpc('collector_cloud_take', {'p_worker': worker, 'p_slug': slug})
             if not claim:
                 summary['commits'].append({'source': slug, 'status': 'queue_empty'})
@@ -82,7 +82,7 @@ def main():
     selection.add_argument('--source', action='append')
     selection.add_argument('--all-owned', action='store_true')
     parser.add_argument('--browser', action='store_true')
-    parser.add_argument('--max-claims', type=int, default=1, help='maximum claims per source, 1–100')
+    parser.add_argument('--max-claims', type=int, help='optional operator-selected claim limit; omitted drains available claims')
     parser.add_argument('--output', default='work/collector-v2-worker.json')
     args = parser.parse_args()
     result = run(args.source, browser=args.browser, all_owned=args.all_owned, max_claims=args.max_claims)

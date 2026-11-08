@@ -392,9 +392,6 @@ export async function extractExpansion(
     nodes.map((n) => textNodes(n as unknown as Node).join(" ")).join(" "),
   );
   if (body.length < 10) throw new Error("empty_body");
-  if (body.length > 80000) {
-    throw new Error("long_document_requires_chunked_reading");
-  }
   if (c.date) {
     for (const n of document.querySelectorAll(c.date)) {
       const value = c.date_attribute

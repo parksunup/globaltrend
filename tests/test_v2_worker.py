@@ -43,7 +43,7 @@ class SourceOwnershipTests(unittest.TestCase):
         self.assertEqual(commit['p_bundle'], bundle)
         self.assertEqual(result['status'], 'completed')
 
-    def test_unbounded_queue_is_stopped_after_requested_claim_limit(self):
+    def test_operator_selected_claim_limit_is_applied_when_supplied(self):
         class Store:
             def preflight(self, config): return {'allowed': True}
             def rpc(self, name, payload):
@@ -51,7 +51,7 @@ class SourceOwnershipTests(unittest.TestCase):
                 return {'saved': True}
         bundle = {'result': {'status': 'success'}, 'operations': []}
         with patch('scripts.collector_v2.worker.SupabaseStore', return_value=Store()), patch('scripts.collector_v2.worker.prepare', return_value=bundle):
-            result = run(['ftc'])
+            result = run(['ftc'], max_claims=1)
         self.assertEqual(len([c for c in result['commits'] if c['status'] == 'committed']), 1)
         self.assertEqual(result['commits'][-1]['reason'], 'claim_limit_reached')
         self.assertEqual(result['status'], 'partial')

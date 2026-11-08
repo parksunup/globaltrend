@@ -28,8 +28,6 @@ def supplement_official_pdf(item, source, client):
             pdf = parsers.extract_pdf(body, final)
             text = '\n'.join(page['text'] for page in pdf['pages'])
             combined = item['content_text'] + '\n\n[Official PDF attachment]\n' + text
-            if len(combined) > 80000:
-                raise ValueError('attachment_too_long_for_single_document')
             item['content_text'] = combined
             item['content_hash'] = hashlib.sha256(combined.encode('utf-8')).hexdigest()
             attachment['read'] = True

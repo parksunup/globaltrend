@@ -206,7 +206,6 @@ def extract(source, html, url):
     nodes=[n for n in nodes if not any(parent in nodes for parent in n.parents)]
     body=normalize(' '.join(n.get_text(' ',strip=True) for n in nodes))
     if len(body)<10: raise ValueError('empty_body')
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=[]
     ppc_title_date=None
     if date_node:
@@ -266,7 +265,7 @@ def extract_pdf(data,url):
         # Many public PDFs carry an empty user password solely to restrict
         # editing. Do not try passwords beyond the standard empty one.
         if reader.is_encrypted and not reader.decrypt(''): raise ValueError('pdf_limit_or_encrypted')
-        if not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
+        if not len(reader.pages): raise ValueError('pdf_limit_or_encrypted')
         pages=[]; related=[]
         for i,page in enumerate(reader.pages,1):
             text=page.extract_text(extraction_mode='layout') or ''
@@ -294,7 +293,6 @@ def extract_pdpc_pdf(data,url,row):
         raise ValueError('pdf_listing_evidence_missing')
     pdf=extract_pdf(data,url)
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     # PDPC cards can display event dates. No verified PDF publication dateline
     # exists yet, so neither listing dates nor arbitrary PDF prose decide range.
     observations=[dict(o,meaning='listing_date_candidate') for o in row.get('date_observations',[])]
@@ -306,11 +304,44 @@ def extract_pdpc_pdf(data,url,row):
     return {'title_original':normalize(row['title']),'content_text':body,
         'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':None,'metadata':metadata}
 
+def extract_edps_status(html,url,row=None):
+    """Read the full public status text from EDPS's official Mastodon page."""
+    if (urlsplit(url).scheme!='https' or urlsplit(url).hostname!='social.edps.europa.eu' or
+            not re.fullmatch(r'/@EDPS/\d+',urlsplit(url).path)):
+        raise ValueError('edps_status_outside_official_mastodon')
+    soup=BeautifulSoup(html,'html.parser')
+    description=soup.find('meta',attrs={'property':'og:description'}) or soup.find('meta',attrs={'name':'description'})
+    body=normalize(description.get('content','')) if description else ''
+    if len(body)<10:
+        raise ValueError('edps_status_body_missing')
+    row_title=normalize((row or {}).get('title',''))
+    title=row_title or normalize((soup.find('meta',attrs={'property':'og:title'}) or {}).get('content',''))
+    title=re.sub(r'\s*\(@EDPS@social\.edps\.europa\.eu\)\s*$','',title)
+    if not title or title=='EDPS':
+        title=body.split('. ',1)[0][:240]
+    related=[]
+    for document in (row or {}).get('related_documents',[]):
+        link=document.get('url','')
+        if urlsplit(link).scheme=='https': related.append(document)
+    digest=hashlib.sha256(body.encode()).hexdigest()
+    return {'title_original':title,'content_text':body,'content_hash':digest,'published_date':None,
+        'metadata':{'normalization_version':NORMALIZATION_VERSION,'parser_version':'edps-official-mastodon-status-v1',
+            'read_scope':'official_social_post_not_linked_report','date_observations':[],
+            'requires_review':True,'related_documents':related,'unread_attachments':[],
+            'factual_status':'official_edps_social_post_not_linked_document','ai_ready':False}}
+
 def extract_document(source,data,url,content_type,row=None):
     if source in expansion.ROUTES:
         if content_type not in ('text/html','application/xhtml+xml') and not (source=='ec' and content_type=='application/json'):raise ValueError('unsupported_document_type')
         return expansion.extract(source,data.decode('utf-8','replace'),url,row)
     if content_type in ('text/html','application/xhtml+xml'):
+        if source=='edps':
+            item=extract_edps_status(data.decode('utf-8','replace'),url,row)
+            if row and row.get('date_observations'):
+                observations=row['date_observations']
+                item['metadata']['date_observations']=observations
+                item['published_date']=ftc_listing_date({'date_observations':observations})
+            return item
         item=extract(source,data.decode('utf-8','replace'),url)
         if source in ('pdpc','cnil') and row and row.get('date_observations'):
             observations=item['metadata']['date_observations']+row['date_observations']
@@ -383,7 +414,6 @@ def extract_document(source,data,url,content_type,row=None):
         raise ValueError('press_release_listing_evidence_missing')
     pdf=extract_pdf(data,url)
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=list(row.get('date_observations',[]))
     # Only the release's dateline, never case history or PDF file metadata.
     for match in re.finditer(r'Luxembourg,\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})',pdf['pages'][0]['text']):
@@ -413,7 +443,7 @@ def listing_page_number(url):
         raise ValueError('unverified_listing_query')
     try: page=int(query.get('page',['1'])[0])
     except ValueError: raise ValueError('invalid_listing_page') from None
-    if not 1<=page<=1000: raise ValueError('invalid_listing_page')
+    if page<1: raise ValueError('invalid_listing_page')
     return page
 
 def listing_next_url(url,page):
@@ -428,7 +458,7 @@ def pdpc_api_page_number(url):
         raise ValueError('pdpc_listing_query_changed')
     try: number=int(page[0])
     except ValueError: raise ValueError('invalid_listing_page') from None
-    if not 1<=number<=1000: raise ValueError('invalid_listing_page')
+    if number<1: raise ValueError('invalid_listing_page')
     return number
 
 def pdpc_api_next_url(url,page):
@@ -532,16 +562,36 @@ def discover_listing(source,html,url,fetch):
     return discover(source,html,url)
 
 def discover(source,html,url):
-    if source in ('ftc', 'oecd') and '<rss' in html[:1000].lower():
+    if source in ('ftc', 'oecd', 'edps') and '<rss' in html[:1000].lower():
         if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
         rows=[]
         for item in root.findall('.//item'):
             target=item.findtext('link')
             if not target: continue
+            description=item.findtext('description') or ''
             row={'url':target,'title':item.findtext('title') or ''}
+            if source=='edps':
+                if (urlsplit(target).hostname!='social.edps.europa.eu' or
+                        not re.fullmatch(r'/@EDPS/\d+',urlsplit(target).path)):
+                    raise ValueError('edps_status_outside_official_mastodon')
+                description_soup=BeautifulSoup(description,'html.parser')
+                summary=normalize(description_soup.get_text(' ',strip=True))
+                if not summary:
+                    raise ValueError('edps_status_body_missing')
+                row['summary']=summary
+                row['related_documents']=[{'url':urljoin(target,a['href']),
+                    'title':normalize(a.get_text(' ',strip=True)) or 'Linked source','read':False}
+                    for a in description_soup.select('a[href]')
+                    if urlsplit(urljoin(target,a['href'])).scheme=='https'
+                    and urlsplit(urljoin(target,a['href'])).hostname!='social.edps.europa.eu']
+                if not row['title']:
+                    first=description_soup.find(['p','div'])
+                    row['title']=normalize(first.get_text(' ',strip=True)) if first else summary[:180]
+                    row['title']=row['title'][:240]
+                row['categories']=[normalize(node.text or '') for node in item.findall('category') if node.text]
             if source=='oecd':
-                row['summary']=normalize(item.findtext('description') or '')
+                row['summary']=normalize(description)
                 categories=[normalize(node.text or '') for node in item.findall('category') if node.text]
                 if categories: row['categories']=categories
             pubdates=[normalize(node.text or '') for node in item.findall('pubDate')]

@@ -7,6 +7,15 @@ import time
 
 
 class HttpClientSelectionTests(unittest.TestCase):
+    def test_crawlee_default_accepts_response_larger_than_previous_fixed_cap(self):
+        client=CrawleeClient({'example.com'},interval=0)
+        body=b'x'*(2_000_001)
+        response=Response(body=body,url='https://example.com/',content_type='text/html',status=200)
+        with patch.object(client.robots_client,'check_robots'), \
+             patch.object(client,'_submit',side_effect=lambda coroutine:(coroutine.close(),response)[1]):
+            received,_,_=client.get('https://example.com/')
+        self.assertEqual(len(received),len(body))
+
     def test_safe_headers_set_project_identity_and_keep_request_headers(self):
         headers = safe_request_headers({'uSeR-aGeNt': 'Mozilla/5.0', 'ACCEPT': 'text/plain', 'Content-Type': 'application/json'})
         self.assertEqual(headers['User-Agent'], USER_AGENT)
@@ -54,11 +63,12 @@ class HttpClientSelectionTests(unittest.TestCase):
             client.get('https://example.com/')
         self.assertEqual((budget['requests'], budget['bytes']), (1, 5))
 
-    def test_shared_budget_limit_blocks_request(self):
+    def test_shared_budget_does_not_cut_off_by_an_arbitrary_request_count(self):
         client = CrawleeClient({'example.com'}, budget={'requests': 1000, 'bytes': 0, 'started': time.monotonic()})
-        with patch.object(client.robots_client, 'check_robots'):
-            with self.assertRaisesRegex(FetchError, 'request_or_runtime_limit'):
-                client.get('https://example.com/')
+        response = Response(body=b'ok', url='https://example.com/', content_type='text/html', status=200)
+        with patch.object(client.robots_client, 'check_robots'), patch.object(client, '_submit', side_effect=lambda coroutine: (coroutine.close(), response)[1]):
+            body, _, _ = client.get('https://example.com/')
+        self.assertEqual(body, b'ok')
 
     def test_robots_failure_prevents_request(self):
         client = CrawleeClient({'example.com'})

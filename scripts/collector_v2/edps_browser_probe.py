@@ -2,11 +2,13 @@
 import asyncio
 import html
 import json
+import re
 import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 from urllib.robotparser import RobotFileParser
+from urllib.parse import urlsplit
 
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
@@ -72,9 +74,9 @@ def get_url(url, timeout=20):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
-            return response.status, response.read(2_000_000), safe_headers(response.headers), None
+            return response.status, response.read(), safe_headers(response.headers), None
     except urllib.error.HTTPError as error:
-        return error.code, error.read(2_000_000), safe_headers(error.headers), None
+        return error.code, error.read(), safe_headers(error.headers), None
     except Exception as error:  # noqa: BLE001 - bounded diagnostic only
         return None, b"", {}, type(error).__name__
 
@@ -261,6 +263,36 @@ def probe_feed_endpoint(url, feed_name):
     return result
 
 
+def probe_mastodon_status_post(url, robots_body):
+    result = {"id": "official_mastodon_status_detail", "url": url,
+              "database_writes": False, "captcha_or_challenge_solved": False}
+    parsed = urlsplit(url or "")
+    if (parsed.scheme != "https" or parsed.hostname != "social.edps.europa.eu"
+            or not re.fullmatch(r"/@EDPS/\d+", parsed.path)):
+        result["result"] = "status_url_outside_official_account"
+        return result
+    parser = RobotFileParser()
+    parser.parse(robots_body.decode("utf-8", "replace").splitlines())
+    result["robots_allowed"] = parser.can_fetch("GlobalTrendResearch", url)
+    if not result["robots_allowed"]:
+        result["result"] = "disallowed_by_robots"
+        return result
+    status, body, headers, error = get_url(url, timeout=20)
+    result.update(status=status, headers=headers)
+    if error or status != 200:
+        result["result"] = "status_request_error" if error else "status_unavailable"
+        if error:
+            result["error_type"] = error
+        return result
+    soup = BeautifulSoup(body, "html.parser")
+    description = soup.find("meta", attrs={"property": "og:description"})
+    content = " ".join(description.get("content", "").split()) if description else ""
+    result.update(result="status_body_readable" if len(content) >= 100 else "status_body_too_short",
+                  content_characters=len(content), excerpt=content[:220] or None,
+                  account_title=(soup.find("meta", attrs={"property": "og:title"}) or {}).get("content"))
+    return result
+
+
 def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_body):
     result = {
         "id": "official_mastodon_public_api",
@@ -294,7 +326,7 @@ def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_b
     time.sleep(2.0)
     statuses_url = (
         f"{MASTODON_BASE}/api/v1/accounts/{account_id}/statuses"
-        "?limit=10&exclude_reblogs=true"
+        "?exclude_reblogs=true"
     )
     status_parser = RobotFileParser()
     status_parser.parse(social_robots_body.decode("utf-8", "replace").splitlines())
@@ -461,6 +493,10 @@ async def run_probe():
         )
         profile_rss_result["robots_allowed"] = mastodon_allowed["rss"]
         result["alternatives"].append(profile_rss_result)
+        if profile_rss_result.get("result") == "feed_readable":
+            await asyncio.sleep(2.0)
+            result["alternatives"].append(probe_mastodon_status_post(
+                profile_rss_result.get("newest_entry_url"), social_robots_body))
     else:
         result["alternatives"].append({"id": "official_mastodon_profile_rss", "result": "disallowed_by_robots"})
     await asyncio.sleep(2.0)

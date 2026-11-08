@@ -11,13 +11,7 @@ from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 from . import expansion
 
-MAX_BYTES=2_000_000
-MAX_PROCESSED_URL_HASHES=50
 OECD_NEWSROOM_LISTING='https://www.oecd.org/en/about/newsroom.html'
-# Per-process safety ceiling, independent of the per-run document/page inputs.
-# A 100-item backfill also performs progress and database RPC calls; the old
-# value of 100 unintentionally stopped a batch before its document limit.
-MAX_REQUESTS=1000
 USER_AGENT='GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)'
 DEFAULT_ACCEPT='text/html,application/xhtml+xml,application/rss+xml,application/atom+xml,application/xml;q=0.9,application/json;q=0.8,*/*;q=0.5'
 _HOST_PACE_GUARD=threading.Lock()
@@ -61,13 +55,13 @@ def is_unapproved_https_host(url,hosts):
     except ValueError: return False
     return parsed.scheme=='https' and parsed.hostname not in hosts and not parsed.username and not parsed.password and parsed.port in (None,443)
 
-def read_limited(stream,limit=MAX_BYTES):
+def read_limited(stream,limit=None):
     result=bytearray()
     while True:
-        block=stream.read(min(65536,limit+1-len(result)))
+        block=stream.read(65536 if limit is None else min(65536,limit+1-len(result)))
         if not block: return bytes(result)
         result.extend(block)
-        if len(result)>limit: raise FetchError('response_size_limit')
+        if limit is not None and len(result)>limit: raise FetchError('response_size_limit')
 
 def retry_delay(value):
     try: delay=float(value)
@@ -93,7 +87,6 @@ class HttpClient:
     def request(self,url,method='GET',payload=None,headers=None,enforce_robots=False,_redirects=0):
         url=canonical_url(url,self.hosts)
         for attempt in range(3):
-            if self.budget['requests']>=MAX_REQUESTS or time.monotonic()-self.budget['started']>600: raise FetchError('request_or_runtime_limit')
             pace_host(urlsplit(url).hostname,self.interval)
             time.sleep(max(0,self.last+self.interval-time.monotonic()))
             self.last=time.monotonic(); self.requests+=1
@@ -101,7 +94,6 @@ class HttpClient:
             request=urllib.request.Request(url,data=payload,method=method,headers=safe_request_headers(headers))
             try:
                 with self.opener.open(request,timeout=20) as response:
-                    if int(response.headers.get('Content-Length','0'))>MAX_BYTES: raise FetchError('response_size_limit')
                     data=read_limited(response);self.budget['bytes']+=len(data)
                     return data,response.url,response.headers.get_content_type()
             except urllib.error.HTTPError as e:
@@ -163,7 +155,7 @@ def fetch_listing(source,client,page):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 
-def collect(config,client,store,since,until,max_pages=10,max_items=30):
+def collect(config,client,store,since,until,max_pages=None,max_items=None):
     result={'source':config['source'],'status':'held','reason':None,'coverage_complete':False,'since':since,'until':until,
             'discovered':0,'new':0,'changed':0,'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,
             'excluded_unapproved_host_count':0,'pages':0}
@@ -191,7 +183,7 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         while page:
             page=canonical_url(page,set(config['hosts']))
             if page in seen_pages: raise FetchError('pagination_cycle')
-            if result['pages']>=max_pages: raise FetchError('page_limit')
+            if max_pages is not None and result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
             if config['source'] in expansion.ROUTES:
                 next_page=expansion.next_within_window(config['source'],rows,next_page,since)
@@ -224,25 +216,18 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                 url_key=hashlib.sha256(url.encode()).hexdigest()
                 if config['source'] in ('ftc','oecd') and url_key in processed_keys: continue
                 if url in seen_items: continue
-                if len(seen_items)-result.get('listing_date_excluded',0)>=max_items: raise FetchError('document_limit')
+                if max_items is not None and len(seen_items)-result.get('listing_date_excluded',0)>=max_items: raise FetchError('document_limit')
                 if config['source']=='ftc':
-                    # PostgreSQL collector_set_progress rejects jsonb::text over
-                    # 4000 bytes. Reserve the next identity *before* fetching or
-                    # ingesting; never truncate this exact set and skip URLs.
-                    # Counters reserve one unknown date/failure, covering the
-                    # atomic parked-failure cursor as well as success.
+                    # Preserve every prior identity in the durable cursor.
                     prospective={'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed']+1,
                         'unknown_dates':prior_unknown_dates+result['unknown_date']+1,
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                         'processed_url_hashes':sorted(processed_keys | {url_key})}
-                    if (len(prospective['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
-                            len(json.dumps(prospective,ensure_ascii=False).encode('utf-8'))>4000):
-                        raise FetchError('ftc_resume_cursor_capacity_exceeded')
                 seen_items.add(url); result['discovered']+=1
                 try:
                     listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
-                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else
+                                  parsers.ftc_listing_date(row) if config['source'] in ('ftc','edps') else
                                   expansion.listing_date(row) if config['source'] in expansion.ROUTES else None)
                     if listing_date and not since<=listing_date<=until:
                         # An individually dated CNIL/FTC row can be excluded
@@ -291,35 +276,24 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     processed_keys.add(url_key)
                     processed_hashes=sorted(processed_keys)
                 elif config['source']=='oecd' and urlsplit(page).path==urlsplit(OECD_NEWSROOM_LISTING).path:
-                    # Keep a bounded rolling identity window for the newsroom's
-                    # mutable six-card listing. Check it against topic rows too.
                     processed_hashes=[value for value in processed_hashes if value!=url_key]
                     processed_hashes.append(url_key)
-                    processed_hashes=processed_hashes[-MAX_PROCESSED_URL_HASHES:]
                     processed_keys=set(processed_hashes)
                 if hasattr(store,'progress'):
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
+                        **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
             completed_page=page
             page=next_page
             cursor=None
             if config['source']=='ftc' and page is None:
-                # The FTC RSS is a bounded, single-page feed. Keep the exact
-                # URL hashes in its latest complete snapshot so tomorrow's
-                # scan does not fetch the same details again. Replace old
-                # hashes only after completing the whole feed; never truncate
-                # a growing in-progress set to fit PostgreSQL's 4 KB limit.
                 processed_keys={hashlib.sha256(url.encode()).hexdigest() for url in listing_urls}
                 completed_cursor={'page':completed_page,'offset':0,'fingerprint':fingerprint,
                     'had_pagination':had_pagination,'failures':prior_failures+result['failed'],
                     'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                     'processed_url_hashes':sorted(processed_keys)}
-                if (len(completed_cursor['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
-                        len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000):
-                    raise FetchError('ftc_resume_cursor_capacity_exceeded')
             elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path!=urlsplit(OECD_NEWSROOM_LISTING).path:
                 # The official topic landing page exposes publications and may
                 # link related releases, but it is not the newsroom release list.
@@ -335,7 +309,7 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                 result['listing_transition']='topic_to_official_newsroom'
             elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path==urlsplit(OECD_NEWSROOM_LISTING).path:
                 # Restart the next scheduled scan at the topic listing while
-                # retaining a bounded rolling set of processed newsroom URLs.
+                # retaining the discovered newsroom identities.
                 page=config['listing']
                 completed_cursor={'page':page,'offset':0,'had_pagination':False,
                     'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
@@ -364,9 +338,6 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
     except (FetchError,ValueError) as e:
-        # Ordinary batch boundaries preserve the cursor for the next run. They
-        # do not establish complete coverage, but are not collection failures.
         result['status']='partial' if str(e) in ('document_limit','page_limit') else 'failed'
         result['reason']=str(e); result['coverage_complete']=False
     return result
-

@@ -14,9 +14,8 @@ on:
         options: [auto, impit, httpx]
         default: auto
       source:
-        description: 'Source selection for this manual validation run'
-        type: choice
-        options: [all, edpb, oecd, curia, cnil, ico, dpc, pdpc, ppc, ftc, ec, calprivacy, oaic, ca-opc, hk-pcpd, eu-parliament, eu-council, cn-cac, cn-tc260, es-aepd]
+        description: 'Source slug from config/trend-collector.json, or all'
+        type: string
         default: all
       since:
         description: 'Optional backfill start YYYY-MM-DD (bounded; resume the same range)'
@@ -25,13 +24,11 @@ on:
         description: 'Optional end YYYY-MM-DD; default today in Korea'
         type: string
       max_items:
-        description: 'Maximum documents per source for this run (1–100; default 30)'
+        description: 'Optional operator-selected document limit; blank follows all discovered documents'
         type: string
-        default: '30'
       max_pages:
-        description: 'Maximum listing pages per source for this run (1–50; default 10)'
+        description: 'Optional operator-selected page limit; blank follows pagination to its end'
         type: string
-        default: '10'
 
 # architecture.md 3.1 assigns collection scheduling to Supabase Cron + Queues.
 # Keep Actions manual-only so merging this workflow cannot enable a second
@@ -46,12 +43,11 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
     strategy:
       fail-fast: false
       max-parallel: 3
       matrix:
-        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight","edps-browser-probe","scrapling-probe"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
+        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight","edps-browser-probe","scrapling-probe"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || format('["{0}"]', inputs.source || 'all')) }}
     env:
       PYTHONUTF8: '1'
       COLLECTOR_RUNNER: github-hosted
@@ -66,8 +62,8 @@ jobs:
       SOURCE_SELECTION: ${{ matrix.source }}
       RANGE_START: ${{ inputs.since }}
       RANGE_END: ${{ inputs.until }}
-      MAX_ITEMS: ${{ inputs.max_items || '30' }}
-      MAX_PAGES: ${{ inputs.max_pages || '10' }}
+      MAX_ITEMS: ${{ inputs.max_items }}
+      MAX_PAGES: ${{ inputs.max_pages }}
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
       FREE_LIMITS_VERIFIED: ${{ vars.FREE_LIMITS_VERIFIED }}
       CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
@@ -144,7 +140,8 @@ jobs:
           if [ "$SOURCE_SELECTION" != "all" ]; then args+=(--source "$SOURCE_SELECTION"); fi
           if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
           if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi
-          args+=(--max-items "$MAX_ITEMS" --max-pages "$MAX_PAGES")
+          if [ -n "$MAX_ITEMS" ]; then args+=(--max-items "$MAX_ITEMS"); fi
+          if [ -n "$MAX_PAGES" ]; then args+=(--max-pages "$MAX_PAGES"); fi
           set +e
           python -m scripts.collector.run "${args[@]}"
           collector_exit=$?

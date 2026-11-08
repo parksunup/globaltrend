@@ -3,7 +3,6 @@ import unittest
 import urllib.request
 from email.message import Message
 from urllib.response import addinfourl
-from unittest.mock import patch
 
 from scripts.collector.core import HttpClient, SafeRedirect, FetchError
 
@@ -65,12 +64,12 @@ class RedirectTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'URL outside approved official hosts'):
             SafeRedirect(['ico.org.uk']).redirect_request(None, None, 301, 'Moved', {}, 'http://other.example/path')
 
-    def test_redirect_stops_before_exceeding_request_budget(self):
+    def test_redirect_chain_is_not_cut_by_an_arbitrary_request_count(self):
         client, handler = self.client()
-        with patch('scripts.collector.core.MAX_REQUESTS', 2):
-            with self.assertRaisesRegex(FetchError, 'request_or_runtime_limit'):
-                client.get('https://ico.org.uk/allowed')
-        self.assertEqual(handler.paths, ['/robots.txt', '/allowed'])
+        body, final, _ = client.get('https://ico.org.uk/allowed')
+        self.assertEqual(body, b'The redirected body')
+        self.assertEqual(final, 'https://ico.org.uk/blocked')
+        self.assertEqual(handler.paths, ['/robots.txt', '/allowed', '/blocked'])
 
 
 if __name__ == '__main__':
