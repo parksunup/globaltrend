@@ -20,6 +20,10 @@ RSS_URL = f"{BASE}/feed/news_en"
 APEX_RSS_URL = "https://edps.europa.eu/feed/news_en"
 MASTODON_BASE = "https://social.edps.europa.eu"
 MASTODON_ACCOUNT = "EDPS"
+IDPC_REPUBLICATION_URL = (
+    "https://idpc.org.mt/news-latest/edps-opinion-eu-us-border-information-exchange-"
+    "effective-safeguards-are-essential-to-protect-fundamental-rights-in-practice/"
+)
 ROUTES = [
     {
         "id": "newsletter_detail",
@@ -263,6 +267,7 @@ def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_b
         "account": f"@{MASTODON_ACCOUNT}@social.edps.europa.eu",
         "database_writes": False,
         "cookies_reused": False,
+        "robots_allowed_lookup": lookup_allowed,
     }
     if not lookup_allowed:
         result["result"] = "stopped_by_robots_or_rate_limit"
@@ -297,6 +302,7 @@ def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_b
         result["statuses"] = {"url": statuses_url, "result": "disallowed_by_robots"}
         result["result"] = "public_statuses_disallowed_by_robots"
         return result
+    result["robots_allowed_statuses"] = True
     status, body, headers, error = get_url(statuses_url, timeout=20)
     result["statuses"] = {"url": statuses_url, "status": status, "headers": headers}
     if error or status != 200:
@@ -337,6 +343,64 @@ def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_b
     return result
 
 
+def probe_official_regulator_republication():
+    robots_url = "https://idpc.org.mt/robots.txt"
+    robots_status, robots_body, robots_headers, robots_error = get_url(robots_url, timeout=20)
+    result = {
+        "id": "malta_idpc_official_republication_sample",
+        "url": IDPC_REPUBLICATION_URL,
+        "robots": {"url": robots_url, "status": robots_status, "headers": robots_headers},
+        "database_writes": False,
+    }
+    if robots_error:
+        result["robots"].update(result="unreachable", error_type=robots_error)
+        result["result"] = "stopped_robots_unreachable"
+        return result
+    if robots_status == 429:
+        result["robots"]["result"] = "rate_limited"
+        result["result"] = "stopped_by_rate_limit"
+        return result
+    if robots_status is not None and 400 <= robots_status < 500:
+        allowed = True  # RFC 9309: 4xx robots responses mean rules are unavailable.
+        result["robots"]["result"] = "unavailable_4xx"
+    elif robots_status == 200:
+        parser = RobotFileParser()
+        parser.parse(robots_body.decode("utf-8", "replace").splitlines())
+        allowed = parser.can_fetch("GlobalTrendResearch", IDPC_REPUBLICATION_URL)
+        result["robots"]["result"] = "rules_loaded"
+    else:
+        allowed = False
+        result["robots"]["result"] = "unavailable_server_error"
+    result["robots"]["allowed"] = allowed
+    if not allowed:
+        result["result"] = "stopped_by_robots"
+        return result
+
+    status, body, headers, error = get_url(IDPC_REPUBLICATION_URL, timeout=20)
+    result.update(status=status, headers=headers)
+    if error or status != 200:
+        result["result"] = "republication_unavailable"
+        if error:
+            result["error_type"] = error
+        else:
+            result["body_excerpt"] = body.decode("utf-8", "replace").strip()[:240]
+        return result
+
+    soup = BeautifulSoup(body, "html.parser")
+    text = soup.get_text(" ", strip=True)
+    result.update(
+        result="official_regulator_republication_readable",
+        page_title=soup.title.get_text(" ", strip=True) if soup.title else None,
+        body_characters=len(text),
+        expected_content={
+            "EDPS Opinion": "EDPS Opinion" in text,
+            "border information exchange": "border information exchange" in text.lower(),
+            "case-by-case": "case-by-case" in text,
+        },
+    )
+    return result
+
+
 async def run_probe():
     robots, allowed = robots_results()
     rss = rss_item_summary()
@@ -366,14 +430,15 @@ async def run_probe():
         social_robots = {"status": 200, "result": "rules_loaded", "headers": social_robots_headers}
     else:
         mastodon_allowed = {"rss": False, "lookup": False}
-
-    if isinstance(mastodon_allowed, bool):
-        mastodon_allowed = {"rss": mastodon_allowed, "lookup": mastodon_allowed}
         social_robots = {
             "status": social_robots_status,
             "result": "unavailable_server_error",
             "headers": social_robots_headers,
         }
+
+    if isinstance(mastodon_allowed, bool):
+        mastodon_allowed = {"rss": mastodon_allowed, "lookup": mastodon_allowed}
+    social_robots["allowed_paths"] = mastodon_allowed
 
     result = {
         "source": "edps",
@@ -391,9 +456,11 @@ async def run_probe():
     result["alternatives"].append(probe_feed_endpoint(APEX_RSS_URL, "apex_official_rss"))
     await asyncio.sleep(2.0)
     if mastodon_allowed["rss"]:
-        result["alternatives"].append(
-            probe_feed_endpoint(f"{MASTODON_BASE}/@{MASTODON_ACCOUNT}.rss", "official_mastodon_profile_rss")
+        profile_rss_result = probe_feed_endpoint(
+            f"{MASTODON_BASE}/@{MASTODON_ACCOUNT}.rss", "official_mastodon_profile_rss"
         )
+        profile_rss_result["robots_allowed"] = mastodon_allowed["rss"]
+        result["alternatives"].append(profile_rss_result)
     else:
         result["alternatives"].append({"id": "official_mastodon_profile_rss", "result": "disallowed_by_robots"})
     await asyncio.sleep(2.0)
@@ -403,6 +470,8 @@ async def run_probe():
             mastodon_allowed["lookup"], social_robots_status, social_robots_body
         )
     )
+    await asyncio.sleep(2.0)
+    result["alternatives"].append(probe_official_regulator_republication())
 
     delay = robots.get("crawl_delay_seconds", 0)
     async with async_playwright() as playwright:
@@ -431,6 +500,11 @@ async def run_probe():
         for alternative in result["alternatives"]
     ):
         result["result"] = "official_mastodon_posts_available_site_detail_blocked"
+    elif any(
+        alternative.get("result") == "official_regulator_republication_readable"
+        for alternative in result["alternatives"]
+    ):
+        result["result"] = "official_regulator_republication_available_site_detail_blocked"
     else:
         result["result"] = "cloud_cannot_fetch_edps_detail"
     return result
