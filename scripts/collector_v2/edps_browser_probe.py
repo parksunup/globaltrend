@@ -39,44 +39,67 @@ ROUTES = [
 ]
 
 
+DIAGNOSTIC_HEADERS = (
+    "server",
+    "content-type",
+    "via",
+    "x-cache",
+    "x-request-id",
+    "x-amzn-requestid",
+    "x-amz-cf-id",
+    "x-azure-ref",
+    "cf-ray",
+    "retry-after",
+)
+
+
+def safe_headers(headers):
+    return {
+        name: str(value)[:160]
+        for name in DIAGNOSTIC_HEADERS
+        if (value := headers.get(name))
+    }
+
+
 def get_url(url, timeout=20):
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
-            return response.status, response.read(2_000_000), None
+            return response.status, response.read(2_000_000), safe_headers(response.headers), None
     except urllib.error.HTTPError as error:
-        return error.code, error.read(2_000_000), None
+        return error.code, error.read(2_000_000), safe_headers(error.headers), None
     except Exception as error:  # noqa: BLE001 - bounded diagnostic only
-        return None, b"", type(error).__name__
+        return None, b"", {}, type(error).__name__
 
 
 def robots_results():
-    status, body, error = get_url(ROBOTS_URL, timeout=20)
+    status, body, headers, error = get_url(ROBOTS_URL, timeout=20)
     if error:
         return {"status": "unreachable", "error": error}, {route["id"]: False for route in ROUTES}
     if status == 429:
-        return {"status": status, "result": "rate_limited"}, {route["id"]: False for route in ROUTES}
+        return {"status": status, "result": "rate_limited", "headers": headers}, {route["id"]: False for route in ROUTES}
     if status is not None and 400 <= status < 500:
         # RFC 9309 treats 4xx robots responses as unavailable, not as Disallow.
-        return {"status": status, "result": "unavailable_4xx"}, {route["id"]: True for route in ROUTES}
+        return {"status": status, "result": "unavailable_4xx", "headers": headers}, {route["id"]: True for route in ROUTES}
     if status is None or status < 200 or status >= 300:
-        return {"status": status, "result": "unavailable_server_error"}, {route["id"]: False for route in ROUTES}
+        return {"status": status, "result": "unavailable_server_error", "headers": headers}, {route["id"]: False for route in ROUTES}
 
     parser = RobotFileParser()
     parser.parse(body.decode("utf-8", "replace").splitlines())
     allowed = {}
     for route in ROUTES:
         allowed[route["id"]] = parser.can_fetch("GlobalTrendResearch", route["url"])
-    return {"status": status, "result": "rules_loaded"}, allowed
+    return {"status": status, "result": "rules_loaded", "headers": headers}, allowed
 
 
 def rss_item_summary():
-    status, body, error = get_url(RSS_URL, timeout=20)
-    result = {"url": RSS_URL, "status": status, "result": "unavailable"}
+    status, body, headers, error = get_url(RSS_URL, timeout=20)
+    result = {"url": RSS_URL, "status": status, "headers": headers, "result": "unavailable"}
     if error:
         result["error"] = error
         return result
     if status != 200:
+        result["body_excerpt"] = body.decode("utf-8", "replace").strip()[:240]
         return result
     try:
         root = ET.fromstring(body)
@@ -128,6 +151,7 @@ async def probe_route(page, route, robots_allowed):
     try:
         response = await page.goto(route["url"], wait_until="domcontentloaded", timeout=45_000)
         initial_status = response.status if response else None
+        response_headers = safe_headers(response.headers) if response else {}
         deadline = time.monotonic() + 20
         body_text = ""
         title = ""
@@ -166,10 +190,12 @@ async def probe_route(page, route, robots_allowed):
 
         result.update(
             initial_http_status=initial_status,
+            response_headers=response_headers,
             final_http_status=statuses[-1] if statuses else None,
             document_response_statuses=statuses,
             rendered_title=title,
             rendered_body_characters=len(body_text),
+            response_body_excerpt=body_text.strip()[:240] if initial_status in {403, 429} else None,
             expected_sections=markers,
             challenge_interstitial_present=waf_markers,
             result=classification,
