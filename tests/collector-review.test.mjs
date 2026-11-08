@@ -18,5 +18,9 @@ test('feedback follows the exact item and original revision independent of app d
 test('invalid database responses do not appear as an empty successful list',()=>{
   assert.throws(()=>parseCollectorReview(null));
   assert.throws(()=>parseCollectorReview({items:'bad'}));
-  assert.deepEqual(parseCollectorReview({items:[],limit:100,database_bytes:123}).items,[]);
+  assert.deepEqual(parseCollectorReview({items:[],database_bytes:123}).items,[]);
+});
+test('review parser preserves every returned item beyond the old 100-item window',()=>{
+  const items=Array.from({length:160},(_,i)=>({id:`item-${i}`}));
+  assert.equal(parseCollectorReview({items,database_bytes:123}).items.length,160);
 });

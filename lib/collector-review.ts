@@ -21,7 +21,7 @@ export type CollectorItem = {
   jobs: CollectorJob[]; report: CollectorReport | null;
   evidence: Array<{ id: string; excerpt: string; locator: { location?: string; claim?: string; revision_id?: string } }>;
 };
-export type CollectorReview = { items: CollectorItem[]; limit: number; database_bytes: number };
+export type CollectorReview = { items: CollectorItem[]; database_bytes: number };
 export function canReviewCollector(role: string | null): boolean {
   return role === 'admin' || role === 'editor' || role === 'reviewer';
 }

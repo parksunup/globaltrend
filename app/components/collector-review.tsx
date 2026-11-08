@@ -12,7 +12,7 @@ export default function CollectorReviewPanel({ data, error, commitSha }: { data:
     <h2>자동 수집 자료와 한국어 초안</h2>
     <p>DB에서 직접 불러오는 자료입니다. 새 자료 저장 후 화면을 새로고침하면 커밋·재배포 없이 표시됩니다. AI 근거 검사와 사람 승인은 별개입니다.</p>
     {error ? <p role="alert">수집 자료를 읽지 못했습니다. DB 변경 적용 여부와 팀 권한을 확인해 주세요. 빈 대기함으로 처리하지 않았습니다.</p> : data?.items.length === 0 ? <p>아직 저장된 자동 수집 자료가 없습니다. 이것만으로 공식 사이트에 새 자료가 없었다고 판단할 수는 없습니다.</p> : null}
-    {data && <p>DB 사용량: {(data.database_bytes / 1000000).toFixed(1)} MB · 수집 쓰기 중단 기준: 400 MB · 최근 최대 {data.limit}건 표시</p>}
+    {data && <p>현재 목록 {data.items.length}건 · DB 사용량: {(data.database_bytes / 1000000).toFixed(1)} MB · 수집 저장공간 상태를 확인해 주세요.</p>}
     {data?.items.map(item => <article key={item.id} style={{border:'1px solid #aaa',padding:'1.2rem',margin:'1rem 0',borderRadius:12}}>
       <h3>{item.report?.title_ko ?? item.title_original}</h3>
       <p>{item.source_name} · 원문 게시일: {item.published_at?.slice(0,10) ?? '미확정'} · {labels[item.pipeline_status] ?? item.pipeline_status}</p>
