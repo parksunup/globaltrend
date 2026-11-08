@@ -17,6 +17,9 @@ from scripts.collector.core import USER_AGENT
 BASE = "https://www.edps.europa.eu"
 ROBOTS_URL = f"{BASE}/robots.txt"
 RSS_URL = f"{BASE}/feed/news_en"
+APEX_RSS_URL = "https://edps.europa.eu/feed/news_en"
+MASTODON_BASE = "https://social.edps.europa.eu"
+MASTODON_ACCOUNT = "EDPS"
 ROUTES = [
     {
         "id": "newsletter_detail",
@@ -207,20 +210,199 @@ async def probe_route(page, route, robots_allowed):
     return result
 
 
+def probe_feed_endpoint(url, feed_name):
+    status, body, headers, error = get_url(url, timeout=20)
+    result = {"id": feed_name, "url": url, "status": status, "headers": headers}
+    if error:
+        result.update(result="request_error", error_type=error)
+        return result
+    if status != 200:
+        result.update(
+            result="unavailable",
+            body_excerpt=body.decode("utf-8", "replace").strip()[:240],
+        )
+        return result
+    try:
+        root = ET.fromstring(body)
+    except ET.ParseError:
+        result.update(result="http_success_invalid_xml", body_characters=len(body))
+        return result
+
+    entries = [
+        node for node in root.iter()
+        if node.tag.rsplit("}", 1)[-1].lower() in {"item", "entry"}
+    ]
+    newest = entries[0] if entries else None
+    newest_fields = {}
+    if newest is not None:
+        for child in newest:
+            field_name = child.tag.rsplit("}", 1)[-1].lower()
+            if field_name in {"title", "link", "pubdate", "published", "updated", "description", "encoded"}:
+                newest_fields[field_name] = (child.text or "").strip()
+    excerpt_markup = newest_fields.get("description") or newest_fields.get("encoded", "")
+    newest_excerpt = BeautifulSoup(html.unescape(excerpt_markup), "html.parser").get_text(" ", strip=True)
+    result.update(
+        result="feed_readable",
+        body_characters=len(body),
+        entry_count=len(entries),
+        newest_entry_title=newest_fields.get("title"),
+        newest_entry_url=newest_fields.get("link"),
+        newest_entry_published=(
+            newest_fields.get("pubdate")
+            or newest_fields.get("published")
+            or newest_fields.get("updated")
+        ),
+        newest_entry_excerpt=newest_excerpt[:360] or None,
+    )
+    return result
+
+
+def probe_mastodon_account(lookup_allowed, social_robots_status, social_robots_body):
+    result = {
+        "id": "official_mastodon_public_api",
+        "account": f"@{MASTODON_ACCOUNT}@social.edps.europa.eu",
+        "database_writes": False,
+        "cookies_reused": False,
+    }
+    if not lookup_allowed:
+        result["result"] = "stopped_by_robots_or_rate_limit"
+        return result
+
+    lookup_url = f"{MASTODON_BASE}/api/v1/accounts/lookup?acct={MASTODON_ACCOUNT}"
+    status, body, headers, error = get_url(lookup_url, timeout=20)
+    result["lookup"] = {"url": lookup_url, "status": status, "headers": headers}
+    if error or status != 200:
+        result["result"] = "account_lookup_unavailable"
+        if error:
+            result["lookup"]["error_type"] = error
+        else:
+            result["lookup"]["body_excerpt"] = body.decode("utf-8", "replace").strip()[:240]
+        return result
+
+    try:
+        account = json.loads(body)
+        account_id = account["id"]
+    except (json.JSONDecodeError, KeyError, TypeError):
+        result["result"] = "account_lookup_invalid_json"
+        return result
+
+    time.sleep(2.0)
+    statuses_url = (
+        f"{MASTODON_BASE}/api/v1/accounts/{account_id}/statuses"
+        "?limit=10&exclude_reblogs=true"
+    )
+    status_parser = RobotFileParser()
+    status_parser.parse(social_robots_body.decode("utf-8", "replace").splitlines())
+    if social_robots_status == 200 and not status_parser.can_fetch("GlobalTrendResearch", statuses_url):
+        result["statuses"] = {"url": statuses_url, "result": "disallowed_by_robots"}
+        result["result"] = "public_statuses_disallowed_by_robots"
+        return result
+    status, body, headers, error = get_url(statuses_url, timeout=20)
+    result["statuses"] = {"url": statuses_url, "status": status, "headers": headers}
+    if error or status != 200:
+        result["result"] = "public_statuses_unavailable"
+        if error:
+            result["statuses"]["error_type"] = error
+        else:
+            result["statuses"]["body_excerpt"] = body.decode("utf-8", "replace").strip()[:240]
+        return result
+
+    try:
+        statuses = json.loads(body)
+    except json.JSONDecodeError:
+        result["result"] = "public_statuses_invalid_json"
+        return result
+    if not isinstance(statuses, list):
+        result["result"] = "public_statuses_unexpected_shape"
+        return result
+
+    rendered_text = [
+        BeautifulSoup(item.get("content", ""), "html.parser").get_text(" ", strip=True)
+        for item in statuses if isinstance(item, dict)
+    ]
+    joined = "\n".join(rendered_text)
+    result.update(
+        result="official_public_posts_available",
+        account_id=account_id,
+        sample_count=len(statuses),
+        newest_post_url=statuses[0].get("url") if statuses else None,
+        newest_post_created_at=statuses[0].get("created_at") if statuses else None,
+        sampled_text_characters=sum(map(len, rendered_text)),
+        sampled_data_protection_mentions=sum(
+            1 for text in rendered_text
+            if any(term in text.lower() for term in ("data protection", "privacy", "personal data"))
+        ),
+        sampled_post_excerpt=(rendered_text[0][:360] if rendered_text else None),
+    )
+    return result
+
+
 async def run_probe():
     robots, allowed = robots_results()
     rss = rss_item_summary()
+    social_robots_status, social_robots_body, social_robots_headers, social_robots_error = get_url(
+        f"{MASTODON_BASE}/robots.txt", timeout=20
+    )
+    if social_robots_error:
+        mastodon_allowed = False
+        social_robots = {"result": "unreachable", "error": social_robots_error}
+    elif social_robots_status == 429:
+        mastodon_allowed = False
+        social_robots = {"status": 429, "result": "rate_limited", "headers": social_robots_headers}
+    elif social_robots_status is not None and 400 <= social_robots_status < 500:
+        mastodon_allowed = True
+        social_robots = {"status": social_robots_status, "result": "unavailable_4xx", "headers": social_robots_headers}
+    elif social_robots_status == 200:
+        parser = RobotFileParser()
+        parser.parse(social_robots_body.decode("utf-8", "replace").splitlines())
+        mastodon_paths = {
+            "rss": f"{MASTODON_BASE}/@{MASTODON_ACCOUNT}.rss",
+            "lookup": f"{MASTODON_BASE}/api/v1/accounts/lookup?acct={MASTODON_ACCOUNT}",
+        }
+        mastodon_allowed = {
+            key: parser.can_fetch("GlobalTrendResearch", url)
+            for key, url in mastodon_paths.items()
+        }
+        social_robots = {"status": 200, "result": "rules_loaded", "headers": social_robots_headers}
+    else:
+        mastodon_allowed = {"rss": False, "lookup": False}
+
+    if isinstance(mastodon_allowed, bool):
+        mastodon_allowed = {"rss": mastodon_allowed, "lookup": mastodon_allowed}
+        social_robots = {
+            "status": social_robots_status,
+            "result": "unavailable_server_error",
+            "headers": social_robots_headers,
+        }
+
     result = {
         "source": "edps",
         "purpose": "read_only_route_diagnostic",
         "robots": robots,
         "rss": rss,
+        "alternatives": [],
         "routes": [],
         "database_writes": False,
     }
     if not any(allowed.values()):
         result["result"] = "stopped_by_robots_or_rate_limit"
         return result
+
+    result["alternatives"].append(probe_feed_endpoint(APEX_RSS_URL, "apex_official_rss"))
+    await asyncio.sleep(2.0)
+    if mastodon_allowed["rss"]:
+        result["alternatives"].append(
+            probe_feed_endpoint(f"{MASTODON_BASE}/@{MASTODON_ACCOUNT}.rss", "official_mastodon_profile_rss")
+        )
+    else:
+        result["alternatives"].append({"id": "official_mastodon_profile_rss", "result": "disallowed_by_robots"})
+    await asyncio.sleep(2.0)
+    result["alternatives"].append({"robots": social_robots})
+    result["alternatives"].append(
+        probe_mastodon_account(
+            mastodon_allowed["lookup"], social_robots_status, social_robots_body
+        )
+    )
 
     delay = robots.get("crawl_delay_seconds", 0)
     async with async_playwright() as playwright:
@@ -239,6 +421,16 @@ async def run_probe():
         result["result"] = "newsletter_detail_rendered"
     elif any(route["result"] == "official_detail_rendered" for route in alternatives):
         result["result"] = "newsletter_blocked_but_linked_official_detail_available"
+    elif any(
+        alternative.get("result") == "feed_readable" and alternative.get("entry_count", 0) > 0
+        for alternative in result["alternatives"]
+    ):
+        result["result"] = "official_alternate_feed_available_site_detail_blocked"
+    elif any(
+        alternative.get("result") == "official_public_posts_available"
+        for alternative in result["alternatives"]
+    ):
+        result["result"] = "official_mastodon_posts_available_site_detail_blocked"
     else:
         result["result"] = "cloud_cannot_fetch_edps_detail"
     return result
