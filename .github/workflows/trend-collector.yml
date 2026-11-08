@@ -6,7 +6,7 @@ on:
       mode:
         description: 'preflight checks runtime, DB and sites without writes; write uses verified gates'
         type: choice
-        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, crawlee-worker, crawlee-preflight, scrapling-probe, preflight, write]
+        options: [dry-run, probe, expansion-probe, crawlee-probe, crawlee-browser-probe, edps-browser-probe, crawlee-worker, crawlee-preflight, scrapling-probe, preflight, write]
         default: dry-run
       http_client:
         description: 'Crawlee HTTP transport for read-only probes and collection'
@@ -51,7 +51,7 @@ jobs:
       fail-fast: false
       max-parallel: 3
       matrix:
-        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight","scrapling-probe"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
+        source: ${{ fromJSON((contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-preflight","edps-browser-probe","scrapling-probe"]'), inputs.mode) || (inputs.mode == 'crawlee-worker' && inputs.source == 'all')) && '["diagnostic"]' || inputs.source && inputs.source != 'all' && format('["{0}"]', inputs.source) || '["edpb","oecd","curia","cnil","ico","dpc","pdpc","ppc","ftc"]') }}
     env:
       PYTHONUTF8: '1'
       COLLECTOR_RUNNER: github-hosted
@@ -71,8 +71,8 @@ jobs:
       COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
       FREE_LIMITS_VERIFIED: ${{ vars.FREE_LIMITS_VERIFIED }}
       CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
-      SUPABASE_URL: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_URL || '' }}
-      SUPABASE_SECRET_KEY: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_SECRET_KEY || '' }}
+      SUPABASE_URL: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","edps-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_URL || '' }}
+      SUPABASE_SECRET_KEY: ${{ !contains(fromJSON('["expansion-probe","crawlee-probe","crawlee-browser-probe","edps-browser-probe","scrapling-probe"]'), inputs.mode) && secrets.COLLECTOR_SUPABASE_SECRET_KEY || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -83,13 +83,13 @@ jobs:
         if: inputs.mode == 'scrapling-probe'
         run: python -m pip install 'scrapling[fetchers]==0.5.1'
       - name: Install parallel Crawlee collector dependencies
-        if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
+        if: contains(fromJSON('["crawlee-probe","crawlee-browser-probe","edps-browser-probe","crawlee-worker","crawlee-preflight"]'), inputs.mode)
         run: python -m pip install -r scripts/collector_v2/requirements.txt
       - name: Install optional Crawlee HTTPX client for comparison
         if: (inputs.mode == 'crawlee-probe' || inputs.mode == 'crawlee-worker') && (inputs.http_client == 'httpx' || inputs.http_client == 'auto')
         run: python -m pip install 'crawlee[httpx]==1.11.0'
       - name: Install Chromium for browser probe
-        if: inputs.mode == 'crawlee-browser-probe' || (inputs.mode == 'crawlee-worker' && (inputs.source == 'ico' || inputs.source == 'eu-parliament'))
+        if: inputs.mode == 'crawlee-browser-probe' || inputs.mode == 'edps-browser-probe' || (inputs.mode == 'crawlee-worker' && (inputs.source == 'ico' || inputs.source == 'eu-parliament'))
         run: python -m playwright install --with-deps chromium
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
       - name: Run parallel Crawlee regression suite
@@ -102,6 +102,10 @@ jobs:
         run: |
           if [ "$REQUESTED_MODE" = "scrapling-probe" ]; then
             python -m scripts.collector_v2.scrapling_probe
+            exit $?
+          fi
+          if [ "$REQUESTED_MODE" = "edps-browser-probe" ]; then
+            python -m scripts.collector_v2.edps_browser_probe
             exit $?
           fi
           if [ "$REQUESTED_MODE" = "crawlee-probe" ] || [ "$REQUESTED_MODE" = "crawlee-browser-probe" ]; then
