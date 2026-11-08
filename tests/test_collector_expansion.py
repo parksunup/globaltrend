@@ -41,12 +41,12 @@ class ExpansionTests(unittest.TestCase):
                 self.assertEqual(item['published_date'],m['published_date'])
                 self.assertGreater(len(item['content_text']),100)
                 self.assertEqual(item['metadata']['ai_ready'],not item['metadata']['requires_review'])
-    def test_missing_robots_is_allowed_but_forbidden_and_server_failure_remain_blocked(self):
-        for code in ('http_404','http_410'):
+    def test_robots_4xx_unavailable_is_allowed_but_server_failure_remains_blocked(self):
+        for code in ('http_403','http_404','http_410'):
             c=HttpClient(['example.org'])
             with patch.object(c,'request',side_effect=FetchError(code)):
                 self.assertEqual(c.check_robots('https://example.org/news'),'https://example.org/news')
-        for code in ('http_403','http_500'):
+        for code in ('http_500',):
             with patch.object(HttpClient,'request',side_effect=FetchError(code)):
                 with self.assertRaises(FetchError):HttpClient(['example.org']).check_robots('https://example.org/news')
     def test_ec_detail_reference_uses_official_api_and_matches_identity(self):
