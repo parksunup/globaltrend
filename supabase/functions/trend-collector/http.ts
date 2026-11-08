@@ -23,7 +23,6 @@ export class OfficialHTTP {
   private robot: ReturnType<typeof robotsParser> | undefined;
   private last = 0;
   private interval = 2000;
-  private requests = 0;
   constructor(readonly hosts: string[]) {}
   async request(
     raw: string,
@@ -51,12 +50,15 @@ export class OfficialHTTP {
         }
         body = new TextDecoder().decode(r.bytes);
       } catch (error) {
-        // A missing robots file is not a transport/permission failure. Keep
-        // 401/403, timeouts and 5xx fail-closed; never turn those into permission.
-        if (
-          !(error instanceof Error) ||
-          !["http_404", "http_410"].includes(error.message)
-        ) throw error;
+        // RFC 9309 §2.3.1.3 treats 4xx robots.txt responses as unavailable;
+        // that differs from a rule disallowing the requested page. Honor
+        // explicit throttling (429) and fail closed on network/5xx failures.
+        const status = error instanceof Error
+          ? Number(error.message.match(/^http_(\d{3})$/)?.[1])
+          : NaN;
+        if (!Number.isInteger(status) || status < 400 || status >= 500 || status === 429) {
+          throw error;
+        }
       }
       this.robot = robotsParser(
         new URL("/robots.txt", url).href,
@@ -72,7 +74,6 @@ export class OfficialHTTP {
       if (
         robots && this.robot?.isAllowed(url, "GlobalTrendResearch") === false
       ) throw new Error("robots_disallowed");
-      if (++this.requests > 12) throw new Error("request_budget");
       await new Promise((r) =>
         setTimeout(r, Math.max(0, this.last + this.interval - Date.now()))
       );

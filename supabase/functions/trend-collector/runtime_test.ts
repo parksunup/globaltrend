@@ -352,7 +352,7 @@ Deno.test("ICO restarts an unfiltered cursor in its period and validates full pa
     }
   }
 });
-Deno.test("ICO records the robots URL for a 403 and preserves the listing cursor", async () => {
+Deno.test("ICO records a robots rate limit and preserves the listing cursor", async () => {
   const c = { ...config, source: "ico", listing: "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/", hosts: ["ico.org.uk"] };
   const state: State = {
     since: "2026-11-01",
@@ -360,15 +360,15 @@ Deno.test("ICO records the robots URL for a 403 and preserves the listing cursor
     page: c.listing,
     offset: 0,
   };
-  const error = Object.assign(new Error("http_403"), {
+  const error = Object.assign(new Error("http_429"), {
     requestUrl: "https://ico.org.uk/robots.txt",
     requestKind: "robots",
   });
   const step = await advance(c, state, {
     request: async () => { throw error; },
-  }, async () => { throw Error("403 must not ingest anything"); });
+  }, async () => { throw Error("429 must not ingest anything"); });
   eq(step.result.status, "failed");
-  eq(step.result.reason, "http_403");
+  eq(step.result.reason, "http_429");
   eq(step.result.stage, "listing_robots_fetch");
   eq(step.result.failed_request_url, "https://ico.org.uk/robots.txt");
   eq(step.result.coverage_complete, false);

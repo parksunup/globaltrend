@@ -2,6 +2,7 @@ import datetime as dt
 import email.utils
 import json
 import hashlib
+import re
 import time
 import threading
 import urllib.error
@@ -123,7 +124,11 @@ class HttpClient:
         if origin not in self.robots:
             try: data,_,_=self.request(origin+'/robots.txt')
             except FetchError as e:
-                if str(e) not in ('http_404','http_410'):
+                # RFC 9309 §2.3.1.3 treats 4xx robots.txt responses as
+                # unavailable, not as an access prohibition. A 429 is a
+                # separate rate-limit signal and must still stop this run.
+                match=re.fullmatch(r'http_(4\d\d)',str(e))
+                if not match or match.group(1)=='429':
                     raise FetchError('robots_fetch_failed:'+str(e)) from None
                 data=b''
             robot=urllib.robotparser.RobotFileParser(); robot.parse(data.decode('utf-8','replace').splitlines())

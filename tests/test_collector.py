@@ -233,11 +233,21 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual((data,final,ctype),(b'ok','https://www.ftc.gov/a','text/html'))
         self.assertEqual(opened.call_count,2)
 
-    def test_robots_access_failure_is_reported_at_robots_boundary(self):
+    def test_robots_4xx_is_unavailable_under_rfc9309_and_429_still_stops(self):
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
         with patch.object(client,'request',side_effect=self.core.FetchError('http_403')):
-            with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_403$'):
+            self.assertEqual(client.check_robots('https://www.ftc.gov/news'),'https://www.ftc.gov/news')
+        client=self.core.HttpClient(['www.ftc.gov'],interval=0)
+        with patch.object(client,'request',side_effect=self.core.FetchError('http_429')):
+            with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_429$'):
+                client.check_robots('https://www.ftc.gov/news')
+
+    def test_robots_server_failure_stays_fail_closed(self):
+        from unittest.mock import patch
+        client=self.core.HttpClient(['www.ftc.gov'],interval=0)
+        with patch.object(client,'request',side_effect=self.core.FetchError('http_503')):
+            with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_503$'):
                 client.check_robots('https://www.ftc.gov/news')
 
     def test_response_stream_reader_has_no_fixed_byte_ceiling(self):
