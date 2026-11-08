@@ -1,6 +1,7 @@
 # 동향 클라우드 수집·검수 연결: 실제 상태와 운영 방법
 
 최신 2026-10-21 클라우드 실행부 구현·예약 실행·미검수 초안 제출 결과는 [실서버 운영 검증 기록](cloud-runtime-operation-20261021.md)에 있습니다. 아래 과거 날짜의 검사·보류 상태를 현재 운영 설정으로 가정하지 않습니다.
+**상한 정리:** 2026-11-08 후속 PR에서 목록 400건 제한과 앱이 정한 DB 400 MB 중단 기준을 제거합니다. 아래 실행 기록에 적힌 `stop_bytes=400,000,000`은 당시 시험값을 설명하는 과거 기록이며 현재 동작 기준이 아닙니다. 실제 Supabase 용량·실행 제약은 플랫폼이 반환하는 결과로 확인합니다.
 **자동 실행 기반 후속:** 사용자 PC 전원과 독립된 클라우드 수집·편집 요구사항과
 실제 서버 환경의 읽기 전용 사전검사는 [자동 실행 기반](collector-runtime.md)에
 정리했습니다. 클라우드 예약 연결은 미검증이며 데스크톱 예약으로 대신하지 않습니다.
@@ -119,7 +120,7 @@ python -m scripts.collector.run --probe --output work/collector-probe.json
 소급 예시(활성화 조건을 실제로 충족한 뒤에만):
 
 ```bash
-python -m scripts.collector.run --write --source edpb --since 2026-10-01 --until 2026-10-03 --max-pages 2 --max-items 10
+python -m scripts.collector.run --write --source edpb --since 2026-10-01 --until 2026-10-03
 ```
 
 먼저 작은 범위로 검사합니다. 같은 범위를 다시 실행하면 저장된 위치부터 이어가며, URL/본문 해시 중복은 기존 DB가 막습니다. 실패한 상세는 발견 기록으로 남습니다. 자료가 없던 성공과 실패를 구분합니다.

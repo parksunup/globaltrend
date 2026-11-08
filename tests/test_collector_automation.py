@@ -90,14 +90,14 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(result['outcome'], 'partial')
         self.assertTrue(store.recorded)
 
-    def test_capacity_stop_does_not_attempt_database_run_log(self):
+    def test_read_only_database_does_not_attempt_database_run_log(self):
         class Store:
             run_id='test'
             def preflight(self, cfg): return {'allowed':True}
             def range_start(self, *args): return '2026-10-01'
             def record_run(self, result): raise AssertionError('write after capacity stop')
         code, result, created, calls = self.execute([self.config()], Store(),
-            dict(source='edpb', status='failed', coverage_complete=False, reason='database_storage_cap'))
+            dict(source='edpb', status='failed', coverage_complete=False, reason='database_read_only'))
         self.assertEqual(code, 1)
         self.assertEqual(result['run_log']['status'], 'skipped')
 
@@ -197,7 +197,7 @@ class AutomationTests(unittest.TestCase):
             def rpc(self,name,payload):
                 calls.append(name)
                 return {'can_write':False}
-        with self.assertRaisesRegex(FetchError,'database_storage_cap'):
+        with self.assertRaisesRegex(FetchError,'database_read_only'):
             Store().record_run({})
         self.assertEqual(calls,['collector_capacity'])
 

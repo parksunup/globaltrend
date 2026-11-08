@@ -11,6 +11,26 @@ const config = {
   hosts: ["www.edpb.europa.eu"],
   language: "en",
 };
+Deno.test("EDPB listing keeps every row when one page has more than 400 items", async () => {
+  const html = `<main>${Array.from({ length: 401 }, (_, index) =>
+    `<a href="/news/item-${index}">Item ${index}</a>`
+  ).join("")}</main>`;
+  const state: State = {
+    since: "2026-09-21",
+    until: "2026-10-21",
+    page: config.listing,
+  };
+  const step = await advance(config, state, {
+    request: async (url) => ({
+      bytes: new TextEncoder().encode(html),
+      url,
+      type: "text/html",
+    }),
+  }, async () => { throw new Error("listing scan must not fetch article details yet"); });
+  eq(step.result.stage, "listing");
+  eq(step.result.discovered, 401);
+  eq(step.state.rows?.length, 401);
+});
 Deno.test("failed detail preserves exact position and range for retry", async () => {
   const state: State = {
     since: "2026-09-21",

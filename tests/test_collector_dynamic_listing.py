@@ -130,6 +130,44 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(payload['filters'], [{'key': 'from', 'values': ['2026-09-21']}, {'key': 'to', 'values': ['2026-10-23']}])
         self.assertEqual(payload['pageNumber'], 2)
 
+    def test_wiredgov_ico_form_is_parsed_dynamically_and_searches_its_official_channel(self):
+        html='''<form action="/wg/home.nsf/savesearchsite?openagent&amp;id=BDEX-726DKJ&amp;key=SEARCH-DNWA-X"><input name="keywordSearch" value="">
+          <select name="areaSearch"><option value="1405">Information Commissioner's Office</option></select>
+          <select name="yearSearchFrom"><option value="2025">2025</option><option value="2026">2026</option></select>
+        </form>'''
+        endpoint,payload=parsers.wiredgov_ico_search_request(html,'2026-11-01','2026-11-08')
+        from urllib.parse import parse_qs
+        self.assertTrue(endpoint.startswith('https://www.wired-gov.net/wg/home.nsf/savesearchsite?'))
+        self.assertEqual(parse_qs(payload.decode(),keep_blank_values=True),{
+            'areaSearch':['1405'],'monthSearchFrom':['11'],'daySearchFrom':['1'],'yearSearchFrom':['2026'],
+            'monthSearchTo':['11'],'daySearchTo':['8'],'yearSearchTo':['2026'],'keywordSearch':[''],'matchSearch':['all']})
+
+    def test_wiredgov_ico_search_and_detail_keep_republication_provenance(self):
+        listing='''<div id="search_results"><div class="newsbox"><div class="newsboxsummary"><span class="link">
+          <a href="/wg/news.nsf/articles/ICO+news+05112026152000?open">Information Commissioner's Office | Official News Release Solar firm made almost 500 nuisance calls</a>
+        </span></div></div></div>'''
+        rows,next_url=parsers.discover_wiredgov_ico_search(listing,'https://www.wired-gov.net/wg/home.nsf/page?readform')
+        self.assertEqual(next_url,None)
+        self.assertEqual(rows[0]['title'],'Solar firm made almost 500 nuisance calls')
+        detail='''<div class="article-head-label">Thursday 05 Nov 2026 @ 15:20 Information Commissioner's Office</div>
+        <div class="article-inner-container"><div class="article-channel-headline"><h2>ICO article title</h2></div>
+        <div class="newsboxsummary"><p>The complete reproduced article body contains more than one hundred characters and is attributed to the ICO.</p>
+        <p>Further explanation of the ICO action and the relevant next steps for organisations.</p></div>
+        <p>Original article link: <a href="https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/example/">ICO original article</a></p></div>'''
+        item=parsers.extract_wiredgov_ico(detail,'https://www.wired-gov.net/wg/news.nsf/articles/ICO+news+05112026152000?open',rows[0])
+        self.assertEqual(item['published_date'],'2026-11-05')
+        self.assertEqual(item['metadata']['read_scope'],'official_ico_republication')
+        self.assertEqual(item['metadata']['original_official_url'],'https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/example/')
+        self.assertTrue(item['metadata']['requires_review'])
+
+    def test_wiredgov_public_archive_range_and_channel_changes_fail_explicitly(self):
+        html='<form action="/wg/home.nsf/savesearchsite?openagent"><select name="areaSearch"><option value="9">Other</option></select><select name="yearSearchFrom"><option value="2026">2026</option></select></form>'
+        with self.assertRaisesRegex(ValueError,'wiredgov_ico_channel_missing'):
+            parsers.wiredgov_ico_search_request(html,'2026-11-01','2026-11-08')
+        html=html.replace('<option value="9">Other</option>','<option value="1405">Information Commissioner\'s Office</option>')
+        with self.assertRaisesRegex(ValueError,'wiredgov_public_archive_date_unavailable'):
+            parsers.wiredgov_ico_search_request(html,'2025-11-01','2025-11-08')
+
     def test_ico_rejects_partial_and_empty_pages_despite_has_more(self):
         for page, size in [(12, 20), (13, 0)]:
             response = {'results': [{'url': '/news/a/', 'title': 'A'}] * size,
@@ -157,8 +195,9 @@ class DynamicListingTests(unittest.TestCase):
                 raise FetchError('stop_after_request')
         cfg = {'source': 'ico', 'hosts': ['ico.org.uk'], 'listing': 'https://ico.org.uk/news/',
                'enabled': True, 'permissions': dict(collect=True, store=True, ai=True)}
-        for old, expected in [('https://ico.org.uk/news/?page=13', 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23'),
-                              ('https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2', 'https://ico.org.uk/news/?from=2026-09-21&page=2&to=2026-10-23')]:
+        expected=parsers.WIREDGOV_ICO_SEARCH
+        for old in ['https://ico.org.uk/news/?page=13',
+                    'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2']:
             client = Client()
             result = collect(cfg, client, Store(old), '2026-09-21', '2026-10-23')
             self.assertEqual(client.pages, [expected])
@@ -213,25 +252,38 @@ class DynamicListingTests(unittest.TestCase):
             client.post('https://ico.org.uk/api/search', b'{}', {'Content-Type': 'application/json'})
         self.assertEqual(client.called, ['https://ico.org.uk/robots.txt'])
 
-    def test_listing_and_probe_use_current_ico_endpoint_without_body_from_snippet(self):
+    def test_listing_and_probe_use_wiredgov_official_republication_and_full_body(self):
         from scripts.collector.run import probe_source
         class Client:
-            def __init__(self): self.post_payload = None
+            def __init__(self): self.post_payload = None; self.post_url=None
             def get(self, url):
-                html = '<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>' if url.endswith('/news/') else '<h1>Data rights</h1><span>Date</span><strong>9 October 2026</strong><main><div class="rich-text"><div class="prose">The actual detailed news body.</div></div></main>'
+                if url==parsers.WIREDGOV_ICO_SEARCH:
+                    html='''<form action="/wg/home.nsf/savesearchsite?openagent&amp;id=BDEX-726DKJ&amp;key=SEARCH-DNWA-X"><input name="keywordSearch" value="">
+                      <select name="areaSearch"><option value="1405">Information Commissioner's Office</option></select>
+                      <select name="yearSearchFrom"><option value="2025">2025</option><option value="2026">2026</option></select></form>'''
+                else:
+                    html='''<div class="article-head-label">Thursday 05 Nov 2026 @ 15:20 Information Commissioner's Office</div>
+                    <div class="article-inner-container"><div class="article-channel-headline"><h2>ICO article title</h2></div>
+                    <div class="newsboxsummary"><p>The actual detailed news body contains more than one hundred characters and is attributed to the ICO.</p>
+                    <p>Further explanation of the ICO action and the relevant next steps for organisations.</p></div>
+                    <p>Original article link: <a href="https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/example/">ICO original article</a></p></div>'''
                 return html.encode(), url, 'text/html'
             def post(self, url, payload, headers):
-                self.post_payload = json.loads(payload)
-                response = {'results': [{'url': '/news/a/', 'title': 'Data rights', 'description': 'Never use this snippet as full text'}],
-                    'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 1, 'totalResults': 1, 'perPage': 25}}
-                return json.dumps(response).encode(), url, 'application/json'
+                self.post_url=url
+                from urllib.parse import parse_qs
+                self.post_payload = parse_qs(payload.decode())
+                response='''<div id="search_results"><div class="newsbox"><div class="newsboxsummary"><span class="link">
+                  <a href="/wg/news.nsf/articles/ICO+news+05112026152000?open">Information Commissioner's Office | Official News Release Data rights</a>
+                </span></div></div></div>'''
+                return response.encode(), url, 'text/html'
         client = Client()
-        record, failed = probe_source({'source': 'ico', 'listing': 'https://ico.org.uk/news/'}, client, [])
+        record, failed = probe_source({'source': 'ico', 'listing': 'https://ico.org.uk/news/'}, client, [],'2026-11-01','2026-11-08')
         self.assertFalse(failed)
+        self.assertEqual(record['listing']['route'],'wiredgov_official_ico_channel')
         self.assertEqual(record['listing']['discovered'], 1)
         self.assertEqual(record['detail']['sample_origin'], 'current_listing')
-        self.assertEqual(record['detail']['content_characters'], len('The actual detailed news body.'))
-        self.assertEqual(client.post_payload['rootPageId'], 2816)
+        self.assertEqual(record['detail']['content_characters'], len('The actual detailed news body contains more than one hundred characters and is attributed to the ICO. Further explanation of the ICO action and the relevant next steps for organisations.'))
+        self.assertTrue(client.post_url.startswith('https://www.wired-gov.net/wg/home.nsf/savesearchsite?'))
 
     def test_repeated_pdpc_page_cannot_advance_checkpoint(self):
         from scripts.collector.core import collect

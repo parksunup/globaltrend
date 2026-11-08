@@ -7,13 +7,13 @@ import uuid
 import time
 from pathlib import Path
 from urllib.parse import urlsplit
-from .core import collect,HttpClient,FetchError
+from .core import collect,HttpClient,FetchError,fetch_listing
 from .store import SupabaseStore,DryStore
 from . import parsers
 from .environment import runtime_info, runtime_problem
 
 ROOT=Path(__file__).resolve().parents[2]
-def probe_source(config,client,sample_urls):
+def probe_source(config,client,sample_urls,since=None,until=None):
     """Robots-aware listing and one detail; no writes or approval changes.
 
     Current discovered URLs take priority over historical research samples.
@@ -30,28 +30,38 @@ def probe_source(config,client,sample_urls):
         record['requests'].append({'url':url,'final_url':final,'status':'fetched','bytes':len(body),'content_type':ctype})
         return body,final,ctype
     try:
-        body,final,ctype=fetch(listing)
-        is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
-        if is_pdpc_api:
-            rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
-        elif ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
+        if config['source']=='ico':
+            since=since or (dt.date.today()-dt.timedelta(days=7)).isoformat()
+            until=until or dt.date.today().isoformat()
+            listing=parsers.ico_range_url(listing,since,until)
+            rows,next_page=fetch_listing(config['source'],client,listing)
+            record['listing']={'status':'parsed','route':'wiredgov_official_ico_channel',
+                'discovered':len(rows),'next_url':next_page}
+            if not rows: raise ValueError('wiredgov_ico_results_empty_or_changed')
+        else:
+            body,final,ctype=fetch(listing)
+        if config['source']!='ico':
+          is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+          if is_pdpc_api:
+              rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
+          elif ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml'):
             # Bounded public-page diagnostics help distinguish a changed site
             # template from an access/challenge page; never store the response.
-            if ctype in ('text/html','application/xhtml+xml'):
-                document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
-                title=document.select_one('title')
-                record['listing_document']={
-                    'title':parsers.normalize(title.get_text())[:200] if title else None,
-                    'language':document.html.get('lang') if document.html else None,
-                    'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
-                }
-                if not title and not document.select_one('main,article,h1'):
-                    record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
-            rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
-        else:
-            raise ValueError('unsupported_listing_type')
-        if not rows: raise ValueError('listing_empty_or_structure_changed')
-        record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
+              if ctype in ('text/html','application/xhtml+xml'):
+                  document=parsers.BeautifulSoup(body.decode('utf-8','replace'),'html.parser')
+                  title=document.select_one('title')
+                  record['listing_document']={
+                      'title':parsers.normalize(title.get_text())[:200] if title else None,
+                      'language':document.html.get('lang') if document.html else None,
+                      'challenge_marker':b'cf_chl_opt' in body or b'/cdn-cgi/challenge-platform/' in body,
+                  }
+                  if not title and not document.select_one('main,article,h1'):
+                      record['listing_document']['non_article_text']=parsers.normalize(document.get_text())[:200]
+              rows,next_page=parsers.discover_listing(config['source'],body.decode('utf-8','replace'),final,fetch)
+          else:
+              raise ValueError('unsupported_listing_type')
+          if not rows: raise ValueError('listing_empty_or_structure_changed')
+          record['listing']={'status':'parsed','discovered':len(rows),'next_url':next_page}
     except (FetchError,ValueError) as e:
         record['listing']={'status':'failed','reason':str(e)}; failed=True
     row=rows[0] if rows else ({'url':sample_urls[0]} if sample_urls else None)
@@ -106,7 +116,7 @@ def main():
     if args.max_items is not None and args.max_items<1: p.error('max-items must be positive when supplied')
     if args.probe and args.write: p.error('probe never writes to Supabase')
     if args.scheduled and (not args.write or args.since or explicit_until): p.error('scheduled mode requires write without range overrides')
-    registry=json.loads((ROOT/'config/trend-collector.json').read_text())
+    registry=json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
     configs=[c for c in registry['sources'] if not args.source or c['source']==args.source]
     if not configs: p.error('unknown source')
     result={'run_id':str(uuid.uuid4()),'started_at':dt.datetime.now(dt.timezone.utc).isoformat(),
@@ -137,7 +147,7 @@ def main():
                 preflight=store.preflight(config); record['preflight']=preflight
                 if not preflight['allowed']:
                     record['reason']=preflight['reason']
-                    if record['reason']=='database_storage_cap':
+                    if record['reason']=='database_read_only':
                         record['status']='failed'; database_stop=True
                     result['sources'].append(record); continue
                 if args.scheduled:
@@ -147,8 +157,8 @@ def main():
                 record.update(since=since,until=until)
             client=HttpClient(config['hosts'],interval=6 if config['source']=='ico' else 2,budget=budget)
             if args.probe:
-                researched=json.loads((ROOT/f"data/trends/source-configs/{config['source']}.json").read_text())
-                probe,failed=probe_source(config,client,researched.get('sample_urls',[])[:1])
+                researched=json.loads((ROOT/f"data/trends/source-configs/{config['source']}.json").read_text(encoding='utf-8'))
+                probe,failed=probe_source(config,client,researched.get('sample_urls',[])[:1],since,until)
                 probe.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))
                 result['sources'].append(probe); probe_failed=probe_failed or failed
                 continue

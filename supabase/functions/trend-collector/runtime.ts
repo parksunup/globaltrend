@@ -501,7 +501,6 @@ export async function advance(
       if (!found.rows.length && c.source !== "ec") {
         throw new Error("listing_empty_or_structure_changed");
       }
-      if (found.rows.length > 400) throw new Error("listing_row_limit");
       const urls = found.rows.map((r) => r.url);
       if (
         new Set(urls).size !== urls.length && ["pdpc", "ico"].includes(c.source)

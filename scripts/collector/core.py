@@ -8,7 +8,7 @@ import threading
 import urllib.error
 import urllib.request
 import urllib.robotparser
-from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
+from urllib.parse import urlsplit,urlunsplit,parse_qsl,parse_qs,urlencode,urljoin
 from . import parsers
 from . import expansion
 
@@ -146,6 +146,19 @@ class HttpClient:
 def fetch_listing(source,client,page):
     def fetch(url,method='GET',payload=None):
         return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
+    if source=='ico':
+        query=parse_qs(urlsplit(page).query,keep_blank_values=True)
+        if set(query)-{'from','to','page'} or len(query.get('from',[]))!=1 or len(query.get('to',[]))!=1:
+            raise FetchError('invalid_ico_fallback_range')
+        since,until=query['from'][0],query['to'][0]
+        html,form_url,form_type=client.get(parsers.WIREDGOV_ICO_SEARCH)
+        if form_type not in ('text/html','application/xhtml+xml') or urlsplit(form_url).hostname!='www.wired-gov.net':
+            raise FetchError('wiredgov_search_form_unavailable')
+        endpoint,payload=parsers.wiredgov_ico_search_request(html.decode('utf-8','replace'),since,until)
+        data,final,ctype=client.post(endpoint,payload,{'Content-Type':'application/x-www-form-urlencoded','Referer':form_url})
+        if ctype not in ('text/html','application/xhtml+xml') or urlsplit(final).hostname!='www.wired-gov.net':
+            raise FetchError('wiredgov_search_response_invalid')
+        return parsers.discover_wiredgov_ico_search(data.decode('utf-8','replace'),final)
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
     if is_pdpc_api:

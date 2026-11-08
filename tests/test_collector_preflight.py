@@ -34,7 +34,7 @@ class PreflightTests(unittest.TestCase):
         probe = {'source':'edpb','listing':{'status':'failed' if probe_failed else 'parsed'},
                  'detail':{'status':'parsed','requires_review':True}}
         store = Mock()
-        store.preflight.return_value = {'allowed':db_allowed, 'reason':None if db_allowed else 'database_storage_cap'}
+        store.preflight.return_value = {'allowed':db_allowed, 'reason':None if db_allowed else 'database_read_only'}
         env = {'GITHUB_ACTIONS':'true', 'COLLECTOR_RUNNER':'github-hosted',
                'COLLECTOR_ACTUAL_RUNNER':'github-hosted', 'GITHUB_RUN_ID':'123',
                'GITHUB_REF_NAME':'candidate', 'COLLECTOR_DEFAULT_BRANCH':'main',

@@ -57,11 +57,11 @@ Deno.serve(async (req: Request) => {
       !await rpc("collector_source_allowed", { p_source_id: config.source_id })
     ) throw new Error("source_approval_revoked");
     if (!(await rpc("collector_capacity")).can_write) {
-      throw new Error("database_storage_cap");
+      throw new Error("database_read_only");
     }
     const ingest = async (item: Item, url: string) => {
       if (!(await rpc("collector_capacity")).can_write) {
-        throw new Error("database_storage_cap");
+        throw new Error("database_read_only");
       }
       const saved = await rpc("ingest_source_item", {
         p_source_id: config.source_id,

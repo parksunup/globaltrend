@@ -297,7 +297,7 @@ class CollectorTests(unittest.TestCase):
                 return h.encode(),url,'text/html'
         class Store:
             failures=0
-            def ingest(this,*args): raise self.core.FetchError('database_storage_cap')
+            def ingest(this,*args): raise self.core.FetchError('database_read_only')
             def discovery_failure(this,*args): this.failures+=1
         st=Store();result=self.core.collect(cfg,Client(),st,'2026-10-01','2026-10-13')
         self.assertEqual(st.failures,0);self.assertEqual(result['status'],'failed')

@@ -38,8 +38,8 @@ class SupabaseStore:
             return {'allowed':False,'reason':'database_source_approval_missing'}
         capacity=self.rpc('collector_capacity',{})
         return {'allowed':bool(capacity.get('can_write')),
-                'reason':None if capacity.get('can_write') else 'database_storage_cap',
-                'database_bytes':capacity.get('database_bytes'),'stop_bytes':capacity.get('stop_bytes')}
+                'reason':None if capacity.get('can_write') else 'database_read_only',
+                'database_bytes':capacity.get('database_bytes')}
     def scheduled_range(self,config,until):
         import datetime as dt
         data=self.rpc('collector_get_progress',{'p_source_id':config['source_id']})
@@ -67,8 +67,8 @@ class SupabaseStore:
            'p_document_type':'press_release' if item['metadata'].get('read_scope')=='press_release_pdf_not_judgment' else 'news',
            'p_content_text':item['content_text'],
            'p_content_hash':item['content_hash'],'p_raw_storage_path':None,'p_metadata':item['metadata'],'p_instruction_version':'trend-ko-v1'}
-        # Read-only mode and conservative storage cap are checked before each body write.
-        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_storage_cap')
+        # Respect an explicitly read-only database; do not apply an app-level size ceiling.
+        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_read_only')
         if not self.rpc('collector_source_allowed',{'p_source_id':config['source_id']}): raise FetchError('database_source_approval_missing')
         return self.rpc('ingest_source_item',p)[0]
     def discovery_failure(self,config,url,title,error):
@@ -89,5 +89,5 @@ class SupabaseStore:
         data=self.rpc('collector_get_progress',{'p_source_id':config['source_id']})
         return self._range_start(data,until)
     def record_run(self,result):
-        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_storage_cap')
+        if not self.rpc('collector_capacity',{}).get('can_write'): raise FetchError('database_read_only')
         self.rpc('collector_record_run',{'p_run_id':self.run_id,'p_result':result})

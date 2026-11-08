@@ -17,7 +17,7 @@ class ReadOnlyPreflightTests(unittest.TestCase):
 
             def preflight(self, config):
                 self.calls.extend(['collector_source_allowed', 'collector_capacity'])
-                return {'allowed': True, 'database_bytes': 42, 'stop_bytes': 400000000}
+                return {'allowed': True, 'database_bytes': 42}
 
             def rpc(self, name, payload):
                 self.calls.append(name)

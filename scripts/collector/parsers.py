@@ -335,6 +335,8 @@ def extract_document(source,data,url,content_type,row=None):
         if content_type not in ('text/html','application/xhtml+xml') and not (source=='ec' and content_type=='application/json'):raise ValueError('unsupported_document_type')
         return expansion.extract(source,data.decode('utf-8','replace'),url,row)
     if content_type in ('text/html','application/xhtml+xml'):
+        if source=='ico' and urlsplit(url).hostname=='www.wired-gov.net':
+            return extract_wiredgov_ico(data.decode('utf-8','replace'),url,row)
         if source=='edps':
             item=extract_edps_status(data.decode('utf-8','replace'),url,row)
             if row and row.get('date_observations'):
@@ -518,6 +520,93 @@ def discover_ico_search(data,url,page):
     next_url=urlunsplit((parts.scheme,parts.netloc,parts.path,urlencode([(k,v) for k,values in query.items() for v in values]),''))
     return rows,next_url if more else None
 
+WIREDGOV_ICO_SEARCH='https://www.wired-gov.net/wg/home.nsf/nav/Search%2Bfor%2BPress%2BReleases?id=BDEX-726DKJ&open='
+
+def wiredgov_ico_search_request(html,since,until):
+    try:
+        start=dt.date.fromisoformat(since); end=dt.date.fromisoformat(until)
+    except (TypeError,ValueError):
+        raise ValueError('invalid_wiredgov_date_range') from None
+    if start>end: raise ValueError('invalid_wiredgov_date_range')
+    soup=BeautifulSoup(html,'html.parser')
+    form=next((node for node in soup.select('form') if node.select_one('select[name="areaSearch"]')),None)
+    if not form: raise ValueError('wiredgov_search_form_changed')
+    action=urljoin(WIREDGOV_ICO_SEARCH,form.get('action',''))
+    parsed=urlsplit(action)
+    if parsed.scheme!='https' or parsed.hostname!='www.wired-gov.net' or not parsed.path.endswith('/savesearchsite'):
+        raise ValueError('wiredgov_search_action_changed')
+    area=form.select_one('select[name="areaSearch"]')
+    matches=[option.get('value') for option in area.select('option')
+             if normalize(option.get_text())=="Information Commissioner's Office"]
+    if len(matches)!=1 or not matches[0]: raise ValueError('wiredgov_ico_channel_missing')
+    years={option.get('value') for option in form.select('select[name="yearSearchFrom"] option')}
+    if str(start.year) not in years or str(end.year) not in years:
+        raise ValueError('wiredgov_public_archive_date_unavailable')
+    fields={'areaSearch':matches[0], 'monthSearchFrom':str(start.month),
+        'daySearchFrom':str(start.day), 'yearSearchFrom':str(start.year),
+        'monthSearchTo':str(end.month), 'daySearchTo':str(end.day),
+        'yearSearchTo':str(end.year), 'keywordSearch':'', 'matchSearch':'all'}
+    return action,urlencode(fields).encode('utf-8')
+
+def discover_wiredgov_ico_search(html,url):
+    if urlsplit(url).scheme!='https' or urlsplit(url).hostname!='www.wired-gov.net':
+        raise ValueError('wiredgov_search_outside_verified_host')
+    soup=BeautifulSoup(html,'html.parser')
+    rows=[]; seen=set()
+    for anchor in soup.select('a[href*="/wg/news.nsf/articles/"]'):
+        target=urljoin(url,anchor.get('href','')); parsed=urlsplit(target)
+        if parsed.scheme!='https' or parsed.hostname!='www.wired-gov.net' or not parsed.path.startswith('/wg/news.nsf/articles/'):
+            continue
+        if target in seen: continue
+        seen.add(target)
+        title=normalize(anchor.get_text(' ',strip=True))
+        prefix=re.match(r"Information Commissioner's Office\s*[|–-]\s*(?:Official (?:News|Press) Release\s*)?",title,re.I)
+        if prefix: title=title[prefix.end():].strip()
+        if not title: raise ValueError('wiredgov_result_title_missing')
+        rows.append({'url':target,'title':title,
+            'metadata':{'republication_channel':"Information Commissioner's Office"}})
+    if not rows: raise ValueError('wiredgov_ico_results_empty_or_changed')
+    return rows,None
+
+def extract_wiredgov_ico(html,url,row=None):
+    parsed=urlsplit(url)
+    if parsed.scheme!='https' or parsed.hostname!='www.wired-gov.net' or not re.fullmatch(r'/wg/news[.]nsf/articles/[^/]+',parsed.path):
+        raise ValueError('wiredgov_ico_article_route_unverified')
+    soup=BeautifulSoup(html,'html.parser')
+    label=soup.select_one('.article-head-label')
+    title_node=soup.select_one('.article-channel-headline h2')
+    body_node=soup.select_one('.article-inner-container .newsboxsummary')
+    if not label or not title_node or not body_node: raise ValueError('wiredgov_ico_article_template_changed')
+    label_text=normalize(label.get_text(' ',strip=True))
+    if not re.search(r"Information Commissioner(?:'s)? Office",label_text,re.I):
+        raise ValueError('wiredgov_article_not_ico_channel')
+    date_match=re.search(r'\b\d{1,2}\s+[A-Za-z]{3}\s+\d{4}\b',label_text)
+    published=parse_date(date_match.group(0)) if date_match else None
+    if not published: raise ValueError('wiredgov_ico_publication_date_missing')
+    body=normalize(body_node.get_text(' ',strip=True))
+    if len(body)<100: raise ValueError('wiredgov_ico_article_body_missing')
+    original=None
+    for anchor in soup.select('a[href]'):
+        target=urljoin(url,anchor.get('href','')); target_parts=urlsplit(target)
+        parent=anchor.parent
+        context=normalize(parent.get_text(' ',strip=True)) if parent else ''
+        if target_parts.scheme=='https' and target_parts.hostname=='ico.org.uk' and 'original article' in context.lower():
+            original=target; break
+    if not original:
+        match=re.search(r'Original article link:\s*(https://ico[.]org[.]uk/\S+)',normalize(soup.get_text(' ',strip=True)),re.I)
+        if match: original=match.group(1).rstrip('.,)')
+    if not original: raise ValueError('wiredgov_original_ico_link_missing')
+    boundary=len(body_node.get_text(' ',strip=True))>=4999
+    digest=hashlib.sha256(body.encode('utf-8')).hexdigest()
+    return {'title_original':normalize(title_node.get_text(' ',strip=True)),'content_text':body,
+        'content_hash':digest,'published_date':published,
+        'metadata':{'normalization_version':NORMALIZATION_VERSION,'parser_version':'wiredgov-ico-republication-v1',
+            'read_scope':'official_ico_republication','date_observations':[{'meaning':'published_display','locator':'.article-head-label','value':date_match.group(0)}],
+            'related_documents':[{'url':original,'title':'ICO 원문','read':False}],
+            'unread_attachments':[original],'republication_source':url,'original_official_url':original,
+            'body_length_boundary_review':boundary,'requires_review':True,'ai_ready':False,
+            'factual_status':'ico_channel_republication_not_original_ico_host'}}
+
 def pdpc_listing_request(html,url):
     soup=BeautifulSoup(html,'html.parser')
     if not soup.select_one('section[data-listing-type="media_events"]'):
@@ -547,6 +636,7 @@ def discover_pdpc_listing(data,url,page):
 def discover_listing(source,html,url,fetch):
     if source in expansion.ROUTES:return expansion.discover(source,html,url)
     if source=='ico':
+        if urlsplit(url).hostname=='www.wired-gov.net': return discover_wiredgov_ico_search(html,url)
         payload=ico_search_request(html,url)
         endpoint=urljoin(url,'/api/search')
         data,_,ctype=fetch(endpoint,'POST',json.dumps(payload).encode())
