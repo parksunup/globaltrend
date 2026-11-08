@@ -1,6 +1,7 @@
 """Read-only Crawlee diagnostic using the existing source adapters."""
 import json
 import argparse
+import datetime as dt
 from pathlib import Path
 from scripts.collector import parsers, expansion
 from scripts.collector.core import fetch_listing
@@ -53,7 +54,7 @@ def run_web_source(source, browser=False):
     return record
 
 
-def run_source(config):
+def run_source(config, since=None, until=None):
     name = config['source']
     if name in WEB and WEB[name].get('enabled', True):
         return run_web_source(name, browser=bool(config.get('browser_hosts')))
@@ -61,7 +62,14 @@ def run_source(config):
     result = {'source': name, 'mode': 'crawlee', 'database_writes': False,
               'coverage_complete': False, 'status': 'failed'}
     try:
-        rows, next_url = fetch_listing(name, client, config['listing'])
+        listing_url = config['listing']
+        if name == 'ico':
+            # The ICO adapter is a date-windowed search of WiredGov's official
+            # ICO republication channel. Probe the same route as production.
+            until = until or dt.datetime.now(dt.timezone(dt.timedelta(hours=9))).date().isoformat()
+            since = since or (dt.date.fromisoformat(until) - dt.timedelta(days=7)).isoformat()
+            listing_url = parsers.ico_range_url(listing_url, since, until)
+        rows, next_url = fetch_listing(name, client, listing_url)
         result.update(discovered=len(rows), next_url=next_url, stage='detail')
         if not rows:
             raise ValueError('listing_empty_or_structure_changed')
@@ -83,15 +91,41 @@ def run_source(config):
     return result
 
 
+def select_sources(sources, requested):
+    """All enabled sources by default; explicit read-only probes can include held sources."""
+    names = [name for name in (requested or []) if name != 'all']
+    if not names:
+        return [source for source in sources if source.get('enabled')]
+    known = {source['source'] for source in sources}
+    unknown = sorted(set(names) - known)
+    if unknown:
+        raise ValueError('unknown source: ' + ', '.join(unknown))
+    return [source for source in sources if source['source'] in names]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', action='append')
     parser.add_argument('--browser', action='append', default=[])
+    parser.add_argument('--since')
+    parser.add_argument('--until')
     parser.add_argument('--output', default='work/collector-v2-probe.json')
     args = parser.parse_args()
     registry = json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
-    configs = [c for c in registry['sources'] if c.get('enabled') and (not args.source or c['source'] in args.source)]
-    results = [run_source({**c, **({'browser_hosts': c['hosts']} if c['source'] in args.browser else {})}) for c in configs]
+    try:
+        # Explicit read-only probes can inspect a source held from production
+        # collection without changing its state.
+        configs = select_sources(registry['sources'], args.source)
+    except ValueError as error:
+        parser.error(str(error))
+    if args.since:
+        dt.date.fromisoformat(args.since)
+    if args.until:
+        dt.date.fromisoformat(args.until)
+    if args.since and args.until and args.since > args.until:
+        parser.error('since must precede until')
+    results = [run_source({**c, **({'browser_hosts': c['hosts']} if c['source'] in args.browser else {})},
+                          since=args.since, until=args.until) for c in configs]
     target = Path(args.output)
     if not target.is_absolute(): target = ROOT / target
     target.parent.mkdir(parents=True, exist_ok=True)

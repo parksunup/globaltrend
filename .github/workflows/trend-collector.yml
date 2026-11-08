@@ -99,6 +99,8 @@ jobs:
           if [ "$REQUESTED_MODE" = "crawlee-probe" ] || [ "$REQUESTED_MODE" = "crawlee-browser-probe" ]; then
             args=(--output work/collector-v2-probe.json)
             if [ "${{ inputs.source }}" != "all" ]; then args+=(--source "${{ inputs.source }}"); fi
+            if [ -n "$RANGE_START" ]; then args+=(--since "$RANGE_START"); fi
+            if [ -n "$RANGE_END" ]; then args+=(--until "$RANGE_END"); fi
             if [ "$REQUESTED_MODE" = "crawlee-browser-probe" ] && [ "${{ inputs.source }}" != "all" ]; then args+=(--browser "${{ inputs.source }}"); fi
             python -m scripts.collector_v2.diagnose "${args[@]}"
             exit $?
