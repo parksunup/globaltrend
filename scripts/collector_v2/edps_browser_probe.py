@@ -120,12 +120,11 @@ async def probe_route(page, route, robots_allowed):
         return result
 
     statuses = []
-    page.on(
-        "response",
-        lambda response: statuses.append(response.status)
-        if response.request.resource_type == "document"
-        else None,
-    )
+    def record_document_response(response):
+        if response.request.resource_type == "document":
+            statuses.append(response.status)
+
+    page.on("response", record_document_response)
     try:
         response = await page.goto(route["url"], wait_until="domcontentloaded", timeout=45_000)
         initial_status = response.status if response else None
@@ -178,7 +177,7 @@ async def probe_route(page, route, robots_allowed):
     except Exception as error:  # noqa: BLE001 - bounded diagnostic only
         result.update(result="navigation_error", error_type=type(error).__name__)
     finally:
-        page.remove_all_listeners("response")
+        page.remove_listener("response", record_document_response)
     return result
 
 
