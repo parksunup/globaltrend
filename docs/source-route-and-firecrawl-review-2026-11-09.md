@@ -59,3 +59,10 @@ GitHub Actions의 임시 Linux Docker runner에서 Firecrawl OSS `v2.11.0` 공�
 - Firecrawl 재현 workflow: `.github/workflows/firecrawl-source-probe.yml`
 - Firecrawl 실행 코드: `scripts/firecrawl_probe.py`
 
+## Firecrawl 전체 7개 출처 재시험
+
+사용자 요청에 따라 2026-11-09 04:20 UTC에 공식 `v2.11.0` OSS Compose를 다시 띄우고 일곱 출처 전체를 새로 시험했습니다. 시험 코드와 upstream Firecrawl 코드는 수정하지 않았고, 요청 실행부는 기존 robots·허용 호스트·5초 속도 제한만 적용했습니다. 재시험 결과는 `docs/evidence/firecrawl-seven-source-2026-11-09-repeat.json`입니다.
+
+이번 결과는 앞선 전체 시험과 같습니다. OECD 403(보안 검증 화면), EP 403(CDN 요청 차단), RIPD 500(AEPD 차단 안내), CAC 목록 20건/관련 14건 및 상세 271자, PCPD 해당 날짜 후보 0건, Vietnam 홈 27건/관련 제목 0건, EU Council RSS 관련 후보 1건 및 상세 403(브라우저 검증 화면)입니다. 따라서 반복 실행에서도 접근이 안 된 곳은 OECD·EP·RIPD와 EU Council 상세이며, CAC는 짧은 공지 본문, PCPD와 Vietnam은 해당 경로에서 관련 항목이 발견되지 않은 상태로 구분됩니다.
+
+
