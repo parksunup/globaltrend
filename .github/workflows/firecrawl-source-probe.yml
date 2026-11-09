@@ -1,0 +1,62 @@
+name: Firecrawl seven-source cloud probe
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/firecrawl-source-probe.yml'
+      - 'scripts/firecrawl_probe.py'
+      - 'scripts/collector/**'
+      - 'config/trend-source-catalog.json'
+
+permissions:
+  contents: read
+
+jobs:
+  firecrawl-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned project extraction dependencies
+        run: python -m pip install -r scripts/collector/requirements.txt
+      - name: Check out pinned Firecrawl open-source release
+        run: git clone --depth 1 --branch v2.11.0 https://github.com/firecrawl/firecrawl.git "$RUNNER_TEMP/firecrawl"
+      - name: Build and start official Firecrawl Docker Compose stack
+        working-directory: ${{ runner.temp }}/firecrawl
+        env:
+          PORT: '3002'
+          USE_DB_AUTHENTICATION: 'false'
+          NUM_WORKERS_PER_QUEUE: '1'
+          CRAWL_CONCURRENT_REQUESTS: '1'
+          MAX_CONCURRENT_JOBS: '1'
+          BROWSER_POOL_SIZE: '1'
+          BULL_AUTH_KEY: 'firecrawl-probe-local-only'
+          LOGGING_LEVEL: 'warn'
+        run: |
+          docker compose build api playwright-service nuq-postgres
+          docker compose up -d api playwright-service nuq-postgres redis rabbitmq
+      - name: Wait for the local Firecrawl API
+        run: |
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent http://127.0.0.1:3002/ >/dev/null; then exit 0; fi
+            sleep 5
+          done
+          docker compose -f "$RUNNER_TEMP/firecrawl/docker-compose.yaml" -p firecrawl logs --no-color
+          exit 1
+      - name: Probe the seven incomplete official sources
+        run: python scripts/firecrawl_probe.py --output work/firecrawl-seven-source-probe.json
+      - name: Save report artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firecrawl-seven-source-probe
+          path: work/firecrawl-seven-source-probe.json
+          if-no-files-found: warn
+      - name: Stop Firecrawl and remove its temporary containers and volumes
+        if: always()
+        working-directory: ${{ runner.temp }}/firecrawl
+        run: docker compose down --volumes --remove-orphans
