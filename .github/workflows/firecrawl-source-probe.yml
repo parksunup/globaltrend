@@ -2,12 +2,11 @@ name: Firecrawl seven-source cloud probe
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths:
-      - '.github/workflows/firecrawl-source-probe.yml'
-      - 'scripts/firecrawl_probe.py'
-      - 'scripts/collector/**'
-      - 'config/trend-source-catalog.json'
+    inputs:
+      sources:
+        description: 'all or a comma-separated subset of the seven source IDs'
+        type: string
+        default: all
 
 permissions:
   contents: read
@@ -48,7 +47,9 @@ jobs:
           docker compose -f "$RUNNER_TEMP/firecrawl/docker-compose.yaml" -p firecrawl logs --no-color
           exit 1
       - name: Probe the seven incomplete official sources
-        run: python scripts/firecrawl_probe.py --output work/firecrawl-seven-source-probe.json
+        env:
+          PROBE_SOURCES: ${{ inputs.sources || 'all' }}
+        run: python scripts/firecrawl_probe.py --sources "$PROBE_SOURCES" --output work/firecrawl-seven-source-probe.json
       - name: Save report artifact
         if: always()
         uses: actions/upload-artifact@v4

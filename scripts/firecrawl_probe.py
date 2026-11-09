@@ -134,19 +134,51 @@ def probe(source, crawler, source_by_id):
         listing_url = f"https://www.info.gov.hk/gia/general/{today:%Y%m}/{today:%d}.htm"
     try:
         listing_data, delay = crawler.scrape(listing_url, set(source_config["hosts"]))
-        listing_html = listing_data.get("rawHtml") or listing_data.get("html") or ""
+        format_used = "rawHtml"
+        listing_html = listing_data.get("rawHtml") or ""
+        if source in ("eu-parliament", "ripd", "eu-council"):
+            # Firecrawl may return its HTML presentation wrapper before the original feed.
+            # The official RSS parser is intentionally given only the actual XML document.
+            for candidate_format in ("rawHtml", "html", "markdown"):
+                candidate = listing_data.get(candidate_format) or ""
+                if re.match(r"\s*(?:<\?xml|<rss\b|<feed\b)", candidate, re.I):
+                    listing_html, format_used = candidate, candidate_format
+                    break
+            else:
+                listing_html = listing_data.get("rawHtml") or listing_data.get("html") or listing_data.get("markdown") or ""
+        else:
+            listing_html = listing_html or listing_data.get("html") or ""
         listing_body = listing_data.get("markdown") or ""
-        rows, relevant = discover_candidates(source, listing_html, listing_url)
+        http_status = (listing_data.get("metadata") or {}).get("statusCode")
+        if isinstance(http_status, int) and http_status >= 400:
+            return {"source": source, "status": "access_denied" if http_status in (401, 403, 429) else "http_error",
+                    "listing_url": listing_url, "listing_http_status": http_status,
+                    "listing_characters": len(listing_body), "candidate_count": 0,
+                    "relevant_candidate_count": 0, "listing_preview": listing_body[:300],
+                    "crawl_delay_seconds": delay}
+        try:
+            rows, relevant = discover_candidates(source, listing_html, listing_url)
+            parse_error = None
+        except Exception as exc:
+            rows, relevant = [], []
+            parse_error = type(exc).__name__ + ": " + str(exc)[:200]
         sample_row = None
         for row in relevant[:1]:
             try:
                 detail, detail_delay = crawler.scrape(row["url"], set(source_config["hosts"]))
+                detail_status = (detail.get("metadata") or {}).get("statusCode")
+                if isinstance(detail_status, int) and detail_status >= 400:
+                    sample_row = {"url": row["url"], "title": row.get("title"),
+                                  "http_status": detail_status, "status": "access_denied" if detail_status in (401, 403, 429) else "http_error",
+                                  "body_preview": (detail.get("markdown") or "")[:300],
+                                  "crawl_delay_seconds": detail_delay}
+                    break
                 html = detail.get("rawHtml") or detail.get("html") or ""
                 doc = extract_document(source, html.encode("utf-8"), row["url"], "text/html", row)
                 body = (doc or {}).get("content_text") or detail.get("markdown") or ""
                 sample_row = {
                     "url": row["url"], "title": row.get("title"),
-                    "http_status": (detail.get("metadata") or {}).get("statusCode"),
+                    "http_status": detail_status,
                     "body_characters": len(body), "body_preview": body[:500],
                     "extractor": ((doc or {}).get("metadata") or {}).get("extraction_method", "firecrawl_markdown"),
                     "crawl_delay_seconds": detail_delay,
@@ -159,12 +191,15 @@ def probe(source, crawler, source_by_id):
                 break
         return {
             "source": source,
-            "status": "listing_fetched" if relevant else "no_relevant_candidates",
+            "status": ("parse_failed" if parse_error else "listing_fetched" if relevant else "no_relevant_candidates"),
             "listing_url": listing_url,
-            "listing_http_status": (listing_data.get("metadata") or {}).get("statusCode"),
+            "listing_http_status": http_status,
             "listing_characters": len(listing_body),
+            "listing_format_used": format_used,
             "candidate_count": len(rows),
             "relevant_candidate_count": len(relevant),
+            "listing_parse_error": parse_error,
+            "listing_preview": (listing_html[:300] if parse_error else None),
             "sample": sample_row,
             "crawl_delay_seconds": delay,
         }
@@ -177,10 +212,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://127.0.0.1:3002")
     parser.add_argument("--output", type=Path, default=ROOT / "work/firecrawl-seven-source-probe.json")
+    parser.add_argument("--sources", default="all", help="comma-separated source IDs or all")
     args = parser.parse_args()
     sources = {row["id"]: row for row in load_catalog()["sources"]}
     crawler = Firecrawl(args.base_url)
-    results = [probe(source, crawler, sources) for source in TARGETS]
+    selected = TARGETS if args.sources == "all" else tuple(item.strip() for item in args.sources.split(",") if item.strip())
+    unknown = set(selected) - set(TARGETS)
+    if not selected or unknown:
+        parser.error("--sources must be all or a comma-separated subset of: " + ", ".join(TARGETS))
+    results = [probe(source, crawler, sources) for source in selected]
     report = {
         "run_at": datetime.now(timezone.utc).isoformat(),
         "engine": "Firecrawl self-hosted OSS v2.11.0; /v2/scrape; proxy=basic; no cloud API, stealth, or proxy service",
