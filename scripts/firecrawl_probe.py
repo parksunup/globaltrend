@@ -7,7 +7,11 @@ import urllib.error
 import urllib.request
 from datetime import date, datetime, timezone
 from pathlib import Path
+import sys
 from urllib.parse import urljoin, urlsplit
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 
 from bs4 import BeautifulSoup
 from protego import Protego
@@ -17,7 +21,6 @@ from scripts.collector.parsers import discover_rss
 from scripts.collector.extraction import extract_document
 from scripts.source_catalog import load_catalog
 
-ROOT = Path(__file__).resolve().parents[1]
 TARGETS = ("oecd", "eu-parliament", "ripd", "cn-cac", "hk-pcpd", "vn-gov", "eu-council")
 USER_AGENT = "GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)"
 MIN_DELAY = 5
