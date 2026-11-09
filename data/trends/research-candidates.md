@@ -2,9 +2,9 @@
 
 ID: `policy-academic-candidate-registry-v1`
 
-사용자가 요청한 전체 후보 11곳/명입니다. 기관 4곳(IAPP·CIPL·FPF·SAPI), 연구자 7명(Solove·Hartzog·고학수·박상철·임용·김병필·카민스키)이며, 카민스키 교수는 사용자가 Margot E. Kaminski로 확인했습니다. 공식 프로필 대조는 별도입니다. 기관과 연구자를 운영 DB의 활성 출처로 등록한 목록이 아닙니다.
+사용자가 요청한 전체 후보 9곳/명입니다. 기관 2곳(IAPP·SAPI), 연구자 7명(Solove·Hartzog·고학수·박상철·임용·김병필·카민스키)이며, 카민스키 교수는 사용자가 Margot E. Kaminski로 확인했습니다. 공식 프로필 대조는 별도입니다. 기관과 연구자를 운영 DB의 활성 출처로 등록한 목록이 아닙니다.
 
-- 출처 조사표가 있는 후보: 기존 5곳/명과 SAPI, 총 6곳/명 — 접속 차단·실사 미완료
+- 출처 조사표가 있는 후보: IAPP·Solove·Hartzog·SAPI, 총 4곳/명 — 접속 차단·실사 미완료
 - 공식 프로필/주소 탐색 대기: 연구자 5명
 - 신규 실제 선정 자료: 0건 / 미발행
 - 내부 candidate_id의 로마자는 공식 저자명·영문 표기를 검증한 결과가 아닙니다.
@@ -12,8 +12,6 @@ ID: `policy-academic-candidate-registry-v1`
 | 후보 ID | 요청된 기관·연구자 | 성격 | 시작 URL | 현재 상태·후속 확인 |
 | --- | --- | --- | --- | --- |
 | iapp | IAPP | professional_association | https://iapp.org/ | 이전 GET은 HTTPS 프록시 CONNECT 403. 공식 목록·본문·저자 프로필 미확인. |
-| cipl | Centre for Information Policy Leadership (CIPL) | policy_organization | https://www.informationpolicycentre.com/ | 이전 GET은 HTTPS 프록시 CONNECT 403. 공식 목록·본문·저자 프로필 미확인. |
-| fpf | Future of Privacy Forum (FPF) | policy_research_organization | https://fpf.org/ | 이전 GET은 HTTPS 프록시 CONNECT 403. 공식 목록·본문·저자 프로필 미확인. |
 | daniel-solove | Daniel J. Solove | individual_researcher | https://www.law.gwu.edu/daniel-j-solove | 이전 GET은 HTTPS 프록시 CONNECT 403. 공식 목록·본문·저자 프로필 미확인. |
 | woody-hartzog | Woody Hartzog | individual_researcher | https://www.bu.edu/law/profile/woody-hartzog/ | 이전 GET은 HTTPS 프록시 CONNECT 403. 공식 목록·본문·저자 프로필 미확인. |
 | sapi | SAPI(사용자 제공 명칭) | university_initiative | https://sapi.co.kr/publications/?e-filter-d61a3b0-publicaton_category=papers | 사용자 제공 URL GET은 CONNECT 403. 목록·본문·공식 명칭 미확인 |
