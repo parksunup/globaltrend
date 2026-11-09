@@ -628,3 +628,20 @@
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
 }
+
+/* Keep inline legal citations and their mobile reading links legible. */
+.trendDetail .articleReference > a,
+.trendDetail .articleReference > a:visited,
+.trendDetail .articleSheetActions a,
+.trendDetail .articleSheetActions a:visited {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+.trendDetail .articleReference > a:hover,
+.trendDetail .articleSheetActions a:hover { color: var(--gold); }
+.trendDetail .articleReference > a:focus-visible,
+.trendDetail .articleSheetActions a:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
