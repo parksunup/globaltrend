@@ -14,8 +14,8 @@ function withOfficialPipa(bundle: ReturnType<typeof publishedLegalBundle>) {
   };
 }
 
-async function loadLegal(forceDraft = false) {
-  const preview = forceDraft || publicSubmissionPreviewEnabled();
+async function loadLegal(forceDraft = false, allowPreview = true) {
+  const preview = forceDraft || (allowPreview && publicSubmissionPreviewEnabled());
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) {
@@ -39,3 +39,6 @@ async function loadLegal(forceDraft = false) {
 export async function loadPublicLegal() { return loadLegal(); }
 /** Match the current repository version against the published snapshot in every environment. */
 export async function loadReviewedLegalDrafts() { return loadLegal(true); }
+
+/** Public search never falls back to repository drafts, including in Preview. */
+export async function loadPublishedLegalForSearch() { return loadLegal(false, false); }

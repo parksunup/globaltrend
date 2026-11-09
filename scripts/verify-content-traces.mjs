@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-const routes=['public/laws','public/laws/[lawId]','work/new/law','work','legal-translation','legal-translation/[lawId]'];
+const routes=['public/search','public/laws','public/laws/[lawId]','work/new/law','work','legal-translation','legal-translation/[lawId]'];
 for(const route of routes){
  const trace=JSON.parse(readFileSync(`.next/server/app/${route}/page.js.nft.json`,'utf8'));
  for(const file of ['data/derived/gdpr.json',...['appi','pipl','uk-gdpr','ccpa','pdpa'].map(id=>`data/legal/translations/${id}.json`)]){

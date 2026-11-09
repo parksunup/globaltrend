@@ -8,7 +8,7 @@ const nextConfig = {
     "/public": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/public/laws": ["./data/legal/**/*", "./data/derived/*.json"],
     "/public/laws/*": ["./data/legal/**/*", "./data/derived/*.json"],
-    "/public/search": ["./data/trends/**/*"],
+    "/public/search": ["./data/trends/**/*", "./data/legal/**/*", "./data/derived/*.json"],
     "/public/trends/*": ["./data/trends/**/*"],
     "/public/weekly": ["./data/trends/**/*"],
     "/public/sources": ["./data/trends/**/*"],
