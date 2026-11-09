@@ -626,7 +626,7 @@ def probe(source, configured=None):
                     else:
                         extracted, metadata = extract_main_text(article, final) if content_type in ('text/html', 'application/xhtml+xml') else (None, None)
                     from scripts.collector.pdf_source_routes import supports_pdf_source_page
-                    if source['id'] in ('jpdp-my', 'global-cbpr', 'ppc') and supports_pdf_source_page(source['id'], final):
+                    if source['id'] in ('jpdp-my', 'global-cbpr', 'ppc', 'cn-tc260') and supports_pdf_source_page(source['id'], final):
                         from scripts.collector.extraction import extract_verified_pdf_attachments
                         verified_pdf_item = extract_verified_pdf_attachments(
                             source['id'], article, final, content_type, row, client)
@@ -641,11 +641,11 @@ def probe(source, configured=None):
                 title_markup = article_for_text if article_for_text is not None else article
                 extracted_title = (detail_title(title_markup, metadata, row.get('title'))
                                    if content_type in ('text/html', 'application/xhtml+xml') or ec_detail else row.get('title'))
-                if source['id'] not in ('npc-ph', 'nl-ap', 'eu-council', 'jpdp-my','global-cbpr','ppc','ec'):
+                if source['id'] not in ('npc-ph', 'nl-ap', 'eu-council', 'jpdp-my','global-cbpr','ppc','ec','cn-tc260'):
                     published = next((observation['value'] for observation in row.get('date_observations', [])
                                       if observation.get('meaning') == 'listing_published_rfc822' and
                                       re.fullmatch(r'\d{4}-\d{2}-\d{2}', observation.get('value', ''))), None)
-                if source['id'] not in ('npc-ph', 'nl-ap', 'eu-council', 'jpdp-my','global-cbpr','ppc'):
+                if source['id'] not in ('npc-ph', 'nl-ap', 'eu-council', 'jpdp-my','global-cbpr','ppc','cn-tc260'):
                     read_scope = 'official_rss_item_full_post' if feed_body else 'trafilatura_main_text'
                     body_extractor = 'official_mastodon_rss_description' if feed_body else 'trafilatura'
                 adapter_body = None
@@ -669,10 +669,15 @@ def probe(source, configured=None):
                                 item = parsers.extract_document(source['id'], article, parser_url, content_type, row)
                             adapter_body = item.get('content_text', '').strip()
                             published = item.get('published_date')
-                            if not extracted or not extracted.strip():
+                            from scripts.collector.extraction import SOURCE_ADAPTER_MIN_BODY_CHARS
+                            minimum = SOURCE_ADAPTER_MIN_BODY_CHARS.get(source['id'], 0)
+                            if (not extracted or not extracted.strip() or
+                                    (minimum and len(extracted.strip()) < minimum and
+                                     len(adapter_body) > len(extracted.strip()))):
                                 extracted = adapter_body or None
                                 read_scope = item.get('metadata', {}).get('read_scope', 'source_adapter_fallback')
                                 body_extractor = ('pypdf' if source['id'] == 'iso-iec-sc27' else
+                                                  'source_parser_short_body_fallback' if minimum else
                                                   'source_specific_adapter_fallback')
                             if source['id'] == 'iso-iec-sc27':
                                 verified_pdf_item = item

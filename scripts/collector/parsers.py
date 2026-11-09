@@ -262,7 +262,13 @@ def extract_pdf(data,url):
     from pypdf import PdfReader
     try:
         reader=PdfReader(io.BytesIO(data),strict=True)
-        if reader.is_encrypted or len(reader.pages)<1: raise ValueError('pdf_limit_or_encrypted')
+        # Some official notice PDFs are owner-permission encrypted but permit
+        # extraction with the empty user password. Only that non-secret,
+        # owner-configured case is accepted; password-protected files remain
+        # rejected.
+        if reader.is_encrypted and not reader.decrypt(''):
+            raise ValueError('pdf_limit_or_encrypted')
+        if len(reader.pages)<1: raise ValueError('pdf_limit_or_encrypted')
         pages=[]; related=[]
         for i,page in enumerate(reader.pages,1):
             text=page.extract_text(extraction_mode='layout') or ''
@@ -288,7 +294,7 @@ def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
     the standard/report itself. A partial month (for example ISO's 2025-05
     news-row date) is retained as evidence but never promoted to a full date.
     """
-    if source not in ('jpdp-my','global-cbpr','iso-iec-sc27'):
+    if source not in ('jpdp-my','global-cbpr','iso-iec-sc27','cn-tc260'):
         raise ValueError('unapproved_source_pdf')
     from .pdf_source_routes import discover_pdf_links
     parsed=urlsplit(url)
@@ -300,12 +306,14 @@ def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
             '/wp-content/uploads/Global-CBPR-Forum-Work-Program-2026-2027.pdf'}),
         'iso-iec-sc27':('committee.iso.org',{
             '/files/live/sites/jtc1sc27/files/news/ISOIEC_TS_27560_2023.pdf'}),
+        'cn-tc260':('www.tc260.org.cn', set()),
     }
     expected_host,expected_paths=approved_assets[source]
     if (parsed.scheme!='https' or parsed.hostname!=expected_host or
             parsed.username is not None or parsed.password is not None or
             parsed.port not in (None,443) or parsed.query or parsed.fragment or
-            parsed.path not in expected_paths):
+            (parsed.path not in expected_paths and not (source=='cn-tc260' and re.fullmatch(
+                r'/tc260/tzgg/\d{6}/[a-f0-9]{32}/files/[^/]+\.pdf(?:\.pdf)?',parsed.path)))):
         raise ValueError('source_pdf_url_not_pdf')
     # The helper's exact host/path policy is authoritative. For ISO, the PDF
     # is linked directly from the news listing; for JPDP/CBPR it is linked
@@ -316,9 +324,14 @@ def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
             'jpdp-my':('www.pdp.gov.my','/en/public-consultation-paper-no-1-2026-artificial-intelligence-ai-and-personal-data-protection-framework/'),
             'global-cbpr':('www.globalcbpr.org','/the-forum-releases-its-annual-report-2025-2026-and-annual-work-program-for-2026-2027/'),
             'iso-iec-sc27':('committee.iso.org','/sites/jtc1sc27/home/news.html'),
+            'cn-tc260':('www.tc260.org.cn',None),
         }
         approved_page_host,approved_page_path=approved_pages[source]
-        if page_host!=approved_page_host or urlsplit(source_page_url).path!=approved_page_path:
+        page_path=urlsplit(source_page_url).path
+        tc_article=re.fullmatch(r'/tc260/tzgg/(\d{6})/([a-f0-9]{32})\.shtml',page_path) if source=='cn-tc260' else None
+        pdf_article=re.fullmatch(r'/tc260/tzgg/(\d{6})/([a-f0-9]{32})/files/[^/]+\.pdf(?:\.pdf)?',parsed.path) if source=='cn-tc260' else None
+        tc_identity_ok=bool(tc_article and pdf_article and tc_article.groups()==pdf_article.groups())
+        if page_host!=approved_page_host or (page_path!=approved_page_path and not (source=='cn-tc260' and tc_identity_ok)):
             raise ValueError('pdf_page_not_evidence_backed')
     pdf=extract_pdf(data,url)
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
@@ -419,7 +432,7 @@ def extract_publication_document(source,data,url,content_type,row=None):
 def extract_document(source,data,url,content_type,row=None):
     if source in expansion.PUBLICATION_SOURCE_IDS:
         return extract_publication_document(source,data,url,content_type,row)
-    if source in ('jpdp-my','global-cbpr','iso-iec-sc27') and content_type in ('application/pdf','application/octet-stream'):
+    if source in ('jpdp-my','global-cbpr','iso-iec-sc27','cn-tc260') and content_type in ('application/pdf','application/octet-stream'):
         return extract_verified_source_pdf(source,data,url,row,(row or {}).get('discovered_from'))
     if source in expansion.ROUTES and source!='ppc':
         if content_type not in ('text/html','application/xhtml+xml') and not (source in ('ec','anpd-br') and content_type=='application/json'):raise ValueError('unsupported_document_type')

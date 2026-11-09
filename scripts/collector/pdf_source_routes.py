@@ -13,6 +13,7 @@ attachments, and generic extensionless links.
 from __future__ import annotations
 
 from copy import deepcopy
+import re
 from typing import Any
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
@@ -48,8 +49,14 @@ _SOURCE_RULES = {
     },
     "ppc": {
         "host": "www.ppc.go.jp",
-        "page_paths": {"/news/press/2026/261007_houdou", "/news/press/2026/261007_houdou/"},
-        "asset_paths": {"/files/pdf/261007_houdou.pdf"},
+        "page_paths": {"/news/press/2026/261007_houdou", "/news/press/2026/261007_houdou/",
+                        "/news/press/2026/261028_houdou", "/news/press/2026/261028_houdou/"},
+        "asset_paths": {"/files/pdf/261007_houdou.pdf", "/files/pdf/261028housei_press_kenkyukai.pdf"},
+    },
+    "cn-tc260": {
+        "host": "www.tc260.org.cn",
+        "page_paths": set(),
+        "asset_paths": set(),
     },
 }
 
@@ -68,7 +75,8 @@ def supports_pdf_source_page(source: str, page_url: str) -> bool:
         and page.username is None
         and page.password is None
         and page.port in (None, 443)
-        and page.path in rules["page_paths"]
+        and (page.path in rules["page_paths"] or (source == "cn-tc260" and re.fullmatch(
+            r"/tc260/tzgg/\d{6}/[a-f0-9]{32}\.shtml", page.path) is not None))
     )
 
 
@@ -176,7 +184,13 @@ def discover_pdf_links(
             continue
         target_path = urlsplit(target).path
         if target_path not in rules["asset_paths"]:
-            continue
+            if source != "cn-tc260":
+                continue
+            match = re.fullmatch(
+                r"/tc260/tzgg/\d{6}/([a-f0-9]{32})/files/[^/]+\.pdf(?:\.pdf)?", target_path)
+            article = re.search(r"/tc260/tzgg/\d{6}/([a-f0-9]{32})\.shtml$", urlsplit(page_url).path)
+            if not match or not article or match[1] != article[1]:
+                continue
 
         title = " ".join((anchor.get_text(" ", strip=True) or anchor.get("title") or "").split())
         if title.casefold() in _GENERIC_LINK_TEXT:

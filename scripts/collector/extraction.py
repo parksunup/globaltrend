@@ -7,6 +7,16 @@ from bs4 import BeautifulSoup
 from . import parsers
 
 
+# These adapters contain institution-specific selectors for pages where the
+# generic main-text extractor can return only a navigation fragment. Keep the
+# threshold limited to sources whose observed short samples prompted a review.
+SOURCE_ADAPTER_MIN_BODY_CHARS = {
+    'pdpc': 500,
+    'ppc': 500,
+    'cn-tc260': 500,
+}
+
+
 def _article_title(data, metadata, source_item, row):
     """Prefer a document's own heading over a teaser title from its listing."""
     try:
@@ -111,6 +121,27 @@ def _trafilatura_item(source, data, url, content_type, row=None):
 def extract_document(source, data, url, content_type, row=None):
     """Use Trafilatura for body text first, then adapter for metadata; fall back on body failure."""
     item = _trafilatura_item(source, data, url, content_type, row)
+    minimum = SOURCE_ADAPTER_MIN_BODY_CHARS.get(source)
+    if item is not None and minimum and len(item['content_text']) < minimum:
+        try:
+            adapter_item = parsers.extract_document(source, data, url, content_type, row)
+        except Exception:
+            adapter_item = None
+        adapter_body = parsers.normalize((adapter_item or {}).get('content_text', ''))
+        if len(adapter_body) > len(item['content_text']):
+            adapter_item['content_text'] = adapter_body
+            adapter_item['content_hash'] = hashlib.sha256(adapter_body.encode()).hexdigest()
+            adapter_item['metadata']['extraction_method'] = 'source_parser_short_body_fallback'
+            adapter_item['metadata']['trafilatura_first_attempt'] = 'below_source_minimum'
+            adapter_item['metadata']['trafilatura_first_attempt_characters'] = len(item['content_text'])
+            adapter_item['metadata']['source_parser_characters'] = len(adapter_body)
+            adapter_item['metadata']['requires_review'] = True
+            adapter_item['metadata']['ai_ready'] = False
+            adapter_item['metadata']['body_review_status'] = 'machine_extracted_not_human_reviewed'
+            return adapter_item
+        item['metadata']['source_parser_short_body_fallback'] = (
+            'no_longer_body_available' if adapter_item is not None else 'source_parser_failed')
+        item['metadata']['minimum_body_characters'] = minimum
     if item is not None:
         return item
     item = parsers.extract_document(source, data, url, content_type, row)
@@ -194,7 +225,7 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
     the article page first; its output is retained as diagnostic evidence while
     the explicitly linked primary PDF is extracted with the shared pypdf path.
     """
-    if source not in ('jpdp-my', 'global-cbpr', 'ppc'):
+    if source not in ('jpdp-my', 'global-cbpr', 'ppc', 'cn-tc260'):
         raise ValueError('pdf_attachment_source_not_supported')
     html_attempt = _trafilatura_item(source, html, page_url, content_type, row)
     from .pdf_source_routes import discover_pdf_links
@@ -203,12 +234,19 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
         raise ValueError('verified_source_pdf_attachment_missing')
     # The helper only emits source-specific URLs observed on official pages.
     from . import parsers
+    from urllib.parse import unquote, urlsplit
     pages = []
     documents = []
     body_parts = []
     for link in links:
         pdf_data, final_url, pdf_type = client.get(link['url'])
-        if final_url != link['url'] or pdf_type not in ('application/pdf', 'application/octet-stream'):
+        expected = urlsplit(link['url'])
+        actual = urlsplit(final_url)
+        same_identity = (actual.scheme == expected.scheme == 'https' and
+                         actual.hostname == expected.hostname and
+                         unquote(actual.path) == unquote(expected.path) and
+                         not actual.query and not actual.fragment)
+        if not same_identity or pdf_type not in ('application/pdf', 'application/octet-stream'):
             raise ValueError('verified_source_pdf_response_mismatch')
         pdf = parsers.extract_pdf(pdf_data, final_url)
         text = parsers.normalize(' '.join(page['text'] for page in pdf['pages']))

@@ -343,7 +343,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                         else:
                             body,detail,ctype=client.get(expansion.detail_request_url(config['source'],url))
                             from .pdf_source_routes import supports_pdf_source_page
-                            if config['source'] in ('jpdp-my','global-cbpr','ppc') and supports_pdf_source_page(config['source'],detail):
+                            if config['source'] in ('jpdp-my','global-cbpr','ppc','cn-tc260') and supports_pdf_source_page(config['source'],detail):
                                 item=extraction.extract_verified_pdf_attachments(
                                     config['source'],body,detail,ctype,row,client)
                             else:

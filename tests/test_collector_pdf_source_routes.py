@@ -140,6 +140,25 @@ class PdfSourceRouteTests(unittest.TestCase):
                          ['https://www.ppc.go.jp/files/pdf/261007_houdou.pdf'])
         self.assertEqual(links[0]['date_observations'], row['date_observations'])
 
+    def test_ppc_october_28_notice_discovers_its_exact_official_pdf(self):
+        page = "https://www.ppc.go.jp/news/press/2026/261028_houdou/"
+        pdf = "https://www.ppc.go.jp/files/pdf/261028housei_press_kenkyukai.pdf"
+        html = f'<main><a href="{pdf}">研究会の開催について（PDF : 130KB）</a></main>'
+        result = discover_pdf_links("ppc", html, page, {"title": "研究会", "date_observations": []})
+        self.assertEqual([row["url"] for row in result], [pdf])
+
+    def test_tc260_discovers_only_pdf_under_the_matching_article_id(self):
+        page = "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml"
+        pdf = "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa/files/notice.pdf.pdf"
+        html = f'<div class="list content plr30"><a href="{pdf}">通知附件</a><a href="/tc260/tzgg/202610/another/files/wrong.pdf">Other</a></div>'
+        result = discover_pdf_links("cn-tc260", html, page, {"title": "标准计划通知", "date_observations": []})
+        self.assertEqual([row["url"] for row in result], [pdf])
+
+    def test_tc260_rejects_pdf_beneath_a_different_article_identity(self):
+        page = "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml"
+        html = '<a href="/tc260/tzgg/202610/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/files/notice.pdf">wrong article</a>'
+        self.assertEqual(discover_pdf_links("cn-tc260", html, page), [])
+
 
 if __name__ == "__main__":
     unittest.main()
