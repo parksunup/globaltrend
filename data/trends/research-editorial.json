@@ -7,7 +7,13 @@
     "cipl",
     "fpf",
     "daniel-solove",
-    "woody-hartzog"
+    "woody-hartzog",
+    "sapi",
+    "researcher-ko-hak-su",
+    "researcher-park-sang-cheol",
+    "researcher-im-yong",
+    "researcher-kim-byeong-pil",
+    "researcher-kaminski"
   ],
   "base_style_reference": "../../docs/trend-report-style.md",
   "base_style_id": "privacy-report-ko-48-reference-v2",
@@ -100,7 +106,8 @@
     "공저 논문이 두 저자 목록에 나타나도 동일 연구 한 건",
     "DOI/출판정보/원제·저자·판본을 대조; 제목 문자열만으로 확정하지 않음",
     "초안과 출판본의 내용 변경은 판본 이력에 보존; 서로 다른 연구는 합치지 않음",
-    "기관 재소개와 원 논문/공식 처분은 연결; 뉴스 인용을 원 저자의 주장으로 혼동하지 않음"
+    "기관 재소개와 원 논문/공식 처분은 연결; 뉴스 인용을 원 저자의 주장으로 혼동하지 않음",
+    "SAPI 발간물과 후보 연구자의 저자 목록에 같은 문서가 있으면 발행처·저자 관계를 연결하고 한 문서로 집계"
   ],
   "selection_rules": [
     "개인정보와 직접 관련되고 새 주장·구체 정책 선택지·실증 결과·중요 개념 분석이 있는지 본문으로 판단",
@@ -116,10 +123,13 @@
   ],
   "pilot": {
     "status": "blocked_before_selection",
-    "candidate_sources": 5,
+    "candidate_sources": 11,
     "selected_works": 0,
     "reporting_period": null,
     "sample_upper_bound_per_source": 5,
-    "note": "5건은 상한이며 목표 수량 아님. 신규 조사 기간을 임의 지정하지 않고 접근 후 자료별 날짜를 확인."
-  }
+    "note": "전체 11개 후보 중 출처 조사표 6개는 접근 차단, 추가 연구자 5명은 공식 프로필/주소 확인 대기. 실제 표본 0건. Kaminski 신원과 SAPI 주소는 사용자 확인 반영.",
+    "source_configs_present": 6,
+    "pending_identity_and_url_discovery": 5
+  },
+  "candidate_registry": "research-candidates.json"
 }

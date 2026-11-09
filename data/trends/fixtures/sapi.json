@@ -1,0 +1,23 @@
+{
+  "source_id": "sapi",
+  "checked_at": "2026-11-09T09:19:23+09:00",
+  "selection_status": "blocked",
+  "selected_count": 0,
+  "items": [],
+  "counting_unit": "one work/event per record; coauthor listings, preprints and publication versions linked, not duplicated",
+  "is_published": false,
+  "review_status": "blocked",
+  "reason": "사용자 제공 SAPI 논문 목록의 GET이 HTTPS 프록시 CONNECT 403으로 실패해 실사 미완료. 실제 제목·저자·날짜·본문을 확인하지 못해 표본 0건으로 보류.",
+  "access_failures": [
+    {
+      "requested_url": "https://sapi.co.kr/publications/?e-filter-d61a3b0-publicaton_category=papers",
+      "stage": "https_proxy_connect",
+      "proxy_status": 403,
+      "origin_http_status": null,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-11-09T09:19:23+09:00"
+    }
+  ],
+  "editorial_contract": "../research-editorial.json"
+}
