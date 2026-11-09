@@ -1,0 +1,125 @@
+{
+  "record_id": "research-editorial-contract-v1",
+  "status": "editorial_proposal",
+  "human_review_status": "unreviewed",
+  "applies_to": [
+    "iapp",
+    "cipl",
+    "fpf",
+    "daniel-solove",
+    "woody-hartzog"
+  ],
+  "base_style_reference": "../../docs/trend-report-style.md",
+  "base_style_id": "privacy-report-ko-48-reference-v2",
+  "collection_enabled": false,
+  "publication_enabled": false,
+  "priority_topics": [
+    "AI",
+    "생체정보",
+    "감시",
+    "동의",
+    "기술 설계와 프라이버시"
+  ],
+  "source_authority_rule": "기관/저자의 원 자료와 규제기관의 법적 권한을 구분. 비규제기관 출처라는 이유만으로 연구의 신뢰도를 자동으로 낮추거나 높이지 않음.",
+  "workflow": [
+    "discover",
+    "verify_identity_and_bibliography",
+    "read_article_and_linked_material",
+    "assess_relevance_and_original_contribution",
+    "link_versions_and_related_event",
+    "draft_with_evidence",
+    "human_review"
+  ],
+  "material_status_values": [
+    "policy_report",
+    "commentary",
+    "working_paper",
+    "preprint",
+    "accepted_manuscript",
+    "published_article",
+    "unknown"
+  ],
+  "read_scope_values": [
+    "full_text",
+    "abstract_only",
+    "metadata_only",
+    "none"
+  ],
+  "bibliographic_fields": [
+    "record_id",
+    "source_id",
+    "original_title",
+    "authors",
+    "publisher",
+    "affiliations_as_printed",
+    "official_url",
+    "doi",
+    "first_online_date",
+    "publication_date",
+    "updated_date",
+    "version_label",
+    "material_status",
+    "review_or_acceptance_evidence",
+    "read_scope",
+    "related_documents",
+    "duplicate_group_id"
+  ],
+  "analysis_fields": [
+    "title_ko",
+    "summary_ko",
+    "details_ko",
+    "research_question_or_policy_problem",
+    "claims_attributed_to_author",
+    "method_or_argument_type",
+    "supporting_evidence",
+    "limitations_stated_by_source",
+    "limitations_identified_by_editor",
+    "policy_proposals",
+    "privacy_significance_editorial_opinion",
+    "required_human_checks"
+  ],
+  "evidence_fields": [
+    "claim_id",
+    "claim_kind",
+    "evidence_url",
+    "page_or_section",
+    "read_scope"
+  ],
+  "claim_kind_values": [
+    "source_fact",
+    "author_argument",
+    "author_recommendation",
+    "editorial_opinion"
+  ],
+  "body_contract": {
+    "summary_ko": "주체·자료의 새로움·핵심 특징의 짧은 한 문단. 상세 본문을 섞지 않음.",
+    "details_ko": "내용 흐름에 따라 - 문단을 빈 줄로 구분. 고정 항목 수·고정 분량·모든 기사 소제목을 강제하지 않음.",
+    "internal_review_notes": "독자 본문과 별도. 미확인 전문·권리·판본·후속 확인 기록."
+  },
+  "deduplication_rules": [
+    "공저 논문이 두 저자 목록에 나타나도 동일 연구 한 건",
+    "DOI/출판정보/원제·저자·판본을 대조; 제목 문자열만으로 확정하지 않음",
+    "초안과 출판본의 내용 변경은 판본 이력에 보존; 서로 다른 연구는 합치지 않음",
+    "기관 재소개와 원 논문/공식 처분은 연결; 뉴스 인용을 원 저자의 주장으로 혼동하지 않음"
+  ],
+  "selection_rules": [
+    "개인정보와 직접 관련되고 새 주장·구체 정책 선택지·실증 결과·중요 개념 분석이 있는지 본문으로 판단",
+    "광고·행사만 있는 공지는 제외, 단순 소식은 짧게 정리 가능",
+    "주제 목록은 우선순위이며 관련 연구를 기계적으로 배제하는 조건이 아님",
+    "초록만 읽으면 초록 기준으로 명시; 방법·수치·한계 등 미확인 내용을 추가하지 않음"
+  ],
+  "rights_and_safety": [
+    "유료벽·접근 제한 우회 금지",
+    "원문/번역 전문·운영 DB·비밀값 공개 금지",
+    "출판일과 심사/채택 상태를 추정하지 않음",
+    "발행·승인 상태 자동 변경 금지"
+  ],
+  "pilot": {
+    "status": "blocked_before_selection",
+    "candidate_sources": 5,
+    "selected_works": 0,
+    "reporting_period": null,
+    "sample_upper_bound_per_source": 5,
+    "note": "5건은 상한이며 목표 수량 아님. 신규 조사 기간을 임의 지정하지 않고 접근 후 자료별 날짜를 확인."
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "source_id": "fpf",
+  "checked_at": "2026-11-09T09:11:27+09:00",
+  "selection_status": "blocked",
+  "selected_count": 0,
+  "items": [],
+  "counting_unit": "one work/event per record; coauthor listings, preprints and publication versions linked, not duplicated",
+  "is_published": false,
+  "review_status": "blocked",
+  "reason": "후보 URL의 HTTPS 프록시 CONNECT 403으로 실사 미완료. 실제 제목·날짜·본문·저자 주장·학술지 심사 상태를 확인하지 못해 표본을 만들지 않았습니다.",
+  "access_failures": [
+    {
+      "requested_url": "https://fpf.org/",
+      "stage": "https_proxy_connect",
+      "proxy_status": 403,
+      "origin_http_status": null,
+      "body_received": false,
+      "error": "<urlopen error Tunnel connection failed: 403 Forbidden>",
+      "checked_at": "2026-11-09T09:11:27+09:00"
+    }
+  ],
+  "editorial_contract": "../research-editorial.json"
+}
