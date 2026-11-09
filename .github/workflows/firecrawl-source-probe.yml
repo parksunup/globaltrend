@@ -27,7 +27,7 @@ jobs:
       - name: Build and start official Firecrawl Docker Compose stack
         working-directory: ${{ runner.temp }}/firecrawl
         env:
-          PORT: '3002'
+          PORT: '127.0.0.1:3002'
           USE_DB_AUTHENTICATION: 'false'
           NUM_WORKERS_PER_QUEUE: '1'
           CRAWL_CONCURRENT_REQUESTS: '1'
@@ -61,3 +61,4 @@ jobs:
         if: always()
         working-directory: ${{ runner.temp }}/firecrawl
         run: docker compose down --volumes --remove-orphans
+
