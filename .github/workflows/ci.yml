@@ -89,8 +89,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - run: python -m pip install -r scripts/collector-scrapling/requirements.txt
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
       - run: python -m unittest discover -s tests -p 'test_cloud_snapshot_cursor.py'
+      - run: python -m unittest tests.test_scrapling_collector_transport tests.test_scrapling_collector_runner tests.test_scrapling_source_adapters_ftc_calprivacy tests.test_scrapling_source_pcpd_vn tests.test_scrapling_oecd_cac_adapters tests.test_scrapling_cloud_worker tests.test_scrapling_filter_rpc_sql
       - run: python scripts/verify-collector-dry-run.py
 
   collector-edge:
