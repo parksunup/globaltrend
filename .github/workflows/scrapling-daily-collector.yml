@@ -1,8 +1,9 @@
 name: Separate Scrapling source collectors
 
 on:
-  # Manual only until the separate collectors are wired into the existing
-  # Supabase Cron + Queues contract and the production migration is deployed.
+  schedule:
+    # 03:00 Asia/Seoul (UTC+9); GitHub may delay scheduled starts.
+    - cron: '0 18 * * *'
   workflow_dispatch:
 
 permissions:
