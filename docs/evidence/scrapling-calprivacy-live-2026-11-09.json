@@ -1,0 +1,55 @@
+{
+  "started_at": "2026-11-09T10:45:02.339860+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "calprivacy",
+      "since": "2026-10-12",
+      "until": "2026-10-12",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 3,
+      "out_of_range": 2,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://privacy.ca.gov/2026/10/calprivacy-launches-first-ever-delete-week-to-help-californians-protect-their-personal-information/",
+          "title_original": "CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information",
+          "content_text": "## Newsroom ## CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information *October 12, 2026* SACRAMENTO, CA — CalPrivacy today announced the statewide launch of Delete Week (Oct 12-16) a new annual privacy awareness initiative designed to help Californians better understand their privacy rights and take meaningful steps to protect their personal information. Throughout this week, CalPrivacy will highlight tools and resources — including the state’s free Delete Request and Opt‑out Platform (DROP), which makes it easy to delete personal data held by registered data brokers. “Delete Week is about giving Californians simple, effective, and scalable ways to safeguard their privacy,” said Executive Director Tom Kemp. “Whether you’re signing up for DROP or checking your deletion progress, we want to make it easy for everyone to take control of their data.” ### DROP is making a difference Since launching on January 1, DROP has already seen strong adoption, with more than 560,000 Californians registered and using the tool to delete their personal information from data brokers. The platform is delivering measurable results: the number of consumer profiles being reported deleted by data brokers is already approaching 100 million, and 99.9% of users have had their information deleted by at least one broker. And a typical DROP user has already had their personal information reported as deleted by more than 150 brokers. During Delete Week, CalPrivacy will share short videos, tips, and educational resources on our social media channels to help the public understand how DROP works and how data brokers collect and use personal information. The agency will also launch its new external newsletter, CalPrivacy Quarterly, and participate in media engagements across the state to raise awareness. ### Sign up for DROP and check your deletion status DROP allows Californians to send one request instructing over 660 data brokers to delete their personal information. It’s fast, free, and takes most people less than 10 minutes. For Californians who already use DROP, Delete Week is the perfect moment to check your deletion status using your DROP ID. A new FAQ blog walks through what to expect and how to recover your ID if you’ve misplaced it. ### Share DROP with your community A major goal of Delete Week is to grow awareness. To make it easy to share DROP, CalPrivacy created the DROP toolkit, complete with downloadable graphics, messages, and ready‑to‑use materials. ### About Us The California Privacy Protection Agency (CalPrivacy) is committed to promoting the education and awareness of consumers’ privacy rights and businesses’ responsibilities under the California Consumer Privacy Act, Delete Act, and Opt Me Out Act. Consumers can visit Privacy.ca.gov to access helpful and up-to-date information and tips on how to exercise their rights, protect their personal information, and learn about the Delete Request and Opt-out Platform (DROP). In addition, CalPrivacy’s website provides important information about Board Meetings, announcements, and the rulemaking process.",
+          "content_hash": "ba6d81f35a987d5e2a560cc23783e91403e4f6d5735513eb620a07284bac2ca3",
+          "published_date": "2026-10-12",
+          "metadata": {
+            "parser_version": "scrapling-calprivacy-article-v1",
+            "read_scope": "official_calprivacy_press_release_body",
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "date_observations": [
+              {
+                "meaning": "official_published_attribute",
+                "locator": "article:published_time or press-release date",
+                "value": "2026-10-12T16:00:56+00:00"
+              }
+            ],
+            "factual_status": "official_calprivacy_press_release_not_independently_reviewed",
+            "body_review_status": "machine_extracted_not_human_reviewed",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://privacy.ca.gov/category/content-types/news/press-release/",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 353850
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:16.840146+00:00"
+}

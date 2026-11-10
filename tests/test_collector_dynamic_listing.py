@@ -66,13 +66,12 @@ class DynamicListingTests(unittest.TestCase):
         self.assertTrue(item['metadata']['date_conflict'])
         self.assertTrue(item['metadata']['requires_review'])
 
-    def test_ico_uses_explicit_dublin_core_published_date(self):
-        html='<html><head><meta name="DC.Date" content="Monday, October 12, 2026"></head><body><h1>Privacy notice</h1><main><div class="rich-text"><div class="prose"><p>A sufficiently complete official privacy notice.</p></div></div></main></body></html>'
-        item=parsers.extract('ico',html,'https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/example/')
-        self.assertEqual(item['published_date'],'2026-10-12')
-        self.assertEqual(item['metadata']['date_observations'][-1],{
-            'meaning':'official_published_attribute','locator':'meta[name="DC.Date"]@content',
-            'value':'Monday, October 12, 2026'})
+    def test_ico_legacy_direct_route_is_not_the_selected_collection_route(self):
+        from scripts.collector.expansion import ROUTES
+        self.assertEqual(ROUTES['ico']['host'],'www.wired-gov.net')
+        with self.assertRaisesRegex(ValueError,'URL outside approved official hosts'):
+            parsers.extract('ico','<main><h1>Old route</h1></main>',
+                'https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/example/')
 
     def test_cnil_detail_publication_date_wins_over_archive_card_with_review(self):
         html='<main><h1>Article</h1><div class="ctn-gen-auteur">20 octobre 2026</div><div class="ctn-gen-body">A sufficiently complete privacy article body.</div></main>'
@@ -145,24 +144,10 @@ class DynamicListingTests(unittest.TestCase):
         _, nxt = parsers.discover_ico_search(json.dumps(response), 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23', 1)
         self.assertEqual(nxt, 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2')
 
-    def test_ico_legacy_page_restarts_in_range_and_scoped_cursor_resumes(self):
-        from scripts.collector.core import collect
-        class Store:
-            def __init__(self, page): self.page = page
-            def resume(self, *args): return {'page': self.page, 'offset': 20, 'failures': 2}
-        class Client:
-            def __init__(self): self.pages = []
-            def get(self, url):
-                self.pages.append(url)
-                raise FetchError('stop_after_request')
-        cfg = {'source': 'ico', 'hosts': ['ico.org.uk'], 'listing': 'https://ico.org.uk/news/',
-               'enabled': True, 'permissions': dict(collect=True, store=True, ai=True)}
-        for old, expected in [('https://ico.org.uk/news/?page=13', 'https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23'),
-                              ('https://ico.org.uk/news/?from=2026-09-21&to=2026-10-23&page=2', 'https://ico.org.uk/news/?from=2026-09-21&page=2&to=2026-10-23')]:
-            client = Client()
-            result = collect(cfg, client, Store(old), '2026-09-21', '2026-10-23')
-            self.assertEqual(client.pages, [expected])
-            self.assertFalse(result['coverage_complete'])
+    def test_ico_wiredgov_latest_route_is_preserved_without_old_range_rewrite(self):
+        from scripts.collector.expansion import listing_request_url, ROUTES
+        listing=ROUTES['ico']['listing']
+        self.assertEqual(listing_request_url('ico',listing,'2026-11-06','2026-11-08'),listing)
 
     def test_ico_range_rejects_invalid_or_reversed_dates(self):
         for since, until in [('2026-02-30', '2026-10-23'), ('2026-10-24', '2026-10-23')]:
@@ -213,25 +198,13 @@ class DynamicListingTests(unittest.TestCase):
             client.post('https://ico.org.uk/api/search', b'{}', {'Content-Type': 'application/json'})
         self.assertEqual(client.called, ['https://ico.org.uk/robots.txt'])
 
-    def test_listing_and_probe_use_current_ico_endpoint_without_body_from_snippet(self):
-        from scripts.collector.run import probe_source
-        class Client:
-            def __init__(self): self.post_payload = None
-            def get(self, url):
-                html = '<div id="filter-page-container" data-node-id="2816"></div><select id="filter-page-order"><option selected value="newest">Latest</option></select>' if url.endswith('/news/') else '<h1>Data rights</h1><span>Date</span><strong>9 October 2026</strong><main><div class="rich-text"><div class="prose">The actual detailed news body.</div></div></main>'
-                return html.encode(), url, 'text/html'
-            def post(self, url, payload, headers):
-                self.post_payload = json.loads(payload)
-                response = {'results': [{'url': '/news/a/', 'title': 'Data rights', 'description': 'Never use this snippet as full text'}],
-                    'pagination': {'showingPageNumber': 1, 'hasMore': False, 'totalPages': 1, 'totalResults': 1, 'perPage': 25}}
-                return json.dumps(response).encode(), url, 'application/json'
-        client = Client()
-        record, failed = probe_source({'source': 'ico', 'listing': 'https://ico.org.uk/news/'}, client, [])
-        self.assertFalse(failed)
-        self.assertEqual(record['listing']['discovered'], 1)
-        self.assertEqual(record['detail']['sample_origin'], 'current_listing')
-        self.assertEqual(record['detail']['content_characters'], len('The actual detailed news body.'))
-        self.assertEqual(client.post_payload['rootPageId'], 2816)
+    def test_listing_uses_wiredgov_attribution_not_ico_search_snippets(self):
+        from scripts.collector.expansion import discover, ROUTES
+        markup='''<a class="link-past-week" href="/wg/news.nsf/articles/ico-item?open"><span class="newsArticleTitle">ICO data decision</span><span class="newsArticleChannel">Information Commissioner's Office</span><span class="newsArticleDate">Thursday 05 November 2026 @ 15:20</span></a><a class="link-past-week" href="/wg/news.nsf/articles/other-item?open"><span class="newsArticleTitle">Other agency item</span><span class="newsArticleChannel">Other Office</span><span class="newsArticleDate">Thursday 05 November 2026 @ 15:20</span></a>'''
+        rows,next_page=discover('ico',markup,ROUTES['ico']['listing'])
+        self.assertGreaterEqual(len(rows),1)
+        self.assertIsNone(next_page)
+        self.assertTrue(all(row['source_attribution']=="Information Commissioner's Office" for row in rows))
 
     def test_repeated_pdpc_page_cannot_advance_checkpoint(self):
         from scripts.collector.core import collect

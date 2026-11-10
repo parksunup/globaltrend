@@ -2,3 +2,7 @@ beautifulsoup4==4.13.4
 soupsieve==2.7
 typing_extensions==4.15.0
 pypdf==6.1.1
+cryptography==50.0.2
+trafilatura==2.3.1
+crawlee[httpx]==1.11.0
+protego==0.6.2

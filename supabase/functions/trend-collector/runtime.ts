@@ -59,6 +59,13 @@ export type Item = {
   published_date: string | null;
   metadata: Extracted["metadata"];
 };
+
+/** Keep every page fingerprint so cycles remain detectable on long sources. */
+export function recordListingPage(rows: Row[], seenPages: string[], fingerprint: string): string[] {
+  if (!rows.length) throw new Error("listing_empty_page");
+  if (seenPages.includes(fingerprint)) throw new Error("listing_cycle");
+  return [...seenPages, fingerprint];
+}
 // PDPC's media listing also links to other Singapore agencies. These hosts
 // are recognised referrals, not PDPC articles. Never ingest them under the
 // PDPC source identity, even when the linked agency is an approved host.
@@ -102,7 +109,7 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
       const value = values[0];
       const valid = key === "from" || key === "to"
         ? /^\d{4}-\d{2}-\d{2}$/.test(value)
-        : /^\d{1,6}$/.test(value);
+        : /^\d+$/.test(value);
       if (valid) safe.searchParams.set(key, value);
     }
     safe.searchParams.sort();
@@ -169,7 +176,7 @@ async function listing(c: Config, http: HTTP, page: string) {
       ["page", "from", "to"].some((k) => query.getAll(k).length > 1)
     ) throw new Error("unverified_listing_query");
     const n = Number(query.get("page") || 1);
-    if (!Number.isInteger(n) || n < 1 || n > 1000) {
+    if (!Number.isSafeInteger(n) || n < 1) {
       throw new Error("invalid_listing_page");
     }
     const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({
@@ -281,9 +288,7 @@ async function extractTextPDF(
     useWorkerFetch: false,
   }).promise;
   try {
-    if (doc.numPages < 1 || doc.numPages > 50) {
-      throw new Error("pdf_page_limit");
-    }
+    if (doc.numPages < 1) throw new Error("pdf_page_count_missing");
     const pages: { page: number; text: string }[] = [];
     const related: {
       url: string;
@@ -325,9 +330,6 @@ async function extractTextPDF(
       }
     }
     const body = normalize(pages.map((x) => x.text).join(" "));
-    if (body.length > 80000) {
-      throw new Error("long_document_requires_chunked_reading");
-    }
     // A PDPC listing date is not yet verified as the PDF publication date.
     const obs = source === "pdpc"
       ? (row.date_observations || []).map((o) => ({
@@ -504,16 +506,12 @@ export async function advance(
       if (!found.rows.length && c.source !== "ec") {
         throw new Error("listing_empty_or_structure_changed");
       }
-      if (found.rows.length > 400) throw new Error("listing_row_limit");
       const urls = found.rows.map((r) => r.url);
       if (
         new Set(urls).size !== urls.length && ["pdpc", "ico"].includes(c.source)
       ) throw new Error("listing_repeated_or_duplicate_items");
       const fingerprint = await sha(JSON.stringify(found.rows));
-      if (state.seen_pages?.includes(fingerprint)) {
-        throw new Error("listing_cycle");
-      }
-      state.seen_pages = [...(state.seen_pages || []), fingerprint].slice(-50);
+      state.seen_pages = recordListingPage(found.rows, state.seen_pages || [], fingerprint);
       state.failures = 0;
       state.rows = found.rows;
       state.next = isExpansion(c.source)

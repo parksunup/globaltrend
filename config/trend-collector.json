@@ -16,7 +16,7 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "limited_html_or_rss"
+      "adapter_scope": "official_search_privacy_term_consumer_protection_filter_paginated_listing"
     },
     {
       "source": "oecd",
@@ -72,19 +72,25 @@
     {
       "source": "ico",
       "source_id": "d7c96a28-2fca-49ad-a631-3a62cf0a03b9",
-      "listing": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/",
+      "listing": "https://www.wired-gov.net/wg/home.nsf/nav/latest+news?open&id=BDEX-6ZFKSH",
       "hosts": [
-        "ico.org.uk"
+        "www.wired-gov.net",
+        "wired-gov.net"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
-      "adapter_scope": "observed_internal_search_and_news_html"
+      "hold_reason": "source_access_policy_review_pending",
+      "adapter_scope": "official_republication_latest_index_filtered_by_ico_attribution",
+      "verification_status": "wiredgov_listing_and_ico_detail_verified_current_week_only",
+      "verification": "WiredGov latest index returned HTTP 200/197807 bytes/204 anchors. One attributed ICO item detail returned HTTP 200/37222 bytes; Trafilatura extracted 5257 characters and listing/detail title/date matched 2026-11-05. Cross-source index has about five business days, no continuation; filter exact ICO publisher attribution, do not claim archive completeness.",
+      "executor": "hold",
+      "cadence": "daily",
+      "coverage_complete": false
     },
     {
       "source": "dpc",
@@ -135,14 +141,35 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "limited_html_or_rss"
+      "adapter_scope": "year_archive_listing_trafilatura_first_verified_pdf_attachment"
     },
     {
       "source": "ftc",
       "source_id": "430bd32d-19b1-4752-8280-7b2d2acbda88",
-      "listing": "https://www.ftc.gov/feeds/press-release-consumer-protection.xml",
+      "listing": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29",
       "hosts": [
+        "search.ftc.gov",
         "www.ftc.gov"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "robots_disallowed_on_verified_search_route",
+      "adapter_scope": "official_search_privacy_term_consumer_protection_filter_paginated_listing",
+      "executor": "hold",
+      "verification": "Prior read-only source validation found the official privacy search query and a July 29 2026 detail. Current production Crawlee probe did not fetch the listing because the site's robots policy disallows it; no request was sent. Do not try alternate paths unless their robots policy permits them.",
+      "verification_status": "prior_route_sample_verified_current_robots_disallow"
+    },
+    {
+      "source": "edps",
+      "source_id": "2239debc-9ce2-5cfd-99f3-c555b7cd0c94",
+      "listing": "https://social.edps.europa.eu/@EDPS.rss",
+      "hosts": [
+        "social.edps.europa.eu"
       ],
       "language": "en",
       "enabled": true,
@@ -152,30 +179,13 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "limited_html_or_rss"
-    },
-    {
-      "source": "edps",
-      "source_id": "2239debc-9ce2-5cfd-99f3-c555b7cd0c94",
-      "listing": "https://www.edps.europa.eu/feed/news_en",
-      "hosts": [
-        "www.edps.europa.eu"
-      ],
-      "language": "en",
-      "enabled": false,
-      "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
-      },
-      "hold_reason": "user_deferred_2026_10_29",
-      "adapter_scope": "official_press_or_news_body",
-      "executor": "chatgpt-web",
+      "adapter_scope": "official_mastodon_rss_full_post",
+      "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 1,
-      "verification": "RSS discovery verified; substantive linked body access remains blocked",
-      "verification_status": "held_by_user"
+      "verification": "Official EDPS Mastodon RSS: 20 posts parsed; full post text and pubDate extracted from the RSS item; production queue enrollment added",
+      "verification_status": "route_and_content_verified_runtime_pending"
     },
     {
       "source": "ec",
@@ -192,7 +202,7 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
+      "adapter_scope": "official_presscorner_paginated_search_api_identity_checked_document_api_detail_trafilatura_first",
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
@@ -201,7 +211,7 @@
     {
       "source": "calprivacy",
       "source_id": "b064fc3c-766d-540f-9b65-3aa71e632663",
-      "listing": "https://privacy.ca.gov/about-us/newsroom/",
+      "listing": "https://privacy.ca.gov/category/content-types/news/press-release/",
       "hosts": [
         "privacy.ca.gov"
       ],
@@ -213,7 +223,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
+      "adapter_scope": "official_press_release_category_paginated",
+      "verification": "Official press-release category and a page-2 link were previously observed; current Crawlee route-specific probe received HTTP 403 before parsing. The legacy announcements archive is historical only and ends January 12 2026.",
+      "verification_status": "current_category_http_403_historical_alternate_only",
       "executor": "edge",
       "cadence": "daily",
       "lookback_days": 3,
@@ -264,26 +276,27 @@
     {
       "source": "hk-pcpd",
       "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
-      "listing": "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
+      "listing": "https://www.info.gov.hk/gia/general/today.htm",
       "hosts": [
-        "www.pcpd.org.hk",
-        "www.info.gov.hk"
+        "www.info.gov.hk",
+        "www.pcpd.org.hk"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
-      "executor": "chatgpt-web",
+      "hold_reason": "source_access_policy_review_pending",
+      "adapter_scope": "official_gia_rss_discovery_and_daily_date_archive_republication",
+      "executor": "hold",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 1,
-      "verification": "Official government republication body verified; not all PCPD releases are republished",
-      "verification_status": "conditional_web_attempt"
+      "verification": "The official ISD date archive page for 2026-01-27 returned HTTP 200/15627 bytes/53 links; it linked a PCPD/HKMA release whose detail returned HTTP 200/18418 bytes and Trafilatura extracted 4913 characters/date 2026-01-27. Generic ISD RSS is 200/414462 bytes/100 items but current window has no PCPD mention and no full body. The cloud route queries the official daily date archive; it does not claim complete PCPD coverage.",
+      "verification_status": "official_date_archive_route_and_detail_verified_daily_window_only",
+      "coverage_complete": false
     },
     {
       "source": "eu-parliament",
@@ -309,25 +322,25 @@
     {
       "source": "eu-council",
       "source_id": "f4dc010a-0c02-5b24-8799-bd64f20b2e25",
-      "listing": "https://www.consilium.europa.eu/en/press/press-releases/",
+      "listing": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx",
       "hosts": [
         "www.consilium.europa.eu"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
-      "executor": "chatgpt-web",
+      "hold_reason": "source_access_policy_review_pending",
+      "adapter_scope": "official_rss_summary_only_no_detail_fetch",
+      "executor": "hold",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 2,
-      "verification": "Official full article and publication date verified through web open",
-      "verification_status": "conditional_web_attempt"
+      "verification": "Official RSS returned HTTP 200 XML/14640 bytes/20 items with ISO-offset dates and 64-282 character descriptions. Current 20 contained no privacy/data-protection match; the fresh probe extracted one non-privacy invitation summary. An observed linked detail returned HTTP 403. The adapter stores matching RSS summaries only and never requests linked details; rolling-window completeness remains unverified.",
+      "verification_status": "official_rss_summary_route_verified_detail_blocked_rolling_window_incomplete"
     },
     {
       "source": "eur-lex",
@@ -355,7 +368,7 @@
     {
       "source": "cn-cac",
       "source_id": "d743f9ab-5194-5263-ab22-ef127336e2f2",
-      "listing": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+      "listing": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
       "hosts": [
         "www.cac.gov.cn"
       ],
@@ -367,7 +380,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
+      "adapter_scope": "official_privacy_listing_latest_items_no_verified_pagination",
+      "verification": "Official privacy-specific listing and 2026 items were previously observed; current Crawlee probe received HTTP 403 before parsing. No access-control bypass is attempted; the exact observed mobile listing also returned 403 on recheck.",
+      "verification_status": "prior_listing_verified_current_http_403_no_pagination",
       "executor": "edge",
       "cadence": "daily",
       "lookback_days": 3,
@@ -416,6 +431,478 @@
       "expansion_phase": 3,
       "verification": "Official listing, dated teaser, full press release body, and robots tested; listing pagination blocked by robots, discovery is first page only",
       "verification_status": "bounded_first_page"
+    },
+    {
+      "source": "anpd-br",
+      "source_id": "8999005f-a0b3-4261-b073-bfce8f1834aa",
+      "listing": "https://www.gov.br/anpd/++api++/@search?portal_type=News%20Item&path=%2Fpt-br%2Fassuntos%2Fnoticias&sort_on=effective&sort_order=descending&b_size=10",
+      "hosts": [
+        "www.gov.br"
+      ],
+      "language": "pt",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "verified_govbr_plone_rest_api_listing_and_article",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official Gov.br Plone REST listing/detail passed through production Crawlee HttpClient; listing returned 10 published items and continuation, detail extracted 4,421 characters with matching effective date. AI readiness remains false pending human relevance review.",
+      "verification_status": "runtime_listing_detail_and_parser_verified_human_relevance_review_required",
+      "name": "Brazil ANPD",
+      "publisher_id": "c24156b5-a63e-400b-b202-d220ffa81e82",
+      "jurisdiction": "BR",
+      "publisher_type": "supervisory_authority",
+      "approval_basis": "User requested this source in the complete tested scope. robots.txt does not disallow /anpd. Dedicated terms page returned HTTP 404; source access-policy review completed without claiming terms permission. Collection is enabled; item relevance and AI readiness still require human review.",
+      "source_kind": "json_api"
+    },
+    {
+      "source": "npc-ph",
+      "source_id": "20f6ed2a-a84c-4260-82f4-12e8b6b969f9",
+      "listing": "https://privacy.gov.ph/feed/",
+      "hosts": [
+        "privacy.gov.ph"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_rss_content_encoded_full_article",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official Crawlee request to https://privacy.gov.ph/feed/ returned application/rss+xml (50,995 bytes, 9 entries). content:encoded produced full article text in tested entries (2,099–9,378 characters), with RFC822 pubDate and no linked detail request; one original HTML detail route returned HTTP 403. Topic relevance and feed-window completeness remain human review items.",
+      "verification_status": "official_rss_full_body_runtime_verified_human_review_required",
+      "name": "Philippines National Privacy Commission",
+      "publisher_id": "8868da89-4d11-4cef-976b-a8e2692c1e36",
+      "jurisdiction": "PH",
+      "publisher_type": "supervisory_authority",
+      "approval_basis": "User requested this source in the complete tested-source scope. The official RSS feed is publicly accessible, robots permits the requested feed path, and full text is present in content:encoded. The linked HTML route returned HTTP 403 and is not used; RSS entries retain pending human relevance review.",
+      "terms_review_result": "separate_terms_not_verified; no license or terms grant claimed",
+      "terms_review_semantics": "terms_reviewed_at records that the source access and policy review was performed; it does not mean source terms grant permission.",
+      "source_kind": "rss"
+    },
+    {
+      "source": "jpdp-my",
+      "source_id": "0db916d5-a210-4bd8-b5f3-97571fdd1e60",
+      "listing": "https://www.pdp.gov.my/en/main-page/",
+      "hosts": [
+        "www.pdp.gov.my"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_listed_article_with_verified_primary_pdf",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Crawlee production probe: official listing returned 200 with 11 candidates and no next-page link. The privacy-relevant Oct 29, 2026 consultation article links the exact official 32-page PDF; Trafilatura first extracted the article page, then the approved PDF was extracted with pypdf (68,612 characters). Listing date is preserved separately from document content.",
+      "verification_status": "official_listing_detail_pdf_and_date_verified_human_review_required_pagination_incomplete",
+      "name": "Malaysia Personal Data Protection Commissioner",
+      "publisher_id": "b1e85e96-3399-4718-b534-8dcc22fd6e96",
+      "jurisdiction": "MY",
+      "publisher_type": "supervisory_authority",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Only official listing items and their exact approved PDF attachments are read; extracted documents require human relevance and factual review. Listing pagination is incomplete.",
+      "source_kind": "html"
+    },
+    {
+      "source": "nist",
+      "source_id": "37bea39f-6ebe-4684-880d-19c715399c4b",
+      "listing": "https://www.nist.gov/news-events/news-updates/org/258376",
+      "hosts": [
+        "www.nist.gov"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_privacy_relevant_news_full_body",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official NCCoE listing and current privacy-relevant detail verified through production Crawlee HttpClient and Trafilatura-first extraction; listing/detail publication dates agree and pagination continuation is present. Human topic review remains required.",
+      "verification_status": "runtime_listing_detail_date_and_pagination_verified_human_topic_review_required",
+      "name": "US National Institute of Standards and Technology",
+      "publisher_id": "72004e05-87db-4028-b2cc-826c86894ced",
+      "jurisdiction": "US",
+      "publisher_type": "government",
+      "approval_basis": "User requested NIST in the complete source scope. Official NIST site robots permits the path; NIST Copyrights & Disclaimers says website information is a public service and unmarked information may be distributed or copied, with attribution requested; page-level copyright markings must still be respected.",
+      "source_kind": "html"
+    },
+    {
+      "source": "iapp",
+      "source_id": "4f056a27-ce76-40f8-b7ec-3eb21dc1d439",
+      "listing": "https://iapp.org/news",
+      "hosts": [
+        "iapp.org"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_sample_body_only_scope_review_pending",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "One 10,903-character article extracted; relevance and free/public full-text availability need review.",
+      "verification_status": "sample_body_only_scope_review_pending",
+      "name": "International Association of Privacy Professionals",
+      "publisher_id": "e71bdd7b-50cc-49e7-bb4b-932b67b2e86f",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "other",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
+    },
+    {
+      "source": "fpf",
+      "source_id": "e532813d-f9af-484b-ae30-1fa5e3cbe9cb",
+      "listing": "https://fpf.org/blog/",
+      "hosts": [
+        "fpf.org"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_sample_stale_or_off_topic",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "One 1,492-character sample was stale/off-topic; a separate privacy-related current item needs verification.",
+      "verification_status": "sample_stale_or_off_topic",
+      "name": "Future of Privacy Forum",
+      "publisher_id": "16bb7303-10fb-4557-ad75-c356c5f8a3a8",
+      "jurisdiction": "US",
+      "publisher_type": "other",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
+    },
+    {
+      "source": "gpa",
+      "source_id": "e55fce7d-7b55-445d-9c8b-0841095ac7f1",
+      "listing": "https://globalprivacyassembly.com/news-events/latest-news/",
+      "hosts": [
+        "globalprivacyassembly.com"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_sample_body_only_review_pending",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "weekly",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Listing yielded items and one 2,858-character sample; body/date/topic and pagination need review.",
+      "verification_status": "sample_body_only_review_pending",
+      "name": "Global Privacy Assembly",
+      "publisher_id": "1c417538-fefd-4ff4-be71-fc6d3b5f6b7c",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "international_org",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
+    },
+    {
+      "source": "g7-dpa",
+      "source_id": "c1c51983-486c-4a6e-98ef-43eaaee88d5a",
+      "listing": "https://www.priv.gc.ca/en/about-the-opc/what-we-do/international-collaboration/international-events/g7-2025/membership/",
+      "hosts": [
+        "www.priv.gc.ca"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "coverage_and_reuse_review_pending",
+      "adapter_scope": "official_opc_g7_membership_hub_linked_deliverables",
+      "executor": "hold",
+      "cadence": "weekly",
+      "lookback_days": 7,
+      "expansion_phase": 4,
+      "verification": "Official Canada OPC G7 membership hub returned 200 and links the 2026 communiqué. Detail returned 200 and Trafilatura extracted about 6916 characters; modification date 2026-07-08 is distinct from meeting dates 2026-06-25/26. Hub continuation and recurring weekly coverage are not established.",
+      "verification_status": "official_g7_hub_and_detail_verified_coverage_incomplete_policy_hold",
+      "name": "G7 Data Protection and Privacy Authorities Roundtable",
+      "publisher_id": "e5bb6a05-60ca-41b0-aeff-68e8b2346f59",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "international_org",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Verified OPC hub and communiqué are retained as route evidence; recurring coverage and separate reuse rights remain unresolved, so the source stays held.",
+      "source_kind": "html",
+      "coverage_complete": false
+    },
+    {
+      "source": "global-cbpr",
+      "source_id": "ed10f3a1-4d0d-4409-9ae4-7d320ae92abc",
+      "listing": "https://www.globalcbpr.org/news/",
+      "hosts": [
+        "www.globalcbpr.org",
+        "globalcbpr.org"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_news_item_with_verified_annual_report_and_work_program_pdfs",
+      "executor": "cloud-python",
+      "cadence": "weekly",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Crawlee production probe: official news listing returned 200 with 12 candidates and no next-page link. The June 10, 2026 news item links the official annual report and work-program PDFs; each is 2 pages and both cover sheets say May 26, 2026. The collector uses the news listing date as publication date and retains PDF document dates separately. Trafilatura is attempted on the item page before pypdf extracts both approved attachments (7,031 combined characters).",
+      "verification_status": "official_listing_detail_two_pdfs_and_publication_date_verified_human_review_required_pagination_incomplete",
+      "name": "Global CBPR Forum",
+      "publisher_id": "99d67ba2-6a6d-46e5-9563-dcbf427ef66c",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "international_org",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Only official news items and exact approved annual-report/work-program PDF attachments are read; extracted documents require human review. Listing pagination is incomplete.",
+      "source_kind": "html"
+    },
+    {
+      "source": "ripd",
+      "source_id": "d5a9b352-8ebf-401a-8d83-378262cc0c12",
+      "listing": "https://www.redipd.org/noticias/rss.xml",
+      "hosts": [
+        "www.redipd.org"
+      ],
+      "language": "es",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "separate_source_terms_and_reuse_review_pending",
+      "adapter_scope": "official_rss_discovery_plus_article_detail",
+      "executor": "hold",
+      "cadence": "weekly",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official robots.txt returned 200 and did not disallow public news paths. Earlier RSS returned 311 items and linked detail returned 200 with about 3896 Trafilatura characters; current route-specific Crawlee RSS probe returned HTTP 500. Feed continuation and reuse terms remain unverified; source stays held.",
+      "verification_status": "prior_rss_detail_verified_current_rss_http_500_terms_pending",
+      "name": "Red Iberoamericana de Protección de Datos",
+      "publisher_id": "40fef387-6b15-4654-8bd2-5f99f4cec0ec",
+      "jurisdiction": "LATAM",
+      "publisher_type": "international_org",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Public RSS and detail routes are verified; collection remains held pending separate terms/reuse review and full feed-window assessment.",
+      "source_kind": "official-rss"
+    },
+    {
+      "source": "iso-iec-sc27",
+      "source_id": "3fd924b0-3a38-4ba6-b9b2-5154ecca3a39",
+      "listing": "https://committee.iso.org/sites/jtc1sc27/home/news.html",
+      "hosts": [
+        "committee.iso.org",
+        "www.iso.org"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_news_table_to_exact_standard_pdf",
+      "executor": "cloud-python",
+      "cadence": "weekly",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Crawlee production probe: official news table returned 200; the verified ISO/IEC TS 27560-2023 PDF was 1 page and pypdf extracted 2,081 characters. The listing records only 2025-05, so no full publication date is invented; the standard's September 2023 issue date remains separate from the 2025 announcement. The route leaves publication_date unresolved and requires human review.",
+      "verification_status": "official_listing_pdf_and_month_evidence_verified_full_publication_date_unavailable_human_review_required",
+      "name": "ISO/IEC JTC 1/SC 27",
+      "publisher_id": "ab505e8c-590d-43da-a0a6-8bd44d95522f",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "international_org",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Only the exact official ISO news PDF asset is read; its 2025-05 listing month is not promoted to a full publication date, and the extracted standard requires human review.",
+      "source_kind": "html"
+    },
+    {
+      "source": "noyb",
+      "source_id": "87f2775b-40f2-4af1-926c-da151cd51242",
+      "listing": "https://noyb.eu/en/news",
+      "hosts": [
+        "noyb.eu"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_sample_body_only_review_pending",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "One 2,444-character candidate extracted; source-level relevance/date/pagination still need verification.",
+      "verification_status": "sample_body_only_review_pending",
+      "name": "noyb — European Center for Digital Rights",
+      "publisher_id": "516e3336-b54d-4700-bb1e-688b083df437",
+      "jurisdiction": "AT",
+      "publisher_type": "other",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
+    },
+    {
+      "source": "nl-ap",
+      "source_id": "1d9ac2d7-02f7-4777-8677-c00fb702d021",
+      "listing": "https://autoriteitpersoonsgegevens.nl/feed/article/rss.xml",
+      "hosts": [
+        "autoriteitpersoonsgegevens.nl"
+      ],
+      "language": "nl",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "separate_source_terms_and_reuse_review_pending",
+      "adapter_scope": "official_rss_discovery_plus_protego_allowed_article_detail",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official RSS returned 10 entries; a linked /actueel/* detail was independently fetched as HTTP 200 and Trafilatura extracted 936 characters dated 2026-10-30. Protego 0.6.2 correctly applies the observed longer Allow: /actueel/* rule over Disallow: /actueel; the generic RSS remains a rolling window without continuation, and terms/reuse permission is not established.",
+      "verification_status": "official_rss_and_robots_allowed_detail_verified_coverage_incomplete_terms_hold",
+      "name": "Dutch Autoriteit Persoonsgegevens",
+      "publisher_id": "6283604f-f595-469e-8619-0640714ae80c",
+      "jurisdiction": "NL",
+      "publisher_type": "supervisory_authority",
+      "approval_basis": "User requested this source in the complete tested-source scope. Official RSS is discovery only; robots-aware detail retrieval uses upstream Protego 0.6.2, with human review and rolling-feed coverage limitations retained.",
+      "terms_review_result": "separate_terms_not_verified; route held pending policy review",
+      "terms_review_semantics": "terms_reviewed_at records that the source access and policy review was performed; it does not mean source terms grant permission.",
+      "source_kind": "rss"
+    },
+    {
+      "source": "vn-gov",
+      "source_id": "9e9815e2-2028-4384-a5e5-6ebd1f2e2f55",
+      "listing": "https://en.baochinhphu.vn/",
+      "hosts": [
+        "en.baochinhphu.vn"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "source_access_policy_review_pending",
+      "adapter_scope": "official_policies_listing_timeline_pages_and_body_aware_relevance",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "Official home spotlight exposes the privacy-related Decree 363 story omitted from observed policies pages 1–5. Detail returned HTTP 200/68536 bytes; Trafilatura extracted 4309 characters and meta/JSON-LD/visible dates agree on 2026-11-02. The official policies listing and timeline pages 1–5 returned 200; each timeline fragment had 24 entries. The source adapter checks home spotlight then policies/timeline; listing completeness remains unverified.",
+      "verification_status": "homepage_and_timeline_routes_verified_known_relevant_story_found_homepage_not_policy_timeline",
+      "name": "Vietnam Government Online Newspaper",
+      "publisher_id": "6d736b06-8da2-4e27-aeaf-77ecd43094ad",
+      "jurisdiction": "VN",
+      "publisher_type": "government",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Official listing/detail/body/date route is verified; keep disabled until listing continuation or an accepted current-items polling policy is established.",
+      "source_kind": "html",
+      "coverage_complete": false
+    },
+    {
+      "source": "freevacy",
+      "source_id": "91874208-ed99-4249-8aca-24d8c964ddb2",
+      "listing": "https://www.freevacy.com/news",
+      "hosts": [
+        "www.freevacy.com"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_sample_body_only_source_scope_review_pending",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "daily",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "One 2,793-character candidate extracted; relevance, date, original-source traceability and scope need review.",
+      "verification_status": "sample_body_only_source_scope_review_pending",
+      "name": "Freevacy Privacy Newsfeed",
+      "publisher_id": "bdcbff4b-4507-465a-b1a7-4f16d7ae24b4",
+      "jurisdiction": "GLOBAL",
+      "publisher_type": "media",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
+    },
+    {
+      "source": "overview-legal",
+      "source_id": "94a8de6e-c573-4459-a983-e7424cd3cead",
+      "listing": "https://overview.legal/this-week?ui=v1",
+      "hosts": [
+        "overview.legal"
+      ],
+      "language": "en",
+      "enabled": false,
+      "permissions": {
+        "collect": false,
+        "store": false,
+        "ai": false
+      },
+      "hold_reason": "unresolved_aggregate_and_source_scope_review_pending",
+      "adapter_scope": "catalog_probe_only_no_production_adapter",
+      "executor": "hold",
+      "cadence": "weekly",
+      "lookback_days": 3,
+      "expansion_phase": 4,
+      "verification": "One 10,508-character page extracted, but it was a topic/aggregate page rather than a verified individual article.",
+      "verification_status": "aggregate_and_source_scope_review_pending",
+      "name": "overview.legal",
+      "publisher_id": "1eb81b68-a366-4624-a4ca-7987b59f7203",
+      "jurisdiction": "EU",
+      "publisher_type": "media",
+      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
+      "source_kind": "html"
     }
   ]
 }

@@ -11,6 +11,44 @@ ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/'tests/fixtures/collector-expansion'
 
 class ExpansionTests(unittest.TestCase):
+    def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
+        route=expansion.ROUTES['nl-ap']
+        feed='''<?xml version="1.0" encoding="UTF-8"?>
+        <rss version="2.0"><channel><item>
+          <title>Handhavingsbeleid AP gepubliceerd</title>
+          <link>https://autoriteitpersoonsgegevens.nl/actueel/handhavingsbeleid-ap-gepubliceerd</link>
+          <description><![CDATA[De Autoriteit Persoonsgegevens heeft het handhavingsbeleid gepubliceerd.]]></description>
+          <pubDate>Fri, 30 Oct 2026 00:07:29 +0100</pubDate>
+        </item></channel></rss>'''
+        def unexpected_fetch(*args,**kwargs):
+            self.fail('RSS discovery must not fetch article detail')
+        rows,next_page=parsers.discover_listing('nl-ap',feed,route['listing'],unexpected_fetch)
+        self.assertIsNone(next_page)
+        self.assertEqual(len(rows),1)
+        row=rows[0]
+        self.assertEqual(row['url'],'https://autoriteitpersoonsgegevens.nl/actueel/handhavingsbeleid-ap-gepubliceerd')
+        self.assertEqual(row['rss_source'],'nl-ap')
+        self.assertEqual(row['feed_text'],'De Autoriteit Persoonsgegevens heeft het handhavingsbeleid gepubliceerd.')
+        self.assertEqual(row['feed_body_source'],'rss_content_or_description')
+        self.assertEqual(row['date_observations'],[{
+            'meaning':'listing_published_rfc822',
+            'locator':'rss item pubDate',
+            'value':'Fri, 30 Oct 2026 00:07:29 +0100',
+            'raw':'Fri, 30 Oct 2026 00:07:29 +0100',
+        }])
+
+    def test_netherlands_ap_rejects_non_rss_listing_response_explicitly(self):
+        route=expansion.ROUTES['nl-ap']
+        with self.assertRaisesRegex(ValueError,'nl_ap_official_rss_expected'):
+            expansion.discover('nl-ap','<html><main>not the official feed</main></html>',route['listing'])
+
+    def test_ppc_accepts_only_the_same_article_with_canonical_trailing_slash(self):
+        requested='https://www.ppc.go.jp/news/press/2026/261028_houdou'
+        received=requested+'/'
+        expansion.verify_detail_response('ppc',requested,received)
+        with self.assertRaisesRegex(ValueError,'detail_redirect_identity_mismatch'):
+            expansion.verify_detail_response('ppc',requested,requested.replace('261028','261027')+'/')
+
     def test_tc260_follows_observed_pagination_and_unknown_dates_never_shorten_a_scan(self):
         rows,nxt=expansion.discover('cn-tc260',(FIXTURES/'cn-tc260-listing.html').read_text(),expansion.ROUTES['cn-tc260']['listing'])
         self.assertEqual(nxt,'https://www.tc260.org.cn/tc260/tzgg/list_2.shtml')
@@ -23,15 +61,61 @@ class ExpansionTests(unittest.TestCase):
             if c.get('enabled') and c.get('executor')=='cloud-python':validate_claim(claim)
             else:
                 with self.assertRaisesRegex(ValueError,'cloud_source_not_assigned'):validate_claim(claim)
+    def test_nist_actual_config_passes_collect_gate_and_ingests_verified_detail(self):
+        from scripts.collector.core import collect
+        config=next(row for row in json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+                   if row['source']=='nist')
+        class Client:
+            def get(self,url):
+                if url==config['listing']:
+                    return (FIXTURES/'nist-listing.html').read_bytes(),url,'text/html'
+                return (FIXTURES/'nist-detail.html').read_bytes(),url,'text/html'
+        class Store:
+            def __init__(self): self.items=[];self.cursors=[];self.checkpoints=[]
+            def resume(self,*args): return None
+            def ingest(self,config,url,item): self.items.append((url,item))
+            def progress(self,config,since,until,cursor): self.cursors.append(cursor)
+            def checkpoint(self,config,until): self.checkpoints.append(until)
+            def discovery_failure(self,*args): self.failures=args
+        store=Store()
+        result=collect(config,Client(),store,'2026-10-27','2026-10-29')
+        self.assertNotEqual('held',result['status'],result['reason'])
+        self.assertEqual(1,len(store.items))
+        self.assertEqual('2026-10-29',store.items[0][1]['published_date'])
+        self.assertEqual('trafilatura',store.items[0][1]['metadata']['extraction_method'])
+        self.assertTrue(store.items[0][1]['metadata']['requires_review'])
+    def test_vietnam_policy_route_extracts_detail_date_and_keeps_topic_review(self):
+        route=expansion.ROUTES['vn-gov']
+        rows,nxt=parsers.discover_listing('vn-gov',(FIXTURES/'vn-gov-listing.html').read_text(),'https://en.baochinhphu.vn/policies.htm',None)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['url'],'https://en.baochinhphu.vn/new-policies-take-effect-in-viet-nam-in-november-2026-111261102100407268.htm')
+        self.assertEqual(nxt,'https://en.baochinhphu.vn/timelinelist/11151/2.htm')
+        manifest=json.loads((FIXTURES/'manifest.json').read_text())['vn-gov']
+        from scripts.collector.extraction import extract_document
+        item=extract_document('vn-gov',(FIXTURES/'vn-gov-detail.html').read_bytes(),manifest['url'],'text/html',rows[0])
+        self.assertEqual(item['published_date'],'2026-11-02')
+        self.assertIn('Decree No. 363/2026/ND-CP',item['content_text'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertIn('personal data protection',item['content_text'])
     def test_all_observed_routes_extract_official_body_and_publication_date(self):
         manifest=json.loads((FIXTURES/'manifest.json').read_text())
         for source,c in expansion.ROUTES.items():
+            # These source routes have their own tested listing/PDF pipeline;
+            # treating the listing row URL as an HTML article here would skip
+            # the evidence-backed PDF attachment step.
+            if source in ('jpdp-my','global-cbpr','iso-iec-sc27',
+                          'iapp','fpf','gpa','noyb','freevacy','overview-legal',
+                          'ico','hk-pcpd','g7-dpa','vn-gov','eu-council','nl-ap','ppc',
+                          'calprivacy','cn-cac','ftc','ripd'):
+                continue
             with self.subTest(source=source):
-                ext='json' if source=='ec' else 'xml' if c.get('feed') else 'html'
+                ext='json' if source in ('ec','anpd-br') else 'xml' if c.get('feed') else 'html'
                 rows,nxt=parsers.discover_listing(source,(FIXTURES/f'{source}-listing.{ext}').read_text(),c['listing'],None)
                 self.assertTrue(rows)
                 m=manifest[source]
-                item=parsers.extract_document(source,(FIXTURES/f'{source}-detail.{"json" if source=="ec" else "html"}').read_bytes(),m['url'],'application/json' if source=='ec' else 'text/html')
+                json_source=source in ('ec','anpd-br')
+                item=parsers.extract_document(source,(FIXTURES/f'{source}-detail.{"json" if json_source else "html"}').read_bytes(),m['url'],'application/json' if json_source else 'text/html')
                 self.assertEqual(item['published_date'],m['published_date'])
                 self.assertGreater(len(item['content_text']),100)
                 self.assertEqual(item['metadata']['ai_ready'],not item['metadata']['requires_review'])

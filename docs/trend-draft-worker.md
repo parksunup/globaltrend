@@ -1,8 +1,10 @@
 # 한국어 초안 편집 실행 지침 v1
 
+> **작업 범위 참고(2026-11-09):** 아래의 `활성 18개`, EDPS·EUR-Lex 보류 상태는 이 문서가 작성될 당시 `main`의 상태를 기록한 과거 메모입니다. 현재 `codex/source-collector-36` 브랜치는 전체 범위를 37개로 정리하고 있습니다. 이 브랜치 설정에 보이는 EDPS/NIST 경로가 운영 DB에서 실제 실행된다는 뜻은 아니며, route 검증·migration·배포 상태를 각각 확인해야 합니다. 아래 편집 지침과 원고 검토 기준은 그대로 유지하고, 과거 수집 범위 메모를 현재 출처 목록으로 사용하지 않습니다.
+
 ## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
 
-기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처18개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
+기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 이 작성 지침에 적힌 수집 출처 18개와 EDPS·EUR-Lex 보류는 작성 지침이 기록된 당시의 역사적 운영 범위다. 현재 수집기 출처 목록은 `config/trend-source-catalog.json`을 따른다. 일일 3일·주간 약 8건은 당시의 작성 편집 범위 기록이며, 수집기 출처 목록을 제한하는 기준이 아니다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
 
 1. 시작 시 `collector_writing_policy()`의 정책ID·지침해시를 로컬 `config/trend-writing-policy.json`과 비교한다. 지침과 DB판본이 다르면 해당 제출을 보류해 정확한 오류·재개 위치를 기록하되 다른 출처의 수집을 임의로 중단하지 않는다. 기존 `trend-ko-v1` 작업 임대·해시 계약은 그대로 유지한다.
 2. 실제 claim 반환JSON을 ignored `work/claim-<job>.json`에 저장하고 `node scripts/trend-report.mjs --packet work/claim-<job>.json --out work/writing-packet-<job>.json`을 실행한다. 반환된 원문 전문과 최신 지침·용어집·유형별검토항목을 실제로 읽는다. 패킷 생성은 읽기 완료가 아니다.
