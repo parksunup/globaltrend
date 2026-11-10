@@ -2,7 +2,7 @@
 
 ## 처리 흐름
 
-1. Scrapling worker는 기존 Supabase Cron + Queues 계약에 연결되어야 합니다. 현재 GitHub Actions workflow는 수동 검증만 가능하며 일일 운영 예약으로 활성화하지 않았습니다. 운영 예약을 구성하기 전에는 사용자의 PC에서 실행하지 않습니다. 수집 시작 전에 `collector_source_allowed(source_id)`와 `collector_capacity()`를 확인합니다. 승인되지 않은 출처는 요청하지 않습니다.
+1. Scrapling worker는 Python 런타임이 필요하므로 기존 Edge collector와 별도 GitHub Actions cloud runner에서 실행합니다. 새 workflow는 매일 03:00 KST (`0 18 * * *` UTC)와 수동 실행만 지원하며, `main`에서만 동작합니다. 기존 Supabase Cron 기반 수집 예약은 별도로 활성화하지 않아 중복 실행을 막습니다. 사용자 PC가 꺼져 있어도 GitHub runner에서 실행합니다. 수집 시작 전에 `collector_source_allowed(source_id)`와 `collector_capacity()`를 확인합니다. 승인되지 않은 출처는 요청하지 않습니다.
 2. OECD, CAC, PCPD, 베트남 정부 전자신문, FTC, CalPrivacy의 기존 전용 Scrapling 어댑터로 최근 3일 범위를 점검합니다. 목록 10페이지·상세 30건 제한을 두며, robots 규칙과 출처별 최소 5초 간격을 계속 적용합니다.
 3. 수집한 원문은 기존 중앙 저장소 `source_items`와 `source_item_revisions`에 들어갑니다. 같은 출처·canonical URL은 기존 `ingest_source_item`이 판본·SHA-256·재수집 idempotency를 처리합니다. 신규 run과 각 item metadata에 execution/run ID를 남깁니다. 새 원문을 별도 파일 artifact에 복제하지 않습니다.
 4. 기존 Supabase `reports` 및 다른 출처의 `source_items`와 비교하는 필터 판단은 `scrapling_filter_decisions`에 run·revision·매칭 대상·근거와 함께 기록합니다. exact URL/hash는 시스템에서 비교하고, 번역·재게시·같은 사건의 보도자료처럼 의미 판단이 필요한 후보는 제목만으로 버리지 않고 기존 원문·작성 보고서와 대조합니다. 정정·후속 문서처럼 새로운 사실을 담은 자료는 별도 자료로 보존합니다.
@@ -20,9 +20,9 @@
 
 ## 자동화 상태와 연결 순서
 
-Scrapling GitHub Actions workflow는 현재 `workflow_dispatch`만 지원하며 일일 운영 예약이 아닙니다. 별도 worker를 기존 Supabase Cron + Queues 계약에 연결하고 DB migration을 배포하기 전까지 production schedule이 작동한다고 간주하지 않습니다.
+Scrapling GitHub Actions workflow는 매일 03:00 KST에 클라우드에서 실행되고 수동 진단도 지원합니다. 운영 실행은 PR #114의 변경이 main에 반영되고 `scrapling_candidate_filter_decisions` migration이 Supabase에 적용된 뒤 시작합니다. GitHub Actions의 예약 시각은 지연될 수 있으므로 DB run 기록의 실제 시각을 기준으로 확인합니다. 기존 수집 파이프라인과 그 예약은 별도 상태로 보존하며, 같은 새 Scrapling worker를 중복 예약하지 않습니다.
 
-한국어 작성은 사용자 Codex 구독을 사용하는 클라우드 Codex 예약 워커로 실행해야 합니다. 사용자 PC·데스크톱 앱이 꺼져 있어도 동작해야 하며, 로컬 Codex 예약이나 로컬 cron으로 대체하지 않습니다. 별도 OpenAI API·생성 API는 사용하지 않습니다. 이 작업환경에서 확인 가능한 예약 생성기는 로컬 실행만 지원하므로, 클라우드 예약은 아직 구성·검증되지 않았습니다. 클라우드 예약 도구와 실제 DB 접근 권한이 확인되기 전에는 예약이 설정됐다고 보고하지 않습니다. 예약 워커는 저장소의 최신 지침 파일과 Supabase 대기열에 접근해야 하며, 필수 migration/RPC/정책/출처 승인 gate가 준비되지 않으면 쓰기 없이 종료해야 합니다.
+한국어 작성은 사용자 Codex 구독을 사용하는 클라우드 Codex 예약 워커로 실행해야 합니다. 사용자 PC·데스크톱 앱이 꺼져 있어도 동작해야 하며, 로컬 Codex 예약이나 로컬 cron으로 대체하지 않습니다. 별도 OpenAI API·생성 API는 사용하지 않습니다. 예약 작업은 사용자의 PC와 독립된 클라우드 실행이어야 합니다. 현재 05:00 예약은 Codex/ChatGPT 예약 화면에서 활성 상태를 확인했지만, 직전 실행에서 repository/runtime 연결이 확인되지 않아 실제 초안 처리는 검증되지 않았습니다. 필수 migration/RPC/정책/출처 승인 gate가 준비되지 않으면 쓰기 없이 종료해야 합니다. 예약 워커는 저장소의 최신 지침 파일과 Supabase 대기열에 접근해야 하며, 필수 migration/RPC/정책/출처 승인 gate가 준비되지 않으면 쓰기 없이 종료해야 합니다.
 
 베트남 정부 출처는 운영 `sources` 등록 및 `terms_reviewed_at` 승인 gate가 현재 충족되지 않으면 collector가 해당 사이트에 요청하지 않고 `source_not_active_or_terms_not_reviewed`로 기록합니다. 이 workflow가 DB 출처를 생성하거나 약관·재사용 검토 표시를 자동으로 바꾸지 않습니다.
 

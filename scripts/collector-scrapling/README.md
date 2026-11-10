@@ -51,11 +51,14 @@ read successfully. Other sources remain partial until pagination/window
 completeness has been independently established.
 
 The cloud ingestion entry point is
-`python -m scripts.collector_scrapling.cloud_worker`. Its GitHub workflow is
-manual-only until it is wired into the existing Supabase Cron + Queues contract
-and the migration is deployed. It is not yet a daily production schedule. The
-daily Codex writer/filter task is defined in
-`docs/trend-scrapling-daily-codex-task.md`; it must use a cloud Codex
-subscription automation at 05:00 Asia/Seoul and does not call an OpenAI API.
-That cloud schedule is not configured or verified yet; do not substitute a
-local desktop task.
+`python -m scripts.collector_scrapling.cloud_worker`. The GitHub Actions
+workflow runs daily at 03:00 Asia/Seoul (`0 18 * * *` UTC) and can also be
+started manually. It runs only from `main`, writes to the central Supabase
+source pool, and stops before requesting any source that fails the existing
+source-approval or capacity checks. The prior collector schedule remains
+separate and disabled, so there is only one active schedule for this new
+Scrapling pipeline. GitHub may delay scheduled starts; the run ledger records
+the actual execution and result. The 05:00 Codex-account filter/writer task is
+defined in `docs/trend-scrapling-daily-codex-task.md`; it must run in cloud,
+use the user's subscription rather than an OpenAI API, and submit only
+unreviewed drafts. Do not substitute a local desktop task.
