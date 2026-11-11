@@ -140,7 +140,8 @@ def main():
     if args.max_pages is not None and args.max_pages<1: p.error('max-pages must be positive')
     if args.max_items is not None and args.max_items<1: p.error('max-items must be positive')
     if args.probe and args.write: p.error('probe never writes to Supabase')
-    if args.scheduled and (not args.write or args.since or explicit_until): p.error('scheduled mode requires write without range overrides')
+    if args.scheduled and not args.write: p.error('scheduled mode requires write')
+    if args.scheduled and bool(args.since) != bool(explicit_until): p.error('scheduled range requires both since and until')
     registry=json.loads((ROOT/'config/trend-collector.json').read_text())
     try:
         configs=select_configs(registry['sources'],args.source,args.source_set)
@@ -183,7 +184,9 @@ def main():
                     if record['reason']=='database_storage_cap':
                         record['status']='failed'; database_stop=True
                     result['sources'].append(record); continue
-                if args.scheduled:
+                if args.scheduled and args.since and explicit_until:
+                    since,until=args.since,explicit_until
+                elif args.scheduled:
                     since,until=store.scheduled_range(config,until)
                 else:
                     since=args.since or store.range_start(config,until)
