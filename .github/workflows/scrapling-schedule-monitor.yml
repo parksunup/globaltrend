@@ -21,7 +21,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           API_URL: ${{ github.api_url }}
-            run: |
+        run: |
           python - <<'PY'
           import datetime as dt
           import json
