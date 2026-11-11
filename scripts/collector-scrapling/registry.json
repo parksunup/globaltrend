@@ -6,11 +6,30 @@
   "max_items_per_source": 30,
   "filter_version": "scrapling-dedup-v1",
   "sources": [
-    {"source": "oecd", "source_id": "50ec0b84-7c02-4f85-895e-50bf43219a98", "language": "en"},
-    {"source": "cn-cac", "source_id": "d743f9ab-5194-5263-ab22-ef127336e2f2", "language": "zh"},
-    {"source": "hk-pcpd", "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe", "language": "en"},
-    {"source": "vn-gov", "source_id": "9e9815e2-2028-4384-a5e5-6ebd1f2e2f55", "language": "en"},
-    {"source": "ftc", "source_id": "430bd32d-19b1-4752-8280-7b2d2acbda88", "language": "en"},
-    {"source": "calprivacy", "source_id": "b064fc3c-766d-540f-9b65-3aa71e632663", "language": "en"}
+    {
+      "source": "cn-cac",
+      "source_id": "d743f9ab-5194-5263-ab22-ef127336e2f2",
+      "language": "zh"
+    },
+    {
+      "source": "hk-pcpd",
+      "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
+      "language": "en"
+    },
+    {
+      "source": "vn-gov",
+      "source_id": "9e9815e2-2028-4384-a5e5-6ebd1f2e2f55",
+      "language": "en"
+    },
+    {
+      "source": "ftc",
+      "source_id": "430bd32d-19b1-4752-8280-7b2d2acbda88",
+      "language": "en"
+    },
+    {
+      "source": "calprivacy",
+      "source_id": "b064fc3c-766d-540f-9b65-3aa71e632663",
+      "language": "en"
+    }
   ]
 }

@@ -32,5 +32,13 @@ jobs:
         run: python -m pip install -r scripts/collector-scrapling/requirements.txt
       - name: Verify collector adapters and safe transport
         run: python -m unittest tests.test_scrapling_collector_transport tests.test_scrapling_collector_runner tests.test_scrapling_source_adapters_ftc_calprivacy tests.test_scrapling_source_pcpd_vn tests.test_scrapling_oecd_cac_adapters tests.test_scrapling_cloud_worker tests.test_scrapling_filter_rpc_sql
-      - name: Collect and store approved source items
-        run: python -m scripts.collector_scrapling.cloud_worker
+      - name: Collect OECD and the other approved Scrapling sources
+        shell: bash
+        run: |
+          set +e
+          python -m scripts.collector_oecd_rss.cloud_worker
+          oecd_status=$?
+          python -m scripts.collector_scrapling.cloud_worker
+          scrapling_status=$?
+          if [ "$oecd_status" -ne 0 ]; then exit "$oecd_status"; fi
+          exit "$scrapling_status"

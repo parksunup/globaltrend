@@ -21,13 +21,22 @@ GitHub가 시작을 늦추더라도 수집 구간은 기존 진행 위치를 사
 
 `config/crawlee-daily-source-set.json`은 PR #114 표본에서 성공한 28개 중 사용자가
 제외한 EU Council을 뺀 27개를 지정합니다. EP와 RIPD는 성공 표본 목록에 없습니다.
-OECD와 FTC, CalPrivacy, CAC, PCPD, 베트남은 별도 Scrapling collector에서 처리하므로
-이 Crawlee 목록에 넣지 않아 중복 요청을 피합니다.
+2026-11-11 명시적인 활성화 지시에 따라 이전에 꺼져 있던 후보 설정 9개를 켰습니다.
+따라서 이 목록 27개가 모두 예약 실행 대상입니다. 기존 품질·범위·날짜 검토 표시는
+유지하고, PR #114의 실시간 표본 성공을 전체 기간 완전성으로 취급하지 않습니다.
+OECD는 기존 HTML/Python 어댑터 대신 새 WebCMS RSS collector가 맡고, FTC·CalPrivacy·
+CAC·PCPD·베트남은 별도 Scrapling collector가 맡으므로 Crawlee 집합에서는 제외합니다.
 
-출처 목록에 있다는 이유만으로 네트워크 요청하지 않습니다. 기존
-`config/trend-collector.json`의 활성·수집·저장 설정과 DB `collector_source_allowed`,
-저장 용량 검사를 모두 통과한 출처만 요청·저장됩니다. 미승인·보류 출처는 계속
-보류됩니다. 수동 `workflow_dispatch`는 읽기 전용 probe이며 DB를 쓰지 않습니다.
+마이그레이션 `20261111041009_activate_pr114_crawlee_sources.sql`은 14개 누락 publisher/
+source 행을 만들고, 27개 source 행을 활성화합니다. `terms_reviewed_at`은 내부 수집 게이트
+값이며 저작권 라이선스나 사이트 약관의 허가를 뜻하지 않습니다. robots.txt와 각 collector의
+요청 간격은 계속 준수합니다.
+
+수집기는 기존 `config/trend-collector.json`의 source ID와 production route/parser를 사용합니다.
+DB `collector_source_allowed`와 저장 용량 검사를 매 실행 때 확인합니다. 수동
+`workflow_dispatch`는 읽기 전용 probe이며 DB를 쓰지 않습니다. 저장소 변수
+`SCHEDULE_ENABLED`, `COLLECTION_ENABLED`, `FREE_LIMITS_VERIFIED`,
+`CLOUD_PIPELINE_VERIFIED`는 모두 `true`여야 예약 수집이 실제로 기록됩니다.
 예약 실행의 쓰기 여부는 저장소 변수 `SCHEDULE_ENABLED`, `COLLECTION_ENABLED`,
 `FREE_LIMITS_VERIFIED`, `CLOUD_PIPELINE_VERIFIED`가 모두 `true`여야 합니다.
 
@@ -35,7 +44,17 @@ OECD와 FTC, CalPrivacy, CAC, PCPD, 베트남은 별도 Scrapling collector에�
 새 Actions workflow는 기존 Crawlee HTTP transport와 `ingest_source_item` 저장 계약을
 사용하는 별도 실행입니다. Scraping/OpenAI 작성 API 호출은 하지 않습니다.
 
-## OECD 승인 게이트 불일치
+## OECD 대체 수집 경로
+
+OECD는 새 모듈 `scripts/collector_oecd_rss/`가 공식 WebCMS RSS API 두 경로만 사용합니다.
+PR #42의 HTML topic route, 977자 Python 초록 경로, 기존 OECD Scrapling 어댑터를 가져오지
+않습니다. RSS의 정확한 게시 요약과 날짜를 보존하고, 링크된 공식 상세 페이지 또는 PDF가
+robots 허용 및 요청 간격 조건에서 열리면 별도 추출합니다. 상세/PDF 요청이 403 등으로
+실패하면 RSS 요약만 저장하고 `ai_ready=false`, `requires_review=true`를 유지합니다.
+별도 OECD cloud worker가 같은 03:00 KST Scrapling workflow에서 실행되고, 일반 Scrapling
+목록에서는 OECD를 빼 중복 호출을 막습니다.
+
+## OECD 승인 게이트 불일치 (과거 로그)
 
 2026-11-11 예약 실행과 같은 날 수동 실행에서 Scrapling worker는 OECD를
 `source_not_active_or_terms_not_reviewed`로 보류했습니다. 실행 코드는

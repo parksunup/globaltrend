@@ -7,12 +7,6 @@ source-specific HTML/RSS/PDF parsers in `scripts/collector_scrapling/adapters`.
 
 ## Included sources
 
-- OECD: the official WebCMS privacy-topic and English-publications RSS APIs
-  are the primary alternate routes. The PR #42 HTML topic path remains a
-  separately labelled legacy route. The historical 2026-10-22 977-character
-  abstract came from the PR #42 `urllib.request` client, not Crawlee. Exact
-  official PDF links are fetched through Scrapling and parsed with pypdf when
-  allowed.
 - CAC: official privacy list and exact article path. A short official notice
   remains short and is marked for review; it is not padded or mislabeled.
 - PCPD: inclusive daily official ISD archive traversal. An empty individual
@@ -43,22 +37,22 @@ python -m pip install -r scripts/collector-scrapling/requirements.txt
 python -m scripts.collector_scrapling.runner --source all --since 2026-11-09 --until 2026-11-09 --output work/scrapling-result.json
 ```
 
-Use `--source oecd|cn-cac|hk-pcpd|vn-gov|ftc|calprivacy` to run one source.
+Use `--source cn-cac|hk-pcpd|vn-gov|ftc|calprivacy` to run one source.
 The result records body text and the request/error outcomes. HTTP success alone
 does not prove complete period coverage; `coverage_complete` is only true for
 the exact inclusive PCPD daily-archive window when every requested day was
 read successfully. Other sources remain partial until pagination/window
 completeness has been independently established.
 
-The cloud ingestion entry point is
-`python -m scripts.collector_scrapling.cloud_worker`. The GitHub Actions
-workflow runs daily at 03:00 Asia/Seoul (`0 18 * * *` UTC) and can also be
+The cloud ingestion entry point for these five sources is
+`python -m scripts.collector_scrapling.cloud_worker`. OECD has a separate
+WebCMS RSS-only collector in `scripts/collector_oecd_rss/`; it does not import
+the previous OECD adapter or the PR #42 HTML route. The GitHub Actions workflow
+runs both workers daily at 03:00 Asia/Seoul (`0 18 * * *`) and can also be
 started manually. It runs only from `main`, writes to the central Supabase
 source pool, and stops before requesting any source that fails the existing
-source-approval or capacity checks. The prior collector schedule remains
-separate and disabled, so there is only one active schedule for this new
-Scrapling pipeline. GitHub may delay scheduled starts; the run ledger records
-the actual execution and result. The 05:00 Codex-account filter/writer task is
+source-approval or capacity checks. GitHub may delay scheduled starts; the run
+ledger records the actual execution and result. The 05:00 Codex-account filter/writer task is
 defined in `docs/trend-scrapling-daily-codex-task.md`; it must run in cloud,
 use the user's subscription rather than an OpenAI API, and submit only
 unreviewed drafts. Do not substitute a local desktop task.
