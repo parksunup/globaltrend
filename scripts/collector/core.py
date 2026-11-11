@@ -199,9 +199,9 @@ class HttpClient:
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
         if not self.robots[origin].can_fetch(url,'GlobalTrendResearch'): raise FetchError('robots_disallowed')
         return url
-    def get(self,url):
+    def get(self,url,headers=None):
         url=self.check_robots(url)
-        return self.request(url,enforce_robots=True)
+        return self.request(url,headers=headers,enforce_robots=True)
     def post(self,url,payload,headers):
         url=self.check_robots(url)
         return self.request(url,'POST',payload,headers,enforce_robots=True)
@@ -227,8 +227,9 @@ class HttpClient:
     def __exit__(self,exc_type,exc_value,traceback): self.close()
 
 def fetch_listing(source,client,page):
-    def fetch(url,method='GET',payload=None):
-        return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
+    def fetch(url,method='GET',payload=None,headers=None):
+        if method=='POST': return client.post(url,payload,headers or {'Content-Type':'application/json'})
+        return client.get(url,headers=headers) if headers is not None else client.get(url)
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:

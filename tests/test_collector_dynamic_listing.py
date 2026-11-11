@@ -119,8 +119,11 @@ class DynamicListingTests(unittest.TestCase):
         api_url = 'https://www.pdpc.gov.sg/api/listing-api?listingtype=media_events&itemsperpage=10&pathname=%2Fmedia-events'
         body = json.dumps({'data': [{'href': f'/media-events/{i}', 'title': f'Notice {i}', 'date': '30 Sep 2026'}
                                     for i in range(10)], 'totalItems': 10})
-        def fetch(url):
+        def fetch(url, method, payload, headers):
             self.assertEqual(url, api_url)
+            self.assertEqual(method, 'GET')
+            self.assertIsNone(payload)
+            self.assertEqual(headers['Referer'], 'https://www.pdpc.gov.sg/media-events')
             return body, url, 'application/octet-stream'
         rows, next_page = parsers.discover_listing('pdpc', '<html></html>',
             'https://www.pdpc.gov.sg/media-events', fetch)
@@ -236,7 +239,7 @@ class DynamicListingTests(unittest.TestCase):
             ['$', 'article', None, {'children': [['$', '$L26', None, {'data': {'content': '<p>Data protection advisory body.</p>'}}]]}]]}]
         detail = '<main><h1>A</h1><span class="page-banner__date">Published on 30 Sep 2026</span></main><script>self.__next_f.push(' + json.dumps([1, '24:' + json.dumps(content) + '\n']) + ')</script>'
         class Client:
-            def get(self, url):
+            def get(self, url, headers=None):
                 if '/api/' in url: return json.dumps(response).encode(), url, 'text/plain'
                 html = '<section data-listing-type="media_events"></section>' if url.split('?')[0].endswith('/media-events') else detail
                 return html.encode(), url, 'text/html'

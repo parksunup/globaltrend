@@ -251,10 +251,12 @@ class CollectorTests(unittest.TestCase):
         from urllib.parse import urlsplit, parse_qs
         import json
         calls=[]
+        api_headers=[]
         listing='https://www.pdpc.gov.sg/media-events'
         class Client:
-            def get(self,url):
+            def get(self,url,headers=None):
                 calls.append(url)
+                if headers: api_headers.append(headers)
                 if url==listing:
                     return b'<section class="listing-filters" data-listing-type="media_events"></section>',url,'text/html'
                 return json.dumps({'totalItems':1,'data':[{'href':'/media-events/advisory','title':'Advisory','date':'10 Nov 2026'}]}).encode(),url,'text/plain'
@@ -265,6 +267,7 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(len(calls),2)
         self.assertEqual(urlsplit(calls[1]).path,'/api/listing-api')
         self.assertEqual(parse_qs(urlsplit(calls[1]).query)['pathname'],['/media-events'])
+        self.assertEqual(api_headers[0]['Referer'], listing)
 
     def test_pdpc_api_pagination_rejects_changed_scope(self):
         with self.assertRaisesRegex(ValueError,'pdpc_listing_query_changed'):

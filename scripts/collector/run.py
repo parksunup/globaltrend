@@ -35,9 +35,10 @@ def probe_source(config,client,sample_urls):
         record.update(reason=user_hold,hold_reason=user_hold,eligibility_reasons=['source_held_by_user'])
         return record,False
     failed=False; rows=[]; listing=config['listing']
-    def fetch(url,method='GET',payload=None):
+    def fetch(url,method='GET',payload=None,headers=None):
         try:
-            body,final,ctype=client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
+            if method=='POST': body,final,ctype=client.post(url,payload,headers or {'Content-Type':'application/json'})
+            else: body,final,ctype=client.get(url,headers=headers) if headers is not None else client.get(url)
         except (FetchError,ValueError) as e:
             record['requests'].append({'url':url,'status':'failed','reason':str(e)})
             raise
