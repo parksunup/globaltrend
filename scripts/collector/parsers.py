@@ -615,11 +615,15 @@ def discover_ico_search(data,url,page):
     return rows,next_url if more else None
 
 def pdpc_listing_request(html,url):
-    soup=BeautifulSoup(html,'html.parser')
-    if not soup.select_one('section[data-listing-type="media_events"]'):
-        raise ValueError('pdpc_listing_template_changed')
+    # The official listing route is also the bootstrap for its JSON endpoint.
+    # Do not make that endpoint depend on a particular HTML marker: the same
+    # listing can be returned without the marker (for example, alternate
+    # server-rendered pages), while the API response itself is schema-checked.
+    parts=urlsplit(url)
+    if parts.scheme!='https' or parts.hostname!='www.pdpc.gov.sg' or parts.path!='/media-events':
+        raise ValueError('pdpc_listing_route_unverified')
     page=listing_page_number(url)
-    query={'listingtype':'media_events','itemsperpage':10,'pathname':urlsplit(url).path}
+    query={'listingtype':'media_events','itemsperpage':10,'pathname':parts.path}
     if page>1: query['page']=page
     return urljoin(url,'/api/listing-api')+'?'+urlencode(query)
 

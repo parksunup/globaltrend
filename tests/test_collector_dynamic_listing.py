@@ -103,13 +103,17 @@ class DynamicListingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             parsers.extract('pdpc', html, 'https://www.pdpc.gov.sg/media-events/a')
 
-    def test_pdpc_listing_uses_dom_marker_and_observed_ten_item_protocol(self):
-        endpoint = parsers.pdpc_listing_request('<section data-listing-type="media_events"></section>',
+    def test_pdpc_listing_bootstraps_api_without_requiring_html_marker(self):
+        endpoint = parsers.pdpc_listing_request('<html><main><h1>Media & Events</h1></main></html>',
             'https://www.pdpc.gov.sg/media-events?page=2')
         from urllib.parse import urlsplit, parse_qs
         query = parse_qs(urlsplit(endpoint).query)
         self.assertEqual(query, {'listingtype': ['media_events'], 'itemsperpage': ['10'],
                                 'pathname': ['/media-events'], 'page': ['2']})
+
+    def test_pdpc_listing_bootstrap_rejects_unverified_route(self):
+        with self.assertRaisesRegex(ValueError, 'pdpc_listing_route_unverified'):
+            parsers.pdpc_listing_request('<html></html>', 'https://example.org/media-events')
 
     def test_pdpc_registered_start_page_bootstraps_from_official_html(self):
         import json
