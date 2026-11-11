@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default async function PublicLawComparePage({ searchParams }: { searchParams: Promise<{ view?: string; countries?: string; criterion?: string; back?: string; published?: string }> }) {
   const { view, countries, criterion, back, published } = await searchParams;
-  const searchReturnTo = back?.startsWith("/public/search?") ? back : undefined;
+  const searchReturnTo = (back?.startsWith("/public/search?") || back?.startsWith("/public/unified-search?")) ? back : undefined;
   const publishedOnly = published === "1" || Boolean(searchReturnTo);
   const draftMode = !publishedOnly && publicSubmissionPreviewEnabled();
   const { cells, documents: translations, instruments } = await (publishedOnly ? loadPublishedLegalForSearch() : loadPublicLegal());

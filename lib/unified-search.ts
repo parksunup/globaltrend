@@ -106,7 +106,7 @@ export function searchHref(filters: SearchFilters, changes: Partial<SearchFilter
         p.set('sort', 'newest');
     if (f.page > 1)
         p.set('page', String(f.page));
-    return `/public/search?${p}`;
+    return `/public/unified-search?${p}`;
 }
 export function matchingConcepts(query: string) { const q = normalizeSearchText(query).replaceAll(' ', ''); return searchConcepts.filter(concept => concept.aliases.some(alias => q.includes(normalizeSearchText(alias).replaceAll(' ', '')))); }
 function snippet(text: string, terms: string[]): string {

@@ -9,8 +9,8 @@ export const dynamic = "force-dynamic";
 export default async function PublicLawTextPage({ params, searchParams }: { params: Promise<{ lawId: string }>; searchParams: Promise<{ back?: string; published?: string }> }) {
   const { lawId } = await params;
   const { back, published } = await searchParams;
-  const returnTo = (back?.startsWith("/public/laws?") || back?.startsWith("/public/search?")) ? back : "/public/laws?view=full";
-  const publishedOnly = published === "1" || back?.startsWith("/public/search?") || (back?.startsWith("/public/laws?") && new URL(back, "https://local.invalid").searchParams.get("published") === "1");
+  const returnTo = (back?.startsWith("/public/laws?") || (back?.startsWith("/public/search?") || back?.startsWith("/public/unified-search?"))) ? back : "/public/laws?view=full";
+  const publishedOnly = published === "1" || (back?.startsWith("/public/search?") || back?.startsWith("/public/unified-search?")) || (back?.startsWith("/public/laws?") && new URL(back, "https://local.invalid").searchParams.get("published") === "1");
   const law = (await (publishedOnly ? loadPublishedLegalForSearch() : loadPublicLegal())).documents.find(item => item.id === lawId);
   if (!law) notFound();
   return <main className={styles.site}>

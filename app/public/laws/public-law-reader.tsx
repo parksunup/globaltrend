@@ -20,7 +20,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
   const dateLabel = /^\d{4}-\d{2}-\d{2}$/.test(law.version) ? "시행일" : "자료 기준";
   const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
-    <Link href={returnTo}>← {returnTo.startsWith("/public/search?") ? "검색 결과로" : returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
+    <Link href={returnTo}>← {(returnTo.startsWith("/public/search?") || returnTo.startsWith("/public/unified-search?")) ? "검색 결과로" : returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
     <p className={styles.lawOverline}>{law.reviewStatus === "official" ? "OFFICIAL KOREAN TEXT" : "KOREAN TRANSLATION"}</p>
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>

@@ -65,13 +65,13 @@ export default async function PublicHome() {
       <div className={styles.heroTitle}>
         <p className={styles.overline}>GLOBAL PRIVACY OBSERVATORY</p>
         <h1>글로벌 개인정보 동향</h1>
-        <p>세계의 개인정보 이슈를 한눈에, 법과 정책의 변화를 깊이 있게.</p><div className={styles.mobileHeroActions}><Link href="/public/search">자료 찾기</Link><Link href="/public/laws">국가별 법제 보기</Link></div>
+        <p>세계의 개인정보 이슈를 한눈에, 법과 정책의 변화를 깊이 있게.</p><div className={styles.mobileHeroActions}><Link href="/public/search">동향 찾기</Link><Link href="/public/laws">국가별 법제 보기</Link></div>
       </div>
       <div className={styles.globe} aria-hidden="true" />
       <div className={styles.heroMotto}>PEOPLE<br />LAW<br />SOCIETY<br /><b>A SAFER DIGITAL TOMORROW</b></div>
     </section>
 
-    <section className={searchStyles.compact} aria-label="통합 검색 안내"><div><strong>궁금한 개인정보 이슈가 있나요?</strong><p>질문으로 동향과 국가별 법제·근거를 함께 찾아보세요.</p></div><Link href="/public/search">통합 검색 →</Link></section>
+    <section className={searchStyles.compact} aria-label="통합 검색 안내"><div><strong>궁금한 개인정보 이슈가 있나요?</strong><p>질문으로 동향과 국가별 법제·근거를 함께 찾아보세요.</p></div><Link href="/public/unified-search">통합 검색 →</Link></section>
     {podcast&&<HomePodcastPlayer podcast={podcast}/>}
 
     <section className={styles.observatoryGrid}>
@@ -89,7 +89,7 @@ export default async function PublicHome() {
         <h3>{featured ? featured.summary : "작업실에서 주간 동향을 공개하면 이곳에 표시됩니다."}</h3>
         {featured&&<div className={styles.featureSource}><span>선정 기준</span><b>{featuredReasons.join(' · ')}</b><span>공식 출처</span><b>{featured.institution}</b></div>}
         <p className={styles.featureBody}>{featured?.details || ""}</p>
-        <Link className={styles.featureLink} href={featured ? `/public/trends/${featured.id}` : "/public/search"}>{featured ? "동향 자세히 보기" : "통합 검색 열기"} <span>→</span></Link>
+        <Link className={styles.featureLink} href={featured ? `/public/trends/${featured.id}` : "/public/search"}>{featured ? "동향 자세히 보기" : "동향 검색 열기"} <span>→</span></Link>
       </article>
 
       <aside className={styles.topicPanel}>

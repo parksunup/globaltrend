@@ -17,7 +17,7 @@ test('query parsing validates lengths, real dates, calendar periods and shared f
  const f=parseSearchFilters({q:'  아동  ',country:['UK,GB','KR','../x'],scope:'laws',mode:'concept',page:'-3'});assert.equal(f.q,'아동');assert.deepEqual(f.countries,['GB','KR']);assert.equal(f.scope,'laws');assert.equal(f.mode,'hybrid');assert.equal(f.page,1);
  assert.ok(parseSearchFilters({q:'x'.repeat(301)}).errors.length);assert.ok(parseSearchFilters({q:'!!!'}).errors.length);assert.ok(parseSearchFilters({from:'2026-02-30'}).errors.length);assert.ok(parseSearchFilters({from:'2026-03-01',to:'2026-02-01'}).errors.length);
  assert.equal(parseSearchFilters({period:'최근 1개월'},new Date('2026-03-31T00:00:00Z')).from,'2026-02-28');
- const u=new URL(searchHref(f),'https://example.test');assert.equal(u.pathname,'/public/search');assert.deepEqual(u.searchParams.getAll('country'),['GB','KR']);assert.equal(u.searchParams.get('scope'),'laws');
+ const u=new URL(searchHref(f),'https://example.test');assert.equal(u.pathname,'/public/unified-search');assert.deepEqual(u.searchParams.getAll('country'),['GB','KR']);assert.equal(u.searchParams.get('scope'),'laws');
 });
 test('free questions map to the six existing reading criteria and keyword mode does not pretend to expand them',()=>{
  const ids=['extraterritorial_scope','children_information','cross_border_transfer','data_subject_rights','processing_basis_use','breach_notification'];
@@ -61,7 +61,7 @@ test('catalog excludes drafts, pending review notes and unsafe source URLs',()=>
  assert.equal(rows.length,3);assert.equal(rows[0].sourceUrl,'');assert.ok(rows.some(row=>row.url.includes(encodeURIComponent('pipa-제3조'))));assert.ok(!JSON.stringify(rows).includes('PRIVATE REVIEW NOTE'));
 });
 async function renderSearch({params={q:'아동'},sources={trends:true,laws:true},documents=[trend,doc({title:'아동 개인정보',text:'아동의 조건과 예외'})]}={}){
- let requests=0;const Component=loader({'../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../../../lib/unified-search-data':{loadPublicSearchCorpus:async()=>{requests++;return {sources,documents};}},'../../../lib/search-semantic-provider':{semanticSearch:async()=>({state:'off',hits:[]})}})('app/public/search/page.tsx').default;
+ let requests=0;const Component=loader({'../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../../../lib/unified-search-data':{loadPublicSearchCorpus:async()=>{requests++;return {sources,documents};}},'../../../lib/search-semantic-provider':{semanticSearch:async()=>({state:'off',hits:[]})}})('app/public/unified-search/page.tsx').default;
  return {html:renderToStaticMarkup(await Component({searchParams:Promise.resolve(params)})),requests};
 }
 test('unified screen groups public news and laws, preserves back links, and states the real search method',async()=>{
@@ -81,9 +81,37 @@ test('search links keep published snapshots through comparison and article navig
  let publishedCalls=0;
  const mocks={'../../../lib/public-legal':{loadPublishedLegalForSearch:async()=>{publishedCalls++;return {cells:[],documents:[],instruments:[]};},loadPublicLegal:async()=>{throw Error('must not use Preview working copy');}},'../../../lib/public-submission-preview':{publicSubmissionPreviewEnabled:()=>true},'../../../lib/legal-release':{},'./public-law-compare':{default:()=>null,__esModule:true}};
  const page=loader(mocks)('app/public/laws/page.tsx').default;
- const element=await page({searchParams:Promise.resolve({published:'1',back:'/public/search?q=GDPR',view:'compare'})});
- assert.equal(publishedCalls,1);assert.equal(element.props.publishedOnly,true);assert.equal(element.props.draftMode,false);assert.equal(element.props.searchReturnTo,'/public/search?q=GDPR');
+ const element=await page({searchParams:Promise.resolve({published:'1',back:'/public/unified-search?q=GDPR',view:'compare'})});
+ assert.equal(publishedCalls,1);assert.equal(element.props.publishedOnly,true);assert.equal(element.props.draftMode,false);assert.equal(element.props.searchReturnTo,'/public/unified-search?q=GDPR');
  const textPage=loader({'next/navigation':{notFound:()=>{throw Error('not found');}},'../../../../lib/public-legal':{loadPublishedLegalForSearch:async()=>{publishedCalls++;return {documents:[{id:'gdpr'}]};},loadPublicLegal:async()=>{throw Error('must not use Preview working copy');}},'../../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../public-law-reader':{default:()=>null,__esModule:true}})('app/public/laws/[lawId]/page.tsx').default;
  await textPage({params:Promise.resolve({lawId:'gdpr'}),searchParams:Promise.resolve({back:'/public/laws?view=compare&published=1'})});
  assert.equal(publishedCalls,2);
+});
+test('navigation keeps overseas trends and places separate unified search immediately after laws',()=>{
+ const {PublicHeader}=loader({'./public-theme':{usePublicTheme:()=>({theme:'dark',toggleTheme(){}})}})('app/public/public-navigation.tsx');
+ const html=renderToStaticMarkup(React.createElement(PublicHeader,{active:'/public/unified-search'}));
+ const nav=html.match(/<nav[^>]*aria-label="주요 메뉴"[^>]*>(.*?)<\/nav>/s)[1];
+ assert.match(nav,/href="\/public\/search"[^>]*>해외동향</);
+ assert.match(nav,/href="\/public\/laws"[^>]*>국가별 법제<\/a><a[^>]*href="\/public\/unified-search"[^>]*aria-current="page"[^>]*>통합 검색</);
+});
+test('original trends page still loads the complete published list without requiring a search query',async()=>{
+ let calls=0;
+ const stories=Array.from({length:149},(_,i)=>({id:String(i)}));
+ const Component=loader({'../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../trend-search':{__esModule:true,default:({stories})=>React.createElement('div',{'data-story-count':stories.length})},'../../../lib/published-trends':{loadPublishedStories:async()=>{calls++;return stories;}}})('app/public/search/page.tsx').default;
+ let html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
+ assert.match(html,/data-story-count="149"/);
+ stories.push({id:'new-trend'});
+ html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
+ assert.match(html,/data-story-count="150"/);assert.equal(calls,2);
+});
+test('newly published trends and a new law join the next corpus without an ID allowlist or index rebuild',async()=>{
+ const stories=[];const legal={cells:[],documents:[],instruments:[]};
+ const {loadPublicSearchCorpus}=loader({'./published-trends':{loadPublishedStories:async()=>stories},'./public-legal':{loadPublishedLegalForSearch:async()=>legal}})('lib/unified-search-data.ts');
+ assert.equal((await loadPublicSearchCorpus()).documents.length,0);
+ stories.push({id:'newly-published',publicationStatus:'published',title:'새로 등록한 브라질 보호 지침',summary:'신규 동향',details:'새법률 검색용',country:'BR',jurisdictions:['BR'],tags:[],originalTitle:'New source',institution:'기관',date:'2026.11.11',officialUrl:'https://example.test/official'});
+ legal.documents.push({id:'new-lgpd',jurisdiction:'BR',title:'새법률',officialName:'LGPD',version:'신규 선정 판본',reviewStatus:'published',officialUrl:'https://example.test/law',sections:[{id:'new-article-1',title:'제1조',context:'적용 범위',lines:[{text:'새법률의 적용 조건과 예외'}]}]});
+ const corpus=await loadPublicSearchCorpus();assert.equal(corpus.documents.length,2);
+ const hits=rankPublicDocuments(corpus.documents,parseSearchFilters({q:'새법률',country:'BR',mode:'keyword'}));
+ assert.deepEqual(Array.from(hits,hit=>hit.document.kind).sort(),['article','trend']);
+ legal.documents[0].reviewStatus='unreviewed';stories[0].publicationStatus='draft';assert.equal((await loadPublicSearchCorpus()).documents.length,0);
 });
