@@ -135,7 +135,7 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "observed_listing_json_and_embedded_rsc_article",
+      "adapter_scope": "official_media_events_page_bootstraps_verified_listing_json_api_and_embedded_rsc_article",
       "cadence": "daily",
       "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
