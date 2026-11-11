@@ -17,7 +17,7 @@ function route(state) {
   }});
   return Object.assign(exports.GET,{PUT:exports.PUT});
 }
-const row={id:'12345678-1234-1234-1234-123456789abc',revision:'a'.repeat(32),created_at:'2026-11-01T00:00:00Z',title_ko:'제목',summary_ko:'요약',details_ko:'본문'};
+const row={id:'12345678-1234-1234-1234-123456789abc',revision:'a'.repeat(32),created_at:'2026-10-01T00:00:00Z',title_ko:'제목',summary_ko:'요약',details_ko:'본문'};
 test('anonymous requests cannot read DB drafts or trigger GitHub loading',async()=>{
   const state={gitReads:0,user:null};const get=route(state);
   const response=await get(new Request('https://example.test/api/team-workspace?role=trends'));

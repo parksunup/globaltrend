@@ -115,3 +115,11 @@ test('newly published trends and a new law join the next corpus without an ID al
  assert.deepEqual(Array.from(hits,hit=>hit.document.kind).sort(),['article','trend']);
  legal.documents[0].reviewStatus='unreviewed';stories[0].publicationStatus='draft';assert.equal((await loadPublicSearchCorpus()).documents.length,0);
 });
+test('official Korean PIPA does not remove other newly published Korean laws',async()=>{
+ const official={id:'pipa',jurisdiction:'KR',title:'공식 개인정보 보호법'};
+ const secondLaw={id:'pipa-decree',jurisdiction:'KR',title:'추가 한국 법률'};
+ const load=loader({'@supabase/supabase-js':{createClient:()=>({from:()=>({select:()=>({eq:()=>({not:async()=>({data:[],error:null})})})})})},'./legal-release':{publishedLegalBundle:()=>({cells:[],instruments:[],documents:[{...official,title:'대체본'},secondLaw]})},'./public-submission-preview':{publicSubmissionPreviewEnabled:()=>false},'./public-legal-schema':{},'./official-pipa':{loadOfficialPipa:()=>official,officialPipaInstrument:()=>({fields:[]})}})('lib/public-legal.ts');
+ const previousUrl=process.env.NEXT_PUBLIC_SUPABASE_URL,previousKey=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+ process.env.NEXT_PUBLIC_SUPABASE_URL='http://127.0.0.1:4295';process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='offline-test';
+ try{const corpus=await load.loadPublishedLegalForSearch();assert.deepEqual(Array.from(corpus.documents,law=>law.id),['pipa','pipa-decree']);assert.equal(corpus.documents[0].title,official.title);}finally{if(previousUrl===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_URL;else process.env.NEXT_PUBLIC_SUPABASE_URL=previousUrl;if(previousKey===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;else process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=previousKey;}
+});

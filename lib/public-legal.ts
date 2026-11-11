@@ -10,7 +10,7 @@ function withOfficialPipa(bundle: ReturnType<typeof publishedLegalBundle>) {
     ...bundle,
     instruments: bundle.instruments.some((item) => item.fields.some((field) => field.label === "관할권" && field.value === "KR"))
       ? bundle.instruments : [officialPipaInstrument(law), ...bundle.instruments],
-    documents: [law, ...bundle.documents.filter((item) => item.jurisdiction !== "KR")],
+    documents: [law, ...bundle.documents.filter((item) => item.id !== law.id)],
   };
 }
 

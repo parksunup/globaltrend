@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {composeTeamTrends,parseTrendEdit,loadTeamTrendRows} from '../lib/team-trends.ts';
 import {canPublishTeamTrend} from '../lib/team-trend-publication.ts';
 const id='12345678-1234-1234-1234-123456789abc';
-const row={id,revision:'a'.repeat(32),created_at:'2026-11-01T00:00:00Z',title_ko:'원래 제목',summary_ko:'요약',details_ko:'본문',official_url:'https://example.test/one',original_title:'Original',source_name:'기관',published_date:'2026-10-01',jurisdictions:[],topics:[],status:'draft'};
+const row={id,revision:'a'.repeat(32),created_at:'2026-10-01T00:00:00Z',title_ko:'원래 제목',summary_ko:'요약',details_ko:'본문',official_url:'https://example.test/one',original_title:'Original',source_name:'기관',published_date:'2026-10-01',jurisdictions:[],topics:[],status:'draft'};
 const snapshot={items:[],commitSha:'c'.repeat(40)};
 const edit={report_id:id,base_revision:row.revision,title_ko:'수정 제목',summary_ko:'수정 요약',details_ko:'수정 본문'};
 test('all DB drafts are reviewable; GitHub edits change only workspace composition, not originals',()=>{
