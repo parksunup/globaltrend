@@ -50,11 +50,13 @@ export class OfficialHTTP {
         }
         body = new TextDecoder().decode(r.bytes);
       } catch (error) {
-        // A missing robots file is not a transport/permission failure. Keep
-        // 401/403, timeouts and 5xx fail-closed; never turn those into permission.
+        // A 403 response to robots.txt is not a parsed robots policy. Treat
+        // 403/404/410 as unavailable rules, then continue under the normal
+        // polite delay. A 403 on a requested listing/detail remains a hard
+        // access failure; 429, 5xx, timeouts and network errors stay fail-closed.
         if (
           !(error instanceof Error) ||
-          !["http_404", "http_410"].includes(error.message)
+          !["http_403", "http_404", "http_410"].includes(error.message)
         ) throw error;
       }
       this.robot = robotsParser(

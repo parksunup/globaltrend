@@ -195,11 +195,15 @@ def main():
             if args.probe:
                 researched=json.loads((ROOT/f"data/trends/source-configs/{config['source']}.json").read_text())
                 probe,failed=probe_source(config,client,researched.get('sample_urls',[])[:1])
+                if client.robots_unavailable:
+                    probe['robots_unavailable']=client.robots_unavailable
                 probe.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))
                 result['sources'].append(probe); probe_failed=probe_failed or failed
                 continue
             attempted=True
             collected=collect(config,client,store or DryStore(),since,until,args.max_pages,args.max_items)
+            if client.robots_unavailable:
+                collected['robots_unavailable']=client.robots_unavailable
             collected.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))
             if 'preflight' in record: collected['preflight']=record['preflight']
             record=collected
