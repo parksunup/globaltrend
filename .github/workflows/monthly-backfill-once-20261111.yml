@@ -3,6 +3,7 @@ name: One-time monthly source backfill 2026-11-11 15:40 KST
 on:
   schedule:
     - cron: '40 6 11 11 *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,7 +35,7 @@ jobs:
       - name: Confirm this is the one scheduled date
         id: date_guard
         run: |
-          if [ "$(date -u +%F)" = '2026-11-11' ] && [ '${{ github.event.schedule }}' = '40 6 11 11 *' ]; then
+          if [ "$(date -u +%F)" = '2026-11-11' ] && { [ '${{ github.event.schedule }}' = '40 6 11 11 *' ] || [ '${{ github.event_name }}' = 'workflow_dispatch' ]; }; then
             echo 'proceed=true' >> "$GITHUB_OUTPUT"
           else
             echo 'proceed=false' >> "$GITHUB_OUTPUT"
@@ -52,23 +53,22 @@ jobs:
         run: |
           python -m pip install -r scripts/collector/requirements.txt
           python -m pip install -r scripts/collector-scrapling/requirements.txt
-      - name: Collect 27 Crawlee routes for the monthly window
+      - name: Collect all 33 routes for the monthly window
         if: steps.date_guard.outputs.proceed == 'true'
         env:
           COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
-        run: >-
-          python -m scripts.collector.run --scheduled --write --since "$COLLECTOR_SINCE"
-          --until "$COLLECTOR_UNTIL" --source-set config/crawlee-daily-source-set.json
-          --output work/monthly-crawlee-result.json
-      - name: Collect OECD and five other Scrapling routes for the monthly window
-        if: steps.date_guard.outputs.proceed == 'true'
         shell: bash
         run: |
           set +e
+          python -m scripts.collector.run --scheduled --write --since "$COLLECTOR_SINCE" \
+            --until "$COLLECTOR_UNTIL" --source-set config/crawlee-daily-source-set.json \
+            --output work/monthly-crawlee-result.json
+          crawlee_status=$?
           python -m scripts.collector_oecd_rss.cloud_worker
           oecd_status=$?
           python -m scripts.collector_scrapling.cloud_worker
           scrapling_status=$?
+          if [ "$crawlee_status" -ne 0 ]; then exit "$crawlee_status"; fi
           if [ "$oecd_status" -ne 0 ]; then exit "$oecd_status"; fi
           exit "$scrapling_status"
       - name: Disable this one-time schedule after its occurrence
