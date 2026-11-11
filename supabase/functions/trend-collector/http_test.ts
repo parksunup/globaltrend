@@ -18,12 +18,16 @@ Deno.test("missing robots 404 permits public page, real failures stay blocked", 
     globalThis.fetch = original;
   }
 });
-Deno.test("robots access denial reports its exact official URL without allowing the page", async () => {
+Deno.test("robots 403 is unavailable policy and does not block the public page", async () => {
   const original = globalThis.fetch;
   const requested: string[] = [];
   globalThis.fetch = async (input) => {
     requested.push(String(input));
-    return new Response("forbidden", { status: 403 });
+    return String(input).endsWith("/robots.txt")
+      ? new Response("forbidden", { status: 403 })
+      : new Response("article body", {
+        headers: { "content-type": "text/html" },
+      });
   };
   try {
     let error: unknown;
@@ -34,14 +38,9 @@ Deno.test("robots access denial reports its exact official URL without allowing 
     } catch (value) {
       error = value;
     }
-    if (!(error instanceof Error) || error.message !== "http_403") {
-      throw Error("robots 403 must remain blocked");
-    }
-    if ((error as Error & { requestUrl?: string }).requestUrl !== "https://ico.org.uk/robots.txt") {
-      throw Error("missing exact robots URL diagnostic");
-    }
-    if (requested.length !== 1 || !requested[0].endsWith("/robots.txt")) {
-      throw Error("collector must not attempt the page after robots 403");
+    if (error) throw error;
+    if (requested.length !== 2 || !requested[0].endsWith("/robots.txt") || !requested[1].includes("/media-centre/news-and-blogs/")) {
+      throw Error("collector must continue to the official page after robots 403");
     }
   } finally {
     globalThis.fetch = original;
