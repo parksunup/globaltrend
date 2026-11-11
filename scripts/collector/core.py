@@ -62,6 +62,7 @@ atexit.register(_close_http_clients)
 class HttpClient:
     def __init__(self,hosts,interval=2,budget=None,request_timeout_seconds=None):
         self.hosts=set(hosts); self.interval=interval; self.requests=0; self.last=0; self.robots={}
+        self.robots_unavailable=[]
         self._transport=None; self._loop=None; self._thread=None; self._ready=None; self._transport_lock=threading.Lock()
         if request_timeout_seconds is not None and request_timeout_seconds<=0:
             raise ValueError('request_timeout_seconds_must_be_positive')
@@ -183,8 +184,14 @@ class HttpClient:
         if origin not in self.robots:
             try: data,_,_=self.request(origin+'/robots.txt')
             except FetchError as e:
-                if str(e) not in ('http_404','http_410'):
+                # A 403 response to robots.txt is not a parsed robots policy.
+                # Treat the policy file as unavailable, then continue with the
+                # ordinary source request under the configured polite delay.
+                # A 403 on the actual listing/detail request remains a hard
+                # access failure; 429, 5xx and network errors remain fail-closed.
+                if str(e) not in ('http_403','http_404','http_410'):
                     raise FetchError('robots_fetch_failed:'+str(e)) from None
+                self.robots_unavailable.append({'url':origin+'/robots.txt','reason':str(e)})
                 data=b''
             from protego import Protego
             robot=Protego.parse(data.decode('utf-8','replace'))

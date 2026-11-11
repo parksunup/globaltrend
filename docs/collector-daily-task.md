@@ -60,6 +60,10 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 
 일일 예약은 새로 발견된 자료와 기존 미완료 범위를 처리하고, 실제 개인정보 관련성이 있는 비중복 자료를 한국어 보고서체 초안으로 제출합니다. 일일 실행은 전주 주간 호의 확정/집계 역할을 맡지 않습니다.
 
+### robots.txt 요청이 403인 경우
+
+robots.txt 자체를 요청했을 때 받은 HTTP 403은 robots 정책 본문이 아니므로 `Disallow`로 해석하거나 그 이유만으로 출처 수집을 중단하지 않습니다. 수집기는 이를 정책 파일을 읽을 수 없는 상태로 기록하고, 등록된 공식 목록 경로를 기존 출처별 요청 간격·페이지 범위·User-Agent 규칙에 따라 계속 처리합니다. robots.txt를 정상적으로 읽어 확인한 `Disallow`는 계속 준수합니다. 실제 목록·상세 페이지가 HTTP 403/401을 반환하면 접근 실패로 기록하며 우회하지 않습니다. HTTP 429, 5xx, timeout, 네트워크 오류도 재시도·backoff 규칙에 따르고 허용으로 간주하지 않습니다. 실행 요약에는 robots 요청 결과와 실제 콘텐츠 요청 결과를 분리해 남깁니다.
+
 1. 직전 daily producer 요약과 `config/trend-collector.json`의 **전체 등록 출처**별 수집 이벤트·제출 job/report, 출처 상태, cloud cursor·queue·backlog를 읽습니다. `config/trend-source-catalog.json`의 전체 요청 목록과 운영 등록 목록을 별도로 대조해 빠진 ID를 숨기지 않습니다. `docs/collector-daily-evidence.sql`의 한국시간 날짜를 해당 실행일로 바꿔 읽기 전용 집계하고, `daily-cron`(Edge 예약), `manual-validation`(수동), cloud-python의 result trigger 및 실제 automation run ID를 따로 대조합니다. CNIL의 `listing_date_excluded`는 카드 날짜만 확인한 건수이므로 상세 열람·저장 건수와 구분합니다. 유효 임대가 있으면 빼앗지 않습니다. 수집을 시작하기 전에 기존 대기 자료의 원문·적격성을 검토해 작성 가능한 작업부터 처리합니다. 수집의 무진행 반복 때문에 기존 적격 초안이 밀리지 않게 합니다.
 2. OECD·FTC는 기존 `collector_cloud_take → python -m scripts.collector.cloud_step → collector_cloud_commit` 경로를 사용합니다. 이전 commit이 성공한 뒤 다음 claim을 진행합니다. Claim과 미저장 bundle은 ignored work/에 보관하고, commit 응답이 있어야 저장 성공으로 기록합니다.
 3. Bundle에 실제 automation/run ID·예정 시각·`trigger='scheduled'`·Git SHA를 넣습니다. 실제 context에서 모르는 값은 지어내지 않고 미확인으로 남깁니다. queue message kind와 예약 trigger를 혼동하지 않습니다.

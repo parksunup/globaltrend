@@ -315,12 +315,12 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual((data,final,ctype),(b'ok','https://www.ftc.gov/a','text/html'))
         self.assertEqual(len(attempts),2)
 
-    def test_robots_access_failure_is_reported_at_robots_boundary(self):
+    def test_robots_403_is_unavailable_and_collection_can_continue(self):
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
         with patch.object(client,'request',side_effect=self.core.FetchError('http_403')):
-            with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_403$'):
-                client.check_robots('https://www.ftc.gov/news')
+            self.assertEqual(client.check_robots('https://www.ftc.gov/news'),'https://www.ftc.gov/news')
+        self.assertEqual(client.robots_unavailable,[{'url':'https://www.ftc.gov/robots.txt','reason':'http_403'}])
 
     def test_size_limit_streaming_and_429_distinct(self):
         import io
