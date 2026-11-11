@@ -104,11 +104,31 @@ def execution_outcome(records):
     return 'success'
 
 
+def select_configs(registry_sources, source=None, source_set_path=None):
+    if source and source_set_path:
+        raise ValueError('source_and_source_set_are_mutually_exclusive')
+    if source_set_path:
+        selected=json.loads(Path(source_set_path).read_text(encoding='utf-8'))
+        slugs=selected.get('sources') if isinstance(selected,dict) else None
+        if (not isinstance(slugs,list) or not slugs or
+                any(not isinstance(slug,str) or not slug for slug in slugs) or
+                len(set(slugs))!=len(slugs)):
+            raise ValueError('source_set_schema_invalid')
+        available={config['source'] for config in registry_sources}
+        unknown=sorted(set(slugs)-available)
+        if unknown:
+            raise ValueError('source_set_unknown_source')
+        wanted=set(slugs)
+        return [config for config in registry_sources if config['source'] in wanted]
+    return [config for config in registry_sources if not source or config['source']==source]
+
+
 def main():
     p=argparse.ArgumentParser(description='No paid AI API. Default is held/dry-run.')
     p.add_argument('--write',action='store_true'); p.add_argument('--probe',action='store_true')
     p.add_argument('--scheduled',action='store_true',help='Scheduled write; requires explicit runtime schedule and operation gates')
     p.add_argument('--source'); p.add_argument('--since'); p.add_argument('--until')
+    p.add_argument('--source-set',help='JSON file containing a bounded list of source slugs to process')
     p.add_argument('--max-pages',type=int,default=None,help='Optional resumable stop after this many listing pages; no default ceiling.')
     p.add_argument('--max-items',type=int,default=None,help='Optional resumable stop after this many documents; no default ceiling.')
     p.add_argument('--output',default='work/collector-result.json')
@@ -122,7 +142,10 @@ def main():
     if args.probe and args.write: p.error('probe never writes to Supabase')
     if args.scheduled and (not args.write or args.since or explicit_until): p.error('scheduled mode requires write without range overrides')
     registry=json.loads((ROOT/'config/trend-collector.json').read_text())
-    configs=[c for c in registry['sources'] if not args.source or c['source']==args.source]
+    try:
+        configs=select_configs(registry['sources'],args.source,args.source_set)
+    except (OSError,UnicodeDecodeError,json.JSONDecodeError,ValueError) as error:
+        p.error(str(error))
     if not configs: p.error('unknown source')
     result={'run_id':str(uuid.uuid4()),'started_at':dt.datetime.now(dt.timezone.utc).isoformat(),
       'mode':'probe' if args.probe else 'write' if args.write else 'dry_run','scheduled':args.scheduled,

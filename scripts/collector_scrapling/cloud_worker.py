@@ -78,6 +78,43 @@ def rpc_call(name, args, *, environ=None, opener=urllib.request.urlopen):
         raise WorkerError(name + "_invalid_json_response") from None
 
 
+def source_row_gate(source_id, *, environ=None, opener=urllib.request.urlopen):
+    """Read only the authoritative source approval fields when the gate RPC says false.
+
+    This is a fail-closed diagnostic/fallback for mismatches between the RPC and
+    the row it evaluates. It never infers approval from registry configuration.
+    """
+    base, key = credentials(environ)
+    query = urllib.parse.urlencode({
+        "select": "id,is_active,terms_reviewed_at",
+        "id": "eq." + str(source_id),
+    })
+    headers = {"apikey": key, "Accept": "application/json"}
+    if not key.startswith("sb_secret_"):
+        headers["Authorization"] = "Bearer " + key
+    request = urllib.request.Request(base + "/rest/v1/sources?" + query, headers=headers)
+    try:
+        with opener(request, timeout=30) as response:
+            payload = response.read()
+    except urllib.error.HTTPError as error:
+        raise WorkerError("source_gate_row_http_" + str(error.code)) from None
+    except (urllib.error.URLError, TimeoutError, OSError):
+        raise WorkerError("source_gate_row_network_error") from None
+    try:
+        rows = json.loads(payload.decode("utf-8")) if payload else None
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise WorkerError("source_gate_row_invalid_json") from None
+    if not isinstance(rows, list) or len(rows) != 1 or not isinstance(rows[0], dict):
+        raise WorkerError("source_gate_row_not_found_or_ambiguous")
+    row = rows[0]
+    if row.get("id") != str(source_id):
+        raise WorkerError("source_gate_row_id_mismatch")
+    active = row.get("is_active") is True
+    terms_reviewed = row.get("terms_reviewed_at") is not None
+    return {"row_found": True, "is_active": active,
+            "terms_reviewed": terms_reviewed, "allowed": active and terms_reviewed}
+
+
 def daily_window(now=None, timezone="Asia/Seoul", lookback_days=3):
     current = (now or dt.datetime.now(ZoneInfo(timezone))).astimezone(ZoneInfo(timezone)).date()
     if lookback_days < 1 or lookback_days > 14:
@@ -139,7 +176,7 @@ def _capacity_ok(call_rpc):
 
 
 def run(*, now=None, registry_path=REGISTRY_PATH, call_rpc=rpc_call,
-        collect=collect_source, execution_id=None, git_sha=None):
+        collect=collect_source, source_status=source_row_gate, execution_id=None, git_sha=None):
     registry = json.loads(Path(registry_path).read_text(encoding="utf-8"))
     run_id = str(uuid.uuid4())
     execution_id = execution_id or "scrapling-gha-" + uuid.uuid4().hex
@@ -168,15 +205,32 @@ def run(*, now=None, registry_path=REGISTRY_PATH, call_rpc=rpc_call,
     any_partial = False
     for source in registry["sources"]:
         slug = source["source"]
-        outcome = {"source": slug, "status": "held", "reason": None,
+        outcome = {"source": slug, "source_id": source["source_id"], "status": "held", "reason": None,
                    "discovered": 0, "saved": 0, "new": 0, "changed": 0,
                    "duplicate": 0, "errors": []}
         try:
             allowed = call_rpc("collector_source_allowed", {"p_source_id": source["source_id"]})
             if allowed is not True:
-                outcome["reason"] = "source_not_active_or_terms_not_reviewed"
-                per_source.append(outcome)
-                continue
+                try:
+                    row_gate = source_status(source["source_id"])
+                    outcome["source_gate_diagnostic"] = {
+                        "rpc_allowed": False,
+                        "row_allowed": row_gate.get("allowed") is True,
+                        "row_found": row_gate.get("row_found") is True,
+                        "is_active": row_gate.get("is_active") is True,
+                        "terms_reviewed": row_gate.get("terms_reviewed") is True,
+                    }
+                    if row_gate.get("allowed") is not True:
+                        outcome["reason"] = "source_not_active_or_terms_not_reviewed"
+                        per_source.append(outcome)
+                        continue
+                    outcome["source_gate_fallback"] = "active_and_terms_reviewed_row"
+                except WorkerError as error:
+                    outcome["reason"] = "source_gate_rpc_false_and_row_check_failed"
+                    outcome["errors"].append(str(error))
+                    per_source.append(outcome)
+                    any_failure = True
+                    continue
             _capacity_ok(call_rpc)
             report = collect(
                 slug, since, until,

@@ -4,16 +4,42 @@ import tempfile
 import unittest
 from datetime import datetime, timezone
 from pathlib import Path
+from unittest.mock import patch
+from urllib.parse import urlsplit, parse_qs
 
 from scripts.collector_scrapling.cloud_worker import (
     WorkerError,
     daily_window,
     run,
     _normalize_item,
+    source_row_gate,
 )
 
 
 class ScraplingCloudWorkerTests(unittest.TestCase):
+    def test_source_row_gate_checks_only_the_exact_live_approval_fields(self):
+        class Response:
+            def __enter__(self): return self
+            def __exit__(self, *args): return False
+            def read(self):
+                return json.dumps([{"id": "oecd-id", "is_active": True,
+                                    "terms_reviewed_at": "2026-10-19T08:18:39Z"}]).encode()
+        captured = {}
+        def opener(request, timeout):
+            captured["url"] = request.full_url
+            captured["headers"] = request.headers
+            return Response()
+        env = {"SUPABASE_URL": "https://example.supabase.co",
+               "SUPABASE_SERVICE_ROLE_KEY": "sb_secret_test"}
+        with patch.dict("os.environ", env, clear=True):
+            gate = source_row_gate("oecd-id", opener=opener)
+        self.assertEqual(gate, {"row_found": True, "is_active": True,
+                                "terms_reviewed": True, "allowed": True})
+        self.assertEqual(parse_qs(urlsplit(captured["url"]).query),
+                         {"select": ["id,is_active,terms_reviewed_at"], "id": ["eq.oecd-id"]})
+        self.assertEqual(captured["headers"]["Apikey"], "sb_secret_test")
+        self.assertNotIn("Authorization", captured["headers"])
+
     def test_daily_window_uses_korea_calendar_and_three_day_overlap(self):
         now = datetime.fromisoformat("2026-11-08T16:30:00+00:00")
         self.assertEqual(daily_window(now), ("2026-11-07", "2026-11-09"))
@@ -61,10 +87,45 @@ class ScraplingCloudWorkerTests(unittest.TestCase):
             def collect(*args, **kwargs):
                 raise AssertionError("unapproved source was fetched")
 
-            result = run(registry_path=path, call_rpc=rpc, collect=collect)
+            result = run(registry_path=path, call_rpc=rpc, collect=collect,
+                         source_status=lambda source_id: {"row_found": True, "is_active": False,
+                                                          "terms_reviewed": True, "allowed": False})
             self.assertEqual(result["sources"][0]["status"], "held")
             self.assertEqual(result["status"], "partial")
             self.assertFalse(any(name == "ingest_source_item" for name, _ in calls))
+
+    def test_rpc_false_uses_same_row_approval_predicate_and_records_mismatch(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "registry.json"
+            path.write_text(json.dumps({
+                "collector": "scrapling-separate-v1", "timezone": "Asia/Seoul", "lookback_days": 3,
+                "max_pages_per_source": 2, "max_items_per_source": 3,
+                "sources": [{"source": "oecd", "source_id": "oecd-id", "language": "en"}],
+            }), encoding="utf-8")
+            calls = []
+            body = "OECD official privacy update with enough text to ingest."
+            item = {
+                "url": "https://www.oecd.org/en/topics/privacy-and-data-protection.html/test",
+                "title_original": "OECD privacy update", "published_date": "2026-11-10",
+                "content_text": body, "content_hash": hashlib.sha256(body.encode()).hexdigest(),
+                "metadata": {"ai_ready": False},
+            }
+            def rpc(name, args):
+                calls.append((name, args))
+                if name == "collector_source_allowed": return False
+                if name == "collector_capacity": return {"can_write": True}
+                if name == "ingest_source_item": return [{"item_created": True, "content_changed": True}]
+                if name == "record_scrapling_collection_run": return {"run_id": args["p_id"]}
+                raise AssertionError(name)
+            def collect(*args, **kwargs):
+                return {"status": "success", "coverage_complete": True, "pages": 1,
+                        "discovered": 1, "details_attempted": 1, "errors": [], "items": [item]}
+            row = {"row_found": True, "is_active": True, "terms_reviewed": True, "allowed": True}
+            result = run(registry_path=path, call_rpc=rpc, collect=collect,
+                         source_status=lambda source_id: row)
+            self.assertEqual(result["sources"][0]["source_gate_fallback"], "active_and_terms_reviewed_row")
+            self.assertEqual(result["sources"][0]["source_gate_diagnostic"]["row_allowed"], True)
+            self.assertTrue(any(name == "ingest_source_item" for name, _ in calls))
 
     def test_allowed_items_are_ingested_and_run_has_start_and_finish_records(self):
         with tempfile.TemporaryDirectory() as directory:

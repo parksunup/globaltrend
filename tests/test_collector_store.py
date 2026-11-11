@@ -23,6 +23,21 @@ class StoreResponseTests(unittest.TestCase):
         self.assertEqual(self.store(b'{"can_write":true}').rpc('collector_capacity', {}),
                          {'can_write': True})
 
+    def test_secret_api_key_is_not_misused_as_a_bearer_jwt(self):
+        store = self.store(b'true')
+        store.key = 'sb_secret_example'
+        store.rpc('collector_source_allowed', {'p_source_id': 'source-id'})
+        headers = store.client.request.call_args.args[3]
+        self.assertEqual(headers['apikey'], 'sb_secret_example')
+        self.assertNotIn('Authorization', headers)
+
+    def test_legacy_service_role_jwt_remains_a_bearer_token(self):
+        store = self.store(b'true')
+        store.key = 'legacy-service-role-jwt'
+        store.rpc('collector_source_allowed', {'p_source_id': 'source-id'})
+        headers = store.client.request.call_args.args[3]
+        self.assertEqual(headers['Authorization'], 'Bearer legacy-service-role-jwt')
+
     def test_nonempty_malformed_rpc_response_remains_a_failure(self):
         with self.assertRaisesRegex(FetchError, '^database_rpc_failure:collector_capacity:'):
             self.store(b'not json').rpc('collector_capacity', {})
