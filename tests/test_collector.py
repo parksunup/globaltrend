@@ -239,6 +239,33 @@ class CollectorTests(unittest.TestCase):
         self.assertIn('pathname=%2Fmedia-events',next_page)
         self.assertIn('page=2',next_page)
 
+    def test_pdpc_json_listing_reports_empty_and_non_json_responses(self):
+        url='https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events'
+        for body,reason in ((b'', 'empty_body'),(b'<html>blocked</html>', 'not_json')):
+            with self.subTest(reason=reason), self.assertRaisesRegex(
+                ValueError, f'^pdpc_listing_json_invalid:{reason}:bytes_'
+            ):
+                self.parsers.discover_pdpc_listing(body,url,1)
+
+    def test_pdpc_html_bootstrap_then_validates_listing_api_response(self):
+        from urllib.parse import urlsplit, parse_qs
+        import json
+        calls=[]
+        listing='https://www.pdpc.gov.sg/media-events'
+        class Client:
+            def get(self,url):
+                calls.append(url)
+                if url==listing:
+                    return b'<section class="listing-filters" data-listing-type="media_events"></section>',url,'text/html'
+                return json.dumps({'totalItems':1,'data':[{'href':'/media-events/advisory','title':'Advisory','date':'10 Nov 2026'}]}).encode(),url,'text/plain'
+        rows,next_page=self.core.fetch_listing('pdpc',Client(),listing)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['url'],'https://www.pdpc.gov.sg/media-events/advisory')
+        self.assertIsNone(next_page)
+        self.assertEqual(len(calls),2)
+        self.assertEqual(urlsplit(calls[1]).path,'/api/listing-api')
+        self.assertEqual(parse_qs(urlsplit(calls[1]).query)['pathname'],['/media-events'])
+
     def test_pdpc_api_pagination_rejects_changed_scope(self):
         with self.assertRaisesRegex(ValueError,'pdpc_listing_query_changed'):
             self.parsers.pdpc_api_page_number('https://www.pdpc.gov.sg/api/listing-api?itemsperpage=100&listingtype=media_events&pathname=%2Fmedia-events')
