@@ -115,6 +115,18 @@ class DynamicListingTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'pdpc_listing_route_unverified'):
             parsers.pdpc_listing_request('<html></html>', 'https://example.org/media-events')
 
+    def test_pdpc_listing_accepts_schema_valid_json_with_unexpected_content_type(self):
+        api_url = 'https://www.pdpc.gov.sg/api/listing-api?listingtype=media_events&itemsperpage=10&pathname=%2Fmedia-events'
+        body = json.dumps({'data': [{'href': f'/media-events/{i}', 'title': f'Notice {i}', 'date': '30 Sep 2026'}
+                                    for i in range(10)], 'totalItems': 10})
+        def fetch(url):
+            self.assertEqual(url, api_url)
+            return body, url, 'application/octet-stream'
+        rows, next_page = parsers.discover_listing('pdpc', '<html></html>',
+            'https://www.pdpc.gov.sg/media-events', fetch)
+        self.assertEqual(len(rows), 10)
+        self.assertIsNone(next_page)
+
     def test_pdpc_registered_start_page_bootstraps_from_official_html(self):
         import json
         from pathlib import Path

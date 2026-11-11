@@ -662,8 +662,9 @@ def discover_listing(source,html,url,fetch):
         if urlsplit(url).path=='/api/listing-api':
             return discover_pdpc_listing(html.encode('utf-8'),url,pdpc_api_page_number(url))
         endpoint=pdpc_listing_request(html,url)
-        data,_,ctype=fetch(endpoint)
-        if ctype not in ('application/json','text/plain'): raise ValueError('pdpc_listing_response_type_changed')
+        data,_,_=fetch(endpoint)
+        # Validate the body against the strict API schema instead of depending
+        # on a stable Content-Type header from the upstream service.
         return discover_pdpc_listing(data,url,listing_page_number(url))
     return discover(source,html,url)
 
