@@ -111,6 +111,13 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(query, {'listingtype': ['media_events'], 'itemsperpage': ['10'],
                                 'pathname': ['/media-events'], 'page': ['2']})
 
+    def test_pdpc_registered_start_page_bootstraps_from_official_html(self):
+        import json
+        from pathlib import Path
+        config=json.loads((Path(__file__).resolve().parents[1]/'config/trend-collector.json').read_text(encoding='utf-8'))
+        pdpc=next(item for item in config['sources'] if item['source']=='pdpc')
+        self.assertEqual(pdpc['listing'],'https://www.pdpc.gov.sg/media-events')
+
     def test_pdpc_listing_rejects_unknown_shape_and_invalid_total(self):
         for response in [None, {'data': [], 'totalItems': '20'}, {'data': [], 'totalItems': 20}]:
             with self.assertRaises(ValueError):

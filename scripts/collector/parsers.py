@@ -624,7 +624,13 @@ def pdpc_listing_request(html,url):
     return urljoin(url,'/api/listing-api')+'?'+urlencode(query)
 
 def discover_pdpc_listing(data,url,page):
-    response=json.loads(data)
+    try:
+        response=json.loads(data)
+    except (json.JSONDecodeError,UnicodeDecodeError,TypeError):
+        raw=data.encode('utf-8') if isinstance(data,str) else bytes(data) if isinstance(data,(bytes,bytearray)) else b''
+        size=len(raw)
+        detail='empty_body' if not raw.strip() else 'not_json'
+        raise ValueError(f'pdpc_listing_json_invalid:{detail}:bytes_{size}') from None
     if not isinstance(response,dict) or not isinstance(response.get('data'),list) or type(response.get('totalItems')) is not int:
         raise ValueError('pdpc_listing_schema_changed')
     total=response['totalItems']; results=response['data']
