@@ -63,23 +63,12 @@ class NPCOfficialRSSCloudTests(unittest.TestCase):
         self.assertTrue(operation['p_metadata']['requires_review'])
         self.assertFalse(operation['p_metadata']['ai_ready'])
 
-    def test_netherlands_ap_route_remains_held_pending_reuse_review(self):
+    def test_netherlands_ap_route_is_in_the_user_activated_daily_set(self):
         config = next(row for row in json.loads((ROOT / 'config/trend-collector.json').read_text())['sources']
                       if row['source'] == 'nl-ap')
-        self.assertFalse(config['enabled'])
-        self.assertEqual(config['hold_reason'], 'separate_source_terms_and_reuse_review_pending')
+        self.assertTrue(config['enabled'])
+        self.assertIsNone(config['hold_reason'])
         self.assertEqual(config['executor'], 'cloud-python')
-        class Client:
-            def __init__(self, *args, **kwargs):
-                self.budget = {'requests': 0, 'bytes': 0}
-            def get(self, url):
-                self.budget['requests'] += 1
-                raise AssertionError('held AP route must not make a network request')
-        claim = {'slug':'nl-ap','source_id':config['source_id'],'since':'2026-10-30','until':'2026-10-30',
-                 'cursor':None,'lease_until':'2099-01-01T00:00:00+00:00'}
-        with patch.object(cloud_step, 'HttpClient', Client):
-            with self.assertRaisesRegex(ValueError, 'cloud_source_not_assigned'):
-                cloud_step.prepare(claim)
 
         from scripts.collector.extraction import extract_official_rss_summary
         item = extract_official_rss_summary({

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "basis": "PR #114 Crawlee read-only probe: listing and one body sample succeeded on 2026-11-09",
+  "sources": [
+    "edpb",
+    "curia",
+    "cnil",
+    "ico",
+    "dpc",
+    "pdpc",
+    "ppc",
+    "ec",
+    "oaic",
+    "ca-opc",
+    "cn-tc260",
+    "es-aepd",
+    "edps",
+    "anpd-br",
+    "npc-ph",
+    "jpdp-my",
+    "g7-dpa",
+    "nist",
+    "iapp",
+    "fpf",
+    "gpa",
+    "global-cbpr",
+    "iso-iec-sc27",
+    "noyb",
+    "nl-ap",
+    "freevacy",
+    "overview-legal"
+  ]
+}

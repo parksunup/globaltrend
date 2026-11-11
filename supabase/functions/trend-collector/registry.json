@@ -16,7 +16,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_search_privacy_term_consumer_protection_filter_paginated_listing"
+      "adapter_scope": "official_search_privacy_term_consumer_protection_filter_paginated_listing",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "oecd",
@@ -50,7 +52,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "english_press_release_listing_and_pdf"
+      "adapter_scope": "english_press_release_listing_and_pdf",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "cnil",
@@ -67,7 +71,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "limited_html_or_rss"
+      "adapter_scope": "limited_html_or_rss",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "ico",
@@ -78,19 +84,22 @@
         "wired-gov.net"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "source_access_policy_review_pending",
+      "hold_reason": null,
       "adapter_scope": "official_republication_latest_index_filtered_by_ico_attribution",
       "verification_status": "wiredgov_listing_and_ico_detail_verified_current_week_only",
       "verification": "WiredGov latest index returned HTTP 200/197807 bytes/204 anchors. One attributed ICO item detail returned HTTP 200/37222 bytes; Trafilatura extracted 5257 characters and listing/detail title/date matched 2026-11-05. Cross-source index has about five business days, no continuation; filter exact ICO publisher attribution, do not claim archive completeness.",
-      "executor": "hold",
+      "executor": "cloud-python",
       "cadence": "daily",
-      "coverage_complete": false
+      "coverage_complete": false,
+      "pre_activation_hold_reason": "source_access_policy_review_pending",
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "dpc",
@@ -107,7 +116,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "limited_html_or_rss"
+      "adapter_scope": "limited_html_or_rss",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "pdpc",
@@ -124,7 +135,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "observed_listing_json_and_embedded_rsc_article"
+      "adapter_scope": "observed_listing_json_and_embedded_rsc_article",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "ppc",
@@ -141,7 +154,9 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "year_archive_listing_trafilatura_first_verified_pdf_attachment"
+      "adapter_scope": "year_archive_listing_trafilatura_first_verified_pdf_attachment",
+      "cadence": "daily",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "ftc",
@@ -185,7 +200,8 @@
       "lookback_days": 3,
       "expansion_phase": 1,
       "verification": "Official EDPS Mastodon RSS: 20 posts parsed; full post text and pubDate extracted from the RSS item; production queue enrollment added",
-      "verification_status": "route_and_content_verified_runtime_pending"
+      "verification_status": "route_and_content_verified_runtime_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "ec",
@@ -206,7 +222,8 @@
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 1
+      "expansion_phase": 1,
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "calprivacy",
@@ -250,7 +267,8 @@
       "executor": "edge",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 1
+      "expansion_phase": 1,
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "ca-opc",
@@ -271,7 +289,8 @@
       "executor": "edge",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 1
+      "expansion_phase": 1,
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "hk-pcpd",
@@ -407,7 +426,8 @@
       "executor": "edge",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 2
+      "expansion_phase": 2,
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "es-aepd",
@@ -430,7 +450,8 @@
       "lookback_days": 3,
       "expansion_phase": 3,
       "verification": "Official listing, dated teaser, full press release body, and robots tested; listing pagination blocked by robots, discovery is first page only",
-      "verification_status": "bounded_first_page"
+      "verification_status": "bounded_first_page",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "anpd-br",
@@ -459,7 +480,8 @@
       "jurisdiction": "BR",
       "publisher_type": "supervisory_authority",
       "approval_basis": "User requested this source in the complete tested scope. robots.txt does not disallow /anpd. Dedicated terms page returned HTTP 404; source access-policy review completed without claiming terms permission. Collection is enabled; item relevance and AI readiness still require human review.",
-      "source_kind": "json_api"
+      "source_kind": "json_api",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "npc-ph",
@@ -490,7 +512,8 @@
       "approval_basis": "User requested this source in the complete tested-source scope. The official RSS feed is publicly accessible, robots permits the requested feed path, and full text is present in content:encoded. The linked HTML route returned HTTP 403 and is not used; RSS entries retain pending human relevance review.",
       "terms_review_result": "separate_terms_not_verified; no license or terms grant claimed",
       "terms_review_semantics": "terms_reviewed_at records that the source access and policy review was performed; it does not mean source terms grant permission.",
-      "source_kind": "rss"
+      "source_kind": "rss",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "jpdp-my",
@@ -519,7 +542,8 @@
       "jurisdiction": "MY",
       "publisher_type": "supervisory_authority",
       "approval_basis": "User requested inclusion in the complete tested-source scope. Only official listing items and their exact approved PDF attachments are read; extracted documents require human relevance and factual review. Listing pagination is incomplete.",
-      "source_kind": "html"
+      "source_kind": "html",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "nist",
@@ -548,7 +572,8 @@
       "jurisdiction": "US",
       "publisher_type": "government",
       "approval_basis": "User requested NIST in the complete source scope. Official NIST site robots permits the path; NIST Copyrights & Disclaimers says website information is a public service and unmarked information may be distributed or copied, with attribution requested; page-level copyright markings must still be respected.",
-      "source_kind": "html"
+      "source_kind": "html",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "iapp",
@@ -558,15 +583,15 @@
         "iapp.org"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_sample_body_only_scope_review_pending",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
@@ -576,8 +601,10 @@
       "publisher_id": "e71bdd7b-50cc-49e7-bb4b-932b67b2e86f",
       "jurisdiction": "GLOBAL",
       "publisher_type": "other",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_sample_body_only_scope_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "fpf",
@@ -587,15 +614,15 @@
         "fpf.org"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_sample_stale_or_off_topic",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
@@ -605,8 +632,10 @@
       "publisher_id": "16bb7303-10fb-4557-ad75-c356c5f8a3a8",
       "jurisdiction": "US",
       "publisher_type": "other",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_sample_stale_or_off_topic",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "gpa",
@@ -616,16 +645,16 @@
         "globalprivacyassembly.com"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_sample_body_only_review_pending",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
-      "cadence": "weekly",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
+      "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
       "verification": "Listing yielded items and one 2,858-character sample; body/date/topic and pagination need review.",
@@ -634,8 +663,11 @@
       "publisher_id": "1c417538-fefd-4ff4-be71-fc6d3b5f6b7c",
       "jurisdiction": "GLOBAL",
       "publisher_type": "international_org",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_sample_body_only_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11",
+      "source_cadence_before_daily_activation": "weekly"
     },
     {
       "source": "g7-dpa",
@@ -645,16 +677,16 @@
         "www.priv.gc.ca"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "coverage_and_reuse_review_pending",
+      "hold_reason": null,
       "adapter_scope": "official_opc_g7_membership_hub_linked_deliverables",
-      "executor": "hold",
-      "cadence": "weekly",
+      "executor": "cloud-python",
+      "cadence": "daily",
       "lookback_days": 7,
       "expansion_phase": 4,
       "verification": "Official Canada OPC G7 membership hub returned 200 and links the 2026 communiqué. Detail returned 200 and Trafilatura extracted about 6916 characters; modification date 2026-07-08 is distinct from meeting dates 2026-06-25/26. Hub continuation and recurring weekly coverage are not established.",
@@ -663,9 +695,12 @@
       "publisher_id": "e5bb6a05-60ca-41b0-aeff-68e8b2346f59",
       "jurisdiction": "GLOBAL",
       "publisher_type": "international_org",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Verified OPC hub and communiqué are retained as route evidence; recurring coverage and separate reuse rights remain unresolved, so the source stays held.",
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
       "source_kind": "html",
-      "coverage_complete": false
+      "coverage_complete": false,
+      "pre_activation_hold_reason": "coverage_and_reuse_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11",
+      "source_cadence_before_daily_activation": "weekly"
     },
     {
       "source": "global-cbpr",
@@ -685,7 +720,7 @@
       "hold_reason": null,
       "adapter_scope": "official_news_item_with_verified_annual_report_and_work_program_pdfs",
       "executor": "cloud-python",
-      "cadence": "weekly",
+      "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
       "verification": "Crawlee production probe: official news listing returned 200 with 12 candidates and no next-page link. The June 10, 2026 news item links the official annual report and work-program PDFs; each is 2 pages and both cover sheets say May 26, 2026. The collector uses the news listing date as publication date and retains PDF document dates separately. Trafilatura is attempted on the item page before pypdf extracts both approved attachments (7,031 combined characters).",
@@ -695,7 +730,9 @@
       "jurisdiction": "GLOBAL",
       "publisher_type": "international_org",
       "approval_basis": "User requested inclusion in the complete tested-source scope. Only official news items and exact approved annual-report/work-program PDF attachments are read; extracted documents require human review. Listing pagination is incomplete.",
-      "source_kind": "html"
+      "source_kind": "html",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11",
+      "source_cadence_before_daily_activation": "weekly"
     },
     {
       "source": "ripd",
@@ -744,7 +781,7 @@
       "hold_reason": null,
       "adapter_scope": "official_news_table_to_exact_standard_pdf",
       "executor": "cloud-python",
-      "cadence": "weekly",
+      "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
       "verification": "Crawlee production probe: official news table returned 200; the verified ISO/IEC TS 27560-2023 PDF was 1 page and pypdf extracted 2,081 characters. The listing records only 2025-05, so no full publication date is invented; the standard's September 2023 issue date remains separate from the 2025 announcement. The route leaves publication_date unresolved and requires human review.",
@@ -754,7 +791,9 @@
       "jurisdiction": "GLOBAL",
       "publisher_type": "international_org",
       "approval_basis": "User requested inclusion in the complete tested-source scope. Only the exact official ISO news PDF asset is read; its 2025-05 listing month is not promoted to a full publication date, and the extracted standard requires human review.",
-      "source_kind": "html"
+      "source_kind": "html",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11",
+      "source_cadence_before_daily_activation": "weekly"
     },
     {
       "source": "noyb",
@@ -764,15 +803,15 @@
         "noyb.eu"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_sample_body_only_review_pending",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
@@ -782,8 +821,10 @@
       "publisher_id": "516e3336-b54d-4700-bb1e-688b083df437",
       "jurisdiction": "AT",
       "publisher_type": "other",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_sample_body_only_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "nl-ap",
@@ -793,13 +834,13 @@
         "autoriteitpersoonsgegevens.nl"
       ],
       "language": "nl",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "separate_source_terms_and_reuse_review_pending",
+      "hold_reason": null,
       "adapter_scope": "official_rss_discovery_plus_protego_allowed_article_detail",
       "executor": "cloud-python",
       "cadence": "daily",
@@ -811,10 +852,12 @@
       "publisher_id": "6283604f-f595-469e-8619-0640714ae80c",
       "jurisdiction": "NL",
       "publisher_type": "supervisory_authority",
-      "approval_basis": "User requested this source in the complete tested-source scope. Official RSS is discovery only; robots-aware detail retrieval uses upstream Protego 0.6.2, with human review and rolling-feed coverage limitations retained.",
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
       "terms_review_result": "separate_terms_not_verified; route held pending policy review",
       "terms_review_semantics": "terms_reviewed_at records that the source access and policy review was performed; it does not mean source terms grant permission.",
-      "source_kind": "rss"
+      "source_kind": "rss",
+      "pre_activation_hold_reason": "separate_source_terms_and_reuse_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "vn-gov",
@@ -854,15 +897,15 @@
         "www.freevacy.com"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_sample_body_only_source_scope_review_pending",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
@@ -872,8 +915,10 @@
       "publisher_id": "bdcbff4b-4507-465a-b1a7-4f16d7ae24b4",
       "jurisdiction": "GLOBAL",
       "publisher_type": "media",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_sample_body_only_source_scope_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
       "source": "overview-legal",
@@ -883,16 +928,16 @@
         "overview.legal"
       ],
       "language": "en",
-      "enabled": false,
+      "enabled": true,
       "permissions": {
-        "collect": false,
-        "store": false,
-        "ai": false
+        "collect": true,
+        "store": true,
+        "ai": true
       },
-      "hold_reason": "unresolved_aggregate_and_source_scope_review_pending",
-      "adapter_scope": "catalog_probe_only_no_production_adapter",
-      "executor": "hold",
-      "cadence": "weekly",
+      "hold_reason": null,
+      "adapter_scope": "crawlee_production_route_and_extractor_in_scripts_collector_expansion",
+      "executor": "cloud-python",
+      "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 4,
       "verification": "One 10,508-character page extracted, but it was a topic/aggregate page rather than a verified individual article.",
@@ -901,8 +946,11 @@
       "publisher_id": "1eb81b68-a366-4624-a4ca-7987b59f7203",
       "jurisdiction": "EU",
       "publisher_type": "media",
-      "approval_basis": "User requested inclusion in the complete tested-source scope. Runtime access, full-body extraction, topic relevance, date evidence, and source-specific route have not all been verified; do not collect or write.",
-      "source_kind": "html"
+      "approval_basis": "The user explicitly directed activation of the PR #114 Crawlee candidate source set on 2026-11-11. Collection follows the configured source routes, robots rules, and rate limits. This activation does not claim full archive coverage or a license grant; relevance, dates, excerpts, and pagination remain subject to item-level review.",
+      "source_kind": "html",
+      "pre_activation_hold_reason": "unresolved_aggregate_and_source_scope_review_pending",
+      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11",
+      "source_cadence_before_daily_activation": "weekly"
     }
   ]
 }

@@ -22,8 +22,12 @@ class SupabaseStore:
         self.run_id=str(uuid.uuid4())
     def rpc(self,name,payload):
         try:
-            data,_,_=self.client.request(self.base+'/rest/v1/rpc/'+name,'POST',json.dumps(payload,ensure_ascii=False).encode(),
-                {'apikey':self.key,'Authorization':'Bearer '+self.key,'Content-Type':'application/json'})
+            headers={'apikey':self.key,'Content-Type':'application/json'}
+            # Supabase sb_secret keys are API keys, not JWTs. Legacy service_role
+            # keys remain JWTs and are accepted as the bearer token.
+            if not self.key.startswith('sb_secret_'):
+                headers['Authorization']='Bearer '+self.key
+            data,_,_=self.client.request(self.base+'/rest/v1/rpc/'+name,'POST',json.dumps(payload,ensure_ascii=False).encode(),headers)
             # PostgREST returns an empty 204 response for successful void RPCs
             # such as progress/checkpoint/run-log writes.
             return json.loads(data) if data.strip() else None

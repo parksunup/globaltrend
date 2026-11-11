@@ -82,7 +82,7 @@ select ok(
   'anonymous readers cannot delete feedback'
 );
 
-select is((select count(*)::integer from public.sources where is_active),19,
+select is((select count(*)::integer from public.sources where is_active),28,
   'anonymous users can read the current active source catalog');
 select is((select count(*)::integer from public.sources where not is_active),0,
   'anonymous users cannot read inactive source metadata');
