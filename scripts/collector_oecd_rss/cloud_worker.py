@@ -56,7 +56,20 @@ def run(*, now=None, call_rpc=rpc_call, source_status=source_row_gate, collect=c
     run_id = str(uuid.uuid4())
     execution_id = execution_id or "oecd-webcms-rss-gha-" + uuid.uuid4().hex
     started = dt.datetime.now(dt.timezone.utc)
-    since, until = daily_window(now=now, lookback_days=3)
+    since_override = os.environ.get("COLLECTOR_SINCE")
+    until_override = os.environ.get("COLLECTOR_UNTIL")
+    if bool(since_override) != bool(until_override):
+        raise WorkerError("collection_window_requires_both_dates")
+    if since_override:
+        try:
+            since = dt.date.fromisoformat(since_override).isoformat()
+            until = dt.date.fromisoformat(until_override).isoformat()
+        except ValueError:
+            raise WorkerError("collection_window_date_invalid") from None
+        if since > until:
+            raise WorkerError("collection_window_order_invalid")
+    else:
+        since, until = daily_window(now=now, lookback_days=3)
     start_result = call_rpc("record_scrapling_collection_run", {
         "p_id": run_id,
         "p_execution_id": execution_id,

@@ -182,11 +182,24 @@ def run(*, now=None, registry_path=REGISTRY_PATH, call_rpc=rpc_call,
     execution_id = execution_id or "scrapling-gha-" + uuid.uuid4().hex
     started = dt.datetime.now(dt.timezone.utc)
     started_text = started.isoformat()
-    since, until = daily_window(
-        now=now,
-        timezone=registry.get("timezone", "Asia/Seoul"),
-        lookback_days=registry.get("lookback_days", 3),
-    )
+    since_override = os.environ.get("COLLECTOR_SINCE")
+    until_override = os.environ.get("COLLECTOR_UNTIL")
+    if bool(since_override) != bool(until_override):
+        raise WorkerError("collection_window_requires_both_dates")
+    if since_override:
+        try:
+            since = dt.date.fromisoformat(since_override).isoformat()
+            until = dt.date.fromisoformat(until_override).isoformat()
+        except ValueError:
+            raise WorkerError("collection_window_date_invalid") from None
+        if since > until:
+            raise WorkerError("collection_window_order_invalid")
+    else:
+        since, until = daily_window(
+            now=now,
+            timezone=registry.get("timezone", "Asia/Seoul"),
+            lookback_days=registry.get("lookback_days", 3),
+        )
     start_record = call_rpc("record_scrapling_collection_run", {
         "p_id": run_id,
         "p_execution_id": execution_id,
