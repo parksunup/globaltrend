@@ -21,8 +21,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
           API_URL: ${{ github.api_url }}
-          SUMMARY_FILE: ${{ github.step_summary }}
-        run: |
+            run: |
           python - <<'PY'
           import datetime as dt
           import json
@@ -106,7 +105,7 @@ jobs:
           else:
               lines.append("- No scheduled runs found in the last seven days.")
 
-          with open(os.environ["SUMMARY_FILE"], "a", encoding="utf-8") as summary:
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
               summary.write("\n".join(lines) + "\n")
           print(json.dumps({"checked_at": now.isoformat(), "recent_runs": recent[:14]}, ensure_ascii=False))
           PY
