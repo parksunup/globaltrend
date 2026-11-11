@@ -230,7 +230,7 @@ def fetch_listing(source,client,page):
     def fetch(url,method='GET',payload=None):
         return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
     data,final,ctype=fetch(page)
-    is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+    is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:
         return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):

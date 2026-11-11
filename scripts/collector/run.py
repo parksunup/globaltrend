@@ -45,7 +45,7 @@ def probe_source(config,client,sample_urls):
         return body,final,ctype
     try:
         body,final,ctype=fetch(listing)
-        is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+        is_pdpc_api=config['source']=='pdpc' and urlsplit(final).path=='/api/listing-api'
         if is_pdpc_api:
             rows,next_page=parsers.discover_pdpc_listing(body,final,parsers.pdpc_api_page_number(final))
         elif (ctype in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml')
