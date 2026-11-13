@@ -81,6 +81,25 @@ class ExpansionTests(unittest.TestCase):
         rows,nxt=expansion.discover('cn-tc260',(FIXTURES/'cn-tc260-listing.html').read_text(),expansion.ROUTES['cn-tc260']['listing'])
         self.assertEqual(nxt,'https://www.tc260.org.cn/tc260/tzgg/list_2.shtml')
         self.assertEqual(expansion.next_within_window('oaic',[{'url':'https://www.oaic.gov.au/news/media-centre/test','title':'unknown'}],'https://www.oaic.gov.au/news/media-centre?page=2','2026-10-24'),'https://www.oaic.gov.au/news/media-centre?page=2')
+
+    def test_tc260_stops_after_a_fully_dated_newest_first_page_crosses_since(self):
+        rows=[{'date_observations':[{'meaning':'expansion_listing_published','value':value}]}
+              for value in ('2026-11-13','2026-10-13','2026-09-18','2026-09-15')]
+        nxt='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        self.assertIsNone(expansion.next_within_window('cn-tc260',rows,nxt,'2026-10-01'))
+        self.assertEqual(expansion.listing_date_boundary('cn-tc260',rows,'2026-10-01'),
+                         {'kind':'official_listing_date_order_boundary','first_date':'2026-11-13',
+                          'last_date':'2026-09-15','since':'2026-10-01','rows':4})
+
+    def test_tc260_boundary_requires_every_card_date_and_newest_first_order(self):
+        nxt='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        missing=[{'date_observations':[{'meaning':'expansion_listing_published','value':'2026-09-15'}]},
+                 {'url':'https://www.tc260.org.cn/tc260/tzgg/item.shtml'}]
+        unsorted=[{'date_observations':[{'meaning':'expansion_listing_published','value':value}]}
+                  for value in ('2026-09-15','2026-11-13')]
+        for rows in (missing,unsorted):
+            self.assertEqual(expansion.next_within_window('cn-tc260',rows,nxt,'2026-10-01'),nxt)
+            self.assertIsNone(expansion.listing_date_boundary('cn-tc260',rows,'2026-10-01'))
     def test_only_assigned_cloud_sources_and_matching_source_ids_are_claimable(self):
         configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
         for c in configs:

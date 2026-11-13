@@ -302,6 +302,9 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 result['listing_route']='official_sitemap_fallback'
                 result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
+                boundary=expansion.listing_date_boundary(config['source'],rows,since)
+                if boundary:
+                    result['listing_date_boundary']={'url':page,**boundary}
                 next_page=expansion.next_within_window(config['source'],rows,next_page,since)
             if config['source']=='edpb' and next_page:
                 next_page=expansion.listing_request_url('edpb',next_page,since,until)

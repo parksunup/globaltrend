@@ -412,10 +412,20 @@ def listing_date(row):
     return None
 
 def next_within_window(source,rows,nxt,since):
-    if not nxt or source not in ('oaic','ca-opc','anpd-br','nist'):return nxt
+    if not nxt or source not in ('oaic','ca-opc','anpd-br','nist','cn-tc260'):return nxt
     dates=[listing_date(r) for r in rows]
     if dates and all(dates) and all(dates[i]<=dates[i-1] for i in range(1,len(dates))) and dates[-1]<since:return None
     return nxt
+
+def listing_date_boundary(source,rows,since):
+    """Return a verifiable per-page date boundary, without claiming source-wide coverage."""
+    if source not in ('oaic','ca-opc','anpd-br','nist','cn-tc260') or not rows:return None
+    dates=[listing_date(row) for row in rows]
+    if (not all(dates) or any(dates[index]>dates[index-1] for index in range(1,len(dates)))
+            or dates[-1]>=since):
+        return None
+    return {'kind':'official_listing_date_order_boundary','first_date':dates[0],
+            'last_date':dates[-1],'since':since,'rows':len(dates)}
 
 def detail_request_url(source,url):
     if source not in ROUTES:return url
