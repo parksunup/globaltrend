@@ -245,6 +245,10 @@ def _bounded_frozen_cursor(cursor,source):
     urls=cursor.get('frozen_urls')
     if not isinstance(urls,list) or not urls or not all(isinstance(u,str) for u in urls) or len(set(urls))!=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     for url in urls:_canonical(url,source,url)
+    rows=cursor.get('frozen_rows')
+    if rows is not None and (not isinstance(rows,list) or len(rows)!=len(urls) or
+            any(not isinstance(row,dict) or row.get('url')!=url for row,url in zip(rows,urls))):
+        raise ValueError('expansion_frozen_cursor_invalid')
     if type(cursor.get('offset')) is not int or not 0<=cursor['offset']<=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
 
@@ -299,17 +303,19 @@ def collect_frozen(config,client,store,since,until):
                     result.update(listing_scan_complete=not bool(nxt),reason='scoped_official_listing_empty')
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
-            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],frozen_next=nxt)
+            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
+                        frozen_rows=rows,frozen_next=nxt)
         _bounded_frozen_cursor(cursor,source)
         urls=cursor['frozen_urls']
         per_run_page_drain=source in ('anpd-br','nist')
         while cursor['offset']<len(urls):
             ordinal=cursor['offset'];url=urls[ordinal]
             result['discovered']+=1
+            row=cursor.get('frozen_rows',[{} for _ in urls])[ordinal]
             try:
                 body,received,ctype=client.get(detail_request_url(source,url))
                 verify_detail_response(source,url,received)
-                item=extraction.extract_document(source,body,url,ctype)
+                item=extraction.extract_document(source,body,url,ctype,row)
                 published=item['published_date']
                 if published and not since<=published<=until:result['out_of_range']=1
                 else:

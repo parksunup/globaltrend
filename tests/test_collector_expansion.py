@@ -80,10 +80,10 @@ class ExpansionTests(unittest.TestCase):
         store=Store()
         result=collect(config,Client(),store,'2026-10-27','2026-10-29')
         self.assertNotEqual('held',result['status'],result['reason'])
-        self.assertEqual(1,len(store.items))
+        self.assertEqual(2,len(store.items))
         self.assertEqual(2,result['discovered'])
-        self.assertEqual(1,result['out_of_range'])
-        dated_item=store.items[0][1]
+        self.assertEqual({'2026-10-29'},{item['published_date'] for _,item in store.items})
+        dated_item=next(item for _,item in store.items if item['published_date']=='2026-10-29')
         self.assertEqual('trafilatura',dated_item['metadata']['extraction_method'])
         self.assertTrue(dated_item['metadata']['requires_review'])
     def test_vietnam_policy_route_extracts_detail_date_and_keeps_topic_review(self):
