@@ -12,7 +12,10 @@ begin
   );
   occurrences := (length(function_sql) -
     length(replace(function_sql, old_fragment, ''))) / length(old_fragment);
-  if occurrences <> 2 then
+  -- Older clean installs already use the generic one-hour retry policy.
+  if occurrences = 0 then
+    return;
+  elsif occurrences <> 2 then
     raise exception 'expected two EC retry-delay branches; found %', occurrences;
   end if;
   execute replace(function_sql, old_fragment, new_fragment);
