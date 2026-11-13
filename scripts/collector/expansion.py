@@ -84,6 +84,7 @@ ROUTES['g7-dpa']={
     'article_path':r'^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\d{4}/[^/]+/?$',
     'title':'main h1#wb-cont, main h1',
     'body':'main section[aria-label="Main content"]',
+    'date':'time',
 }
 ROUTES['calprivacy']={
     'host':'privacy.ca.gov',

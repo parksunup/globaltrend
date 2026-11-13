@@ -118,6 +118,25 @@ class PublicationRouteCandidatesTests(unittest.TestCase):
         self.assertEqual(row["content_origin_kind"], "third_party_aggregated_record")
         self.assertFalse(row["primary_source_verified_by_this_listing"])
 
+    def test_structured_article_published_date_is_used_and_modified_date_is_ignored(self):
+        from scripts.collector.parsers import extract_publication_document
+        html='''<main><h1>Article</h1><article>Article text with enough content.</article>
+        <script type="application/ld+json">{"@type":"Article","datePublished":"2026-05-28T00:00:00Z","dateModified":"2026-11-13T06:00:31Z"}</script></main>'''
+        item=extract_publication_document('overview-legal',html.encode(),
+            'https://overview.legal/posts/607723','text/html')
+        self.assertEqual(item['published_date'],'2026-05-28')
+        self.assertEqual(item['metadata']['date_observations'][0]['locator'],
+                         'application/ld+json datePublished')
+
+    def test_iapp_full_listing_date_is_normalized_when_detail_has_only_schema_metadata(self):
+        from scripts.collector.parsers import extract_publication_document
+        url,listing=LISTINGS['iapp']
+        row=discover_publication_route_candidates('iapp',listing,url)[0]
+        row.update(source_type='professional_publication',source_name='IAPP')
+        item=extract_publication_document('iapp',b'<main><h1>Article</h1><article>Article text.</article></main>',
+            'https://iapp.org/news/a/privacy-law-update','text/html',row)
+        self.assertEqual(item['published_date'],'2026-11-06')
+
     def test_freevacy_is_retained_as_a_syndicated_aggregator_item(self):
         listing_url, html = LISTINGS["freevacy"]
         row = discover_publication_route_candidates("freevacy", html, listing_url)[0]
