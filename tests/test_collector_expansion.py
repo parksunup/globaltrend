@@ -11,6 +11,34 @@ ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/'tests/fixtures/collector-expansion'
 
 class ExpansionTests(unittest.TestCase):
+    def test_global_cbpr_follows_official_wordpress_next_page(self):
+        listing='''<main><article class="elementor-post">
+          <h2 class="elementor-post__title"><a href="/sample-release/">Sample release</a></h2>
+          <div class="elementor-post-date">November 1, 2026</div>
+        </article><nav class="elementor-pagination">
+          <a class="page-numbers next" href="/news/page/2/">Next »</a>
+        </nav></main>'''
+        rows,next_page=parsers.discover_listing('global-cbpr',listing,expansion.ROUTES['global-cbpr']['listing'],None)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(next_page,'https://www.globalcbpr.org/news/page/2/')
+
+    def test_edpb_listing_is_filtered_to_requested_publication_years(self):
+        from urllib.parse import parse_qs,urlsplit
+        single=expansion.listing_request_url('edpb','https://www.edpb.europa.eu/news_en','2026-10-16','2026-11-13')
+        self.assertEqual(parse_qs(urlsplit(single).query),{'date':['2026']})
+        page=expansion.listing_request_url('edpb','https://www.edpb.europa.eu/news_en?date=2025&page=2','2025-12-30','2026-01-03')
+        self.assertEqual(parse_qs(urlsplit(page).query),{'date':['2025-2026'],'page':['2']})
+
+    def test_curia_listing_uses_official_year_filter_and_all_results_mode(self):
+        from urllib.parse import parse_qs,urlsplit
+        scoped=expansion.listing_request_url('curia','https://curia.europa.eu/site/jcms/d2_5158/en/press-releases','2025-10-01','2025-10-31')
+        params=parse_qs(urlsplit(scoped).query)
+        self.assertEqual(params['year'],['2025'])
+        self.assertEqual(params['PortalAction_d6_1000000371_pagerAll'],['true'])
+        self.assertEqual(params['PortalAction_d6_1000000371_pageSize'],['500'])
+        unbounded='https://curia.europa.eu/site/jcms/d2_5158/en/press-releases'
+        self.assertEqual(expansion.listing_request_url('curia',unbounded,'2025-12-31','2026-01-02'),unbounded)
+
     def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
         route=expansion.ROUTES['nl-ap']
         feed='''<?xml version="1.0" encoding="UTF-8"?>
@@ -53,6 +81,90 @@ class ExpansionTests(unittest.TestCase):
         rows,nxt=expansion.discover('cn-tc260',(FIXTURES/'cn-tc260-listing.html').read_text(),expansion.ROUTES['cn-tc260']['listing'])
         self.assertEqual(nxt,'https://www.tc260.org.cn/tc260/tzgg/list_2.shtml')
         self.assertEqual(expansion.next_within_window('oaic',[{'url':'https://www.oaic.gov.au/news/media-centre/test','title':'unknown'}],'https://www.oaic.gov.au/news/media-centre?page=2','2026-10-24'),'https://www.oaic.gov.au/news/media-centre?page=2')
+
+    def test_tc260_stops_after_a_fully_dated_newest_first_page_crosses_since(self):
+        rows=[{'date_observations':[{'meaning':'expansion_listing_published','value':value}]}
+              for value in ('2026-11-13','2026-10-13','2026-09-18','2026-09-15')]
+        nxt='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        self.assertIsNone(expansion.next_within_window('cn-tc260',rows,nxt,'2026-10-01'))
+        self.assertEqual(expansion.listing_date_boundary('cn-tc260',rows,'2026-10-01'),
+                         {'kind':'official_listing_date_order_boundary','first_date':'2026-11-13',
+                          'last_date':'2026-09-15','since':'2026-10-01','rows':4})
+
+    def test_tc260_boundary_requires_every_card_date_and_newest_first_order(self):
+        nxt='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        missing=[{'date_observations':[{'meaning':'expansion_listing_published','value':'2026-09-15'}]},
+                 {'url':'https://www.tc260.org.cn/tc260/tzgg/item.shtml'}]
+        unsorted=[{'date_observations':[{'meaning':'expansion_listing_published','value':value}]}
+                  for value in ('2026-09-15','2026-11-13')]
+        for rows in (missing,unsorted):
+            self.assertEqual(expansion.next_within_window('cn-tc260',rows,nxt,'2026-10-01'),nxt)
+            self.assertIsNone(expansion.listing_date_boundary('cn-tc260',rows,'2026-10-01'))
+
+    def test_tc260_collector_completes_only_after_cross_page_order_and_boundary_are_verified(self):
+        from scripts.collector.core import collect
+        listing='https://www.tc260.org.cn/tc260/tzgg/list.shtml'
+        second='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        def row(day,slug):
+            ident={'new':'a','in-range':'b','old-one':'c','old-two':'d','older':'e','newer-again':'f'}[slug]
+            return {'url':f'https://www.tc260.org.cn/tc260/tzgg/261113/{ident}.shtml','title':slug,
+                    'date_observations':[{'meaning':'expansion_listing_published','value':day}]}
+        pages={listing:([row('2026-11-13','new'),row('2026-10-05','in-range')],second),
+               second:([row('2026-09-29','old-one'),row('2026-09-01','old-two')],
+                       'https://www.tc260.org.cn/tc260/tzgg/list_3.shtml')}
+        config={'source':'cn-tc260','listing':listing,'hosts':['www.tc260.org.cn'],'enabled':True,
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            def get(self,url):return b'<html/>',url,'text/html'
+        class Store:
+            def __init__(self):self.cursor=None;self.checkpoints=[];self.items=[]
+            def resume(self,*args):return self.cursor
+            def progress(self,cfg,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,cfg,until):self.checkpoints.append(until)
+            def ingest(self,cfg,url,item):self.items.append((url,item));return {'item_created':True}
+            def discovery_failure(self,*args):raise AssertionError(args)
+        store=Store()
+        with patch('scripts.collector.core.fetch_listing',side_effect=lambda source,client,page:pages[page]), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch('scripts.collector.extraction.extract_document',side_effect=lambda source,body,url,ctype,row:{
+                 'title_original':row['title'],'content_text':'Official notice body with sufficient text.',
+                 'content_hash':row['title'],'published_date':expansion.listing_date(row),'metadata':{'requires_review':False}}):
+            result=collect(config,Client(),store,'2026-10-01','2026-11-13')
+        self.assertTrue(result['coverage_complete'])
+        self.assertEqual(result['reason'],'official_tc260_archive_boundary_verified')
+        self.assertTrue(result['coverage_evidence']['date_order_verified'])
+        self.assertEqual(result['listing_date_boundary']['url'],second)
+        self.assertEqual(store.checkpoints,['2026-11-13'])
+
+    def test_tc260_collector_does_not_complete_when_page_order_breaks(self):
+        from scripts.collector.core import collect
+        listing='https://www.tc260.org.cn/tc260/tzgg/list.shtml'
+        second='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        def row(day,slug):
+            ident={'new':'a','older':'b','newer-again':'c'}[slug]
+            return {'url':f'https://www.tc260.org.cn/tc260/tzgg/261113/{ident}.shtml','title':slug,
+                    'date_observations':[{'meaning':'expansion_listing_published','value':day}]}
+        pages={listing:([row('2026-11-13','new'),row('2026-10-05','older')],second),
+               second:([row('2026-10-06','newer-again')],None)}
+        config={'source':'cn-tc260','listing':listing,'hosts':['www.tc260.org.cn'],'enabled':True,
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            def get(self,url):return b'<html/>',url,'text/html'
+        class Store:
+            cursor=None
+            def resume(self,*args):return self.cursor
+            def progress(self,cfg,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,*args):raise AssertionError('out-of-order listing cannot be certified')
+            def ingest(self,*args):return {'item_created':True}
+            def discovery_failure(self,*args):raise AssertionError(args)
+        with patch('scripts.collector.core.fetch_listing',side_effect=lambda source,client,page:pages[page]), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch('scripts.collector.extraction.extract_document',side_effect=lambda source,body,url,ctype,row:{
+                 'title_original':row['title'],'content_text':'Official notice body with sufficient text.',
+                 'content_hash':row['title'],'published_date':expansion.listing_date(row),'metadata':{'requires_review':False}}):
+            result=collect(config,Client(),Store(),'2026-10-01','2026-11-13')
+        self.assertFalse(result['coverage_complete'])
+        self.assertFalse(result['coverage_evidence']['date_order_verified'])
     def test_only_assigned_cloud_sources_and_matching_source_ids_are_claimable(self):
         configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
         for c in configs:
@@ -80,10 +192,12 @@ class ExpansionTests(unittest.TestCase):
         store=Store()
         result=collect(config,Client(),store,'2026-10-27','2026-10-29')
         self.assertNotEqual('held',result['status'],result['reason'])
-        self.assertEqual(1,len(store.items))
-        self.assertEqual('2026-10-29',store.items[0][1]['published_date'])
-        self.assertEqual('trafilatura',store.items[0][1]['metadata']['extraction_method'])
-        self.assertTrue(store.items[0][1]['metadata']['requires_review'])
+        self.assertEqual(2,len(store.items))
+        self.assertEqual(2,result['discovered'])
+        self.assertEqual({'2026-10-29',None},{item['published_date'] for _,item in store.items})
+        dated_item=next(item for _,item in store.items if item['published_date']=='2026-10-29')
+        self.assertEqual('trafilatura',dated_item['metadata']['extraction_method'])
+        self.assertTrue(dated_item['metadata']['requires_review'])
     def test_vietnam_policy_route_extracts_detail_date_and_keeps_topic_review(self):
         route=expansion.ROUTES['vn-gov']
         rows,nxt=parsers.discover_listing('vn-gov',(FIXTURES/'vn-gov-listing.html').read_text(),'https://en.baochinhphu.vn/policies.htm',None)
@@ -148,13 +262,30 @@ class ExpansionTests(unittest.TestCase):
         data['pageNumber']=7
         with self.assertRaisesRegex(ValueError,'ec_listing_schema_or_page_changed'):
             expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
+
+    def test_ec_accepts_live_statement_and_speech_reference_classes(self):
+        for reference in ('STATEMENT/26/2431','SPEECH/26/2428'):
+            payload={'totalNumber':1,'pageNumber':1,'pageSize':10,
+                     'docuLanguageListResources':[{'refCode':reference,'title':'Official release','eventDate':'2026-11-13'}]}
+            rows,next_page=expansion.discover('ec',json.dumps(payload),expansion.ROUTES['ec']['listing'])
+            self.assertIsNone(next_page)
+            self.assertEqual(rows[0]['url'],'https://ec.europa.eu/commission/presscorner/detail/en/'+reference.lower().replace('/','_'))
     def test_ca_opc_advice_to_parliament_is_an_approved_paginated_listing(self):
-        route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][0]
+        route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][1]
         html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
         rows,nxt=expansion.discover('ca-opc',html,listing)
         self.assertEqual(len(rows),2)
         self.assertEqual(expansion.listing_date(rows[0]),'2026-11-02')
         self.assertTrue(rows[0]['url'].endswith('/parl_261102/'))
+        self.assertIn('Page=2',nxt)
+
+    def test_ca_opc_includes_speeches_and_statements_listing(self):
+        route=expansion.ROUTES['ca-opc']
+        listing=route['additional_listings'][0]
+        self.assertEqual(listing,'https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?o=d&Page=1&Filter=True')
+        html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-10">November 10, 2026</time><h2><a href="/en/opc-news/speeches-and-statements/2026/speech_261110/">Speech on privacy and AI</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
+        rows,nxt=expansion.discover('ca-opc',html,listing)
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-11-10')
         self.assertIn('Page=2',nxt)
     def test_modified_date_and_cookie_challenge_never_become_valid_articles(self):
         html=(FIXTURES/'ca-opc-detail.html').read_text().replace('name="dcterms.issued"','name="dcterms.modified"')

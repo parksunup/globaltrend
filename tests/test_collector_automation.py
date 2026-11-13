@@ -231,7 +231,7 @@ class AutomationTests(unittest.TestCase):
             failed=True
             fetched=[]
             def get(self, url):
-                if url.endswith('news_en'):
+                if url.startswith('https://www.edpb.europa.eu/news_en?') or url.endswith('news_en'):
                     return b'<main><a href="/news/a_en">A</a><a href="/news/b_en">B</a></main>',url,'text/html'
                 self.fetched.append(url)
                 if self.failed: raise FetchError('http_503')
@@ -258,8 +258,8 @@ class AutomationTests(unittest.TestCase):
         from scripts.collector.core import collect
         class Client:
             def get(self,url):
-                if url.endswith('news_en'): html='<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>'
-                elif '?page=1' in url: html='<main><a href="/news/b_en">B</a></main>'
+                if url.startswith('https://www.edpb.europa.eu/news_en?') or url.endswith('news_en'): html='<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>'
+                elif 'page=1' in url: html='<main><a href="/news/b_en">B</a></main>'
                 else: html='<h2 class="node-article-full__title">A</h2><div class="node-article-full__body">Data protection policy.</div>'
                 return html.encode(),url,'text/html'
         class Store:

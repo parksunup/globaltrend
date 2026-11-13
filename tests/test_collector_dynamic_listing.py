@@ -134,6 +134,24 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(rows[0]['listing_route'], 'official_sitemap')
         self.assertEqual(seen[-1], 'https://www.pdpc.gov.sg/sitemap.xml')
 
+    def test_pdpc_empty_api_response_uses_sitemap_in_production_fetch_path(self):
+        from scripts.collector.core import fetch_listing
+        api='https://www.pdpc.gov.sg/api/listing-api?listingtype=media_events&itemsperpage=10&pathname=%2Fmedia-events'
+        sitemap=b'''<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+          <url><loc>https://www.pdpc.gov.sg/media-events/notice-one</loc></url>
+        </urlset>'''
+        class Client:
+            def __init__(self): self.seen=[]
+            def get(self,url):
+                self.seen.append(url)
+                if url==api:return b'',url,'application/json'
+                return sitemap,url,'application/xml'
+        client=Client()
+        rows,next_url=fetch_listing('pdpc',client,api)
+        self.assertIsNone(next_url)
+        self.assertEqual(rows[0]['listing_route'],'official_sitemap')
+        self.assertEqual(client.seen,[api,'https://www.pdpc.gov.sg/sitemap.xml'])
+
     def test_pdpc_sitemap_rejects_unapproved_host_and_xml_entities(self):
         with self.assertRaisesRegex(ValueError, 'pdpc_sitemap_route_unverified'):
             parsers.discover_pdpc_sitemap(b'<urlset/>', 'https://example.org/sitemap.xml')

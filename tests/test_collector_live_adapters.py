@@ -229,12 +229,12 @@ class LiveAdapterTests(unittest.TestCase):
         self.assertEqual(result['detail']['sample_origin'], 'research_sample')
 
     def test_curia_collect_uses_pdf_adapter_but_single_listing_is_not_complete(self):
-        listing = 'https://curia.europa.eu/site/list'
+        listing = 'https://curia.europa.eu/site/jcms/d2_5158/en/press-releases'
         html = '<base href="https://curia.europa.eu/site/"><main><li class="curia-itemlist-item"><time>08 Oct 2026</time><div class="curia-itemlist-item-title"><a href="upload/press-en.pdf"><h3>Opinion in Case C-222/25</h3></a></div></li></main>'
         pdf = press_pdf('Press release. Luxembourg, 8 October 2026. Data protection rights.')
         class Client:
             def get(self, url):
-                return (html.encode(), url, 'text/html') if url == listing else (pdf, url, 'application/pdf')
+                return (html.encode(), url, 'text/html') if url.startswith(listing) else (pdf, url, 'application/pdf')
         class Store:
             def ingest(self, cfg, url, item):
                 self.item = item
