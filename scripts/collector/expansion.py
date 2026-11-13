@@ -187,6 +187,17 @@ def listing_request_url(source,url,since,until):
         params={key:values[0] for key,values in parse_qs(parsed.query).items()}
         params['date']=str(start) if start==end else f'{start}-{end}'
         return canonical_url(parsed._replace(query=urlencode(params)).geturl(),['www.edpb.europa.eu'])
+    if source=='curia':
+        parsed=urlsplit(canonical_url(url,['curia.europa.eu']))
+        if parsed.path!='/site/jcms/d2_5158/en/press-releases':raise ValueError('curia_listing_path_unverified')
+        start=dt.date.fromisoformat(since).year
+        end=dt.date.fromisoformat(until).year
+        # The official form accepts one year per query. A cross-year window
+        # needs a multi-query sweep, so do not pretend one year is exhaustive.
+        if start!=end:return url
+        params={key:values[0] for key,values in parse_qs(parsed.query).items() if not key.startswith('PortalAction_d6_1000000371_')}
+        params.update(year=str(start),PortalAction_d6_1000000371_start='0',PortalAction_d6_1000000371_pageSize='500',PortalAction_d6_1000000371_pagerAll='true',PortalAction_d6_1000000371_sort='year',PortalAction_d6_1000000371_reverse='true')
+        return canonical_url(parsed._replace(query=urlencode(params)).geturl(),['curia.europa.eu'])
     if source=='vn-gov':
         parsed=urlsplit(url)
         if parsed.hostname!='en.baochinhphu.vn':raise ValueError('vn_listing_host_unverified')

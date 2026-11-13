@@ -280,6 +280,10 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         scoped=expansion.listing_request_url('edpb',page,since,until)
         if scoped!=page: cursor=None
         page=scoped
+    elif config['source']=='curia':
+        scoped=expansion.listing_request_url('curia',page,since,until)
+        if scoped!=page: cursor=None
+        page=scoped
     result['status']='partial'
     try:
         while page:
@@ -487,6 +491,14 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
             }
             if (result['listing_scan_complete'] and 'date' in dict(parse_qsl(urlsplit(page).query)) and result['unknown_date']==0 and
                     result['failed']==0 and result['excluded_unapproved_host_count']==0):
+                result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
+        if config['source']=='curia':
+            year=dt.date.fromisoformat(since).year
+            filtered=(dt.date.fromisoformat(until).year==year and 'year' in dict(parse_qsl(urlsplit(page).query)) and
+                      dict(parse_qsl(urlsplit(page).query)).get('year')==str(year) and
+                      dict(parse_qsl(urlsplit(page).query)).get('PortalAction_d6_1000000371_pagerAll')=='true')
+            result['coverage_evidence']={'strategy':'official_year_filtered_press_release_archive','year':year,'all_results_mode':filtered,'cross_year_window_supported':False}
+            if (filtered and result['listing_scan_complete'] and result['unknown_date']==0 and result['failed']==0 and result['excluded_unapproved_host_count']==0):
                 result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']

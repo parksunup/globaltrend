@@ -29,6 +29,16 @@ class ExpansionTests(unittest.TestCase):
         page=expansion.listing_request_url('edpb','https://www.edpb.europa.eu/news_en?date=2025&page=2','2025-12-30','2026-01-03')
         self.assertEqual(parse_qs(urlsplit(page).query),{'date':['2025-2026'],'page':['2']})
 
+    def test_curia_listing_uses_official_year_filter_and_all_results_mode(self):
+        from urllib.parse import parse_qs,urlsplit
+        scoped=expansion.listing_request_url('curia','https://curia.europa.eu/site/jcms/d2_5158/en/press-releases','2025-10-01','2025-10-31')
+        params=parse_qs(urlsplit(scoped).query)
+        self.assertEqual(params['year'],['2025'])
+        self.assertEqual(params['PortalAction_d6_1000000371_pagerAll'],['true'])
+        self.assertEqual(params['PortalAction_d6_1000000371_pageSize'],['500'])
+        unbounded='https://curia.europa.eu/site/jcms/d2_5158/en/press-releases'
+        self.assertEqual(expansion.listing_request_url('curia',unbounded,'2025-12-31','2026-01-02'),unbounded)
+
     def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
         route=expansion.ROUTES['nl-ap']
         feed='''<?xml version="1.0" encoding="UTF-8"?>
