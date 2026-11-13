@@ -100,6 +100,71 @@ class ExpansionTests(unittest.TestCase):
         for rows in (missing,unsorted):
             self.assertEqual(expansion.next_within_window('cn-tc260',rows,nxt,'2026-10-01'),nxt)
             self.assertIsNone(expansion.listing_date_boundary('cn-tc260',rows,'2026-10-01'))
+
+    def test_tc260_collector_completes_only_after_cross_page_order_and_boundary_are_verified(self):
+        from scripts.collector.core import collect
+        listing='https://www.tc260.org.cn/tc260/tzgg/list.shtml'
+        second='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        def row(day,slug):
+            ident={'new':'a','in-range':'b','old-one':'c','old-two':'d','older':'e','newer-again':'f'}[slug]
+            return {'url':f'https://www.tc260.org.cn/tc260/tzgg/261113/{ident}.shtml','title':slug,
+                    'date_observations':[{'meaning':'expansion_listing_published','value':day}]}
+        pages={listing:([row('2026-11-13','new'),row('2026-10-05','in-range')],second),
+               second:([row('2026-09-29','old-one'),row('2026-09-01','old-two')],
+                       'https://www.tc260.org.cn/tc260/tzgg/list_3.shtml')}
+        config={'source':'cn-tc260','listing':listing,'hosts':['www.tc260.org.cn'],'enabled':True,
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            def get(self,url):return b'<html/>',url,'text/html'
+        class Store:
+            def __init__(self):self.cursor=None;self.checkpoints=[];self.items=[]
+            def resume(self,*args):return self.cursor
+            def progress(self,cfg,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,cfg,until):self.checkpoints.append(until)
+            def ingest(self,cfg,url,item):self.items.append((url,item));return {'item_created':True}
+            def discovery_failure(self,*args):raise AssertionError(args)
+        store=Store()
+        with patch('scripts.collector.core.fetch_listing',side_effect=lambda source,client,page:pages[page]), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch('scripts.collector.extraction.extract_document',side_effect=lambda source,body,url,ctype,row:{
+                 'title_original':row['title'],'content_text':'Official notice body with sufficient text.',
+                 'content_hash':row['title'],'published_date':expansion.listing_date(row),'metadata':{'requires_review':False}}):
+            result=collect(config,Client(),store,'2026-10-01','2026-11-13')
+        self.assertTrue(result['coverage_complete'])
+        self.assertEqual(result['reason'],'official_tc260_archive_boundary_verified')
+        self.assertTrue(result['coverage_evidence']['date_order_verified'])
+        self.assertEqual(result['listing_date_boundary']['url'],second)
+        self.assertEqual(store.checkpoints,['2026-11-13'])
+
+    def test_tc260_collector_does_not_complete_when_page_order_breaks(self):
+        from scripts.collector.core import collect
+        listing='https://www.tc260.org.cn/tc260/tzgg/list.shtml'
+        second='https://www.tc260.org.cn/tc260/tzgg/list_2.shtml'
+        def row(day,slug):
+            ident={'new':'a','older':'b','newer-again':'c'}[slug]
+            return {'url':f'https://www.tc260.org.cn/tc260/tzgg/261113/{ident}.shtml','title':slug,
+                    'date_observations':[{'meaning':'expansion_listing_published','value':day}]}
+        pages={listing:([row('2026-11-13','new'),row('2026-10-05','older')],second),
+               second:([row('2026-10-06','newer-again')],None)}
+        config={'source':'cn-tc260','listing':listing,'hosts':['www.tc260.org.cn'],'enabled':True,
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        class Client:
+            def get(self,url):return b'<html/>',url,'text/html'
+        class Store:
+            cursor=None
+            def resume(self,*args):return self.cursor
+            def progress(self,cfg,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,*args):raise AssertionError('out-of-order listing cannot be certified')
+            def ingest(self,*args):return {'item_created':True}
+            def discovery_failure(self,*args):raise AssertionError(args)
+        with patch('scripts.collector.core.fetch_listing',side_effect=lambda source,client,page:pages[page]), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch('scripts.collector.extraction.extract_document',side_effect=lambda source,body,url,ctype,row:{
+                 'title_original':row['title'],'content_text':'Official notice body with sufficient text.',
+                 'content_hash':row['title'],'published_date':expansion.listing_date(row),'metadata':{'requires_review':False}}):
+            result=collect(config,Client(),Store(),'2026-10-01','2026-11-13')
+        self.assertFalse(result['coverage_complete'])
+        self.assertFalse(result['coverage_evidence']['date_order_verified'])
     def test_only_assigned_cloud_sources_and_matching_source_ids_are_claimable(self):
         configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
         for c in configs:

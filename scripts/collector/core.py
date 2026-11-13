@@ -287,6 +287,8 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
     # an older feed entry appear new again after the cursor grows.
     processed_hashes=list((cursor or {}).get('processed_url_hashes',[]))
     processed_urls=set(processed_hashes)
+    tc260_date_order_valid=((cursor or {}).get('tc260_date_order_valid') is True if cursor else True)
+    tc260_previous_page_last_date=(cursor or {}).get('tc260_previous_page_last_date')
     fpf_completed_pages=list((cursor or {}).get('fpf_completed_pages',[]))
     fpf_expected_total=(cursor or {}).get('fpf_expected_total')
     fpf_expected_pages=(cursor or {}).get('fpf_expected_pages')
@@ -309,6 +311,9 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         if config['source']=='fpf':
             state.update(fpf_completed_pages=fpf_completed_pages,fpf_expected_total=fpf_expected_total,
                          fpf_expected_pages=fpf_expected_pages)
+        if config['source']=='cn-tc260':
+            state.update(tc260_date_order_valid=tc260_date_order_valid,
+                         tc260_previous_page_last_date=tc260_previous_page_last_date)
         store.progress(config,since,until,state)
     if config['source']=='ico' and urlsplit(page).hostname=='www.wired-gov.net':
         # WiredGov's supported cross-agency latest index has no date query.
@@ -365,10 +370,21 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 result['listing_route']='official_sitemap_fallback'
                 result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
+                if config['source']=='cn-tc260':
+                    tc260_dates=[expansion.listing_date(row) for row in rows]
+                    page_order_valid=(bool(tc260_dates) and all(tc260_dates) and
+                        all(tc260_dates[index]<=tc260_dates[index-1] for index in range(1,len(tc260_dates))) and
+                        (tc260_previous_page_last_date is None or tc260_dates[0]<=tc260_previous_page_last_date))
+                    tc260_date_order_valid=tc260_date_order_valid and page_order_valid
+                    if all(tc260_dates):tc260_previous_page_last_date=tc260_dates[-1]
+                    result['listing_date_order_verified']=tc260_date_order_valid
                 boundary=expansion.listing_date_boundary(config['source'],rows,since)
+                if config['source']=='cn-tc260' and not tc260_date_order_valid:
+                    boundary=None
                 if boundary:
                     result['listing_date_boundary']={'url':page,**boundary}
-                next_page=expansion.next_within_window(config['source'],rows,next_page,since)
+                if config['source']!='cn-tc260' or tc260_date_order_valid:
+                    next_page=expansion.next_within_window(config['source'],rows,next_page,since)
             if config['source']=='edpb' and next_page:
                 next_page=expansion.listing_request_url('edpb',next_page,since,until)
             if not rows:
@@ -542,6 +558,9 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
             if config['source']=='fpf' and completed_cursor is not None:
                 completed_cursor.update(fpf_completed_pages=fpf_completed_pages,
                     fpf_expected_total=fpf_expected_total,fpf_expected_pages=fpf_expected_pages)
+            if config['source']=='cn-tc260' and completed_cursor is not None:
+                completed_cursor.update(tc260_date_order_valid=tc260_date_order_valid,
+                    tc260_previous_page_last_date=tc260_previous_page_last_date)
             if hasattr(store,'progress'):
                 store.progress(config,since,until,completed_cursor)
             if oecd_cycle_complete:
@@ -582,6 +601,16 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
             result['coverage_evidence']={'strategy':'official_year_filtered_press_release_archive','year':year,'all_results_mode':filtered,'cross_year_window_supported':False}
             if (filtered and result['listing_scan_complete'] and result['unknown_date']==0 and result['failed']==0 and result['excluded_unapproved_host_count']==0):
                 result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
+        if config['source']=='cn-tc260':
+            result['coverage_evidence']={'strategy':'official_newest_first_notice_archive','date_order_verified':tc260_date_order_valid,
+                'listing_scan_complete':result['listing_scan_complete'],'boundary':result.get('listing_date_boundary')}
+            tc260_complete=(result['listing_scan_complete'] and tc260_date_order_valid and
+                result['unknown_date']==0 and result['failed']==0 and result['held']==0 and
+                prior_failures==0 and prior_unknown_dates==0 and
+                prior_excluded_hosts==0 and result['excluded_unapproved_host_count']==0)
+            if tc260_complete:
+                store.checkpoint(config,until)
+                result.update(status='complete',coverage_complete=True,reason='official_tc260_archive_boundary_verified')
         if fpf_complete:store.checkpoint(config,until)
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
