@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import styles from "./public.module.css";
 
 import type { PublishedStory } from "../../lib/published-trends";
-import { jurisdictionName } from "../../lib/jurisdictions";
+import { jurisdictionFilterName, jurisdictionName } from "../../lib/jurisdictions";
 import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
 import { inCustomDateRange } from "../../lib/public-search-filters";
 import Link from "next/link";
@@ -42,7 +42,7 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
       const jurisdictions = story.jurisdictions?.length ? story.jurisdictions : [story.country];
       for (const jurisdiction of jurisdictions) {
         if (!jurisdiction) continue;
-        const label = jurisdictionName(jurisdiction);
+        const label = jurisdictionFilterName(jurisdiction);
         const codes = groups.get(label) ?? new Set<string>();
         codes.add(jurisdiction);
         groups.set(label, codes);
