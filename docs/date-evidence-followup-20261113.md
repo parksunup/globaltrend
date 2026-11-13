@@ -22,11 +22,9 @@ G7 DPA's official Canada detail page exposes `meta[name="dcterms.issued"]` with 
 
 Freevacy detail pages expose an explicit `Published: dd/mm/yyyy` label. The parser accepts that labeled value; no date is inferred from the syndicated publisher or an article URL.
 
-## Still unresolved
+## Remaining verification scope
 
-- Freevacy cards do not carry a date, so the candidate remains undated until the detail fetch succeeds. Its detail page has explicit publication metadata as described above; publisher dates are not a substitute.
-- IAPP and noyb listings show explicit full calendar dates for the sampled rows; these are retained as listing publication evidence. A detail-page date is not necessary when the official listing date is present. The noyb news listing displays `29.10.2026`; the IAPP listing displays `6 Nov. 2026`.
+- The historical Freevacy, IAPP, noyb, GPA, and overview.legal counters are unchanged. Their now-supported explicit detail or listing dates require a fresh run to verify all candidates, since the historical summary did not preserve every candidate URL.
 - ISO/IEC SC 27's [official news listing](https://committee.iso.org/sites/jtc1sc27/home/news.html) gives only `2025-05` for the sampled item. Its [linked PDF](https://committee.iso.org/files/live/sites/jtc1sc27/files/news/ISOIEC_TS_27560_2023.pdf)'s September 2023 date is the technical standard's publication date, not the news post date. The news item must remain undated until a full posting date is available.
-- GPA listing cards omit dates, but its article detail carries an explicit published timestamp, which the collector can now use.
 
-A source remains incomplete when any listed item has an unresolved publication date. A date parser change by itself does not establish listing coverage.
+A source remains incomplete when any required candidate has an unresolved publication date. These parser fixes do not establish broader listing coverage by themselves.
