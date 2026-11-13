@@ -36,7 +36,23 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
   const [sort, setSort] = useState<"관련도순" | "최신순">(initialFilters.sort === "최신순" ? "최신순" : "관련도순");
   const [selected, setSelected] = useState<string | null>(null);
   useEffect(() => { if (initialFilters.restore !== "1") return; try { const position = Number(sessionStorage.getItem("globaltrend-search-scroll")); if (Number.isFinite(position)) requestAnimationFrame(() => window.scrollTo(0, position)); } catch { /* optional scroll memory */ } }, [initialFilters.restore]);
-  const countryOptions = useMemo(() => Array.from(new Set(stories.flatMap((story) => story.jurisdictions?.length ? story.jurisdictions : [story.country]))).sort((a, b) => jurisdictionName(a).localeCompare(jurisdictionName(b), "ko")), [stories]);
+  const countryOptions = useMemo(() => {
+    const groups = new Map<string, Set<string>>();
+    for (const story of stories) {
+      const jurisdictions = story.jurisdictions?.length ? story.jurisdictions : [story.country];
+      for (const jurisdiction of jurisdictions) {
+        if (!jurisdiction) continue;
+        const label = jurisdictionName(jurisdiction);
+        const codes = groups.get(label) ?? new Set<string>();
+        codes.add(jurisdiction);
+        groups.set(label, codes);
+      }
+    }
+    return [...groups.entries()]
+      .map(([label, codes]) => ({ label, codes: [...codes].sort() }))
+      .sort((a, b) => a.label.localeCompare(b.label, "ko"));
+  }, [stories]);
+  const selectedCountryOptions = countryOptions.filter((option) => option.codes.some((code) => countries.includes(code)));
   const activeTopic = publicTopics.find((topic) => topic.id === topicId);
   const terms = useMemo(() => {
     const normalized = submittedQuery.trim().toLocaleLowerCase();
@@ -111,16 +127,24 @@ export default function TrendSearch({ initialQuery, initialTopic, initialFilters
         <button type="button" className={styles.mobileFilterToggle} aria-expanded={filtersExpanded} onClick={() => setFiltersExpanded(!filtersExpanded)}>{filtersExpanded ? "검색 필터 접기" : "검색 필터 펼치기"}</button>
         <div className={styles.filterHeading}><span>검색 필터</span><button type="button" onClick={() => { setCountries([]); setPeriod("전체"); setCustomStart(""); setCustomEnd(""); setTopicId(""); setSort("관련도순"); setSelected(null); router.push(submittedQuery.trim() ? `/public/search?q=${encodeURIComponent(submittedQuery.trim())}` : "/public/search", { scroll: false }); }}>초기화</button></div>
         <details open className={styles.filterGroup}><summary>기간</summary>{["전체", "최근 1개월", "최근 6개월", "최근 1년", "직접 설정"].map((value) => <button key={value} type="button" className={period === value ? styles.filterSelected : ""} onClick={() => { setPeriod(value); setSelected(null); if (value === "직접 설정" && !customStart && !customEnd) { const now = new Date(); const yearAgo = new Date(now); yearAgo.setFullYear(now.getFullYear() - 1); const localDate = (date: Date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); setCustomStart(localDate(yearAgo)); setCustomEnd(localDate(now)); } }}><span>{value}</span><span>{period === value ? "●" : "○"}</span></button>)}{period === "직접 설정" && <div className={styles.dateRange}><label>시작일<input type="date" value={customStart} max={customEnd || undefined} onChange={(event) => { setCustomStart(event.target.value); setSelected(null); }} /></label><label>종료일<input type="date" value={customEnd} min={customStart || undefined} onChange={(event) => { setCustomEnd(event.target.value); setSelected(null); }} /></label>{customStart > customEnd && <p role="alert">종료일을 시작일 이후로 선택해 주세요.</p>}</div>}</details>
-        <details open id="country-filter" className={styles.filterGroup}><summary>국가·지역</summary>{["전체", ...countryOptions].map((value) => {
-          const checked = value === "전체" ? countries.length === 0 : countries.includes(value);
-          return <button key={value} type="button" className={checked ? styles.countryFilterSelected : styles.countryFilter} aria-pressed={checked} onClick={() => {
-            setCountries((current) => value === "전체" ? [] : current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+        <details open id="country-filter" className={styles.filterGroup}><summary>국가·지역</summary>{[
+          { label: "전체", codes: [] as string[] },
+          ...countryOptions,
+        ].map((option) => {
+          const checked = option.label === "전체" ? countries.length === 0 : option.codes.some((code) => countries.includes(code));
+          return <button key={option.label} type="button" className={checked ? styles.countryFilterSelected : styles.countryFilter} aria-pressed={checked} onClick={() => {
+            setCountries((current) => {
+              if (option.label === "전체") return [];
+              return checked
+                ? current.filter((item) => !option.codes.includes(item))
+                : [...new Set([...current, ...option.codes])];
+            });
             setSelected(null);
-          }}><span>{value === "전체" ? "전 세계" : jurisdictionName(value)}</span><span className={checked ? styles.countryCheckboxChecked : styles.countryCheckbox} aria-hidden="true">{checked && value !== "전체" ? "✓" : ""}</span></button>;
+          }}><span>{option.label === "전체" ? "전 세계" : option.label}</span><span className={checked ? styles.countryCheckboxChecked : styles.countryCheckbox} aria-hidden="true">{checked && option.label !== "전체" ? "✓" : ""}</span></button>;
         })}</details>
         <div className={styles.filterFoot}>{results.length}건의 동향</div><button type="button" className={styles.mobileFilterDone} onClick={() => setFiltersExpanded(false)}>{results.length}건 결과 보기</button>
       </aside>
-      <div className={styles.results}><div className={styles.mobileAppliedFilters}>{period !== "전체" && <button type="button" onClick={() => setPeriod("전체")}>{period} ×</button>}{countries.map((country) => <button type="button" key={country} onClick={() => setCountries((current) => current.filter((item) => item !== country))}>{jurisdictionName(country)} ×</button>)}{activeTopic && <button type="button" onClick={() => setTopicId("")}>{activeTopic.label} ×</button>}</div>
+      <div className={styles.results}><div className={styles.mobileAppliedFilters}>{period !== "전체" && <button type="button" onClick={() => setPeriod("전체")}>{period} ×</button>}{selectedCountryOptions.map((option) => <button type="button" key={option.label} onClick={() => setCountries((current) => current.filter((item) => !option.codes.includes(item)))}>{option.label} ×</button>)}{activeTopic && <button type="button" onClick={() => setTopicId("")}>{activeTopic.label} ×</button>}</div>
         <div className={styles.resultHeader}><div><p className={styles.eyebrow}>CURATED INTELLIGENCE</p><strong>{results.length}<small>건의 동향</small></strong></div><div className={styles.sortSwitch}><button type="button" className={sort === "관련도순" ? styles.sortActive : ""} onClick={() => setSort("관련도순")}>관련도순</button><button type="button" className={sort === "최신순" ? styles.sortActive : ""} onClick={() => setSort("최신순")}>최신순</button></div></div>
         {results.length ? <div className={styles.resultList}>{results.map((story) => <Link key={story.id} href={`/public/trends/${encodeURIComponent(story.id)}?back=${encodeURIComponent(returnTo)}`} onMouseEnter={() => setSelected(story.id)} onFocus={() => setSelected(story.id)} onClick={() => { try { sessionStorage.setItem("globaltrend-search-scroll", String(window.scrollY)); } catch { /* optional scroll memory */ } }} className={`${styles.storyCard} ${active?.id === story.id ? styles.storySelected : ""}`}>
           <div className={styles.storyMeta}><span>{story.region}</span><i>·</i><span>{story.institution}</span><i>·</i><time>{story.date}</time></div>
