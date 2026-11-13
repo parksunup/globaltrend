@@ -276,6 +276,10 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         scoped=parsers.ico_range_url(page,since,until)
         if scoped!=page: cursor=None
         page=scoped
+    elif config['source']=='edpb':
+        scoped=expansion.listing_request_url('edpb',page,since,until)
+        if scoped!=page: cursor=None
+        page=scoped
     result['status']='partial'
     try:
         while page:
@@ -464,6 +468,20 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         if config['source']!='oecd' or oecd_cycle_complete:
             result['listing_scan_complete']=True
         result['reason']='unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
+        if config['source']=='edpb':
+            first_year=dt.date.fromisoformat(since).year
+            last_year=dt.date.fromisoformat(until).year
+            result['coverage_evidence']={
+                'strategy':'official_year_filtered_news_archive',
+                'date_filter':str(first_year) if first_year==last_year else f'{first_year}-{last_year}',
+                'listing_scan_complete':result['listing_scan_complete'],
+                'unknown_date':result['unknown_date'],
+                'failed':result['failed'],
+                'excluded_unapproved_host_count':result['excluded_unapproved_host_count'],
+            }
+            if (result['listing_scan_complete'] and 'date' in dict(parse_qsl(urlsplit(page).query)) and result['unknown_date']==0 and
+                    result['failed']==0 and result['excluded_unapproved_host_count']==0):
+                result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
     except (FetchError,ValueError) as e:

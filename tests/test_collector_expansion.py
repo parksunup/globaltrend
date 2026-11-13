@@ -22,6 +22,13 @@ class ExpansionTests(unittest.TestCase):
         self.assertEqual(len(rows),1)
         self.assertEqual(next_page,'https://www.globalcbpr.org/news/page/2/')
 
+    def test_edpb_listing_is_filtered_to_requested_publication_years(self):
+        from urllib.parse import parse_qs,urlsplit
+        single=expansion.listing_request_url('edpb','https://www.edpb.europa.eu/news_en','2026-10-16','2026-11-13')
+        self.assertEqual(parse_qs(urlsplit(single).query),{'date':['2026']})
+        page=expansion.listing_request_url('edpb','https://www.edpb.europa.eu/news_en?date=2025&page=2','2025-12-30','2026-01-03')
+        self.assertEqual(parse_qs(urlsplit(page).query),{'date':['2025-2026'],'page':['2']})
+
     def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
         route=expansion.ROUTES['nl-ap']
         feed='''<?xml version="1.0" encoding="UTF-8"?>

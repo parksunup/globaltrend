@@ -176,6 +176,15 @@ CLOUD_SOURCES=('ec','eu-parliament','anpd-br','nist','ico','g7-dpa','vn-gov','hk
 
 def listing_request_url(source,url,since,until):
     from .core import canonical_url
+    if source=='edpb':
+        parsed=urlsplit(canonical_url(url,['www.edpb.europa.eu']))
+        if parsed.path!='/news_en':raise ValueError('edpb_listing_path_unverified')
+        start=dt.date.fromisoformat(since).year
+        end=dt.date.fromisoformat(until).year
+        if start>end:raise ValueError('invalid_expansion_range')
+        params={key:values[0] for key,values in parse_qs(parsed.query).items()}
+        params['date']=str(start) if start==end else f'{start}-{end}'
+        return canonical_url(parsed._replace(query=urlencode(params)).geturl(),['www.edpb.europa.eu'])
     if source=='vn-gov':
         parsed=urlsplit(url)
         if parsed.hostname!='en.baochinhphu.vn':raise ValueError('vn_listing_host_unverified')
