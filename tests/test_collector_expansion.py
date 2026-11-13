@@ -80,10 +80,11 @@ class ExpansionTests(unittest.TestCase):
         store=Store()
         result=collect(config,Client(),store,'2026-10-27','2026-10-29')
         self.assertNotEqual('held',result['status'],result['reason'])
-        self.assertEqual(1,len(store.items))
-        self.assertEqual('2026-10-29',store.items[0][1]['published_date'])
-        self.assertEqual('trafilatura',store.items[0][1]['metadata']['extraction_method'])
-        self.assertTrue(store.items[0][1]['metadata']['requires_review'])
+        self.assertEqual(2,len(store.items))
+        self.assertEqual({'2026-10-29',None},{item['published_date'] for _,item in store.items})
+        dated_item=next(item for _,item in store.items if item['published_date'])
+        self.assertEqual('trafilatura',dated_item['metadata']['extraction_method'])
+        self.assertTrue(dated_item['metadata']['requires_review'])
     def test_vietnam_policy_route_extracts_detail_date_and_keeps_topic_review(self):
         route=expansion.ROUTES['vn-gov']
         rows,nxt=parsers.discover_listing('vn-gov',(FIXTURES/'vn-gov-listing.html').read_text(),'https://en.baochinhphu.vn/policies.htm',None)
