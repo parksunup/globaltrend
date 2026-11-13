@@ -233,7 +233,18 @@ def fetch_listing(source,client,page):
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:
-        return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        try:
+            return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        except ValueError as exc:
+            reason=str(exc)
+            if reason=='robots_disallowed' or not (
+                reason in ('pdpc_listing_page_incomplete','pdpc_listing_schema_changed') or
+                reason.startswith('pdpc_listing_json_invalid:')
+            ):
+                raise
+            sitemap='https://www.pdpc.gov.sg/sitemap.xml'
+            sitemap_data,sitemap_final,_=fetch(sitemap)
+            return parsers.discover_pdpc_sitemap(sitemap_data,sitemap_final)
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)

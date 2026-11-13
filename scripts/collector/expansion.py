@@ -575,7 +575,11 @@ def discover(source,html,url):
         if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or type(response_page) is not int or response_page not in (page,page-1) or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
         for row in data['docuLanguageListResources']:
             if not isinstance(row.get('refCode'),str) or not isinstance(row.get('title'),str):raise ValueError('ec_listing_schema_changed')
-            if not re.fullmatch(r'(IP|QANDA|STATEMENT|SPEECH|MEMO|MEX)/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
+            # Presscorner has used both slash-delimited publication references
+            # and opaque numeric identifiers. Preserve the official article
+            # URL only for known reference families, while allowing additional
+            # two-letter document classes as the registry expands.
+            if not re.fullmatch(r'(?:[A-Z]{2,12})/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
             event_date=row.get('eventDate')
             add('/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),row['title'],event_date if isinstance(event_date,str) else None,'EC API eventDate')
         params={k:v[0] for k,v in params.items()};params['pagenumber']=str(page+1)
