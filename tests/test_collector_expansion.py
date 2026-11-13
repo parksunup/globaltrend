@@ -11,6 +11,17 @@ ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/'tests/fixtures/collector-expansion'
 
 class ExpansionTests(unittest.TestCase):
+    def test_global_cbpr_follows_official_wordpress_next_page(self):
+        listing='''<main><article class="elementor-post">
+          <h2 class="elementor-post__title"><a href="/sample-release/">Sample release</a></h2>
+          <div class="elementor-post-date">November 1, 2026</div>
+        </article><nav class="elementor-pagination">
+          <a class="page-numbers next" href="/news/page/2/">Next »</a>
+        </nav></main>'''
+        rows,next_page=parsers.discover_listing('global-cbpr',listing,expansion.ROUTES['global-cbpr']['listing'],None)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(next_page,'https://www.globalcbpr.org/news/page/2/')
+
     def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
         route=expansion.ROUTES['nl-ap']
         feed='''<?xml version="1.0" encoding="UTF-8"?>

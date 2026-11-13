@@ -154,6 +154,7 @@ ROUTES['global-cbpr']={
     'article_path':r'^/[a-z0-9][a-z0-9-]*/$',
     'card':'article.elementor-post',
     'card_date':'.elementor-post-date',
+    'next':'a.page-numbers.next[href],a[rel="next"]',
 }
 ROUTES['iso-iec-sc27']={
     'host':'committee.iso.org',
