@@ -83,6 +83,17 @@ class PublicationRouteCandidatesTests(unittest.TestCase):
         self.assertEqual(item['published_date'], '2026-11-03')
         self.assertEqual(item['metadata']['date_observations'][0]['meaning'], 'published_display')
 
+    def test_g7_opc_dcterms_issued_is_publication_date_not_meeting_date(self):
+        html='''<main><h1 id="wb-cont">G7 Data Protection and privacy Authorities Roundtable</h1>
+        <meta name="dcterms.issued" title="W3CDTF" content="2026-07-08">
+        <meta name="dcterms.modified" title="W3CDTF" content="2026-07-08">
+        <section aria-label="Main content"><p>We met on 25 and 26 June 2026 under the presidency of France.</p></section></main>'''
+        from scripts.collector.expansion import extract
+        item=extract('g7-dpa',html,
+            'https://www.priv.gc.ca/en/opc-news/speeches-and-statements/2026/communique-g7-260626')
+        self.assertEqual(item['published_date'],'2026-07-08')
+        self.assertEqual(item['metadata']['date_observations'][0]['locator'],'meta dcterms.issued')
+
     def test_each_observed_layout_yields_existing_article_links_and_evidence(self):
         expected = {
             "iapp": ("https://iapp.org/news/a/privacy-law-update", "Privacy law update", "professional_publication"),

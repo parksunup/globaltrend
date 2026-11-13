@@ -84,7 +84,9 @@ ROUTES['g7-dpa']={
     'article_path':r'^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\d{4}/[^/]+/?$',
     'title':'main h1#wb-cont, main h1',
     'body':'main section[aria-label="Main content"]',
-    'date':'time',
+    # This route's pages may contain dates for meetings/adoption in body text.
+    # Use the government-issued publication metadata, not arbitrary <time> nodes.
+    'date':None,
 }
 ROUTES['calprivacy']={
     'host':'privacy.ca.gov',
@@ -750,6 +752,11 @@ def extract(source,input,url,row=None):
     for n in soup.select(c['date']) if c.get('date') else []:
         value=n.get(c['date_attribute']) if c.get('date_attribute') else n.get_text(' ',strip=True)
         if value:observations.append({'meaning':'official_published_attribute','locator':c['date'],'value':normalize(value)})
+    if source=='g7-dpa':
+        issued=soup.select_one('meta[name="dcterms.issued"][content]')
+        if issued and issued.get('content'):
+            observations.append({'meaning':'official_published_attribute',
+                'locator':'meta dcterms.issued','value':normalize(issued['content'])})
     if source=='ftc' and row and row.get('date_observations'):
         observations.extend(row['date_observations'])
     dates={date(x['value']) for x in observations}-{None}
