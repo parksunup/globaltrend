@@ -301,9 +301,11 @@ def collect_frozen(config,client,store,since,until):
                 raise ValueError('listing_empty_or_structure_changed')
             cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],frozen_next=nxt)
         _bounded_frozen_cursor(cursor,source)
-        ordinal=cursor['offset'];urls=cursor['frozen_urls']
-        if ordinal<len(urls):
-            url=urls[ordinal];result['discovered']=1
+        urls=cursor['frozen_urls']
+        per_run_page_drain=source in ('anpd-br','nist')
+        while cursor['offset']<len(urls):
+            ordinal=cursor['offset'];url=urls[ordinal]
+            result['discovered']+=1
             try:
                 body,received,ctype=client.get(detail_request_url(source,url))
                 verify_detail_response(source,url,received)
@@ -320,6 +322,13 @@ def collect_frozen(config,client,store,since,until):
                 store.progress(config,since,until,cursor)
                 return result
             cursor={**cursor,'offset':ordinal+1}
+            # Each article is persisted independently. Finish the frozen page
+            # in this scheduled invocation so a multi-item page does not take
+            # one daily run per article. Persist every ordinal before fetching
+            # the next detail so interruption resumes without skipping items.
+            store.progress(config,since,until,cursor)
+            if not per_run_page_drain:
+                break
         if cursor['offset']>=len(urls):
             if cursor['frozen_next']:
                 store.progress(config,since,until,dict(page=cursor['frozen_next'],offset=0))
@@ -328,7 +337,7 @@ def collect_frozen(config,client,store,since,until):
                 store.progress(config,since,until,None);store.checkpoint(config,until)
                 result.update(listing_scan_complete=True,reason='listing_exhaustiveness_unverified')
         else:
-            store.progress(config,since,until,cursor);result['reason']='frozen_listing_item_processed'
+            result['reason']='frozen_listing_page_items_processed'
         return result
     except (FetchError,ValueError) as error:
         # No body was committed. Keep the exact persisted position for retry.
