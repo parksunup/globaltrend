@@ -12,17 +12,31 @@ results from these checks were written to the database.
 - In the current Crawlee `HttpxHttpClient` environment, the official media
   centre returned HTTP 200 and its existing parser extracted 10 entries plus
   the official `start_rank=11` continuation URL.
-- PublicNow's source archive and example release both returned HTTP 403. Its
-  `robots.txt` also returned 403 (treated as unavailable under the existing
-  robots policy); the actual archive/article request remained blocked. So this
-  alternate is identified and wired as a fallback, but it is **not currently
-  live-verified as reachable** from this runner. The fallback must not be
-  reported as a successful route until an actual cloud run can read it.
+- A dedicated read-only GitHub-hosted probe was run from the PR branch on
+  2026-11-13 (Actions run `43370474048`). It requested PublicNow's robots file,
+  then the source archive using the production Crawlee HTTPX client and the
+  configured 6-second host interval. `robots.txt` returned HTTP 403, so the
+  collector treated the policy file as unavailable and proceeded. The actual
+  archive also returned HTTP 403; no candidate or detail request was obtained.
+  This confirms the alternate is **not reachable from the production cloud
+  runner**, so it is not a verified working OAIC route and PR #135 must remain
+  unmerged pending a usable alternate.
+- Other candidate repositories were checked: FOI Monitor indexes OAIC FOI
+  disclosure-log documents, not the OAIC media-release stream; OAIC's monthly
+  Information Matters newsletter and joint announcements on partner agency
+  sites are selective and do not provide a complete media-centre archive.
+  They therefore cannot replace a full OAIC news route. PublicNow remains the
+  only full-content republication archive identified so far, but its cloud
+  access is blocked.
 - If OAIC's official listing request returns HTTP 403/503, Crawlee now tries
   the PublicNow source archive with the same host allowlist, robots checks,
   request pacing, and source attribution validation. The parser accepts only
   PublicNow `/view/<40-hex-id>` pages and requires visible OAIC and Public
   Technologies attribution in the detail.
+- Probe implementation: `scripts/collector/oaic_publicnow_probe.py`. It is
+  database-free and checks the listing plus one detail and the OAIC/republisher
+  attribution. The GitHub Actions job is deliberately read-only and requires
+  no Supabase secrets.
 
 ## PDPC
 
