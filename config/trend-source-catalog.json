@@ -156,8 +156,7 @@
       "name": "Office of the Australian Information Commissioner",
       "listing": "https://www.oaic.gov.au/news/media-centre",
       "hosts": [
-        "www.oaic.gov.au",
-        "www.publicnow.com"
+        "www.oaic.gov.au"
       ],
       "language": "en",
       "cadence": "daily",

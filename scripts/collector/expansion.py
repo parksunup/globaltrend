@@ -10,12 +10,6 @@ from urllib.parse import urlsplit, urljoin, parse_qs, urlencode
 from bs4 import BeautifulSoup
 
 ROUTES=json.loads((Path(__file__).resolve().parents[2]/'supabase/functions/trend-collector/expansion-routes.json').read_text())
-# OAIC press releases are also republished in full, with explicit attribution,
-# in the PublicNow source archive. Keep this as a Crawlee/Python fallback only;
-# the Edge collector continues to use the official OAIC host.
-ROUTES['oaic']['hosts']=['www.oaic.gov.au','www.publicnow.com']
-ROUTES['oaic']['publicnow_source']='https://www.publicnow.com/source/91701'
-ROUTES['oaic']['publicnow_article_path']=r'^/view/[A-Fa-f0-9]{40}$'
 # ANPD uses the public Plone REST API. Keep this Python-only route here until
 # its adapter is available to the Edge runtime as well.
 ROUTES['anpd-br']={
@@ -346,8 +340,7 @@ def _canonical(raw,source,base):
     from .core import canonical_url
     c=ROUTES[source]
     url=canonical_url(urljoin(base,raw),c.get('hosts',[c['host']]))
-    article_path=c.get('publicnow_article_path') if source=='oaic' and urlsplit(url).hostname=='www.publicnow.com' else c['article_path']
-    if not re.fullmatch(article_path,urlsplit(url).path):raise ValueError('unverified_article_path')
+    if not re.fullmatch(c['article_path'],urlsplit(url).path):raise ValueError('unverified_article_path')
     return url
 
 def date(value):
@@ -400,33 +393,6 @@ def discover(source,html,url):
     from .parsers import normalize
     from .core import canonical_url
     c=ROUTES[source];canonical_url(url,c.get('hosts',[c['host']]));rows={}
-    if source=='oaic' and urlsplit(url).hostname=='www.publicnow.com':
-        soup=BeautifulSoup(html,'html.parser')
-        for anchor in soup.select('a[href*="/view/"]'):
-            try:target=_canonical(anchor.get('href',''),source,url)
-            except ValueError:continue
-            if not re.fullmatch(c['publicnow_article_path'],urlsplit(target).path):continue
-            card=anchor.find_parent(['article','li']) or anchor.find_parent(class_=re.compile(r'card|release|article',re.I))
-            title=normalize(anchor.get_text(' ',strip=True))
-            if not title and card:
-                heading=card.select_one('h1,h2,h3,h4')
-                title=normalize(heading.get_text(' ',strip=True) if heading else '')
-            if not title:continue
-            row={'url':target,'title':title,'source_attribution':'OAIC - Office of the Australian Information Commissioner',
-                 'republisher':'Public Technologies'}
-            date_node=card.select_one('time[datetime],time,.date,[class*=date]') if card else None
-            date_value=(date_node.get('datetime') or date_node.get_text(' ',strip=True)) if date_node else ''
-            if date_value:
-                row['date_observations']=[{'meaning':'expansion_listing_published','locator':'PublicNow OAIC source archive date','value':normalize(date_value)}]
-            rows[target]=row
-        next_node=soup.select_one('a[rel~="next"],a.next[href]')
-        nxt=None
-        if next_node and next_node.get('href'):
-            candidate=canonical_url(urljoin(url,next_node['href']),['www.publicnow.com'])
-            if urlsplit(candidate).path!='/source/91701':raise ValueError('oaic_publicnow_next_path_unverified')
-            nxt=candidate
-        if not rows:raise ValueError('oaic_publicnow_listing_empty_or_structure_changed')
-        return list(rows.values()),nxt
     if source=='ftc' and html.lstrip('\ufeff \t\r\n').lower().startswith(('<?xml','<rss','<feed')):
         from .parsers import discover_rss
         return discover_rss(html,url)
@@ -681,32 +647,6 @@ def extract(source,input,url,row=None):
     from . import parsers
     normalize=parsers.normalize
     c=ROUTES[source];_canonical(url,source,url);observations=[]
-    if source=='oaic' and urlsplit(url).hostname=='www.publicnow.com':
-        soup=BeautifulSoup(input,'html.parser')
-        title_node=soup.select_one('main h1,article h1,h1')
-        title=normalize(title_node.get_text(' ',strip=True) if title_node else '')
-        if not title or not re.fullmatch(c['publicnow_article_path'],urlsplit(url).path):
-            raise ValueError('oaic_publicnow_article_identity_or_title_missing')
-        visible=normalize(soup.get_text(' ',strip=True))
-        if ('Office of the Australian Information Commissioner' not in visible or
-                'Public Technologies' not in visible):
-            raise ValueError('oaic_publicnow_attribution_missing')
-        body_node=soup.select_one('article .article-content,article .content,main article,main')
-        if body_node is None:raise ValueError('oaic_publicnow_body_missing')
-        for junk in body_node.select('script,style,nav,footer,aside,.related,.share,.cookie'):
-            junk.decompose()
-        body=normalize(body_node.get_text(' ',strip=True))
-        if len(body)<80:raise ValueError('oaic_publicnow_body_too_short')
-        date_node=soup.select_one('time[datetime],meta[property="article:published_time"]')
-        raw_date=(date_node.get('datetime') or date_node.get('content') or date_node.get_text(' ',strip=True)) if date_node else ''
-        published=date(raw_date) if raw_date else None
-        if raw_date:observations.append({'meaning':'republisher_published_attribute','locator':'PublicNow publication date','value':normalize(raw_date)})
-        return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
-            'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'oaic-publicnow-v1',
-            'read_scope':'OAIC release republished in full by Public Technologies','source_attribution':'OAIC - Office of the Australian Information Commissioner',
-            'republisher':'Public Technologies','date_observations':observations,'requires_review':True,
-            'review_reason':'republished_source_body_and_attribution_require_human_review','ai_ready':False,
-            'related_documents':[],'unread_attachments':[],'factual_status':'official_OAIC_release_republished_unedited_not_independently_reviewed'}}
     if source in PUBLICATION_SOURCE_IDS:
         from .parsers import extract_publication_document
         return extract_publication_document(source,input.encode('utf-8'),url,'text/html',row)

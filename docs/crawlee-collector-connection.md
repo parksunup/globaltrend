@@ -20,24 +20,29 @@ GitHub가 시작을 늦추더라도 수집 구간은 기존 진행 위치를 사
 않습니다.
 
 `config/crawlee-daily-source-set.json`은 PR #114 표본에서 성공한 28개 중 사용자가
-제외한 EU Council을 뺀 27개를 지정합니다. EP와 RIPD는 성공 표본 목록에 없습니다.
+제외한 EU Council과 2026-11-13에 제거를 지시한 OAIC를 뺀 26개를 지정합니다. EP와
+RIPD는 성공 표본 목록에 없습니다. OAIC는 공유/기존 Edge registry에 공식 호스트로 남기고
+Crawlee 예약 목록에서만 제외합니다.
 2026-11-11 명시적인 활성화 지시에 따라 이전에 꺼져 있던 후보 설정 9개를 켰습니다.
-따라서 이 목록 27개가 모두 예약 실행 대상입니다. 기존 품질·범위·날짜 검토 표시는
+따라서 이 목록 26개가 Crawlee 예약 실행 대상입니다. 기존 품질·범위·날짜 검토 표시는
 유지하고, PR #114의 실시간 표본 성공을 전체 기간 완전성으로 취급하지 않습니다.
 OECD는 기존 HTML/Python 어댑터 대신 새 WebCMS RSS collector가 맡고, FTC·CalPrivacy·
 CAC·PCPD·베트남은 별도 Scrapling collector가 맡으므로 Crawlee 집합에서는 제외합니다.
 
 마이그레이션 `20261111041009_activate_pr114_crawlee_sources.sql`은 14개 누락 publisher/
-source 행을 만들고, 27개 source 행을 활성화합니다. `terms_reviewed_at`은 내부 수집 게이트
+source 행을 만들고, 당시 27개 source 행을 활성화합니다. 이 공유 DB 승인 상태는 Crawlee의
+26개 실행 목록과 별개이며 OAIC의 기존 Edge 경로를 보존합니다. `terms_reviewed_at`은 내부 수집 게이트
 값이며 저작권 라이선스나 사이트 약관의 허가를 뜻하지 않습니다. robots.txt와 각 collector의
 요청 간격은 계속 준수합니다.
 
 수집기는 기존 `config/trend-collector.json`의 source ID와 production route/parser를 사용합니다.
 DB `collector_source_allowed`와 저장 용량 검사를 매 실행 때 확인합니다. 수동
-`workflow_dispatch`는 읽기 전용 probe이며 DB를 쓰지 않습니다. 저장소 변수
+`workflow_dispatch`는 기본적으로 읽기 전용 probe이며 DB를 쓰지 않습니다. 명시적으로
+`actual_collection=true`를 선택한 일회성 실행은 기존 운영 gate를 통과할 때만 실수집합니다.
+저장소 변수
 `SCHEDULE_ENABLED`, `COLLECTION_ENABLED`, `FREE_LIMITS_VERIFIED`,
 `CLOUD_PIPELINE_VERIFIED`는 모두 `true`여야 예약 수집이 실제로 기록됩니다.
-예약 실행의 쓰기 여부는 저장소 변수 `SCHEDULE_ENABLED`, `COLLECTION_ENABLED`,
+예약·일회성 실수집의 쓰기 여부는 저장소 변수 `SCHEDULE_ENABLED`, `COLLECTION_ENABLED`,
 `FREE_LIMITS_VERIFIED`, `CLOUD_PIPELINE_VERIFIED`가 모두 `true`여야 합니다.
 
 이번 변경은 기존 Edge/Crawlee Cron·Queue 파이프라인을 삭제하거나 활성화하지 않습니다.
@@ -81,7 +86,8 @@ Worker는 이제 RPC가 `false`일 때만 `sources`에서 동일 ID의 세 필�
 PR을 병합한 뒤 첫 예약 실행에서 확인할 항목:
 
 1. GitHub Actions `Daily Crawlee source collectors` 실행이 생성됐는지 확인합니다.
-2. 실행 요약에서 27개 목록, 출처별 승인 보류, 수집·저장 결과를 분리해 봅니다.
+2. 실행 요약에서 26개 목록, 출처별 승인 보류, 수집·저장 결과를 분리해 봅니다.
 3. OECD Scrapling 실행 요약에서 `source_gate_fallback`과 RPC/행 판정이 일치하는지
    확인한 뒤, 실제 OECD WebCMS/RSS 후보와 저장 결과를 확인합니다.
-4. `workflow_dispatch`로 시작한 읽기 전용 probe를 예약 수집 실적으로 집계하지 않습니다.
+4. `workflow_dispatch` 기본 probe는 수집 실적으로 세지 않습니다. `actual_collection=true`의
+   실행은 실제 DB event와 commit 결과까지 대조합니다.

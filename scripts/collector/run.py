@@ -106,12 +106,6 @@ def execution_outcome(records):
     return 'success'
 
 
-def collector_runtime_config(config):
-    """Add Python-only republisher hosts without changing the mirrored Edge registry."""
-    if config.get('source')!='oaic': return config
-    return {**config,'hosts':sorted(set(config.get('hosts',[]))|{'www.publicnow.com'})}
-
-
 def select_configs(registry_sources, source=None, source_set_path=None):
     if source and source_set_path:
         raise ValueError('source_and_source_set_are_mutually_exclusive')
@@ -167,7 +161,7 @@ def main():
     store=None; attempted=False; database_stop=False; probe_failed=False
     budget={'requests':0,'bytes':0,'started':time.monotonic()}
     for config in configs:
-        runtime_config=collector_runtime_config(config)
+        runtime_config=config
         since=args.since or (dt.date.fromisoformat(args.until)-dt.timedelta(days=7)).isoformat()
         until=args.until
         reasons=source_eligibility(config,require_id=args.write)

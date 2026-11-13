@@ -33,16 +33,10 @@ results from these checks were written to the database.
   They therefore cannot replace a full OAIC news route. PublicNow remains the
   only full-content republication platform identified so far, but both of its
   tested public domains are blocked from the GitHub runner.
-- If OAIC's official listing request returns HTTP 403/503, Crawlee now tries
-  the PublicNow source archive with the same host allowlist, robots checks,
-  request pacing, and source attribution validation. The parser accepts only
-  PublicNow `/view/<40-hex-id>` pages and requires visible OAIC and Public
-  Technologies attribution in the detail.
-- Probe implementation: `scripts/collector/oaic_publicnow_probe.py`. It is
-  database-free and checks the official listing plus one detail, PublicNow and
-  EBS archive pages, and a known EBS full-text detail with OAIC/republisher
-  attribution. The GitHub Actions job is deliberately read-only and requires
-  no Supabase secrets.
+- On 2026-11-13 the user directed that OAIC be removed from the Crawlee daily
+  source set. The shared/legacy Edge registry entry is retained with its
+  official OAIC host; PublicNow fallback code and its temporary probe job are
+  removed from the Crawlee collector.
 
 ## PDPC
 
