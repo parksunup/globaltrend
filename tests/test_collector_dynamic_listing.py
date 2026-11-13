@@ -111,6 +111,36 @@ class DynamicListingTests(unittest.TestCase):
         self.assertEqual(query, {'listingtype': ['media_events'], 'itemsperpage': ['10'],
                                 'pathname': ['/media-events'], 'page': ['2']})
 
+    def test_pdpc_empty_listing_api_falls_back_to_official_sitemap(self):
+        sitemap = b'''<?xml version="1.0" encoding="UTF-8"?>
+          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+            <url><loc>https://www.pdpc.gov.sg/media-events/notice-one</loc><lastmod>2026-11-12</lastmod></url>
+            <url><loc>https://www.pdpc.gov.sg/media-events/notice-one</loc></url>
+            <url><loc>https://www.pdpc.gov.sg/media-events/webinar-two</loc></url>
+            <url><loc>https://www.pdpc.gov.sg/contact-us</loc></url>
+          </urlset>'''
+        seen = []
+        def fetch(url, method='GET', payload=None, headers=None):
+            seen.append(url)
+            if url.endswith('/api/listing-api?listingtype=media_events&itemsperpage=10&pathname=%2Fmedia-events'):
+                return b'', url, 'application/json'
+            return sitemap, url, 'application/xml'
+        rows, next_url = parsers.discover_listing('pdpc', '<main></main>',
+            'https://www.pdpc.gov.sg/media-events', fetch)
+        self.assertEqual(next_url, None)
+        self.assertEqual(len(rows), 2)
+        self.assertEqual(rows[0]['url'], 'https://www.pdpc.gov.sg/media-events/notice-one')
+        self.assertEqual(rows[0]['topic'], 'Unclassified')
+        self.assertEqual(rows[0]['listing_route'], 'official_sitemap')
+        self.assertEqual(seen[-1], 'https://www.pdpc.gov.sg/sitemap.xml')
+
+    def test_pdpc_sitemap_rejects_unapproved_host_and_xml_entities(self):
+        with self.assertRaisesRegex(ValueError, 'pdpc_sitemap_route_unverified'):
+            parsers.discover_pdpc_sitemap(b'<urlset/>', 'https://example.org/sitemap.xml')
+        with self.assertRaisesRegex(ValueError, 'xml_entities_rejected'):
+            parsers.discover_pdpc_sitemap(b'<!DOCTYPE x [<!ENTITY e "x">]><urlset/>',
+                'https://www.pdpc.gov.sg/sitemap.xml')
+
     def test_pdpc_listing_bootstrap_rejects_unverified_route(self):
         with self.assertRaisesRegex(ValueError, 'pdpc_listing_route_unverified'):
             parsers.pdpc_listing_request('<html></html>', 'https://example.org/media-events')

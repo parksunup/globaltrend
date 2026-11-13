@@ -275,6 +275,9 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
             if page in seen_pages: raise FetchError('pagination_cycle')
             if max_pages is not None and result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
+            if config['source']=='pdpc' and any(row.get('listing_route')=='official_sitemap' for row in rows):
+                result['listing_route']='official_sitemap_fallback'
+                result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
                 next_page=expansion.next_within_window(config['source'],rows,next_page,since)
             if not rows:
@@ -356,6 +359,11 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                                     config['source'],body,detail,ctype,row,client)
                             else:
                                 item=extraction.extract_document(config['source'],body,url if config['source']=='ec' else detail,ctype,row)
+                        if config['source']=='pdpc' and row.get('listing_route')=='official_sitemap':
+                            item['metadata']['requires_review']=True
+                            item['metadata']['ai_ready']=False
+                            item['metadata']['listing_route']='official_sitemap_fallback'
+                            item['metadata']['review_reason']='pdpc_sitemap_has_no_topic_classification'
                         date=item['published_date']
                         if (config['source']=='oecd' and
                                 parsers.oecd_certainly_outside_window(item,since,until)):
