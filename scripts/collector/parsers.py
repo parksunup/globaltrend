@@ -402,6 +402,16 @@ def extract_publication_document(source,data,url,content_type,row=None):
     if not body:raise ValueError('publication_main_body_empty')
 
     observations=[]
+    if source=='freevacy':
+        for node in soup.select('h5'):
+            match=re.fullmatch(r'Published:\s*(\d{2})/(\d{2})/(\d{4})',normalize(node.get_text(' ',strip=True)),re.I)
+            if not match:
+                continue
+            try:
+                value=dt.date(int(match[3]),int(match[2]),int(match[1])).isoformat()
+            except ValueError:
+                continue
+            observations.append({'meaning':'published_display','locator':'Freevacy article h5 Published label','value':value})
     for script in soup.select('script[type="application/ld+json"]'):
         try:
             structured=json.loads(script.get_text(strip=True))
