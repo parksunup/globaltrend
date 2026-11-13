@@ -122,6 +122,24 @@ class PdfSourceExtractionTests(unittest.TestCase):
         self.assertEqual(item['metadata']['trafilatura_first_attempt_characters'],len('Short HTML notice.'))
         self.assertTrue(item['metadata']['requires_review'])
 
+    def test_ppc_pdf_route_uses_official_notice_dateline_when_listing_date_is_missing(self):
+        page='https://www.ppc.go.jp/news/press/2026/261028_houdou/'
+        pdf_url='https://www.ppc.go.jp/files/pdf/261028housei_press_kenkyukai.pdf'
+        row={'url':page,'title':'Study group announcement','date_observations':[]}
+        html=f'''<main class="l-main"><h1 class="page-ttl">Study group announcement</h1>
+          <div class="l-article"><div class="date-box">令和８年10月28日 個人情報保護委員会</div>
+          <p>Official notice with details about the committee meeting and privacy rules.</p>
+          <a href="{pdf_url}">PDF</a></div></main>'''
+        client=FakePdfClient({pdf_url:(b'%PDF-ppc',pdf_url,'application/pdf')})
+        with patch.object(extraction,'_trafilatura_item',return_value={'content_text':'HTML diagnostic'}), \
+             patch.object(parsers,'extract_pdf',return_value={
+                 'pages':[{'page':1,'text':'Official attachment text.'}],
+                 'related_documents':[]}):
+            item=extraction.extract_verified_pdf_attachments('ppc',html,page,'text/html',row,client)
+        self.assertEqual(item['published_date'],'2026-10-28')
+        self.assertTrue(any(o['meaning']=='published_notice_dateline'
+                            for o in item['metadata']['date_observations']))
+
 
 if __name__ == '__main__':
     unittest.main()

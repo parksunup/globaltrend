@@ -61,6 +61,50 @@ LISTINGS = {
 
 
 class PublicationRouteCandidatesTests(unittest.TestCase):
+    def test_ico_detail_uses_wiredgov_publication_date_metadata(self):
+        from scripts.collector.expansion import extract
+        html='''<meta name="DC.Date" content="Thursday, November 12, 2026">
+        <main><div class="wgstyle article-whole-container"><div class="newsbox article-inner-container">
+          <h2 itemprop="name">UK health sector warned to tackle medical record snooping</h2>
+          <div class="newsboxsummary"><p>The Information Commissioner's Office issued an official notice.</p></div>
+        </div></div></main>'''
+        item=extract('ico',html,
+            'https://www.wired-gov.net/wg/news.nsf/articles/UK+health+sector+warned+to+tackle+medical+record+snooping+12112026170500?open=')
+        self.assertEqual(item['published_date'],'2026-11-12')
+        self.assertEqual(item['metadata']['date_observations'][0]['locator'],'meta[name="DC.Date"]')
+
+    def test_aepd_detail_ignores_related_content_dates(self):
+        from scripts.collector.expansion import extract
+        html='''<main><article class="node--view-mode-full">
+          <div class="layout__region layout__region--first">
+            <div class="field--name-title"><h1>La AEPD publica un aviso</h1></div>
+            <div class="field--name-fecha-publicacion"><time datetime="2026-11-04T12:30:35Z">4 Nov 2026</time></div>
+          </div>
+          <div class="field--name-body"><p>La Agencia comunica una nueva medida para proteger datos personales.</p></div>
+          <div class="layout__region layout__region--content">
+            <div class="field--name-fecha-publicacion"><time datetime="2026-09-08T10:00:00Z">8 Sep 2026</time></div>
+            <div class="field--name-fecha-publicacion"><time datetime="2024-03-01T11:29:40Z">1 Mar 2024</time></div>
+          </div>
+        </article></main>'''
+        row={'date_observations':[{'meaning':'expansion_listing_published','locator':'AEPD listing time','value':'2026-11-04T11:30:35Z'}]}
+        item=extract('es-aepd',html,
+            'https://www.aepd.es/prensa-y-comunicacion/notas-de-prensa/aviso-privacidad',row)
+        self.assertEqual(item['published_date'],'2026-11-04')
+        self.assertFalse(item['metadata']['date_conflict'])
+        self.assertEqual([o['value'] for o in item['metadata']['date_observations']],
+                         ['2026-11-04T12:30:35Z','2026-11-04T11:30:35Z'])
+
+    def test_jpdp_html_item_uses_explicit_listing_publication_date(self):
+        from scripts.collector.expansion import extract
+        row={'title':'List of compound cases','date_observations':[{
+            'meaning':'expansion_listing_published','locator':'jpdp-my .elementor-post-date',
+            'value':'November 2, 2026'}]}
+        html='<main><h1>List of compound cases</h1><article><p>Official list of enforcement cases with further information.</p></article></main>'
+        item=extract('jpdp-my',html,
+            'https://www.pdp.gov.my/en/list-of-compound-cases-under-the-personal-data-protection-act-2010-act-709/',row)
+        self.assertEqual(item['published_date'],'2026-11-02')
+        self.assertEqual(item['metadata']['date_observations'],row['date_observations'])
+
     def test_freevacy_uses_explicit_published_label_date(self):
         html='''<main><h1>CSR Bill amendment grants ministers powers</h1>
         <h5>Published: 05/11/2026</h5><article><p>Official syndicated article body.</p></article></main>'''
@@ -142,10 +186,10 @@ class PublicationRouteCandidatesTests(unittest.TestCase):
     def test_structured_article_published_date_is_used_and_modified_date_is_ignored(self):
         from scripts.collector.parsers import extract_publication_document
         html='''<main><h1>Article</h1><article>Article text with enough content.</article>
-        <script type="application/ld+json">{"@type":"Article","datePublished":"2026-05-28T00:00:00Z","dateModified":"2026-11-13T06:00:31Z"}</script></main>'''
+        <script type="application/ld+json">{"@type":"Article","datePublished":"2026-11-05T00:00:00.000Z","dateModified":"2026-11-13T06:00:34.986Z"}</script></main>'''
         item=extract_publication_document('overview-legal',html.encode(),
-            'https://overview.legal/posts/607723','text/html')
-        self.assertEqual(item['published_date'],'2026-05-28')
+            'https://overview.legal/posts/607721','text/html')
+        self.assertEqual(item['published_date'],'2026-11-05')
         self.assertEqual(item['metadata']['date_observations'][0]['locator'],
                          'application/ld+json datePublished')
 

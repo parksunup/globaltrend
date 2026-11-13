@@ -119,7 +119,7 @@
     "card_date_attribute": "datetime",
     "title": "article.node--view-mode-full .field--name-title h1",
     "body": "article.node--view-mode-full .field--name-body",
-    "date": "article.node--view-mode-full .field--name-fecha-publicacion time[datetime]",
+    "date": "article.node--view-mode-full .layout__region--first .field--name-fecha-publicacion time[datetime], article.node--view-mode-full > .field--name-fecha-publicacion time[datetime]",
     "date_attribute": "datetime"
   },
   "ec": {

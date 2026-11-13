@@ -52,6 +52,10 @@ ROUTES['ico']={
     'host':'www.wired-gov.net',
     'listing':'https://www.wired-gov.net/wg/home.nsf/nav/latest+news?open&id=BDEX-6ZFKSH',
     'article_path':r'^/wg/news[.]nsf/articles/[^/]+$',
+    'title':'div.newsbox.article-inner-container h2[itemprop="name"]',
+    'body':'div.wgstyle.article-whole-container',
+    'date':'meta[name="DC.Date"]',
+    'date_attribute':'content',
 }
 ROUTES['hk-pcpd']={
     'host':'www.info.gov.hk',
@@ -773,6 +777,12 @@ def extract(source,input,url,row=None):
     for n in soup.select(c['date']) if c.get('date') else []:
         value=n.get(c['date_attribute']) if c.get('date_attribute') else n.get_text(' ',strip=True)
         if value:observations.append({'meaning':'official_published_attribute','locator':c['date'],'value':normalize(value)})
+    if source=='jpdp-my' and row and row.get('date_observations'):
+        # Elementor's visible listing date is the authoritative publication
+        # date for this route. Preserve and reconcile it with any explicit
+        # detail date rather than silently dropping it on HTML-only items.
+        observations.extend(observation for observation in row['date_observations']
+                            if observation not in observations)
     if source=='g7-dpa':
         issued=soup.select_one('meta[name="dcterms.issued"][content]')
         if issued and issued.get('content'):
@@ -788,4 +798,6 @@ def extract(source,input,url,row=None):
     nist_review=source=='nist'
     vn_review=source=='vn-gov'
     requires_review=not published or conflict or nist_review or vn_review
-    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':observations+(row or {}).get('date_observations',[]),'date_conflict':conflict,'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'official_nist_news_not_independently_reviewed' if nist_review else 'official_government_news_not_independently_reviewed' if vn_review else 'original_statement_not_independent_legal_finding','relevance_reason':'NIST item relevance requires human confirmation' if nist_review else 'Vietnam policies feed body relevance requires human confirmation' if vn_review else None,'ai_ready':bool(published) and not requires_review}}
+    date_evidence=(observations if source=='jpdp-my' else
+                   observations+(row or {}).get('date_observations',[]))
+    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':date_evidence,'date_conflict':conflict,'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'official_nist_news_not_independently_reviewed' if nist_review else 'official_government_news_not_independently_reviewed' if vn_review else 'original_statement_not_independent_legal_finding','relevance_reason':'NIST item relevance requires human confirmation' if nist_review else 'Vietnam policies feed body relevance requires human confirmation' if vn_review else None,'ai_ready':bool(published) and not requires_review}}

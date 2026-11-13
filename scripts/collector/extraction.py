@@ -228,6 +228,20 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
     if source not in ('jpdp-my', 'global-cbpr', 'ppc', 'cn-tc260'):
         raise ValueError('pdf_attachment_source_not_supported')
     html_attempt = _trafilatura_item(source, html, page_url, content_type, row)
+    ppc_date_item = None
+    if source == 'ppc':
+        # PDF-first evidence routes must still obtain publication metadata
+        # from the official HTML notice page. The PDF itself may contain event,
+        # enactment, or update dates that are not the notice publication date.
+        from . import parsers
+        try:
+            ppc_date_item = parsers.extract_document(
+                'ppc', html.encode('utf-8') if isinstance(html, str) else html,
+                page_url, content_type, row)
+        except (ValueError, UnicodeError):
+            # Retain the explicit listing date as a fallback when an old notice
+            # template cannot be parsed; never mine dates from the PDF text.
+            ppc_date_item = None
     from .pdf_source_routes import discover_pdf_links
     links = discover_pdf_links(source, html, page_url, row)
     if not links:
@@ -258,6 +272,17 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
         documents.append({'url': final_url, 'title': link['title'], 'read': True})
     body = parsers.normalize('\n\n'.join(body_parts))
     published = parsers.expansion.listing_date(row or {})
+    date_observations = list((row or {}).get('date_observations', []))
+    date_conflict = False
+    if ppc_date_item is not None:
+        date_observations = list(ppc_date_item.get('metadata', {}).get('date_observations', [])) + date_observations
+        detail_published = ppc_date_item.get('published_date')
+        if detail_published:
+            if published and published != detail_published:
+                date_conflict = True
+                published = None
+            else:
+                published = detail_published
     return {
         'title_original': parsers.normalize((row or {}).get('title', '')),
         'content_text': body,
@@ -267,7 +292,8 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
             'normalization_version': parsers.NORMALIZATION_VERSION,
             'parser_version': 'verified-source-pdf-attachments-v1',
             'read_scope': 'official_source_pdf_attachment_text',
-            'date_observations': list((row or {}).get('date_observations', [])),
+            'date_observations': date_observations,
+            'date_conflict': date_conflict,
             'pdf_pages': pages,
             'trafilatura_first_attempt_characters': len((html_attempt or {}).get('content_text', '')),
             'requires_review': True,
