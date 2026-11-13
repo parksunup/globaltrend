@@ -723,8 +723,8 @@ def discover_pdpc_sitemap(data,url):
         raise ValueError('pdpc_sitemap_empty')
     return rows,None
 
-def discover_listing(source,html,url,fetch):
-    if source in expansion.ROUTES:return expansion.discover(source,html,url)
+def discover_listing(source,html,url,fetch=None,response_headers=None):
+    if source in expansion.ROUTES:return expansion.discover(source,html,url,response_headers)
     if source=='ico':
         payload=ico_search_request(html,url)
         endpoint=urljoin(url,'/api/search')

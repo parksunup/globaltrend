@@ -182,6 +182,23 @@ CLOUD_SOURCES=('ec','eu-parliament','anpd-br','nist','ico','g7-dpa','vn-gov','hk
 
 def listing_request_url(source,url,since,until):
     from .core import canonical_url
+    if source=='fpf':
+        parsed=urlsplit(url)
+        if parsed.hostname!='fpf.org' or parsed.path not in ('/blog/','/wp-json/wp/v2/posts'):
+            raise ValueError('fpf_listing_path_unverified')
+        start=dt.date.fromisoformat(since);end=dt.date.fromisoformat(until)
+        if start>end:raise ValueError('invalid_expansion_range')
+        try:page=int(parse_qs(parsed.query).get('page',['1'])[0])
+        except ValueError:raise ValueError('fpf_listing_page_invalid') from None
+        if page<1:raise ValueError('fpf_listing_page_invalid')
+        # WordPress applies strict before/after comparisons. Two-day padding
+        # covers requested calendar dates despite site-local timezone; core
+        # filters every official publication date to the exact range.
+        params={'page':page,'per_page':100,'categories':15,
+                'after':(start-dt.timedelta(days=2)).isoformat()+'T00:00:00',
+                'before':(end+dt.timedelta(days=2)).isoformat()+'T00:00:00',
+                '_fields':'id,date,date_gmt,link,title,categories'}
+        return 'https://fpf.org/wp-json/wp/v2/posts?'+urlencode(params)
     if source=='edpb':
         parsed=urlsplit(canonical_url(url,['www.edpb.europa.eu']))
         if parsed.path!='/news_en':raise ValueError('edpb_listing_path_unverified')
@@ -442,7 +459,7 @@ def detail_request_url(source,url):
     code=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
     return 'https://ec.europa.eu/commission/presscorner/api/documents?'+urlencode({'language':'en','reference':code})
 
-def discover(source,html,url):
+def discover(source,html,url,response_headers=None):
     from .parsers import normalize
     from .core import canonical_url
     c=ROUTES[source];canonical_url(url,c.get('hosts',[c['host']]));rows={}
@@ -560,6 +577,46 @@ def discover(source,html,url):
             if title:rows[target]={'url':target,'title':title}
         if not rows:raise ValueError('opc_g7_hub_has_no_verified_2026_deliverable')
         return list(rows.values()),None
+    if source=='fpf' and urlsplit(url).path=='/wp-json/wp/v2/posts':
+        params=parse_qs(urlsplit(url).query)
+        try:
+            page=int(params['page'][0]);size=int(params['per_page'][0]);category=int(params['categories'][0])
+            after=params['after'][0];before=params['before'][0]
+        except (KeyError,ValueError,TypeError):raise ValueError('fpf_listing_query_unverified') from None
+        if size!=100 or category!=15 or page<1 or date(after) is None or date(before) is None:
+            raise ValueError('fpf_listing_query_unverified')
+        def header(name):
+            return next((value for key,value in (response_headers or {}).items() if key.lower()==name.lower()),None)
+        try:total=int(header('X-WP-Total'));total_pages=int(header('X-WP-TotalPages'))
+        except (TypeError,ValueError):raise ValueError('fpf_pagination_headers_missing') from None
+        expected_pages=(total+size-1)//size
+        expected_items=max(0,min(size,total-(page-1)*size))
+        if total<0 or total_pages!=expected_pages or page>max(1,total_pages):
+            raise ValueError('fpf_pagination_headers_invalid')
+        try:data=json.loads(html)
+        except json.JSONDecodeError:raise ValueError('fpf_listing_json_invalid') from None
+        if not isinstance(data,list) or len(data)!=expected_items:raise ValueError('fpf_listing_page_count_mismatch')
+        for entry in data:
+            if (not isinstance(entry,dict) or type(entry.get('id')) is not int or
+                    not isinstance(entry.get('date'),str) or not isinstance(entry.get('link'),str) or
+                    not isinstance(entry.get('categories'),list) or 15 not in entry['categories']):
+                raise ValueError('fpf_blog_record_schema_changed')
+            try:target=_canonical(entry['link'],source,url)
+            except ValueError:raise ValueError('fpf_blog_permalink_outside_approved_path') from None
+            if not re.fullmatch(ROUTES['fpf']['article_path'],urlsplit(target).path):
+                raise ValueError('fpf_blog_permalink_outside_approved_path')
+            title_data=entry.get('title')
+            if not isinstance(title_data,dict) or not isinstance(title_data.get('rendered'),str):
+                raise ValueError('fpf_blog_title_or_date_missing')
+            title=BeautifulSoup(title_data['rendered'],'html.parser').get_text(' ',strip=True)
+            if not title or date(entry['date']) is None:raise ValueError('fpf_blog_title_or_date_missing')
+            rows[target]={'url':target,'title':title,
+                'date_observations':[{'meaning':'expansion_listing_published','locator':'official WordPress Blog category API date','value':entry['date']}]}
+        nxt=None
+        if page<total_pages:
+            params['page']=[str(page+1)]
+            nxt=urlsplit(url)._replace(query=urlencode({key:values[0] for key,values in params.items()})).geturl()
+        return list(rows.values()),nxt
     if source in PUBLICATION_SOURCE_IDS:
         from .publication_route_candidates import discover_publication_route_candidates
         rows=discover_publication_route_candidates(source,html,url)
