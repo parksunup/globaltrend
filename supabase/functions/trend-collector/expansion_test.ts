@@ -115,7 +115,7 @@ Deno.test("EC accepts observed zero-based response page and retains eventDate", 
 });
 Deno.test("CA OPC Advice to Parliament is an approved paginated listing stream", async () => {
   const listing = additionalListing("ca-opc", 1)!;
-  assert(listing === "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d&Page=1&Filter=True");
+  assert(listing === "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?Filter=True&Page=1&o=d");
   const found = discover(
     "ca-opc",
     '<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>',

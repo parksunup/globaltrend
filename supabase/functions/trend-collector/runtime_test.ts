@@ -80,7 +80,7 @@ Deno.test("CA OPC moves from the news list to its approved speeches list before 
   eq(step.continue, true);
   eq(step.result.stage, "next_listing_stream");
   eq(step.state.listing_index, 1);
-  eq(step.state.page, "https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?o=d&Page=1&Filter=True");
+  eq(step.state.page, "https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?Filter=True&Page=1&o=d");
   eq(step.state.offset, 0);
 });
 Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
