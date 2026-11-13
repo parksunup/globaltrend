@@ -2,8 +2,8 @@
   "collector": "scrapling-separate-v1",
   "timezone": "Asia/Seoul",
   "lookback_days": 3,
-  "max_pages_per_source": 10,
-  "max_items_per_source": 30,
+  "max_pages_per_source": null,
+  "max_items_per_source": null,
   "filter_version": "scrapling-dedup-v1",
   "sources": [
     {

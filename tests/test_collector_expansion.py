@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from scripts.collector import parsers, expansion
-from scripts.collector.core import HttpClient, FetchError
+from scripts.collector.core import HttpClient, FetchError, fetch_listing
 from scripts.collector.cloud_step import validate_claim
 
 ROOT=Path(__file__).resolve().parents[1]

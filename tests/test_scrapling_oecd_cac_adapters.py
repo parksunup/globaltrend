@@ -8,9 +8,35 @@ from scripts.collector_scrapling.adapters.oecd import RSS_LISTING_URLS, listing_
 from scripts.collector_scrapling.adapters.oecd import parse_detail as parse_oecd_detail
 from scripts.collector_scrapling.adapters.oecd import extract_pdf as extract_oecd_pdf
 from scripts.collector_scrapling.adapters.oecd import parse_listing as parse_oecd_listing
+from scripts.collector_oecd_rss import collector as oecd_rss_collector
+from scripts.collector_scrapling.transport import FetchFailure
 
 
 class OECDAdapterTests(unittest.TestCase):
+    def test_oecd_rss_collector_has_no_default_item_cap(self):
+        rows = "".join(
+            f"<item><title>Privacy update {index}</title>"
+            f"<link>https://www.oecd.org/en/publications/privacy-update-{index}.html</link>"
+            f"<description>Official personal data protection summary {index}.</description>"
+            "<pubDate>Mon, 09 Nov 2026 09:00:00 GMT</pubDate></item>"
+            for index in range(35)
+        )
+        feed = f"<rss version='2.0'><channel>{rows}</channel></rss>".encode()
+
+        class Client:
+            def get(self, url):
+                if url in oecd_rss_collector.RSS_FEEDS:
+                    return feed, url, "application/rss+xml"
+                raise FetchFailure("http_403")
+
+        result = oecd_rss_collector.collect_window(
+            "2026-11-09", "2026-11-09", client=Client()
+        )
+        self.assertEqual(result["discovered"], 70)
+        self.assertEqual(result["details_attempted"], 35)
+        self.assertEqual(len(result["items"]), 35)
+        self.assertTrue(all(item["published_date"] == "2026-11-09" for item in result["items"]))
+
     def test_webcms_rss_api_routes_are_primary_and_privacy_titles_are_filtered(self):
         routes = oecd_listing_urls("2026-11-01", "2026-11-09")
         self.assertEqual(routes, list(RSS_LISTING_URLS))

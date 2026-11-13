@@ -38,6 +38,12 @@ class FtcScraplingAdapterTests(unittest.TestCase):
             target,
         )
 
+    def test_verified_oldest_first_page_can_end_window_scan_but_unknown_dates_cannot(self):
+        older = '''<main><article><a href="/news-events/news/press-releases/2026/10/privacy-update">FTC privacy update</a><time datetime="2026-10-30"></time></article><a rel="next" href="?search=privacy&amp;field_mission%5B29%5D=29&amp;page=2">Next</a></main>'''
+        self.assertIsNone(ftc.next_page_url(older, ftc.LISTING_URL, since="2026-11-11"))
+        unknown = '''<main><article><a href="/news-events/news/press-releases/2026/10/privacy-update">FTC privacy update</a></article><a rel="next" href="?search=privacy&amp;field_mission%5B29%5D=29&amp;page=2">Next</a></main>'''
+        self.assertIsNotNone(ftc.next_page_url(unknown, ftc.LISTING_URL, since="2026-11-11"))
+
     def test_detail_uses_source_body_fallback_and_records_review_state(self):
         html = '''<html><main><article><h1>FTC privacy release</h1>
           <time datetime="2026-07-29T12:00:00-04:00"></time>

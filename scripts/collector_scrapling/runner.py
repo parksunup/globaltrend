@@ -178,7 +178,11 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
     queued = set(queue)
     visited = set()
     item_by_url = {}
+    candidate_seen = set()
     detail_seen = set()
+    terminal_verified = False
+    ftc_dates_ordered = True
+    ftc_previous_page_oldest = None
     result = {
         "source": source_id,
         "since": since,
@@ -188,6 +192,7 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
         "pages": 0,
         "discovered": 0,
         "out_of_range": 0,
+        "unknown_date_candidates": 0,
         "details_attempted": 0,
         "items": [],
         "errors": [],
@@ -219,7 +224,33 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
 
         next_url = None
         try:
-            next_url = _next_page(adapter, html, final_url, since)
+            if source_id == "ftc":
+                page_dates = adapter.listing_dates(rows)
+                if page_dates is None:
+                    ftc_dates_ordered = False
+                elif page_dates:
+                    if not all(page_dates[index] <= page_dates[index - 1]
+                               for index in range(1, len(page_dates))):
+                        ftc_dates_ordered = False
+                    if (ftc_previous_page_oldest is not None
+                            and max(page_dates) > ftc_previous_page_oldest):
+                        ftc_dates_ordered = False
+                    ftc_previous_page_oldest = min(page_dates)
+                if (ftc_dates_ordered
+                        and adapter.proves_before_window(rows, since)):
+                    terminal_verified = True
+                else:
+                    # Do not use an unproven date cutoff. Exhaust verified
+                    # pagination instead when dates are missing or unordered.
+                    next_url = _next_page(adapter, html, final_url, None)
+                    if not next_url:
+                        terminal_verified = True
+            else:
+                next_url = _next_page(adapter, html, final_url, since)
+                if not next_url and source_id == "vn-gov":
+                    terminal_verified = bool(getattr(adapter, "proves_window_exhausted", lambda *_: False)(
+                        html, final_url, since
+                    ))
         except ValueError as error:
             result["errors"].append({"url": page_url, "reason": str(error)[:240]})
         if next_url and next_url not in visited and next_url not in queued:
@@ -231,12 +262,14 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
             if not isinstance(url, str) or not _validate_candidate(url, hosts):
                 result["errors"].append({"url": str(url)[:240], "reason": "candidate_url_outside_allowlist"})
                 continue
-            if url in item_by_url:
+            if url in candidate_seen:
                 continue
-            if url in detail_seen:
-                continue
+            candidate_seen.add(url)
             window = _in_range(row, since, until)
-            if window is False:
+            # Fetch all Vietnam timeline candidates, including rows whose
+            # listing date is outside the window, so the detail date can be
+            # checked against the card before excluding it.
+            if window is False and source_id != "vn-gov":
                 result["out_of_range"] += 1
                 continue
             if max_items is not None and len(detail_seen) >= max_items:
@@ -251,6 +284,12 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                 item = adapter.parse_detail(source_id, detail_html, detail_url, row)
                 if not isinstance(item, dict) or not item.get("content_text"):
                     raise CollectionError("adapter_returned_empty_item")
+                detail_window = _in_range(item, since, until)
+                if detail_window is False or (detail_window is None and window is False):
+                    result["out_of_range"] += 1
+                    continue
+                if detail_window is None and window is None:
+                    result["unknown_date_candidates"] += 1
                 # A linked official PDF is the primary document when present;
                 # parse it with pypdf instead of keeping only an HTML teaser.
                 # Only exact PDF links surfaced by the source-specific parser
@@ -313,24 +352,33 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                     result["errors"].append({"url": url, "reason": str(error)[:240]})
 
     result["items"] = list(item_by_url.values())
+    result["unique_candidates"] = len(candidate_seen)
     result["requests"] = getattr(client, "requests", None)
     result["robots_requests"] = getattr(client, "robots_requests", None)
     result["downloaded_bytes"] = getattr(client, "bytes_received", None)
-    # Only PCPD's exact inclusive daily-archive enumeration proves its tested
-    # date window was fully visited. A page with no next link elsewhere is not
-    # evidence that the source archive is exhaustive.
+    # Completeness requires a source-specific terminal proof: exact daily
+    # archives for PCPD, verified topic pagination exhaustion for FTC, or an
+    # empty/ordered-date cutoff on Vietnam's official timeline.
     result["coverage_complete"] = (
-        source_id == "hk-pcpd" and not result["errors"]
-        and len(visited) == len(initial)
+        not result["errors"] and result["unknown_date_candidates"] == 0 and (
+            source_id == "hk-pcpd" and len(visited) == len(initial)
+            or source_id in ("ftc", "vn-gov") and terminal_verified and bool(result["pages"])
+        )
     )
+    if result["coverage_complete"]:
+        result["coverage_evidence"] = {
+            "hk-pcpd": "every_inclusive_official_daily_archive_visited",
+            "ftc": "topic_listing_paginated_to_end_or_verified_date_cutoff",
+            "vn-gov": "official_timeline_empty_fragment_or_ordered_date_cutoff",
+        }.get(source_id)
     if result["items"]:
         result["status"] = "success" if result["coverage_complete"] else "partial"
-    elif result["pages"] and result["discovered"] == 0 and not result["errors"]:
-        result["status"] = "empty_window" if source_id == "hk-pcpd" else "no_candidates"
-    elif result["pages"] and result["details_attempted"] == 0 and result["discovered"]:
-        result["status"] = "no_in_range_candidates"
-    elif result["pages"] and result["out_of_range"] and not result["errors"]:
-        result["status"] = "no_in_range_candidates"
+    elif result["coverage_complete"]:
+        result["status"] = "empty_window"
+        result["reason"] = "full_window_checked_no_in_range_relevant_items"
+    elif result["pages"] and not result["items"]:
+        result["status"] = "partial"
+        result["reason"] = "empty_window_not_exhaustively_verified"
     else:
         result["status"] = "failed" if result["errors"] else "empty_window"
     return result

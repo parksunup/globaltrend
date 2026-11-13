@@ -5,6 +5,12 @@ on:
     # 03:00 Asia/Seoul (UTC+9). GitHub may delay scheduled starts.
     - cron: '0 18 * * *'
   workflow_dispatch:
+    inputs:
+      actual_collection:
+        description: Run a one-time production collection and write accepted results to Supabase
+        type: boolean
+        required: true
+        default: false
 
 permissions:
   contents: read
@@ -44,7 +50,7 @@ jobs:
         env:
           COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
         run: |
-          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ] || [ '${{ inputs.actual_collection }}' = 'true' ]; then
             python -m scripts.collector.run --scheduled --write \
               --source-set config/crawlee-daily-source-set.json \
               --output work/crawlee-daily-result.json

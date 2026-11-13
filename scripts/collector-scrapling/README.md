@@ -29,6 +29,9 @@ the existing Supabase `source_items` pool through allowlisted RPCs and should
 only run in the configured GitHub Actions workflow with repository secrets.
 Every ingested item is marked not AI-ready and is held out of `draft_jobs`
 until the Codex duplicate/relevance filter records an accepted decision.
+All sources follow their verified pagination without a default page or item
+ceiling. Optional CLI limits are available only when an operator explicitly
+requests a resumable bounded run.
 
 ```powershell
 python -m venv .venv-scrapling
@@ -38,11 +41,11 @@ python -m scripts.collector_scrapling.runner --source all --since 2026-11-09 --u
 ```
 
 Use `--source cn-cac|hk-pcpd|vn-gov|ftc|calprivacy` to run one source.
-The result records body text and the request/error outcomes. HTTP success alone
-does not prove complete period coverage; `coverage_complete` is only true for
-the exact inclusive PCPD daily-archive window when every requested day was
-read successfully. Other sources remain partial until pagination/window
-completeness has been independently established.
+The result records body text and request/error outcomes. An empty result is
+successful only when the source-specific window boundary was verified: exact
+inclusive PCPD date archives, exhausted FTC topic pagination, or the official
+Vietnam timeline's empty fragment/date cutoff. Other sources remain partial
+when their pagination or window coverage cannot be proven.
 
 The cloud ingestion entry point for these five sources is
 `python -m scripts.collector_scrapling.cloud_worker`. OECD has a separate

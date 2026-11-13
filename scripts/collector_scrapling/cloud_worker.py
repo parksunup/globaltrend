@@ -247,15 +247,20 @@ def run(*, now=None, registry_path=REGISTRY_PATH, call_rpc=rpc_call,
             _capacity_ok(call_rpc)
             report = collect(
                 slug, since, until,
-                max_pages=registry.get("max_pages_per_source", 10),
-                max_items=registry.get("max_items_per_source", 30),
+                max_pages=source.get("max_pages", registry.get("max_pages_per_source", 10)),
+                max_items=source.get("max_items", registry.get("max_items_per_source", 30)),
             )
             outcome.update({
                 "status": report.get("status", "failed"),
                 "discovered": report.get("discovered", 0),
+                "unique_candidates": report.get("unique_candidates", 0),
                 "pages": report.get("pages", 0),
                 "details_attempted": report.get("details_attempted", 0),
+                "out_of_range": report.get("out_of_range", 0),
+                "unknown_date_candidates": report.get("unknown_date_candidates", 0),
                 "coverage_complete": report.get("coverage_complete", False),
+                "coverage_evidence": report.get("coverage_evidence"),
+                "reason": report.get("reason"),
                 "errors": [e.get("reason", "unknown") for e in report.get("errors", [])],
             })
             if outcome["status"] == "partial":

@@ -101,7 +101,8 @@ def source_eligibility(config, require_id=False):
 def execution_outcome(records):
     if any(r['status']=='failed' for r in records): return 'failed'
     if all(r['status']=='held' for r in records): return 'blocked'
-    if any(r['status']!='success' for r in records): return 'partial'
+    if any(r['status']=='empty_window' and r.get('coverage_complete') is not True for r in records): return 'partial'
+    if any(r['status'] not in ('success','empty_window') for r in records): return 'partial'
     return 'success'
 
 
@@ -160,6 +161,7 @@ def main():
     store=None; attempted=False; database_stop=False; probe_failed=False
     budget={'requests':0,'bytes':0,'started':time.monotonic()}
     for config in configs:
+        runtime_config=config
         since=args.since or (dt.date.fromisoformat(args.until)-dt.timedelta(days=7)).isoformat()
         until=args.until
         reasons=source_eligibility(config,require_id=args.write)
@@ -192,17 +194,17 @@ def main():
                 else:
                     since=args.since or store.range_start(config,until)
                 record.update(since=since,until=until)
-            client=HttpClient(config['hosts'],interval=6 if config['source']=='ico' else 2,budget=budget)
+            client=HttpClient(runtime_config['hosts'],interval=6 if config['source']=='ico' else 2,budget=budget)
             if args.probe:
                 researched=json.loads((ROOT/f"data/trends/source-configs/{config['source']}.json").read_text())
-                probe,failed=probe_source(config,client,researched.get('sample_urls',[])[:1])
+                probe,failed=probe_source(runtime_config,client,researched.get('sample_urls',[])[:1])
                 if getattr(client,'robots_unavailable',None):
                     probe['robots_unavailable']=client.robots_unavailable
                 probe.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))
                 result['sources'].append(probe); probe_failed=probe_failed or failed
                 continue
             attempted=True
-            collected=collect(config,client,store or DryStore(),since,until,args.max_pages,args.max_items)
+            collected=collect(runtime_config,client,store or DryStore(),since,until,args.max_pages,args.max_items)
             if getattr(client,'robots_unavailable',None):
                 collected['robots_unavailable']=client.robots_unavailable
             collected.update(eligibility_reasons=reasons,hold_reason=config.get('hold_reason'))

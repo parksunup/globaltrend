@@ -26,7 +26,6 @@ RSS_FEEDS = (
     "https://api.oecd.org/webcms/search/rss?siteName=oecd&interfaceLanguage=en&path=%2Fcontent%2Foecd%2Fen%2Fpublications&facets=oecd-languages%3Aen",
 )
 ALLOWED_HOSTS = {"api.oecd.org", "www.oecd.org", "www.oecd-ilibrary.org"}
-MAX_FEED_ITEMS = 30
 MAX_ITEM_CHARS = 80_000
 MAX_PDF_BYTES = 5_000_000
 PRIVACY_TERMS = re.compile(
@@ -94,7 +93,8 @@ def parse_feed(payload: bytes, feed_url: str) -> list[dict]:
         is_topic_feed = "privacy-and-data-protection" in feed_url
         if not is_topic_feed and not PRIVACY_TERMS.search(title + " " + summary):
             continue
-        date_node = fields.get("pubdate") or fields.get("date") or fields.get("published") or fields.get("updated")
+        date_node = next((fields.get(key) for key in ("pubdate", "date", "published", "updated")
+                          if fields.get(key) is not None), None)
         raw_date = _text(date_node)
         published = _date(raw_date)
         observations = ([{"meaning": "official_rss_published", "locator": "OECD WebCMS RSS date", "value": raw_date}]
@@ -210,7 +210,7 @@ def _pdf_item(client: SafeScraplingClient, item: dict, markup: bytes) -> dict:
     return item
 
 
-def collect_window(since: str, until: str, *, client=None, max_items: int = MAX_FEED_ITEMS) -> dict:
+def collect_window(since: str, until: str, *, client=None, max_items: int | None = None) -> dict:
     own_client = client is None
     client = client or SafeScraplingClient(ALLOWED_HOSTS)
     result = {"status": "partial", "since": since, "until": until, "pages": 0,
@@ -237,7 +237,9 @@ def collect_window(since: str, until: str, *, client=None, max_items: int = MAX_
             except (FetchFailure, ValueError) as error:
                 result["errors"].append({"url": feed_url, "reason": str(error)[:200]})
 
-        candidates = list(by_url.values())[:max_items]
+        candidates = list(by_url.values())
+        if max_items is not None:
+            candidates = candidates[:max_items]
         for row in candidates:
             result["details_attempted"] += 1
             item = None
