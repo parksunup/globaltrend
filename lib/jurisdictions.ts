@@ -7,11 +7,21 @@ export const jurisdictionNames: Record<string, string> = {
   "미국 캘리포니아": "미국·캘리포니아",
   "미국 캘리포니아주": "미국·캘리포니아",
   "호주 연방": "호주",
-  "캐나다 연방": "캐나다",
   "international:OECD": "국제기구(OECD)",
 };
 
 export function jurisdictionName(code: string): string {
   const normalized = code.trim().replace(/\s+/g, " ");
   return jurisdictionNames[normalized] ?? normalized;
+}
+
+const countryFilterAliases: Record<string, string> = {
+  "캐나다 연방": "캐나다",
+  "캐나다 연방·퀘벡·브리티시컬럼비아·앨버타": "캐나다",
+  "캐나다·G7": "캐나다",
+};
+
+export function jurisdictionFilterName(value: string): string {
+  const normalized = value.trim().replace(/\s+/g, " ");
+  return countryFilterAliases[normalized] ?? jurisdictionName(normalized);
 }
