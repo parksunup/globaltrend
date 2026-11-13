@@ -11,7 +11,7 @@ GPA article pages expose an explicit publication timestamp in `time.entry-date.p
 - Freevacy detail pages and its listing candidates examined in the source-catalog probe do not expose a recognized publication date. The listing is syndicated content, so source dates must be retained from publisher evidence or explicit Freevacy metadata.
 - overview.legal listing dates omit the year, and the inspected detail page has no published-date metadata. Assigning the current or inferred year would be speculative.
 - IAPP, noyb, and the remaining sources need exact runtime item evidence and their official detail markup checked before broad date extraction changes are safe. Probe sample dates produced by Trafilatura are candidates, not verified publication dates.
-- ISO/IEC SC 27's observed listing gives only a month, not the publication day.
+- ISO/IEC SC 27's official news listing gives only `2025-05` for the sampled item. Its linked PDF's September 2023 date is the technical standard's publication date, not the news post date. The news item must remain undated until a full posting date is available.
 - GPA listing cards omit dates, but its article detail carries an explicit published timestamp, which the collector can now use.
 
 A source remains incomplete when any listed item has an unresolved publication date. A date parser change by itself does not establish listing coverage.
