@@ -30,6 +30,9 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(run.execution_outcome([
             {'status':'empty_window','coverage_complete':False},
         ]),'partial')
+        self.assertEqual(run.execution_outcome([
+            {'status':'complete','collection_complete':True,'coverage_complete':False},
+        ]),'success')
 
     def execute(self, configs, store=None, collected=None, flags=('--write',), env=None):
         with tempfile.TemporaryDirectory() as tmp:

@@ -317,6 +317,9 @@ Deno.test("exhausted listing reports a finished scan separately from period cove
     throw new Error("unexpected ingest");
   });
   eq(step.result.listing_scan_complete, true);
+  eq(step.result.status, "success");
+  eq(step.result.collection_complete, true);
+  eq(step.result.recovery_needed, true);
   eq(step.result.coverage_complete, false);
   eq(step.result.unresolved_date_count, 3);
   eq(step.result.coverage_blockers, [

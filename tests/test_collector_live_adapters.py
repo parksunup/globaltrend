@@ -246,7 +246,7 @@ class LiveAdapterTests(unittest.TestCase):
         store = Store()
         result = collect(cfg, Client(), store, '2026-10-01', '2026-10-13')
         self.assertEqual(result['new'], 1)
-        self.assertEqual(result['status'], 'partial')
+        self.assertEqual(result['status'], 'complete')
         self.assertFalse(result['coverage_complete'])
 
 

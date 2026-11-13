@@ -395,6 +395,12 @@ def collect_frozen(config,client,store,since,until):
         store.progress(config,since,until,cursor or None)
         result.update(status='failed',reason=str(error),failed=1)
         return result
+    finally:
+        if result.get('listing_scan_complete') and not result['failed']:
+            result.update(status='complete',collection_complete=True,
+                          recovery_needed=bool(result['held'] or result['unknown_date']))
+            if not result['coverage_complete']:
+                result['reason']='configured_listing_processed'
 
 def _canonical(raw,source,base):
     from .core import canonical_url

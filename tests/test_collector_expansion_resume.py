@@ -54,8 +54,11 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         with patch('scripts.collector.core.fetch_listing',return_value=([row],None)), \
              patch('scripts.collector.expansion.verify_detail_response'), \
              patch.object(extraction,'extract_document',return_value=item) as extract:
-            expansion.collect_frozen(config,type('Client',(),{'get':lambda *_:(b'<html/>',url,'text/html')})(),
-                                     store,'2026-07-01','2026-07-31')
+            result=expansion.collect_frozen(config,type('Client',(),{'get':lambda *_:(b'<html/>',url,'text/html')})(),
+                                            store,'2026-07-01','2026-07-31')
+        self.assertEqual(result['status'],'complete')
+        self.assertTrue(result['collection_complete'])
+        self.assertFalse(result['coverage_complete'])
         self.assertEqual(extract.call_args.args[4],row)
         self.assertEqual(store.items[0][1]['published_date'],'2026-07-08')
 

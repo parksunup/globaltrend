@@ -53,7 +53,9 @@ class NPCOfficialRSSCloudTests(unittest.TestCase):
         with patch.object(cloud_step, 'HttpClient', Client):
             bundle = cloud_step.prepare(claim)
 
-        self.assertEqual(bundle['result']['status'], 'partial')
+        self.assertEqual(bundle['result']['status'], 'success')
+        self.assertTrue(bundle['result']['collection_complete'])
+        self.assertFalse(bundle['result']['coverage_complete'])
         self.assertEqual(len(bundle['operations']), 1)
         operation = bundle['operations'][0]
         self.assertEqual(operation['p_canonical_url'], article)

@@ -391,11 +391,11 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 if (config['source']=='fpf' and result.get('fpf_api_total')==0 and
                         result.get('fpf_api_total_pages')==0 and prior_failures==0 and prior_unknown_dates==0):
                     store.progress(config,since,until,None);store.checkpoint(config,until)
-                    result.update(status='complete',coverage_complete=True,reason='official_fpf_blog_date_query_empty',listing_scan_complete=True)
+                    result.update(status='complete',coverage_complete=True,collection_complete=True,reason='official_fpf_blog_date_query_empty',listing_scan_complete=True)
                     return result
                 if config['source']=='eu-council':
                     store.progress(config,since,until,None);store.checkpoint(config,until)
-                    result.update(status='complete',reason='no_privacy_relevant_items_in_current_official_rss_window',listing_scan_complete=True)
+                    result.update(status='complete',collection_complete=True,reason='no_privacy_relevant_items_in_current_official_rss_window',listing_scan_complete=True)
                     return result
                 raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
@@ -614,6 +614,16 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         if fpf_complete:store.checkpoint(config,until)
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
+        # An exhausted configured listing is a finished collection run. The
+        # stronger coverage_complete flag continues to describe a verified
+        # date-window archive, which rolling feeds cannot establish.
+        if (result.get('listing_scan_complete') and not result['failed'] and
+                not prior_excluded_hosts and not result['excluded_unapproved_host_count']):
+            result['collection_complete']=True
+            result['status']='complete'
+            result['recovery_needed']=bool(prior_failures or result['held'] or result['unknown_date'])
+            if not result['coverage_complete']:
+                result['reason']='configured_listing_processed'
     except (FetchError,ValueError) as e:
         # Ordinary batch boundaries preserve the cursor for the next run. They
         # do not establish complete coverage, but are not collection failures.
