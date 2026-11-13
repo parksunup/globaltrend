@@ -206,12 +206,21 @@ class ExpansionTests(unittest.TestCase):
             self.assertIsNone(next_page)
             self.assertEqual(rows[0]['url'],'https://ec.europa.eu/commission/presscorner/detail/en/'+reference.lower().replace('/','_'))
     def test_ca_opc_advice_to_parliament_is_an_approved_paginated_listing(self):
-        route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][0]
+        route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][1]
         html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
         rows,nxt=expansion.discover('ca-opc',html,listing)
         self.assertEqual(len(rows),2)
         self.assertEqual(expansion.listing_date(rows[0]),'2026-11-02')
         self.assertTrue(rows[0]['url'].endswith('/parl_261102/'))
+        self.assertIn('Page=2',nxt)
+
+    def test_ca_opc_includes_speeches_and_statements_listing(self):
+        route=expansion.ROUTES['ca-opc']
+        listing=route['additional_listings'][0]
+        self.assertEqual(listing,'https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?o=d&Page=1&Filter=True')
+        html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-10">November 10, 2026</time><h2><a href="/en/opc-news/speeches-and-statements/2026/speech_261110/">Speech on privacy and AI</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
+        rows,nxt=expansion.discover('ca-opc',html,listing)
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-11-10')
         self.assertIn('Page=2',nxt)
     def test_modified_date_and_cookie_challenge_never_become_valid_articles(self):
         html=(FIXTURES/'ca-opc-detail.html').read_text().replace('name="dcterms.issued"','name="dcterms.modified"')

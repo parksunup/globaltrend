@@ -29,9 +29,10 @@
   },
   "ca-opc": {
     "host": "www.priv.gc.ca",
-    "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+    "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/?o=d&Page=1&Filter=True",
     "additional_listings": [
-      "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d"
+      "https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?o=d&Page=1&Filter=True",
+      "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d&Page=1&Filter=True"
     ],
     "links": "main h2.item-title a[href], main a[href]",
     "article_path": "^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\\d{4}/[^/]+/$",
