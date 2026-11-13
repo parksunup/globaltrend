@@ -13,6 +13,12 @@ from scripts.collector.store import SupabaseStore
 
 
 class AutomationTests(unittest.TestCase):
+    def test_oaic_alternate_host_is_python_runtime_only(self):
+        config={'source':'oaic','hosts':['www.oaic.gov.au']}
+        runtime=run.collector_runtime_config(config)
+        self.assertEqual(config['hosts'],['www.oaic.gov.au'])
+        self.assertEqual(runtime['hosts'],['www.oaic.gov.au','www.publicnow.com'])
+
     def test_exhaustively_verified_empty_window_is_a_success_not_a_partial_failure(self):
         self.assertEqual(run.execution_outcome([
             {'status':'empty_window','coverage_complete':True},
