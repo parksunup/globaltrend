@@ -61,6 +61,16 @@ LISTINGS = {
 
 
 class PublicationRouteCandidatesTests(unittest.TestCase):
+    def test_freevacy_uses_explicit_published_label_date(self):
+        html='''<main><h1>CSR Bill amendment grants ministers powers</h1>
+        <h5>Published: 05/11/2026</h5><article><p>Official syndicated article body.</p></article></main>'''
+        item=extract_publication_document(
+            'freevacy',html.encode(),
+            'https://www.freevacy.com/news/the-register/csr-bill-amendment-grants-ministers-powers-to-investigate-rogue-ai-agents/7815',
+            'text/html',{'title':'CSR Bill amendment grants ministers powers'})
+        self.assertEqual(item['published_date'],'2026-11-05')
+        self.assertEqual(item['metadata']['date_observations'][0]['locator'],'Freevacy article h5 Published label')
+
     def test_gpa_uses_explicit_published_time_and_ignores_updated_time(self):
         html = '''<main><h1>GPA reference panel</h1>
         <time class="entry-date published" datetime="2026-11-03T18:52:50+08:00">3 November 2026</time>
