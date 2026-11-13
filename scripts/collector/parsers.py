@@ -402,7 +402,7 @@ def extract_publication_document(source,data,url,content_type,row=None):
     if not body:raise ValueError('publication_main_body_empty')
 
     observations=[]
-    for node in soup.select('meta[property="article:published_time"], meta[itemprop="datePublished"], meta[name="datePublished"], time[itemprop="datePublished"], time[datetime][data-published]'):
+    for node in soup.select('meta[property="article:published_time"], meta[itemprop="datePublished"], meta[name="datePublished"], time[itemprop="datePublished"], time[datetime][data-published], time.entry-date.published[datetime]'):
         value=node.get('content') or node.get('datetime') or node.get_text(' ',strip=True)
         value=normalize(value)
         if value:

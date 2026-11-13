@@ -1,6 +1,7 @@
 import unittest
 
 from scripts.collector.publication_route_candidates import discover_publication_route_candidates
+from scripts.collector.parsers import extract_publication_document
 
 
 LISTINGS = {
@@ -60,6 +61,18 @@ LISTINGS = {
 
 
 class PublicationRouteCandidatesTests(unittest.TestCase):
+    def test_gpa_uses_explicit_published_time_and_ignores_updated_time(self):
+        html = '''<main><h1>GPA reference panel</h1>
+        <time class="entry-date published" datetime="2026-11-03T18:52:50+08:00">3 November 2026</time>
+        <time class="updated tm-hide" datetime="2026-11-04T07:26:09+08:00">4 November 2026</time>
+        <article><p>Official article body with enough text to parse.</p></article></main>'''
+        item = extract_publication_document(
+            'gpa', html.encode(),
+            'https://globalprivacyassembly.com/global-privacy-assembly-welcomes-its-new-gpa-reference-panel-members/',
+            'text/html', {'title': 'GPA reference panel'})
+        self.assertEqual(item['published_date'], '2026-11-03')
+        self.assertEqual(item['metadata']['date_observations'][0]['meaning'], 'published_display')
+
     def test_each_observed_layout_yields_existing_article_links_and_evidence(self):
         expected = {
             "iapp": ("https://iapp.org/news/a/privacy-law-update", "Privacy law update", "professional_publication"),
