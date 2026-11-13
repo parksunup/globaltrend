@@ -283,6 +283,10 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
     result['status']='partial'
     try:
         while page:
+            if config['source']=='edpb':
+                # The site's next link can omit the active year filter. Carry
+                # the requested date scope onto every continuation URL.
+                page=expansion.listing_request_url('edpb',page,since,until)
             if config['source']=='ppc':
                 page=expansion.listing_request_url('ppc',page,since,until)
                 if page is None: break
@@ -295,6 +299,8 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
                 next_page=expansion.next_within_window(config['source'],rows,next_page,since)
+            if config['source']=='edpb' and next_page:
+                next_page=expansion.listing_request_url('edpb',next_page,since,until)
             if not rows:
                 if config['source']=='eu-council':
                     store.progress(config,since,until,None);store.checkpoint(config,until)
