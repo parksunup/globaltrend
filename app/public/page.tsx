@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./public.module.css";
+import searchStyles from "./unified-search.module.css";
 
 import { loadPublicStories } from "../../lib/public-content";
 import { publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
@@ -70,6 +71,7 @@ export default async function PublicHome() {
       <div className={styles.heroMotto}>PEOPLE<br />LAW<br />SOCIETY<br /><b>A SAFER DIGITAL TOMORROW</b></div>
     </section>
 
+    <section className={searchStyles.compact} aria-label="통합 검색 안내"><div><strong>궁금한 개인정보 이슈가 있나요?</strong><p>질문으로 동향과 국가별 법제·근거를 함께 찾아보세요.</p></div><Link href="/public/unified-search">통합 검색 →</Link></section>
     {podcast&&<HomePodcastPlayer podcast={podcast}/>}
 
     <section className={styles.observatoryGrid}>
