@@ -15,13 +15,11 @@ export function jurisdictionName(code: string): string {
   return jurisdictionNames[normalized] ?? normalized;
 }
 
-const countryFilterAliases: Record<string, string> = {
-  "캐나다 연방": "캐나다",
-  "캐나다 연방·퀘벡·브리티시컬럼비아·앨버타": "캐나다",
-  "캐나다·G7": "캐나다",
-};
-
 export function jurisdictionFilterName(value: string): string {
   const normalized = value.trim().replace(/\s+/g, " ");
-  return countryFilterAliases[normalized] ?? jurisdictionName(normalized);
+  // Filter by country, while keeping the full jurisdiction string on each story.
+  // Any Canadian federal, provincial, or joint-scope label stays under one country,
+  // including newly added labels that use a different province or punctuation.
+  if (normalized === "캐나다" || normalized.startsWith("캐나다")) return "캐나다";
+  return jurisdictionName(normalized);
 }
