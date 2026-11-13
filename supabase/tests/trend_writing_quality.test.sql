@@ -1,16 +1,23 @@
 begin;
 set local search_path=public,extensions;
-select plan(17);
+select plan(23);
 \ir fixtures/writing-review.inc
 select is(public.collector_writing_policy()->>'policy_id','privacy-report-ko-48-reference-v2','latest reference-based policy is discoverable');
 select ok(not has_function_privilege('anon','public.collector_writing_policy()','EXECUTE'),'policy RPC stays private');
 select ok(not has_function_privilege('service_role','private.validate_trend_writing_review(jsonb,uuid,text,text,text,jsonb)','EXECUTE'),'validator not a public bypass');
+select ok(not has_function_privilege('anon','public.collector_seal_trend_draft(jsonb)','EXECUTE'),'server-side draft sealer stays private');
+select ok(has_function_privilege('service_role','public.collector_seal_trend_draft(jsonb)','EXECUTE'),'cloud writer can use the server-side draft sealer');
 update public.sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
 create temporary table quality_context as select draft_job_id job,source_item_id item,source_item_revision_id revision from public.ingest_source_item(
  (select id from public.sources where name='EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/writing-quality-test','Synthetic final guideline','2026-10-28',null,now(),'en','news',
  'The board published final guidelines on personal data.',repeat('7',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
 select public.claim_trend_draft_jobs('quality-test-worker',1,(select job from quality_context));
-create temporary table quality_payload as select pg_temp.test_writing_review('{"title_ko":"유럽 이사회, 개인정보 처리 지침 발표","summary_ko":"이사회, 개인정보 처리 최종 지침 발표","details_ko":"- 이사회는 개인정보 처리에 관한 최종 지침을 발표","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"합성 원문 첫 문장","claim":"최종 지침 발표"}],"limitations":[]}'::jsonb,(select job from quality_context)) d;
+create temporary table quality_payload as
+select public.collector_seal_trend_draft(pg_temp.test_writing_review(
+ '{"title_ko":"유럽 이사회, 개인정보 처리 지침 발표","summary_ko":"이사회, 개인정보 처리 최종 지침 발표","details_ko":"- 이사회는 개인정보 처리에 관한 최종 지침을 발표","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"합성 원문 첫 문장","claim":"최종 지침 발표"}],"limitations":[]}'::jsonb,(select job from quality_context))) d;
+select is((select d#>>'{writing_review,draft_hash}' from quality_payload),
+ encode(extensions.digest(convert_to((select (d->>'title_ko')||E'\n'||(d->>'summary_ko')||E'\n'||(d->>'details_ko') from quality_payload),'UTF8'),'sha256'),'hex'),
+ 'server-side seal binds the exact Korean draft');
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select d-'writing_review' from quality_payload))$$,'22023','Writing review instruction hashes mismatch','old format-only submission is rejected');
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select jsonb_set(d,'{writing_review,input_hash}','"wrong"') from quality_payload))$$,'22023','Writing review policy or source binding is missing or stale','stale source review rejected');
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select jsonb_set(d,'{details_ko}','"- 원고를 수정했지만 검토 해시는 갱신하지 않은 시험 자료"') from quality_payload))$$,'22023','Writing review draft hash mismatch','editing Korean copy invalidates review');
@@ -21,6 +28,9 @@ select throws_ok($$select private.validate_trend_writing_review((select d from q
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select jsonb_set(d,'{writing_review,supplements}','[{"url":"https://example.org/report","status":"read","material":true,"read_scope":"partial","complete":false,"locator":"보고서 첫 쪽만 열고 나머지 핵심 분석 쪽은 확보하지 못한 시험 자료","reason":"기사의 핵심 판단을 설명하는 데 필요한 보고서"}]') from quality_payload))$$,'22023','Writing review material attachment missing or incomplete','partial material reads cannot pass as complete');
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select jsonb_set(d,'{writing_review,source_reading,locator}','123456789012') from quality_payload))$$,'22023','Writing review complete official source reading required','numeric locator rejected like client');
 select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select jsonb_set(d,'{writing_review,source_reading,reviewed_at}','"-infinity"') from quality_payload))$$,'22023','Writing review actual reading time required','nonfinite timestamp cannot attest reading');
+select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select public.collector_seal_trend_draft(jsonb_set(d,'{summary_ko}','"주요 내용: 이사회 발표"')) from quality_payload))$$,'22023','Writing review summary must not contain a section label','server rejects section-label summaries');
+select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select public.collector_seal_trend_draft(jsonb_set(d,'{details_ko}','"- 검토 필요: 원문을 정확히 확인하고 일반화하지 마세요"')) from quality_payload))$$,'22023','Writing review forbidden editorial directions in report body','server rejects editor instructions in reader text');
+select throws_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select public.collector_seal_trend_draft(jsonb_set(d,'{summary_ko}','"이사회는 지침을 발표했습니다"')) from quality_payload))$$,'22023','Writing review summary must use report style','server rejects conversational summary endings');
 select lives_ok($$select private.validate_trend_writing_review(pg_temp.test_writing_review((select jsonb_set(d,'{details_ko}',to_jsonb(E'- 첫 문단의 사실을 설명\r\n\r\n- 둘째 문단의 조건을 설명'::text)) from quality_payload),(select job from quality_context)),(select revision from quality_context),repeat('7',64),'short source','https://www.edpb.europa.eu/writing-quality-test','{}')$$,'CRLF paragraphs accepted with the same digest and format contract');
 select lives_ok($$select public.submit_trend_draft((select job from quality_context),'quality-test-worker',(select d from quality_payload))$$,'reviewed short complete notice submits through existing pipeline');
 select is((select automation_metadata->>'writing_policy_id' from public.reports where source_item_id=(select item from quality_context)),'privacy-report-ko-48-reference-v2','review receipt persists with exact policy');

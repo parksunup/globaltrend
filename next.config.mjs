@@ -9,6 +9,7 @@ const nextConfig = {
     "/public/laws": ["./data/legal/**/*", "./data/derived/*.json"],
     "/public/laws/*": ["./data/legal/**/*", "./data/derived/*.json"],
     "/public/search": ["./data/trends/**/*"],
+    "/public/unified-search": ["./data/trends/**/*", "./data/legal/**/*", "./data/derived/*.json"],
     "/public/trends/*": ["./data/trends/**/*"],
     "/public/weekly": ["./data/trends/**/*"],
     "/public/sources": ["./data/trends/**/*"],

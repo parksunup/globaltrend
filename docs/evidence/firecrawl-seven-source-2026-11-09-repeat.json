@@ -1,0 +1,113 @@
+{
+  "run_at": "2026-11-09T04:20:27.437196+00:00",
+  "engine": "Firecrawl self-hosted OSS v2.11.0; /v2/scrape; proxy=basic; no cloud API, stealth, or proxy service",
+  "database_writes": false,
+  "policy": "robots checked before each URL; requests paced per host by max(robots crawl-delay, 5 seconds); HTTPS and catalog-host allowlist; at most one detail per source",
+  "results": [
+    {
+      "source": "oecd",
+      "status": "access_denied",
+      "listing_url": "https://www.oecd.org/en/topics/privacy-and-data-protection.html",
+      "listing_http_status": 403,
+      "listing_characters": 605,
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_preview": "![Icon for www.oecd.org](https://www.oecd.org/favicon.ico)\n\nwww.oecd.org\n============\n\nPerforming security verification\n--------------------------------\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nVeri",
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "eu-parliament",
+      "status": "access_denied",
+      "listing_url": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+      "listing_http_status": 403,
+      "listing_characters": 580,
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_preview": "403 ERROR\n=========\n\nThe request could not be satisfied.\n-----------------------------------\n\n* * *\n\nRequest blocked. We can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again later, or contact the app or website owner.  ",
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "ripd",
+      "status": "http_error",
+      "listing_url": "https://www.redipd.org/noticias/rss.xml",
+      "listing_http_status": 500,
+      "listing_characters": 375,
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_preview": "Acceso Bloqueado\n================\n\nSu solicitud ha sido bloqueada por los sistemas de la **AEPD** .\n\nSi ha adjuntado un documento a través de la sede electrónica, se ha mostrado esta página debido a que es muy probable que contenga virus o elementos maliciosos .\n\nPara continuar, revise el fichero y ",
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "cn-cac",
+      "status": "listing_fetched",
+      "listing_url": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+      "listing_http_status": 200,
+      "listing_characters": 5680,
+      "listing_format_used": "rawHtml",
+      "candidate_count": 20,
+      "relevant_candidate_count": 14,
+      "listing_parse_error": null,
+      "listing_preview": null,
+      "sample": {
+        "url": "https://www.cac.gov.cn/2026-10/28/c_1794942554784626.htm",
+        "title": "通过个人信息保护合规审计服务认证的专业机构名单（第三批）",
+        "http_status": 200,
+        "body_characters": 271,
+        "body_preview": "落实《中华人民共和国个人信息保护法》《个人信息保护合规审计管理办法》相关要求，中央网信办（国家网信办）数据与技术保障中心、中国网络安全审查认证和市场监管大数据中心、北京赛西认证有限责任公司依据《中华人民共和国认证认可条例》以及相关认证规则、实践指南开展专业机构认证工作。 近期，第三批专业机构认证工作已完成，21家机构获个人信息保护合规审计服务认证证书。具体名单如下: 具体信息可通过认证机构官方网站查询。 中央网信办（国家网信办）数据与技术保障中心 中国网络安全审查认证和市场监管大数据中心 北京赛西认证有限责任公司 2026年10月28日",
+        "extractor": "trafilatura",
+        "crawl_delay_seconds": 5
+      },
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "hk-pcpd",
+      "status": "no_relevant_candidates",
+      "listing_url": "https://www.info.gov.hk/gia/general/202611/09.htm",
+      "listing_http_status": 200,
+      "listing_characters": 4185,
+      "listing_format_used": "rawHtml",
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_parse_error": null,
+      "listing_preview": null,
+      "sample": null,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "vn-gov",
+      "status": "no_relevant_candidates",
+      "listing_url": "https://en.baochinhphu.vn/",
+      "listing_http_status": 200,
+      "listing_characters": 38729,
+      "listing_format_used": "rawHtml",
+      "candidate_count": 27,
+      "relevant_candidate_count": 0,
+      "listing_parse_error": null,
+      "listing_preview": null,
+      "sample": null,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "eu-council",
+      "status": "listing_fetched",
+      "listing_url": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx",
+      "listing_http_status": 200,
+      "listing_characters": 26035,
+      "listing_format_used": "rawHtml",
+      "candidate_count": 1,
+      "relevant_candidate_count": 1,
+      "listing_parse_error": null,
+      "listing_preview": null,
+      "sample": {
+        "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/11/03/informal-meeting-of-heads-of-state-or-government-of-13-november-2026-invitation-letter-by-president-antonio-costa-to-the-members-of-the-european-council/",
+        "title": "Informal meeting of Heads of State or Government of 13 November 2026 - Invitation letter by President António Costa to the members of the European Council",
+        "http_status": 403,
+        "status": "access_denied",
+        "body_preview": "![](<Base64-Image-Removed>)\n\nChecking your browser before accessing a GSC Managed Website\n============================================================\n\nVerification successful. Waiting for www.consilium.europa.eu to respond\n\n\n\n\n\n\n----------------------------------------------------------------------",
+        "crawl_delay_seconds": 5
+      },
+      "crawl_delay_seconds": 5
+    }
+  ]
+}
+

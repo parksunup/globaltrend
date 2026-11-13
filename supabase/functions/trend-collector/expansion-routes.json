@@ -2,15 +2,16 @@
   "calprivacy": {
     "host": "privacy.ca.gov",
     "listing": "https://privacy.ca.gov/about-us/newsroom/",
-    "links": "main h2.entry-title a[href]",
+    "links": "article.et_pb_post h2.entry-title a[href]",
     "article_path": "^/\\d{4}/\\d{2}/[^/]+/$",
-    "card": "article",
-    "card_date": ".published",
+    "card": "article.et_pb_post",
+    "card_title": "h2.entry-title",
+    "card_date": ".post-meta .published",
     "title": "main .et_pb_text_1 h2",
     "body": "main .et_pb_text_1 .et_pb_text_inner",
     "date": "meta[property=\"article:published_time\"]",
     "date_attribute": "content",
-    "next": "a[rel=\"next\"]"
+    "next": "a.next, a.next.page-numbers, a[rel=\"next\"]"
   },
   "oaic": {
     "host": "www.oaic.gov.au",
@@ -55,14 +56,46 @@
   },
   "cn-cac": {
     "host": "www.cac.gov.cn",
-    "listing": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
-    "links": "h5 a[href]",
+    "listing": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+    "links": "li h5 a[href]",
     "article_path": "^/\\d{4}-\\d{2}/\\d{2}/c_\\d+\\.htm$",
     "card": "li",
     "card_date": ".times",
     "title": ".main-title h1.title",
     "body": "#BodyLabel",
     "date": "#pubtime"
+  },
+  "ripd": {
+    "host": "www.redipd.org",
+    "listing": "https://www.redipd.org/noticias/rss.xml",
+    "feed": true,
+    "article_path": "^/noticias/[^?#]+$",
+    "title": "main h1",
+    "body": "main article, main .field--name-body",
+    "date": "meta[property=\"article:published_time\"]",
+    "date_attribute": "content"
+  },
+  "ftc": {
+    "host": "search.ftc.gov",
+    "listing": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29",
+    "links": "main a[href*='/news-events/news/press-releases/']",
+    "article_path": "^/news-events/news/press-releases/[^?#]+$",
+    "card": "article",
+    "card_title": "h2, h3",
+    "card_date": "time[datetime]",
+    "card_date_attribute": "datetime",
+    "title": "main h1",
+    "body": "main article .field--name-body, main article",
+    "date": "time[datetime]",
+    "date_attribute": "datetime",
+    "next": "a[rel='next'], .pager__item--next a[href]"
+  },
+  "g7-dpa": {
+    "host": "www.priv.gc.ca",
+    "listing": "https://www.priv.gc.ca/en/about-the-opc/what-we-do/international-collaboration/international-events/g7-2025/membership/",
+    "article_path": "^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\\d{4}/[^/]+/?$",
+    "title": "main h1#wb-cont, main h1",
+    "body": "main section[aria-label=\"Main content\"]"
   },
   "cn-tc260": {
     "host": "www.tc260.org.cn",
@@ -94,5 +127,15 @@
     "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
     "json_api": true,
     "article_path": "^/commission/presscorner/detail/en/(?:ip|qanda|statement|speech|memo|mex)_\\d{2}_\\d+$"
+  },
+  "vn-gov": {
+    "host": "en.baochinhphu.vn",
+    "listing": "https://en.baochinhphu.vn/policies.htm",
+    "links": "div.box-category-item-sub h3.box-category-content a.box-category-link-title[data-linktype=\"newsdetail\"][href]",
+    "article_path": "^/[a-z0-9-]+-\\d{18}\\.htm$",
+    "title": "h1.detail-title[data-role=\"title\"]",
+    "body": ".detail-content",
+    "date": "meta[property=\"article:published_time\"]",
+    "date_attribute": "content"
   }
 }

@@ -8,15 +8,12 @@ import datetime as dt
 import json
 import hashlib
 import uuid
-import re
 from pathlib import Path
-from .core import HttpClient, FetchError, MAX_PROCESSED_URL_HASHES, canonical_url, collect, fetch_listing
+from .core import HttpClient, FetchError, canonical_url, collect, fetch_listing
 from . import parsers
+from . import extraction
 
 ROOT = Path(__file__).resolve().parents[2]
-MAX_FTC_SNAPSHOT_ROWS=100
-
-
 def validate_claim(claim):
     if claim.get('slug') not in ('oecd', 'ftc'):
         configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
@@ -43,13 +40,22 @@ class PreparedStore:
     def stage_listing(self, config, listing_url, fingerprint, rows):
         if config.get('source') != 'ftc':
             raise FetchError('listing_snapshot_source_not_supported')
-        if not isinstance(rows, list) or not rows or len(rows) > MAX_FTC_SNAPSHOT_ROWS:
-            raise FetchError('ftc_listing_snapshot_capacity_exceeded')
+        if not isinstance(rows, list) or not rows:
+            raise FetchError('ftc_listing_snapshot_empty')
         try:
             listing_url=canonical_url(listing_url,set(config['hosts']))
         except ValueError:
             raise FetchError('ftc_listing_snapshot_listing_url_unapproved') from None
-        if listing_url != 'https://www.ftc.gov/feeds/press-release-consumer-protection.xml' or not isinstance(fingerprint,str) or len(fingerprint)!=64:
+        legacy_listing='https://www.ftc.gov/feeds/press-release-consumer-protection.xml'
+        current_listing='https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29'
+        configured_listing=config.get('listing')
+        try:
+            configured_listing=canonical_url(configured_listing,set(config['hosts'])) if configured_listing else None
+        except ValueError:
+            configured_listing=None
+        legacy_listing=canonical_url(legacy_listing,set(config['hosts']))
+        current_listing=canonical_url(current_listing,set(config['hosts']))
+        if listing_url not in (configured_listing,current_listing,legacy_listing) or not isinstance(fingerprint,str) or len(fingerprint)!=64:
             raise FetchError('ftc_listing_snapshot_schema_invalid')
         normalized=[]; seen=set()
         for row in rows:
@@ -59,27 +65,20 @@ class PreparedStore:
                 url=canonical_url(row['url'],set(config['hosts']))
             except ValueError:
                 raise FetchError('ftc_listing_snapshot_unapproved_url') from None
-            if len(url.encode('utf-8')) > 2048 or len(row['title']) > 1000 or url in seen:
+            if url in seen:
                 raise FetchError('ftc_listing_snapshot_schema_invalid')
             seen.add(url)
             observations=row.get('date_observations',[])
-            if not isinstance(observations,list) or len(observations)>4:
+            if not isinstance(observations,list):
                 raise FetchError('ftc_listing_snapshot_schema_invalid')
             normalized_row={'url':url,'title':row['title'],'date_observations':observations}
-            if len(json.dumps(normalized_row,ensure_ascii=False).encode('utf-8'))>5000:
-                raise FetchError('ftc_listing_snapshot_schema_invalid')
             normalized.append(normalized_row)
-        if len(json.dumps(normalized,ensure_ascii=False).encode('utf-8'))>400000:
-            raise FetchError('ftc_listing_snapshot_payload_too_large')
         snapshot={
             'id':str(uuid.uuid4()),'listing_url':listing_url,'fingerprint':fingerprint,
             'rows':normalized,
-            'url_hashes':sorted(hashlib.sha256(row['url'].encode()).hexdigest() for row in normalized),
         }
-        cursor={**(self.cursor or {}),'page':listing_url,'offset':0,'fingerprint':fingerprint,
-                'snapshot_id':snapshot['id']}
-        if len(json.dumps(cursor,ensure_ascii=False).encode('utf-8'))>4000:
-            raise FetchError('ftc_listing_snapshot_cursor_capacity_exceeded')
+        cursor={key:value for key,value in (self.cursor or {}).items() if key!='processed_url_hashes'}
+        cursor.update(page=listing_url,offset=0,fingerprint=fingerprint,snapshot_id=snapshot['id'])
         self.listing_snapshot=snapshot
         self.cursor=cursor
 
@@ -145,11 +144,30 @@ def prepare(claim):
         result = {'source': claim['slug'], 'since': claim['since'], 'until': claim['until'],
                   'coverage_complete': False, 'status': 'partial', 'reason': 'backlog_detail_saved'}
         try:
-            body, url, ctype = client.get(parsers.expansion.detail_request_url(claim['slug'],detail['url']))
-            if claim['slug'] in parsers.expansion.ROUTES:
-                parsers.expansion.verify_detail_response(claim['slug'],detail['url'],url)
-            canonical_detail=detail['url'] if claim['slug']=='ec' else url
-            item = parsers.extract_document(claim['slug'], body, canonical_detail, ctype, detail)
+            if claim['slug'] in ('npc-ph', 'nl-ap'):
+                # These official RSS feeds carry a body we can save without
+                # fetching linked detail pages. NPC has full content:encoded;
+                # NL AP supplies a short summary and blocks detail URLs.
+                source_config = next(c for c in json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+                                     if c['source'] == claim['slug'])
+                body, feed_url, ctype = client.get(source_config['listing'])
+                if ctype not in ('application/rss+xml', 'application/xml', 'text/xml'):
+                    raise ValueError('official_rss_content_type_changed')
+                rows, _ = parsers.discover_listing(claim['slug'], body.decode('utf-8', 'replace'), feed_url,
+                                                  lambda *args: (_ for _ in ()).throw(ValueError('rss_detail_fetch_unexpected')))
+                row = next((candidate for candidate in rows if candidate['url'] == detail['url']), None)
+                if row is None or not row.get('feed_text'):
+                    raise ValueError('claimed_item_missing_rss_body')
+                item=(extraction.extract_official_rss_summary(row) if claim['slug']=='nl-ap'
+                      else extraction.extract_official_rss_post(row))
+                url = detail['url']
+                canonical_detail = detail['url']
+            else:
+                body, url, ctype = client.get(parsers.expansion.detail_request_url(claim['slug'],detail['url']))
+                if claim['slug'] in parsers.expansion.ROUTES:
+                    parsers.expansion.verify_detail_response(claim['slug'],detail['url'],url)
+                canonical_detail=detail['url'] if claim['slug']=='ec' else url
+                item = extraction.extract_document(claim['slug'], body, canonical_detail, ctype, detail)
             item['metadata'].update(ai_ready=item['published_date'] is not None and not item['metadata']['requires_review'],
                                     relevance_reason='full_body_available_human_relevance_review_pending')
             if (claim['slug']=='oecd' and parsers.oecd_certainly_outside_window(item,claim['since'],claim['until'])):
@@ -179,30 +197,29 @@ def prepare(claim):
         ordinal=snapshot.get('ordinal')
         row_count=snapshot.get('row_count')
         row=snapshot.get('row')
-        hashes=snapshot.get('url_hashes')
-        if type(ordinal) is not int or ordinal<0 or type(row_count) is not int or not 0<row_count<=MAX_FTC_SNAPSHOT_ROWS or ordinal>=row_count:
+        if type(ordinal) is not int or ordinal<0 or type(row_count) is not int or not 0<row_count or ordinal>=row_count:
             raise ValueError('listing_snapshot_claim_invalid')
         if (claim['cursor'].get('offset') != ordinal or not isinstance(row,dict) or
                 not isinstance(row.get('url'),str) or not isinstance(row.get('title'),str)):
             raise ValueError('listing_snapshot_claim_invalid')
-        if (not isinstance(hashes,list) or len(hashes)!=row_count or
-                len(set(hashes))!=len(hashes) or
-                any(not isinstance(value,str) or not re.fullmatch(r'[0-9a-f]{64}',value) for value in hashes)):
-            raise ValueError('listing_snapshot_hashes_missing_or_invalid')
         store.snapshot_ref={'id':snapshot['id'],'ordinal':ordinal}
         result={'source':'ftc','status':'partial','reason':None,'coverage_complete':False,
                 'since':claim['since'],'until':claim['until'],'discovered':1,'new':0,'changed':0,
                 'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,
                 'excluded_unapproved_host_count':0,'pages':0}
-        cursor=dict(claim['cursor'])
+        cursor={key:value for key,value in claim['cursor'].items() if key!='processed_url_hashes'}
         url=canonical_url(row['url'],set(config['hosts']))
         if url != row['url']:
             raise ValueError('listing_snapshot_url_not_canonical')
         try:
-            row_hash=hashlib.sha256(url.encode()).hexdigest()
-            if row_hash not in set(hashes):
-                raise ValueError('listing_snapshot_hash_mismatch')
-            if row_hash in set(claim.get('previous_listing_hashes') or cursor.get('processed_url_hashes') or []):
+            legacy_hashes=claim.get('previous_listing_hashes') or cursor.get('processed_url_hashes') or []
+            seen_before=snapshot.get('seen_before') is True
+            if 'url_hashes' in snapshot:
+                row_hash=hashlib.sha256(url.encode()).hexdigest()
+                if row_hash not in set(snapshot['url_hashes']):
+                    raise ValueError('listing_snapshot_hash_mismatch')
+                seen_before=seen_before or row_hash in set(legacy_hashes)
+            if seen_before:
                 result['duplicate']=1
                 result['reason']='previously_seen_url'
             else:
@@ -214,7 +231,7 @@ def prepare(claim):
                     result['listing_date_evidence']={'url':url,'date':listing_date,'observations':row.get('date_observations',[])}
                 else:
                     body,detail,ctype=client.get(url)
-                    item=parsers.extract_document('ftc',body,detail,ctype,row)
+                    item=extraction.extract_document('ftc',body,detail,ctype,row)
                     date=item['published_date']
                     if date and not claim['since']<=date<=claim['until']:
                         result['out_of_range']=1
@@ -242,10 +259,10 @@ def prepare(claim):
             store.cursor={**cursor,'offset':ordinal+1}
             result['reason']='snapshot_item_processed'
         if ordinal+1>=row_count:
-            completed_hashes=sorted(snapshot.get('url_hashes',[]))[:MAX_PROCESSED_URL_HASHES]
             store.cursor={k:v for k,v in store.cursor.items() if k!='snapshot_id'}
+            store.cursor.pop('processed_url_hashes',None)
             store.cursor.update(page=snapshot['listing_url'],offset=0,fingerprint=snapshot['fingerprint'],
-                                processed_url_hashes=completed_hashes)
+                                )
             result['listing_scan_complete']=True
             result['reason']='listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
         result['coverage_complete']=False
@@ -255,11 +272,9 @@ def prepare(claim):
         if store.failure and not store.snapshot_ref:
             # The commit RPC must persist this backlog before accepting the advance.
             if claim['slug'] == 'ftc':
-                # Include the parked URL in both cursors; commit atomically
-                # preserves its retry before accepting this listing advance.
-                keys=set(store.cursor.get('processed_url_hashes', []))
-                keys.add(hashlib.sha256(store.failure['url'].encode()).hexdigest())
-                store.cursor={**store.cursor,'processed_url_hashes':sorted(keys)}
+                # A durable FTC snapshot owns row identity; retry state lives in
+                # the parked failure record rather than an expanding cursor hash list.
+                store.cursor.pop('processed_url_hashes',None)
             store.failure['cursor'] = store.cursor
             store.cursor = {**store.cursor, 'offset': store.cursor['offset'] + 1}
             result.update(status='partial', reason='detail_failure_parked', parked_failure=store.failure)

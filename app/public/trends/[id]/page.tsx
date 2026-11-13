@@ -26,7 +26,7 @@ export default async function TrendDetail({ params, searchParams }: {
       console.warn('Legal citations are unavailable on this trend page.');
     }
   }
-  const returnTo = back?.startsWith("/public/search?") ? back : "/public/search";
+  const returnTo = (back?.startsWith("/public/search?") || back?.startsWith("/public/unified-search?")) ? back : "/public/search";
   return <main className={styles.site}>
     <PublicHeader active="/public" />
     <section className={styles.searchPage}>

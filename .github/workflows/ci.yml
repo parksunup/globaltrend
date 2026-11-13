@@ -18,7 +18,20 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r scripts/podcast-cloud/requirements.txt
       - run: python -m unittest discover -s tests -p 'test_podcast_cloud.py'
+      - run: python -m unittest discover -s tests -p 'test_search_embedding.py'
       - run: python scripts/podcast-cloud/check_mcp_manifest.py
+  source-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r scripts/collector-crawlee/requirements.txt
+      - run: python -m unittest discover -s tests -p 'test_source_catalog.py'
+      - run: python -m unittest discover -s tests -p 'test_catalog_probe_rss.py'
+      - run: python -m unittest discover -s tests -p 'test_collector*.py'
+      - run: python -m unittest discover -s tests -p 'test_cloud_snapshot_cursor.py'
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -77,7 +90,10 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - run: python -m pip install -r scripts/collector-scrapling/requirements.txt
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
+      - run: python -m unittest discover -s tests -p 'test_cloud_snapshot_cursor.py'
+      - run: python -m unittest tests.test_scrapling_collector_transport tests.test_scrapling_collector_runner tests.test_scrapling_source_adapters_ftc_calprivacy tests.test_scrapling_source_pcpd_vn tests.test_scrapling_oecd_cac_adapters tests.test_scrapling_cloud_worker tests.test_scrapling_filter_rpc_sql
       - run: python scripts/verify-collector-dry-run.py
 
   collector-edge:

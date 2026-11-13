@@ -59,7 +59,8 @@ class CollectorTests(unittest.TestCase):
         </main></body></html>'''
         class Client:
             def get(self,url):
-                return (listing_html.encode(),listing,'text/html') if url==listing else (article.encode(),url,'text/html')
+                archive='https://www.ppc.go.jp/news/press/2026/'
+                return (listing_html.encode(),archive,'text/html') if url==archive else (article.encode(),url,'text/html')
         class Store:
             def resume(self,*args): return None
             def ingest(self,cfg,url,item): self.item=item; return {'item_created':True,'content_changed':False}
@@ -83,7 +84,8 @@ class CollectorTests(unittest.TestCase):
             listing_html=f'<main><ul class="news-list"><li><div class="news-text"><a href="{url}">{title}</a></div></li></ul></main>'
             class Client:
                 def get(self, requested):
-                    return (listing_html.encode(),listing,'text/html') if requested==listing else (article.encode(),url,'text/html')
+                    archive='https://www.ppc.go.jp/news/press/2026/'
+                    return (listing_html.encode(),archive,'text/html') if requested==archive else (article.encode(),url,'text/html')
             class Store:
                 def resume(self,*args): return None
                 def ingest(self,cfg,canonical,item): self.item=item; return {'item_created':True,'content_changed':False}
@@ -107,6 +109,96 @@ class CollectorTests(unittest.TestCase):
         rows,next_page=self.parsers.discover('ftc','<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><description>Short text</description></item></channel></rss>','https://www.ftc.gov/feed')
         self.assertEqual(rows[0]['url'],'https://www.ftc.gov/a'); self.assertNotIn('content_text',rows[0]); self.assertIsNone(next_page)
 
+    def test_edps_mastodon_rss_carries_full_post_and_publication_time(self):
+        rss='''<rss><channel><item><guid>https://social.edps.europa.eu/@EDPS/123</guid>
+        <link>https://social.edps.europa.eu/@EDPS/123</link>
+        <pubDate>Sun, 08 Nov 2026 08:36:16 +0000</pubDate>
+        <description>&lt;p&gt;*** # Datapedia: Automated proctoring ***&lt;/p&gt;&lt;p&gt;The EDPS published a privacy update with its findings and recommendations.&lt;/p&gt;</description>
+        </item></channel></rss>'''
+        rows,next_page=self.parsers.discover('edps',rss,'https://social.edps.europa.eu/@EDPS.rss')
+        self.assertEqual(rows[0]['title'],'Datapedia: Automated proctoring')
+        self.assertIn('findings and recommendations',rows[0]['feed_text'])
+        self.assertEqual(self.parsers.ftc_listing_date(rows[0]),'2026-11-08')
+        self.assertIsNone(next_page)
+
+    def test_npc_rss_uses_full_official_content_encoded_and_date(self):
+        rss='''<rss xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><item>
+        <title>NPC statement on reported data leaks</title><link>https://privacy.gov.ph/npc-statement/</link>
+        <pubDate>Fri, 06 Nov 2026 04:25:05 +0000</pubDate>
+        <description><![CDATA[Short teaser.]]></description>
+        <content:encoded><![CDATA[<p>QUEZON CITY, 06 November 2026 - The National Privacy Commission issued a statement.</p>
+        <p>The Commission explained the response and asked agencies to take specific measures to protect personal data.</p>]]></content:encoded>
+        </item></channel></rss>'''
+        rows,next_page=self.parsers.discover('npc-ph',rss,'https://privacy.gov.ph/feed/')
+        self.assertEqual(len(rows),1); self.assertIsNone(next_page)
+        self.assertGreater(len(rows[0]['feed_text']),100)
+        self.assertIn('specific measures',rows[0]['feed_text'])
+        self.assertEqual(rows[0]['feed_body_source'],'rss_content_encoded')
+        self.assertEqual(self.parsers.ftc_listing_date(rows[0]),'2026-11-06')
+        from scripts.collector.extraction import extract_official_rss_post
+        item=extract_official_rss_post(rows[0])
+        self.assertEqual(item['published_date'],'2026-11-06')
+        self.assertEqual(item['metadata']['extraction_method'],'rss_content_encoded')
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertFalse(item['metadata']['ai_ready'])
+
+    def test_npc_collection_uses_encoded_feed_body_without_blocked_detail_request(self):
+        listing='https://privacy.gov.ph/feed/'
+        rss=b'''<rss xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><item>
+        <title>NPC statement on reported data leaks</title><link>https://privacy.gov.ph/npc-statement/</link>
+        <pubDate>Fri, 06 Nov 2026 04:25:05 +0000</pubDate><description><![CDATA[Short teaser.]]></description>
+        <content:encoded><![CDATA[<p>QUEZON CITY, 06 November 2026 - The National Privacy Commission issued a statement on data leaks.</p>
+        <p>The Commission explained the response and asked agencies to take specific measures to protect personal data.</p>]]></content:encoded>
+        </item></channel></rss>'''
+        class Client:
+            calls=[]
+            def get(this,url):
+                this.calls.append(url)
+                if url==listing:return rss,listing,'application/rss+xml'
+                raise AssertionError('official full RSS body should avoid blocked article detail')
+        class Store:
+            def resume(this,*args):return None
+            def ingest(this,cfg,url,item):this.item=(url,item);return {'item_created':True,'content_changed':True}
+            def checkpoint(this,*args):this.completed=True
+        client=Client();store=Store()
+        config={'source':'npc-ph','enabled':True,'listing':listing,'hosts':['privacy.gov.ph'],
+            'permissions':{'collect':True,'store':True,'ai':True}}
+        result=self.core.collect(config,client,store,'2026-11-06','2026-11-06')
+        self.assertEqual(client.calls,[listing])
+        self.assertEqual(store.item[1]['published_date'],'2026-11-06')
+        self.assertIn('specific measures',store.item[1]['content_text'])
+        self.assertEqual(result['new'],1)
+
+    def test_official_rss_parser_accepts_utf8_bom(self):
+        rows,next_page=self.parsers.discover('eu-council','\ufeff<?xml version="1.0"?><rss><channel><item><title>Privacy update</title><link>https://www.consilium.europa.eu/a</link></item></channel></rss>','https://www.consilium.europa.eu/en/rss/pressreleases.ashx')
+        self.assertEqual(rows[0]['title'],'Privacy update')
+        self.assertIsNone(next_page)
+
+    def test_edps_collection_uses_official_rss_post_without_short_status_page(self):
+        listing='https://social.edps.europa.eu/@EDPS.rss'
+        rss=b'''<rss><channel><item><link>https://social.edps.europa.eu/@EDPS/123</link>
+        <pubDate>Sun, 08 Nov 2026 08:36:16 +0000</pubDate>
+        <description>&lt;p&gt;Datapedia: Automated proctoring&lt;/p&gt;&lt;p&gt;The EDPS published a privacy update with its findings and recommendations.&lt;/p&gt;</description>
+        </item></channel></rss>'''
+        class Client:
+            calls=[]
+            def get(this,url):
+                this.calls.append(url)
+                if url==listing: return rss,listing,'application/rss+xml'
+                raise AssertionError('RSS body should avoid the abbreviated linked-status HTML')
+        class Store:
+            def resume(this,*args): return None
+            def ingest(this,cfg,url,item): this.item=(url,item); return {'item_created':True,'content_changed':True}
+            def checkpoint(this,*args): this.completed=True
+        client=Client(); store=Store()
+        config={'source':'edps','enabled':True,'listing':listing,'hosts':['social.edps.europa.eu'],
+                'permissions':{'collect':True,'store':True,'ai':True}}
+        result=self.core.collect(config,client,store,'2026-11-08','2026-11-08')
+        self.assertEqual(client.calls,[listing])
+        self.assertEqual(store.item[1]['published_date'],'2026-11-08')
+        self.assertIn('findings and recommendations',store.item[1]['content_text'])
+        self.assertEqual(result['new'],1)
+
     def test_ftc_pubdate_requires_one_explicit_timezone_and_uses_korea_date(self):
         rss='<rss><channel><item><title>A</title><link>https://www.ftc.gov/a</link><pubDate>Mon, 19 Oct 2026 00:00:00 +0900</pubDate></item></channel></rss>'
         rows,_=self.parsers.discover('ftc',rss,'https://www.ftc.gov/feed')
@@ -128,7 +220,7 @@ class CollectorTests(unittest.TestCase):
             'meaning':'listing_published_rfc822','locator':'rss item pubDate',
             'value':'Mon, 19 Oct 2026 00:00:00 +0000'}]}
         html='<h1>Privacy action</h1><article class="node--view-mode-banner"><time datetime="2026-10-20">20 October 2026</time></article><main><article class="node--view-mode-full"><div class="field--name-body"><p>Complete official privacy action statement.</p></div></article></main>'
-        item=self.parsers.extract_document('ftc',html.encode(),'https://www.ftc.gov/a','text/html',row)
+        item=self.parsers.extract_document('ftc',html.encode(),'https://www.ftc.gov/news-events/news/press-releases/a','text/html',row)
         self.assertIsNone(item['published_date'])
         self.assertTrue(item['metadata']['requires_review'])
         self.assertEqual(len(item['metadata']['date_observations']),3)
@@ -146,6 +238,36 @@ class CollectorTests(unittest.TestCase):
         self.assertIn('listingtype=media_events',next_page)
         self.assertIn('pathname=%2Fmedia-events',next_page)
         self.assertIn('page=2',next_page)
+
+    def test_pdpc_json_listing_reports_empty_and_non_json_responses(self):
+        url='https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events'
+        for body,reason in ((b'', 'empty_body'),(b'<html>blocked</html>', 'not_json')):
+            with self.subTest(reason=reason), self.assertRaisesRegex(
+                ValueError, f'^pdpc_listing_json_invalid:{reason}:bytes_'
+            ):
+                self.parsers.discover_pdpc_listing(body,url,1)
+
+    def test_pdpc_html_bootstrap_then_validates_listing_api_response(self):
+        from urllib.parse import urlsplit, parse_qs
+        import json
+        calls=[]
+        api_headers=[]
+        listing='https://www.pdpc.gov.sg/media-events'
+        class Client:
+            def get(self,url,headers=None):
+                calls.append(url)
+                if headers: api_headers.append(headers)
+                if url==listing:
+                    return b'<section class="listing-filters" data-listing-type="media_events"></section>',url,'text/html'
+                return json.dumps({'totalItems':1,'data':[{'href':'/media-events/advisory','title':'Advisory','date':'10 Nov 2026'}]}).encode(),url,'text/plain'
+        rows,next_page=self.core.fetch_listing('pdpc',Client(),listing)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['url'],'https://www.pdpc.gov.sg/media-events/advisory')
+        self.assertIsNone(next_page)
+        self.assertEqual(len(calls),2)
+        self.assertEqual(urlsplit(calls[1]).path,'/api/listing-api')
+        self.assertEqual(parse_qs(urlsplit(calls[1]).query)['pathname'],['/media-events'])
+        self.assertEqual(api_headers[0]['Referer'], listing)
 
     def test_pdpc_api_pagination_rejects_changed_scope(self):
         with self.assertRaisesRegex(ValueError,'pdpc_listing_query_changed'):
@@ -191,47 +313,51 @@ class CollectorTests(unittest.TestCase):
         result=self.core.collect(cfg,None,None,'2026-10-01','2026-10-13')
         self.assertEqual(result['status'],'held'); self.assertFalse(result['coverage_complete'])
 
-    def test_retry_after_is_bounded_and_invalid_is_safe(self):
-        self.assertEqual(self.core.retry_delay('99999'),60)
+    def test_retry_after_is_honored_without_an_arbitrary_delay_ceiling(self):
+        self.assertEqual(self.core.retry_delay('99999'),99999)
         self.assertEqual(self.core.retry_delay('garbage'),2)
 
     def test_proxy_policy_denial_is_distinct_from_site_http_denial(self):
-        import urllib.error
+        import asyncio
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
-        with patch.object(client.opener,'open',side_effect=urllib.error.URLError(OSError('Tunnel connection failed: 403 Forbidden'))):
+        class ConnectError(Exception): pass
+        async def proxy_denial(*args): raise ConnectError('Tunnel connection failed: 403 Forbidden')
+        with patch.object(client,'_stream_once',side_effect=proxy_denial), patch.object(client,'_run_async',side_effect=lambda coroutine: asyncio.run(coroutine)):
             with self.assertRaisesRegex(self.core.FetchError,'^network_policy_denied_403$'):
                 client.request('https://www.ftc.gov/robots.txt')
-        with patch.object(client.opener,'open',side_effect=urllib.error.HTTPError('https://www.ftc.gov/a',403,'Forbidden',{},None)):
+        async def forbidden(*args): return 403,{'Content-Type':'text/plain'},b''
+        with patch.object(client,'_stream_once',side_effect=forbidden), patch.object(client,'_run_async',side_effect=lambda coroutine: asyncio.run(coroutine)):
             with self.assertRaisesRegex(self.core.FetchError,'^http_403$'):
                 client.request('https://www.ftc.gov/a')
 
     def test_timeout_retries_twice_before_returning_content(self):
-        from io import BytesIO
+        import asyncio
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
-        class Headers(dict):
-            def get_content_type(self): return 'text/html'
-        class Response(BytesIO):
-            headers=Headers({'Content-Length':'2'})
-            url='https://www.ftc.gov/a'
-        response=Response(b'ok')
-        with patch.object(client.opener,'open',side_effect=[TimeoutError(),response]) as opened, patch.object(self.core.time,'sleep'):
+        attempts=[]
+        async def timeout_then_success(*args):
+            attempts.append(args)
+            if len(attempts)==1: raise TimeoutError()
+            return 200,{'Content-Type':'text/html'},b'ok'
+        with patch.object(client,'_stream_once',side_effect=timeout_then_success), patch.object(client,'_run_async',side_effect=lambda coroutine: asyncio.run(coroutine)), patch.object(self.core.time,'sleep'):
             data,final,ctype=client.request('https://www.ftc.gov/a')
         self.assertEqual((data,final,ctype),(b'ok','https://www.ftc.gov/a','text/html'))
-        self.assertEqual(opened.call_count,2)
+        self.assertEqual(len(attempts),2)
 
-    def test_robots_access_failure_is_reported_at_robots_boundary(self):
+    def test_robots_403_is_unavailable_and_collection_can_continue(self):
         from unittest.mock import patch
         client=self.core.HttpClient(['www.ftc.gov'],interval=0)
         with patch.object(client,'request',side_effect=self.core.FetchError('http_403')):
-            with self.assertRaisesRegex(self.core.FetchError,'^robots_fetch_failed:http_403$'):
-                client.check_robots('https://www.ftc.gov/news')
+            self.assertEqual(client.check_robots('https://www.ftc.gov/news'),'https://www.ftc.gov/news')
+        self.assertEqual(client.robots_unavailable,[{'url':'https://www.ftc.gov/robots.txt','reason':'http_403'}])
 
     def test_size_limit_streaming_and_429_distinct(self):
         import io
         with self.assertRaises(self.core.FetchError): self.core.read_limited(io.BytesIO(b'123456'),5)
         self.assertEqual(self.core.read_limited(io.BytesIO(b'1234'),5),b'1234')
+        large=b'x'*(2_000_001)
+        self.assertEqual(len(self.core.read_limited(io.BytesIO(large))),len(large))
 
     def test_checkpoint_not_advanced_on_empty_listing_or_network_failure(self):
         cfg={'source':'edpb','enabled':True,'permissions':{'collect':True,'store':True,'ai':True},'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}

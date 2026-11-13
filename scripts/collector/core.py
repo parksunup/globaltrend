@@ -1,22 +1,19 @@
 import datetime as dt
+import asyncio
+import atexit
 import email.utils
+from email.message import Message
 import json
 import hashlib
+import threading
 import time
-import urllib.error
-import urllib.request
-import urllib.robotparser
+from datetime import timedelta
 from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
 from . import parsers
 from . import expansion
+from . import extraction
 
-MAX_BYTES=2_000_000
-MAX_PROCESSED_URL_HASHES=50
 OECD_NEWSROOM_LISTING='https://www.oecd.org/en/about/newsroom.html'
-# Per-process safety ceiling, independent of the per-run document/page inputs.
-# A 100-item backfill also performs progress and database RPC calls; the old
-# value of 100 unintentionally stopped a batch before its document limit.
-MAX_REQUESTS=1000
 class FetchError(Exception): pass
 
 def canonical_url(url,hosts):
@@ -38,103 +35,210 @@ def is_unapproved_https_host(url,hosts):
     except ValueError: return False
     return parsed.scheme=='https' and parsed.hostname not in hosts and not parsed.username and not parsed.password and parsed.port in (None,443)
 
-def read_limited(stream,limit=MAX_BYTES):
+def read_limited(stream,limit=None):
     result=bytearray()
     while True:
-        block=stream.read(min(65536,limit+1-len(result)))
+        block=stream.read(65536 if limit is None else min(65536,limit+1-len(result)))
         if not block: return bytes(result)
         result.extend(block)
-        if len(result)>limit: raise FetchError('response_size_limit')
+        if limit is not None and len(result)>limit: raise FetchError('response_size_limit')
 
 def retry_delay(value):
     try: delay=float(value)
     except (TypeError,ValueError):
         try: delay=(email.utils.parsedate_to_datetime(value)-dt.datetime.now(dt.timezone.utc)).total_seconds()
         except Exception: delay=2
-    return max(0,min(60,delay))
+    return max(0,delay)
 
-class SafeRedirect(urllib.request.HTTPRedirectHandler):
-    def __init__(self,hosts): self.hosts=set(hosts)
-    def redirect_request(self,req,fp,code,msg,headers,newurl):
-        canonical_redirect_url(newurl,self.hosts)
-        # Return the redirect to HttpClient so robots, rate and request limits
-        # apply to each hop instead of urllib following it inside one open().
-        return None
+_HTTP_CLIENTS=set()
+
+def _close_http_clients():
+    for client in tuple(_HTTP_CLIENTS):
+        try: client.close()
+        except Exception: pass
+
+atexit.register(_close_http_clients)
 
 class HttpClient:
-    def __init__(self,hosts,interval=2,budget=None):
+    def __init__(self,hosts,interval=2,budget=None,request_timeout_seconds=None):
         self.hosts=set(hosts); self.interval=interval; self.requests=0; self.last=0; self.robots={}
-        self.opener=urllib.request.build_opener(SafeRedirect(self.hosts))
+        self.robots_unavailable=[]
+        self._transport=None; self._loop=None; self._thread=None; self._ready=None; self._transport_lock=threading.Lock()
+        if request_timeout_seconds is not None and request_timeout_seconds<=0:
+            raise ValueError('request_timeout_seconds_must_be_positive')
+        self.request_timeout_seconds=request_timeout_seconds
         self.started=time.monotonic()
         self.budget=budget if budget is not None else {'requests':0,'bytes':0,'started':self.started}
+        _HTTP_CLIENTS.add(self)
+
+    def _start_transport(self):
+        """Lazily host Crawlee's async HTTPX client on one persistent event loop.
+
+        The collector's public API is synchronous. Keeping Crawlee on a private
+        loop lets existing callers use it without creating a new connection pool
+        for every request or reusing an async client across different loops.
+        """
+        if self._loop is not None:
+            return
+        with self._transport_lock:
+            if self._loop is not None:
+                return
+            self._ready=threading.Event()
+            def serve():
+                loop=asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                self._loop=loop
+                self._ready.set()
+                loop.run_forever()
+                pending=asyncio.all_tasks(loop)
+                for task in pending: task.cancel()
+                if pending: loop.run_until_complete(asyncio.gather(*pending,return_exceptions=True))
+                loop.close()
+            self._thread=threading.Thread(target=serve,name='globaltrend-crawlee-http',daemon=True)
+            self._thread.start()
+            self._ready.wait()
+            self._run_async(self._initialize_transport())
+
+    async def _initialize_transport(self):
+        from crawlee.http_clients import HttpxHttpClient
+        # Redirects are disabled in Crawlee because this collector must validate
+        # and apply robots/rate/request checks before every redirect hop.
+        self._transport=HttpxHttpClient(
+            follow_redirects=False,
+            header_generator=None,
+            timeout=self.request_timeout_seconds,
+        )
+
+    def _run_async(self,coroutine):
+        self._start_transport()
+        return asyncio.run_coroutine_threadsafe(coroutine,self._loop).result()
+
+    async def _stream_once(self,url,method,payload,headers):
+        operation=self._stream_once_body(url,method,payload,headers)
+        if self.request_timeout_seconds is None:
+            return await operation
+        return await asyncio.wait_for(operation,timeout=self.request_timeout_seconds)
+
+    async def _stream_once_body(self,url,method,payload,headers):
+        async with self._transport.stream(
+            url,method=method,headers=headers,payload=payload,
+            timeout=timedelta(seconds=self.request_timeout_seconds) if self.request_timeout_seconds is not None else None
+        ) as response:
+            response_headers=dict(response.headers)
+            if response.status_code in (301,302,303,307,308) or response.status_code>=300:
+                return response.status_code,response_headers,b''
+            body=bytearray()
+            async for block in response.read_stream():
+                body.extend(block)
+            return response.status_code,response_headers,bytes(body)
+
+    @staticmethod
+    def _header(headers,name):
+        return next((value for key,value in headers.items() if key.lower()==name.lower()),None)
+
     def request(self,url,method='GET',payload=None,headers=None,enforce_robots=False,_redirects=0):
         url=canonical_url(url,self.hosts)
         for attempt in range(3):
-            if self.budget['requests']>=MAX_REQUESTS or time.monotonic()-self.budget['started']>600: raise FetchError('request_or_runtime_limit')
             time.sleep(max(0,self.last+self.interval-time.monotonic()))
             self.last=time.monotonic(); self.requests+=1
             self.budget['requests']+=1
-            request=urllib.request.Request(url,data=payload,method=method,headers={'User-Agent':'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)',**(headers or {})})
+            request_headers={'User-Agent':'GlobalTrendResearch/0.1 (+https://github.com/parksunup/globaltrend)',**(headers or {})}
             try:
-                with self.opener.open(request,timeout=20) as response:
-                    if int(response.headers.get('Content-Length','0'))>MAX_BYTES: raise FetchError('response_size_limit')
-                    data=read_limited(response);self.budget['bytes']+=len(data)
-                    return data,response.url,response.headers.get_content_type()
-            except urllib.error.HTTPError as e:
-                if e.code in (301,302,303,307,308):
-                    if _redirects>=5 or not e.headers.get('Location'):
-                        e.close(); raise FetchError('redirect_limit_or_location_missing') from None
-                    try: target=canonical_redirect_url(urljoin(url,e.headers['Location']),self.hosts)
+                status,response_headers,data=self._run_async(self._stream_once(url,method,payload,request_headers))
+                if status in (301,302,303,307,308):
+                    location=self._header(response_headers,'Location')
+                    if _redirects>=5 or not location:
+                        raise FetchError('redirect_limit_or_location_missing')
+                    try: target=canonical_redirect_url(urljoin(url,location),self.hosts)
                     except ValueError:
-                        e.close(); raise FetchError('network_or_redirect_failure:ValueError') from None
-                    status=e.code; e.close()
+                        raise FetchError('network_or_redirect_failure:ValueError') from None
                     if enforce_robots: self.check_robots(target)
                     if status==303 and method!='HEAD' or status in (301,302) and method=='POST':
                         method='GET'; payload=None
                     return self.request(target,method,payload,headers,enforce_robots,_redirects+1)
-                if e.code in (429,500,502,503,504) and attempt<2:
-                    time.sleep(retry_delay(e.headers.get('Retry-After'))); continue
-                raise FetchError('http_'+str(e.code)) from None
-            except (urllib.error.URLError,TimeoutError,OSError,ValueError) as e:
-                # Do not include credentials or proxy URLs in logs.
-                if isinstance(e,urllib.error.URLError) and 'Tunnel connection failed: 403' in str(e.reason):
+                if status in (429,500,502,503,504) and attempt<2:
+                    time.sleep(retry_delay(self._header(response_headers,'Retry-After'))); continue
+                if status>=300:
+                    raise FetchError('http_'+str(status))
+                self.budget['bytes']+=len(data)
+                message=Message()
+                content_type=self._header(response_headers,'Content-Type')
+                if content_type: message['Content-Type']=content_type
+                return data,url,message.get_content_type()
+            except FetchError:
+                raise
+            except Exception as e:
+                # Keep transport errors useful without exposing proxy URLs,
+                # response bodies, cookies, or credentials in logs.
+                error_type=type(e).__name__
+                if error_type in ('ConnectError','ProxyError') and '403' in str(e):
                     raise FetchError('network_policy_denied_403') from None
-                if attempt<2 and isinstance(e,(urllib.error.URLError,TimeoutError,OSError)):
+                if attempt<2 and error_type in ('TimeoutError','TimeoutException','ConnectTimeout','ReadTimeout',
+                                                'WriteTimeout','PoolTimeout','ConnectError','ReadError',
+                                                'WriteError','NetworkError','RemoteProtocolError','OSError'):
                     time.sleep(1+attempt)
                     continue
-                raise FetchError('network_or_redirect_failure:'+type(e).__name__) from None
+                raise FetchError('network_or_redirect_failure:'+error_type) from None
     def check_robots(self,url):
         url=canonical_url(url,self.hosts); origin='https://'+urlsplit(url).hostname
         if origin not in self.robots:
             try: data,_,_=self.request(origin+'/robots.txt')
             except FetchError as e:
-                if str(e) not in ('http_404','http_410'):
+                # A 403 response to robots.txt is not a parsed robots policy.
+                # Treat the policy file as unavailable, then continue with the
+                # ordinary source request under the configured polite delay.
+                # A 403 on the actual listing/detail request remains a hard
+                # access failure; 429, 5xx and network errors remain fail-closed.
+                if str(e) not in ('http_403','http_404','http_410'):
                     raise FetchError('robots_fetch_failed:'+str(e)) from None
+                self.robots_unavailable.append({'url':origin+'/robots.txt','reason':str(e)})
                 data=b''
-            robot=urllib.robotparser.RobotFileParser(); robot.parse(data.decode('utf-8','replace').splitlines())
+            from protego import Protego
+            robot=Protego.parse(data.decode('utf-8','replace'))
             self.robots[origin]=robot
             self.interval=max(self.interval,robot.crawl_delay('GlobalTrendResearch') or robot.crawl_delay('*') or 0)
-        if not self.robots[origin].can_fetch('GlobalTrendResearch',url): raise FetchError('robots_disallowed')
+        if not self.robots[origin].can_fetch(url,'GlobalTrendResearch'): raise FetchError('robots_disallowed')
         return url
-    def get(self,url):
+    def get(self,url,headers=None):
         url=self.check_robots(url)
-        return self.request(url,enforce_robots=True)
+        return self.request(url,headers=headers,enforce_robots=True)
     def post(self,url,payload,headers):
         url=self.check_robots(url)
         return self.request(url,'POST',payload,headers,enforce_robots=True)
 
+    def close(self):
+        """Release Crawlee's HTTP pool and its dedicated event-loop thread."""
+        if self._loop is None:
+            _HTTP_CLIENTS.discard(self)
+            return
+        try:
+            if self._transport is not None:
+                future=asyncio.run_coroutine_threadsafe(self._transport.cleanup(),self._loop)
+                future.result(timeout=10)
+                self._transport=None
+        finally:
+            self._loop.call_soon_threadsafe(self._loop.stop)
+            if self._thread is not None:
+                self._thread.join(timeout=10)
+            self._loop=None; self._thread=None
+            _HTTP_CLIENTS.discard(self)
+
+    def __enter__(self): return self
+    def __exit__(self,exc_type,exc_value,traceback): self.close()
+
 def fetch_listing(source,client,page):
-    def fetch(url,method='GET',payload=None):
-        return client.post(url,payload,{'Content-Type':'application/json'}) if method=='POST' else client.get(url)
+    def fetch(url,method='GET',payload=None,headers=None):
+        if method=='POST': return client.post(url,payload,headers or {'Content-Type':'application/json'})
+        return client.get(url,headers=headers) if headers is not None else client.get(url)
     data,final,ctype=fetch(page)
-    is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api' and ctype in ('application/json','text/plain')
+    is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:
         return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
-    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source=='ec' and ctype=='application/json'):
+    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 
-def collect(config,client,store,since,until,max_pages=10,max_items=30):
+def collect(config,client,store,since,until,max_pages=None,max_items=None):
     result={'source':config['source'],'status':'held','reason':None,'coverage_complete':False,'since':since,'until':until,
             'discovered':0,'new':0,'changed':0,'duplicate':0,'held':0,'failed':0,'out_of_range':0,'unknown_date':0,
             'excluded_unapproved_host_count':0,'pages':0}
@@ -144,29 +248,44 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
         return expansion.collect_frozen(config,client,store,since,until)
     cursor=store.resume(config,since,until) if hasattr(store,'resume') else None
     seen_pages=set(); seen_items=set(); seen_listing_urls=set(); seen_fingerprints=set()
-    # A mutable feed's titles/order can change between one-document commits.
-    # FTC keeps URL identities across claims and completed daily scans; titles
-    # and row order are not stable enough to serve as a resume key.
-    processed_hashes=list((cursor or {}).get('processed_url_hashes',[])) if config['source'] in ('ftc','oecd') else []
-    processed_keys=set(processed_hashes)
+    # Keep all previously processed identities for mutable, non-paginated feeds.
+    # This state is deliberately unbounded: dropping a tail sample would make
+    # an older feed entry appear new again after the cursor grows.
+    processed_hashes=list((cursor or {}).get('processed_url_hashes',[]))
+    processed_urls=set(processed_hashes)
     oecd_cycle_complete=False
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
-    if config['source']=='ico':
+    if config['source']=='ico' and urlsplit(page).hostname=='www.wired-gov.net':
+        # WiredGov's supported cross-agency latest index has no date query.
+        # Keep it intact rather than transforming it into an old search URL.
+        pass
+    elif config['source']=='ico':
         scoped=parsers.ico_range_url(page,since,until)
         if scoped!=page: cursor=None
         page=scoped
     result['status']='partial'
     try:
         while page:
+            if config['source']=='ppc':
+                page=expansion.listing_request_url('ppc',page,since,until)
+                if page is None: break
             page=canonical_url(page,set(config['hosts']))
             if page in seen_pages: raise FetchError('pagination_cycle')
-            if result['pages']>=max_pages: raise FetchError('page_limit')
+            if max_pages is not None and result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
+            if config['source']=='pdpc' and any(row.get('listing_route')=='official_sitemap' for row in rows):
+                result['listing_route']='official_sitemap_fallback'
+                result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
                 next_page=expansion.next_within_window(config['source'],rows,next_page,since)
-            if not rows: raise FetchError('listing_empty_or_structure_changed')
+            if not rows:
+                if config['source']=='eu-council':
+                    store.progress(config,since,until,None);store.checkpoint(config,until)
+                    result.update(status='complete',reason='no_privacy_relevant_items_in_current_official_rss_window',listing_scan_complete=True)
+                    return result
+                raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
             fingerprint=hashlib.sha256(json.dumps(rows,sort_keys=True).encode()).hexdigest()
             listing_urls=[]
@@ -190,30 +309,24 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
                             'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
+                            })
                     continue
-                url_key=hashlib.sha256(url.encode()).hexdigest()
-                if config['source'] in ('ftc','oecd') and url_key in processed_keys: continue
                 if url in seen_items: continue
-                if len(seen_items)-result.get('listing_date_excluded',0)>=max_items: raise FetchError('document_limit')
-                if config['source']=='ftc':
-                    # PostgreSQL collector_set_progress rejects jsonb::text over
-                    # 4000 bytes. Reserve the next identity *before* fetching or
-                    # ingesting; never truncate this exact set and skip URLs.
-                    # Counters reserve one unknown date/failure, covering the
-                    # atomic parked-failure cursor as well as success.
-                    prospective={'page':page,'offset':index+1,'fingerprint':fingerprint,
-                        'had_pagination':had_pagination,'failures':prior_failures+result['failed']+1,
-                        'unknown_dates':prior_unknown_dates+result['unknown_date']+1,
-                        'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                        'processed_url_hashes':sorted(processed_keys | {url_key})}
-                    if (len(prospective['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
-                            len(json.dumps(prospective,ensure_ascii=False).encode('utf-8'))>4000):
-                        raise FetchError('ftc_resume_cursor_capacity_exceeded')
+                row_hash=hashlib.sha256(url.encode()).hexdigest()
+                if config['source'] in ('ftc','oecd') and row_hash in processed_urls:
+                    if hasattr(store,'progress'):
+                        store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
+                            'had_pagination':had_pagination,'failures':prior_failures,
+                            'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
+                            'processed_url_hashes':processed_hashes})
+                    continue
+                if max_items is not None and result['discovered']-result.get('listing_date_excluded',0)>=max_items:
+                    raise FetchError('document_limit')
                 seen_items.add(url); result['discovered']+=1
                 try:
                     listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
-                                  parsers.ftc_listing_date(row) if config['source']=='ftc' else
+                                  parsers.ftc_listing_date(row) if config['source'] in ('ftc','edps','nl-ap') else
                                   expansion.listing_date(row) if config['source'] in expansion.ROUTES else None)
                     if listing_date and not since<=listing_date<=until:
                         # An individually dated CNIL/FTC row can be excluded
@@ -224,8 +337,33 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                         result['range_filter_read_scope']='listing_date_only'
                         result['listing_date_evidence']={'url':url,'date':listing_date,'observations':row['date_observations']}
                     else:
-                        body,detail,ctype=client.get(expansion.detail_request_url(config['source'],url))
-                        item=parsers.extract_document(config['source'],body,url if config['source']=='ec' else detail,ctype,row)
+                        if config['source'] in ('edps','npc-ph','nl-ap','eu-council') and row.get('feed_text'):
+                            if config['source']=='nl-ap':
+                                # The RSS is only a discovery index. Protego
+                                # checks the official /actueel/* Allow rule
+                                # before fetching each linked article.
+                                body,detail,ctype=client.get(expansion.detail_request_url('nl-ap',url))
+                                item=extraction.extract_document('nl-ap',body,detail,ctype,row)
+                                item['published_date']=parsers.ftc_listing_date(row)
+                                item['metadata']['date_observations']=list(row.get('date_observations',[]))
+                                item['metadata']['source_body_completeness']='full_article_body'
+                                item['metadata']['factual_status']='official_article_machine_extracted_not_human_reviewed'
+                                item['metadata']['requires_review']=True
+                            else:
+                                item=extraction.extract_official_rss_post(row)
+                        else:
+                            body,detail,ctype=client.get(expansion.detail_request_url(config['source'],url))
+                            from .pdf_source_routes import supports_pdf_source_page
+                            if config['source'] in ('jpdp-my','global-cbpr','ppc','cn-tc260') and supports_pdf_source_page(config['source'],detail):
+                                item=extraction.extract_verified_pdf_attachments(
+                                    config['source'],body,detail,ctype,row,client)
+                            else:
+                                item=extraction.extract_document(config['source'],body,url if config['source']=='ec' else detail,ctype,row)
+                        if config['source']=='pdpc' and row.get('listing_route')=='official_sitemap':
+                            item['metadata']['requires_review']=True
+                            item['metadata']['ai_ready']=False
+                            item['metadata']['listing_route']='official_sitemap_fallback'
+                            item['metadata']['review_reason']='pdpc_sitemap_has_no_topic_classification'
                         date=item['published_date']
                         if (config['source']=='oecd' and
                                 parsers.oecd_certainly_outside_window(item,since,until)):
@@ -256,41 +394,25 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
                             'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
+                            })
                     raise FetchError('detail_failure:'+str(e)) from None
-                if config['source']=='ftc':
-                    processed_keys.add(url_key)
-                    processed_hashes=sorted(processed_keys)
-                elif config['source']=='oecd' and urlsplit(page).path==urlsplit(OECD_NEWSROOM_LISTING).path:
-                    # Keep a bounded rolling identity window for the newsroom's
-                    # mutable six-card listing. Check it against topic rows too.
-                    processed_hashes=[value for value in processed_hashes if value!=url_key]
-                    processed_hashes.append(url_key)
-                    processed_hashes=processed_hashes[-MAX_PROCESSED_URL_HASHES:]
-                    processed_keys=set(processed_hashes)
                 if hasattr(store,'progress'):
+                    if config['source'] in ('ftc','oecd') and row_hash not in processed_urls:
+                        processed_urls.add(row_hash); processed_hashes.append(row_hash)
                     store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                            **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})})
+                        'processed_url_hashes':processed_hashes,
+                            })
             completed_page=page
             page=next_page
             cursor=None
             if config['source']=='ftc' and page is None:
-                # The FTC RSS is a bounded, single-page feed. Keep the exact
-                # URL hashes in its latest complete snapshot so tomorrow's
-                # scan does not fetch the same details again. Replace old
-                # hashes only after completing the whole feed; never truncate
-                # a growing in-progress set to fit PostgreSQL's 4 KB limit.
-                processed_keys={hashlib.sha256(url.encode()).hexdigest() for url in listing_urls}
                 completed_cursor={'page':completed_page,'offset':0,'fingerprint':fingerprint,
                     'had_pagination':had_pagination,'failures':prior_failures+result['failed'],
                     'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                    'processed_url_hashes':sorted(processed_keys)}
-                if (len(completed_cursor['processed_url_hashes'])>MAX_PROCESSED_URL_HASHES or
-                        len(json.dumps(completed_cursor,ensure_ascii=False).encode('utf-8'))>4000):
-                    raise FetchError('ftc_resume_cursor_capacity_exceeded')
+                    'processed_url_hashes':processed_hashes}
             elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path!=urlsplit(OECD_NEWSROOM_LISTING).path:
                 # The official topic landing page exposes publications and may
                 # link related releases, but it is not the newsroom release list.
@@ -305,8 +427,8 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                     'processed_url_hashes':processed_hashes}
                 result['listing_transition']='topic_to_official_newsroom'
             elif config['source']=='oecd' and page is None and urlsplit(canonical_url(completed_page,set(config['hosts']))).path==urlsplit(OECD_NEWSROOM_LISTING).path:
-                # Restart the next scheduled scan at the topic listing while
-                # retaining a bounded rolling set of processed newsroom URLs.
+                # Restart the next scheduled scan at the topic listing. The
+                # database upsert keeps repeated items idempotent.
                 page=config['listing']
                 completed_cursor={'page':page,'offset':0,'had_pagination':False,
                     'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
@@ -315,11 +437,10 @@ def collect(config,client,store,since,until,max_pages=10,max_items=30):
                 result['listing_transition']='newsroom_to_topic_restart'
                 oecd_cycle_complete=True
             else:
-                if config['source'] not in ('ftc','oecd'): processed_keys.clear()
                 completed_cursor={'page':page,'offset':0,'had_pagination':had_pagination,
                     'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                    **({'processed_url_hashes':processed_hashes} if config['source'] in ('ftc','oecd') else {})} if page else None
+                    'processed_url_hashes':processed_hashes} if page else None
             if hasattr(store,'progress'):
                 store.progress(config,since,until,completed_cursor)
             if oecd_cycle_complete:

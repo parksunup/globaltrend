@@ -8,22 +8,22 @@
       "https://www.edps.europa.eu/feed/news_en",
       "https://www.edps.europa.eu/press-publications/press-news/press-releases_en"
     ],
-    "verification": "RSS discovery verified; substantive linked body access remains blocked",
+    "verification": "Retired for this executor; EDPS uses the official Mastodon RSS cloud-Python route staged in the source collector PR",
     "enabled": false,
-    "hold_reason": "user_deferred_2026_10_29"
+    "hold_reason": "moved_to_cloud_python_mastodon_rss_2026_11_08"
   },
   "hk-pcpd": {
     "source_id": "d4d64477-c45b-5f10-883d-374a7cd0ddfe",
     "routes": [
-      "^https://www[.]pcpd[.]org[.]hk/english/(news_events/media_statements/press_[0-9]+[.]html|whatsnew/[0-9]+[.]html)$",
       "^https://www[.]info[.]gov[.]hk/gia/general/[0-9]{6}/[0-9]{2}/P[0-9]+[.]htm$"
     ],
     "discovery": [
-      "https://www.pcpd.org.hk/english/news_events/media_statements/index.html",
-      "https://www.info.gov.hk/gia/general/today.htm"
+      "https://www.info.gov.hk/gia/general/today.htm",
+      "https://www.info.gov.hk/gia/rss/general_en.xml"
     ],
-    "verification": "Official government republication body verified; not all PCPD releases are republished",
-    "enabled": true
+    "verification": "The official ISD date archive page for 2026-01-27 returned HTTP 200/15627 bytes/53 links; it linked a PCPD/HKMA release whose detail returned HTTP 200/18418 bytes and Trafilatura extracted 4913 characters/date 2026-01-27. Generic ISD RSS is 200/414462 bytes/100 items but current window has no PCPD mention and no full body. The cloud route queries the official daily date archive; it does not claim complete PCPD coverage.",
+    "enabled": false,
+    "hold_reason": "moved_to_cloud_python_daily_archive; reuse_grant_for_translation_and_public_summaries_not_verified"
   },
   "eu-council": {
     "source_id": "f4dc010a-0c02-5b24-8799-bd64f20b2e25",
@@ -31,10 +31,11 @@
       "^https://www[.]consilium[.]europa[.]eu/en/press/press-releases/[0-9]{4}/[0-9]{2}/[0-9]{2}/[^?#]+/$"
     ],
     "discovery": [
-      "https://www.consilium.europa.eu/en/press/press-releases/"
+      "https://www.consilium.europa.eu/en/rss/pressreleases.ashx"
     ],
-    "verification": "Official full article and publication date verified through web open",
-    "enabled": true
+    "verification": "Official RSS summary route is handled by cloud-python; HTML detail fetch observed 403.",
+    "enabled": false,
+    "hold_reason": "moved_to_cloud_python_rss_summary; sampled_detail_http_403; current_feed_window_has_no_privacy_match"
   },
   "eur-lex": {
     "source_id": "76ed096b-7297-5e5a-b85d-bda00b89a82f",

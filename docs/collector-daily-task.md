@@ -13,7 +13,7 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 
 ## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
 
-기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 수집 출처19개·보류EDPS/EUR-Lex·일일3일·주간약8건은 변경하지 않는다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
+기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 전체 모니터링 목록은 `config/trend-source-catalog.json`의 37곳이다. 실제 운영 등록·활성 상태는 `config/trend-collector.json`과 DB에서 따로 확인한다. EDPS는 2026-11-08 사용자 지시에 따라 공식 Mastodon RSS를 사용하는 cloud-python 경로로 옮기는 중이며, PR 병합과 migration 적용 전까지 운영 활성이라고 말하지 않는다. EUR-Lex 보류는 유지한다. 일일 최근 3일과 주간 약 8건의 기존 작성 절차는 계속 적용한다.
 
 1. 시작 시 `collector_writing_policy()`의 정책ID·지침해시를 로컬 `config/trend-writing-policy.json`과 비교한다. 지침과 DB판본이 다르면 해당 제출을 보류해 정확한 오류·재개 위치를 기록하되 다른 출처의 수집을 임의로 중단하지 않는다. 기존 `trend-ko-v1` 작업 임대·해시 계약은 그대로 유지한다.
 2. 실제 claim 반환JSON을 ignored `work/claim-<job>.json`에 저장하고 `node scripts/trend-report.mjs --packet work/claim-<job>.json --out work/writing-packet-<job>.json`을 실행한다. 반환된 원문 전문과 최신 지침·용어집·유형별검토항목을 실제로 읽는다. 패킷 생성은 읽기 완료가 아니다.
@@ -25,19 +25,19 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 
 
 
-## 2026-10-29 사용자 보류 지시 — 아래 과거 활성4개 표현보다 우선
+## 2026-10-29 출처 상태 기록 — EDPS는 2026-11-08 지시로 변경
 
-EDPS와 EUR-Lex는 사용자 지시로 보류한다. 두 출처는 일일 검색·RSS 조회·본문 재시도·수집·한국어 초안 신규 생성 대상에서 제외하고 기존 발견·실패·원문 기록을 보존한다. 보류를 성공·무자료로 기록하지 않는다. 활성 대상은 19개(Edge13·cloud-python4·chatgpt-web2)이며 웹2개는 홍콩 PCPD와 EU 이사회이다. 나머지19개는 최근3일 일일 수집·보존자료 한국어 작성·검사·/work 저장을 계속하고, 월요일 주요 약8건 주간호 초안 계약을 유지한다. 출처 보류 때문에 다른 출처 실행을 멈추지 않는다.
+이 문단의 EDPS 보류는 과거 상태다. 2026-11-08 사용자는 공식 Mastodon RSS(`https://social.edps.europa.eu/@EDPS.rss`) 경로를 지정했다. 이에 따라 현재 PR은 EDPS를 cloud-python 실행기로 등록하고 출처·cursor 허용 목록을 추가한다. 배포 및 실제 예약 실행은 아직 검증하지 않았다. EUR-Lex는 보류 상태를 유지한다. 아래 `chatgpt-web` 경로에서 EDPS를 다시 시도하지 않는다.
 
 
 ## 2026-10-29 웹 예외 경로 추가
 
-EDPS·홍콩 PCPD·EU 이사회·EUR-Lex는 이제 기존 일일 예약 안의 독립 `chatgpt-web` 확인 대상이다. `docs/collector-web-task.md`와 `config/collector-web.json`을 읽고 매일 최근 3일의 공식 웹 자료를 확인한다. 기존 12개 Edge·4개 cloud-python과 별도로 웹 4개를 시도한다. 아래 과거 4개 hold 표현은 폐기하되, 활성화가 본문 수집 성공을 뜻하지 않는다. EDPS RSS 소개문·검색 스니펫을 전문으로 제출하지 않으며 EUR-Lex 법령 전문으로 대체하지 않는다. 미접근 본문·실패 URL은 기존 이벤트에 보존하고 실제 확보 자료만 기존 한국어 작성·검사·/work 제출까지 처리한다.
+홍콩 PCPD와 EU 이사회는 `chatgpt-web` 예외 경로에서 확인한다. EUR-Lex는 보류하며 법령 전문으로 대체하지 않는다. EDPS는 이 웹 예외에서 제외하고, 사용자가 지정한 공식 Mastodon RSS를 cloud-python 실행기에 맡긴다. migration이 적용되기 전까지 EDPS 운영 실행은 미검증으로 기록한다. 실제 확보 자료만 기존 한국어 작성·검사·/work 제출까지 처리한다.
 
 
 ## 2026-10-28 사용자 확장 지시 (아래 과거 9곳 고정 표현보다 우선)
 
-1·2차 11곳의 경로와 판정은 `docs/collector-source-expansion-20261028.md`와 `config/trend-collector.json`을 읽습니다. 활성화된 전체 출처가 일일 최근 3일 범위 수집·한국어 초안 작성 대상입니다. 신규 Edge 5곳은 calprivacy, oaic, ca-opc, cn-cac, cn-tc260이고 신규 cloud-python 2곳은 ec, eu-parliament입니다. 기존 OECD·FTC를 포함한 모든 활성 클라우드 경로를 독립 worker로 처리합니다. EDPS·hk-pcpd·eu-council·eur-lex는 보류이며 성공·무자료로 바꾸지 않습니다. 등록·예약 변경만으로 실제 실행이나 한국어 작성 완료를 주장하지 않습니다.
+출처별 경로와 현재 판정은 `docs/collector-source-expansion-20261028.md`, `docs/collector-complete-source-scope.md`, `config/trend-collector.json`을 읽습니다. 37곳의 탐색 목록과 DB 실행 등록은 서로 다릅니다. 활성화된 전체 등록 출처가 최근 3일 수집 대상이며, 각 executor에 맞는 Edge·cloud-python·chatgpt-web 경로를 사용합니다. EDPS는 공식 Mastodon RSS를 cloud-python으로 옮기는 PR이 적용되기 전까지 운영 미검증입니다. HK PCPD·EU 이사회는 웹 경로, EUR-Lex는 보류로 기록합니다. 등록·예약 변경만으로 실제 실행이나 한국어 작성 완료를 주장하지 않습니다.
 
 보존 결정한 자료는 전부 한국어 제목·요약·본문 작성·검증·/work 저장까지 완료해야 합니다. 미검수 초안을 공개 검색이나 주간호 완료 목록으로 내보내지 않습니다. 월요일에 직전 월~일 발표 동향 중 주요 약 8건을 기존 /work 안에 초안으로 저장합니다. 의회·법원은 보도자료를 읽고 법률안·법률·판결 전문을 크롤링하지 않습니다. 후속 협의체·표준기구는 주 1회 대상이며 이번에 추가하지 않았습니다.
 
@@ -60,7 +60,11 @@ EDPS·홍콩 PCPD·EU 이사회·EUR-Lex는 이제 기존 일일 예약 안의 �
 
 일일 예약은 새로 발견된 자료와 기존 미완료 범위를 처리하고, 실제 개인정보 관련성이 있는 비중복 자료를 한국어 보고서체 초안으로 제출합니다. 일일 실행은 전주 주간 호의 확정/집계 역할을 맡지 않습니다.
 
-1. 직전 daily producer 요약, **9개 출처 전체**의 수집 이벤트·제출 job/report, 출처 상태, cloud cursor·queue·backlog를 읽습니다. `docs/collector-daily-evidence.sql`의 한국시간 날짜를 해당 실행일로 바꿔 읽기 전용 집계하고, `daily-cron`(Edge 예약), `manual-validation`(수동), cloud-python의 result trigger 및 실제 automation run ID를 따로 대조합니다. CNIL의 `listing_date_excluded`는 카드 날짜만 확인한 건수이므로 상세 열람·저장 건수와 구분합니다. 유효 임대가 있으면 빼앗지 않습니다. 수집을 시작하기 전에 기존 대기 자료의 원문·적격성을 검토해 작성 가능한 작업부터 처리합니다. 수집의 무진행 반복 때문에 기존 적격 초안이 밀리지 않게 합니다.
+### robots.txt 요청이 403인 경우
+
+robots.txt 자체를 요청했을 때 받은 HTTP 403은 robots 정책 본문이 아니므로 `Disallow`로 해석하거나 그 이유만으로 출처 수집을 중단하지 않습니다. 수집기는 이를 정책 파일을 읽을 수 없는 상태로 기록하고, 등록된 공식 목록 경로를 기존 출처별 요청 간격·페이지 범위·User-Agent 규칙에 따라 계속 처리합니다. robots.txt를 정상적으로 읽어 확인한 `Disallow`는 계속 준수합니다. 실제 목록·상세 페이지가 HTTP 403/401을 반환하면 접근 실패로 기록하며 우회하지 않습니다. HTTP 429, 5xx, timeout, 네트워크 오류도 재시도·backoff 규칙에 따르고 허용으로 간주하지 않습니다. 실행 요약에는 robots 요청 결과와 실제 콘텐츠 요청 결과를 분리해 남깁니다.
+
+1. 직전 daily producer 요약과 `config/trend-collector.json`의 **전체 등록 출처**별 수집 이벤트·제출 job/report, 출처 상태, cloud cursor·queue·backlog를 읽습니다. `config/trend-source-catalog.json`의 전체 요청 목록과 운영 등록 목록을 별도로 대조해 빠진 ID를 숨기지 않습니다. `docs/collector-daily-evidence.sql`의 한국시간 날짜를 해당 실행일로 바꿔 읽기 전용 집계하고, `daily-cron`(Edge 예약), `manual-validation`(수동), cloud-python의 result trigger 및 실제 automation run ID를 따로 대조합니다. CNIL의 `listing_date_excluded`는 카드 날짜만 확인한 건수이므로 상세 열람·저장 건수와 구분합니다. 유효 임대가 있으면 빼앗지 않습니다. 수집을 시작하기 전에 기존 대기 자료의 원문·적격성을 검토해 작성 가능한 작업부터 처리합니다. 수집의 무진행 반복 때문에 기존 적격 초안이 밀리지 않게 합니다.
 2. OECD·FTC는 기존 `collector_cloud_take → python -m scripts.collector.cloud_step → collector_cloud_commit` 경로를 사용합니다. 이전 commit이 성공한 뒤 다음 claim을 진행합니다. Claim과 미저장 bundle은 ignored work/에 보관하고, commit 응답이 있어야 저장 성공으로 기록합니다.
 3. Bundle에 실제 automation/run ID·예정 시각·`trigger='scheduled'`·Git SHA를 넣습니다. 실제 context에서 모르는 값은 지어내지 않고 미확인으로 남깁니다. queue message kind와 예약 trigger를 혼동하지 않습니다.
 4. 나머지 7개 승인 출처는 기존 Edge/Cron 소비자가 처리합니다. **처리 책임이 다르다는 이유로 운영 확인·보고에서 제외하지 않습니다.** 출처별 예약/수동 실행, 실제 신규/변경/중복 저장, 기간 밖 자료, 실패, 미확정 날짜, 남은 목록·backlog, 초안 제출 상태를 모두 확인합니다. 최신 이벤트 한 건의 경고를 하루 전체 수집 성과로 대신하지 않습니다. `listing_exhaustiveness_unverified`는 기존 구현이 목록 끝에서 항상 남기는 경고이므로 목록 탐색 종료와 기간 전체 입증을 구분합니다. 출처 승인·호스트·route를 추가하거나 재설정하지 않습니다. CNIL 실패·재시도와 기존 미완료 범위를 보존합니다. coverage는 실제 전체 검증 전까지 미완료로 둡니다.
@@ -69,7 +73,7 @@ EDPS·홍콩 PCPD·EU 이사회·EUR-Lex는 이제 기존 일일 예약 안의 �
 7. `node scripts/trend-report.mjs --check work/draft-<job_id>.json`을 실제 통과한 초안만 `submit_trend_draft`로 제출합니다. 실패 원고는 기존 fail 경로를 쓰고 제출 성공으로 간주하지 않습니다.
 8. reports·publication_working_copies(`entity_type='report'`)·기존 `get_trend_collector_review()` JSON items에서 report ID, draft·미검수·미게시·공개 요청 없음·revision을 확인합니다. 관리자 확인과 팀 RLS 조회, 브라우저 직접 확인을 구분합니다. 권한을 확대하지 않습니다.
 
-하루 여러 자료를 처리할 수 있지만, 이는 정책상 수량 목표나 보장이 아닙니다. 적격 자료가 없으면 작성하지 않습니다. 실행 요약의 `role='daily-producer'`에 9개 출처 전체의 대상 기간, 신규/변경/중복/기간 밖/실패 처리량, 예약/수동 구분, event/job/revision/input_hash/report ID, 초안 제외·보류의 실제 사유, 검사 결과, 소요시간, 남은 범위와 중복 방지 근거를 남깁니다. 처리하지 않은 출처도 직전 확인 기록의 시각과 미실행 여부를 명시합니다. 실행 이력의 completed는 플랫폼 작업 종료이며 9개 출처의 완전 수집이나 초안 제출 성공과 동일하지 않습니다. 정상 건수마다 별도 주간 보고를 만들지 않습니다. 사용자에게 별도 알림은 실패·권한/비용 오류·재개 불가 등 조치가 필요한 경우에만 합니다.
+하루 여러 자료를 처리할 수 있지만, 이는 정책상 수량 목표나 보장이 아닙니다. 적격 자료가 없으면 작성하지 않습니다. 실행 요약의 `role='daily-producer'`에 전체 등록 출처의 대상 기간, 신규/변경/중복/기간 밖/실패 처리량, 예약/수동 구분, event/job/revision/input_hash/report ID, 초안 제외·보류의 실제 사유, 검사 결과, 소요시간, 남은 범위와 중복 방지 근거를 남깁니다. 처리하지 않은 출처도 직전 확인 기록의 시각과 미실행 여부를 명시합니다. 실행 이력의 completed는 플랫폼 작업 종료이며 전체 요청 목록의 완전 수집이나 초안 제출 성공과 동일하지 않습니다. 정상 건수마다 별도 주간 보고를 만들지 않습니다. 사용자에게 별도 알림은 실패·권한/비용 오류·재개 불가 등 조치가 필요한 경우에만 합니다.
 
 ## 월요일 주간 집계·보고자
 
@@ -77,7 +81,7 @@ EDPS·홍콩 PCPD·EU 이사회·EUR-Lex는 이제 기존 일일 예약 안의 �
 
 - 일일 생산자의 요약과 DB의 event/job/report/revision·route cursor·queue·backlog 상태를 서로 대조합니다. 등록된 예약은 실제 실행 증거로 취급하지 않습니다.
 - 기존 검수 대기 보고서의 원문·초안·출처 URL·발표일·상태를 읽고 사건 및 언어판 중복을 제거해 핵심 동향·주간 목차·검수 대기 목록을 작성합니다.
-- 보고에는 대상 기간, 출처별 성공·중복·실패·보류·미완료, 매일의 실제 실행/미실행 여부와 측정된 처리시간을 포함합니다. 첫 완전한 주간 처리가 끝나기 전에는 전체 소요시간 실측이라고 부르지 않습니다.
+- 보고에는 대상 기간, 전체 요청 목록과 운영 등록 목록을 구분한 출처별 성공·중복·실패·보류·미완료, 매일의 실제 실행/미실행 여부와 측정된 처리시간을 포함합니다. 첫 완전한 주간 처리가 끝나기 전에는 전체 소요시간 실측이라고 부르지 않습니다.
 - 주간 집계는 수집 take/commit, 초안 claim/submit을 호출하지 않고 기존 보고서를 고치거나 새 DB report를 만들지 않습니다. 자동 승인·발행을 하지 않습니다.
 - coverage 미완료·실패 HTTP·미열람 첨부·날짜 불일치·CNIL 재시도를 숨기지 않습니다. 적격 주간 자료가 없으면 억지로 채우지 않습니다.
 - 읽기 전용 집계가 끝난 뒤 `collector_edge_events`에 `source_id=null`, `trigger_kind='cloud-automation-summary'`, 고유 execution_id와 실제 시각, 확인한 run/report/event 및 미완료 범위를 `role='weekly-digest'` 요약으로 남깁니다. 원문·초안 전문·비밀값은 기록하지 않습니다.

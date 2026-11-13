@@ -1,6 +1,6 @@
 begin;
 
-select plan(41);
+select plan(43);
 
 select has_table('public', 'sources', 'sources table exists');
 select has_table('public', 'legal_instruments', 'legal instruments table exists');
@@ -16,14 +16,14 @@ select has_function(
 );
 
 select results_eq(
-  'select count(*)::bigint from public.publishers where id in (select publisher_id from public.sources where parser_config->>''expansion_phase'' is null)',
+  $$select count(distinct p.id)::bigint from public.publishers p join public.sources s on s.publisher_id=p.id where (p.acronym,s.name) in (('EDPB','EDPB 뉴스·보도자료'),('OECD','OECD 개인정보·데이터 보호'),('CJEU','CJEU/CURIA 보도자료·판결 안내'))$$,
   array[3::bigint],
-  'three initial publishers are seeded'
+  'the three initial publishers remain seeded'
 );
 select results_eq(
-  'select count(*)::bigint from public.sources where parser_config->>''expansion_phase'' is null',
+  $$select count(*)::bigint from public.sources s join public.publishers p on p.id=s.publisher_id where (p.acronym,s.name) in (('EDPB','EDPB 뉴스·보도자료'),('OECD','OECD 개인정보·데이터 보호'),('CJEU','CJEU/CURIA 보도자료·판결 안내'))$$,
   array[3::bigint],
-  'three initial sources are seeded'
+  'the three initial source rows remain seeded'
 );
 select results_eq(
   'select count(*)::bigint from public.legal_instruments',
@@ -82,11 +82,12 @@ select ok(
   'anonymous readers cannot delete feedback'
 );
 
-select results_eq(
-  'select count(*)::bigint from public.sources',
-  array[13::bigint],
-  'anonymous users can read active source metadata'
-);
+select is((select count(*)::integer from public.sources where is_active),28,
+  'anonymous users can read the current active source catalog');
+select is((select count(*)::integer from public.sources where not is_active),0,
+  'anonymous users cannot read inactive source metadata');
+select is((select count(*)::integer from public.sources where id in ('430bd32d-19b1-4752-8280-7b2d2acbda88','d4d64477-c45b-5f10-883d-374a7cd0ddfe','f4dc010a-0c02-5b24-8799-bd64f20b2e25','76ed096b-7297-5e5a-b85d-bda00b89a82f')),0,
+  'anonymous users cannot read held PCPD, Council, EUR-Lex or FTC sources');
 select results_eq(
   'select count(*)::bigint from public.legal_instruments',
   array[7::bigint],

@@ -75,9 +75,9 @@ function citationSourceUrl(citation: string, cell: LegalComparisonCell, index: n
   return "";
 }
 
-export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView, initialSelected, initialCriterion }: {
+export default function PublicLawCompare({ cells, instruments, translations, articlePreviews, draftMode, initialView, initialSelected, initialCriterion, publishedOnly = false, searchReturnTo }: {
   cells: LegalComparisonCell[]; instruments: SubmissionItem[];
-  translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare"; initialSelected?: string[]; initialCriterion?: string;
+  translations: LegalTranslationSummary[]; articlePreviews: Record<string, LegalArticlePreview>; draftMode: boolean; initialView: "full" | "compare"; initialSelected?: string[]; initialCriterion?: string; publishedOnly?: boolean; searchReturnTo?: string;
 }) {
   const criteria = useMemo(() => Array.from(new Map(cells.map((cell) =>
     [cell.criterionId, { id: cell.criterionId, name: cell.criterionName, order: cell.criterionOrder }]
@@ -89,7 +89,7 @@ export default function PublicLawCompare({ cells, instruments, translations, art
   const [activeCountry, setActiveCountry] = useState("KR");
   const [activeCriterion, setActiveCriterion] = useState(criteria.some((item) => item.id === initialCriterion) ? initialCriterion! : criteria[0]?.id ?? "");
   useEffect(() => setView(initialView), [initialView]);
-  useEffect(() => { const params = new URLSearchParams({ view }); if (view === "compare") { params.set("countries", selected.join(",")); if (activeCriterion) params.set("criterion", activeCriterion); } window.history.replaceState(null, "", `/public/laws?${params}`); }, [view, selected, activeCriterion]);
+  useEffect(() => { const params = new URLSearchParams({ view }); if (publishedOnly) params.set("published", "1"); if (searchReturnTo) params.set("back", searchReturnTo); if (view === "compare") { params.set("countries", selected.join(",")); if (activeCriterion) params.set("criterion", activeCriterion); } window.history.replaceState(null, "", `/public/laws?${params}`); }, [view, selected, activeCriterion, publishedOnly, searchReturnTo]);
 
   const selectedLaws = countries.filter((law) => selected.includes(law.code));
   const criterion = criteria.find((item) => item.id === activeCriterion) ?? criteria[0];
@@ -108,12 +108,14 @@ export default function PublicLawCompare({ cells, instruments, translations, art
 
   };
   const activeLaw = countries.find((law) => law.code === activeCountry) ?? countries[1];
-  const currentPath = view === "compare" ? `/public/laws?view=compare&countries=${encodeURIComponent(selected.join(","))}&criterion=${encodeURIComponent(activeCriterion)}` : "/public/laws?view=full";
+  const basePath = view === "compare" ? `/public/laws?view=compare&countries=${encodeURIComponent(selected.join(","))}&criterion=${encodeURIComponent(activeCriterion)}` : "/public/laws?view=full";
+  const currentPath = basePath + (publishedOnly ? "&published=1" : "") + (searchReturnTo ? `&back=${encodeURIComponent(searchReturnTo)}` : "");
   const selectedNames = view === "compare" ? selectedLaws.map((law) => law.country).join(" · ") : activeLaw.country;
   const criterionIndex = criteria.findIndex((item) => item.id === criterion?.id);
 
   return <main className={styles.lawPage}>
     <PublicHeader active="/public/laws" />
+    {searchReturnTo && <p className={styles.draftNotice}><Link href={searchReturnTo}>← 검색 결과로 돌아가기</Link></p>}
     {draftMode && <p className={styles.draftNotice}>미리보기 환경 · 각 법률의 판본과 공식 원문을 확인해 주세요.</p>}
     <section className={styles.lawHero}>
       <div><p className={styles.lawOverline}>GLOBAL PRIVACY LAW ATLAS</p><h1>국가별 법제</h1>

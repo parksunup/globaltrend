@@ -11,8 +11,26 @@ from scripts.collector import run
 from scripts.collector.core import FetchError
 from scripts.collector.store import SupabaseStore
 
+ROOT=Path(__file__).resolve().parents[1]
+
 
 class AutomationTests(unittest.TestCase):
+    def test_oaic_is_out_of_crawlee_daily_set_but_legacy_edge_source_remains(self):
+        crawlee=json.loads((ROOT/'config/crawlee-daily-source-set.json').read_text())
+        self.assertNotIn('oaic',crawlee['sources'])
+        registry=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+        oaic=next(source for source in registry if source['source']=='oaic')
+        self.assertEqual(oaic['executor'],'edge')
+        self.assertEqual(oaic['hosts'],['www.oaic.gov.au'])
+
+    def test_exhaustively_verified_empty_window_is_a_success_not_a_partial_failure(self):
+        self.assertEqual(run.execution_outcome([
+            {'status':'empty_window','coverage_complete':True},
+        ]),'success')
+        self.assertEqual(run.execution_outcome([
+            {'status':'empty_window','coverage_complete':False},
+        ]),'partial')
+
     def execute(self, configs, store=None, collected=None, flags=('--write',), env=None):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -43,6 +61,70 @@ class AutomationTests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertEqual(result['outcome'], 'blocked')
         self.assertEqual(result['sources'][0]['hold_reason'], 'original_review_pending')
+
+    def test_user_deferred_source_is_not_constructed_or_requested_in_probe_mode(self):
+        cfg=self.config(source='eur-lex', enabled=False,
+            permissions=dict(collect=False,store=False,ai=False),
+            listing='https://eur-lex.europa.eu/content/news/index.html',
+            hosts=['eur-lex.europa.eu'], hold_reason='user_deferred_2026_10_29',
+            verification_status='held_by_user')
+        with patch.object(run,'HttpClient') as http_client:
+            code,result,created,calls=self.execute([cfg],flags=('--probe',))
+        self.assertEqual(code,0)
+        self.assertEqual(created,0)
+        self.assertEqual(calls,0)
+        http_client.assert_not_called()
+        self.assertEqual(result['sources'][0]['reason'],'user_deferred_2026_10_29')
+        self.assertEqual(result['sources'][0]['eligibility_reasons'],['source_held_by_user'])
+        self.assertEqual(result['sources'][0].get('requests',[]),[])
+
+    def test_user_deferred_source_is_not_constructed_or_requested_in_write_mode(self):
+        cfg=self.config(source='eur-lex', enabled=False,
+            permissions=dict(collect=False,store=False,ai=False),
+            listing='https://eur-lex.europa.eu/content/news/index.html',
+            hosts=['eur-lex.europa.eu'], hold_reason='user_deferred_2026_10_29',
+            verification_status='held_by_user')
+        with patch.object(run,'HttpClient') as http_client:
+            code,result,created,calls=self.execute([cfg],flags=('--write',))
+        self.assertEqual(code,2)
+        self.assertEqual(created,0)
+        self.assertEqual(calls,0)
+        http_client.assert_not_called()
+        self.assertEqual(result['sources'][0]['reason'],'user_deferred_2026_10_29')
+        self.assertEqual(result['sources'][0]['requests'] if 'requests' in result['sources'][0] else [],[])
+
+    def test_direct_probe_helper_honors_user_hold_without_touching_client(self):
+        class NeverRequest:
+            def get(self,*args,**kwargs): raise AssertionError('user-held URL must not be requested')
+            def post(self,*args,**kwargs): raise AssertionError('user-held URL must not be requested')
+        cfg=self.config(source='eur-lex',hold_reason='user_deferred_2026_10_29',verification_status='held_by_user')
+        result,failed=run.probe_source(cfg,NeverRequest(),['https://eur-lex.europa.eu/test'])
+        self.assertFalse(failed)
+        self.assertEqual(result['status'],'held')
+        self.assertEqual(result['reason'],'user_deferred_2026_10_29')
+        self.assertEqual(result['requests'],[])
+
+    def test_disabled_source_without_explicit_user_hold_remains_probeable(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'config').mkdir();(root/'data/trends/source-configs').mkdir(parents=True)
+            cfg=self.config(enabled=False,hold_reason='original_review_pending',verification_status='sample_body_only_review_pending')
+            (root/'config/trend-collector.json').write_text(json.dumps({'pr16_commit':'test','sources':[cfg]}))
+            (root/'data/trends/source-configs/edpb.json').write_text(json.dumps({'sample_urls':[]}))
+            output=root/'result.json'
+            class Client:
+                def __init__(self,*args,**kwargs): self.requested=[]
+                def get(self,url):
+                    self.requested.append(url)
+                    raise FetchError('http_503')
+            with patch.object(run,'ROOT',root),patch.object(run,'HttpClient',side_effect=Client) as http_client, \
+                 patch.dict(os.environ,{},clear=True),patch('sys.argv',['collector','--probe','--output',str(output)]), \
+                 contextlib.redirect_stdout(io.StringIO()):
+                code=run.main()
+            self.assertEqual(code,1)
+            http_client.assert_called_once()
+            result=json.loads(output.read_text())
+            self.assertEqual(result['sources'][0]['requests'][0]['status'],'failed')
+            self.assertEqual(result['sources'][0]['hold_reason'],'original_review_pending')
 
     def test_missing_source_id_is_blocked_without_database_client(self):
         code, result, created, calls = self.execute([self.config(source_id=None)])

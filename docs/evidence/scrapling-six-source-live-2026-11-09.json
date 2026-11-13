@@ -1,0 +1,309 @@
+{
+  "generated_at": "2026-11-09T10:47:46.412331+00:00",
+  "method": "Separate Scrapling 0.4.11 Fetcher collectors; robots checked; minimum 5 seconds per host; read-only; per-source reruns supersede earlier aggregate",
+  "database_writes": false,
+  "results": [
+    {
+      "source": "cn-cac",
+      "since": "2026-10-28",
+      "until": "2026-10-28",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 16,
+      "out_of_range": 15,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://www.cac.gov.cn/2026-10/28/c_1794942554784626.htm",
+          "title_original": "通过个人信息保护合规审计服务认证的专业机构名单（第三批）",
+          "content_text": "落实《中华人民共和国个人信息保护法》《个人信息保护合规审计管理办法》相关要求，中央网信办（国家网信办）数据与技术保障中心、中国网络安全审查认证和市场监管大数据中心、北京赛西认证有限责任公司依据《中华人民共和国认证认可条例》以及相关认证规则、实践指南开展专业机构认证工作。 近期，第三批专业机构认证工作已完成，21家机构获个人信息保护合规审计服务认证证书。具体名单如下: 具体信息可通过认证机构官方网站查询。 中央网信办（国家网信办）数据与技术保障中心 中国网络安全审查认证和市场监管大数据中心 北京赛西认证有限责任公司 2026年10月28日",
+          "content_hash": "04d01ccf5ce8d50897a0906e8bc53cb37f92ece4ce8f8f9da4f8bfe977a68860",
+          "published_date": "2026-10-28",
+          "metadata": {
+            "parser_version": "cac-official-article-v1",
+            "read_scope": "official_cac_notice_html",
+            "date_observations": [
+              {
+                "meaning": "published_display_candidate",
+                "value": "2026-10-28",
+                "locator": "#loadingInfoPage li .times"
+              },
+              {
+                "meaning": "published_display_candidate",
+                "value": "2026年10月28日 11:02",
+                "locator": "#pubtime"
+              }
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "short_notice": true,
+            "short_notice_reason": "original_notice_is_brief_or_needs_attachment_review",
+            "related_documents": [],
+            "unread_attachments": [],
+            "factual_status": "official_notice_not_independent_legal_finding",
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 30807
+    },
+    {
+      "source": "calprivacy",
+      "since": "2026-10-12",
+      "until": "2026-10-12",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 3,
+      "out_of_range": 2,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://privacy.ca.gov/2026/10/calprivacy-launches-first-ever-delete-week-to-help-californians-protect-their-personal-information/",
+          "title_original": "CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information",
+          "content_text": "## Newsroom ## CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information *October 12, 2026* SACRAMENTO, CA — CalPrivacy today announced the statewide launch of Delete Week (Oct 12-16) a new annual privacy awareness initiative designed to help Californians better understand their privacy rights and take meaningful steps to protect their personal information. Throughout this week, CalPrivacy will highlight tools and resources — including the state’s free Delete Request and Opt‑out Platform (DROP), which makes it easy to delete personal data held by registered data brokers. “Delete Week is about giving Californians simple, effective, and scalable ways to safeguard their privacy,” said Executive Director Tom Kemp. “Whether you’re signing up for DROP or checking your deletion progress, we want to make it easy for everyone to take control of their data.” ### DROP is making a difference Since launching on January 1, DROP has already seen strong adoption, with more than 560,000 Californians registered and using the tool to delete their personal information from data brokers. The platform is delivering measurable results: the number of consumer profiles being reported deleted by data brokers is already approaching 100 million, and 99.9% of users have had their information deleted by at least one broker. And a typical DROP user has already had their personal information reported as deleted by more than 150 brokers. During Delete Week, CalPrivacy will share short videos, tips, and educational resources on our social media channels to help the public understand how DROP works and how data brokers collect and use personal information. The agency will also launch its new external newsletter, CalPrivacy Quarterly, and participate in media engagements across the state to raise awareness. ### Sign up for DROP and check your deletion status DROP allows Californians to send one request instructing over 660 data brokers to delete their personal information. It’s fast, free, and takes most people less than 10 minutes. For Californians who already use DROP, Delete Week is the perfect moment to check your deletion status using your DROP ID. A new FAQ blog walks through what to expect and how to recover your ID if you’ve misplaced it. ### Share DROP with your community A major goal of Delete Week is to grow awareness. To make it easy to share DROP, CalPrivacy created the DROP toolkit, complete with downloadable graphics, messages, and ready‑to‑use materials. ### About Us The California Privacy Protection Agency (CalPrivacy) is committed to promoting the education and awareness of consumers’ privacy rights and businesses’ responsibilities under the California Consumer Privacy Act, Delete Act, and Opt Me Out Act. Consumers can visit Privacy.ca.gov to access helpful and up-to-date information and tips on how to exercise their rights, protect their personal information, and learn about the Delete Request and Opt-out Platform (DROP). In addition, CalPrivacy’s website provides important information about Board Meetings, announcements, and the rulemaking process.",
+          "content_hash": "ba6d81f35a987d5e2a560cc23783e91403e4f6d5735513eb620a07284bac2ca3",
+          "published_date": "2026-10-12",
+          "metadata": {
+            "parser_version": "scrapling-calprivacy-article-v1",
+            "read_scope": "official_calprivacy_press_release_body",
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "date_observations": [
+              {
+                "meaning": "official_published_attribute",
+                "locator": "article:published_time or press-release date",
+                "value": "2026-10-12T16:00:56+00:00"
+              }
+            ],
+            "factual_status": "official_calprivacy_press_release_not_independently_reviewed",
+            "body_review_status": "machine_extracted_not_human_reviewed",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://privacy.ca.gov/category/content-types/news/press-release/",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 353850
+    },
+    {
+      "source": "ftc",
+      "since": "2026-07-01",
+      "until": "2026-11-09",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 7,
+      "out_of_range": 6,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://search.ftc.gov/news-events/news/press-releases/2026/07/ftc-states-act-against-hims-hers-deceptive-unlawful-privacy-practices",
+          "title_original": "FTC and States Act Against Hims & Hers for Deceptive and Unlawful Privacy Practices",
+          "content_text": "The Federal Trade Commission, joined by Utah and California, by and through Los Angeles County Counsel, today sued Hims & Hers alleging that the telehealth provider shared consumers’ sensitive health information about medical conditions with third-party advertising platforms despite claiming its services maintain consumers’ privacy and deceives users about its billing and cancellation practices. In a complaint filed in federal court, the FTC and its state and local partners allege that Hims & Hers (Hims) fails to clearly disclose that it charges consumers for prescriptions almost immediately after they submit an intake form, despite telling consumers that they will be able to consult with a medical provider to find a treatment that is “right for them.” The FTC also alleges that the company has made it difficult for consumers to cancel subscriptions and misled consumers about keeping their health information private. The FTC alleges that Hims shared consumers’ health information with Meta, Snap and other third parties. “The FTC’s complaint lays out a troubling scenario—consumers unknowingly locked into recurring subscriptions and the disclosure to third parties of consumers’ most private health information without their consent,” said Christopher Mufarrige, Director of the FTC’s Bureau of Consumer Protection. “The FTC will not hesitate to act on behalf of consumers deprived of their ability to choose which products they want and whether to keep their most sensitive health information private.” San Francisco-based Hims provides telehealth services and direct-to-consumer prescription medications for certain conditions. Consumers who express interest in Hims’ services must fill out an online intake form for review by a medical provider before obtaining treatment. In advertisements and on its website, Hims has claimed that consumers can “connect” and consult with a medical provider through Hims to determine whether they need prescription medication. When consumers fill out their intake form, they are asked to provide their billing information despite assurances that they will not be charged unless and until medications are prescribed, according to the complaint. The FTC alleges, however, that Hims does not give most consumers a consultation with a provider. Instead, by submitting their intake form, most consumers will unknowingly be charged for and subscribed to a prescription treatment without having a chance to review or approve it. According to the complaint, Hims enrolls consumers in recurring subscription plans for those treatments shortly after receiving consumers’ intake forms. In addition, the complaint alleges that Hims fails to clearly and conspicuously inform consumers when their prescriptions will be refilled each month, making it difficult to cancel before the next billing cycle. These practices have generated numerous complaints from consumers. One complained that, “I was told that I would be able to speak with a doctor in a few days and that nothing would be charged to my card that day. Him’s & Her’s \\[sic\\] charged me immediately! I never gave consent to apply charges before I spoke with a healthcare professional.” The FTC also alleges that the company makes it extremely difficult to cancel its subscriptions. Prior to 2023, Hims only allowed most consumers to cancel by contacting customer service via phone, email or chat and imposed additional hurdles that made it difficult for consumers to cancel. Even after introducing online cancellation to most consumers in 2023, the company made it difficult for them to cancel their subscriptions by hiding the cancellation button from consumers, the FTC alleges. The button appeared only after these consumers selected an option to “add/remove items from order” and navigated several steps before they even saw the word “cancel.” In addition, the complaint alleges that Hims shared consumers’ sensitive health information with third-party advertising platforms such as Meta and Snap despite promising to protect patient privacy. Hims shared its consumers’ health information with advertising platforms by sharing lists of certain customers with those companies. Hims also shared consumers’ health information via third-party tracking technologies that automatically shared certain “Events”—the actions of visitors on Hims’ website—with those companies. The FTC alleges these practices have violated the FTC Act and the Restore Online Shoppers’ Confidence Act, which prohibits deceptive billing and subscription practices. Utah alleges violations of the Utah Consumer Sales Practices Act, and California alleges violations of California’s False Advertising and Unfair Competition Laws. The Commission vote authorizing the staff to file the complaint was 2-0. The complaint was filed in the U.S. District Court for the Northern District of California. **NOTE:** The Commission files a complaint when it has “reason to believe” that the named defendants are violating or are about to violate the law and it appears to the Commission that a proceeding is in the public interest. The case will be decided by the court. The lead staffers on this matter include Siobhan Amin, Barbara Chun and Jordan Navarrette in the FTC’s Western Region Los Angeles office. The Federal Trade Commission works to promote competition and protect and educate consumers. The FTC will never demand money, make threats, tell you to transfer money, or promise you a prize. Learn more about consumer topics at consumer.ftc.gov, or report fraud, scams, and bad business practices at ReportFraud.ftc.gov. Follow the FTC on social media, read consumer alerts and the business blog, and sign up to get the latest FTC news and alerts.",
+          "content_hash": "0e5a8eaba5a66e59c22127b7716d060d216b3b80a78459c66368f5268fa0cac4",
+          "published_date": null,
+          "metadata": {
+            "parser_version": "scrapling-ftc-article-v1",
+            "read_scope": "official_ftc_press_release_body",
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "FTC search result time[datetime]",
+                "value": "2026-07-29T12:00:00Z"
+              },
+              {
+                "meaning": "published_attribute",
+                "locator": "FTC article time[datetime]",
+                "value": "2026-02-13T22:00:00Z"
+              },
+              {
+                "meaning": "route_month_candidate_not_full_date",
+                "locator": "FTC press-release URL path",
+                "value": "2026-07"
+              }
+            ],
+            "date_conflict": true,
+            "factual_status": "official_ftc_press_release_not_independently_reviewed",
+            "body_review_status": "machine_extracted_not_human_reviewed",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&field_mission%5B29%5D=29",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [
+        {
+          "url": "https://search.ftc.gov/news-events/news/press-releases?field_mission%5B29%5D=29&search=privacy&page=1",
+          "reason": "explicit_page_limit_reached"
+        }
+      ],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 2042115
+    },
+    {
+      "source": "oecd",
+      "since": "2026-11-02",
+      "until": "2026-11-09",
+      "status": "no_candidates",
+      "coverage_complete": false,
+      "pages": 2,
+      "discovered": 0,
+      "out_of_range": 0,
+      "details_attempted": 0,
+      "items": [],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 14702
+    },
+    {
+      "source": "hk-pcpd",
+      "since": "2026-01-27",
+      "until": "2026-01-27",
+      "status": "success",
+      "coverage_complete": true,
+      "pages": 1,
+      "discovered": 1,
+      "out_of_range": 0,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://www.info.gov.hk/gia/general/202601/27/P2026012600522.htm",
+          "title_original": "HKMA and PCPD strengthen collaboration to combat fraud and safeguard personal data (with photo)",
+          "content_text": "HKMA and PCPD strengthen collaboration to combat fraud and safeguard personal data (with photo) \\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* The Hong Kong Monetary Authority (HKMA) and the Office of the Privacy Commissioner for Personal Data (PCPD) jointly announced today (January 27) a series of new measures to enhance collaboration in combatting fraud and strengthening the protection against misuse of personal data. In view of the increasing sophistication of fraud, the HKMA and the PCPD have strengthened their co-operation to ensure that banks' systems and safeguards against these risks are robust, and that best practices are shared with banks on a timely basis. These efforts will include joint risk-based examinations of selected banks' anti-fraud systems and controls, in which the HKMA will focus on assessing the effective implementation of anti-fraud measures set out in circulars issued in December 2024 and April 2025, whilst the PCPD will review the banks' data security measures and access controls that are designed to safeguard personal data against misuse and leakage. Moreover, the HKMA and the PCPD will strengthen joint publicity and educational efforts, and work closely with other key stakeholders including the Hong Kong Police Force (HKPF), The Hong Kong Association of Banks and the industry, to raise public awareness of the latest scam tactics and the importance of protecting personal data, including bank account information. These efforts will include outreach activities targeting members of the public and specific segments of society. Given the evolving nature of deception tactics, it is essential for the public to remain vigilant when providing personal data, including bank account information and login credentials, to prevent such data from being misused for deception or money laundering. Members of the public are also encouraged to stay informed about the latest fraud prevention information published by the HKMA, the PCPD and the HKPF. The Chief Executive of the HKMA, Mr Eddie Yue, said, \"Anti-fraud work has been a priority for the HKMA as it helps to uphold public confidence in the financial system of Hong Kong. The collaboration with the PCPD marks a significant milestone in enhancing the ecosystem approach in the fight against the abuse of our banking system for fraudulent purposes.\" The Privacy Commissioner for Personal Data, Ms Ada Chung, said, \"In light of the substantial volume of personal data handled by banks on a daily basis, it is imperative for the banking industry to adopt stringent data security and monitoring measures to prevent unauthorised or accidental access or misuse of customers' personal data. We are very pleased to collaborate with the HKMA in cultivating a culture of fraud prevention and personal data privacy protection across the financial sector.\" Background Fraud continues to grow in scale and complexity. During the first 10 months of 2025, a total of 35 831 deception cases were reported in Hong Kong, resulting in total losses amounting to $6.4 billion. To keep pace with the evolving nature of fraud, the HKMA has continued to strengthen the banking industry's response to fraud and money laundering, with a number of measures introduced in April last year. These include expanded use of Scameter data, amendment of the Banking Ordinance to facilitate information sharing among banks, sharing of good anti-fraud practices with banks, thematic reviews on the effectiveness of banks' anti-fraud measures, and enhanced publicity and education efforts on \"Don’t Lend/Sell Your Account\". To further enhance the ecosystem approach, the HKMA is collaborating with the PCPD to combat fraud, and to strengthen the protection against misuse of personal data. The protection of personal data privacy has always been one of the critical priorities in combatting fraud, as deception and financial crimes often involve malicious use of personal data. To address the evolving deceptive tactics employed by fraudsters, the PCPD continues to strengthen its efforts on public education and raising awareness against fraud. Apart from conducting anti-fraud talks for different stakeholders, the PCPD has published a new anti-fraud leaflet and poster with the theme \"Too Good to be True\" to enhance public awareness of fraud prevention and personal data protection. Both publications have been distributed to District Offices, community centres, elderly centres, banks and schools. Since 2022, the PCPD has set up the \"Personal Data Fraud Prevention Hotline\" (3423 6611) to handle public enquiries about fraud or suspected fraud cases from members of the public. The PCPD has also launched the webpage entitled \"Anti-Fraud Tips\", with a view to providing a one-stop information portal for members of the public. Ends/Tuesday, January 27, 2026 Issued at HKT 11:00 NNNN",
+          "content_hash": "6ea78ffa22d6fc50fc4115c33d7a4ae636e0e3793d57a378011d516f40da7bb1",
+          "published_date": "2026-01-27",
+          "metadata": {
+            "parser_version": "scrapling-pcpd-official-isd-v1",
+            "read_scope": "official_isd_republication_body",
+            "source_attribution": "Office of the Privacy Commissioner for Personal Data, Hong Kong",
+            "date_observations": [
+              {
+                "meaning": "listing_archive_day",
+                "locator": "Hong Kong ISD official daily archive URL",
+                "value": "2026-01-27"
+              }
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://www.info.gov.hk/gia/general/202601/27.htm",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 34045
+    },
+    {
+      "source": "vn-gov",
+      "since": "2026-11-02",
+      "until": "2026-11-09",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 26,
+      "out_of_range": 0,
+      "details_attempted": 3,
+      "items": [
+        {
+          "url": "https://en.baochinhphu.vn/respect-for-constitution-and-law-helps-maintain-discipline-and-drive-national-development-111261108155943542.htm",
+          "title_original": "Respect for Constitution and law helps maintain discipline and drive national development",
+          "content_text": "# Respect for Constitution and law helps maintain discipline and drive national development ## VGP – Respect for the Constitution and the law would help maintain discipline and drive national development, wrote General Secretary and President To Lam in his latest article released on Sunday on the occasion of the Viet Nam Law Day 2026 (November 8, 2026). Respect for the Constitution must be reflected in every decision and action of agencies, organizations, and competent persons. The Constitution possesses the highest legal effect, thus all legal provisions must conform to the Constitution; all public power activities must have a lawful basis, strictly adhere to assigned jurisdiction, and be subject to control. Any legal document or administrative act violating the Constitution or the law must be detected and handled in a timely manner and within prescribed authority. Neither development objectives nor task urgency may be cited as justification for disregarding constitutionality and legality. Concurrently, competent authorities must proactively amend inadequate regulations and promptly remove obstacles to development. Resolution No. 27-NQ/TW on continuing to build and perfect the socialist rule-of-law State of Viet Nam clearly defined the relationship: *Party leadership, State management, and People's mastery*. The leadership and governing capacity of the Party is reflected in the quality of institutionalizing guidelines and in practical results achieved, bringing tangible improvements to the people's lives. Respect for the Constitution also requires that human rights and citizens' rights be guaranteed and protected substantively. Human rights and citizens' rights may only be restricted in accordance with provisions of law in necessary cases for reasons prescribed by the Constitution. The safety, dignity, and legitimate rights and interests of every individual are values that the State is obligated to protect. According to the top Vietnamese leader, Resolution No. 66-NQ/TW mandates the renovation of law-making and law-enforcement work, turning the law into a catalyst for development. Enhancing management efficiency must go hand in hand with expanding development opportunities, ensuring that administrative burdens are not shifted onto citizens and businesses. The legal system must create favorable conditions for integrating science, technology, and innovation into production, mobilizing social resources, expanding business opportunities, and leveraging the advantages of international integration. Alongside encouraging new development models, the law must guarantee access to education, employment, and essential services. A transparent, stable, and consistently enforced legal framework reduces risks and costs while boosting investor confidence. This forms the basis for efficiently mobilizing and allocating resources, turning the law into a national competitive advantage. Administrative procedure reform must facilitate fast and convenient resolution of administrative affairs, lower compliance costs, and clearly define enforcement responsibilities. Law-making and law enforcement must be tied to outcome-based accountability. Agencies involved in drafting, promulgating, and enforcing laws must coordinate to monitor impacts, rectify implementation flaws, and promptly amend or recommend amendments to inadequate provisions within their authority. Bottlenecks must be correctly identified by their root causes. Unreasonable regulations must be amended; cadres with limited capacity must be trained. Digital transformation must enhance governance efficiency and public service quality. The exploitation and sharing of data must strictly comply with the law while the application of technology must ensure information security, personal data protection, and privacy rights. To Lam also stressed the need to cultivate a culture of the rule of law rooted in the exemplary behavior of cadres and Party members, and the active, voluntary participation of the eople. Such a culture should be nurtured by legal awareness, public service ethics, and the experience of being treated fairly. Clear regulations, thoroughly explained and equitably applied, will reinforce public trust and encourage voluntary compliance. Citizens are the primary subjects who participate in drafting, implementing, and protecting the law. Their participation must be guaranteed in policy consultation, supervision, reporting inadequacies, and evaluating implementation results. Legal dissemination and education must empower citizens to exercise their rights, fulfill their obligations, and reach the right beneficiaries when assistance is needed. Policy explanations must be coupled with dialogue and listening to feedback for timely adjustments. Digital technology adoption must go hand-in-hand with direct assistance for vulnerable groups and individuals in disadvantaged regions. Respect for the Constitution and the law serves as both the foundation and the driver for building a nation characterized by discipline, integrity, democracy, equality, civilization, development, and prosperity. This is not only an immediate mandate but also a choice of strategic significance, ensuring that Viet Nam advances firmly into a new era of rapid, sustainable development and realizes its aspiration for a prosperous and happy country./.",
+          "content_hash": "71cffb7cbc098792e12bd31b7f4efdb57fda8ae4373bdadb5a5c535f995ecd7a",
+          "published_date": "2026-11-08",
+          "metadata": {
+            "parser_version": "scrapling-vn-gov-official-detail-v1",
+            "read_scope": "official_government_news_detail_body",
+            "source_attribution": "Vietnam Government Online Newspaper",
+            "date_observations": [
+              {
+                "meaning": "official_published_attribute",
+                "locator": "meta[property=\"article:published_time\"]@content",
+                "value": "2026-11-08T15:59:00+07:00"
+              },
+              {
+                "meaning": "official_published_display",
+                "locator": "[data-role=publishdate]",
+                "value": "November 08, 2026 3:59 PM GMT+7",
+                "date": "2026-11-08"
+              }
+            ],
+            "relevance_checked_against_body": true,
+            "privacy_relevant": true,
+            "relevance_terms": [
+              "personal data",
+              "privacy"
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://en.baochinhphu.vn/",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [
+        {
+          "url": "https://en.baochinhphu.vn/viet-nam-appoints-new-consuls-general-in-us-russia-111261106161711515.htm",
+          "reason": "explicit_item_limit_reached"
+        }
+      ],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 4,
+      "robots_requests": 1,
+      "downloaded_bytes": 357078
+    }
+  ],
+  "evidence_files": [
+    "scrapling-cac-live-2026-11-09.json",
+    "scrapling-calprivacy-live-2026-11-09.json",
+    "scrapling-ftc-live-2026-11-09.json",
+    "scrapling-oecd-live-2026-11-09.json",
+    "scrapling-pcpd-live-2026-11-09.json",
+    "scrapling-vn-live-2026-11-09.json"
+  ]
+}

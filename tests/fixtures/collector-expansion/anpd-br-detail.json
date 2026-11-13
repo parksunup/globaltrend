@@ -1,0 +1,13 @@
+{
+  "@id": "https://www.gov.br/anpd/pt-br/assuntos/noticias/noticia-um",
+  "@type": "News Item",
+  "review_state": "published",
+  "title": "ANPD publica orientação sobre dados pessoais",
+  "effective": "2026-11-06T12:50:06+00:00",
+  "blocks_layout": {"items": ["intro", "details", "related"]},
+  "blocks": {
+    "intro": {"@type": "slate", "plaintext": "A Autoridade Nacional de Proteção de Dados publicou orientação destinada a esclarecer obrigações de proteção de dados pessoais."},
+    "details": {"@type": "slate", "plaintext": "A publicação descreve as medidas esperadas, os agentes alcançados e os procedimentos de implementação. A autoridade recomenda que organizações documentem as decisões e mantenham controles adequados."},
+    "related": {"@type": "slate", "plaintext": "LEIA TAMBÉM » notícia relacionada"}
+  }
+}
