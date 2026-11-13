@@ -650,6 +650,45 @@ def discover_pdpc_listing(data,url,page):
     next_url=pdpc_api_next_url(url,page) if urlsplit(url).path=='/api/listing-api' else listing_next_url(url,page)
     return rows,next_url if page*10<total else None
 
+def discover_pdpc_sitemap(data,url):
+    """Use PDPC's official sitemap as a bounded discovery fallback.
+
+    Sitemap lastmod values are intentionally ignored: article pages supply the
+    publication date, while lastmod may describe a later site update.
+    """
+    parts=urlsplit(url)
+    if parts.scheme!='https' or parts.hostname!='www.pdpc.gov.sg' or parts.path!='/sitemap.xml':
+        raise ValueError('pdpc_sitemap_route_unverified')
+    raw=data.decode('utf-8','replace') if isinstance(data,(bytes,bytearray)) else str(data)
+    if '<!DOCTYPE' in raw.upper() or '<!ENTITY' in raw.upper():
+        raise ValueError('xml_entities_rejected')
+    try:
+        root=ET.fromstring(raw)
+    except ET.ParseError:
+        raise ValueError('pdpc_sitemap_xml_invalid') from None
+    if root.tag.rsplit('}',1)[-1].lower()!='urlset':
+        raise ValueError('pdpc_sitemap_schema_changed')
+    rows=[]; seen=set()
+    for node in root.iter():
+        if node.tag.rsplit('}',1)[-1].lower()!='loc' or not node.text:
+            continue
+        target=urljoin(url,node.text.strip())
+        parsed=urlsplit(target)
+        if parsed.hostname!='www.pdpc.gov.sg' or not parsed.path.startswith('/media-events/'):
+            continue
+        canonical=urlunsplit((parsed.scheme,parsed.netloc,parsed.path,'',''))
+        # A few official sitemap builds repeat an identical loc entry. Keep
+        # one canonical candidate so the collector's repeated-item guard can
+        # still catch genuine pagination loops in other listing routes.
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        rows.append({'url':canonical,'title':'','topic':'Unclassified',
+            'listing_route':'official_sitemap'})
+    if not rows:
+        raise ValueError('pdpc_sitemap_empty')
+    return rows,None
+
 def discover_listing(source,html,url,fetch):
     if source in expansion.ROUTES:return expansion.discover(source,html,url)
     if source=='ico':
@@ -662,13 +701,28 @@ def discover_listing(source,html,url,fetch):
         if urlsplit(url).path=='/api/listing-api':
             return discover_pdpc_listing(html.encode('utf-8'),url,pdpc_api_page_number(url))
         endpoint=pdpc_listing_request(html,url)
-        data,_,_=fetch(endpoint,'GET',None,{
-            'Accept':'application/json, text/plain, */*',
-            'Referer':url,
-        })
-        # Validate the body against the strict API schema instead of depending
-        # on a stable Content-Type header from the upstream service.
-        return discover_pdpc_listing(data,url,listing_page_number(url))
+        try:
+            data,_,_=fetch(endpoint,'GET',None,{
+                'Accept':'application/json, text/plain, */*',
+                'Referer':url,
+            })
+            # Validate the body against the strict API schema instead of depending
+            # on a stable Content-Type header from the upstream service.
+            return discover_pdpc_listing(data,url,listing_page_number(url))
+        except Exception as exc:
+            reason=str(exc)
+            # A robots denial remains a hard stop. The public sitemap is a
+            # fallback for an unavailable/empty listing endpoint, not a way to
+            # bypass an explicit robots policy.
+            if reason=='robots_disallowed' or not (
+                reason in ('http_403','http_404','http_410','empty_response') or
+                'pdpc_listing_json_invalid:' in reason
+            ):
+                raise
+            fallback='https://www.pdpc.gov.sg/sitemap.xml'
+            data,final,_=fetch(fallback)
+            rows,next_url=discover_pdpc_sitemap(data,final)
+            return rows,next_url
     return discover(source,html,url)
 
 def discover_rss(html,url,keep_feed_text=False,prefer_content_encoded=False):
