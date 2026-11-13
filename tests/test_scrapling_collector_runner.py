@@ -80,6 +80,105 @@ class ScraplingRunnerTests(unittest.TestCase):
         self.assertEqual(item["metadata"]["date_range_status"], "unknown_date_retained_for_review")
         self.assertFalse(result["coverage_complete"])
 
+    def test_ftc_walks_past_ten_pages_and_certifies_empty_filtered_window(self):
+        listing = "https://search.ftc.gov/news-events/news/press-releases?search=privacy&field_mission%5B29%5D=29"
+        responses = {}
+        for page in range(1, 13):
+            url = listing if page == 1 else listing + f"&page={page - 1}"
+            responses[url] = (str(page), "text/html")
+
+        def next_page(html, url):
+            page = int(html)
+            return listing + f"&page={page}" if page < 12 else None
+
+        adapter = SimpleNamespace(parse_listing=lambda *_args: [], next_page_url=next_page,
+                                  listing_dates=lambda _rows: [],
+                                  proves_before_window=lambda _rows, _since: False)
+        client = _MemoryClient(responses)
+        with patch.object(runner, "_adapter", return_value=adapter):
+            result = runner.collect_source("ftc", "2026-11-11", "2026-11-13", client=client)
+        self.assertEqual(result["pages"], 12)
+        self.assertEqual(result["status"], "empty_window")
+        self.assertTrue(result["coverage_complete"])
+        self.assertEqual(result["items"], [])
+        self.assertFalse(result["errors"])
+
+    def test_vietnam_checks_every_candidate_and_continues_past_mixed_date_page(self):
+        from scripts.collector_scrapling.adapters import vn_gov
+
+        home = vn_gov.HOME
+        policies = vn_gov.POLICIES
+        page2 = f"{vn_gov.TIMELINE}/2.htm"
+        page3 = f"{vn_gov.TIMELINE}/3.htm"
+        urls = [f"https://{vn_gov.HOST}/privacy-item-{i:018d}.htm" for i in range(3)]
+        responses = {
+            home: ("home", "text/html"),
+            policies: ("policies", "text/html"),
+            page2: ("mixed", "text/html"),
+            page3: ("empty", "text/html"),
+            **{url: (day, "text/html") for url, day in zip(urls, ("13", "12", "09"))},
+        }
+
+        def parse_listing(_source, html, _url):
+            if html == "mixed":
+                return [{"url": urls[0], "title": "Privacy A", "published_date": "2026-11-13"},
+                        {"url": urls[1], "title": "Privacy B", "published_date": "2026-11-12"},
+                        {"url": urls[2], "title": "Privacy C", "published_date": "2026-11-09"}]
+            return []
+
+        def next_page(html, url, since=None):
+            if url == home:
+                return policies
+            if url == policies:
+                return page2
+            if url == page2:
+                return page3
+            return None
+
+        def proves_exhausted(html, url, _since):
+            return url == page3 and html == "empty"
+
+        def parse_detail(_source, html, _url, row):
+            day = int(html)
+            return {"title_original": row["title"], "content_text": "official article body",
+                    "published_date": f"2026-11-{day:02d}", "content_hash": "hash",
+                    "metadata": {"privacy_relevant": True}}
+
+        adapter = SimpleNamespace(parse_listing=parse_listing, next_page_url=next_page,
+                                   proves_window_exhausted=proves_exhausted,
+                                   parse_detail=parse_detail)
+        with patch.object(runner, "_adapter", return_value=adapter):
+            result = runner.collect_source("vn-gov", "2026-11-11", "2026-11-13",
+                                           client=_MemoryClient(responses))
+        self.assertEqual(result["details_attempted"], 3)
+        self.assertEqual(result["out_of_range"], 1)
+        self.assertEqual(len(result["items"]), 2)
+        self.assertTrue(result["coverage_complete"])
+        self.assertEqual(result["status"], "success")
+
+    def test_unknown_vietnam_date_cannot_be_reported_as_a_proven_empty_window(self):
+        from scripts.collector_scrapling.adapters import vn_gov
+        home, policies = vn_gov.HOME, vn_gov.POLICIES
+        page = f"{vn_gov.TIMELINE}/2.htm"
+        detail = f"https://{vn_gov.HOST}/privacy-item-000000000000000001.htm"
+        responses = {home: ("home", "text/html"), policies: ("policies", "text/html"),
+                     page: ("timeline", "text/html"), detail: ("detail", "text/html")}
+        adapter = SimpleNamespace(
+            parse_listing=lambda _source, html, _url: ([{"url": detail, "title": "Privacy item"}]
+                                                       if html == "timeline" else []),
+            next_page_url=lambda _html, url, since=None: policies if url == home else page if url == policies else None,
+            proves_window_exhausted=lambda _html, url, _since: url == page,
+            parse_detail=lambda *_args: {"title_original": "Privacy item", "content_text": "official content",
+                                        "published_date": None, "content_hash": "hash",
+                                        "metadata": {"privacy_relevant": False}},
+        )
+        with patch.object(runner, "_adapter", return_value=adapter):
+            result = runner.collect_source("vn-gov", "2026-11-11", "2026-11-13",
+                                           client=_MemoryClient(responses))
+        self.assertEqual(result["unknown_date_candidates"], 1)
+        self.assertFalse(result["coverage_complete"])
+        self.assertEqual(result["status"], "partial")
+
 
 if __name__ == "__main__":
     unittest.main()

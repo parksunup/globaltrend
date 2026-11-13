@@ -4,13 +4,33 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from scripts.collector import parsers, expansion
-from scripts.collector.core import HttpClient, FetchError
+from scripts.collector.core import HttpClient, FetchError, fetch_listing
 from scripts.collector.cloud_step import validate_claim
 
 ROOT=Path(__file__).resolve().parents[1]
 FIXTURES=ROOT/'tests/fixtures/collector-expansion'
 
 class ExpansionTests(unittest.TestCase):
+    def test_oaic_403_falls_back_to_attributed_publicnow_release(self):
+        source_url='https://www.publicnow.com/source/91701'
+        article_url='https://www.publicnow.com/view/32AED3FB5E7F6CE28D8B31C7B952C7ADC176E1CB'
+        listing='''<main><article><a href="/view/32AED3FB5E7F6CE28D8B31C7B952C7ADC176E1CB">OAIC closes preliminary inquiries into VIQ Solutions</a><time datetime="2026-11-04">4 November 2026</time></article></main>'''
+        class Client:
+            def get(self,url,headers=None):
+                if url=='https://www.oaic.gov.au/news/media-centre':raise FetchError('http_403')
+                if url==source_url:return listing.encode(),url,'text/html'
+                raise AssertionError('unexpected URL '+url)
+        rows,next_page=fetch_listing('oaic',Client(),'https://www.oaic.gov.au/news/media-centre')
+        self.assertIsNone(next_page)
+        self.assertEqual([row['url'] for row in rows],[article_url])
+        self.assertEqual(rows[0]['source_attribution'],'OAIC - Office of the Australian Information Commissioner')
+        detail='''<main><article><h1>OAIC closes preliminary inquiries into VIQ Solutions</h1><time datetime="2026-11-04"></time><div class="article-content">The Office of the Australian Information Commissioner has published a report outlining findings from its preliminary inquiries into VIQ Solutions. Distributed via Public Technologies, unedited and unaltered. Full release body with sufficient complete content for verification.</div></article></main>'''
+        item=expansion.extract('oaic',detail,article_url,rows[0])
+        self.assertGreater(len(item['content_text']),80)
+        self.assertEqual(item['published_date'],'2026-11-04')
+        self.assertEqual(item['metadata']['republisher'],'Public Technologies')
+        self.assertTrue(item['metadata']['requires_review'])
+
     def test_netherlands_ap_uses_official_rss_for_discovery_and_preserves_evidence(self):
         route=expansion.ROUTES['nl-ap']
         feed='''<?xml version="1.0" encoding="UTF-8"?>

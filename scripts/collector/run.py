@@ -101,7 +101,8 @@ def source_eligibility(config, require_id=False):
 def execution_outcome(records):
     if any(r['status']=='failed' for r in records): return 'failed'
     if all(r['status']=='held' for r in records): return 'blocked'
-    if any(r['status']!='success' for r in records): return 'partial'
+    if any(r['status']=='empty_window' and r.get('coverage_complete') is not True for r in records): return 'partial'
+    if any(r['status'] not in ('success','empty_window') for r in records): return 'partial'
     return 'success'
 
 

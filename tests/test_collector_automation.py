@@ -13,6 +13,14 @@ from scripts.collector.store import SupabaseStore
 
 
 class AutomationTests(unittest.TestCase):
+    def test_exhaustively_verified_empty_window_is_a_success_not_a_partial_failure(self):
+        self.assertEqual(run.execution_outcome([
+            {'status':'empty_window','coverage_complete':True},
+        ]),'success')
+        self.assertEqual(run.execution_outcome([
+            {'status':'empty_window','coverage_complete':False},
+        ]),'partial')
+
     def execute(self, configs, store=None, collected=None, flags=('--write',), env=None):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

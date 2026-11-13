@@ -24,7 +24,9 @@
     {
       "source": "ftc",
       "source_id": "430bd32d-19b1-4752-8280-7b2d2acbda88",
-      "language": "en"
+      "language": "en",
+      "max_pages": null,
+      "max_items": null
     },
     {
       "source": "calprivacy",

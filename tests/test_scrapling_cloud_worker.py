@@ -17,6 +17,31 @@ from scripts.collector_scrapling.cloud_worker import (
 
 
 class ScraplingCloudWorkerTests(unittest.TestCase):
+    def test_ftc_source_override_removes_page_and_item_caps_and_verified_empty_is_complete(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "registry.json"
+            path.write_text(json.dumps({
+                "collector": "scrapling-separate-v1", "timezone": "Asia/Seoul", "lookback_days": 3,
+                "max_pages_per_source": 10, "max_items_per_source": 30,
+                "sources": [{"source": "ftc", "source_id": "ftc-id", "language": "en",
+                             "max_pages": None, "max_items": None}],
+            }), encoding="utf-8")
+            def rpc(name, args):
+                if name in ("collector_source_allowed",): return True
+                if name == "collector_capacity": return {"can_write": True}
+                if name == "record_scrapling_collection_run": return {"run_id": args["p_id"]}
+                raise AssertionError(name)
+            def collect(source, since, until, **kwargs):
+                self.assertEqual(source, "ftc")
+                self.assertEqual(kwargs, {"max_pages": None, "max_items": None})
+                return {"status": "empty_window", "coverage_complete": True,
+                        "pages": 12, "discovered": 80, "details_attempted": 0,
+                        "errors": [], "items": []}
+            result = run(registry_path=path, call_rpc=rpc, collect=collect)
+            self.assertEqual(result["status"], "complete")
+            self.assertEqual(result["sources"][0]["status"], "empty_window")
+            self.assertTrue(result["sources"][0]["coverage_complete"])
+
     def test_source_row_gate_checks_only_the_exact_live_approval_fields(self):
         class Response:
             def __enter__(self): return self

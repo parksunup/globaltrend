@@ -141,11 +141,38 @@ def next_page_url(html: str, url: str, since: str | None = None) -> str | None:
     if not rows:
         return None
     if since:
-        dates = [obs.get("date") for row in rows for obs in row.get("date_observations", []) if obs.get("date")]
-        if dates and min(dates) < date.fromisoformat(since).isoformat():
-            return None
+        dates = [obs.get("date") for row in rows for obs in row.get("date_observations", [])]
+        # Only stop when every card has a verified date, the page is newest to
+        # oldest, and even its newest item predates the requested window.
+        # A single old card on a mixed/undated page must not hide later pages.
+        if dates and all(dates):
+            normalized = [date.fromisoformat(value).isoformat() for value in dates]
+            ordered = all(normalized[index] <= normalized[index - 1]
+                          for index in range(1, len(normalized)))
+            if ordered and max(normalized) < date.fromisoformat(since).isoformat():
+                return None
     page_num = int(match.group(1))
     return f"{TIMELINE}/{page_num + 1}.htm"
+
+
+def proves_window_exhausted(html: str, url: str, since: str) -> bool:
+    """Prove the timeline ended through an empty fragment or a dated cutoff."""
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or parsed.hostname != HOST:
+        return False
+    match = TIMELINE_RE.fullmatch(parsed.path)
+    if not match:
+        return False
+    rows = parse_listing("vn-gov", html, url)
+    if not rows:
+        return True
+    dates = [obs.get("date") for row in rows for obs in row.get("date_observations", [])]
+    if not dates or any(not value for value in dates):
+        return False
+    normalized = [date.fromisoformat(value).isoformat() for value in dates]
+    ordered = all(normalized[index] <= normalized[index - 1]
+                  for index in range(1, len(normalized)))
+    return ordered and max(normalized) < date.fromisoformat(since).isoformat()
 
 
 def is_privacy_relevant(text: str) -> bool:

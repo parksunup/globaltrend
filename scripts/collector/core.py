@@ -230,7 +230,17 @@ def fetch_listing(source,client,page):
     def fetch(url,method='GET',payload=None,headers=None):
         if method=='POST': return client.post(url,payload,headers or {'Content-Type':'application/json'})
         return client.get(url,headers=headers) if headers is not None else client.get(url)
-    data,final,ctype=fetch(page)
+    try:
+        data,final,ctype=fetch(page)
+    except FetchError as error:
+        # OAIC's official media-centre listing has intermittently returned
+        # HTTP 403 to the cloud collector. Retry discovery through its
+        # explicitly attributed PublicNow republishing archive. Robots checks
+        # and the same Crawlee request/rate controls still apply to that host.
+        if (source!='oaic' or page!='https://www.oaic.gov.au/news/media-centre'
+                or str(error) not in ('http_403','http_503','network_policy_denied_403')):
+            raise
+        data,final,ctype=fetch(expansion.ROUTES['oaic']['publicnow_source'])
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:
         return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))

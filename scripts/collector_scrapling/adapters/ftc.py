@@ -82,7 +82,29 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
     return list(found.values())
 
 
-def next_page_url(html: str, listing_url: str) -> str | None:
+def listing_dates(rows: list[dict]) -> list[str] | None:
+    dates = []
+    for row in rows:
+        raw = row.get("published_date")
+        if not raw:
+            observations = row.get("date_observations") or []
+            raw = next((item.get("value") for item in observations if item.get("value")), None)
+        try:
+            dates.append(date.fromisoformat(str(raw)[:10]).isoformat())
+        except (TypeError, ValueError):
+            return None
+    return dates
+
+
+def proves_before_window(rows: list[dict], since: str) -> bool:
+    dates = listing_dates(rows)
+    if dates is None:
+        return False
+    ordered = all(dates[index] <= dates[index - 1] for index in range(1, len(dates)))
+    return bool(dates) and ordered and max(dates) < date.fromisoformat(since).isoformat()
+
+
+def next_page_url(html: str, listing_url: str, since: str | None = None) -> str | None:
     """Return a verified same-host next URL retaining FTC's topic filters."""
     parsed_listing = urlsplit(listing_url)
     query = parse_qs(parsed_listing.query, keep_blank_values=True)
@@ -92,9 +114,15 @@ def next_page_url(html: str, listing_url: str) -> str | None:
             or query.get(filter_key) != ["29"]):
         raise ValueError("ftc_listing_query_unverified")
     soup = BeautifulSoup(html, "html.parser")
+    if since:
+        rows = parse_listing(SOURCE_ID, html, listing_url)
+        if proves_before_window(rows, since):
+            return None
     anchor = soup.select_one("a[rel~='next'], .pager__item--next a[href]")
-    if not anchor or not anchor.get("href"):
+    if not anchor:
         return None
+    if not anchor.get("href"):
+        raise ValueError("ftc_next_link_missing_href")
     target = urljoin(listing_url, anchor["href"])
     parts = urlsplit(target)
     next_query = parse_qs(parts.query, keep_blank_values=True)
@@ -102,7 +130,7 @@ def next_page_url(html: str, listing_url: str) -> str | None:
             or "items_per_page" in next_query
             or next_query.get("search") != ["privacy"]
             or next_query.get(filter_key) != ["29"]):
-        return None
+        raise ValueError("ftc_next_link_unverified")
     return urlunsplit(("https", parts.netloc, parts.path, urlencode(next_query, doseq=True), ""))
 
 
