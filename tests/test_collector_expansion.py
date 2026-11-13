@@ -168,6 +168,14 @@ class ExpansionTests(unittest.TestCase):
         data['pageNumber']=7
         with self.assertRaisesRegex(ValueError,'ec_listing_schema_or_page_changed'):
             expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
+
+    def test_ec_accepts_live_statement_and_speech_reference_classes(self):
+        for reference in ('STATEMENT/26/2431','SPEECH/26/2428'):
+            payload={'totalNumber':1,'pageNumber':1,'pageSize':10,
+                     'docuLanguageListResources':[{'refCode':reference,'title':'Official release','eventDate':'2026-11-13'}]}
+            rows,next_page=expansion.discover('ec',json.dumps(payload),expansion.ROUTES['ec']['listing'])
+            self.assertIsNone(next_page)
+            self.assertEqual(rows[0]['url'],'https://ec.europa.eu/commission/presscorner/detail/en/'+reference.lower().replace('/','_'))
     def test_ca_opc_advice_to_parliament_is_an_approved_paginated_listing(self):
         route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][0]
         html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'
