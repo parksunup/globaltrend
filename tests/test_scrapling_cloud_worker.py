@@ -17,14 +17,14 @@ from scripts.collector_scrapling.cloud_worker import (
 
 
 class ScraplingCloudWorkerTests(unittest.TestCase):
-    def test_ftc_source_override_removes_page_and_item_caps_and_verified_empty_is_complete(self):
+    def test_all_sources_default_to_unbounded_pages_and_items(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "registry.json"
             path.write_text(json.dumps({
                 "collector": "scrapling-separate-v1", "timezone": "Asia/Seoul", "lookback_days": 3,
-                "max_pages_per_source": 10, "max_items_per_source": 30,
-                "sources": [{"source": "ftc", "source_id": "ftc-id", "language": "en",
-                             "max_pages": None, "max_items": None}],
+                "max_pages_per_source": None, "max_items_per_source": None,
+                "sources": [{"source": slug, "source_id": slug + "-id", "language": "en"}
+                            for slug in ("cn-cac", "hk-pcpd", "vn-gov", "ftc", "calprivacy")],
             }), encoding="utf-8")
             def rpc(name, args):
                 if name in ("collector_source_allowed",): return True
@@ -32,15 +32,15 @@ class ScraplingCloudWorkerTests(unittest.TestCase):
                 if name == "record_scrapling_collection_run": return {"run_id": args["p_id"]}
                 raise AssertionError(name)
             def collect(source, since, until, **kwargs):
-                self.assertEqual(source, "ftc")
                 self.assertEqual(kwargs, {"max_pages": None, "max_items": None})
                 return {"status": "empty_window", "coverage_complete": True,
                         "pages": 12, "discovered": 80, "details_attempted": 0,
                         "errors": [], "items": []}
             result = run(registry_path=path, call_rpc=rpc, collect=collect)
             self.assertEqual(result["status"], "complete")
-            self.assertEqual(result["sources"][0]["status"], "empty_window")
-            self.assertTrue(result["sources"][0]["coverage_complete"])
+            self.assertEqual(len(result["sources"]), 5)
+            self.assertTrue(all(row["status"] == "empty_window" and row["coverage_complete"]
+                                for row in result["sources"]))
 
     def test_source_row_gate_checks_only_the_exact_live_approval_fields(self):
         class Response:

@@ -62,11 +62,13 @@ results from these checks were written to the database.
   8 were outside the requested range, and completed with `coverage_complete=true`.
   No detail page was required because every candidate had a verified listing
   date outside the range.
-- FTC now has per-source `max_pages: null` and `max_items: null` overrides;
-  the worker honors per-source overrides instead of applying the generic 10
-  page / 30 item caps. For an early date cutoff, it requires complete,
-  descending listing dates across pages. Unknown or unordered dates cause it
-  to keep following pagination.
+- The default 10-page / 30-item caps are now removed for every Scrapling source;
+  the registry uses `null` defaults and the worker passes them through without
+  truncation. OECD's separate RSS collector also no longer truncates its
+  default candidate set at 30. Optional manual limits remain available when
+  explicitly requested for a resumable run. For an early FTC date cutoff, the
+  collector requires complete, descending listing dates across pages. Unknown
+  or unordered dates cause it to keep following pagination.
 - `empty_window` counts as a successful run only when `coverage_complete` is
   true. An empty result without source-specific evidence remains `partial`,
   so missing dates, failed details, or an unknown listing boundary cannot be
