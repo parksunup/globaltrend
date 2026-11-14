@@ -64,7 +64,7 @@ Deno.serve(async (req: Request) => {
       }
       const title = item.title_original.trim();
       const body = item.content_text.trim();
-      const aiReady = Boolean(title) && body.length >= 10 && body.length <= 80000;
+      const aiReady = Boolean(title?.trim()) && Boolean(body?.trim());
       const saved = await rpc("ingest_source_item", {
         p_source_id: config.source_id,
         p_external_id: null,

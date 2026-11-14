@@ -12,7 +12,7 @@ def mark_ai_readiness(item):
     body = item.get('content_text')
     usable = (
         isinstance(title, str) and bool(title.strip())
-        and isinstance(body, str) and 10 <= len(body.strip()) <= 80000
+        and isinstance(body, str) and bool(body.strip())
     )
     metadata['ai_ready'] = usable
     metadata['draft_readiness_reason'] = (
