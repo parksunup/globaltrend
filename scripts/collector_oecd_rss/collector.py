@@ -183,6 +183,11 @@ def _pdf_item(client: SafeScraplingClient, item: dict, markup: bytes) -> dict:
             if reader.is_encrypted or not 1 <= len(reader.pages) <= 300:
                 continue
             pages = [" ".join((page.extract_text() or "").split()) for page in reader.pages]
+            ocr_pages = [index + 1 for index, value in enumerate(pages) if len(value) < 20]
+            if ocr_pages:
+                from scripts.collector.pdf_ocr import add_text_layer
+                reader = PdfReader(io.BytesIO(add_text_layer(data, 'oecd', ocr_pages)), strict=True)
+                pages = [" ".join((page.extract_text() or "").split()) for page in reader.pages]
             text = "\n\n".join(f"[Page {index + 1}]\n{value}" for index, value in enumerate(pages) if value)
             if len(text.strip()) < 80:
                 continue
@@ -197,6 +202,8 @@ def _pdf_item(client: SafeScraplingClient, item: dict, markup: bytes) -> dict:
                 "read_scope": "official_linked_pdf_text",
                 "pdf_source_url": final_url,
                 "pdf_page_count": len(reader.pages),
+                "pdf_extraction_method": "ocrmypdf+pypdf" if ocr_pages else "pypdf",
+                "pdf_ocr_pages": ocr_pages,
                 "body_truncated": body_truncated,
                 "unread_attachments": [],
                 "factual_status": "official_linked_pdf_text_requires_human_review",

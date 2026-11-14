@@ -257,9 +257,10 @@ def extract(source, html, url):
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(title.get_text()),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':metadata}
 
-def extract_pdf(data,url):
-    """Preserve page boundaries. OCR and a judgment-specific parser are absent."""
+def extract_pdf(data,url,source=None):
+    """Read every page; add an OCR text layer when a page is image-only."""
     from pypdf import PdfReader
+    from .pdf_ocr import add_text_layer
     try:
         reader=PdfReader(io.BytesIO(data),strict=True)
         # Some official notice PDFs are owner-permission encrypted but permit
@@ -269,10 +270,30 @@ def extract_pdf(data,url):
         if reader.is_encrypted and not reader.decrypt(''):
             raise ValueError('pdf_limit_or_encrypted')
         if len(reader.pages)<1: raise ValueError('pdf_limit_or_encrypted')
+        original_pages=list(reader.pages)
+        def page_text(page):
+            try:
+                return page.extract_text(extraction_mode='layout') or ''
+            except KeyError:
+                # A blank or image-only page may have no /Contents stream.
+                if '/Contents' not in page:
+                    return ''
+                raise
+        texts=[page_text(page) for page in original_pages]
+        ocr_pages=[i for i,text in enumerate(texts,1) if len(normalize(text))<20]
+        if ocr_pages:
+            ocr_reader=PdfReader(io.BytesIO(add_text_layer(data,source,ocr_pages)),strict=True)
+            if len(ocr_reader.pages)!=len(original_pages):
+                raise ValueError('pdf_ocr_page_count_changed')
+            # pypdf layout mode omits invisible OCR text. Read OCR pages in
+            # standard mode; keep the existing layout extraction elsewhere.
+            texts=[(ocr_reader.pages[i].extract_text() or '') if i + 1 in ocr_pages
+                   else text for i,text in enumerate(texts)]
+        if len(normalize(' '.join(texts)))<20:
+            raise ValueError('pdf_text_missing_after_ocr' if ocr_pages else 'pdf_text_missing_or_ocr_required')
         pages=[]; related=[]
-        for i,page in enumerate(reader.pages,1):
-            text=page.extract_text(extraction_mode='layout') or ''
-            if len(normalize(text))<20: raise ValueError('pdf_text_missing_or_ocr_required')
+        for i,page in enumerate(original_pages,1):
+            text=texts[i-1]
             pages.append({'page':i,'text':text.strip()})
             for annotation in page.get('/Annots', []):
                 action=annotation.get_object().get('/A')
@@ -281,9 +302,14 @@ def extract_pdf(data,url):
                     link=str(action.get('/URI', ''))
                     if action.get('/S')=='/URI' and urlsplit(link).scheme=='https':
                         related.append({'url':link,'title':'PDF link','page':i,'read':False})
-        return {'pages':pages,'related_documents':related,'read_scope':'pdf_text_only','url':url,'requires_review':True}
+        return {'pages':pages,'related_documents':related,
+                'read_scope':'pdf_text_with_ocr' if ocr_pages else 'pdf_text_only',
+                'extraction_method':'ocrmypdf+pypdf' if ocr_pages else 'pypdf',
+                'ocr_pages':ocr_pages,'url':url,'requires_review':True}
     except ValueError as e:
-        if str(e) in ('pdf_text_missing_or_ocr_required','pdf_limit_or_encrypted'): raise
+        if str(e) in ('pdf_text_missing_or_ocr_required','pdf_text_missing_after_ocr',
+                      'pdf_limit_or_encrypted','pdf_ocr_runtime_missing','pdf_ocr_timeout',
+                      'pdf_ocr_page_count_changed') or str(e).startswith('pdf_ocr_failed_exit_'): raise
         raise ValueError('pdf_extraction_failed') from e
     except Exception as e: raise ValueError('pdf_extraction_failed') from e
 
@@ -333,7 +359,7 @@ def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
         tc_identity_ok=bool(tc_article and pdf_article and tc_article.groups()==pdf_article.groups())
         if page_host!=approved_page_host or (page_path!=approved_page_path and not (source=='cn-tc260' and tc_identity_ok)):
             raise ValueError('pdf_page_not_evidence_backed')
-    pdf=extract_pdf(data,url)
+    pdf=extract_pdf(data,url,source)
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
     observations=list((row or {}).get('date_observations',[]))
     published=expansion.listing_date(row or {})
@@ -348,27 +374,64 @@ def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
             'requires_review':True,'related_documents':[{'url':url,'title':title,'read':True}],
             'unread_attachments':[link['url'] for link in pdf['related_documents']],
             'source_page_url':source_page_url,'factual_status':'official_source_pdf_text_not_human_reviewed',
-            'ai_ready':False,'extraction_method':'pypdf'} }
+            'ai_ready':False,'extraction_method':pdf.get('extraction_method','pypdf'),
+            'pdf_ocr_pages':pdf.get('ocr_pages',[])} }
 
 def extract_pdpc_pdf(data,url,row):
-    """Only the observed official asset route; text reading is not visual/OCR review."""
+    """Read the observed official asset route, including scanned PDF pages."""
     target=urlsplit(url)
     if target.scheme!='https' or target.netloc!='www.pdpc.gov.sg' or not re.fullmatch(r'/assets/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}',target.path):
         raise ValueError('unapproved_pdpc_pdf_asset')
     if not row or not normalize(row.get('title','')):
         raise ValueError('pdf_listing_evidence_missing')
-    pdf=extract_pdf(data,url)
+    pdf=extract_pdf(data,url,'pdpc')
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
     # PDPC cards can display event dates. No verified PDF publication dateline
     # exists yet, so neither listing dates nor arbitrary PDF prose decide range.
     observations=[dict(o,meaning='listing_date_candidate') for o in row.get('date_observations',[])]
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-asset-pdf-text-v1',
-        'read_scope':'pdf_text_only','date_observations':observations,'pdf_pages':pdf['pages'],
+        'read_scope':pdf['read_scope'],'date_observations':observations,'pdf_pages':pdf['pages'],
+        'extraction_method':pdf['extraction_method'],'pdf_ocr_pages':pdf['ocr_pages'],
         'requires_review':True,'related_documents':pdf['related_documents'],
         'unread_attachments':[link['url'] for link in pdf['related_documents']],
         'factual_status':'official_pdf_text_not_visual_or_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(row['title']),'content_text':body,
         'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':None,'metadata':metadata}
+
+def extract_registered_pdf(source,data,url,row):
+    """Read a listed PDF from any registered source using the shared OCR path."""
+    import json
+    from pathlib import Path
+    registry=Path(__file__).resolve().parents[2]/'config'/'trend-collector.json'
+    config=next((entry for entry in json.loads(registry.read_text(encoding='utf-8'))['sources']
+                 if entry.get('source')==source),None)
+    parsed=urlsplit(url)
+    listed=urlsplit((row or {}).get('url',''))
+    if (config is None or parsed.scheme!='https' or parsed.hostname not in config.get('hosts',[]) or
+            parsed.username or parsed.password or parsed.port not in (None,443) or
+            (listed.scheme,listed.hostname,listed.path)!=(parsed.scheme,parsed.hostname,parsed.path)):
+        raise ValueError('registered_pdf_listing_identity_missing')
+    title=normalize((row or {}).get('title',''))
+    if not title:
+        raise ValueError('pdf_listing_evidence_missing')
+    pdf=extract_pdf(data,url,source)
+    body=normalize(' '.join(page['text'] for page in pdf['pages']))
+    observations=list((row or {}).get('date_observations',[]))
+    published=expansion.listing_date(row or {})
+    return {'title_original':title,'content_text':body,
+            'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+            'published_date':published,
+            'metadata':{'normalization_version':NORMALIZATION_VERSION,
+                        'parser_version':'registered-source-pdf-v1',
+                        'read_scope':pdf['read_scope'],
+                        'date_observations':observations,
+                        'pdf_pages':pdf['pages'],
+                        'pdf_ocr_pages':pdf['ocr_pages'],
+                        'extraction_method':pdf['extraction_method'],
+                        'requires_review':True,'ai_ready':False,
+                        'related_documents':pdf['related_documents'],
+                        'unread_attachments':[link['url'] for link in pdf['related_documents']],
+                        'factual_status':'official_pdf_machine_extracted_not_human_reviewed'}}
 
 def extract_publication_document(source,data,url,content_type,row=None):
     """Fallback body/date adapter for the six observed public publications.
@@ -464,10 +527,13 @@ def extract_publication_document(source,data,url,content_type,row=None):
 
 
 def extract_document(source,data,url,content_type,row=None):
-    if source in expansion.PUBLICATION_SOURCE_IDS:
-        return extract_publication_document(source,data,url,content_type,row)
     if source in ('jpdp-my','global-cbpr','iso-iec-sc27','cn-tc260') and content_type in ('application/pdf','application/octet-stream'):
         return extract_verified_source_pdf(source,data,url,row,(row or {}).get('discovered_from'))
+    if (content_type=='application/pdf' or
+            content_type=='application/octet-stream' and isinstance(data,bytes) and data.startswith(b'%PDF-')) and source not in ('pdpc','curia'):
+        return extract_registered_pdf(source,data,url,row)
+    if source in expansion.PUBLICATION_SOURCE_IDS:
+        return extract_publication_document(source,data,url,content_type,row)
     if source in expansion.ROUTES and source!='ppc':
         if content_type not in ('text/html','application/xhtml+xml') and not (source in ('ec','anpd-br') and content_type=='application/json'):raise ValueError('unsupported_document_type')
         return expansion.extract(source,data.decode('utf-8','replace'),url,row)
@@ -542,7 +608,7 @@ def extract_document(source,data,url,content_type,row=None):
         raise ValueError('unsupported_document_type')
     if not row or not normalize(row.get('title','')):
         raise ValueError('press_release_listing_evidence_missing')
-    pdf=extract_pdf(data,url)
+    pdf=extract_pdf(data,url,'curia')
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
     observations=list(row.get('date_observations',[]))
     # Only the release's dateline, never case history or PDF file metadata.
@@ -560,6 +626,7 @@ def extract_document(source,data,url,content_type,row=None):
     published=next(iter(distinct)) if len(distinct)==1 else None
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'curia-press-release-v1',
         'read_scope':'press_release_pdf_not_judgment','date_observations':observations,
+        'extraction_method':pdf['extraction_method'],'pdf_ocr_pages':pdf['ocr_pages'],
         'pdf_pages':pdf['pages'],'case_numbers':list(dict.fromkeys(re.findall(r'\b[CT]-\d+/\d+(?:\s+[A-Z]{1,2})?\b',row['title']))),
         'requires_review':True,'related_documents':pdf['related_documents'],
         'unread_attachments':[link['url'] for link in pdf['related_documents']],
