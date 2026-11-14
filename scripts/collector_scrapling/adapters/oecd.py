@@ -339,6 +339,14 @@ def extract_pdf(data: bytes, url: str, row: dict) -> dict:
             raise ValueError("oecd_pdf_page_or_encryption_limit")
         pages = [{"page": index + 1, "text": _normal(page.extract_text() or "")}
                  for index, page in enumerate(reader.pages)]
+        ocr_pages = [page['page'] for page in pages if len(page['text']) < 20]
+        if ocr_pages:
+            from scripts.collector.pdf_ocr import add_text_layer
+            reader = PdfReader(io.BytesIO(add_text_layer(data, 'oecd', ocr_pages)), strict=True)
+            if len(reader.pages) != len(pages):
+                raise ValueError('oecd_pdf_ocr_page_count_changed')
+            pages = [{"page": index + 1, "text": _normal(page.extract_text() or "")}
+                     for index, page in enumerate(reader.pages)]
     except Exception as error:
         raise ValueError("oecd_pdf_parse_failed:" + type(error).__name__) from None
     full_text = "\n\n".join(f"[Page {page['page']}]\n{page['text']}" for page in pages if page["text"]).strip()
@@ -363,6 +371,8 @@ def extract_pdf(data: bytes, url: str, row: dict) -> dict:
             "requires_review": True,
             "ai_ready": False,
             "pdf_pages": pages,
+            "pdf_extraction_method": "ocrmypdf+pypdf" if ocr_pages else "pypdf",
+            "pdf_ocr_pages": ocr_pages,
             "pdf_page_count": len(pages),
             "pdf_source_url": url,
             "related_documents": related,

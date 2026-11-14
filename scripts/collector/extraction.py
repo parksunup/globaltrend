@@ -262,12 +262,13 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
                          not actual.query and not actual.fragment)
         if not same_identity or pdf_type not in ('application/pdf', 'application/octet-stream'):
             raise ValueError('verified_source_pdf_response_mismatch')
-        pdf = parsers.extract_pdf(pdf_data, final_url)
+        pdf = parsers.extract_pdf(pdf_data, final_url, source)
         text = parsers.normalize(' '.join(page['text'] for page in pdf['pages']))
         if not text:
             raise ValueError('verified_source_pdf_text_empty')
         body_parts.append(link['title'] + '\n' + text)
-        pages.extend({'document_url': final_url, 'document_title': link['title'], **page}
+        pages.extend({'document_url': final_url, 'document_title': link['title'],
+                      'extraction_method': pdf.get('extraction_method', 'pypdf'), **page}
                      for page in pdf['pages'])
         documents.append({'url': final_url, 'title': link['title'], 'read': True})
     body = parsers.normalize('\n\n'.join(body_parts))
@@ -302,6 +303,8 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
             'source_page_url': page_url,
             'factual_status': 'official_source_documents_machine_extracted_not_human_reviewed',
             'ai_ready': False,
-            'extraction_method': 'trafilatura_attempt_then_pypdf',
+            'extraction_method': ('trafilatura_attempt_then_ocrmypdf+pypdf'
+                                  if any(page['extraction_method'] != 'pypdf' for page in pages)
+                                  else 'trafilatura_attempt_then_pypdf'),
         },
     }

@@ -5,6 +5,7 @@ probe parsing must fail these tests. No network or production database used.
 """
 import io
 import unittest
+from unittest.mock import patch
 
 from scripts.collector import parsers
 from scripts.collector.core import collect
@@ -29,6 +30,34 @@ def press_pdf(text):
 
 
 class LiveAdapterTests(unittest.TestCase):
+    def test_shared_pdf_ocr_handles_scanned_pages_for_any_source(self):
+        from pypdf import PdfWriter
+        writer = PdfWriter()
+        writer.add_blank_page(width=612, height=792)
+        scanned = io.BytesIO()
+        writer.write(scanned)
+        recovered = press_pdf('Official privacy decision with readable scanned evidence.')
+        for source in ('pdpc', 'curia', 'ppc', 'oecd', 'cn-tc260'):
+            with self.subTest(source=source), patch(
+                'scripts.collector.pdf_ocr.add_text_layer', return_value=recovered
+            ) as ocr:
+                result = parsers.extract_pdf(scanned.getvalue(), 'https://example.org/file.pdf', source)
+                self.assertIn('Official privacy decision', result['pages'][0]['text'])
+                self.assertEqual(result['ocr_pages'], [1])
+                self.assertEqual(result['extraction_method'], 'ocrmypdf+pypdf')
+                ocr.assert_called_once_with(scanned.getvalue(), source, [1])
+
+    def test_registered_source_pdf_uses_shared_extraction(self):
+        url='https://www.cnil.fr/sites/default/files/2026/report.pdf'
+        row={'url':url,'title':'Privacy report','date_observations':[]}
+        item=parsers.extract_document('cnil',press_pdf('Official privacy report text from CNIL.'),
+                                      url,'application/pdf',row)
+        self.assertIn('Official privacy report',item['content_text'])
+        self.assertEqual(item['metadata']['extraction_method'],'pypdf')
+        with self.assertRaisesRegex(ValueError,'registered_pdf_listing_identity_missing'):
+            parsers.extract_document('cnil',press_pdf('Official privacy report text from CNIL.'),
+                                     url,'application/pdf',{'url':'https://other.example/report.pdf','title':'Report'})
+
     def test_dpc_listing_date_fills_missing_detail_date_but_detail_date_wins_conflict(self):
         url = 'https://www.dataprotection.ie/en/news-media/latest-news/example'
         row = {'title': 'Example', 'date_observations': [{
@@ -146,8 +175,10 @@ class LiveAdapterTests(unittest.TestCase):
         self.assertIsNone(item['published_date'])
         self.assertEqual(item['metadata']['date_observations'][0]['meaning'], 'listing_date_candidate')
 
-    def test_pdpc_pdf_missing_text_preserves_ocr_error(self):
-        with self.assertRaisesRegex(ValueError, '^pdf_text_missing_or_ocr_required$'):
+    def test_pdpc_pdf_missing_text_after_ocr_is_not_saved(self):
+        from unittest.mock import patch
+        with patch('scripts.collector.pdf_ocr.add_text_layer', side_effect=lambda data, source, pages: data), \
+             self.assertRaisesRegex(ValueError, '^pdf_text_missing_after_ocr$'):
             parsers.extract_document('pdpc', press_pdf(''),
                 'https://www.pdpc.gov.sg/assets/82bd9d26-fa3d-4f9f-96fc-8c7829fc6b64', 'application/pdf', {'title':'Official PDF'})
 
@@ -163,7 +194,7 @@ class LiveAdapterTests(unittest.TestCase):
                 'https://www.pdpc.gov.sg/assets/25e68133-795e-4c3f-bbea-7456b01c8506', 'application/pdf')
 
     def test_other_sources_cannot_ingest_pdf_as_verified_curia_press_release(self):
-        with self.assertRaisesRegex(ValueError, 'unsupported_document_type'):
+        with self.assertRaisesRegex(ValueError, 'registered_pdf_listing_identity_missing'):
             parsers.extract_document('edpb', b'%PDF', 'https://www.edpb.europa.eu/a.pdf', 'application/pdf', {'title': 'A'})
 
     def test_curia_base_cannot_retarget_discovered_documents(self):

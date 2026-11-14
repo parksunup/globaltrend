@@ -113,7 +113,7 @@ def _replace_with_official_pdf(item, pdf_bytes, pdf_url, source_id):
         raise
     except Exception as error:
         raise CollectionError("official_pdf_preflight_failed:" + type(error).__name__) from None
-    extracted = extract_pdf(pdf_bytes, pdf_url)
+    extracted = extract_pdf(pdf_bytes, pdf_url, source_id)
     body = "\n\n".join(page["text"].strip() for page in extracted["pages"] if page.get("text", "").strip())
     if not body:
         raise CollectionError("official_pdf_text_missing_or_ocr_required")
@@ -124,8 +124,9 @@ def _replace_with_official_pdf(item, pdf_bytes, pdf_url, source_id):
         "read_scope": "official_linked_pdf_text",
         "pdf_url": pdf_url,
         "pdf_pages": extracted["pages"],
-        "pdf_extraction_method": "pypdf",
-        "pdf_ocr_performed": False,
+        "pdf_extraction_method": extracted["extraction_method"],
+        "pdf_ocr_performed": bool(extracted["ocr_pages"]),
+        "pdf_ocr_pages": extracted["ocr_pages"],
         "requires_review": True,
         "ai_ready": False,
     })

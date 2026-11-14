@@ -38,8 +38,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install open-source PDF OCR and source languages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ocrmypdf tesseract-ocr-eng tesseract-ocr-spa tesseract-ocr-fra tesseract-ocr-jpn tesseract-ocr-nld tesseract-ocr-por tesseract-ocr-chi-sim tesseract-ocr-chi-tra
       - name: Install pinned Crawlee collector dependencies
-        run: python -m pip install -r scripts/collector/requirements.txt
+        run: python -m pip install -r scripts/collector/requirements.txt Pillow==12.0.0
+      - name: Verify scanned PDF OCR
+        run: python -m unittest tests.test_pdf_ocr_runtime
       - name: Validate Crawlee collector
         run: python -m unittest discover -s tests -p 'test_collector*.py'
       - name: Collect the PR #114 Crawlee source set
