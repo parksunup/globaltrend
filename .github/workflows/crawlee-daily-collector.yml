@@ -1,9 +1,6 @@
 name: Daily Crawlee source collectors
 
 on:
-  schedule:
-    # 03:00 Asia/Seoul (UTC+9). GitHub may delay scheduled starts.
-    - cron: '0 18 * * *'
   workflow_dispatch:
     inputs:
       actual_collection:
