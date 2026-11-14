@@ -1,10 +1,7 @@
 name: Daily cloud Python collector
 
 on:
-  # The Supabase Edge collection run starts at 04:00 KST; consume its queue before
-  # the 07:00 KST daily producer begins.
-  schedule:
-    - cron: '0 21 * * *'
+  # Supabase Cron dispatches this workflow at 06:00 KST.
   workflow_dispatch:
 
 permissions:
