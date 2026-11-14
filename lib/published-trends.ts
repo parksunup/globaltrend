@@ -22,11 +22,11 @@ export type PublishedStory = {
 type ReportRow = {
   id: string; source_item_id: string; title_ko: string; one_line_summary_ko: string | null;
   detailed_summary_ko: string | null; jurisdictions: string[] | null; topics: string[] | null;
-  published_at: string | null;
 };
 type SourceItemRow = {
   id: string; source_id: string; title_original: string; canonical_url: string;
   published_at: string | null; document_type: string;
+  publication_month: string | null;
 };
 
 const kindLabels: Record<string, string> = {
@@ -64,7 +64,7 @@ export async function loadPublishedStories(id?: string): Promise<PublishedStory[
   const sourceItems: SourceItemRow[] = [];
   for (const ids of batches([...new Set(reports.map(row => row.source_item_id))], LOOKUP_BATCH_SIZE)) {
     const { data, error } = await supabase.from("source_items")
-      .select("id,source_id,title_original,canonical_url,published_at,document_type").in("id", ids);
+      .select("id,source_id,title_original,canonical_url,published_at,document_type,publication_month").in("id", ids);
     if (error) throw new Error(`Unable to load published source items: ${error.code}`);
     sourceItems.push(...(data ?? []) as SourceItemRow[]);
   }
@@ -83,7 +83,9 @@ export async function loadPublishedStories(id?: string): Promise<PublishedStory[
   return reports.flatMap((report) => {
     const item = itemById.get(report.source_item_id);
     if (!item) return [];
-    const dateValue = item.published_at ?? report.published_at;
+    // A report's published_at is the site publication time, not the source date.
+    const dateValue = item.published_at;
+    const monthValue = item.publication_month;
     return [{
       id: report.id, publicationStatus: "published",
       country: report.jurisdictions?.[0] ?? "기타",
@@ -96,7 +98,7 @@ export async function loadPublishedStories(id?: string): Promise<PublishedStory[
       details: report.detailed_summary_ko ?? "",
       kind: kindLabels[item.document_type] ?? "자료",
       tags: report.topics ?? [],
-      date: dateValue ? dateValue.slice(0, 10).replaceAll("-", ".") : "날짜 미상",
+      date: dateValue ? dateValue.slice(0, 10).replaceAll("-", ".") : monthValue?.replace("-", ".") ?? "",
       officialUrl: item.canonical_url,
     }];
   });

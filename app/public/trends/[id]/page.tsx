@@ -32,7 +32,7 @@ export default async function TrendDetail({ params, searchParams }: {
     <section className={styles.searchPage}>
       <article className={styles.trendDetail}>
         <Link href={returnTo}>← 동향 목록으로</Link>
-        <p className={styles.featureMeta}>{story.region} · {story.institution} · {story.date}</p>
+        <p className={styles.featureMeta}>{story.region} · {story.institution}{story.date?` · ${story.date}`:''}</p>
         <h1>{story.title}</h1>
         <section className={styles.trendSummary}><h2>핵심 요약</h2><p><TrendLawCitations text={story.summary} documents={legalDocuments} idPrefix={`${story.id}-summary`} /></p></section>
         {story.details && <section className={styles.trendBody}><h2>주요 내용</h2>{story.details.startsWith('- ')?<ul className={styles.reportDetailPoints}>{reportPoints(story.details).map((point,index)=><li key={index}><p><TrendLawCitations text={point.text} documents={legalDocuments} idPrefix={`${story.id}-${index}`} /></p></li>)}</ul>:<p><TrendLawCitations text={story.details} documents={legalDocuments} idPrefix={`${story.id}-details`} /></p>}</section>}

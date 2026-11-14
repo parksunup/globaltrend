@@ -20,8 +20,8 @@ For each current revision, read the complete extracted text and metadata. Compar
 - Same official announcement or event reproduced by another source/language: `same_event_duplicate` only when the full text, issuing body, event/date, named parties, and substantive action confirm it. Save the matched source item or report ID and the comparison reason.
 - Different follow-up, correction, final decision, new date, changed measure, or materially new facts: retain separately and describe the relationship in decision metadata.
 - Clearly outside privacy/data-protection scope: `irrelevant` with a short factual reason.
-- Ambiguous match, missing body, unresolved publication-date conflict, unreviewed source, material unread PDF, or insufficient evidence: `needs_review` or `source_held`; do not send it to drafting.
-- Unique, clearly relevant, complete enough for the actual body scope, date verified, source approved: `accepted`.
+- Ambiguous match, missing body, unresolved conflicting date claims, unreviewed source, material unread PDF, or insufficient evidence: `needs_review` or `source_held`; do not send it to drafting.
+- Unique, clearly relevant, complete enough for the actual body scope, source approved: `accepted`. A publication date that cannot be found is not by itself a reason to stop the Korean draft. Leave the source date empty, record the attempted date checks internally, and exclude it from weekly selection until a publication day is established.
 
 Do not treat title similarity alone as proof of duplication. For RSS abstracts or short notices, write only within the actual read scope; if there is not enough evidence for a useful sourced draft, use `needs_review`. Do not invent missing details.
 
