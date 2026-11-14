@@ -6,8 +6,8 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 
 상태에 나온 모든 미완료 자료는 다음 둘 중 하나로 끝낸다.
 
-1. 원문 전체를 확인해 개인정보 동향이 아니거나 중복이면 구체적인 제외 근거를 저장한다.
-2. 보존 대상이면 `collector_retain_for_draft` → `collector_claim_retained_draft` → 원문·첨부 확인 → 한국어 제목·요약·본문 작성 → seal/check → `submit_trend_draft` → reports와 publication_working_copies 재조회까지 끝낸다.
+1. [동향 후보 1차 분류 기준](trend-editorial-triage.md)의 다섯 가지 조치를 기존 자료와 신규 자료 모두에 적용한다: 원문에 근거한 작성, 개인정보 무관 자료 사전 제외, 저중요도 자료 제외, PDPC 최신 추출 재확인, 필요한 첨부·링크만 확인.
+2. 보존 대상은 `collector_retain_for_draft` → `collector_claim_retained_draft` → 원문 및 원고에 실제 사용한 연결자료 확인 → 한국어 제목·요약·본문 작성 → seal/check → `submit_trend_draft` → reports와 publication_working_copies 재조회까지 끝낸다.
 
 종료 요약은 직접 INSERT/UPDATE하지 않고 `collector_finalize_daily_producer(...)`로 기록한다. `collector_daily_pipeline_status(...).ready_to_complete=false`인 동안 DB는 성공 요약을 자동으로 `partial`로 바꾼다. INSERT 뒤 UPDATE로 성공을 덮어쓰는 것도 같은 장벽이 막는다. 따라서 원문만 저장됐거나 관련성 판정·한국어 초안·검사·작업실 저장 중 하나라도 남으면 그 실행은 성공이 아니다. 다음 실행은 새 수집 전에 이 미완료 목록부터 이어받는다.
 
@@ -39,7 +39,7 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 
 출처별 경로와 현재 판정은 `docs/collector-source-expansion-20261028.md`, `docs/collector-complete-source-scope.md`, `config/trend-collector.json`을 읽습니다. 37곳의 탐색 목록과 DB 실행 등록은 서로 다릅니다. 활성화된 전체 등록 출처가 최근 3일 수집 대상이며, 각 executor에 맞는 Edge·cloud-python·chatgpt-web 경로를 사용합니다. EDPS는 공식 Mastodon RSS를 cloud-python으로 옮기는 PR이 적용되기 전까지 운영 미검증입니다. HK PCPD·EU 이사회는 웹 경로, EUR-Lex는 보류로 기록합니다. 등록·예약 변경만으로 실제 실행이나 한국어 작성 완료를 주장하지 않습니다.
 
-보존 결정한 자료는 전부 한국어 제목·요약·본문 작성·검증·/work 저장까지 완료해야 합니다. 미검수 초안을 공개 검색이나 주간호 완료 목록으로 내보내지 않습니다. 월요일에 직전 월~일 발표 동향 중 주요 약 8건을 기존 /work 안에 초안으로 저장합니다. 의회·법원은 보도자료를 읽고 법률안·법률·판결 전문을 크롤링하지 않습니다. 후속 협의체·표준기구는 주 1회 대상이며 이번에 추가하지 않았습니다.
+`accepted`로 판정한 자료는 전부 한국어 제목·요약·본문 작성·검증·/work 저장까지 완료해야 합니다. `irrelevant`와 `low_significance`는 이유를 기록하고 미제출 작성 작업에서 제외하되 원문 이력은 보존합니다. 미검수 초안을 공개 검색이나 주간호 완료 목록으로 내보내지 않습니다. 월요일에 직전 월~일 발표 동향 중 주요 약 8건을 기존 /work 안에 초안으로 저장합니다. 의회·법원은 보도자료를 읽고 법률안·법률·판결 전문을 크롤링하지 않습니다. 후속 협의체·표준기구는 주 1회 대상이며 이번에 추가하지 않았습니다.
 
 2026-10-22 기준 운영 계약입니다. 일일 생산 예약은 증분 수집·한국어 초안 작성·검증·기존 /work 검수함 제출을 담당하고, 월요일 주간 예약은 직전 월~일 자료를 집계해 이 대화 실행 결과로 보고합니다. 두 역할은 기존 DB cursor, backlog, job/report 상태와 collector_edge_events 실행 요약을 공유해 중복을 막습니다. 주간 집계 예약은 수집·claim·제출 RPC를 호출하지 않습니다.
 
@@ -83,7 +83,7 @@ robots.txt 자체를 요청했을 때 받은 HTTP 403은 robots 정책 본문이
 - 기존 검수 대기 보고서의 원문·초안·출처 URL·발표일·상태를 읽고 사건 및 언어판 중복을 제거해 핵심 동향·주간 목차·검수 대기 목록을 작성합니다.
 - 보고에는 대상 기간, 전체 요청 목록과 운영 등록 목록을 구분한 출처별 성공·중복·실패·보류·미완료, 매일의 실제 실행/미실행 여부와 측정된 처리시간을 포함합니다. 첫 완전한 주간 처리가 끝나기 전에는 전체 소요시간 실측이라고 부르지 않습니다.
 - 주간 집계는 수집 take/commit, 초안 claim/submit을 호출하지 않고 기존 보고서를 고치거나 새 DB report를 만들지 않습니다. 자동 승인·발행을 하지 않습니다.
-- coverage 미완료·실패 HTTP·미열람 첨부·날짜 불일치·CNIL 재시도를 숨기지 않습니다. 적격 주간 자료가 없으면 억지로 채우지 않습니다.
+- coverage 미완료·실패 HTTP·원고의 핵심 근거가 될 자료 미확보·날짜 불일치·CNIL 재시도를 숨기지 않습니다. 다만 본문으로 작성 가능한 자료는 불필요한 링크·첨부 열람을 기다리지 않고 원문 범위에서 작성하며, 날짜가 없으면 날짜를 비워 두고 일반 동향으로 제출합니다. 적격 주간 자료가 없으면 억지로 채우지 않습니다.
 - 읽기 전용 집계가 끝난 뒤 `collector_edge_events`에 `source_id=null`, `trigger_kind='cloud-automation-summary'`, 고유 execution_id와 실제 시각, 확인한 run/report/event 및 미완료 범위를 `role='weekly-digest'` 요약으로 남깁니다. 원문·초안 전문·비밀값은 기록하지 않습니다.
 
 ## 유지되는 금지 사항
@@ -92,7 +92,7 @@ main 병합, 기존 보고서 덮어쓰기, 자동 승인·공개 발행, 미확
 
 ### 연결 문서의 사실을 원고에 사용할 때
 
-`writing_review.supplements`에는 수집 metadata의 `related_documents`와 `unread_attachments` URL을 빠짐없이 분류한다. 중요하지 않은 링크도 왜 기사의 핵심 근거가 아닌지 기록한다. `read`인 문서는 `complete=true`, `read_scope=full_document` 또는 `complete_relevant_sections`, 실제 문서·쪽·절의 locator를 적는다. 필요한 핵심 쪽을 읽지 못했으면 부분 열람이며, `material=true` 문서를 읽은 것으로 통과시키지 않는다.
+`writing_review.supplements`에는 원고에서 실제 사용한 연결 문서와 핵심 사실 확인을 위해 읽은 자료만 기록한다. 수집 metadata의 모든 URL을 열거나 분류할 필요는 없다. 장식·메뉴·단순 관련기사·소셜·영상 링크는 핵심 근거가 아닌 한 검토 대상이 아니다. 연결 문서에서 사실을 가져온 경우에만 실제 문서·쪽·절의 위치와 열람 범위를 기록한다. 본문으로 원고를 쓸 수 있으면 그 범위에서 먼저 작성하고 원문 링크를 둔다.
 
 현재 제출 RPC는 근거 인용이 정확한 source_item_revision의 `content_text`에 존재하는지를 검사한다. 연결 PDF에서만 확인되는 방법·수치·판단을 본문의 ‘보고서를 발간했다’는 문장에 연결해서 제출하면 안 된다. 첨부에만 있는 사실이 필요하면 기존 `ingest_source_item`으로 근거를 보강한 새 원문 판본을 먼저 보존한다. 주 출처의 source_id·canonical URL·제목·발표일을 유지하고, 기존 본문과 실제 읽은 공식 문서의 필요한 쪽/절 텍스트를 문서 경계·URL·위치와 함께 입력한다. metadata.evidence_documents에 각 URL·문서역할·열람범위·본문해시를 보존하고, 결합 본문의 실제 SHA256을 p_content_hash로 사용한다. 기존 판본은 삭제하거나 수정하지 않는다.
 

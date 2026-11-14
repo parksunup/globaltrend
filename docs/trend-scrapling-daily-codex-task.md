@@ -1,5 +1,15 @@
 # Daily Codex task: Scrapling filtering and Korean drafts
 
+Apply the shared [five-action editorial triage](trend-editorial-triage.md) to
+every current and future source. This Scrapling task does not create a stricter
+filter than other collection paths. Draft from the facts actually present in
+the source body and leave publication date blank when it cannot be established.
+Do not hold a usable source article merely because supplemental links remain
+unread. Exclude privacy-unrelated and low-significance items with a recorded
+reason; open only linked documents needed to support claims used in the draft.
+For existing PDPC items without drafts, re-fetch using the current PDPC
+extractor and compare the newly extracted body with the preserved revision.
+
 Run at 05:00 Asia/Seoul as the account's cloud Codex scheduled task, independent of the user's PC and desktop app. Treat a run as confirmed Codex Cloud when its Cloud Environment status reports `provider=cloud`, `running`, and `connected`, and the repository checkout or connected GitHub repository is verified as `parksunup/globaltrend`. The status may expose only an environment configuration ID instead of its display name. Do not require a per-run automation ID or `last_run`/`latest_result` field; these may be absent when a scheduled prompt resumes an existing cloud chat. The schedule's Cloud label alone is insufficient. Do not require a local shell or desktop worktree. A generic ChatGPT scheduled run or regular local Codex conversation does not count. If the active run cannot establish the Cloud provider state and the `parksunup/globaltrend` repository connection, or the connected GitHub or Supabase tools are unavailable, stop without writes and leave work pending. Use only this cloud run's connected GitHub and Supabase tools and the user's Codex subscription. Do not use the OpenAI API, another model API, or an API key. Do not approve or publish reports. Submit only through `submit_trend_draft` so the item appears as an unreviewed draft in `/work`.
 
 The cloud run may not have a repository shell. The database is authoritative for draft sealing and submission validation through `collector_seal_trend_draft` and `submit_trend_draft`; do not require local Node.js or a desktop worktree for a scheduled run. Keep the full draft in the task's working context until the RPC returns. Do not commit draft text to GitHub.
@@ -20,10 +30,10 @@ For each current revision, read the complete extracted text and metadata. Compar
 - Same official announcement or event reproduced by another source/language: `same_event_duplicate` only when the full text, issuing body, event/date, named parties, and substantive action confirm it. Save the matched source item or report ID and the comparison reason.
 - Different follow-up, correction, final decision, new date, changed measure, or materially new facts: retain separately and describe the relationship in decision metadata.
 - Clearly outside privacy/data-protection scope: `irrelevant` with a short factual reason.
-- Ambiguous match, missing body, unresolved conflicting date claims, unreviewed source, material unread PDF, or insufficient evidence: `needs_review` or `source_held`; do not send it to drafting.
+- Ambiguous match, missing/unreadable body, unreviewed source, or insufficient evidence to establish relevance/significance: `needs_review` or `source_held`; do not send it to drafting. A missing/conflicting publication date or unread attachment alone is not a blocker when the source body supports a useful draft; leave the date blank and do not select it for a dated weekly issue.
 - Unique, clearly relevant, complete enough for the actual body scope, source approved: `accepted`. A publication date that cannot be found is not by itself a reason to stop the Korean draft. Leave the source date empty, record the attempted date checks internally, and exclude it from weekly selection until a publication day is established.
 
-Do not treat title similarity alone as proof of duplication. For RSS abstracts or short notices, write only within the actual read scope; if there is not enough evidence for a useful sourced draft, use `needs_review`. Do not invent missing details.
+Do not treat title similarity alone as proof of duplication. For RSS abstracts or short notices, write only within the actual read scope. If the notice contains enough source-supported facts to report the action, scope, and status, draft from those facts and link the original; do not invent missing details. Use `needs_review` only when the body itself is unusable or cannot support a privacy relevance/significance decision.
 
 Record each decision with the current item/revision/hash, `scrapling_run_id`, matched IDs, `filter_version='scrapling-dedup-v1'`, and reason. Use a single JSONB literal with a fresh dollar-quote delimiter to call `record_scrapling_filter_decision`. Choose a delimiter that does not occur anywhere in the serialized JSON and verify that before calling Supabase. The decision JSON may contain IDs, hashes, decision code, short reason, and minimal match metadata only; it must not contain article text, title, URL, or full source metadata. The RPC performs the existing retention handoff only for `accepted` items.
 
