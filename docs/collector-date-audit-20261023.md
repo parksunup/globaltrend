@@ -37,6 +37,8 @@ PDPC API `/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2F
 
 Python과 Edge가 PDPC의 승인 공식 호스트 `https://www.pdpc.gov.sg/assets/UUID`에서 application/pdf로 받은 자료를 텍스트로 읽도록 보완했다. 목록 제목이 있어야 하며, 다른 호스트나 다른 경로를 이 지원으로 우회하지 않는다. 기존 50쪽·80,000자 제한과 페이지별 최소 텍스트 확인을 사용한다. 텍스트가 없는 페이지가 있으면 `pdf_text_missing_or_ocr_required` 오류를 보존한다. 모든 페이지의 텍스트 추출이 끝나기 전에는 ingest하지 않으며, backlog 실패 위치·범위·재시도 횟수를 유지한다. Python은 기존 PDF 도우미가 이 명시적 오류를 일반 오류로 덮던 문제도 수정했다.
 
+**2026-11-14 후속 정정:** 위의 80,000자 본문 제한은 후속 마이그레이션에서 `ai_ready`, draft retention 및 claim 경로에서 제거했습니다. 비어 있지 않은 긴 본문은 판본으로 보존해 구간별로 읽습니다. 이 정정은 당시 별도로 명시된 PDF 페이지 추출 제한을 변경하지 않습니다.
+
 PDPC PDF에는 CURIA의 Luxembourg dateline이나 보도자료/판결 의미를 적용하지 않는다. `read_scope=pdf_text_only`, `requires_review=true`, `ai_ready=false`로 보존한다. 목록 날짜의 게시일 의미가 입증되지 않았으므로 `listing_date_candidate`로 남기고 `published_date=null`로 유지한다. 행사 시작일이나 PDF 본문 날짜를 게시일로 선택하지 않는다. 연결 문서는 여전히 미열람이다. 행사 2개는 `.rte`가 HTML에서 비어 있고 별도 RSC 구조이므로 지원을 추가하지 않았다. 이 수정은 운영 backlog 재처리를 수행하지 않는다.
 
 실제 두 PDF를 PDF.js로 다시 읽은 결과는 pypdf와 달랐다. `25e68133…`는 PDF.js 3,419자, pypdf는 페이지별 합계 6,203자였다. `82bd9d26…`는 pypdf 0자였지만 PDF.js가 8,231자의 영문 텍스트를 추출했다. 후자는 보안권고·데이터 위험에 관한 유효한 영문 문장과 피드백 링크를 포함하나 문구 중복과 인포그래픽 순서 혼재가 있어 시각 구조·본문 완결성을 입증하지 않는다. pypdf 실패만으로 이 파일에 OCR이 반드시 필요하다고 단정하지 않는다. 두 Edge 결과 모두 날짜 null·검토 대기·AI 부적격 상태를 확인했다. 시각 렌더링이나 사람 내용 검토는 완료하지 않았다.
