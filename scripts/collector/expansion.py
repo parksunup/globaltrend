@@ -52,6 +52,10 @@ ROUTES['ico']={
     'host':'www.wired-gov.net',
     'listing':'https://www.wired-gov.net/wg/home.nsf/nav/latest+news?open&id=BDEX-6ZFKSH',
     'article_path':r'^/wg/news[.]nsf/articles/[^/]+$',
+    'title':'div.newsbox.article-inner-container h2[itemprop="name"]',
+    'body':'div.wgstyle.article-whole-container',
+    'date':'meta[name="DC.Date"]',
+    'date_attribute':'content',
 }
 ROUTES['hk-pcpd']={
     'host':'www.info.gov.hk',
@@ -84,6 +88,9 @@ ROUTES['g7-dpa']={
     'article_path':r'^/en/(?:opc-news/(?:news-and-announcements|speeches-and-statements)|opc-actions-and-decisions/advice-to-parliament)/\d{4}/[^/]+/?$',
     'title':'main h1#wb-cont, main h1',
     'body':'main section[aria-label="Main content"]',
+    # This route's pages may contain dates for meetings/adoption in body text.
+    # Use the government-issued publication metadata, not arbitrary <time> nodes.
+    'date':None,
 }
 ROUTES['calprivacy']={
     'host':'privacy.ca.gov',
@@ -153,6 +160,7 @@ ROUTES['global-cbpr']={
     'article_path':r'^/[a-z0-9][a-z0-9-]*/$',
     'card':'article.elementor-post',
     'card_date':'.elementor-post-date',
+    'next':'a.page-numbers.next[href],a[rel="next"]',
 }
 ROUTES['iso-iec-sc27']={
     'host':'committee.iso.org',
@@ -174,6 +182,43 @@ CLOUD_SOURCES=('ec','eu-parliament','anpd-br','nist','ico','g7-dpa','vn-gov','hk
 
 def listing_request_url(source,url,since,until):
     from .core import canonical_url
+    if source=='fpf':
+        parsed=urlsplit(url)
+        if parsed.hostname!='fpf.org' or parsed.path not in ('/blog/','/wp-json/wp/v2/posts'):
+            raise ValueError('fpf_listing_path_unverified')
+        start=dt.date.fromisoformat(since);end=dt.date.fromisoformat(until)
+        if start>end:raise ValueError('invalid_expansion_range')
+        try:page=int(parse_qs(parsed.query).get('page',['1'])[0])
+        except ValueError:raise ValueError('fpf_listing_page_invalid') from None
+        if page<1:raise ValueError('fpf_listing_page_invalid')
+        # WordPress applies strict before/after comparisons. Two-day padding
+        # covers requested calendar dates despite site-local timezone; core
+        # filters every official publication date to the exact range.
+        params={'page':page,'per_page':100,'categories':15,
+                'after':(start-dt.timedelta(days=2)).isoformat()+'T00:00:00',
+                'before':(end+dt.timedelta(days=2)).isoformat()+'T00:00:00',
+                '_fields':'id,date,date_gmt,link,title,categories'}
+        return 'https://fpf.org/wp-json/wp/v2/posts?'+urlencode(params)
+    if source=='edpb':
+        parsed=urlsplit(canonical_url(url,['www.edpb.europa.eu']))
+        if parsed.path!='/news_en':raise ValueError('edpb_listing_path_unverified')
+        start=dt.date.fromisoformat(since).year
+        end=dt.date.fromisoformat(until).year
+        if start>end:raise ValueError('invalid_expansion_range')
+        params={key:values[0] for key,values in parse_qs(parsed.query).items()}
+        params['date']=str(start) if start==end else f'{start}-{end}'
+        return canonical_url(parsed._replace(query=urlencode(params)).geturl(),['www.edpb.europa.eu'])
+    if source=='curia':
+        parsed=urlsplit(canonical_url(url,['curia.europa.eu']))
+        if parsed.path!='/site/jcms/d2_5158/en/press-releases':raise ValueError('curia_listing_path_unverified')
+        start=dt.date.fromisoformat(since).year
+        end=dt.date.fromisoformat(until).year
+        # The official form accepts one year per query. A cross-year window
+        # needs a multi-query sweep, so do not pretend one year is exhaustive.
+        if start!=end:return url
+        params={key:values[0] for key,values in parse_qs(parsed.query).items() if not key.startswith('PortalAction_d6_1000000371_')}
+        params.update(year=str(start),PortalAction_d6_1000000371_start='0',PortalAction_d6_1000000371_pageSize='500',PortalAction_d6_1000000371_pagerAll='true',PortalAction_d6_1000000371_sort='year',PortalAction_d6_1000000371_reverse='true')
+        return canonical_url(parsed._replace(query=urlencode(params)).geturl(),['curia.europa.eu'])
     if source=='vn-gov':
         parsed=urlsplit(url)
         if parsed.hostname!='en.baochinhphu.vn':raise ValueError('vn_listing_host_unverified')
@@ -245,6 +290,10 @@ def _bounded_frozen_cursor(cursor,source):
     urls=cursor.get('frozen_urls')
     if not isinstance(urls,list) or not urls or not all(isinstance(u,str) for u in urls) or len(set(urls))!=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     for url in urls:_canonical(url,source,url)
+    rows=cursor.get('frozen_rows')
+    if rows is not None and (not isinstance(rows,list) or len(rows)!=len(urls) or
+            any(not isinstance(row,dict) or row.get('url')!=url for row,url in zip(rows,urls))):
+        raise ValueError('expansion_frozen_cursor_invalid')
     if type(cursor.get('offset')) is not int or not 0<=cursor['offset']<=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
 
@@ -299,15 +348,19 @@ def collect_frozen(config,client,store,since,until):
                     result.update(listing_scan_complete=not bool(nxt),reason='scoped_official_listing_empty')
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
-            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],frozen_next=nxt)
+            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
+                        frozen_rows=rows,frozen_next=nxt)
         _bounded_frozen_cursor(cursor,source)
-        ordinal=cursor['offset'];urls=cursor['frozen_urls']
-        if ordinal<len(urls):
-            url=urls[ordinal];result['discovered']=1
+        urls=cursor['frozen_urls']
+        per_run_page_drain=source in ('anpd-br','nist')
+        while cursor['offset']<len(urls):
+            ordinal=cursor['offset'];url=urls[ordinal]
+            result['discovered']+=1
+            row=cursor.get('frozen_rows',[{} for _ in urls])[ordinal]
             try:
                 body,received,ctype=client.get(detail_request_url(source,url))
                 verify_detail_response(source,url,received)
-                item=extraction.extract_document(source,body,url,ctype)
+                item=extraction.extract_document(source,body,url,ctype,row)
                 published=item['published_date']
                 if published and not since<=published<=until:result['out_of_range']=1
                 else:
@@ -320,6 +373,13 @@ def collect_frozen(config,client,store,since,until):
                 store.progress(config,since,until,cursor)
                 return result
             cursor={**cursor,'offset':ordinal+1}
+            # Each article is persisted independently. Finish the frozen page
+            # in this scheduled invocation so a multi-item page does not take
+            # one daily run per article. Persist every ordinal before fetching
+            # the next detail so interruption resumes without skipping items.
+            store.progress(config,since,until,cursor)
+            if not per_run_page_drain:
+                break
         if cursor['offset']>=len(urls):
             if cursor['frozen_next']:
                 store.progress(config,since,until,dict(page=cursor['frozen_next'],offset=0))
@@ -328,13 +388,19 @@ def collect_frozen(config,client,store,since,until):
                 store.progress(config,since,until,None);store.checkpoint(config,until)
                 result.update(listing_scan_complete=True,reason='listing_exhaustiveness_unverified')
         else:
-            store.progress(config,since,until,cursor);result['reason']='frozen_listing_item_processed'
+            result['reason']='frozen_listing_page_items_processed'
         return result
     except (FetchError,ValueError) as error:
         # No body was committed. Keep the exact persisted position for retry.
         store.progress(config,since,until,cursor or None)
         result.update(status='failed',reason=str(error),failed=1)
         return result
+    finally:
+        if result.get('listing_scan_complete') and not result['failed']:
+            result.update(status='complete',collection_complete=True,
+                          recovery_needed=bool(result['held'] or result['unknown_date']))
+            if not result['coverage_complete']:
+                result['reason']='configured_listing_processed'
 
 def _canonical(raw,source,base):
     from .core import canonical_url
@@ -373,10 +439,20 @@ def listing_date(row):
     return None
 
 def next_within_window(source,rows,nxt,since):
-    if not nxt or source not in ('oaic','ca-opc','anpd-br','nist'):return nxt
+    if not nxt or source not in ('oaic','ca-opc','anpd-br','nist','cn-tc260'):return nxt
     dates=[listing_date(r) for r in rows]
     if dates and all(dates) and all(dates[i]<=dates[i-1] for i in range(1,len(dates))) and dates[-1]<since:return None
     return nxt
+
+def listing_date_boundary(source,rows,since):
+    """Return a verifiable per-page date boundary, without claiming source-wide coverage."""
+    if source not in ('oaic','ca-opc','anpd-br','nist','cn-tc260') or not rows:return None
+    dates=[listing_date(row) for row in rows]
+    if (not all(dates) or any(dates[index]>dates[index-1] for index in range(1,len(dates)))
+            or dates[-1]>=since):
+        return None
+    return {'kind':'official_listing_date_order_boundary','first_date':dates[0],
+            'last_date':dates[-1],'since':since,'rows':len(dates)}
 
 def detail_request_url(source,url):
     if source not in ROUTES:return url
@@ -389,7 +465,7 @@ def detail_request_url(source,url):
     code=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
     return 'https://ec.europa.eu/commission/presscorner/api/documents?'+urlencode({'language':'en','reference':code})
 
-def discover(source,html,url):
+def discover(source,html,url,response_headers=None):
     from .parsers import normalize
     from .core import canonical_url
     c=ROUTES[source];canonical_url(url,c.get('hosts',[c['host']]));rows={}
@@ -507,6 +583,46 @@ def discover(source,html,url):
             if title:rows[target]={'url':target,'title':title}
         if not rows:raise ValueError('opc_g7_hub_has_no_verified_2026_deliverable')
         return list(rows.values()),None
+    if source=='fpf' and urlsplit(url).path=='/wp-json/wp/v2/posts':
+        params=parse_qs(urlsplit(url).query)
+        try:
+            page=int(params['page'][0]);size=int(params['per_page'][0]);category=int(params['categories'][0])
+            after=params['after'][0];before=params['before'][0]
+        except (KeyError,ValueError,TypeError):raise ValueError('fpf_listing_query_unverified') from None
+        if size!=100 or category!=15 or page<1 or date(after) is None or date(before) is None:
+            raise ValueError('fpf_listing_query_unverified')
+        def header(name):
+            return next((value for key,value in (response_headers or {}).items() if key.lower()==name.lower()),None)
+        try:total=int(header('X-WP-Total'));total_pages=int(header('X-WP-TotalPages'))
+        except (TypeError,ValueError):raise ValueError('fpf_pagination_headers_missing') from None
+        expected_pages=(total+size-1)//size
+        expected_items=max(0,min(size,total-(page-1)*size))
+        if total<0 or total_pages!=expected_pages or page>max(1,total_pages):
+            raise ValueError('fpf_pagination_headers_invalid')
+        try:data=json.loads(html)
+        except json.JSONDecodeError:raise ValueError('fpf_listing_json_invalid') from None
+        if not isinstance(data,list) or len(data)!=expected_items:raise ValueError('fpf_listing_page_count_mismatch')
+        for entry in data:
+            if (not isinstance(entry,dict) or type(entry.get('id')) is not int or
+                    not isinstance(entry.get('date'),str) or not isinstance(entry.get('link'),str) or
+                    not isinstance(entry.get('categories'),list) or 15 not in entry['categories']):
+                raise ValueError('fpf_blog_record_schema_changed')
+            try:target=_canonical(entry['link'],source,url)
+            except ValueError:raise ValueError('fpf_blog_permalink_outside_approved_path') from None
+            if not re.fullmatch(ROUTES['fpf']['article_path'],urlsplit(target).path):
+                raise ValueError('fpf_blog_permalink_outside_approved_path')
+            title_data=entry.get('title')
+            if not isinstance(title_data,dict) or not isinstance(title_data.get('rendered'),str):
+                raise ValueError('fpf_blog_title_or_date_missing')
+            title=BeautifulSoup(title_data['rendered'],'html.parser').get_text(' ',strip=True)
+            if not title or date(entry['date']) is None:raise ValueError('fpf_blog_title_or_date_missing')
+            rows[target]={'url':target,'title':title,
+                'date_observations':[{'meaning':'expansion_listing_published','locator':'official WordPress Blog category API date','value':entry['date']}]}
+        nxt=None
+        if page<total_pages:
+            params['page']=[str(page+1)]
+            nxt=urlsplit(url)._replace(query=urlencode({key:values[0] for key,values in params.items()})).geturl()
+        return list(rows.values()),nxt
     if source in PUBLICATION_SOURCE_IDS:
         from .publication_route_candidates import discover_publication_route_candidates
         rows=discover_publication_route_candidates(source,html,url)
@@ -575,7 +691,11 @@ def discover(source,html,url):
         if (type(data.get('totalNumber')) is not int or data['totalNumber']<0 or type(response_page) is not int or response_page not in (page,page-1) or data.get('pageSize')!=size or not isinstance(data.get('docuLanguageListResources'),list) or len(data['docuLanguageListResources'])!=max(0,min(size,data['totalNumber']-(page-1)*size))):raise ValueError('ec_listing_schema_or_page_changed')
         for row in data['docuLanguageListResources']:
             if not isinstance(row.get('refCode'),str) or not isinstance(row.get('title'),str):raise ValueError('ec_listing_schema_changed')
-            if not re.fullmatch(r'(IP|QANDA|STATEMENT|SPEECH|MEMO|MEX)/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
+            # Presscorner has used both slash-delimited publication references
+            # and opaque numeric identifiers. Preserve the official article
+            # URL only for known reference families, while allowing additional
+            # two-letter document classes as the registry expands.
+            if not re.fullmatch(r'(?:[A-Z]{2,12})/\d{2}/\d+',row['refCode'],re.I):raise ValueError('ec_listing_document_type_unverified')
             event_date=row.get('eventDate')
             add('/commission/presscorner/detail/en/'+row['refCode'].lower().replace('/','_'),row['title'],event_date if isinstance(event_date,str) else None,'EC API eventDate')
         params={k:v[0] for k,v in params.items()};params['pagenumber']=str(page+1)
@@ -720,6 +840,17 @@ def extract(source,input,url,row=None):
     for n in soup.select(c['date']) if c.get('date') else []:
         value=n.get(c['date_attribute']) if c.get('date_attribute') else n.get_text(' ',strip=True)
         if value:observations.append({'meaning':'official_published_attribute','locator':c['date'],'value':normalize(value)})
+    if source=='jpdp-my' and row and row.get('date_observations'):
+        # Elementor's visible listing date is the authoritative publication
+        # date for this route. Preserve and reconcile it with any explicit
+        # detail date rather than silently dropping it on HTML-only items.
+        observations.extend(observation for observation in row['date_observations']
+                            if observation not in observations)
+    if source=='g7-dpa':
+        issued=soup.select_one('meta[name="dcterms.issued"][content]')
+        if issued and issued.get('content'):
+            observations.append({'meaning':'official_published_attribute',
+                'locator':'meta dcterms.issued','value':normalize(issued['content'])})
     if source=='ftc' and row and row.get('date_observations'):
         observations.extend(row['date_observations'])
     dates={date(x['value']) for x in observations}-{None}
@@ -730,4 +861,6 @@ def extract(source,input,url,row=None):
     nist_review=source=='nist'
     vn_review=source=='vn-gov'
     requires_review=not published or conflict or nist_review or vn_review
-    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':observations+(row or {}).get('date_observations',[]),'date_conflict':conflict,'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'official_nist_news_not_independently_reviewed' if nist_review else 'official_government_news_not_independently_reviewed' if vn_review else 'original_statement_not_independent_legal_finding','relevance_reason':'NIST item relevance requires human confirmation' if nist_review else 'Vietnam policies feed body relevance requires human confirmation' if vn_review else None,'ai_ready':bool(published) and not requires_review}}
+    date_evidence=(observations if source=='jpdp-my' else
+                   observations+(row or {}).get('date_observations',[]))
+    return {'title_original':normalize(title.get_text(' ',strip=True)),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'expansion-v1','read_scope':'official_press_or_news_body','date_observations':date_evidence,'date_conflict':conflict,'requires_review':requires_review,'related_documents':related,'unread_attachments':[r['url'] for r in related],'factual_status':'official_nist_news_not_independently_reviewed' if nist_review else 'official_government_news_not_independently_reviewed' if vn_review else 'original_statement_not_independent_legal_finding','relevance_reason':'NIST item relevance requires human confirmation' if nist_review else 'Vietnam policies feed body relevance requires human confirmation' if vn_review else None,'ai_ready':bool(published) and not requires_review}}

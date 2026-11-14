@@ -278,6 +278,11 @@ def prepare(claim):
             store.failure['cursor'] = store.cursor
             store.cursor = {**store.cursor, 'offset': store.cursor['offset'] + 1}
             result.update(status='partial', reason='detail_failure_parked', parked_failure=store.failure)
+    if result.get('listing_scan_complete') and not result.get('failed') and not backlog:
+        result.update(status='success',collection_complete=True,
+                      recovery_needed=bool(result.get('held') or result.get('unknown_date')))
+        if not result['coverage_complete']:
+            result['reason']='configured_listing_processed'
     for field in ('new', 'changed', 'duplicate'):
         result.pop(field, None)
     result.update(runtime='cloud-python-connector', started_at=started,

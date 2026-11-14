@@ -55,7 +55,7 @@ Deno.test("successful duplicate advances only after ingest and preserves incompl
   eq(result.result.saved, "duplicate");
   eq(result.result.coverage_complete, false);
 });
-Deno.test("CA OPC moves from the news list to its approved advice list before exhausting", async () => {
+Deno.test("CA OPC moves from the news list to its approved speeches list before exhausting", async () => {
   const opc = {
     source: "ca-opc",
     source_id: "opc-source",
@@ -80,7 +80,7 @@ Deno.test("CA OPC moves from the news list to its approved advice list before ex
   eq(step.continue, true);
   eq(step.result.stage, "next_listing_stream");
   eq(step.state.listing_index, 1);
-  eq(step.state.page, "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?o=d");
+  eq(step.state.page, "https://www.priv.gc.ca/en/opc-news/speeches-and-statements/?Filter=True&Page=1&o=d");
   eq(step.state.offset, 0);
 });
 Deno.test("redirect to another article cannot overwrite the requested source item", async () => {
@@ -317,6 +317,9 @@ Deno.test("exhausted listing reports a finished scan separately from period cove
     throw new Error("unexpected ingest");
   });
   eq(step.result.listing_scan_complete, true);
+  eq(step.result.status, "success");
+  eq(step.result.collection_complete, true);
+  eq(step.result.recovery_needed, true);
   eq(step.result.coverage_complete, false);
   eq(step.result.unresolved_date_count, 3);
   eq(step.result.coverage_blockers, [

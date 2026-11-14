@@ -34,6 +34,8 @@ class CnilRangeTests(unittest.TestCase):
         self.assertEqual(r.get('listing_date_excluded'),1)
         self.assertEqual(r['new'],1)
         self.assertTrue(r.get('listing_scan_complete'))
+        self.assertEqual(r['status'],'complete')
+        self.assertTrue(r['collection_complete'])
         self.assertFalse(r['coverage_complete'])
     def test_ambiguous_card_date_is_not_filtered(self):
         self.assertEqual(parsers.cnil_listing_date({'date_observations':[OBS]}),'2024-03-27')

@@ -402,7 +402,36 @@ def extract_publication_document(source,data,url,content_type,row=None):
     if not body:raise ValueError('publication_main_body_empty')
 
     observations=[]
-    for node in soup.select('meta[property="article:published_time"], meta[itemprop="datePublished"], meta[name="datePublished"], time[itemprop="datePublished"], time[datetime][data-published]'):
+    if source=='freevacy':
+        for node in soup.select('h5'):
+            match=re.fullmatch(r'Published:\s*(\d{2})/(\d{2})/(\d{4})',normalize(node.get_text(' ',strip=True)),re.I)
+            if not match:
+                continue
+            try:
+                value=dt.date(int(match[3]),int(match[2]),int(match[1])).isoformat()
+            except ValueError:
+                continue
+            observations.append({'meaning':'published_display','locator':'Freevacy article h5 Published label','value':value})
+    for script in soup.select('script[type="application/ld+json"]'):
+        try:
+            structured=json.loads(script.get_text(strip=True))
+        except (TypeError,json.JSONDecodeError):
+            continue
+        candidates=structured if isinstance(structured,list) else [structured]
+        for candidate in candidates:
+            if not isinstance(candidate,dict):
+                continue
+            if isinstance(candidate.get('@graph'),list):
+                candidates.extend(candidate['@graph'])
+            kind=candidate.get('@type')
+            kinds=kind if isinstance(kind,list) else [kind]
+            if not any(value in ('Article','NewsArticle','BlogPosting') for value in kinds):
+                continue
+            value=candidate.get('datePublished')
+            if isinstance(value,str) and value.strip():
+                observations.append({'meaning':'published_attribute',
+                    'locator':'application/ld+json datePublished','value':normalize(value)})
+    for node in soup.select('meta[property="article:published_time"], meta[itemprop="datePublished"], meta[name="datePublished"], time[itemprop="datePublished"], time[datetime][data-published], time.entry-date.published[datetime]'):
         value=node.get('content') or node.get('datetime') or node.get_text(' ',strip=True)
         value=normalize(value)
         if value:
@@ -413,6 +442,11 @@ def extract_publication_document(source,data,url,content_type,row=None):
     observations.extend(listing_observations)
     explicit_dates={parse_date(o.get('value','')) for o in observations
                     if o.get('meaning') in ('published_attribute','published_display','listing_published_display')}
+    if source in ('iapp','noyb') and row:
+        from .expansion import listing_date
+        verified_listing_date=listing_date(row)
+        if verified_listing_date:
+            explicit_dates.add(verified_listing_date)
     explicit_dates.discard(None)
     published=next(iter(explicit_dates)) if len(explicit_dates)==1 else None
     origin=(row or {}).get('content_origin_kind')
@@ -689,8 +723,8 @@ def discover_pdpc_sitemap(data,url):
         raise ValueError('pdpc_sitemap_empty')
     return rows,None
 
-def discover_listing(source,html,url,fetch):
-    if source in expansion.ROUTES:return expansion.discover(source,html,url)
+def discover_listing(source,html,url,fetch=None,response_headers=None):
+    if source in expansion.ROUTES:return expansion.discover(source,html,url,response_headers)
     if source=='ico':
         payload=ico_search_request(html,url)
         endpoint=urljoin(url,'/api/search')

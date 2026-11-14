@@ -8,7 +8,7 @@ import hashlib
 import threading
 import time
 from datetime import timedelta
-from urllib.parse import urlsplit,urlunsplit,parse_qsl,urlencode,urljoin
+from urllib.parse import urlsplit,urlunsplit,parse_qsl,parse_qs,urlencode,urljoin
 from . import parsers
 from . import expansion
 from . import extraction
@@ -136,7 +136,7 @@ class HttpClient:
     def _header(headers,name):
         return next((value for key,value in headers.items() if key.lower()==name.lower()),None)
 
-    def request(self,url,method='GET',payload=None,headers=None,enforce_robots=False,_redirects=0):
+    def request(self,url,method='GET',payload=None,headers=None,enforce_robots=False,_redirects=0,include_response_headers=False):
         url=canonical_url(url,self.hosts)
         for attempt in range(3):
             time.sleep(max(0,self.last+self.interval-time.monotonic()))
@@ -155,7 +155,7 @@ class HttpClient:
                     if enforce_robots: self.check_robots(target)
                     if status==303 and method!='HEAD' or status in (301,302) and method=='POST':
                         method='GET'; payload=None
-                    return self.request(target,method,payload,headers,enforce_robots,_redirects+1)
+                    return self.request(target,method,payload,headers,enforce_robots,_redirects+1,include_response_headers)
                 if status in (429,500,502,503,504) and attempt<2:
                     time.sleep(retry_delay(self._header(response_headers,'Retry-After'))); continue
                 if status>=300:
@@ -164,7 +164,8 @@ class HttpClient:
                 message=Message()
                 content_type=self._header(response_headers,'Content-Type')
                 if content_type: message['Content-Type']=content_type
-                return data,url,message.get_content_type()
+                result=(data,url,message.get_content_type())
+                return (*result,response_headers) if include_response_headers else result
             except FetchError:
                 raise
             except Exception as e:
@@ -202,6 +203,9 @@ class HttpClient:
     def get(self,url,headers=None):
         url=self.check_robots(url)
         return self.request(url,headers=headers,enforce_robots=True)
+    def get_with_headers(self,url,headers=None):
+        url=self.check_robots(url)
+        return self.request(url,headers=headers,enforce_robots=True,include_response_headers=True)
     def post(self,url,payload,headers):
         url=self.check_robots(url)
         return self.request(url,'POST',payload,headers,enforce_robots=True)
@@ -230,10 +234,40 @@ def fetch_listing(source,client,page):
     def fetch(url,method='GET',payload=None,headers=None):
         if method=='POST': return client.post(url,payload,headers or {'Content-Type':'application/json'})
         return client.get(url,headers=headers) if headers is not None else client.get(url)
+    if source=='fpf':
+        if not getattr(client,'fpf_blog_category_verified',False):
+            category_url='https://fpf.org/wp-json/wp/v2/categories?slug=blog&_fields=id,name,slug,count'
+            category_data,category_final,category_type=fetch(category_url,headers={'Accept':'application/json'})
+            try: categories=json.loads(category_data.decode('utf-8'))
+            except (UnicodeDecodeError,json.JSONDecodeError): raise ValueError('fpf_blog_category_json_invalid') from None
+            if (category_type!='application/json' or urlsplit(category_final).path!='/wp-json/wp/v2/categories' or
+                    not isinstance(categories,list) or len(categories)!=1 or
+                    not isinstance(categories[0],dict) or categories[0].get('id')!=15 or
+                    categories[0].get('name')!='Blog' or categories[0].get('slug')!='blog' or
+                    type(categories[0].get('count')) is not int or categories[0]['count']<0):
+                raise ValueError('fpf_blog_category_identity_unverified')
+            client.fpf_blog_category_verified=True
+        if not hasattr(client,'get_with_headers'):raise ValueError('fpf_listing_response_headers_unavailable')
+        data,final,ctype,response_headers=client.get_with_headers(page,headers={'Accept':'application/json'})
+        if ctype!='application/json':raise ValueError('fpf_listing_response_type_changed')
+        rows,nxt=parsers.discover_listing(source,data.decode('utf-8','replace'),final,None,response_headers)
+        client.fpf_listing_response_headers=response_headers
+        return rows,nxt
     data,final,ctype=fetch(page)
     is_pdpc_api=source=='pdpc' and urlsplit(final).path=='/api/listing-api'
     if is_pdpc_api:
-        return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        try:
+            return parsers.discover_pdpc_listing(data,final,parsers.pdpc_api_page_number(final))
+        except ValueError as exc:
+            reason=str(exc)
+            if reason=='robots_disallowed' or not (
+                reason in ('pdpc_listing_page_incomplete','pdpc_listing_schema_changed') or
+                reason.startswith('pdpc_listing_json_invalid:')
+            ):
+                raise
+            sitemap='https://www.pdpc.gov.sg/sitemap.xml'
+            sitemap_data,sitemap_final,_=fetch(sitemap)
+            return parsers.discover_pdpc_sitemap(sitemap_data,sitemap_final)
     if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
@@ -253,10 +287,34 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
     # an older feed entry appear new again after the cursor grows.
     processed_hashes=list((cursor or {}).get('processed_url_hashes',[]))
     processed_urls=set(processed_hashes)
+    tc260_date_order_valid=((cursor or {}).get('tc260_date_order_valid') is True if cursor else True)
+    tc260_previous_page_last_date=(cursor or {}).get('tc260_previous_page_last_date')
+    fpf_completed_pages=list((cursor or {}).get('fpf_completed_pages',[]))
+    fpf_expected_total=(cursor or {}).get('fpf_expected_total')
+    fpf_expected_pages=(cursor or {}).get('fpf_expected_pages')
     oecd_cycle_complete=False
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
+    if config['source']=='fpf':
+        if (not isinstance(fpf_completed_pages,list) or
+                any(type(value) is not int or value<1 for value in fpf_completed_pages) or
+                len(set(fpf_completed_pages))!=len(fpf_completed_pages) or
+                fpf_expected_total is not None and (type(fpf_expected_total) is not int or fpf_expected_total<0) or
+                fpf_expected_pages is not None and (type(fpf_expected_pages) is not int or fpf_expected_pages<0) or
+                (fpf_expected_total is None)!=(fpf_expected_pages is None) or
+                fpf_expected_total is not None and fpf_expected_pages!=(fpf_expected_total+99)//100 or
+                fpf_expected_pages is not None and any(value>fpf_expected_pages for value in fpf_completed_pages)):
+            result.update(status='failed',reason='fpf_cursor_invalid')
+            return result
+    def save_progress(state):
+        if config['source']=='fpf':
+            state.update(fpf_completed_pages=fpf_completed_pages,fpf_expected_total=fpf_expected_total,
+                         fpf_expected_pages=fpf_expected_pages)
+        if config['source']=='cn-tc260':
+            state.update(tc260_date_order_valid=tc260_date_order_valid,
+                         tc260_previous_page_last_date=tc260_previous_page_last_date)
+        store.progress(config,since,until,state)
     if config['source']=='ico' and urlsplit(page).hostname=='www.wired-gov.net':
         # WiredGov's supported cross-agency latest index has no date query.
         # Keep it intact rather than transforming it into an old search URL.
@@ -265,25 +323,79 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         scoped=parsers.ico_range_url(page,since,until)
         if scoped!=page: cursor=None
         page=scoped
+    elif config['source']=='edpb':
+        scoped=expansion.listing_request_url('edpb',page,since,until)
+        if scoped!=page: cursor=None
+        page=scoped
+    elif config['source']=='curia':
+        scoped=expansion.listing_request_url('curia',page,since,until)
+        if scoped!=page: cursor=None
+        page=scoped
     result['status']='partial'
     try:
         while page:
-            if config['source']=='ppc':
-                page=expansion.listing_request_url('ppc',page,since,until)
+            if config['source']=='edpb':
+                # The site's next link can omit the active year filter. Carry
+                # the requested date scope onto every continuation URL.
+                page=expansion.listing_request_url('edpb',page,since,until)
+            if config['source'] in ('ppc','fpf'):
+                page=expansion.listing_request_url(config['source'],page,since,until)
                 if page is None: break
             page=canonical_url(page,set(config['hosts']))
             if page in seen_pages: raise FetchError('pagination_cycle')
             if max_pages is not None and result['pages']>=max_pages: raise FetchError('page_limit')
             seen_pages.add(page); rows,next_page=fetch_listing(config['source'],client,page); result['pages']+=1
+            if config['source']=='fpf':
+                headers=getattr(client,'fpf_listing_response_headers',{})
+                query=parse_qs(urlsplit(page).query)
+                try:
+                    total=int(next(value for key,value in headers.items() if key.lower()=='x-wp-total'))
+                    total_pages=int(next(value for key,value in headers.items() if key.lower()=='x-wp-totalpages'))
+                    api_page=int(query['page'][0])
+                except (ValueError,KeyError,StopIteration):raise FetchError('fpf_pagination_headers_missing')
+                if total<0 or total_pages!=(total+99)//100 or api_page<1 or api_page>max(1,total_pages):
+                    raise FetchError('fpf_pagination_headers_invalid')
+                if ((fpf_expected_pages is not None and fpf_expected_pages!=total_pages) or
+                        (fpf_expected_total is not None and fpf_expected_total!=total)):
+                    raise FetchError('fpf_pagination_totals_changed')
+                fpf_expected_total=total;fpf_expected_pages=total_pages
+                result['fpf_api_total']=total;result['fpf_api_total_pages']=total_pages
+                result.setdefault('fpf_listing_pages',[]).append({'page':api_page,'total':total,
+                    'total_pages':total_pages,'category_id':15})
+                result['listing_range_query']={'route':'official_wordpress_posts_api','category':'Blog',
+                    'category_id':15,'requested_since':since,'requested_until':until,
+                    'after':query.get('after',[''])[0],'before':query.get('before',[''])[0],
+                    'date_semantics':'padded_api_bounds_then_exact_listing_date_filter'}
             if config['source']=='pdpc' and any(row.get('listing_route')=='official_sitemap' for row in rows):
                 result['listing_route']='official_sitemap_fallback'
                 result['listing_route_note']='Sitemap has no publication category; article-level human review is required.'
             if config['source'] in expansion.ROUTES:
-                next_page=expansion.next_within_window(config['source'],rows,next_page,since)
+                if config['source']=='cn-tc260':
+                    tc260_dates=[expansion.listing_date(row) for row in rows]
+                    page_order_valid=(bool(tc260_dates) and all(tc260_dates) and
+                        all(tc260_dates[index]<=tc260_dates[index-1] for index in range(1,len(tc260_dates))) and
+                        (tc260_previous_page_last_date is None or tc260_dates[0]<=tc260_previous_page_last_date))
+                    tc260_date_order_valid=tc260_date_order_valid and page_order_valid
+                    if all(tc260_dates):tc260_previous_page_last_date=tc260_dates[-1]
+                    result['listing_date_order_verified']=tc260_date_order_valid
+                boundary=expansion.listing_date_boundary(config['source'],rows,since)
+                if config['source']=='cn-tc260' and not tc260_date_order_valid:
+                    boundary=None
+                if boundary:
+                    result['listing_date_boundary']={'url':page,**boundary}
+                if config['source']!='cn-tc260' or tc260_date_order_valid:
+                    next_page=expansion.next_within_window(config['source'],rows,next_page,since)
+            if config['source']=='edpb' and next_page:
+                next_page=expansion.listing_request_url('edpb',next_page,since,until)
             if not rows:
+                if (config['source']=='fpf' and result.get('fpf_api_total')==0 and
+                        result.get('fpf_api_total_pages')==0 and prior_failures==0 and prior_unknown_dates==0):
+                    store.progress(config,since,until,None);store.checkpoint(config,until)
+                    result.update(status='complete',coverage_complete=True,collection_complete=True,reason='official_fpf_blog_date_query_empty',listing_scan_complete=True)
+                    return result
                 if config['source']=='eu-council':
                     store.progress(config,since,until,None);store.checkpoint(config,until)
-                    result.update(status='complete',reason='no_privacy_relevant_items_in_current_official_rss_window',listing_scan_complete=True)
+                    result.update(status='complete',collection_complete=True,reason='no_privacy_relevant_items_in_current_official_rss_window',listing_scan_complete=True)
                     return result
                 raise FetchError('listing_empty_or_structure_changed')
             had_pagination=had_pagination or bool(next_page)
@@ -305,7 +417,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                     if config['source']!='pdpc' or not is_unapproved_https_host(row['url'],set(config['hosts'])): raise
                     result['excluded_unapproved_host_count']+=1
                     if hasattr(store,'progress'):
-                        store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
+                        save_progress({'page':page,'offset':index+1,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
                             'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
@@ -315,7 +427,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 row_hash=hashlib.sha256(url.encode()).hexdigest()
                 if config['source'] in ('ftc','oecd') and row_hash in processed_urls:
                     if hasattr(store,'progress'):
-                        store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
+                        save_progress({'page':page,'offset':index+1,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
                             'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
@@ -390,7 +502,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                     # Persist the failing item's position, then stop. A future run
                     # retries it; advancing the offset would silently skip it.
                     if hasattr(store,'progress'):
-                        store.progress(config,since,until,{'page':page,'offset':index,'fingerprint':fingerprint,
+                        save_progress({'page':page,'offset':index,'fingerprint':fingerprint,
                             'had_pagination':had_pagination,'failures':prior_failures,
                             'unknown_dates':prior_unknown_dates+result['unknown_date'],
                             'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
@@ -399,11 +511,13 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 if hasattr(store,'progress'):
                     if config['source'] in ('ftc','oecd') and row_hash not in processed_urls:
                         processed_urls.add(row_hash); processed_hashes.append(row_hash)
-                    store.progress(config,since,until,{'page':page,'offset':index+1,'fingerprint':fingerprint,
+                    save_progress({'page':page,'offset':index+1,'fingerprint':fingerprint,
                         'had_pagination':had_pagination,'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                         'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
-                        'processed_url_hashes':processed_hashes,
-                            })
+                        'processed_url_hashes':processed_hashes})
+            if config['source']=='fpf':
+                api_page=int(parse_qs(urlsplit(page).query)['page'][0])
+                if api_page not in fpf_completed_pages:fpf_completed_pages.append(api_page)
             completed_page=page
             page=next_page
             cursor=None
@@ -441,6 +555,12 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                     'failures':prior_failures+result['failed'],'unknown_dates':prior_unknown_dates+result['unknown_date'],
                     'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count'],
                     'processed_url_hashes':processed_hashes} if page else None
+            if config['source']=='fpf' and completed_cursor is not None:
+                completed_cursor.update(fpf_completed_pages=fpf_completed_pages,
+                    fpf_expected_total=fpf_expected_total,fpf_expected_pages=fpf_expected_pages)
+            if config['source']=='cn-tc260' and completed_cursor is not None:
+                completed_cursor.update(tc260_date_order_valid=tc260_date_order_valid,
+                    tc260_previous_page_last_date=tc260_previous_page_last_date)
             if hasattr(store,'progress'):
                 store.progress(config,since,until,completed_cursor)
             if oecd_cycle_complete:
@@ -448,13 +568,62 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
         # Reaching a last page establishes only this listing scan. Pagination
         # alone does not prove that the source covers every item in the period,
         # including related releases, hidden pages and unread attachments.
-        result['coverage_complete']=False
-        result['status']='partial'
+        fpf_complete=(config['source']=='fpf' and fpf_expected_pages is not None and
+                      sorted(set(fpf_completed_pages))==list(range(1,fpf_expected_pages+1)) and
+                      result['failed']==0 and result['unknown_date']==0 and result['held']==0 and
+                      prior_failures==0 and prior_unknown_dates==0)
+        result['coverage_complete']=bool(fpf_complete)
+        result['status']='complete' if fpf_complete else 'partial'
         if config['source']!='oecd' or oecd_cycle_complete:
             result['listing_scan_complete']=True
-        result['reason']='unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else 'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure'
+        result['reason']=('official_fpf_blog_date_window_exhausted' if fpf_complete else
+                          'unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else
+                          'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure')
+        if config['source']=='edpb':
+            first_year=dt.date.fromisoformat(since).year
+            last_year=dt.date.fromisoformat(until).year
+            result['coverage_evidence']={
+                'strategy':'official_year_filtered_news_archive',
+                'date_filter':str(first_year) if first_year==last_year else f'{first_year}-{last_year}',
+                'listing_scan_complete':result['listing_scan_complete'],
+                'unknown_date':result['unknown_date'],
+                'failed':result['failed'],
+                'excluded_unapproved_host_count':result['excluded_unapproved_host_count'],
+            }
+            if (result['listing_scan_complete'] and 'date' in dict(parse_qsl(urlsplit(page).query)) and result['unknown_date']==0 and
+                    result['failed']==0 and result['excluded_unapproved_host_count']==0):
+                result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
+        if config['source']=='curia':
+            year=dt.date.fromisoformat(since).year
+            filtered=(dt.date.fromisoformat(until).year==year and 'year' in dict(parse_qsl(urlsplit(page).query)) and
+                      dict(parse_qsl(urlsplit(page).query)).get('year')==str(year) and
+                      dict(parse_qsl(urlsplit(page).query)).get('PortalAction_d6_1000000371_pagerAll')=='true')
+            result['coverage_evidence']={'strategy':'official_year_filtered_press_release_archive','year':year,'all_results_mode':filtered,'cross_year_window_supported':False}
+            if (filtered and result['listing_scan_complete'] and result['unknown_date']==0 and result['failed']==0 and result['excluded_unapproved_host_count']==0):
+                result.update(status='complete',coverage_complete=True,reason='official_year_filtered_listing_exhausted')
+        if config['source']=='cn-tc260':
+            result['coverage_evidence']={'strategy':'official_newest_first_notice_archive','date_order_verified':tc260_date_order_valid,
+                'listing_scan_complete':result['listing_scan_complete'],'boundary':result.get('listing_date_boundary')}
+            tc260_complete=(result['listing_scan_complete'] and tc260_date_order_valid and
+                result['unknown_date']==0 and result['failed']==0 and result['held']==0 and
+                prior_failures==0 and prior_unknown_dates==0 and
+                prior_excluded_hosts==0 and result['excluded_unapproved_host_count']==0)
+            if tc260_complete:
+                store.checkpoint(config,until)
+                result.update(status='complete',coverage_complete=True,reason='official_tc260_archive_boundary_verified')
+        if fpf_complete:store.checkpoint(config,until)
         if config['source']=='cnil':
             result['coverage_blockers']=['listing_date_order_and_exhaustiveness_unverified']
+        # An exhausted configured listing is a finished collection run. The
+        # stronger coverage_complete flag continues to describe a verified
+        # date-window archive, which rolling feeds cannot establish.
+        if (result.get('listing_scan_complete') and not result['failed'] and
+                not prior_excluded_hosts and not result['excluded_unapproved_host_count']):
+            result['collection_complete']=True
+            result['status']='complete'
+            result['recovery_needed']=bool(prior_failures or result['held'] or result['unknown_date'])
+            if not result['coverage_complete']:
+                result['reason']='configured_listing_processed'
     except (FetchError,ValueError) as e:
         # Ordinary batch boundaries preserve the cursor for the next run. They
         # do not establish complete coverage, but are not collection failures.

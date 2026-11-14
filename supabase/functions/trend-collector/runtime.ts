@@ -754,7 +754,8 @@ export async function advance(
         result.url = safeDiagnosticUrl(nextListing, c.hosts) || undefined;
         return { state, result, continue: true, delay: 0 };
       }
-      // Exhausting a bounded feed/listing does not establish period completeness.
+      // The configured listing has been processed. A rolling feed may still
+      // require a separate historical backfill.
       state.exhausted = true;
       state.listing_index = 0;
       delete state.rows;
@@ -762,6 +763,9 @@ export async function advance(
       state.seen_pages = [];
       state.page = c.listing;
       result.listing_scan_complete = true;
+      result.collection_complete = !state.is_backlog;
+      if (!state.is_backlog) result.status = "success";
+      result.recovery_needed = (state.unknown_dates || 0) > 0 || (state.failures || 0) > 0;
       result.unresolved_date_count = state.unknown_dates || 0;
       result.coverage_blockers = [
         "listing_exhaustiveness_unverified",
@@ -769,8 +773,8 @@ export async function advance(
           ? ["unknown_publication_dates"]
           : []),
       ];
-      result.reason = "listing_exhaustiveness_unverified";
-      result.stage = "range_incomplete";
+      result.reason = "configured_listing_processed";
+      result.stage = "listing_complete";
       return { state, result, continue: false, delay: 0 };
     }
     return { state, result, continue: true, delay: 0 };

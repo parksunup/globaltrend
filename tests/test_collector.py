@@ -410,7 +410,7 @@ class CollectorTests(unittest.TestCase):
         cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}
         class Client:
             def get(this,url):
-                h='<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>' if url.endswith('news_en') else '<h2 class="node-article-full__title">A</h2><time class="node-article-full__date">7 October 2026</time><div class="node-article-full__body">Personal data policy statement.</div>'
+                h='<main><a href="/news/a_en">A</a><a rel="next" href="/news_en?page=1">Next</a></main>' if url.startswith('https://www.edpb.europa.eu/news_en?') or url.endswith('news_en') else '<h2 class="node-article-full__title">A</h2><time class="node-article-full__date">7 October 2026</time><div class="node-article-full__body">Personal data policy statement.</div>'
                 return h.encode(),url,'text/html'
         class Store:
             cursor=None
@@ -421,14 +421,14 @@ class CollectorTests(unittest.TestCase):
         result=self.core.collect(cfg,Client(),store,'2026-10-01','2026-10-13',max_pages=1)
         self.assertEqual(result['status'],'partial')
         self.assertEqual(result['reason'],'page_limit')
-        self.assertEqual(store.cursor['page'],'https://www.edpb.europa.eu/news_en?page=1')
+        self.assertEqual(store.cursor['page'],'https://www.edpb.europa.eu/news_en?date=2026&page=1')
 
     def test_backfill_resumes_at_next_item_after_document_limit(self):
         cfg={'source':'edpb','enabled':True,'permissions':dict(collect=True,store=True,ai=True),'listing':'https://www.edpb.europa.eu/news_en','hosts':['www.edpb.europa.eu'],'source_id':'x'}
         class Client:
             fetched=[]
             def get(this,url):
-                if url.endswith('news_en'): h='<main><a href="/news/a_en">A</a><a href="/news/b_en">B</a></main>'
+                if url.startswith('https://www.edpb.europa.eu/news_en?') or url.endswith('news_en'): h='<main><a href="/news/a_en">A</a><a href="/news/b_en">B</a></main>'
                 else:
                     this.fetched.append(url); h='<h2 class="node-article-full__title">A</h2><div class="node-article-full__body">Personal data policy statement.</div>'
                 return h.encode(),url,'text/html'
