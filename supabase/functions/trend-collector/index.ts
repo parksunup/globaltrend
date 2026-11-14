@@ -62,6 +62,9 @@ Deno.serve(async (req: Request) => {
       if (!(await rpc("collector_capacity")).can_write) {
         throw new Error("database_storage_cap");
       }
+      const title = item.title_original.trim();
+      const body = item.content_text.trim();
+      const aiReady = Boolean(title?.trim()) && Boolean(body?.trim());
       const saved = await rpc("ingest_source_item", {
         p_source_id: config.source_id,
         p_external_id: null,
@@ -82,6 +85,10 @@ Deno.serve(async (req: Request) => {
         p_raw_storage_path: null,
         p_metadata: {
           ...item.metadata,
+          ai_ready: aiReady,
+          draft_readiness_reason: aiReady
+            ? "usable_title_and_source_text"
+            : "missing_or_unusable_title_or_source_text",
           runtime: "supabase-edge",
           execution_id: execution,
         },

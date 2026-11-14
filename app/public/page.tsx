@@ -42,15 +42,15 @@ export default async function PublicHome() {
       const byId=new Map(allStories.map(story=>[story.id,story] as const));
       stories=(links??[]).map(link=>byId.get(link.report_id)).filter((story):story is (typeof allStories)[number]=>Boolean(story))
         .sort((a,b)=>{
-          const dateA=a.date==='날짜 미상'?'00000000':a.date.replaceAll('.','');
-          const dateB=b.date==='날짜 미상'?'00000000':b.date.replaceAll('.','');
+          const dateA=a.date? a.date.replaceAll('.',''):'00000000';
+          const dateB=b.date? b.date.replaceAll('.',''):'00000000';
           return dateB.localeCompare(dateA);
         });
     }
   } catch(error) { console.error('Unable to load the published weekly selection:',error); weeklyIssueError=true; }
   const documentTypes:Record<string,string>={'법령':'legislation','가이드라인':'guidance','판례':'judgment','결정':'decision','의견':'opinion','보고서':'report','기관 발표':'press_release','뉴스':'news'};
   const rankedWeekly=rankWeeklyCandidates(stories.map(story=>({
-    ...story,date:story.date==='날짜 미상'?'00000000':story.date,documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
+    ...story,date:story.date||'00000000',documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
   })));
   const featuredEntry=featuredReportId?rankedWeekly.find(candidate=>candidate.id===featuredReportId)??rankedWeekly[0]:rankedWeekly[0];
   const featured=featuredEntry?.story;
@@ -78,12 +78,12 @@ export default async function PublicHome() {
       <div className={styles.timelinePanel}>
         <div className={styles.panelTitle}><h2>주간 동향</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
         {timelineStories.length ? <ol className={styles.timeline}>{timelineStories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
-          <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
+          <span className={styles.timelineDot} />{story.date&&<time>{story.date}</time>}<Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
         </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
       </div>
 
       <article className={styles.featured}>
-        <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span>{featured&&<><i>·</i><time>{featured.date}</time></>}</div>
+        <div className={styles.featureMeta}><span>{featured?.region ?? "GLOBAL"}</span><i>·</i><span>{featured?.tags[0] ?? "PRIVACY"}</span>{featured?.date&&<><i>·</i><time>{featured.date}</time></>}</div>
         <p className={styles.featureKicker}>{featured ? `${weeklyStart?formatMonthlyWeek(weeklyStart)+' · ':''}${featuredReportId?'담당자 추천 자료':'주간 동향 중 중요도 우선 자료'}` : "공개된 주간 동향이 없습니다"}</p>
         <h2>{featured ? featured.title : "주간 동향을 준비하고 있습니다"}</h2>
         <h3>{featured ? featured.summary : "작업실에서 주간 동향을 공개하면 이곳에 표시됩니다."}</h3>

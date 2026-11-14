@@ -3,6 +3,7 @@ import json
 import os
 import uuid
 from .core import HttpClient,FetchError
+from .readiness import mark_ai_readiness
 
 class DryStore:
     def ingest(self,config,url,item): return {'item_created':True,'content_changed':True}
@@ -65,6 +66,7 @@ class SupabaseStore:
             start=dt.date(year,month,min(end.day,calendar.monthrange(year,month)[1]))
         return min(start,end).isoformat()
     def ingest(self,config,url,item):
+        item=mark_ai_readiness(item)
         p={'p_source_id':config['source_id'],'p_external_id':None,'p_canonical_url':url,'p_title_original':item['title_original'],
            'p_published_at':item['published_date']+'T00:00:00Z' if item['published_date'] else None,'p_event_date':None,'p_fetched_at':None,
            'p_language_code':config.get('language','en'),

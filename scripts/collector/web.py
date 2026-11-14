@@ -10,6 +10,7 @@ import json
 import re
 from pathlib import Path
 from urllib.parse import urlsplit
+from .readiness import mark_ai_readiness
 
 ROOT = Path(__file__).resolve().parents[2]
 ROUTES = json.loads((ROOT / 'config/collector-web.json').read_text())
@@ -51,12 +52,13 @@ def normalize_document(source, document, since, until):
     needs_review = False
     metadata = dict(collector_executor='chatgpt-web',read_scope=scope,web_evidence=evidence,
                     published_date_evidence=dict(value=day.isoformat(),locator=evidence['publication_locator']),
-                    ai_ready=not needs_review,requires_review=needs_review,coverage_complete=False)
+                    requires_review=needs_review,coverage_complete=False)
+    draft_item = mark_ai_readiness({'title_original': title, 'content_text': body, 'metadata': metadata})
     return dict(p_source_id=config['source_id'],p_external_id=None,p_canonical_url=url,p_title_original=title,
                 p_published_at=day.isoformat()+'T00:00:00Z',p_event_date=None,p_fetched_at=evidence['accessed_at'],
                 p_language_code='en',p_document_type='press_release',p_content_text=body,
                 p_content_hash=hashlib.sha256(body.encode()).hexdigest(),p_raw_storage_path=None,
-                p_metadata=metadata,p_instruction_version='trend-ko-v1')
+                p_metadata=draft_item['metadata'],p_instruction_version='trend-ko-v1')
 
 
 def main():

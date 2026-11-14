@@ -43,6 +43,16 @@ test('country, topic, scope and publication date filters do not confuse statute 
  assert.equal(rankPublicDocuments(rows,parseSearchFilters({q:'아동',country:'KR',scope:'trends',topic:'children'})).length,1);
  assert.equal(rankPublicDocuments(rows,parseSearchFilters({q:'아동',country:'CN'})).length,0);
 });
+test('an undated published trend stays searchable but is omitted by a publication-date range',async()=>{
+ const undated={...trend,id:'trend:undated',date:'',title:'아동 개인정보 게시일 없는 자료'};
+ const all=rankPublicDocuments([undated],parseSearchFilters({q:'아동'}));
+ assert.equal(all.length,1);
+ assert.equal(rankPublicDocuments([undated],parseSearchFilters({q:'아동',from:'2026-01-01'})).length,0);
+ const {html}=await renderSearch({documents:[undated]});
+ assert.match(html,/아동 개인정보 게시일 없는 자료/);
+ assert.doesNotMatch(html,/공식 출처 게시일:/);
+ assert.doesNotMatch(html,/날짜 미확인|날짜 미상|확인 필요/);
+});
 test('optional semantic provider is off by default and degrades safely without paid service or private errors',async()=>{
  let calls=0;assert.deepEqual(await semanticSearch('질문',[doc()],{url:'',fetch:async()=>{calls++;throw Error();}}),{state:'off',hits:[]});assert.equal(calls,0);
  assert.equal((await semanticSearch('질문',[doc()],{url:'http://remote.invalid/search',fetch:async()=>{calls++;}})).state,'unavailable');assert.equal(calls,0);

@@ -28,7 +28,7 @@ export default async function PublicSearchPage({ searchParams }: {
     const card = (hit: SearchHit) => <article className={styles.card} key={hit.document.id}>
    <div className={styles.meta}>{hit.document.kind === 'trend' ? '동향' : hit.document.kind === 'comparison' ? '법제 비교 요약' : '법률 조문'} · {hit.document.jurisdictions.map(jurisdictionName).join(' · ')}</div>
    <h3><Link prefetch={false} href={linkFor(hit)}>{hit.document.lawTitle ? `${hit.document.lawTitle} · ` : ''}{hit.document.title}</Link></h3>
-   <div className={styles.meta}>{hit.document.kind === 'trend' ? `공식 출처 게시일: ${hit.document.date || '확인 필요'}` : `선정 판본: ${hit.document.version || '자료에서 확인'}`}</div>
+   {hit.document.kind === 'trend' ? (hit.document.date ? <div className={styles.meta}>공식 출처 게시일: {hit.document.date}</div> : null) : <div className={styles.meta}>선정 판본: {hit.document.version || '자료에서 확인'}</div>}
    <p>{hit.snippet}</p><div className={styles.reasons} aria-label="검색 연결 이유">{hit.reasons.map(reason => <span key={reason}>{reason}</span>)}</div>
    <Link prefetch={false} href={linkFor(hit)}>전체 내용과 조건 확인 →</Link>{hit.document.sourceUrl && <> · <a href={hit.document.sourceUrl} target="_blank" rel="noopener noreferrer">공식 원문 ↗</a></>}
  </article>;

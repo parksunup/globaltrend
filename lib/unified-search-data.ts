@@ -13,7 +13,7 @@ export function publicSearchDocuments(stories: PublishedStory[], legal: LegalBun
     const documents: SearchDocument[] = stories.filter(story => story.publicationStatus === 'published').map(story => ({
         id: `trend:${story.id}`, kind: 'trend', title: story.title, text: [story.summary, story.details].filter(Boolean).join('\n\n'),
         url: `/public/trends/${encodeURIComponent(story.id)}`, jurisdictions: story.jurisdictions ?? [story.country], tags: [...story.tags, story.originalTitle, story.institution],
-        date: /^\d{4}\.\d{2}\.\d{2}$/.test(story.date) ? story.date.replaceAll('.', '-') : '', version: '', sourceUrl: https(story.officialUrl),
+        date: /^\d{4}\.\d{2}(?:\.\d{2})?$/.test(story.date) ? story.date.replaceAll('.', '-') : '', version: '', sourceUrl: https(story.officialUrl),
     }));
     for (const cell of legal.cells) {
         if (cell.status !== 'published' || !cell.summary.trim())

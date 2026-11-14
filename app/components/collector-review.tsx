@@ -15,7 +15,7 @@ export default function CollectorReviewPanel({ data, error, commitSha }: { data:
     {data && <p>DB 사용량: {(data.database_bytes / 1000000).toFixed(1)} MB · 수집 쓰기 중단 기준: 400 MB · 최근 최대 {data.limit}건 표시</p>}
     {data?.items.map(item => <article key={item.id} style={{border:'1px solid #aaa',padding:'1.2rem',margin:'1rem 0',borderRadius:12}}>
       <h3>{item.report?.title_ko ?? item.title_original}</h3>
-      <p>{item.source_name} · 원문 게시일: {item.published_at?.slice(0,10) ?? '미확정'} · {labels[item.pipeline_status] ?? item.pipeline_status}</p>
+      <p>{item.source_name}{item.published_at?` · 원문 게시일: ${item.published_at.slice(0,10)}`:''} · {labels[item.pipeline_status] ?? item.pipeline_status}</p>
       <p><a href={item.canonical_url} target="_blank" rel="noopener noreferrer">공식 원문 ↗</a> · {item.title_original}</p>
       <p>읽은 범위: {item.metadata.read_scope ?? '본문 미확보'} · 관련성: {item.relevance_status === 'relevant' ? '관련 있음' : '사람 확인 필요'}</p>
       {item.metadata.fetch_failure && <p role="alert">본문 수집 실패: {item.metadata.fetch_failure}</p>}
