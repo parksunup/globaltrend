@@ -4,6 +4,8 @@ Run at 05:00 Asia/Seoul as the account's cloud Codex scheduled task, independent
 
 The cloud run may not have a repository shell. The database is authoritative for draft sealing and submission validation through `collector_seal_trend_draft` and `submit_trend_draft`; do not require local Node.js or a desktop worktree for a scheduled run. Keep the full draft in the task's working context until the RPC returns. Do not commit draft text to GitHub.
 
+Supabase tool responses may wrap the SQL result inside `content[0].text` and a JSON `result` field, with human-readable boundary text outside the data. Inspect and parse the actual response envelope before using the claim array. Never parse the boundary text as JSON or copy the entire displayed tool response into a local claim packet. A failed envelope conversion is a worker/tool error, not a failed article: diagnose it with read-only calls before any further claim. Do not spend the same job's three attempts retrying a format conversion. The cloud task must use the existing server sealer and submit RPC described below, even when a repository shell happens to be available.
+
 ## Fail-closed startup
 
 1. Read `AGENTS.md`, `docs/trend-report-style.md`, `docs/trend-reference-reading-notes.md`, `docs/translation/glossary.md`, `docs/trend-draft-worker.md`, `docs/collector-daily-task.md`, and `config/trend-writing-policy.json` through the connected GitHub repository. If any required current file is unavailable, stop without writes.
