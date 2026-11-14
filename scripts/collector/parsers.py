@@ -285,7 +285,10 @@ def extract_pdf(data,url,source=None):
             ocr_reader=PdfReader(io.BytesIO(add_text_layer(data,source,ocr_pages)),strict=True)
             if len(ocr_reader.pages)!=len(original_pages):
                 raise ValueError('pdf_ocr_page_count_changed')
-            texts=[page_text(page) for page in ocr_reader.pages]
+            # pypdf layout mode omits invisible OCR text. Read OCR pages in
+            # standard mode; keep the existing layout extraction elsewhere.
+            texts=[(ocr_reader.pages[i].extract_text() or '') if i + 1 in ocr_pages
+                   else text for i,text in enumerate(texts)]
         if len(normalize(' '.join(texts)))<20:
             raise ValueError('pdf_text_missing_after_ocr' if ocr_pages else 'pdf_text_missing_or_ocr_required')
         pages=[]; related=[]
