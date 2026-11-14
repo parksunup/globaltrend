@@ -36,4 +36,6 @@
 5. 판정은 `record_trend_editorial_triage`로 원문 판본·해시와 함께 기록합니다. 수락된 자료만 초안 작성 작업을 선점합니다. 저중요도·무관 자료는 공개·검수 원고와 원문 이력을 건드리지 않고 미제출 작업만 제거합니다.
 6. PDPC의 기존 미작성 후보는 최신 `edge-pdpc-article-v3` 추출 경로로 원 URL을 다시 가져옵니다. 새 판본의 본문을 읽어 이전 추출과 비교하고, 차이가 있을 때만 재분류합니다. 단순히 AI 준비 값을 바꿔 재수집했다고 보고하지 않습니다.
 
+`collector=scrapling-separate-v1`인 자료에는 별도의 중복 판정 관문이 적용됩니다. 일반 편집 판정에서 `accepted`가 나와도 draft job이 아직 생성되지 않았다면 이를 성공 처리하지 않고 `source_filter_required`로 표시합니다. 해당 자료의 기존 출처 판정·보고서와 같은 사건 여부를 확인한 뒤 `record_scrapling_filter_decision`으로 출처별 중복 판정을 먼저 기록하고, 편집 판정의 결과와 함께 job 존재 여부를 다시 확인합니다. 두 판정 중 어느 하나도 다른 판정을 대신하거나 기존 원고를 덮어쓰지 않습니다.
+
 판정 기록에는 `decision`, `reason`, `decision_version='trend-editorial-triage-v1'`, `source_item_revision_id`, 입력 해시, 링크를 추가로 확인했는지와 원문에 실제 사용한 범위를 포함합니다. 비밀정보나 원문 전문을 판정 메타데이터에 복사하지 않습니다.
