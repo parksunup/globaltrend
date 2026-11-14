@@ -6,6 +6,18 @@
 
 현재 Python 수집기의 직접 PDF, 공식 기사에 연결된 PDF, OECD RSS/Scrapling 경로, PDPC·CURIA 경로에 이 공통 처리를 연결했습니다. 특정 출처만 예외로 정하지 않습니다. 출처가 등록한 언어(en, es, fr, ja, nl, pt, zh)에 맞는 Tesseract 언어 팩을 선택하고 영어를 함께 사용합니다. 언어가 다르거나 OCR 결과가 짧으면 `pdf_text_missing_after_ocr` 등 실제 오류를 남기며 초안의 근거로 삼지 않습니다.
 
+## 출처 전체 대조
+
+등록 출처 37개를 `config/trend-collector.json`, `config/crawlee-daily-source-set.json`, `scripts/collector-scrapling/registry.json`과 대조했습니다. 현재 활성 31개 중 30개에는 Python 수집 경로가 있고 공통 OCR 함수가 연결되어 있습니다. **OAIC 1개는 Edge 단독 경로**이며 GitHub 호스트의 공식·재게시 페이지가 403을 반환한 기록 때문에 Crawlee에서 제외되었습니다. OAIC의 PDF가 Edge 경로로 들어오면 아직 OCR되지 않습니다. 이를 전체 완료라고 표시하지 않습니다.
+
+- Crawlee 경로 26개: edpb, curia, cnil, ico, dpc, pdpc, ppc, edps, ec, ca-opc, cn-tc260, es-aepd, anpd-br, npc-ph, jpdp-my, g7-dpa, nist, iapp, fpf, gpa, global-cbpr, iso-iec-sc27, noyb, nl-ap, freevacy, overview-legal.
+- Scrapling 경로 5개: ftc, calprivacy, hk-pcpd, cn-cac, vn-gov. 이 가운데 ftc·hk-pcpd·vn-gov는 현재 수집 보류 상태이므로 OCR 코드가 있다고 운영 수집 성공으로 표시하지 않습니다.
+- 별도 OECD RSS/Scrapling 경로: oecd.
+- cloud-python 경로 19개는 위 경로와 대부분 중복되며 eu-parliament를 추가로 포함합니다. 공통 PDF 추출부를 사용합니다.
+- 현재 보류 6개: ftc, hk-pcpd, eu-council, eur-lex, ripd, vn-gov. 보류 사유를 OCR 성공으로 해결했다고 간주하지 않습니다.
+
+남은 OAIC PDF 경로는 Edge에서 받은 원본을 비공개 저장소에 영속 기록하고 GitHub Python 작업이 같은 바이트를 OCR한 뒤 기존 출처 ID·URL·판본을 대조하여 재수집하는 연결이 필요합니다. 현재는 OAIC의 스캔 PDF 본문을 읽었다고 주장하지 않습니다.
+
 ## 실행 환경
 
 OCRmyPDF는 Python 패키지만으로 완성되지 않고 Tesseract·Ghostscript 등 시스템 프로그램이 필요합니다. GitHub의 세 Python 수집 워크플로에서 해당 오픈소스 패키지와 언어 팩을 설치하고, 이미지로만 된 PDF를 실제로 읽는 검사를 수행합니다. 이 작업은 사용자 PC가 꺼져 있어도 GitHub 호스트에서 실행됩니다. Supabase Cron이 기존 워크플로를 호출하는 구조는 유지합니다.
