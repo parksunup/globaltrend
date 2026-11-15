@@ -4,9 +4,9 @@
 create or replace function private.trend_draft_source_allowed(p_source_id uuid)
 returns boolean
 language sql
-immutable
+stable
 parallel safe
-set search_path = pg_catalog
+set search_path = pg_catalog, public
 as $$
   select coalesce(p_source_id = any (array[
     'a23ccfc6-4ad0-4ae7-bc85-0da35cfd2c1e'::uuid, -- edpb
@@ -40,7 +40,24 @@ as $$
     'ed10f3a1-4d0d-4409-9ae4-7d320ae92abc'::uuid, -- global-cbpr
     'd5a9b352-8ebf-401a-8d83-378262cc0c12'::uuid, -- ripd
     '3fd924b0-3a38-4ba6-b9b2-5154ecca3a39'::uuid  -- iso-iec-sc27
-  ]::uuid[]), false);
+  ]::uuid[]), false)
+  or exists (
+    -- The original seed creates a few baseline source rows with generated IDs.
+    -- Resolve those rows by their publisher's exact approved catalog acronym so
+    -- clean migration replay and an already-populated production DB share the
+    -- same 31-source allowlist.
+    select 1
+    from public.sources s
+    join public.publishers p on p.id=s.publisher_id
+    where s.id=p_source_id
+      and upper(p.acronym)=any(array[
+        'EDPB','OECD','CJEU','CURIA','CNIL','ICO','DPC','PDPC','PPC','FTC','EC',
+        'CALPRIVACY','CPPA','OAIC','CA-OPC','OPC','HK-PCPD','PCPD',
+        'EU-PARLIAMENT','EP','EU-COUNCIL','CN-CAC','CAC','CN-TC260','TC260',
+        'ES-AEPD','AEPD','EDPS','ANPD-BR','NPC-PH','JPDP-MY','NIST','IAPP','FPF',
+        'GPA','G7-DPA','GLOBAL-CBPR','RIPD','ISO-IEC-SC27'
+      ])
+  );
 $$;
 revoke all on function private.trend_draft_source_allowed(uuid) from public, anon, authenticated, service_role;
 grant usage on schema private to service_role;
@@ -53,9 +70,8 @@ set search_path=pg_catalog as $$ select $policy${"policy_id": "privacy-report-ko
 revoke all on function public.collector_writing_policy() from public,anon,authenticated;
 grant execute on function public.collector_writing_policy() to service_role;
 
--- Apply the same allowlist to the queue claim path without changing its other
--- independent checks (current revision, publication date, relevance, duplicate,
--- content, retry and lease handling).
+-- Apply the same allowlist to the queue claim path while keeping current
+-- revision, relevance, duplicate, content, retry and lease integrity checks.
 do $draft_claim_source_gate$
 declare
   definition text;
@@ -77,6 +93,8 @@ $draft_claim_source_gate$;
 do $draft_claim_retry_and_storage$
 declare
   definition text;
+  old_readiness text := $old$and r.metadata->>'ai_ready' = 'true'$old$;
+  old_publication_date text := $old$and si.published_at is not null$old$;
   old_limit text := $old$and j.attempts < 3 and j.source_item_revision_id = si.current_revision_id$old$;
   new_limit text := $new$and j.source_item_revision_id = si.current_revision_id$new$;
   old_status text := $old$(j.status in ('pending', 'failed') or (j.status = 'claimed' and j.lease_until < now()))$old$;
@@ -85,15 +103,25 @@ declare
   new_storage text := $new$if pg_database_size(current_database()) >= 400000000 then raise insufficient_resources using message = format('draft_queue_storage_guard: database_bytes=%s stop_bytes=400000000', pg_database_size(current_database())); end if;$new$;
 begin
   definition := pg_get_functiondef('public.claim_trend_draft_jobs(text,integer,uuid)'::regprocedure);
-  if position(old_limit in definition) = 0 or position(old_status in definition) = 0 or position(old_storage in definition) = 0 then
+  if position(old_readiness in definition) = 0 or position(old_publication_date in definition) = 0
+     or position(old_limit in definition) = 0
+     or position(old_status in definition) = 0 or position(old_storage in definition) = 0 then
     raise exception 'draft claim retry/storage anchor drift';
   end if;
+  definition := replace(definition, old_readiness, '');
+  definition := replace(definition, old_publication_date, '');
   definition := replace(definition, old_limit, new_limit);
   definition := replace(definition, old_status, new_status);
   definition := replace(definition, old_storage, new_storage);
   execute definition;
 end;
 $draft_claim_retry_and_storage$;
+
+-- A publication date is needed to place an item into a dated weekly issue,
+-- not to draft an otherwise usable source item. Remove the legacy report
+-- trigger that incorrectly made a missing date a hard drafting failure.
+drop trigger if exists collector_require_auto_report_date_before_insert on public.reports;
+drop function if exists private.collector_require_auto_report_date();
 
 -- Retention uses the same allowlist, but does not require an extraction flag or
 -- a known publication date when the current source revision has usable text.
