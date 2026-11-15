@@ -135,3 +135,8 @@
 - 운영 `draft_jobs` 상태는 `pending=216`, `failed=28`, `submitted=121`, `needs_human_review=1`이며 조회 시 `claimed=0`이었다. 따라서 이 시각에 회수할 활성/오래된 선점 작업은 없고, 대기열 216건은 남아 있다. 이는 한 시점의 집계다.
 - 2026-11-15 20:05 KST에 브라질 ANPD 공식 행사 기사 원문을 근거로 작성한 보고서 1건을 기존 서버 `collector_seal_trend_draft` → `submit_trend_draft` 경로로 저장했다. job은 `submitted`, report는 `draft`, `human_reviewed=false`, `published_at=null`이다. `reports`와 `publication_working_copies`의 제목·요약·본문이 모두 일치하고 작업실 사본 revision은 1이다. 자동 승인이나 공개 발행은 없었다.
 - 일일 초안 예약은 기존 Work Scheduled task `매일 한국어 초안 작성` (ID `6acd8e18a8d8819183ea41c78312e398`)가 08:17 KST로 표시된 것을 앞서 확인했다. 사용자가 요청한 목표는 05:25 KST이나, 현재 연결된 도구에는 해당 Work 예약 편집 기능이 없어 실제 시각은 변경되지 않았다. 중복 예약은 추가하지 않았다.
+
+
+### 사용자 일정 변경 반영 — 2026-11-15
+
+- 사용자가 Work Scheduled task의 일일 초안 실행 시각을 직접 매일 오전 05:15 KST로 변경했다고 확인했다. 앞서 기록한 05:25 요청보다 최신 설정이다. 이 변경은 사용자의 직접 조작에 따른 기록이며, 이 세션에서는 예약 설정 자체를 수정하거나 별도 예약을 만들지 않았다. 월요일 주간 실행 09:00 KST와 03:00 수집 시각 사이에 배치된다.
