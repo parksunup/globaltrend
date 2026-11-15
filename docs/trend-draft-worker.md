@@ -4,6 +4,13 @@
 
 > **작업 범위 참고(2026-11-09):** 아래의 `활성 18개`, EDPS·EUR-Lex 보류 상태는 이 문서가 작성될 당시 `main`의 상태를 기록한 과거 메모입니다. 현재 `codex/source-collector-36` 브랜치는 전체 범위를 37개로 정리하고 있습니다. 이 브랜치 설정에 보이는 EDPS/NIST 경로가 운영 DB에서 실제 실행된다는 뜻은 아니며, route 검증·migration·배포 상태를 각각 확인해야 합니다. 아래 편집 지침과 원고 검토 기준은 그대로 유지하고, 과거 수집 범위 메모를 현재 출처 목록으로 사용하지 않습니다.
 
+
+## 2026-11-15 초안 출처와 내부 검토기록 분리
+
+- 초안 작성 대상 출처는 `config/trend-source-catalog.json`의 `original-19` 및 `additional-12` cohort, 합계 31개로 한정합니다. 이 31개에 속하면 초안 작성 출처 조건을 충족합니다. `sources.is_active`와 `terms_reviewed_at`은 초안 작성 허용 여부에 사용하지 않습니다. 수집기가 새 자료를 가져올 수 있는지는 별도 수집·접근 설정으로 판단합니다.
+- 공통 검토항목은 실제 원문에 내용이 있으면 `covered`와 근거를 기록하고, 관련 내용이 없으면 `not_applicable`와 구체적인 이유를 `writing_review.coverage`에 기록합니다. “해당 없음”은 이 내부 검토기록에만 남깁니다.
+- `title_ko`, `summary_ko`, `details_ko`는 독자에게 보여줄 원고입니다. 내부 검토항목을 본문으로 옮기지 않습니다. 따라서 `- 목적: 해당 없음` 같은 체크리스트 문장을 쓰지 않습니다. 서버 봉인 단계도 이런 형식이 원고에 들어오면 거부합니다.
+
 ## 2026-10-29 자동 한국어 작성 품질 계약 — 과거 작성 지시보다 우선
 
 기준은 `privacy-report-ko-48-reference-v2`이며 [전체 작성 지침](trend-report-style.md), [레퍼런스 확인 기록](trend-reference-reading-notes.md), [용어집](translation/glossary.md)을 끝까지 읽는다. 이 작성 지침에 적힌 수집 출처 18개와 EDPS·EUR-Lex 보류는 작성 지침이 기록된 당시의 역사적 운영 범위다. 현재 수집기 출처 목록은 `config/trend-source-catalog.json`을 따른다. 일일 3일·주간 약 8건은 당시의 작성 편집 범위 기록이며, 수집기 출처 목록을 제한하는 기준이 아니다. 주간 선정 여부와 관계없이 보존 자료 전부에 적용한다.
