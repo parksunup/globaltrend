@@ -89,7 +89,10 @@ flowchart LR
     Codex --> Review[Supabase 초안 저장·팀 검수 화면]
     Review --> Published[승인된 발행 버전]
     Published --> Search[키워드·벡터 검색]
-    Published --> Reports[주간호 스냅샷]
+    Published --> Reports[기존 한국어 동향 원고]
+    WeeklyCron[Supabase Cron · 월요일 09:00 KST] --> WeeklyEdge[weekly-digest Edge Function]
+    Reports --> WeeklyEdge
+    WeeklyEdge --> WeeklyDraft[written_weekly_issues · draft only]
     Laws[법령·조문·번역 버전] --> Compare[기준별 법제 비교]
     Laws --> References[동향과 조문의 연결]
     Codex --> References
@@ -109,13 +112,15 @@ flowchart LR
 | Supabase Storage | 허용된 원문 파일, 추출 결과, 내보내기 파일 | 기본 비공개, 공개 산출물만 별도 공개 |
 | Postgres 검색 + pgvector | 어휘 검색, 다국어 의미 검색 | 한국어 품질 평가 후 검색기 확장 |
 | Supabase Cron + Queues | 실행 시점 계산, 작업 보관, 재처리 | 스케줄러는 하나만 활성화 |
-| Supabase Edge Functions / Deno | 가벼운 수집·추출·정규화·큐 작업 | 생성형 초안은 수행하지 않으며 실행 제한 안에서 완료 |
+| Supabase Edge Functions / Deno | 가벼운 수집·추출·정규화·큐 작업, 월요일 주간 후보 선정·주간호 draft 저장 | 생성형 동향 초안은 수행하지 않으며 주간호를 승인·공개하지 않음 |
 | Codex 전용 스레드 + Automation | 대기 자료 확인, 한국어 요약·번역·태그·조문 후보 생성, 결과 반환 | 동일 프로젝트의 지침·양식·용어집을 사용하고 Codex 사용량을 소비 |
 | 저장소의 Codex 작업 스킬·스크립트 | 작업 claim, 입력 묶음 생성, JSON 검증, 초안 제출 | 사람과 Codex가 같은 재현 가능한 계약을 사용 |
 | GitHub + Actions | 코드·리뷰·검증·배포 절차 | 실제 수집 스케줄러로 사용하지 않음 |
 | 향후 컨테이너 워커 / Node.js | 긴 PDF, OCR, 헤드리스 브라우저, 무거운 내보내기 | 필요가 확인되면 호스팅 서비스 별도 선정 |
 
 Supabase는 Cron, 영속 큐, Edge 소비자를 제공하므로 위 조합을 사용할 수 있습니다. 구체적인 병렬도와 타임아웃은 구현 때 선택한 요금제와 실제 문서 크기로 결정합니다. [Cron](https://supabase.com/docs/guides/cron), [Queues](https://supabase.com/docs/guides/queues), [Edge 소비자](https://supabase.com/docs/guides/queues/consuming-messages-with-edge-functions), [실행 제한](https://supabase.com/docs/guides/functions/limits)
+
+주간 자료는 월요일 09:00 한국시간(UTC 월요일 00:00)에 Supabase Cron이 `weekly-digest` Edge Function을 호출합니다. Function은 직전 월~일의 한국어 원고를 기존 화면과 같은 중요도 기준으로 최대 8건 선정해 `written_weekly_issues`에 draft로 저장하고 `collector_edge_events`에 실행 결과를 기록합니다. 동일 주의 주간호가 있으면 편집본·발행본을 덮어쓰지 않습니다. 상세한 저장·멱등성·배포 절차는 [주간 클라우드 예약 안내](docs/weekly-digest-cloud.md)를 참고합니다.
 
 Vercel Cron을 대안 스케줄러로 선택할 수는 있지만, 기본안에서는 사용하지 않습니다. Vercel의 스케줄 호출 자체가 실패 작업의 재시도를 제공하지 않으므로 어느 스케줄러를 쓰더라도 큐·중복 방지·복구는 애플리케이션에 필요합니다. [Vercel Cron 운영 문서](https://vercel.com/docs/cron-jobs/manage-cron-jobs)
 
