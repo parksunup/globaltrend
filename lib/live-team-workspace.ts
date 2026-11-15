@@ -46,11 +46,24 @@ export function createLiveWorkspaceReader(options: {fetch?: typeof fetch; now?: 
   async function refreshHeads() {
     if (now() - headsAt < INTERVAL) return;
     if (!pendingHeads) pendingHeads = (async () => {
-      // Both assigned branches share one API request/cache rather than spending the public quota per viewer.
-      const rows = await (await response(`https://api.github.com/repos/${REPO}/branches?per_page=100`)).json();
-      if (!Array.isArray(rows)) throw Error('GitHub 브랜치 목록을 읽을 수 없습니다.');
       const next: Record<string,string> = {};
-      for (const row of rows) if (Object.values(TEAM_BRANCHES).includes(row.name) && /^[a-f0-9]{40}$/.test(row.commit?.sha)) next[row.name] = row.commit.sha;
+      const assigned = new Set<string>(Object.values(TEAM_BRANCHES));
+      let url: string | undefined = `https://api.github.com/repos/${REPO}/branches?per_page=100`;
+      // The repository can have more than 100 branches. Follow GitHub's
+      // pagination links until both workspace branches are found.
+      while (url && assigned.size > 0) {
+        const result = await response(url);
+        const rows = await result.json();
+        if (!Array.isArray(rows)) throw Error('GitHub 브랜치 목록을 읽을 수 없습니다.');
+        for (const row of rows) {
+          if (assigned.has(row.name) && /^[a-f0-9]{40}$/.test(row.commit?.sha)) {
+            next[row.name] = row.commit.sha;
+            assigned.delete(row.name);
+          }
+        }
+        const link = result.headers.get('link') ?? '';
+        url = assigned.size > 0 ? /<([^>]+)>;\s*rel="next"/.exec(link)?.[1] : undefined;
+      }
       heads = next; headsAt = now();
     })().finally(()=>{pendingHeads=undefined;});
     await pendingHeads;
