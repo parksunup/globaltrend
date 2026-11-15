@@ -7,7 +7,7 @@ Edge 수집은 매일 **04:00 KST**에 먼저 실행하고, 일일 생산자는 
 상태에 나온 모든 미완료 자료는 다음 둘 중 하나로 끝낸다.
 
 1. 원문 전체를 확인해 개인정보 동향이 아니거나 중복이면 구체적인 제외 근거를 저장한다.
-2. 보존 대상이면 `collector_retain_for_draft` → `collector_claim_retained_draft` → 원문·첨부 확인 → 한국어 제목·요약·본문 작성 → seal/check → `submit_trend_draft` → reports와 publication_working_copies 재조회까지 끝낸다.
+2. 보존 대상이면 `collector_retain_for_draft`로 작성 작업을 연결한다. 작성자는 `collector_claim_retained_drafts(worker, 3)`로 최대 3건을 선점하고, 실제 병렬 작성이 가능한 경우 각 원고를 별도 작성자에게 맡겨 동시에 원문·첨부 확인 → 한국어 제목·요약·본문 작성 → seal/check → `submit_trend_draft` → reports와 publication_working_copies 재조회까지 진행한다. 한 건의 오류는 그 건만 정리하고 나머지 건은 계속한다. 병렬 실행이 불가능하면 여러 건의 임대를 미리 잡지 않고 1건씩 처리한다.
 
 종료 요약은 직접 INSERT/UPDATE하지 않고 `collector_finalize_daily_producer(...)`로 기록한다. `collector_daily_pipeline_status(...).ready_to_complete=false`인 동안 DB는 성공 요약을 자동으로 `partial`로 바꾼다. INSERT 뒤 UPDATE로 성공을 덮어쓰는 것도 같은 장벽이 막는다. 따라서 원문만 저장됐거나 관련성 판정·한국어 초안·검사·작업실 저장 중 하나라도 남으면 그 실행은 성공이 아니다. 다음 실행은 새 수집 전에 이 미완료 목록부터 이어받는다.
 
@@ -68,7 +68,7 @@ robots.txt 자체를 요청했을 때 받은 HTTP 403은 robots 정책 본문이
 2. OECD·FTC는 기존 `collector_cloud_take → python -m scripts.collector.cloud_step → collector_cloud_commit` 경로를 사용합니다. 이전 commit이 성공한 뒤 다음 claim을 진행합니다. Claim과 미저장 bundle은 ignored work/에 보관하고, commit 응답이 있어야 저장 성공으로 기록합니다.
 3. Bundle에 실제 automation/run ID·예정 시각·`trigger='scheduled'`·Git SHA를 넣습니다. 실제 context에서 모르는 값은 지어내지 않고 미확인으로 남깁니다. queue message kind와 예약 trigger를 혼동하지 않습니다.
 4. 나머지 7개 승인 출처는 기존 Edge/Cron 소비자가 처리합니다. **처리 책임이 다르다는 이유로 운영 확인·보고에서 제외하지 않습니다.** 출처별 예약/수동 실행, 실제 신규/변경/중복 저장, 기간 밖 자료, 실패, 미확정 날짜, 남은 목록·backlog, 초안 제출 상태를 모두 확인합니다. 최신 이벤트 한 건의 경고를 하루 전체 수집 성과로 대신하지 않습니다. `listing_exhaustiveness_unverified`는 기존 구현이 목록 끝에서 항상 남기는 경고이므로 목록 탐색 종료와 기간 전체 입증을 구분합니다. 출처 승인·호스트·route를 추가하거나 재설정하지 않습니다. CNIL 실패·재시도와 기존 미완료 범위를 보존합니다. coverage는 실제 전체 검증 전까지 미완료로 둡니다.
-5. 각 성공 commit 체크포인트 뒤에는 저장된 원문 전체와 날짜·관련성·중복을 대조합니다. 보존하기로 결정한 자료마다 collector_retain_for_draft(item_id,revision_id,input_hash,reason)를 호출해 보존 확정과 한국어 작성 작업 등록을 원자적으로 연결합니다. 확정된 자료는 다시 표본 선정하거나 미작성 상태로 넘기지 않습니다. collector_claim_retained_draft(worker)를 반복 소비해 기존 형식 검사와 submit_trend_draft 및 작업실 재조회를 끝낸 후 다음 수집으로 진행합니다. 시작과 종료 시 collector_retained_draft_status()를 확인하고 unfinished가 남으면 성공 완료로 기록하지 않습니다. 적격 pending/retry draft 후보를 읽기 전용 비교합니다. 원문 전체, 실제 개인정보 관련성, 같은 발표·언어판 중복 여부, 기존 보고서·상태를 확인하고 작업 1건씩 targeted claim합니다. 제출 완료와 `existing_event_report:` 보류 건은 재선점하지 않습니다.
+5. 각 성공 commit 체크포인트 뒤에는 저장된 원문 전체와 날짜·관련성·중복을 대조합니다. 보존하기로 결정한 자료마다 collector_retain_for_draft(item_id,revision_id,input_hash,reason)를 호출해 보존 확정과 한국어 작성 작업 등록을 원자적으로 연결합니다. 확정된 자료는 다시 표본 선정하거나 미작성 상태로 넘기지 않습니다. collector_claim_retained_drafts(worker,3)로 보존 작업을 최대 3건씩 선점하고 실제 병렬 작성이 가능할 때만 별도 작성자에게 분배합니다. 각 작업의 기존 형식 검사·submit_trend_draft·작업실 재조회를 마치고 다음 묶음으로 진행합니다. 한 작업 오류가 다른 작업을 멈추지 않게 합니다. 시작과 종료 시 collector_retained_draft_status()를 확인하고 unfinished가 남으면 성공 완료로 기록하지 않습니다. 적격 pending/retry draft 후보를 읽기 전용 비교합니다. 원문 전체, 실제 개인정보 관련성, 같은 발표·언어판 중복 여부, 기존 보고서·상태를 확인합니다. 제출 완료와 `existing_event_report:` 보류 건은 재선점하지 않습니다.
 6. 정확한 revision_id·input_hash·instruction_version 및 30분 lease를 유지합니다. 원문과 용어집을 바탕으로 이 Codex 실행에서 초안을 직접 작성하고 주체·날짜·수치·인용·법적 단계를 대조합니다. 별도 생성 API를 사용하지 않습니다.
 7. `node scripts/trend-report.mjs --check work/draft-<job_id>.json`을 실제 통과한 초안만 `submit_trend_draft`로 제출합니다. 실패 원고는 기존 fail 경로를 쓰고 제출 성공으로 간주하지 않습니다.
 8. reports·publication_working_copies(`entity_type='report'`)·기존 `get_trend_collector_review()` JSON items에서 report ID, draft·미검수·미게시·공개 요청 없음·revision을 확인합니다. 관리자 확인과 팀 RLS 조회, 브라우저 직접 확인을 구분합니다. 권한을 확대하지 않습니다.
