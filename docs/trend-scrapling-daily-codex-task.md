@@ -9,7 +9,7 @@ Supabase tool responses may wrap the SQL result inside `content[0].text` and a J
 ## Fail-closed startup
 
 1. Read `AGENTS.md`, `docs/trend-report-style.md`, `docs/trend-reference-reading-notes.md`, `docs/translation/glossary.md`, `docs/trend-draft-worker.md`, `docs/collector-daily-task.md`, and `config/trend-writing-policy.json` through the connected GitHub repository. If any required current file is unavailable, stop without writes.
-2. Through Supabase, verify `scrapling_collection_runs`, `scrapling_filter_decisions`, and these functions exist: `record_scrapling_writer_run`, `record_scrapling_filter_decision`, `collector_writing_policy`, `collector_source_allowed`, `collector_retain_for_draft`, `collector_claim_retained_draft`, `collector_seal_trend_draft`, `submit_trend_draft`, and `fail_trend_draft`. Stop without writes if the migration is absent.
+2. Through Supabase, verify `scrapling_collection_runs`, `scrapling_filter_decisions`, and these functions exist: `record_scrapling_writer_run`, `record_scrapling_filter_decision`, `collector_writing_policy`, `collector_source_allowed`, `collector_retain_for_draft`, `collector_claim_retained_drafts`, `collector_seal_trend_draft`, `submit_trend_draft`, and `fail_trend_draft`. Stop without writes if the migration is absent.
 3. Compare `collector_writing_policy()` with the repository's `config/trend-writing-policy.json`. If the policy ID or any instruction hash differs, record no filter acceptance or draft submission; leave the items pending.
 4. Find all unfiltered Scrapling revisions, not just one source or day. Scope items by `source_items.metadata->>'collector'='scrapling-separate-v1'`, use `current_revision_id`, and exclude revisions already present in `scrapling_filter_decisions`. Join revisions and collection runs. Collection-time access and storage controls remain separate from draft-writing eligibility. For a writer handoff, the exact 31 IDs in the configured `original-19` and `additional-12` cohorts are the complete allowlist; `sources.is_active` and `terms_reviewed_at` do not veto drafting. Do not create or approve source records.
 5. Start a `record_scrapling_writer_run` lease for each eligible collection run. If the repository shell is unavailable, send only the run UUID, execution ID, timestamps, status, and summary JSON to the RPC. Do not put article text, titles, URLs, secrets, or full metadata into this run record.
@@ -31,7 +31,7 @@ Record each decision with the current item/revision/hash, `scrapling_run_id`, ma
 
 ## Draft writing and submission
 
-After filtering the complete eligible pool, repeatedly claim only retained jobs using `collector_claim_retained_draft(worker)`. Use a stable per-run worker name, one item at a time. Do not use a broad pending-job claim.
+After filtering the complete eligible pool, claim only retained jobs using `collector_claim_retained_drafts(worker, 3)`. Use a stable per-run worker name. When three jobs are returned, assign one packet to each of three independent Codex writers and process them concurrently. Each writer must finish its own source reading, Korean drafting, review, seal/check, submit, and read-back before reporting success. A failure or unavailable source for one packet must not cancel or delay the other packets; record/fail only that job and continue. Do not claim more work until a slot is free, and do not use a broad pending-job claim. If this execution cannot actually run independent writers, claim one item at a time instead of taking multiple leases and leaving them idle.
 
 For each claim:
 
