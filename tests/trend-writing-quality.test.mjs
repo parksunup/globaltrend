@@ -14,14 +14,15 @@ test('required review binds policy, exact source and entire Korean draft',()=>{
  }
  assert.equal(d.writing_review.draft_hash,draftDigest(d));
 });
-test('checkboxes, missing dimensions, invented evidence indices and inaccessible critical attachments fail',()=>{
- for(const mutation of [x=>x.writing_review.editorial_review.content=true,x=>x.writing_review.coverage.pop(),x=>x.writing_review.coverage[0].evidence_indices=[8],x=>x.writing_review.supplements=[{url:'https://example.org/report',status:'unavailable',material:true,reason:'보고서의 핵심 분석 내용을 확인할 수 없어 작성 범위가 확정되지 않은 상태'}],x=>x.writing_review.source_reading.read_scope='rss_summary']){
+test('checkboxes, missing dimensions, invented evidence indices and malformed supplements fail',()=>{
+ for(const mutation of [x=>x.writing_review.editorial_review.content=true,x=>x.writing_review.coverage.pop(),x=>x.writing_review.coverage[0].evidence_indices=[8],x=>x.writing_review.supplements=[{url:'https://example.org/report',status:'unavailable',material:true}],x=>x.writing_review.source_reading.read_scope='']){
   const x=sample();mutation(x);assert.ok(validateWritingReview(x,context).length);
  }
 });
-test('short complete announcements are allowed, rich-source compression needs explanation instead of padding',()=>{
+test('short drafts are allowed and long-source density is a non-blocking review signal',()=>{
  const d=sample();assert.deepEqual(validateWritingReview(d,context),[]);
- delete d.writing_review.brevity_reason;assert.ok(validateWritingReview(d,context).some(x=>x.includes('brevity_reason')));
+ delete d.writing_review.brevity_reason;assert.deepEqual(validateWritingReview(d,context),[]);
+ assert.ok(auditWritingDensity(d,context.content_text.length).length);
  assert.deepEqual(validateWritingReview(d,{...context,content_text:'A genuinely short official announcement.'}),[]);
 });
 test('content-specific type requires additional dimensions; source absence needs specific reason',()=>{
@@ -45,12 +46,12 @@ test('writer packet embeds exact current instructions and invalid templates cann
  assert.throws(()=>createWritingPacket([claim,claim]),/1건/);
 });
 
-test('every known attachment receives a review classification and partial material reads stay blocked',()=>{
+test('unused attachments need no classification and honest partial reads are allowed',()=>{
  const url='https://example.org/linked-report.pdf';
  const c={...context,metadata:{related_documents:[{url,read:false}],unread_attachments:[url]}};
- const d=sample();assert.ok(validateWritingReview(d,c).some(x=>x.includes('known_attachment')));
+ const d=sample();assert.deepEqual(validateWritingReview(d,c),[]);
  d.writing_review.supplements=[{url,status:'read',material:true,read_scope:'partial',complete:false,locator:'실제로는 보고서 첫 쪽만 열람하고 나머지 핵심 분석 쪽은 확보하지 못한 상태',reason:'기사의 핵심 분석을 이해하는 데 필요한 보고서'}];
- assert.ok(validateWritingReview(d,c).some(x=>x.includes('supplements')));
+ assert.deepEqual(validateWritingReview(d,c),[]);
  d.writing_review.supplements[0]={url,status:'not_material',material:false,reason:'이 링크는 같은 페이지의 일반 행사 안내이며 본 기사의 조치·판단 근거와 무관함'};
  assert.deepEqual(validateWritingReview(d,c),[]);
 });

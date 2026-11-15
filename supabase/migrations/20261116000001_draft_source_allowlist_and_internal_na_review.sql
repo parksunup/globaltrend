@@ -191,7 +191,8 @@ begin
  if kind is null or not (p->'article_types' ? kind) then raise exception 'Writing review article type required' using errcode='22023'; end if;
  s=r->'source_reading';
  if jsonb_typeof(s) is distinct from 'object' or s->>'url' is distinct from official_url
-  or nullif(btrim(s->>'read_scope'),'') is null or nullif(btrim(s->>'locator'),'') is null
+  or jsonb_typeof(s->'read_scope') is distinct from 'string' or nullif(btrim(s->>'read_scope'),'') is null
+  or jsonb_typeof(s->'locator') is distinct from 'string' or nullif(btrim(s->>'locator'),'') is null
   or jsonb_typeof(s->'reviewed_at') is distinct from 'string' or nullif(btrim(s->>'reviewed_at'),'') is null then
   raise exception 'Writing review source and actual read scope required' using errcode='22023'; end if;
  observed_at=(s->>'reviewed_at')::timestamptz;
@@ -200,9 +201,9 @@ begin
  for s in select value from jsonb_array_elements(r->'supplements') loop
   if jsonb_typeof(s) is distinct from 'object' or coalesce(s->>'url','') !~ '^https://'
    or jsonb_typeof(s->'material') is distinct from 'boolean' or coalesce(s->>'status','') not in ('read','unavailable','not_material')
-   or nullif(btrim(s->>'reason'),'') is null
-   or (s->>'status'='read' and (nullif(btrim(s->>'locator'),'') is null
-      or nullif(btrim(s->>'read_scope'),'') is null)) then
+   or jsonb_typeof(s->'reason') is distinct from 'string' or nullif(btrim(s->>'reason'),'') is null
+   or (s->>'status'='read' and (jsonb_typeof(s->'locator') is distinct from 'string' or nullif(btrim(s->>'locator'),'') is null
+      or jsonb_typeof(s->'read_scope') is distinct from 'string' or nullif(btrim(s->>'read_scope'),'') is null)) then
    raise exception 'Writing review supplement record invalid' using errcode='22023'; end if;
  end loop;
  if jsonb_typeof(r->'coverage') is distinct from 'array' then raise exception 'Writing review coverage required' using errcode='22023'; end if;
@@ -211,22 +212,25 @@ begin
   select value into c from jsonb_array_elements(r->'coverage') where value->>'aspect'=aspect;
   if c is null then raise exception 'Writing review coverage dimension missing: %',aspect using errcode='22023'; end if;
   if c->>'status'='covered' then
-   if nullif(btrim(c->>'detail'),'') is null or jsonb_typeof(c->'evidence_indices') is distinct from 'array'
+   if jsonb_typeof(c->'detail') is distinct from 'string' or nullif(btrim(c->>'detail'),'') is null or jsonb_typeof(c->'evidence_indices') is distinct from 'array'
       or jsonb_array_length(c->'evidence_indices')=0 then raise exception 'Writing review concrete coverage evidence required' using errcode='22023'; end if;
    for idx in select value from jsonb_array_elements(c->'evidence_indices') loop
     if jsonb_typeof(idx) is distinct from 'number' or idx::text !~ '^[0-9]+$'
        or idx::numeric>=jsonb_array_length(d->'evidence') then raise exception 'Writing review evidence index invalid' using errcode='22023'; end if;
    end loop;
   elsif c->>'status'='not_applicable' then
-   if nullif(btrim(c->>'reason'),'') is null or btrim(c->>'reason') ~* '^(해당\s*없음|미해당|n/?a|not_applicable)$' then raise exception 'Writing review absence reason required' using errcode='22023'; end if;
+   if jsonb_typeof(c->'reason') is distinct from 'string' or nullif(btrim(c->>'reason'),'') is null or btrim(c->>'reason') ~* '^(해당\s*없음|미해당|n/?a|not_applicable)$' then raise exception 'Writing review absence reason required' using errcode='22023'; end if;
   else raise exception 'Writing review coverage status invalid' using errcode='22023';
   end if;
  end loop;
  if jsonb_typeof(r->'editorial_review') is distinct from 'object' then raise exception 'Writing review editorial review required' using errcode='22023'; end if;
  for check_name in select jsonb_array_elements_text(p->'editorial_checks') loop
-  if nullif(btrim(r->'editorial_review'->>check_name),'') is null then raise exception 'Writing review editorial check required: %',check_name using errcode='22023'; end if;
+  if jsonb_typeof(r->'editorial_review'->check_name) is distinct from 'string' or nullif(btrim(r->'editorial_review'->>check_name),'') is null then raise exception 'Writing review editorial check required: %',check_name using errcode='22023'; end if;
  end loop;
  if (d->>'summary_ko') ~ '[\r\n]' then raise exception 'Writing review summary must be one paragraph' using errcode='22023'; end if;
+ if (d->>'summary_ko') ~ '주요 내용' then raise exception 'Writing review summary must not contain a section label' using errcode='22023'; end if;
+ if (d->>'summary_ko') ~ '(합니다|했습니다|됩니다|이다|했다|한다|밝혔다|설명한다|안내한다|요구한다)[.!]?[[:space:]]*$' then raise exception 'Writing review summary must use report style' using errcode='22023'; end if;
+ if ((d->>'summary_ko') || E'\n' || (d->>'details_ko')) ~ '(검토 필요|확인 필요|일반화하지|추정하지|작성하지|원문을 정확히|사람 검토|검수 대기|샘플 ID|evidence_index)' then raise exception 'Writing review forbidden editorial directions in report body' using errcode='22023'; end if;
  if ((coalesce(d->>'summary_ko','')) || E'\n' || coalesce(d->>'details_ko','')) ~* '(^|\n)[[:space:]]*-[[:space:]]*(context|action|scope|grounds|follow_up|목적|조치|대상|근거|후속조치|범위)[[:space:]]*[:：][[:space:]]*(해당[[:space:]]*없음|미해당|n/?a|not_applicable)([[:space:]]|$)' then raise exception 'Writing review coverage must stay out of report body' using errcode='22023'; end if;
  for paragraph in select unnest(regexp_split_to_array(btrim(replace(d->>'details_ko',E'\r\n',E'\n')),E'\n[[:space:]]*\n')) loop
   if paragraph !~ '^- [^[:space:]][^\r\n]*$' then raise exception 'Writing review report paragraph format required' using errcode='22023'; end if;
