@@ -256,3 +256,5 @@ pnpm supabase:stop
 ## 팀 작업 공간
 
 `/work`에서 동향·법제를 함께 검색하고 선택해 공개합니다. 공개 중 자료의 수정은 별도 작업본에 저장하며, 관리자가 수정본 공개를 눌러야 외부 내용이 바뀝니다. 공개 취소와 복구 가능한 휴지통도 같은 목록에서 사용합니다. 세부 사용법은 [자료 관리·공개 안내](./docs/editorial-publication.md)를 참고하세요. `/team` 열람과 `/public` 공개 사이트는 유지합니다.
+
+주간 동향 초안은 PC와 무관하게 Supabase Cron과 Edge Function으로 준비합니다. 예약 시각과 draft-only 동작은 [주간 클라우드 예약 안내](./docs/weekly-digest-cloud.md)를 참고하세요.
