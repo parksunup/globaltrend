@@ -57,7 +57,7 @@
 |---|---|---|
 | 게시일 없는 자료의 개별 초안 허용 여부 | 과거 `20261028013000_require_publication_date_for_auto_draft.sql` 및 `20261028090921_completed_korean_catalog.sql`은 claim에서 게시일을 요구하고, 자동 초안 삽입 trigger도 날짜를 요구했다. 최신 운영 claim은 날짜 없는 item을 선점하며 `date_absent_at_claim`를 기록한다. 운영 submit은 날짜 없음 + 그 claim-time flag가 true면 `ai_ready` 예외를 허용한다. | **개별 초안 작성은 허용, 주간호에는 미포함**이 사용자 지시다. 저장소 migration, trigger, 최신 운영 함수와 테스트가 같은 정책을 구현하도록 조정해야 한다. 날짜가 비어 있다는 이유만으로 일반 초안 작업을 막지 않는다. 날짜를 확인할 수 없으면 날짜 칸을 비워 둔다. |
 | 날짜 미확인 초안의 주간호 후보 제외 | 주간 집계 계약 `docs/weekly-digest-cloud.md` 및 `docs/collector-daily-task.md`의 주간 항목은 발표일 확인 가능한 보고서만 기간 필터에 포함한다. | **유지.** 날짜가 없으면 월~일의 기간 귀속을 증명할 수 없다. 이는 일반 동향 초안 생성을 막는 요건이 아니라 주간호의 기간 정확성 필터다. |
-| 사용자 컴퓨터와 무관한 월요일 8건 주간 초안 | `docs/weekly-digest-cloud.md`, `docs/catalog-weekly-contract.md`, 주간 작업 Edge PR #148이 Supabase Cron + `weekly-digest` Edge Function을 목표로 한다. 운영 점검에서는 Function과 Cron job이 아직 배포/등록되지 않았다고 확인됐다. | **예약만 만들면 달성 아님.** PR 병합 → Edge Function 배포 → migration 적용 → Cron 등록 확인 → 실제 `collector_edge_events` 성공 및 저장된 주간 draft 재조회까지 완료해야 활성 자동화다. 승인·공개 발행은 별도 사람 결정이다. |
+| 사용자 컴퓨터와 무관한 월요일 8건 주간 초안 | PR #148은 병합됐고, 운영 `weekly-digest` Edge Function과 `weekly-digest-monday-0900` Cron이 활성이다. Cron은 `0 0 * * 1` UTC(월요일 09:00 KST)이며, 2026-11-15 일요일 조회 시 정기 실행 이력은 아직 없다. | **배포·예약 구성은 완료, 정기 실행의 성공은 미확인.** 실제 정기 occurrence에서 `collector_edge_events` 성공과 8건 초안 저장을 재조회해야 한다. 11월 16일 09:00 KST가 다음 정기 실행이다. 수동 사전 실행으로 같은 dispatch 경로가 동작한 사실은 정기 occurrence 성공의 증거와 구분한다. 승인·공개 발행은 별도 사람 결정이다. |
 
 ### 5. Retry·중복·사람 검수 보호
 
@@ -128,3 +128,10 @@
 - 주간 실행은 자동 저장까지 검증됐지만, Cron 누락 시 과거 주차를 따라잡는 내구성 대기열은 없다. 여러 주가 누락되면 다음 실행에서 직전 완료 주만 계산할 수 있으므로, missed-run 탐지와 누락 주차 catch-up은 별도 개선 과제다.
 - 기존 ChatGPT Work 일일 작업 `매일 한국어 초안 작성`의 ID는 `6acd8e18a8d8819183ea41c78312e398`, 기존 표시 시각은 매일 08:17 KST다. 사용자는 수집(03:00) 뒤·주간 월요일 발행(09:00) 전에 실행되도록 매일 05:25 KST 변경을 요청했다. 현재 연결된 Codex 자동화 도구는 이 Work 예약을 편집하지 못했고 브라우저/데스크톱 UI 접근도 실패해 실제 설정은 아직 변경되지 않았다. 중복 로컬/DB 예약은 만들지 않았다. OpenAI의 안내 경로는 ChatGPT의 Scheduled 화면에서 해당 작업을 편집하는 것이다.
 - PR #149는 이 감사를 위한 문서 전용 변경이다. 본문에서 권고한 `ai_ready`·연결자료·재시도·짧은 원고 등 운영 게이트는 이번 조회나 문서 갱신으로 변경되지 않았다. PR 병합만으로 운영 차단 조건이 바뀌지는 않는다. 자동 승인·공개 발행도 하지 않았다.
+
+
+### 최신 후속 확인 — 2026-11-15 20:06 KST
+
+- 운영 `draft_jobs` 상태는 `pending=216`, `failed=28`, `submitted=121`, `needs_human_review=1`이며 조회 시 `claimed=0`이었다. 따라서 이 시각에 회수할 활성/오래된 선점 작업은 없고, 대기열 216건은 남아 있다. 이는 한 시점의 집계다.
+- 2026-11-15 20:05 KST에 브라질 ANPD 공식 행사 기사 원문을 근거로 작성한 보고서 1건을 기존 서버 `collector_seal_trend_draft` → `submit_trend_draft` 경로로 저장했다. job은 `submitted`, report는 `draft`, `human_reviewed=false`, `published_at=null`이다. `reports`와 `publication_working_copies`의 제목·요약·본문이 모두 일치하고 작업실 사본 revision은 1이다. 자동 승인이나 공개 발행은 없었다.
+- 일일 초안 예약은 기존 Work Scheduled task `매일 한국어 초안 작성` (ID `6acd8e18a8d8819183ea41c78312e398`)가 08:17 KST로 표시된 것을 앞서 확인했다. 사용자가 요청한 목표는 05:25 KST이나, 현재 연결된 도구에는 해당 Work 예약 편집 기능이 없어 실제 시각은 변경되지 않았다. 중복 예약은 추가하지 않았다.
