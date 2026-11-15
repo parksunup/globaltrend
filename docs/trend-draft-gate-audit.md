@@ -117,3 +117,14 @@
 ## 이 감사와 주간 자동화의 변경 범위
 
 초안 gate 감사는 운영 DB를 읽기 전용으로 살폈으며, 감사 목적으로 claim/fail/submit RPC, 원고 row, source approval은 변경하지 않았다. 현재 살아 있는 lease를 빼앗거나 갱신하지 않았다. 주간 자동화의 코드·Edge Function·Cron은 PR #148 작업으로 병합·배포했으며, 위 후속 확인에 적은 대로 검수 대기 주간호 1건을 생성해 재조회했다. 자동 승인이나 공개 발행은 없었다.
+
+## 최신 운영 재확인 및 후속 상태 (2026-11-15 19:37 KST)
+
+- 운영 `draft_jobs` 재조회: pending 223, claimed 1, failed 23, submitted 118, needs_human_review 1. 보고서 테이블은 총 225건(draft 76, published 149)이다. 수치는 자동 처리 중인 시점 스냅샷이다.
+- claim 후보 predicate를 현재 운영 함수에 적용한 후보는 229건이다. 그중 `ai_ready`가 true가 아닌 건은 102건이며, 101건은 게시일이 있다. 현재 `claim_trend_draft_jobs`는 이들을 readiness 확인 없이 선점할 수 있지만, `submit_trend_draft`는 게시일이 있는 `ai_ready=false` 원고를 `Source approval was revoked`로 거부한다. `collector_retain_for_draft`도 같은 유형을 `retention_source_not_ai_ready`로 거절한다. 세 경로의 eligibility를 한 정책으로 정렬해야 한다.
+- 현재 유일한 claimed 작업은 `6590e9c7-c033-45d1-8226-262fa653e1f1`, 작업자 `work-drafts-catchup-20261115T150215KST`, 2026-11-15 11:02:57 UTC(20:02:57 KST)까지 유효한 임대다. 조회 시각에는 아직 유효했으므로 빼앗거나 변경하지 않았다. 오래됐다는 이유만으로 제외하지 않으며, 실제 lease 만료 후 기존 재선점 계약으로 처리한다.
+- 운영 DB 크기는 99,101,843 bytes로 400MB 상한 미만이다. 대기 작업을 멈추게 한 현재 원인으로 이 상한은 확인되지 않았다.
+- 주간 Cron `weekly-digest-monday-0900`은 `0 0 * * 1` UTC, 활성 상태다. 2026-11-15 10:37 UTC 기준 `cron.job_run_details`는 0건이었다. 11월 16일 월요일 오전 9시 KST가 첫 정기 실행 예정이므로, 일요일에 실행된 별도 HTTP 200 사전 호출 및 검수 대기 주간 초안 저장을 정기 실행 성공으로 표현하지 않는다.
+- 주간 실행은 자동 저장까지 검증됐지만, Cron 누락 시 과거 주차를 따라잡는 내구성 대기열은 없다. 여러 주가 누락되면 다음 실행에서 직전 완료 주만 계산할 수 있으므로, missed-run 탐지와 누락 주차 catch-up은 별도 개선 과제다.
+- 기존 ChatGPT Work 일일 작업 `매일 한국어 초안 작성`의 ID는 `6acd8e18a8d8819183ea41c78312e398`, 기존 표시 시각은 매일 08:17 KST다. 사용자는 수집(03:00) 뒤·주간 월요일 발행(09:00) 전에 실행되도록 매일 05:25 KST 변경을 요청했다. 현재 연결된 Codex 자동화 도구는 이 Work 예약을 편집하지 못했고 브라우저/데스크톱 UI 접근도 실패해 실제 설정은 아직 변경되지 않았다. 중복 로컬/DB 예약은 만들지 않았다. OpenAI의 안내 경로는 ChatGPT의 Scheduled 화면에서 해당 작업을 편집하는 것이다.
+- PR #149는 이 감사를 위한 문서 전용 변경이다. 본문에서 권고한 `ai_ready`·연결자료·재시도·짧은 원고 등 운영 게이트는 이번 조회나 문서 갱신으로 변경되지 않았다. PR 병합만으로 운영 차단 조건이 바뀌지는 않는다. 자동 승인·공개 발행도 하지 않았다.
