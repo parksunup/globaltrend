@@ -51,6 +51,7 @@ jobs:
           PODCAST_SESSION_KEY: ${{ secrets.PODCAST_SESSION_KEY }}
           PODCAST_ACCOUNT_EMAIL: ${{ secrets.PODCAST_ACCOUNT_EMAIL }}
           NOTEBOOKLM_AUTH_JSON: ${{ secrets.NOTEBOOKLM_AUTH_JSON }}
+          NOTEBOOKLM_MASTER_TOKEN_JSON: ${{ secrets.NOTEBOOKLM_MASTER_TOKEN_JSON }}
           PODCAST_PRODUCE_ENABLED: ${{ vars.PODCAST_CLOUD_ENABLED }}
           PODCAST_ENDPOINT: https://emlgwhkgaihhrirhdpnp.supabase.co/functions/v1/podcast-cloud
         run: python scripts/podcast-cloud/worker.py

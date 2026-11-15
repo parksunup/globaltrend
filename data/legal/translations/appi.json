@@ -18,7 +18,7 @@
     "response_sha256": "8697d47d0bcafca425426ecc67cf1deb7f0d401ea9f2159cfb58ccce563147b9",
     "law_full_text_sha256": "8dbcebbcd66e1a466c9be799e6f5092b9fb58ab9f2094e5eb79aa0ce4ebae7ef",
     "hash_method": "response: bytes; law_full_text: UTF-8 JSON ensure_ascii=False sort_keys=True separators=(comma,colon)",
-    "scope_note": "e-Gov selected consolidated law, including all 22 supplied supplementary provision groups and 2 appended tables; amendment supplementary excerpts remain excerpts; not the full text of each amending act"
+    "scope_note": "e-Gov selected consolidated law, including all 22 supplied supplementary provision groups and 2 appended tables; amendment supplementary excerpts remain excerpts; not the full text of each amending act 용어 편집(2026-11-02): 요배려 개인정보는 특별한 배려가 필요한 정보라는 일본 APPI의 법정 개념이다. 개인정보·개인데이터·보유 개인데이터·가명가공정보·익명가공정보와 조례상 별도 개념을 구별하며 한국법의 민감정보로 일괄 대체하지 않는다. 사람 검수 전."
   },
   "translation": {
     "language": "ko",
@@ -622,7 +622,7 @@
       "source_sha256": "2f09cafbc0fa1f67fa70ca50be7571f79f30d8cd54b84ce62461e6c4966f5b12",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 법률에서 “배려가 필요한 개인정보”란 본인의 인종, 신조, 사회적 신분, 병력, 범죄 경력, 범죄로 피해를 입은 사실, 그 밖에 본인에 대한 부당한 차별, 편견 또는 그 밖의 불이익이 발생하지 않도록 그 취급에 특별한 배려가 필요한 것으로 정령으로 정하는 기술 등이 포함된 개인정보를 말한다.",
+      "korean_text": "이 법률에서 “요배려 개인정보”란 본인의 인종, 신조, 사회적 신분, 병력, 범죄 경력, 범죄로 피해를 입은 사실, 그 밖에 본인에 대한 부당한 차별, 편견 또는 그 밖의 불이익이 발생하지 않도록 그 취급에 특별한 배려가 필요한 것으로 정령으로 정하는 기술 등이 포함된 개인정보를 말한다.",
       "markdown_anchor": "main-a2-p3"
     },
     {
@@ -2119,7 +2119,7 @@
       "source_sha256": "fe4c14a44df30a4f67d4c41587e86a262ee06b583fe4657580dfd7f13c179f17",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 다음에 열거된 경우를 제외하고는 미리 본인의 동의를 받지 않고 배려가 필요한 개인정보를 취득하여서는 아니 된다.",
+      "korean_text": "개인정보취급사업자는 다음에 열거된 경우를 제외하고는 미리 본인의 동의를 받지 않고 요배려 개인정보를 취득하여서는 아니 된다.",
       "markdown_anchor": "main-a20-p2"
     },
     {
@@ -2189,7 +2189,7 @@
       "source_sha256": "860055977a5c18b4b0a27b874b77db167b67d1505d2966828d7afa8671ebe986",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "해당 개인정보취급사업자가 학술연구기관 등인 경우로서 해당 배려가 필요한 개인정보를 학술연구목적으로 취급할 필요가 있을 때(해당 배려가 필요한 개인정보를 취급하는 목적의 일부가 학술연구목적인 경우를 포함하고, 개인의 권리이익을 부당하게 침해할 우려가 있는 경우를 제외한다).",
+      "korean_text": "해당 개인정보취급사업자가 학술연구기관 등인 경우로서 해당 요배려 개인정보를 학술연구목적으로 취급할 필요가 있을 때(해당 요배려 개인정보를 취급하는 목적의 일부가 학술연구목적인 경우를 포함하고, 개인의 권리이익을 부당하게 침해할 우려가 있는 경우를 제외한다).",
       "markdown_anchor": "main-a20-p2-i5"
     },
     {
@@ -2203,7 +2203,7 @@
       "source_sha256": "c1f1666b5a1ac6d86d224f41e925359d72ff7ffed2daf824e2f713de09fc5259",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "학술연구기관 등으로부터 해당 배려가 필요한 개인정보를 취득하는 경우로서 해당 배려가 필요한 개인정보를 학술연구목적으로 취득할 필요가 있을 때(해당 배려가 필요한 개인정보를 취득하는 목적의 일부가 학술연구목적인 경우를 포함하고, 개인의 권리이익을 부당하게 침해할 우려가 있는 경우를 제외한다)(해당 개인정보취급사업자와 해당 학술연구기관 등이 공동으로 학술연구를 수행하는 경우로 한정한다).",
+      "korean_text": "학술연구기관 등으로부터 해당 요배려 개인정보를 취득하는 경우로서 해당 요배려 개인정보를 학술연구목적으로 취득할 필요가 있을 때(해당 요배려 개인정보를 취득하는 목적의 일부가 학술연구목적인 경우를 포함하고, 개인의 권리이익을 부당하게 침해할 우려가 있는 경우를 제외한다)(해당 개인정보취급사업자와 해당 학술연구기관 등이 공동으로 학술연구를 수행하는 경우로 한정한다).",
       "markdown_anchor": "main-a20-p2-i6"
     },
     {
@@ -2217,7 +2217,7 @@
       "source_sha256": "f1337fbc58585b5a5b8268be4d980004712836610ab990841ff386b4e2697340",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "해당 배려가 필요한 개인정보가 본인, 국가기관, 지방공공단체, 학술연구기관 등, 제57조 제1항 각 호에 열거된 자 또는 그 밖에 개인정보보호위원회 규칙으로 정하는 자에 의하여 공개되어 있는 경우.",
+      "korean_text": "해당 요배려 개인정보가 본인, 국가기관, 지방공공단체, 학술연구기관 등, 제57조 제1항 각 호에 열거된 자 또는 그 밖에 개인정보보호위원회 규칙으로 정하는 자에 의하여 공개되어 있는 경우.",
       "markdown_anchor": "main-a20-p2-i7"
     },
     {
@@ -2658,7 +2658,7 @@
       "source_sha256": "d85694bf67a03a0b7ba28f4b2fc04d2a61c58c25ba69a4aa590bb3a00f79fecc",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "개인정보취급사업자는 제3자에게 제공되는 개인데이터에 대하여 본인의 요구에 따라 해당 본인이 식별되는 개인데이터의 제3자에 대한 제공을 정지하기로 하고 있는 경우로서, 다음에 열거된 사항에 대하여 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두는 동시에 개인정보보호위원회에 신고한 때에는 전항의 규정에도 불구하고 해당 개인데이터를 제3자에게 제공할 수 있다. 다만, 제3자에게 제공되는 개인데이터가 배려가 필요한 개인정보이거나 제20조 제1항의 규정에 위반하여 취득된 것 또는 다른 개인정보취급사업자로부터 이 항 본문의 규정에 따라 제공된 것(그 전부 또는 일부를 복제하거나 가공한 것을 포함한다)인 경우에는 그러하지 아니하다.",
+      "korean_text": "개인정보취급사업자는 제3자에게 제공되는 개인데이터에 대하여 본인의 요구에 따라 해당 본인이 식별되는 개인데이터의 제3자에 대한 제공을 정지하기로 하고 있는 경우로서, 다음에 열거된 사항에 대하여 개인정보보호위원회 규칙으로 정하는 바에 따라 미리 본인에게 통지하거나 본인이 쉽게 알 수 있는 상태에 두는 동시에 개인정보보호위원회에 신고한 때에는 전항의 규정에도 불구하고 해당 개인데이터를 제3자에게 제공할 수 있다. 다만, 제3자에게 제공되는 개인데이터가 요배려 개인정보이거나 제20조 제1항의 규정에 위반하여 취득된 것 또는 다른 개인정보취급사업자로부터 이 항 본문의 규정에 따라 제공된 것(그 전부 또는 일부를 복제하거나 가공한 것을 포함한다)인 경우에는 그러하지 아니하다.",
       "markdown_anchor": "main-a27-p2"
     },
     {
@@ -5441,7 +5441,7 @@
       "source_sha256": "ea31e46ccaf9316bf4fd4714ece85552d68ca6713278f5b169cb3f57eac9016a",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "이 장에서 “조례상 배려가 필요한 개인정보”란 지방공공단체의 기관 또는 지방독립행정법인이 보유하는 개인정보(배려가 필요한 개인정보를 제외한다) 중 지역의 특성 및 그 밖의 사정에 따라 본인에 대한 부당한 차별, 편견 또는 그 밖의 불이익이 발생하지 않도록 그 취급에 특별한 배려가 필요한 것으로 지방공공단체가 조례로 정하는 기술 등이 포함된 개인정보를 말한다.",
+      "korean_text": "이 장에서 “조례상 요배려 개인정보”란 지방공공단체의 기관 또는 지방독립행정법인이 보유하는 개인정보(요배려 개인정보를 제외한다) 중 지역의 특성 및 그 밖의 사정에 따라 본인에 대한 부당한 차별, 편견 또는 그 밖의 불이익이 발생하지 않도록 그 취급에 특별한 배려가 필요한 것으로 지방공공단체가 조례로 정하는 기술 등이 포함된 개인정보를 말한다.",
       "markdown_anchor": "main-a60-p5",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6401,7 +6401,7 @@
       "source_sha256": "fb5ef9260a9605d67dd0cf7bce912f2f8b238c380cfb1cf9337a9c2d6c5c746b",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "기록정보에 배려가 필요한 개인정보가 포함된 때에는 그 사실.",
+      "korean_text": "기록정보에 요배려 개인정보가 포함된 때에는 그 사실.",
       "markdown_anchor": "main-a74-p1-i6",
       "translation_method": "assistant_translation_from_official_japanese"
     },
@@ -6791,7 +6791,7 @@
       "source_sha256": "4c5e4e971bd09a979fd0f88d0723ee309727624c64c68afba505e379652b4e11",
       "translation_status": "draft",
       "human_review_status": "not_started",
-      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대하여 제1항의 규정을 적용할 때에는 같은 항 중 “정하는 사항”을 “정하는 사항 및 기록정보에 조례상 배려가 필요한 개인정보가 포함된 때에는 그 사실”로 한다.",
+      "korean_text": "지방공공단체의 기관 또는 지방독립행정법인에 대하여 제1항의 규정을 적용할 때에는 같은 항 중 “정하는 사항”을 “정하는 사항 및 기록정보에 조례상 요배려 개인정보가 포함된 때에는 그 사실”로 한다.",
       "markdown_anchor": "main-a75-p4",
       "translation_method": "assistant_translation_from_official_japanese"
     },

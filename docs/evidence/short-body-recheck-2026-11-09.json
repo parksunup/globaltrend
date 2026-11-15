@@ -1,0 +1,527 @@
+{
+  "started_at": "2026-11-09T02:04:50.638755+00:00",
+  "scope_count": 4,
+  "sources": [
+    {
+      "source": "pdpc",
+      "name": "Personal Data Protection Commission Singapore",
+      "cohort": "original-19",
+      "cadence": "daily",
+      "database_writes": false,
+      "coverage_complete": false,
+      "status": "listing_and_body_extracted",
+      "listing_url": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events",
+      "listing": {
+        "status": "parsed",
+        "http_status": 200,
+        "final_url": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events",
+        "candidate_count": 10,
+        "next_url": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events&page=2",
+        "relevant_candidate_count": 10,
+        "candidates": [
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/advisory-for-data-protection-risks-when-using-unauthorised-ai-tools-for-the-development-of-software-or-scripts",
+            "title": "Advisory for Data Protection Risks When Using Unauthorised AI Tools For the Development of Software or Scripts",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "30 Sep 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/keynote-address-by-commissioner-denise-wong-for-cybersecurity-and-data-protection-conference-2026",
+            "title": "Keynote Address by Commissioner, Denise Wong, for Cybersecurity and Data Protection Conference 2026",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "23 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/imda-and-the-iapp-strengthen-partnership-to-expand-ai-governance-professional-training-for-ai-and-data-professionals",
+            "title": "IMDA and the IAPP strengthen partnership to expand AI governance professional training for AI and data professionals",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "22 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/keynote-remarks-by-commissioner-denise-wong-for-the-opening-session-of-iapp-asia-forum-2026",
+            "title": "Keynote Remarks by Commissioner, Denise Wong, for the Opening Session of IAPP Asia Forum 2026",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "22 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/opening-address-by-ng-cher-pong-chief-executive-officer-of-imda-for-data-x-innovation-of-singapore-data-festival-2026",
+            "title": "Opening Address by Ng Cher Pong, Chief Executive Officer of IMDA, for Data x Innovation of Singapore Data Festival 2026",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "21 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/closing-remarks-by-commissioner-denise-wong-for-the-opening-session-of-singapore-data-festival-2026",
+            "title": "Closing Remarks by Commissioner, Denise Wong, for the Opening Session of Singapore Data Festival 2026",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "20 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/inaugural-singapore-data-festival-helps-businesses-harness-datas-potential",
+            "title": "Inaugural Singapore Data Festival helps businesses harness data’s potential",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "20 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.mddi.gov.sg/newsroom/opening-speech-by-minister-josephine-teo-at-singapore-data-festival-at-sands-expo-and-convention-centre/",
+            "title": "Opening Speech By Minister Josephine Teo at Singapore Data Festival at Sands Expo and Convention Centre",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "20 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/pdpc-strengthens-international-cooperation-through-memorandum-of-cooperation-moc-with-japans-personal-information-protection-commission",
+            "title": "PDPC Strengthens International Cooperation through Memorandum of Cooperation (MOC) with Japan's Personal Information Protection Commission",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "20 Jul 2026"
+              }
+            ]
+          },
+          {
+            "url": "https://www.pdpc.gov.sg/media-events/pdpc-issues-guidance-for-organisations-on-responsible-use-of-personal-data-in-generative-ai",
+            "title": "PDPC Issues Guidance for Organisations on Responsible Use of Personal Data in Generative AI",
+            "date_observations": [
+              {
+                "meaning": "listing_published_display",
+                "locator": "listing card datePublished",
+                "value": "20 Jul 2026"
+              }
+            ]
+          }
+        ]
+      },
+      "sample": {
+        "url": "https://www.pdpc.gov.sg/media-events/advisory-for-data-protection-risks-when-using-unauthorised-ai-tools-for-the-development-of-software-or-scripts",
+        "title": "Advisory for Data Protection Risks When Using Unauthorised AI Tools For the Development of Software or Scripts",
+        "listing_title": "Advisory for Data Protection Risks When Using Unauthorised AI Tools For the Development of Software or Scripts",
+        "final_url": "https://www.pdpc.gov.sg/media-events/advisory-for-data-protection-risks-when-using-unauthorised-ai-tools-for-the-development-of-software-or-scripts",
+        "content_type": "text/html",
+        "body_characters": 7616,
+        "body_sha256": "f90a7ad667aa9f1d72db731d429b0392bccb538f0defc632a1a056c5592c770b",
+        "publication_date_candidate": "2026-09-30",
+        "date_evidence_source": "source_adapter",
+        "read_scope": "news_html_from_embedded_rsc",
+        "body_extractor": "source_parser_short_body_fallback",
+        "trafilatura_characters": 20,
+        "adapter_fallback_available": true,
+        "privacy_signal_terms": [
+          "privacy",
+          "personal data",
+          "data protection"
+        ],
+        "privacy_relevance": "signals_found_unreviewed",
+        "body_length_note": "length_not_a_quality_verdict"
+      },
+      "qualification": {
+        "privacy_relevance": "unreviewed",
+        "publication_date": "candidate_only",
+        "pagination_complete": false,
+        "scheduled_collection_ready": false
+      },
+      "requests": 2,
+      "downloaded_bytes": 109077
+    },
+    {
+      "source": "ppc",
+      "name": "Personal Information Protection Commission Japan",
+      "cohort": "original-19",
+      "cadence": "daily",
+      "database_writes": false,
+      "coverage_complete": false,
+      "status": "listing_and_body_extracted",
+      "listing_url": "https://www.ppc.go.jp/news/press/",
+      "listing": {
+        "status": "parsed",
+        "http_status": 200,
+        "final_url": "https://www.ppc.go.jp/news/press/2026/",
+        "candidate_count": 12,
+        "next_url": null,
+        "relevant_candidate_count": 12,
+        "candidates": [
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/261028_houdou",
+            "title": "行政機関等の個人情報保護制度の在り方に関する研究会の開催について （令和８年10月28日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/261021_houdou",
+            "title": "特定個人情報の取扱いの状況に係る地方公共団体等による定期的な報告について（令和8年10月21日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/261007_houdou",
+            "title": "「大規模な漏えい等事案を踏まえた対応について（注意喚起）」の公表（令和８年10月７日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260831",
+            "title": "令和９年度予算概算要求・機構定員要求及び重点施策について（令和８年８月31日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260826",
+            "title": "第３回個人情報保護政策に関する懇談会の開催について（令和８年８月26日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260819_01_houdou",
+            "title": "「KＤＤＩ株式会社及びインターネットサービスプロバイダに対する個人情報の保護に関する法律に基づく行政上の対応並びにメールサービス利用者に対する注意喚起について」の公表（令和８年８月19日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260819_02_houdou",
+            "title": "「レセプトデータ等の保有個人情報の利活用に関する注意喚起（行政機関等匿名加工情報の利用・提供について）」の公表（令和８年８月19日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260717",
+            "title": "「個人情報の保護に関する法律等の一部を改正する法律」の公布について（令和８年７月17日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260707",
+            "title": "個人情報保護委員会 令和７年度年次報告の公表について（令和８年７月７日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260601",
+            "title": "「個人情報に関するポスターコンクール」を開催します －個人情報保護委員会創立10 周年記念－"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260420",
+            "title": "個人情報保護委員会のシンボルマーク（創立10周年版）のお知らせ（令和８年４月20日）"
+          },
+          {
+            "url": "https://www.ppc.go.jp/news/press/2026/260407",
+            "title": "「個人情報の保護に関する法律等の一部を改正する法律案」の閣議決定について（令和８年４月７日）"
+          }
+        ]
+      },
+      "sample": {
+        "url": "https://www.ppc.go.jp/news/press/2026/261028_houdou",
+        "title": "行政機関等の個人情報保護制度の在り方に関する研究会の開催について（令和８年10月28日）",
+        "listing_title": "行政機関等の個人情報保護制度の在り方に関する研究会の開催について （令和８年10月28日）",
+        "final_url": "https://www.ppc.go.jp/news/press/2026/261028_houdou/",
+        "content_type": "text/html",
+        "body_characters": 1221,
+        "body_sha256": "c3066121dc4715b4a08c91ec07cad06d98fbe7053e4580853ca36d6adb6a1aa3",
+        "publication_date_candidate": "2026-10-28",
+        "date_evidence_source": "source_adapter",
+        "read_scope": "official_source_pdf_attachment_text",
+        "body_extractor": "trafilatura_attempt_then_pypdf",
+        "trafilatura_characters": 56,
+        "adapter_fallback_available": true,
+        "privacy_signal_terms": [
+          "個人情報"
+        ],
+        "privacy_relevance": "signals_found_unreviewed",
+        "body_length_note": "length_not_a_quality_verdict"
+      },
+      "qualification": {
+        "privacy_relevance": "unreviewed",
+        "publication_date": "candidate_only",
+        "pagination_complete": false,
+        "scheduled_collection_ready": false
+      },
+      "requests": 3,
+      "downloaded_bytes": 219934
+    },
+    {
+      "source": "eu-council",
+      "name": "Council of the European Union Press Releases",
+      "cohort": "original-19",
+      "cadence": "daily",
+      "database_writes": false,
+      "coverage_complete": false,
+      "status": "listing_and_body_extracted",
+      "listing_url": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx",
+      "listing": {
+        "status": "parsed",
+        "http_status": 200,
+        "final_url": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx",
+        "candidate_count": 1,
+        "next_url": null,
+        "relevant_candidate_count": 1,
+        "candidates": [
+          {
+            "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/11/03/informal-meeting-of-heads-of-state-or-government-of-13-november-2026-invitation-letter-by-president-antonio-costa-to-the-members-of-the-european-council/",
+            "title": "Informal meeting of Heads of State or Government of 13 November 2026 - Invitation letter by President António Costa to the members of the European Council",
+            "feed_text": "EU Heads of State or Government will gather in Dublin (Ireland), to discuss about artificial intelligence.",
+            "feed_body_source": "rss_content_or_description",
+            "date_observations": [
+              {
+                "meaning": "official_rss_published_iso",
+                "locator": "rss item pubDate",
+                "value": "2026-11-03T20:15:00+01:00",
+                "raw": "2026-11-03T20:15:00+01:00"
+              }
+            ],
+            "rss_source": "eu-council"
+          }
+        ]
+      },
+      "adapter_errors": [
+        {
+          "source": "eu-council",
+          "error": "ValueError"
+        }
+      ],
+      "sample": {
+        "url": "https://www.consilium.europa.eu/en/press/press-releases/2026/11/03/informal-meeting-of-heads-of-state-or-government-of-13-november-2026-invitation-letter-by-president-antonio-costa-to-the-members-of-the-european-council/",
+        "title": "Informal meeting of Heads of State or Government of 13 November 2026 - Invitation letter by President António Costa to the members of the European Council",
+        "listing_title": "Informal meeting of Heads of State or Government of 13 November 2026 - Invitation letter by President António Costa to the members of the European Council",
+        "final_url": "https://www.consilium.europa.eu/en/press/press-releases/2026/11/03/informal-meeting-of-heads-of-state-or-government-of-13-november-2026-invitation-letter-by-president-antonio-costa-to-the-members-of-the-european-council/",
+        "content_type": "application/rss+xml",
+        "body_characters": 106,
+        "body_sha256": "0a3ceb4105392a99587bd5ca30b4c77de44796f1aefd77a45695e905b602c4bb",
+        "publication_date_candidate": "2026-11-04",
+        "date_evidence_source": "official RSS item pubDate, normalized to Asia/Seoul",
+        "read_scope": "official_rss_summary_only",
+        "body_extractor": "official_rss_description_or_summary",
+        "trafilatura_characters": 106,
+        "adapter_fallback_available": false,
+        "privacy_signal_terms": [],
+        "privacy_relevance": "no_known_signal_unreviewed",
+        "body_length_note": "short_notice_review"
+      },
+      "qualification": {
+        "privacy_relevance": "unreviewed",
+        "publication_date": "candidate_only",
+        "pagination_complete": false,
+        "scheduled_collection_ready": false
+      },
+      "requests": 1,
+      "downloaded_bytes": 14640
+    },
+    {
+      "source": "cn-tc260",
+      "name": "National Technical Committee 260 on Cybersecurity",
+      "cohort": "original-19",
+      "cadence": "daily",
+      "database_writes": false,
+      "coverage_complete": false,
+      "status": "failed",
+      "listing_url": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+      "listing": {
+        "status": "parsed",
+        "http_status": 200,
+        "final_url": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+        "candidate_count": 10,
+        "next_url": "https://www.tc260.org.cn/tc260/tzgg/list_2.shtml",
+        "relevant_candidate_count": 10,
+        "candidates": [
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml",
+            "title": "关于下达25项网络安全推荐性国家标准计划的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-10-13"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202609/e5b82ae7aca244d19d36b39575cbb458.shtml",
+            "title": "关于对《网络安全标准实践指南——智能体系统开发安全指南（征求意见稿）》公开征求意...",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-09-18"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202609/4a537d5ca4d548ec9e2a000bad2e895d.shtml",
+            "title": "关于发布《网络安全标准实践指南——座舱数据处理安全要求》的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-09-15"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202609/ec149159dcb246268eda751eee89967d.shtml",
+            "title": "关于发布《人工智能应用安全指引 总则》等4项网络安全标准实践指南的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-09-15"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202609/63bba278d8164fa08388b530b894a563.shtml",
+            "title": "关于发布《网络安全标准实践指南——半导体存储介质块擦除技术指引》等3项网络安全标准...",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-09-15"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202609/47c1e48359ea469899c2dfab76d35d68.shtml",
+            "title": "关于全国网络安全标准化技术委员会换届及征集委员的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-09-02"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202608/eff28e98b27e48bb8473a42ed4932bb7.shtml",
+            "title": "关于召开全国网络安全标准化技术委员会2026年第二次“标准周”活动的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-08-31"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202608/1586c71e2ebf4db28ed4a7651788ca87.shtml",
+            "title": "关于发布《网络安全标准实践指南——个人用户使用人工智能服务安全指南》的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-08-24"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202608/1b784e2955bf463cb3f96ece040ee87e.shtml",
+            "title": "关于指定48项网络安全国家标准和13项国家标准化指导性技术文件责任专家及责任编辑的通...",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-08-24"
+              }
+            ]
+          },
+          {
+            "url": "https://www.tc260.org.cn/tc260/tzgg/202608/52e6168f26c743ccaef6b5dada4e78ee.shtml",
+            "title": "关于征集《网络安全技术渗透测试方法》标准参编单位的通知",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "cn-tc260 .date",
+                "value": "2026-08-11"
+              }
+            ]
+          }
+        ]
+      },
+      "detail_failures": [
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202610/2ac025d624a046199d8895fd6eeee5aa/files/%E7%BD%91%E5%AE%89%E7%A7%98%E5%AD%97%E3%80%942026%E3%80%95121%E5%8F%B7%E2%80%94%E2%80%94%E5%85%B3%E4%BA%8E%E4%B8%8B%E8%BE%BE25%E9%A1%B9%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%8E%A8%E8%8D%90%E6%80%A7%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E8%AE%A1%E5%88%92%E7%9A%84%E9%80%9A%E7%9F%A5.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202609/e5b82ae7aca244d19d36b39575cbb458.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202609/e5b82ae7aca244d19d36b39575cbb458/files/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E6%99%BA%E8%83%BD%E4%BD%93%E7%B3%BB%E7%BB%9F%E5%BC%80%E5%8F%91%E5%AE%89%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%88%E5%BE%81%E6%B1%82%E6%84%8F%E8%A7%81%E7%A8%BF%EF%BC%89%E3%80%8B.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202609/4a537d5ca4d548ec9e2a000bad2e895d.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202609/4a537d5ca4d548ec9e2a000bad2e895d/files/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E5%BA%A7%E8%88%B1%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E5%AE%89%E5%85%A8%E8%A6%81%E6%B1%82%E3%80%8B.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202609/ec149159dcb246268eda751eee89967d.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202609/ec149159dcb246268eda751eee89967d/files/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%BA%94%E7%94%A8%E5%AE%89%E5%85%A8%E6%8C%87%E5%BC%95%20%E6%80%BB%E5%88%99%E3%80%8B.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202609/63bba278d8164fa08388b530b894a563.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202609/63bba278d8164fa08388b530b894a563/files/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E5%8D%8A%E5%AF%BC%E4%BD%93%E5%AD%98%E5%82%A8%E4%BB%8B%E8%B4%A8%E5%9D%97%E6%93%A6%E9%99%A4%E6%8A%80%E6%9C%AF%E6%8C%87%E5%BC%95%E3%80%8B.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202609/47c1e48359ea469899c2dfab76d35d68.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202609/47c1e48359ea469899c2dfab76d35d68/files/%E5%85%B3%E4%BA%8E%E5%85%A8%E5%9B%BD%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%8C%96%E6%8A%80%E6%9C%AF%E5%A7%94%E5%91%98%E4%BC%9A%E6%8D%A2%E5%B1%8A%E5%8F%8A%E5%BE%81%E9%9B%86%E5%A7%94%E5%91%98%E7%9A%84%E9%80%9A%E7%9F%A5.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202608/eff28e98b27e48bb8473a42ed4932bb7.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202608/eff28e98b27e48bb8473a42ed4932bb7/files/%E5%85%B3%E4%BA%8E%E5%8F%AC%E5%BC%80%E5%85%A8%E5%9B%BD%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%8C%96%E6%8A%80%E6%9C%AF%E5%A7%94%E5%91%98%E4%BC%9A2026%E5%B9%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E2%80%9C%E6%A0%87%E5%87%86%E5%91%A8%E2%80%9D%E6%B4%BB%E5%8A%A8%E7%9A%84%E9%80%9A%E7%9F%A5.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202608/1586c71e2ebf4db28ed4a7651788ca87.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202608/1586c71e2ebf4db28ed4a7651788ca87/files/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%A0%87%E5%87%86%E5%AE%9E%E8%B7%B5%E6%8C%87%E5%8D%97%E2%80%94%E2%80%94%E4%B8%AA%E4%BA%BA%E7%94%A8%E6%88%B7%E4%BD%BF%E7%94%A8%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%9C%8D%E5%8A%A1%E5%AE%89%E5%85%A8%E6%8C%87%E5%8D%97%E3%80%8B.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202608/1b784e2955bf463cb3f96ece040ee87e.shtml",
+          "reason": "verified_source_pdf_response_mismatch",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202608/1b784e2955bf463cb3f96ece040ee87e/files/%E7%BD%91%E5%AE%89%E7%A7%98%E5%AD%97%E3%80%942026%E3%80%95104%E5%8F%B7%E2%80%94%E2%80%94%E5%85%B3%E4%BA%8E%E6%8C%87%E5%AE%9A48%E9%A1%B9%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%92%8C13%E9%A1%B9%E5%9B%BD%E5%AE%B6%E6%A0%87%E5%87%86%E5%8C%96%E6%8C%87%E5%AF%BC%E6%80%A7%E6%8A%80%E6%9C%AF%E6%96%87%E4%BB%B6%E8%B4%A3%E4%BB%BB%E4%B8%93%E5%AE%B6%E5%8F%8A%E8%B4%A3%E4%BB%BB%E7%BC%96%E8%BE%91%E7%9A%84%E9%80%9A%E7%9F%A5.pdf.pdf"
+        },
+        {
+          "url": "https://www.tc260.org.cn/tc260/tzgg/202608/52e6168f26c743ccaef6b5dada4e78ee.shtml",
+          "reason": "verified_source_pdf_attachment_missing",
+          "http_status": 200,
+          "final_url": "https://www.tc260.org.cn/tc260/tzgg/202608/52e6168f26c743ccaef6b5dada4e78ee.shtml"
+        }
+      ],
+      "error": "no_detail_candidate_parsed",
+      "stage": "listing_or_detail_parse",
+      "requests": 20,
+      "downloaded_bytes": 5862708
+    }
+  ],
+  "database_writes": false,
+  "coverage_complete": false
+}

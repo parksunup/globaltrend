@@ -35,6 +35,32 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         self.assertEqual(len(listings),1)
         self.assertTrue(bundles[-1]['result']['listing_scan_complete'])
         self.assertTrue(all(len(b['operations'])==1 for b in bundles))
+        self.assertEqual(details,urls)
+
+    def test_frozen_listing_keeps_date_observations_for_detail_extraction(self):
+        from scripts.collector import extraction
+        url='https://www.priv.gc.ca/en/opc-news/speeches-and-statements/2026/communique-g7-260626/'
+        row={'url':url,'title':'G7 data protection communiqué','date_observations':[
+            {'meaning':'official_published_attribute','locator':'time','value':'2026-07-08'}]}
+        class Store:
+            def __init__(self):self.cursor=None;self.items=[]
+            def resume(self,*args):return None
+            def progress(self,config,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,*args):pass
+            def ingest(self,config,item_url,item):self.items.append((item_url,item))
+            def discovery_failure(self,*args):self.fail(args)
+        store=Store();config={'source':'g7-dpa','listing':expansion.ROUTES['g7-dpa']['listing']}
+        item={'published_date':'2026-07-08','metadata':{},'title_original':'G7 communiqué','content_text':'Official text','content_hash':'hash'}
+        with patch('scripts.collector.core.fetch_listing',return_value=([row],None)), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch.object(extraction,'extract_document',return_value=item) as extract:
+            result=expansion.collect_frozen(config,type('Client',(),{'get':lambda *_:(b'<html/>',url,'text/html')})(),
+                                            store,'2026-07-01','2026-07-31')
+        self.assertEqual(result['status'],'complete')
+        self.assertTrue(result['collection_complete'])
+        self.assertFalse(result['coverage_complete'])
+        self.assertEqual(extract.call_args.args[4],row)
+        self.assertEqual(store.items[0][1]['published_date'],'2026-07-08')
 
     def test_ec_listing_is_explicitly_scoped_to_the_three_day_window(self):
         url=expansion.listing_request_url('ec',self.config('ec')['listing'],'2026-10-26','2026-10-28')

@@ -41,7 +41,7 @@ export async function GET(request: Request) {
     const {publicationInputs:_privatePublicationInputs,...visibleSnapshot}=snapshot;
     const db=await createClient();const {data:{user}}=await db.auth.getUser();
     const {data:membership}=user&&typeof db.from==='function'?await db.from('team_memberships').select('role,is_active').eq('user_id',user.id).maybeSingle():{data:null};
-    const canPublish=Boolean(membership?.is_active&&['admin','editor'].includes(String(membership.role)));
+    const canPublish=Boolean(process.env.VERCEL_ENV!=='preview'&&membership?.is_active&&['admin','editor'].includes(String(membership.role)));
     const canManageWeekly=Boolean(membership?.is_active&&membership.role==='admin');
     let legalPublications:{recordId:string;title:string;jurisdiction:string;status:'published'|'draft'|'ready';publishedId?:string}[]=[];
     if(role==='legal'&&snapshot.publicationInputs) {

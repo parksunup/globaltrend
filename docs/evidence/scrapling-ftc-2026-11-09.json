@@ -1,0 +1,33 @@
+{
+  "run_at": "2026-11-09T01:49:14.883239+00:00",
+  "method": "Scrapling Fetcher HTTP only",
+  "database_writes": false,
+  "detail_pages_requested": true,
+  "policy": "robots checked before listing; per-host delay >=5s; no stealth/proxy/captcha",
+  "results": [
+    {
+      "source": "ftc",
+      "status": "listing_fetched",
+      "http_status": 200,
+      "final_url": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&field_mission%5B29%5D=29",
+      "characters": 219,
+      "preview": "Competition Matters\nHow Loyalty Discounts Between Firms Harm Competition When There Are  Network Effects: FTC v. Surescripts\nMatthew Chesnes (DAD, BE Antitrust I) and Ted Rosenbaum (Acting BE Director)\nFebruary 13, 2026",
+      "candidate_count": 7,
+      "relevant_candidate_count": 7,
+      "listing_parse_error": null,
+      "sample": {
+        "url": "https://search.ftc.gov/news-events/news/press-releases/2026/07/ftc-states-act-against-hims-hers-deceptive-unlawful-privacy-practices",
+        "title": "FTC and States Act Against Hims & Hers for Deceptive and Unlawful Privacy Practices",
+        "body_characters": 6069,
+        "body_preview": "Tags: Consumer Protection Regional Offices Bureau of Consumer Protection Western Region Los Angeles Health deceptive/misleading conduct Advertising and Marketing Online Advertising and Marketing Credit and Finance Payments and Billing Privacy and Security Consumer Privacy Health Privacy The Federal Trade Commission, joined by Utah and California, by and through Los Angeles County Counsel, today sued Hims & Hers alleging that the telehealth provider shared consumers’ sensitive health information ",
+        "extractor": "scrapling_dom",
+        "http_status": 200,
+        "final_url": "https://search.ftc.gov/news-events/news/press-releases/2026/07/ftc-states-act-against-hims-hers-deceptive-unlawful-privacy-practices"
+      },
+      "detail_error": null,
+      "crawl_delay_seconds": 5,
+      "requests": 2,
+      "note": "one detail sample at most; each URL independently checked against robots and host policy"
+    }
+  ]
+}

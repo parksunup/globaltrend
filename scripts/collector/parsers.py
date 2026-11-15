@@ -143,7 +143,7 @@ def pdpc_body_nodes(soup):
         raise ValueError('pdpc_embedded_data_changed') from None
 
 def extract(source, html, url):
-    if source in expansion.ROUTES:return expansion.extract(source,html,url)
+    if source in expansion.ROUTES and source!='ppc':return expansion.extract(source,html,url)
     soup=BeautifulSoup(html,'html.parser')
     selectors={
         'edpb':('.node-article-full__title','time.node-article-full__date',['.node-article-full__body']),
@@ -206,7 +206,6 @@ def extract(source, html, url):
     nodes=[n for n in nodes if not any(parent in nodes for parent in n.parents)]
     body=normalize(' '.join(n.get_text(' ',strip=True) for n in nodes))
     if len(body)<10: raise ValueError('empty_body')
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=[]
     ppc_title_date=None
     if date_node:
@@ -258,16 +257,43 @@ def extract(source, html, url):
               'factual_status':'original_statement_not_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(title.get_text()),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,'metadata':metadata}
 
-def extract_pdf(data,url):
-    """Preserve page boundaries. OCR and a judgment-specific parser are absent."""
+def extract_pdf(data,url,source=None):
+    """Read every page; add an OCR text layer when a page is image-only."""
     from pypdf import PdfReader
+    from .pdf_ocr import add_text_layer
     try:
         reader=PdfReader(io.BytesIO(data),strict=True)
-        if reader.is_encrypted or not 1<=len(reader.pages)<=50: raise ValueError('pdf_limit_or_encrypted')
+        # Some official notice PDFs are owner-permission encrypted but permit
+        # extraction with the empty user password. Only that non-secret,
+        # owner-configured case is accepted; password-protected files remain
+        # rejected.
+        if reader.is_encrypted and not reader.decrypt(''):
+            raise ValueError('pdf_limit_or_encrypted')
+        if len(reader.pages)<1: raise ValueError('pdf_limit_or_encrypted')
+        original_pages=list(reader.pages)
+        def page_text(page):
+            try:
+                return page.extract_text(extraction_mode='layout') or ''
+            except KeyError:
+                # A blank or image-only page may have no /Contents stream.
+                if '/Contents' not in page:
+                    return ''
+                raise
+        texts=[page_text(page) for page in original_pages]
+        ocr_pages=[i for i,text in enumerate(texts,1) if len(normalize(text))<20]
+        if ocr_pages:
+            ocr_reader=PdfReader(io.BytesIO(add_text_layer(data,source,ocr_pages)),strict=True)
+            if len(ocr_reader.pages)!=len(original_pages):
+                raise ValueError('pdf_ocr_page_count_changed')
+            # pypdf layout mode omits invisible OCR text. Read OCR pages in
+            # standard mode; keep the existing layout extraction elsewhere.
+            texts=[(ocr_reader.pages[i].extract_text() or '') if i + 1 in ocr_pages
+                   else text for i,text in enumerate(texts)]
+        if len(normalize(' '.join(texts)))<20:
+            raise ValueError('pdf_text_missing_after_ocr' if ocr_pages else 'pdf_text_missing_or_ocr_required')
         pages=[]; related=[]
-        for i,page in enumerate(reader.pages,1):
-            text=page.extract_text(extraction_mode='layout') or ''
-            if len(normalize(text))<20: raise ValueError('pdf_text_missing_or_ocr_required')
+        for i,page in enumerate(original_pages,1):
+            text=texts[i-1]
             pages.append({'page':i,'text':text.strip()})
             for annotation in page.get('/Annots', []):
                 action=annotation.get_object().get('/A')
@@ -276,36 +302,240 @@ def extract_pdf(data,url):
                     link=str(action.get('/URI', ''))
                     if action.get('/S')=='/URI' and urlsplit(link).scheme=='https':
                         related.append({'url':link,'title':'PDF link','page':i,'read':False})
-        return {'pages':pages,'related_documents':related,'read_scope':'pdf_text_only','url':url,'requires_review':True}
+        return {'pages':pages,'related_documents':related,
+                'read_scope':'pdf_text_with_ocr' if ocr_pages else 'pdf_text_only',
+                'extraction_method':'ocrmypdf+pypdf' if ocr_pages else 'pypdf',
+                'ocr_pages':ocr_pages,'url':url,'requires_review':True}
     except ValueError as e:
-        if str(e) in ('pdf_text_missing_or_ocr_required','pdf_limit_or_encrypted'): raise
+        if str(e) in ('pdf_text_missing_or_ocr_required','pdf_text_missing_after_ocr',
+                      'pdf_limit_or_encrypted','pdf_ocr_runtime_missing','pdf_ocr_timeout',
+                      'pdf_ocr_page_count_changed') or str(e).startswith('pdf_ocr_failed_exit_'): raise
         raise ValueError('pdf_extraction_failed') from e
     except Exception as e: raise ValueError('pdf_extraction_failed') from e
 
+def extract_verified_source_pdf(source,data,url,row=None,source_page_url=None):
+    """Extract a PDF only after its source-specific discovery has approved its URL.
+
+    Listing/article date observations remain separate from the date printed in
+    the standard/report itself. A partial month (for example ISO's 2025-05
+    news-row date) is retained as evidence but never promoted to a full date.
+    """
+    if source not in ('jpdp-my','global-cbpr','iso-iec-sc27','cn-tc260'):
+        raise ValueError('unapproved_source_pdf')
+    from .pdf_source_routes import discover_pdf_links
+    parsed=urlsplit(url)
+    approved_assets={
+        'jpdp-my':('www.pdp.gov.my',{
+            '/wp-content/uploads/2026/10/Public_Consultation_Paper_No_1_2026_Personal_Data_Protection_Framework.pdf'}),
+        'global-cbpr':('www.globalcbpr.org',{
+            '/wp-content/uploads/GlobalCBPRForum-Annual-Report-2025-2026.pdf',
+            '/wp-content/uploads/Global-CBPR-Forum-Work-Program-2026-2027.pdf'}),
+        'iso-iec-sc27':('committee.iso.org',{
+            '/files/live/sites/jtc1sc27/files/news/ISOIEC_TS_27560_2023.pdf'}),
+        'cn-tc260':('www.tc260.org.cn', set()),
+    }
+    expected_host,expected_paths=approved_assets[source]
+    if (parsed.scheme!='https' or parsed.hostname!=expected_host or
+            parsed.username is not None or parsed.password is not None or
+            parsed.port not in (None,443) or parsed.query or parsed.fragment or
+            (parsed.path not in expected_paths and not (source=='cn-tc260' and re.fullmatch(
+                r'/tc260/tzgg/\d{6}/[a-f0-9]{32}/files/[^/]+\.pdf(?:\.pdf)?',parsed.path)))):
+        raise ValueError('source_pdf_url_not_pdf')
+    # The helper's exact host/path policy is authoritative. For ISO, the PDF
+    # is linked directly from the news listing; for JPDP/CBPR it is linked
+    # from the corresponding article page and must be proven by the caller.
+    if source_page_url:
+        page_host=urlsplit(source_page_url).hostname
+        approved_pages={
+            'jpdp-my':('www.pdp.gov.my','/en/public-consultation-paper-no-1-2026-artificial-intelligence-ai-and-personal-data-protection-framework/'),
+            'global-cbpr':('www.globalcbpr.org','/the-forum-releases-its-annual-report-2025-2026-and-annual-work-program-for-2026-2027/'),
+            'iso-iec-sc27':('committee.iso.org','/sites/jtc1sc27/home/news.html'),
+            'cn-tc260':('www.tc260.org.cn',None),
+        }
+        approved_page_host,approved_page_path=approved_pages[source]
+        page_path=urlsplit(source_page_url).path
+        tc_article=re.fullmatch(r'/tc260/tzgg/(\d{6})/([a-f0-9]{32})\.shtml',page_path) if source=='cn-tc260' else None
+        pdf_article=re.fullmatch(r'/tc260/tzgg/(\d{6})/([a-f0-9]{32})/files/[^/]+\.pdf(?:\.pdf)?',parsed.path) if source=='cn-tc260' else None
+        tc_identity_ok=bool(tc_article and pdf_article and tc_article.groups()==pdf_article.groups())
+        if page_host!=approved_page_host or (page_path!=approved_page_path and not (source=='cn-tc260' and tc_identity_ok)):
+            raise ValueError('pdf_page_not_evidence_backed')
+    pdf=extract_pdf(data,url,source)
+    body=normalize(' '.join(page['text'] for page in pdf['pages']))
+    observations=list((row or {}).get('date_observations',[]))
+    published=expansion.listing_date(row or {})
+    title=normalize((row or {}).get('title',''))
+    if not title: raise ValueError('pdf_listing_evidence_missing')
+    return {'title_original':title,'content_text':body,
+        'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+        'published_date':published,
+        'metadata':{'normalization_version':NORMALIZATION_VERSION,
+            'parser_version':'verified-source-pdf-v1','read_scope':'official_source_pdf_text',
+            'date_observations':observations,'pdf_pages':pdf['pages'],
+            'requires_review':True,'related_documents':[{'url':url,'title':title,'read':True}],
+            'unread_attachments':[link['url'] for link in pdf['related_documents']],
+            'source_page_url':source_page_url,'factual_status':'official_source_pdf_text_not_human_reviewed',
+            'ai_ready':False,'extraction_method':pdf.get('extraction_method','pypdf'),
+            'pdf_ocr_pages':pdf.get('ocr_pages',[])} }
+
 def extract_pdpc_pdf(data,url,row):
-    """Only the observed official asset route; text reading is not visual/OCR review."""
+    """Read the observed official asset route, including scanned PDF pages."""
     target=urlsplit(url)
     if target.scheme!='https' or target.netloc!='www.pdpc.gov.sg' or not re.fullmatch(r'/assets/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}',target.path):
         raise ValueError('unapproved_pdpc_pdf_asset')
     if not row or not normalize(row.get('title','')):
         raise ValueError('pdf_listing_evidence_missing')
-    pdf=extract_pdf(data,url)
+    pdf=extract_pdf(data,url,'pdpc')
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     # PDPC cards can display event dates. No verified PDF publication dateline
     # exists yet, so neither listing dates nor arbitrary PDF prose decide range.
     observations=[dict(o,meaning='listing_date_candidate') for o in row.get('date_observations',[])]
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'pdpc-asset-pdf-text-v1',
-        'read_scope':'pdf_text_only','date_observations':observations,'pdf_pages':pdf['pages'],
+        'read_scope':pdf['read_scope'],'date_observations':observations,'pdf_pages':pdf['pages'],
+        'extraction_method':pdf['extraction_method'],'pdf_ocr_pages':pdf['ocr_pages'],
         'requires_review':True,'related_documents':pdf['related_documents'],
         'unread_attachments':[link['url'] for link in pdf['related_documents']],
         'factual_status':'official_pdf_text_not_visual_or_independent_legal_finding','ai_ready':False}
     return {'title_original':normalize(row['title']),'content_text':body,
         'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':None,'metadata':metadata}
 
+def extract_registered_pdf(source,data,url,row):
+    """Read a listed PDF from any registered source using the shared OCR path."""
+    import json
+    from pathlib import Path
+    registry=Path(__file__).resolve().parents[2]/'config'/'trend-collector.json'
+    config=next((entry for entry in json.loads(registry.read_text(encoding='utf-8'))['sources']
+                 if entry.get('source')==source),None)
+    parsed=urlsplit(url)
+    listed=urlsplit((row or {}).get('url',''))
+    if (config is None or parsed.scheme!='https' or parsed.hostname not in config.get('hosts',[]) or
+            parsed.username or parsed.password or parsed.port not in (None,443) or
+            (listed.scheme,listed.hostname,listed.path)!=(parsed.scheme,parsed.hostname,parsed.path)):
+        raise ValueError('registered_pdf_listing_identity_missing')
+    title=normalize((row or {}).get('title',''))
+    if not title:
+        raise ValueError('pdf_listing_evidence_missing')
+    pdf=extract_pdf(data,url,source)
+    body=normalize(' '.join(page['text'] for page in pdf['pages']))
+    observations=list((row or {}).get('date_observations',[]))
+    published=expansion.listing_date(row or {})
+    return {'title_original':title,'content_text':body,
+            'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+            'published_date':published,
+            'metadata':{'normalization_version':NORMALIZATION_VERSION,
+                        'parser_version':'registered-source-pdf-v1',
+                        'read_scope':pdf['read_scope'],
+                        'date_observations':observations,
+                        'pdf_pages':pdf['pages'],
+                        'pdf_ocr_pages':pdf['ocr_pages'],
+                        'extraction_method':pdf['extraction_method'],
+                        'requires_review':True,'ai_ready':False,
+                        'related_documents':pdf['related_documents'],
+                        'unread_attachments':[link['url'] for link in pdf['related_documents']],
+                        'factual_status':'official_pdf_machine_extracted_not_human_reviewed'}}
+
+def extract_publication_document(source,data,url,content_type,row=None):
+    """Fallback body/date adapter for the six observed public publications.
+
+    Production extraction attempts Trafilatura before reaching this parser.
+    It only accepts the six exact listing/article route families registered in
+    ``publication_route_candidates`` and never promotes unqualified dates.
+    """
+    if source not in expansion.PUBLICATION_SOURCE_IDS or content_type not in ('text/html','application/xhtml+xml'):
+        raise ValueError('publication_document_type_or_source_unverified')
+    expansion._canonical(url,source,url)
+    html=data.decode('utf-8','replace') if isinstance(data,(bytes,bytearray)) else str(data)
+    soup=BeautifulSoup(html,'html.parser')
+    title_node=soup.select_one('main h1, article h1, h1')
+    title=normalize(title_node.get_text(' ',strip=True)) if title_node else ''
+    if not title:title=normalize((row or {}).get('title',''))
+    if not title:raise ValueError('publication_article_title_missing')
+    selector={
+        'iapp':'main article, main [class*=article-body], main',
+        'fpf':'main .entry-content, main article, main',
+        'gpa':'main .wpb_text_column, main article, main',
+        'noyb':'main .field--name-body, main article, main',
+        'freevacy':'main .article-body, main article, main',
+        'overview-legal':'main article, main .post-content, main',
+    }[source]
+    body_node=next((soup.select_one(s) for s in selector.split(', ') if soup.select_one(s)),None)
+    if body_node is None:raise ValueError('publication_main_body_missing')
+    for node in body_node.select('script,style,nav,header,footer,form,button,[aria-hidden="true"]'):
+        node.decompose()
+    body=normalize(body_node.get_text('\n',strip=True))
+    if not body:raise ValueError('publication_main_body_empty')
+
+    observations=[]
+    if source=='freevacy':
+        for node in soup.select('h5'):
+            match=re.fullmatch(r'Published:\s*(\d{2})/(\d{2})/(\d{4})',normalize(node.get_text(' ',strip=True)),re.I)
+            if not match:
+                continue
+            try:
+                value=dt.date(int(match[3]),int(match[2]),int(match[1])).isoformat()
+            except ValueError:
+                continue
+            observations.append({'meaning':'published_display','locator':'Freevacy article h5 Published label','value':value})
+    for script in soup.select('script[type="application/ld+json"]'):
+        try:
+            structured=json.loads(script.get_text(strip=True))
+        except (TypeError,json.JSONDecodeError):
+            continue
+        candidates=structured if isinstance(structured,list) else [structured]
+        for candidate in candidates:
+            if not isinstance(candidate,dict):
+                continue
+            if isinstance(candidate.get('@graph'),list):
+                candidates.extend(candidate['@graph'])
+            kind=candidate.get('@type')
+            kinds=kind if isinstance(kind,list) else [kind]
+            if not any(value in ('Article','NewsArticle','BlogPosting') for value in kinds):
+                continue
+            value=candidate.get('datePublished')
+            if isinstance(value,str) and value.strip():
+                observations.append({'meaning':'published_attribute',
+                    'locator':'application/ld+json datePublished','value':normalize(value)})
+    for node in soup.select('meta[property="article:published_time"], meta[itemprop="datePublished"], meta[name="datePublished"], time[itemprop="datePublished"], time[datetime][data-published], time.entry-date.published[datetime]'):
+        value=node.get('content') or node.get('datetime') or node.get_text(' ',strip=True)
+        value=normalize(value)
+        if value:
+            observations.append({'meaning':'published_attribute' if node.name=='meta' else 'published_display',
+                'locator':('meta '+(node.get('property') or node.get('itemprop') or node.get('name') or 'datePublished')) if node.name=='meta' else 'time[itemprop=datePublished]',
+                'value':value})
+    listing_observations=list((row or {}).get('date_observations',[]))
+    observations.extend(listing_observations)
+    explicit_dates={parse_date(o.get('value','')) for o in observations
+                    if o.get('meaning') in ('published_attribute','published_display','listing_published_display')}
+    if source in ('iapp','noyb') and row:
+        from .expansion import listing_date
+        verified_listing_date=listing_date(row)
+        if verified_listing_date:
+            explicit_dates.add(verified_listing_date)
+    explicit_dates.discard(None)
+    published=next(iter(explicit_dates)) if len(explicit_dates)==1 else None
+    origin=(row or {}).get('content_origin_kind')
+    return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+        'published_date':published,
+        'metadata':{'normalization_version':NORMALIZATION_VERSION,
+            'parser_version':'publication-source-fallback-v1','read_scope':'source_article_main_body',
+            'date_observations':observations,'requires_review':True,'related_documents':[],
+            'unread_attachments':[],'factual_status':'public_publication_text_not_independently_reviewed',
+            'source_type':(row or {}).get('source_type'),'source_name':(row or {}).get('source_name'),
+            'content_origin_kind':origin,
+            'publisher_label':(row or {}).get('publisher_label'),
+            'primary_source_verified_by_this_listing':(row or {}).get('primary_source_verified_by_this_listing'),
+            'ai_ready':False,'extraction_method':'source_parser_fallback'}}
+
+
 def extract_document(source,data,url,content_type,row=None):
-    if source in expansion.ROUTES:
-        if content_type not in ('text/html','application/xhtml+xml') and not (source=='ec' and content_type=='application/json'):raise ValueError('unsupported_document_type')
+    if source in ('jpdp-my','global-cbpr','iso-iec-sc27','cn-tc260') and content_type in ('application/pdf','application/octet-stream'):
+        return extract_verified_source_pdf(source,data,url,row,(row or {}).get('discovered_from'))
+    if (content_type=='application/pdf' or
+            content_type=='application/octet-stream' and isinstance(data,bytes) and data.startswith(b'%PDF-')) and source not in ('pdpc','curia'):
+        return extract_registered_pdf(source,data,url,row)
+    if source in expansion.PUBLICATION_SOURCE_IDS:
+        return extract_publication_document(source,data,url,content_type,row)
+    if source in expansion.ROUTES and source!='ppc':
+        if content_type not in ('text/html','application/xhtml+xml') and not (source in ('ec','anpd-br') and content_type=='application/json'):raise ValueError('unsupported_document_type')
         return expansion.extract(source,data.decode('utf-8','replace'),url,row)
     if content_type in ('text/html','application/xhtml+xml'):
         item=extract(source,data.decode('utf-8','replace'),url)
@@ -378,9 +608,8 @@ def extract_document(source,data,url,content_type,row=None):
         raise ValueError('unsupported_document_type')
     if not row or not normalize(row.get('title','')):
         raise ValueError('press_release_listing_evidence_missing')
-    pdf=extract_pdf(data,url)
+    pdf=extract_pdf(data,url,'curia')
     body=normalize(' '.join(page['text'] for page in pdf['pages']))
-    if len(body)>80000: raise ValueError('long_document_requires_chunked_reading')
     observations=list(row.get('date_observations',[]))
     # Only the release's dateline, never case history or PDF file metadata.
     for match in re.finditer(r'Luxembourg,\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})',pdf['pages'][0]['text']):
@@ -397,6 +626,7 @@ def extract_document(source,data,url,content_type,row=None):
     published=next(iter(distinct)) if len(distinct)==1 else None
     metadata={'normalization_version':NORMALIZATION_VERSION,'parser_version':'curia-press-release-v1',
         'read_scope':'press_release_pdf_not_judgment','date_observations':observations,
+        'extraction_method':pdf['extraction_method'],'pdf_ocr_pages':pdf['ocr_pages'],
         'pdf_pages':pdf['pages'],'case_numbers':list(dict.fromkeys(re.findall(r'\b[CT]-\d+/\d+(?:\s+[A-Z]{1,2})?\b',row['title']))),
         'requires_review':True,'related_documents':pdf['related_documents'],
         'unread_attachments':[link['url'] for link in pdf['related_documents']],
@@ -410,7 +640,7 @@ def listing_page_number(url):
         raise ValueError('unverified_listing_query')
     try: page=int(query.get('page',['1'])[0])
     except ValueError: raise ValueError('invalid_listing_page') from None
-    if not 1<=page<=1000: raise ValueError('invalid_listing_page')
+    if page<1: raise ValueError('invalid_listing_page')
     return page
 
 def listing_next_url(url,page):
@@ -425,7 +655,7 @@ def pdpc_api_page_number(url):
         raise ValueError('pdpc_listing_query_changed')
     try: number=int(page[0])
     except ValueError: raise ValueError('invalid_listing_page') from None
-    if not 1<=number<=1000: raise ValueError('invalid_listing_page')
+    if number<1: raise ValueError('invalid_listing_page')
     return number
 
 def pdpc_api_next_url(url,page):
@@ -486,16 +716,26 @@ def discover_ico_search(data,url,page):
     return rows,next_url if more else None
 
 def pdpc_listing_request(html,url):
-    soup=BeautifulSoup(html,'html.parser')
-    if not soup.select_one('section[data-listing-type="media_events"]'):
-        raise ValueError('pdpc_listing_template_changed')
+    # The official listing route is also the bootstrap for its JSON endpoint.
+    # Do not make that endpoint depend on a particular HTML marker: the same
+    # listing can be returned without the marker (for example, alternate
+    # server-rendered pages), while the API response itself is schema-checked.
+    parts=urlsplit(url)
+    if parts.scheme!='https' or parts.hostname!='www.pdpc.gov.sg' or parts.path!='/media-events':
+        raise ValueError('pdpc_listing_route_unverified')
     page=listing_page_number(url)
-    query={'listingtype':'media_events','itemsperpage':10,'pathname':urlsplit(url).path}
+    query={'listingtype':'media_events','itemsperpage':10,'pathname':parts.path}
     if page>1: query['page']=page
     return urljoin(url,'/api/listing-api')+'?'+urlencode(query)
 
 def discover_pdpc_listing(data,url,page):
-    response=json.loads(data)
+    try:
+        response=json.loads(data)
+    except (json.JSONDecodeError,UnicodeDecodeError,TypeError):
+        raw=data.encode('utf-8') if isinstance(data,str) else bytes(data) if isinstance(data,(bytes,bytearray)) else b''
+        size=len(raw)
+        detail='empty_body' if not raw.strip() else 'not_json'
+        raise ValueError(f'pdpc_listing_json_invalid:{detail}:bytes_{size}') from None
     if not isinstance(response,dict) or not isinstance(response.get('data'),list) or type(response.get('totalItems')) is not int:
         raise ValueError('pdpc_listing_schema_changed')
     total=response['totalItems']; results=response['data']
@@ -511,8 +751,47 @@ def discover_pdpc_listing(data,url,page):
     next_url=pdpc_api_next_url(url,page) if urlsplit(url).path=='/api/listing-api' else listing_next_url(url,page)
     return rows,next_url if page*10<total else None
 
-def discover_listing(source,html,url,fetch):
-    if source in expansion.ROUTES:return expansion.discover(source,html,url)
+def discover_pdpc_sitemap(data,url):
+    """Use PDPC's official sitemap as a bounded discovery fallback.
+
+    Sitemap lastmod values are intentionally ignored: article pages supply the
+    publication date, while lastmod may describe a later site update.
+    """
+    parts=urlsplit(url)
+    if parts.scheme!='https' or parts.hostname!='www.pdpc.gov.sg' or parts.path!='/sitemap.xml':
+        raise ValueError('pdpc_sitemap_route_unverified')
+    raw=data.decode('utf-8','replace') if isinstance(data,(bytes,bytearray)) else str(data)
+    if '<!DOCTYPE' in raw.upper() or '<!ENTITY' in raw.upper():
+        raise ValueError('xml_entities_rejected')
+    try:
+        root=ET.fromstring(raw)
+    except ET.ParseError:
+        raise ValueError('pdpc_sitemap_xml_invalid') from None
+    if root.tag.rsplit('}',1)[-1].lower()!='urlset':
+        raise ValueError('pdpc_sitemap_schema_changed')
+    rows=[]; seen=set()
+    for node in root.iter():
+        if node.tag.rsplit('}',1)[-1].lower()!='loc' or not node.text:
+            continue
+        target=urljoin(url,node.text.strip())
+        parsed=urlsplit(target)
+        if parsed.hostname!='www.pdpc.gov.sg' or not parsed.path.startswith('/media-events/'):
+            continue
+        canonical=urlunsplit((parsed.scheme,parsed.netloc,parsed.path,'',''))
+        # A few official sitemap builds repeat an identical loc entry. Keep
+        # one canonical candidate so the collector's repeated-item guard can
+        # still catch genuine pagination loops in other listing routes.
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        rows.append({'url':canonical,'title':'','topic':'Unclassified',
+            'listing_route':'official_sitemap'})
+    if not rows:
+        raise ValueError('pdpc_sitemap_empty')
+    return rows,None
+
+def discover_listing(source,html,url,fetch=None,response_headers=None):
+    if source in expansion.ROUTES:return expansion.discover(source,html,url,response_headers)
     if source=='ico':
         payload=ico_search_request(html,url)
         endpoint=urljoin(url,'/api/search')
@@ -523,12 +802,86 @@ def discover_listing(source,html,url,fetch):
         if urlsplit(url).path=='/api/listing-api':
             return discover_pdpc_listing(html.encode('utf-8'),url,pdpc_api_page_number(url))
         endpoint=pdpc_listing_request(html,url)
-        data,_,ctype=fetch(endpoint)
-        if ctype not in ('application/json','text/plain'): raise ValueError('pdpc_listing_response_type_changed')
-        return discover_pdpc_listing(data,url,listing_page_number(url))
+        try:
+            data,_,_=fetch(endpoint,'GET',None,{
+                'Accept':'application/json, text/plain, */*',
+                'Referer':url,
+            })
+            # Validate the body against the strict API schema instead of depending
+            # on a stable Content-Type header from the upstream service.
+            return discover_pdpc_listing(data,url,listing_page_number(url))
+        except Exception as exc:
+            reason=str(exc)
+            # A robots denial remains a hard stop. The public sitemap is a
+            # fallback for an unavailable/empty listing endpoint, not a way to
+            # bypass an explicit robots policy.
+            if reason=='robots_disallowed' or not (
+                reason in ('http_403','http_404','http_410','empty_response') or
+                'pdpc_listing_json_invalid:' in reason
+            ):
+                raise
+            fallback='https://www.pdpc.gov.sg/sitemap.xml'
+            data,final,_=fetch(fallback)
+            rows,next_url=discover_pdpc_sitemap(data,final)
+            return rows,next_url
     return discover(source,html,url)
 
+def discover_rss(html,url,keep_feed_text=False,prefer_content_encoded=False):
+    if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
+    root=ET.fromstring(html)
+    rows=[]
+    for entry in root.iter():
+        if entry.tag.rsplit('}',1)[-1].lower() not in ('item','entry'): continue
+        values={}
+        for node in entry:
+            key=node.tag.rsplit('}',1)[-1].lower()
+            if key in ('title','link','description','summary','content','encoded','pubdate','published','updated'):
+                values.setdefault(key,[]).append(node)
+        link_node=next(iter(values.get('link',[])),None)
+        target=(link_node.attrib.get('href') if link_node is not None else None) or ((link_node.text or '').strip() if link_node is not None else '')
+        if not target: continue
+        description_fields=(values.get('encoded',[]) or values.get('content',[]) or values.get('description',[]) or values.get('summary',[])) if prefer_content_encoded else (values.get('description',[]) or values.get('summary',[]) or values.get('encoded',[]) or values.get('content',[]))
+        description_node=next(iter(description_fields),None)
+        feed_html=''.join(description_node.itertext()).strip() if description_node is not None else ''
+        feed_text=normalize(BeautifulSoup(feed_html,'html.parser').get_text('\n',strip=True))
+        title_node=next(iter(values.get('title',[])),None)
+        title=normalize(''.join(title_node.itertext())) if title_node is not None else ''
+        if not title and feed_text:
+            heading=BeautifulSoup(feed_html,'html.parser').find('p')
+            title=normalize(heading.get_text(' ',strip=True)) if heading else normalize(feed_text.split('. ',1)[0])
+            title=re.sub(r'^[\s*#]+|[\s*#]+$','',title).strip()
+        if not title: continue
+        row={'url':urljoin(url,target),'title':title}
+        if keep_feed_text and feed_text:
+            row['feed_text']=feed_text
+            row['feed_body_source'] = ('rss_content_encoded' if prefer_content_encoded and
+                                       description_node is not None and
+                                       description_node.tag.rsplit('}',1)[-1].lower()=='encoded'
+                                       else 'rss_content_or_description')
+        date_node=next(iter(values.get('pubdate',[]) or values.get('published',[]) or values.get('updated',[])),None)
+        date_value=normalize(date_node.text or '') if date_node is not None else ''
+        if date_value:
+            row['date_observations']=[{'meaning':'listing_published_rfc822','locator':'rss item pubDate','value':date_value,
+                'raw':date_node.text or ''}]
+        rows.append(row)
+    return rows,None
+
+
 def discover(source,html,url):
+    if source=='edps' and '<rss' in html[:1000].lower():
+        rows,next_page=discover_rss(html,url,keep_feed_text=True)
+        for row in rows: row['rss_source']='edps'
+        return rows,next_page
+    if source=='npc-ph' and html.lstrip('\ufeff \t\r\n').lower().startswith(('<?xml','<rss','<feed')):
+        rows,next_page=discover_rss(html,url,keep_feed_text=True,prefer_content_encoded=True)
+        for row in rows: row['rss_source']='npc-ph'
+        return rows,next_page
+    if source=='nl-ap' and html.lstrip('\ufeff \t\r\n').lower().startswith(('<?xml','<rss','<feed')):
+        rows,next_page=discover_rss(html,url,keep_feed_text=True)
+        for row in rows: row['rss_source']='nl-ap'
+        return rows,next_page
+    if source in ('eu-council','eu-parliament','npc-ph','nl-ap') and html.lstrip('\ufeff \t\r\n').lower().startswith(('<?xml','<rss','<feed')):
+        return discover_rss(html,url)
     if source=='ftc' and '<rss' in html[:1000].lower():
         if '<!DOCTYPE' in html.upper() or '<!ENTITY' in html.upper(): raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
@@ -584,6 +937,12 @@ def discover(source,html,url):
             row['date_observations']=[{'meaning':'listing_published_display',
                 'locator':'listing article.node--view-mode-teaser p.date',
                 'value':normalize(n.get_text())} for n in card.select('p.date')] if card else []
+        if source=='ppc':
+            card=a.find_parent(lambda node: node.name in ('li','div') and node.select_one('time[datetime]'))
+            date_node=card.select_one('time[datetime]') if card else None
+            if date_node:
+                row['date_observations']=[{'meaning':'expansion_listing_published',
+                    'locator':'PPC press archive row time@datetime','value':date_node.get('datetime','')}]
         found[target]=row
     next_link=soup.select_one('a[rel~="next"],.pager__item--next a,.pager-next a')
     return list(found.values()),urljoin(url,next_link['href']) if next_link else None
@@ -627,13 +986,16 @@ def dpc_listing_date(row):
     return parse_date(value)
 
 def ftc_listing_date(row):
-    """Return one timezone-qualified RSS pubDate as a Korea calendar date."""
+    """Read a verified FTC listing date or timezone-qualified RSS pubDate."""
     observations=row.get('date_observations',[])
     if len(observations)!=1: return None
     observation=observations[0]
+    if (observation.get('meaning')=='expansion_listing_published' and
+            observation.get('locator')=='FTC search result time[datetime]'):
+        return expansion.date(observation.get('value',''))
     if observation.get('meaning')!='listing_published_rfc822' or observation.get('locator')!='rss item pubDate': return None
     try:
-        value=parsedate_to_datetime(observation.get('value',''))
+        value=parsedate_to_datetime(observation.get('raw') or observation.get('value',''))
         if value is None or value.utcoffset() is None: return None
         return value.astimezone(ZoneInfo('Asia/Seoul')).date().isoformat()
     except (TypeError,ValueError,OverflowError):

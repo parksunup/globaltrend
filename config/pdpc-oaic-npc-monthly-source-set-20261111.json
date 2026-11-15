@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "basis": "User-requested one-time monthly verification after PDPC listing recovery",
+  "sources": [
+    "pdpc",
+    "oaic",
+    "npc-ph"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "started_at": "2026-11-09T10:45:02.217629+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "hk-pcpd",
+      "since": "2026-01-27",
+      "until": "2026-01-27",
+      "status": "success",
+      "coverage_complete": true,
+      "pages": 1,
+      "discovered": 1,
+      "out_of_range": 0,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://www.info.gov.hk/gia/general/202601/27/P2026012600522.htm",
+          "title_original": "HKMA and PCPD strengthen collaboration to combat fraud and safeguard personal data (with photo)",
+          "content_text": "HKMA and PCPD strengthen collaboration to combat fraud and safeguard personal data (with photo) \\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\*\\* The Hong Kong Monetary Authority (HKMA) and the Office of the Privacy Commissioner for Personal Data (PCPD) jointly announced today (January 27) a series of new measures to enhance collaboration in combatting fraud and strengthening the protection against misuse of personal data. In view of the increasing sophistication of fraud, the HKMA and the PCPD have strengthened their co-operation to ensure that banks' systems and safeguards against these risks are robust, and that best practices are shared with banks on a timely basis. These efforts will include joint risk-based examinations of selected banks' anti-fraud systems and controls, in which the HKMA will focus on assessing the effective implementation of anti-fraud measures set out in circulars issued in December 2024 and April 2025, whilst the PCPD will review the banks' data security measures and access controls that are designed to safeguard personal data against misuse and leakage. Moreover, the HKMA and the PCPD will strengthen joint publicity and educational efforts, and work closely with other key stakeholders including the Hong Kong Police Force (HKPF), The Hong Kong Association of Banks and the industry, to raise public awareness of the latest scam tactics and the importance of protecting personal data, including bank account information. These efforts will include outreach activities targeting members of the public and specific segments of society. Given the evolving nature of deception tactics, it is essential for the public to remain vigilant when providing personal data, including bank account information and login credentials, to prevent such data from being misused for deception or money laundering. Members of the public are also encouraged to stay informed about the latest fraud prevention information published by the HKMA, the PCPD and the HKPF. The Chief Executive of the HKMA, Mr Eddie Yue, said, \"Anti-fraud work has been a priority for the HKMA as it helps to uphold public confidence in the financial system of Hong Kong. The collaboration with the PCPD marks a significant milestone in enhancing the ecosystem approach in the fight against the abuse of our banking system for fraudulent purposes.\" The Privacy Commissioner for Personal Data, Ms Ada Chung, said, \"In light of the substantial volume of personal data handled by banks on a daily basis, it is imperative for the banking industry to adopt stringent data security and monitoring measures to prevent unauthorised or accidental access or misuse of customers' personal data. We are very pleased to collaborate with the HKMA in cultivating a culture of fraud prevention and personal data privacy protection across the financial sector.\" Background Fraud continues to grow in scale and complexity. During the first 10 months of 2025, a total of 35 831 deception cases were reported in Hong Kong, resulting in total losses amounting to $6.4 billion. To keep pace with the evolving nature of fraud, the HKMA has continued to strengthen the banking industry's response to fraud and money laundering, with a number of measures introduced in April last year. These include expanded use of Scameter data, amendment of the Banking Ordinance to facilitate information sharing among banks, sharing of good anti-fraud practices with banks, thematic reviews on the effectiveness of banks' anti-fraud measures, and enhanced publicity and education efforts on \"Don’t Lend/Sell Your Account\". To further enhance the ecosystem approach, the HKMA is collaborating with the PCPD to combat fraud, and to strengthen the protection against misuse of personal data. The protection of personal data privacy has always been one of the critical priorities in combatting fraud, as deception and financial crimes often involve malicious use of personal data. To address the evolving deceptive tactics employed by fraudsters, the PCPD continues to strengthen its efforts on public education and raising awareness against fraud. Apart from conducting anti-fraud talks for different stakeholders, the PCPD has published a new anti-fraud leaflet and poster with the theme \"Too Good to be True\" to enhance public awareness of fraud prevention and personal data protection. Both publications have been distributed to District Offices, community centres, elderly centres, banks and schools. Since 2022, the PCPD has set up the \"Personal Data Fraud Prevention Hotline\" (3423 6611) to handle public enquiries about fraud or suspected fraud cases from members of the public. The PCPD has also launched the webpage entitled \"Anti-Fraud Tips\", with a view to providing a one-stop information portal for members of the public. Ends/Tuesday, January 27, 2026 Issued at HKT 11:00 NNNN",
+          "content_hash": "6ea78ffa22d6fc50fc4115c33d7a4ae636e0e3793d57a378011d516f40da7bb1",
+          "published_date": "2026-01-27",
+          "metadata": {
+            "parser_version": "scrapling-pcpd-official-isd-v1",
+            "read_scope": "official_isd_republication_body",
+            "source_attribution": "Office of the Privacy Commissioner for Personal Data, Hong Kong",
+            "date_observations": [
+              {
+                "meaning": "listing_archive_day",
+                "locator": "Hong Kong ISD official daily archive URL",
+                "value": "2026-01-27"
+              }
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://www.info.gov.hk/gia/general/202601/27.htm",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 34045
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:15.556866+00:00"
+}

@@ -1,0 +1,71 @@
+{
+  "started_at": "2026-11-09T10:45:02.312504+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "ftc",
+      "since": "2026-07-01",
+      "until": "2026-11-09",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 7,
+      "out_of_range": 6,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://search.ftc.gov/news-events/news/press-releases/2026/07/ftc-states-act-against-hims-hers-deceptive-unlawful-privacy-practices",
+          "title_original": "FTC and States Act Against Hims & Hers for Deceptive and Unlawful Privacy Practices",
+          "content_text": "The Federal Trade Commission, joined by Utah and California, by and through Los Angeles County Counsel, today sued Hims & Hers alleging that the telehealth provider shared consumers’ sensitive health information about medical conditions with third-party advertising platforms despite claiming its services maintain consumers’ privacy and deceives users about its billing and cancellation practices. In a complaint filed in federal court, the FTC and its state and local partners allege that Hims & Hers (Hims) fails to clearly disclose that it charges consumers for prescriptions almost immediately after they submit an intake form, despite telling consumers that they will be able to consult with a medical provider to find a treatment that is “right for them.” The FTC also alleges that the company has made it difficult for consumers to cancel subscriptions and misled consumers about keeping their health information private. The FTC alleges that Hims shared consumers’ health information with Meta, Snap and other third parties. “The FTC’s complaint lays out a troubling scenario—consumers unknowingly locked into recurring subscriptions and the disclosure to third parties of consumers’ most private health information without their consent,” said Christopher Mufarrige, Director of the FTC’s Bureau of Consumer Protection. “The FTC will not hesitate to act on behalf of consumers deprived of their ability to choose which products they want and whether to keep their most sensitive health information private.” San Francisco-based Hims provides telehealth services and direct-to-consumer prescription medications for certain conditions. Consumers who express interest in Hims’ services must fill out an online intake form for review by a medical provider before obtaining treatment. In advertisements and on its website, Hims has claimed that consumers can “connect” and consult with a medical provider through Hims to determine whether they need prescription medication. When consumers fill out their intake form, they are asked to provide their billing information despite assurances that they will not be charged unless and until medications are prescribed, according to the complaint. The FTC alleges, however, that Hims does not give most consumers a consultation with a provider. Instead, by submitting their intake form, most consumers will unknowingly be charged for and subscribed to a prescription treatment without having a chance to review or approve it. According to the complaint, Hims enrolls consumers in recurring subscription plans for those treatments shortly after receiving consumers’ intake forms. In addition, the complaint alleges that Hims fails to clearly and conspicuously inform consumers when their prescriptions will be refilled each month, making it difficult to cancel before the next billing cycle. These practices have generated numerous complaints from consumers. One complained that, “I was told that I would be able to speak with a doctor in a few days and that nothing would be charged to my card that day. Him’s & Her’s \\[sic\\] charged me immediately! I never gave consent to apply charges before I spoke with a healthcare professional.” The FTC also alleges that the company makes it extremely difficult to cancel its subscriptions. Prior to 2023, Hims only allowed most consumers to cancel by contacting customer service via phone, email or chat and imposed additional hurdles that made it difficult for consumers to cancel. Even after introducing online cancellation to most consumers in 2023, the company made it difficult for them to cancel their subscriptions by hiding the cancellation button from consumers, the FTC alleges. The button appeared only after these consumers selected an option to “add/remove items from order” and navigated several steps before they even saw the word “cancel.” In addition, the complaint alleges that Hims shared consumers’ sensitive health information with third-party advertising platforms such as Meta and Snap despite promising to protect patient privacy. Hims shared its consumers’ health information with advertising platforms by sharing lists of certain customers with those companies. Hims also shared consumers’ health information via third-party tracking technologies that automatically shared certain “Events”—the actions of visitors on Hims’ website—with those companies. The FTC alleges these practices have violated the FTC Act and the Restore Online Shoppers’ Confidence Act, which prohibits deceptive billing and subscription practices. Utah alleges violations of the Utah Consumer Sales Practices Act, and California alleges violations of California’s False Advertising and Unfair Competition Laws. The Commission vote authorizing the staff to file the complaint was 2-0. The complaint was filed in the U.S. District Court for the Northern District of California. **NOTE:** The Commission files a complaint when it has “reason to believe” that the named defendants are violating or are about to violate the law and it appears to the Commission that a proceeding is in the public interest. The case will be decided by the court. The lead staffers on this matter include Siobhan Amin, Barbara Chun and Jordan Navarrette in the FTC’s Western Region Los Angeles office. The Federal Trade Commission works to promote competition and protect and educate consumers. The FTC will never demand money, make threats, tell you to transfer money, or promise you a prize. Learn more about consumer topics at consumer.ftc.gov, or report fraud, scams, and bad business practices at ReportFraud.ftc.gov. Follow the FTC on social media, read consumer alerts and the business blog, and sign up to get the latest FTC news and alerts.",
+          "content_hash": "0e5a8eaba5a66e59c22127b7716d060d216b3b80a78459c66368f5268fa0cac4",
+          "published_date": null,
+          "metadata": {
+            "parser_version": "scrapling-ftc-article-v1",
+            "read_scope": "official_ftc_press_release_body",
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "date_observations": [
+              {
+                "meaning": "expansion_listing_published",
+                "locator": "FTC search result time[datetime]",
+                "value": "2026-07-29T12:00:00Z"
+              },
+              {
+                "meaning": "published_attribute",
+                "locator": "FTC article time[datetime]",
+                "value": "2026-02-13T22:00:00Z"
+              },
+              {
+                "meaning": "route_month_candidate_not_full_date",
+                "locator": "FTC press-release URL path",
+                "value": "2026-07"
+              }
+            ],
+            "date_conflict": true,
+            "factual_status": "official_ftc_press_release_not_independently_reviewed",
+            "body_review_status": "machine_extracted_not_human_reviewed",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&field_mission%5B29%5D=29",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [
+        {
+          "url": "https://search.ftc.gov/news-events/news/press-releases?field_mission%5B29%5D=29&search=privacy&page=1",
+          "reason": "explicit_page_limit_reached"
+        }
+      ],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 2042115
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:13.342647+00:00"
+}

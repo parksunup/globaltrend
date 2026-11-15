@@ -1,0 +1,31 @@
+{
+  "run_at": "2026-11-09T03:02:50.617494+00:00",
+  "engine": "Firecrawl self-hosted OSS v2.11.0; /v2/scrape; proxy=basic; no cloud API, stealth, or proxy service",
+  "database_writes": false,
+  "policy": "robots checked before each URL; requests paced per host by max(robots crawl-delay, 5 seconds); HTTPS and catalog-host allowlist; at most one detail per source",
+  "results": [
+    {
+      "source": "eu-parliament",
+      "status": "access_denied",
+      "listing_url": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+      "listing_http_status": 403,
+      "listing_characters": 579,
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_preview": "403 ERROR\n=========\n\nThe request could not be satisfied.\n-----------------------------------\n\n* * *\n\nRequest blocked. We can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again later, or contact the app or website owner.  ",
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "ripd",
+      "status": "http_error",
+      "listing_url": "https://www.redipd.org/noticias/rss.xml",
+      "listing_http_status": 500,
+      "listing_characters": 375,
+      "candidate_count": 0,
+      "relevant_candidate_count": 0,
+      "listing_preview": "Acceso Bloqueado\n================\n\nSu solicitud ha sido bloqueada por los sistemas de la **AEPD** .\n\nSi ha adjuntado un documento a través de la sede electrónica, se ha mostrado esta página debido a que es muy probable que contenga virus o elementos maliciosos .\n\nPara continuar, revise el fichero y ",
+      "crawl_delay_seconds": 5
+    }
+  ]
+}
+

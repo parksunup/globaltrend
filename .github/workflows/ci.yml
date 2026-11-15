@@ -18,7 +18,20 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r scripts/podcast-cloud/requirements.txt
       - run: python -m unittest discover -s tests -p 'test_podcast_cloud.py'
+      - run: python -m unittest discover -s tests -p 'test_search_embedding.py'
       - run: python scripts/podcast-cloud/check_mcp_manifest.py
+  source-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -r scripts/collector-crawlee/requirements.txt
+      - run: python -m unittest discover -s tests -p 'test_source_catalog.py'
+      - run: python -m unittest discover -s tests -p 'test_catalog_probe_rss.py'
+      - run: python -m unittest discover -s tests -p 'test_collector*.py'
+      - run: python -m unittest discover -s tests -p 'test_cloud_snapshot_cursor.py'
   verify:
     runs-on: ubuntu-latest
     steps:
@@ -47,6 +60,18 @@ jobs:
       - uses: supabase/setup-cli@v3
         with:
           version: 2.118.0
+      - name: Prepare disabled schedule fixture for the isolated CI database
+        if: hashFiles('supabase/migrations/20261030091000_reschedule_daily_collection_and_drafting.sql') != ''
+        run: |
+          cp scripts/ci/collector-schedule-fixture.sql supabase/migrations/20261030090959_ci_collector_schedule_fixture.sql
+          cp scripts/ci/collector-schedule-fixture.test.sql supabase/tests/ci_collector_schedule_fixture.test.sql
+      - name: Align legacy playback fixture with the monthly issue key schema
+        if: hashFiles('supabase/migrations/20261029170000_monthly_week_keys_and_podcast_editions.sql') != ''
+        run: |
+          if git grep -q '2098-W50' -- supabase/tests/podcast_playback.test.sql; then
+            git apply --check scripts/ci/podcast-playback-monthly-id.patch
+            git apply scripts/ci/podcast-playback-monthly-id.patch
+          fi
       - name: Start local database and replay migrations
         run: |
           supabase db start
@@ -65,8 +90,26 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m pip install -r scripts/collector/requirements.txt
+      - run: python -m pip install -r scripts/collector-scrapling/requirements.txt
       - run: python -m unittest discover -s tests -p 'test_collector*.py'
+      - run: python -m unittest discover -s tests -p 'test_cloud_snapshot_cursor.py'
+      - run: python -m unittest tests.test_scrapling_collector_transport tests.test_scrapling_collector_runner tests.test_scrapling_source_adapters_ftc_calprivacy tests.test_scrapling_source_pcpd_vn tests.test_scrapling_oecd_cac_adapters tests.test_scrapling_cloud_worker tests.test_scrapling_filter_rpc_sql
       - run: python scripts/verify-collector-dry-run.py
+
+  collector-pdf-ocr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install OCRmyPDF and source languages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ocrmypdf tesseract-ocr-eng tesseract-ocr-spa tesseract-ocr-fra tesseract-ocr-jpn tesseract-ocr-nld tesseract-ocr-por tesseract-ocr-chi-sim tesseract-ocr-chi-tra
+      - run: python -m pip install -r scripts/collector/requirements.txt Pillow==12.0.0
+      - name: Read an image-only PDF with the installed OCR engine
+        run: python -m unittest tests.test_pdf_ocr_runtime
 
   collector-edge:
     runs-on: ubuntu-latest

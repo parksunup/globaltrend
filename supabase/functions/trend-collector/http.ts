@@ -7,8 +7,17 @@ const robotsParser = robotsModule as unknown as (
   url: string,
   body: string,
 ) => Robots;
+export class OfficialHTTPError extends Error {
+  constructor(
+    message: string,
+    readonly requestUrl: string,
+    readonly requestKind: "robots" | "resource",
+  ) {
+    super(message);
+    this.name = "OfficialHTTPError";
+  }
+}
 import { canonical } from "./adapter.ts";
-import { requestTimeoutMs } from "./http-timeout.mjs";
 export class OfficialHTTP {
   private robot: ReturnType<typeof robotsParser> | undefined;
   private last = 0;
@@ -25,19 +34,29 @@ export class OfficialHTTP {
     if (robots && !this.robot) {
       let body = "";
       try {
-        const r = await this.request(
-          new URL("/robots.txt", url).href,
-          "GET",
-          undefined,
-          false,
-        );
+        let r: { bytes: Uint8Array; url: string; type: string };
+        try {
+          r = await this.request(
+            new URL("/robots.txt", url).href,
+            "GET",
+            undefined,
+            false,
+          );
+        } catch (error) {
+          if (error instanceof OfficialHTTPError) {
+            throw new OfficialHTTPError(error.message, error.requestUrl, "robots");
+          }
+          throw error;
+        }
         body = new TextDecoder().decode(r.bytes);
       } catch (error) {
-        // A missing robots file is not a transport/permission failure. Keep
-        // 401/403, timeouts and 5xx fail-closed; never turn those into permission.
+        // A 403 response to robots.txt is not a parsed robots policy. Treat
+        // 403/404/410 as unavailable rules, then continue under the normal
+        // polite delay. A 403 on a requested listing/detail remains a hard
+        // access failure; 429, 5xx, timeouts and network errors stay fail-closed.
         if (
           !(error instanceof Error) ||
-          !["http_404", "http_410"].includes(error.message)
+          !["http_403", "http_404", "http_410"].includes(error.message)
         ) throw error;
       }
       this.robot = robotsParser(
@@ -54,7 +73,7 @@ export class OfficialHTTP {
       if (
         robots && this.robot?.isAllowed(url, "GlobalTrendResearch") === false
       ) throw new Error("robots_disallowed");
-      if (++this.requests > 12) throw new Error("request_budget");
+      this.requests++;
       await new Promise((r) =>
         setTimeout(r, Math.max(0, this.last + this.interval - Date.now()))
       );
@@ -68,7 +87,6 @@ export class OfficialHTTP {
           ...(body ? { "Content-Type": "application/json" } : {}),
         },
         redirect: "manual",
-        signal: AbortSignal.timeout(requestTimeoutMs(url)),
       });
       if ([301, 302, 303, 307, 308].includes(r.status)) {
         const loc = r.headers.get("location");
@@ -89,11 +107,7 @@ export class OfficialHTTP {
       }
       if (!r.ok) {
         await r.body?.cancel();
-        throw new Error("http_" + r.status);
-      }
-      if (Number(r.headers.get("content-length") || 0) > 2000000) {
-        await r.body?.cancel();
-        throw new Error("response_size_limit");
+        throw new OfficialHTTPError("http_" + r.status, url, "resource");
       }
       const reader = r.body?.getReader();
       if (!reader) throw new Error("empty_response");
@@ -103,10 +117,6 @@ export class OfficialHTTP {
         const { done, value } = await reader.read();
         if (done) break;
         size += value.length;
-        if (size > 2000000) {
-          await reader.cancel();
-          throw new Error("response_size_limit");
-        }
         chunks.push(value);
       }
       if (!size) throw new Error("empty_response");

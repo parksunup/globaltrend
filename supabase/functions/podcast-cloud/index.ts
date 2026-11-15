@@ -1,6 +1,6 @@
 import {createRemoteJWKSet, jwtVerify} from 'https://deno.land/x/jose@v5.9.6/index.ts';
 import {createClient} from 'https://esm.sh/@supabase/supabase-js@2.57.4';
-import {audience,trusted} from './trust.ts';
+import {audience,trusted,trustedBootstrap} from './trust.ts';
 const jwks=createRemoteJWKSet(new URL('https://token.actions.githubusercontent.com/.well-known/jwks'));
 const db=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,{auth:{persistSession:false}});
 const uuid=(value:unknown)=>typeof value==='string'&&/^[a-f0-9-]{36}$/.test(value);
@@ -11,7 +11,7 @@ Deno.serve(async req=>{
     const token=req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1];
     if(!token)throw Error();
     ({payload:claims}=await jwtVerify(token,jwks,{issuer:'https://token.actions.githubusercontent.com',audience,algorithms:['RS256'],maxTokenAge:'10m'}));
-    if(!trusted(claims))throw Error();
+    if(!trusted(claims)&&!trustedBootstrap(claims))throw Error();
   }catch{return new Response('Unauthorized',{status:401});}
   try {
     if(Number(req.headers.get('content-length')??0)>262144)throw Error('request too large');
@@ -22,6 +22,16 @@ Deno.serve(async req=>{
       if(error)throw Error('worker_state_conflict');return result;
     }
     const action=body.action;
+    if(trustedBootstrap(claims)&&!['master_acquire','master_complete','master_fail'].includes(action))throw Error('bootstrap action only');
+    if(['master_acquire','master_complete','master_fail','master_read'].includes(action)){
+      const {data:result,error}=await db.rpc('podcast_master_bootstrap_step',{
+        p_run:run,p_action:action.slice(7),p_data:body.data??{}
+      });
+      if(error)throw Error('master_bootstrap_conflict');
+      return Response.json(action==='master_acquire'?{bootstrap:result}:result,{
+        headers:{'Cache-Control':'no-store'}
+      });
+    }
     if(['session_acquire','session_save','session_fail'].includes(action)){
       const {data:result,error}=await db.rpc('podcast_session_step',{
         p_run:run,p_action:action.slice(8),p_data:body.data??{}

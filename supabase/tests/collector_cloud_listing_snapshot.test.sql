@@ -1,6 +1,6 @@
 begin;
 set local search_path=public,extensions;
-select plan(13);
+select plan(16);
 
 -- The migration's fixed production registry UUIDs are not present in the
 -- synthetic local seed catalog. Add one transaction-local FTC source so these
@@ -35,8 +35,7 @@ select has_function('public','collector_cloud_take',array['text','text'],
 select has_function('public','collector_cloud_commit',array['uuid','text','uuid','jsonb','text'],
  'commit RPC atomically stages rows and cursor progress');
 
--- Keep the pre-snapshot cursor contract usable during rollout. Fifty SHA-256
--- hashes fit the existing 4 KB limit; the 51st remains rejected by the DB.
+-- Cursor progress is not limited to fifty hashes or four kilobytes.
 select ok(private.collector_cloud_cursor_valid(
  jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
   'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
@@ -46,21 +45,38 @@ select ok(octet_length(jsonb_build_object('page','https://www.ftc.gov/feeds/pres
  'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
  (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,50) i))::text)<=4000,
  'legacy cursor with fifty hashes remains below four kilobytes');
-select ok(not private.collector_cloud_cursor_valid(
+select ok(private.collector_cloud_cursor_valid(
  jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
   'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
   (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,51) i)), 'ftc'),
- '51-hash cursor cannot violate DB bound');
+ '51-hash cursor remains valid');
+select ok(octet_length(c::text)>4000 and private.collector_cloud_cursor_valid(c,'ftc'),
+ 'valid cursor larger than four kilobytes remains accepted')
+from (select jsonb_build_object('page','https://www.ftc.gov/feeds/press-release-consumer-protection.xml',
+ 'offset',0,'fingerprint',repeat('a',64),'processed_url_hashes',
+ (select jsonb_agg(lpad(to_hex(i),64,'0')) from generate_series(1,100) i)) c) large_cursor;
 
-select throws_ok($$
+select lives_ok($$
  insert into public.collector_cloud_listing_scans(id,source_id,listing_url,fingerprint,row_count,status,completed_at)
  select gen_random_uuid(),source_id,'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),101,'completed',now()
  from public.collector_edge_sources where slug='ftc'
-$$,'23514',null,'snapshot size above one hundred is rejected');
+$$,'101-row snapshot is accepted without an arbitrary size ceiling');
+select throws_ok($$
+ insert into public.collector_cloud_listing_scans(id,source_id,listing_url,fingerprint,row_count,status,completed_at)
+ select gen_random_uuid(),source_id,'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),0,'completed',now()
+ from public.collector_edge_sources where slug='ftc'
+$$,'23514',null,'empty snapshot remains invalid');
 insert into public.collector_cloud_listing_scans(id,source_id,listing_url,fingerprint,row_count,status,completed_at)
 select 'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',source_id,
  'https://www.ftc.gov/feeds/press-release-consumer-protection.xml',repeat('a',64),1,'completed',now()
 from public.collector_edge_sources where slug='ftc';
+insert into public.collector_cloud_listing_rows(source_id,scan_id,ordinal,canonical_url,url_hash,row_data)
+select s.source_id,'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',i,
+ 'https://www.ftc.gov/press-release/snapshot-test-'||i,
+ lpad(to_hex(i+1),64,'0'),
+ jsonb_build_object('url','https://www.ftc.gov/press-release/snapshot-test-'||i,'title','Snapshot item '||i,'date_observations','[]'::jsonb)
+from public.collector_edge_sources s cross join generate_series(0,100) i where s.slug='ftc';
+select is((select count(*)::integer from public.collector_cloud_listing_rows where scan_id='f9d7e4dd-b013-4c75-9331-ecf7b9f1b930'),101,'101 listing rows can be persisted for one snapshot');
 select throws_ok($$
  insert into public.collector_cloud_listing_rows(source_id,scan_id,ordinal,canonical_url,url_hash,row_data)
  select source_id,'f9d7e4dd-b013-4c75-9331-ecf7b9f1b930',0,

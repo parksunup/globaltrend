@@ -1,5 +1,6 @@
 import { parseHTML } from "npm:linkedom@0.18.12";
 import {
+  additionalListing,
   detailRequestUrl,
   expansionListingDate,
   isExpansion,
@@ -36,6 +37,7 @@ export type State = {
   rows?: Row[];
   next?: string | null;
   offset?: number;
+  listing_index?: number;
   failures?: number;
   unknown_dates?: number;
   exhausted?: boolean;
@@ -57,6 +59,13 @@ export type Item = {
   published_date: string | null;
   metadata: Extracted["metadata"];
 };
+
+/** Keep every page fingerprint so cycles remain detectable on long sources. */
+export function recordListingPage(rows: Row[], seenPages: string[], fingerprint: string): string[] {
+  if (!rows.length) throw new Error("listing_empty_page");
+  if (seenPages.includes(fingerprint)) throw new Error("listing_cycle");
+  return [...seenPages, fingerprint];
+}
 // PDPC's media listing also links to other Singapore agencies. These hosts
 // are recognised referrals, not PDPC articles. Never ingest them under the
 // PDPC source identity, even when the linked agency is an approved host.
@@ -100,7 +109,7 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
       const value = values[0];
       const valid = key === "from" || key === "to"
         ? /^\d{4}-\d{2}-\d{2}$/.test(value)
-        : /^\d{1,6}$/.test(value);
+        : /^\d+$/.test(value);
       if (valid) safe.searchParams.set(key, value);
     }
     safe.searchParams.sort();
@@ -110,7 +119,17 @@ function safeDiagnosticUrl(raw: string, hosts: string[]): string | null {
   }
 }
 async function listing(c: Config, http: HTTP, page: string) {
-  const r = await http.request(page);
+  // ICO accepts date filters in its /api/search POST body. Keep the browser
+  // listing request on the original unfiltered page; putting from/to on this
+  // GET URL caused 403s before the documented search API was reached.
+  let listingPage = page;
+  if (c.source === "ico") {
+    const base = new URL(page);
+    base.searchParams.delete("from");
+    base.searchParams.delete("to");
+    listingPage = base.href;
+  }
+  const r = await http.request(listingPage);
   const text = new TextDecoder().decode(r.bytes);
   if (c.source === "pdpc") {
     const data = JSON.parse(text);
@@ -157,7 +176,7 @@ async function listing(c: Config, http: HTTP, page: string) {
       ["page", "from", "to"].some((k) => query.getAll(k).length > 1)
     ) throw new Error("unverified_listing_query");
     const n = Number(query.get("page") || 1);
-    if (!Number.isInteger(n) || n < 1 || n > 1000) {
+    if (!Number.isSafeInteger(n) || n < 1) {
       throw new Error("invalid_listing_page");
     }
     const filters = ["from", "to"].filter((k) => query.has(k)).map((key) => ({
@@ -269,9 +288,7 @@ async function extractTextPDF(
     useWorkerFetch: false,
   }).promise;
   try {
-    if (doc.numPages < 1 || doc.numPages > 50) {
-      throw new Error("pdf_page_limit");
-    }
+    if (doc.numPages < 1) throw new Error("pdf_page_count_missing");
     const pages: { page: number; text: string }[] = [];
     const related: {
       url: string;
@@ -313,9 +330,6 @@ async function extractTextPDF(
       }
     }
     const body = normalize(pages.map((x) => x.text).join(" "));
-    if (body.length > 80000) {
-      throw new Error("long_document_requires_chunked_reading");
-    }
     // A PDPC listing date is not yet verified as the PDF publication date.
     const obs = source === "pdpc"
       ? (row.date_observations || []).map((o) => ({
@@ -398,9 +412,24 @@ export async function advance(
       const diagnosticUrl = safeDiagnosticUrl(raw, c.hosts);
       if (diagnosticUrl) result.url = diagnosticUrl;
       else delete result.url;
-      const response = await http.request(raw, method, body);
-      result.stage = `${requestStage}_parse`;
-      return response;
+      try {
+        const response = await http.request(raw, method, body);
+        result.stage = `${requestStage}_parse`;
+        return response;
+      } catch (error) {
+        const requestError = error as {
+          requestUrl?: unknown;
+          requestKind?: unknown;
+        };
+        if (typeof requestError.requestUrl === "string") {
+          const failedUrl = safeDiagnosticUrl(requestError.requestUrl, c.hosts);
+          if (failedUrl) result.failed_request_url = failedUrl;
+        }
+        if (requestError.requestKind === "robots") {
+          result.stage = `${requestStage}_robots_fetch`;
+        }
+        throw error;
+      }
     },
   };
   try {
@@ -413,6 +442,7 @@ export async function advance(
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];
+      state.listing_index = 0;
     }
     // Refresh legacy CNIL row snapshots once, at their current page. Never
     // transfer a stale offset to rows with newly observed dates. Backlog is exact.
@@ -476,16 +506,12 @@ export async function advance(
       if (!found.rows.length && c.source !== "ec") {
         throw new Error("listing_empty_or_structure_changed");
       }
-      if (found.rows.length > 400) throw new Error("listing_row_limit");
       const urls = found.rows.map((r) => r.url);
       if (
         new Set(urls).size !== urls.length && ["pdpc", "ico"].includes(c.source)
       ) throw new Error("listing_repeated_or_duplicate_items");
       const fingerprint = await sha(JSON.stringify(found.rows));
-      if (state.seen_pages?.includes(fingerprint)) {
-        throw new Error("listing_cycle");
-      }
-      state.seen_pages = [...(state.seen_pages || []), fingerprint].slice(-50);
+      state.seen_pages = recordListingPage(found.rows, state.seen_pages || [], fingerprint);
       state.failures = 0;
       state.rows = found.rows;
       state.next = isExpansion(c.source)
@@ -713,13 +739,33 @@ export async function advance(
       state.offset = 0;
       result.stage = "next_page";
     } else {
-      // Exhausting a bounded feed/listing does not establish period completeness.
+      const nextListing = isExpansion(c.source) && !state.is_backlog
+        ? additionalListing(c.source, state.listing_index || 0)
+        : null;
+      if (nextListing) {
+        state.listing_index = (state.listing_index || 0) + 1;
+        state.page = nextListing;
+        delete state.rows;
+        delete state.next;
+        state.offset = 0;
+        state.seen_pages = [];
+        result.stage = "next_listing_stream";
+        result.reason = "additional_approved_official_listing";
+        result.url = safeDiagnosticUrl(nextListing, c.hosts) || undefined;
+        return { state, result, continue: true, delay: 0 };
+      }
+      // The configured listing has been processed. A rolling feed may still
+      // require a separate historical backfill.
       state.exhausted = true;
+      state.listing_index = 0;
       delete state.rows;
       state.offset = 0;
       state.seen_pages = [];
       state.page = c.listing;
       result.listing_scan_complete = true;
+      result.collection_complete = !state.is_backlog;
+      if (!state.is_backlog) result.status = "success";
+      result.recovery_needed = (state.unknown_dates || 0) > 0 || (state.failures || 0) > 0;
       result.unresolved_date_count = state.unknown_dates || 0;
       result.coverage_blockers = [
         "listing_exhaustiveness_unverified",
@@ -727,8 +773,8 @@ export async function advance(
           ? ["unknown_publication_dates"]
           : []),
       ];
-      result.reason = "listing_exhaustiveness_unverified";
-      result.stage = "range_incomplete";
+      result.reason = "configured_listing_processed";
+      result.stage = "listing_complete";
       return { state, result, continue: false, delay: 0 };
     }
     return { state, result, continue: true, delay: 0 };

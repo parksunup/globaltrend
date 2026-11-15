@@ -1,0 +1,583 @@
+{
+  "version": 1,
+  "description": "Complete source scope requested for the open-source collector rebuild. Duplicate mentions are represented once; disabled/held status is operational verification, not omission from scope.",
+  "sources": [
+    {
+      "id": "edpb",
+      "name": "European Data Protection Board",
+      "listing": "https://www.edpb.europa.eu/news_en",
+      "hosts": [
+        "www.edpb.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "oecd",
+      "name": "OECD Privacy and Data Protection",
+      "listing": "https://www.oecd.org/en/topics/privacy-and-data-protection.html",
+      "hosts": [
+        "www.oecd.org"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "curia",
+      "name": "Court of Justice of the European Union",
+      "listing": "https://curia.europa.eu/site/jcms/d2_5158/en/press-releases",
+      "hosts": [
+        "curia.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "cnil",
+      "name": "CNIL",
+      "listing": "https://www.cnil.fr/fr/actualites",
+      "hosts": [
+        "www.cnil.fr"
+      ],
+      "language": "fr",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "ico",
+      "name": "ICO via WiredGov official republication",
+      "listing": "https://www.wired-gov.net/wg/home.nsf/nav/latest+news?open&id=BDEX-6ZFKSH",
+      "hosts": [
+        "www.wired-gov.net",
+        "wired-gov.net"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-republication",
+      "cohort": "original-19",
+      "adapter_scope": "official_republication_latest_index_filtered_by_ico_attribution",
+      "verification_status": "wiredgov_listing_and_ico_detail_verified_current_week_only",
+      "verification": "WiredGov latest index returned HTTP 200/197807 bytes/204 anchors. One attributed ICO item detail returned HTTP 200/37222 bytes; Trafilatura extracted 5257 characters and listing/detail title/date matched 2026-11-05. Cross-source index has about five business days, no continuation; filter exact ICO publisher attribution, do not claim archive completeness."
+    },
+    {
+      "id": "dpc",
+      "name": "Data Protection Commission Ireland",
+      "listing": "https://www.dataprotection.ie/en/news-media/latest-news",
+      "hosts": [
+        "www.dataprotection.ie"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "pdpc",
+      "name": "Personal Data Protection Commission Singapore",
+      "listing": "https://www.pdpc.gov.sg/api/listing-api?itemsperpage=10&listingtype=media_events&pathname=%2Fmedia-events",
+      "hosts": [
+        "www.pdpc.gov.sg"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "ppc",
+      "name": "Personal Information Protection Commission Japan",
+      "listing": "https://www.ppc.go.jp/news/press/",
+      "hosts": [
+        "www.ppc.go.jp"
+      ],
+      "language": "ja",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "ftc",
+      "name": "Federal Trade Commission consumer-protection press releases (privacy topic filter)",
+      "listing": "https://search.ftc.gov/news-events/news/press-releases?search=privacy&items_per_page=50&field_mission%5B29%5D=29",
+      "hosts": [
+        "search.ftc.gov",
+        "www.ftc.gov"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-rss-topic-filter",
+      "cohort": "original-19",
+      "topic_terms": [
+        "privacy",
+        "personal data",
+        "personal information",
+        "data security",
+        "data breach",
+        "children's data",
+        "consumer data"
+      ],
+      "listing_is_topic_scoped": false,
+      "route_status": "official_search_privacy_query_detail_sample_verified_but_current_crawlee_robots_disallow_no_request_sent"
+    },
+    {
+      "id": "ec",
+      "name": "European Commission Press Corner",
+      "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
+      "hosts": [
+        "ec.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "calprivacy",
+      "name": "California Privacy Protection Agency",
+      "listing": "https://privacy.ca.gov/category/content-types/news/press-release/",
+      "hosts": [
+        "privacy.ca.gov"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19",
+      "route_status": "official_press_release_category_and_page2_previously_observed_current_crawlee_http_403_historical_legacy_archive_only"
+    },
+    {
+      "id": "oaic",
+      "name": "Office of the Australian Information Commissioner",
+      "listing": "https://www.oaic.gov.au/news/media-centre",
+      "hosts": [
+        "www.oaic.gov.au"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "ca-opc",
+      "name": "Office of the Privacy Commissioner of Canada",
+      "listing": "https://www.priv.gc.ca/en/opc-news/news-and-announcements/",
+      "hosts": [
+        "www.priv.gc.ca"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "hk-pcpd",
+      "name": "Hong Kong PCPD via official release and government republication",
+      "listing": "https://www.info.gov.hk/gia/general/today.htm",
+      "hosts": [
+        "www.info.gov.hk",
+        "www.pcpd.org.hk"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-republication",
+      "cohort": "original-19",
+      "adapter_scope": "official_gia_rss_discovery_and_daily_date_archive_republication",
+      "verification_status": "official_date_archive_route_and_detail_verified_daily_window_only",
+      "verification": "The official ISD date archive page for 2026-01-27 returned HTTP 200/15627 bytes/53 links; it linked a PCPD/HKMA release whose detail returned HTTP 200/18418 bytes and Trafilatura extracted 4913 characters/date 2026-01-27. Generic ISD RSS is 200/414462 bytes/100 items but current window has no PCPD mention and no full body. The cloud route queries the official daily date archive; it does not claim complete PCPD coverage."
+    },
+    {
+      "id": "eu-parliament",
+      "name": "European Parliament Press Releases",
+      "listing": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+      "hosts": [
+        "www.europarl.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "eu-council",
+      "source_id": "f4dc010a-0c02-5b24-8799-bd64f20b2e25",
+      "name": "Council of the European Union Press Releases",
+      "listing": "https://www.consilium.europa.eu/en/rss/pressreleases.ashx",
+      "hosts": [
+        "www.consilium.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-rss-summary-only",
+      "cohort": "original-19",
+      "route_status": "official_feed_http_200_20_items; summaries_64_to_282_chars; newest_20_have_no_privacy_match; sampled_detail_http_403; no_next_link_observed"
+    },
+    {
+      "id": "cn-cac",
+      "name": "Cyberspace Administration of China",
+      "listing": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+      "hosts": [
+        "www.cac.gov.cn"
+      ],
+      "language": "zh",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19",
+      "route_status": "official_privacy_list_and_2026_items_previously_observed_current_crawlee_http_403_no_verified_pagination"
+    },
+    {
+      "id": "cn-tc260",
+      "name": "National Technical Committee 260 on Cybersecurity",
+      "listing": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
+      "hosts": [
+        "www.tc260.org.cn"
+      ],
+      "language": "zh",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "es-aepd",
+      "name": "Agencia Española de Protección de Datos",
+      "listing": "https://www.aepd.es/prensa-y-comunicacion/notas-de-prensa",
+      "hosts": [
+        "www.aepd.es"
+      ],
+      "language": "es",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "original-19"
+    },
+    {
+      "id": "edps",
+      "name": "European Data Protection Supervisor via official Mastodon RSS",
+      "listing": "https://social.edps.europa.eu/@EDPS.rss",
+      "hosts": [
+        "social.edps.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-social-feed",
+      "cohort": "additional-12"
+    },
+    {
+      "id": "anpd-br",
+      "name": "Brazil ANPD",
+      "listing": "https://www.gov.br/anpd/++api++/@search?portal_type=News%20Item&path=%2Fpt-br%2Fassuntos%2Fnoticias&sort_on=effective&sort_order=descending&b_size=10",
+      "hosts": [
+        "www.gov.br"
+      ],
+      "language": "pt",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "additional-12",
+      "topic_terms": [
+        "proteção de dados",
+        "dados pessoais",
+        "privacidade",
+        "lgpd",
+        "titulares",
+        "fiscalização",
+        "anpd"
+      ],
+      "source_id": "8999005f-a0b3-4261-b073-bfce8f1834aa",
+      "publisher_id": "c24156b5-a63e-400b-b202-d220ffa81e82",
+      "source_kind": "json_api",
+      "listing_is_topic_scoped": true
+    },
+    {
+      "id": "npc-ph",
+      "name": "Philippines National Privacy Commission",
+      "listing": "https://privacy.gov.ph/feed/",
+      "hosts": [
+        "privacy.gov.ph"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official-rss",
+      "cohort": "additional-12",
+      "source_id": "20f6ed2a-a84c-4260-82f4-12e8b6b969f9",
+      "publisher_id": "8868da89-4d11-4cef-976b-a8e2692c1e36",
+      "source_kind": "rss",
+      "verification_status": "official_rss_full_body_runtime_verified_human_review_required",
+      "verification": "Crawlee fetched the official RSS as application/rss+xml (50,995 bytes, 9 items). Tested content:encoded bodies ranged from 2,099 to 9,378 characters and included RFC822 pubDate. The linked detail route returned HTTP 403 and is not used. Human relevance review and feed-window completeness remain required."
+    },
+    {
+      "id": "jpdp-my",
+      "name": "Malaysia Personal Data Protection Commissioner",
+      "listing": "https://www.pdp.gov.my/en/main-page/",
+      "hosts": [
+        "www.pdp.gov.my"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "additional-12",
+      "source_id": "0db916d5-a210-4bd8-b5f3-97571fdd1e60",
+      "publisher_id": "b1e85e96-3399-4718-b534-8dcc22fd6e96",
+      "source_kind": "html",
+      "adapter_scope": "official_listed_article_with_verified_primary_pdf",
+      "verification_status": "official_listing_detail_pdf_and_date_verified_human_review_required_pagination_incomplete",
+      "verification": "Crawlee production probe: official listing returned 200 with 11 candidates and no next-page link. The privacy-relevant Oct 29, 2026 consultation article links the exact official 32-page PDF; Trafilatura first extracted the article page, then the approved PDF was extracted with pypdf (68,612 characters). Listing date is preserved separately from document content."
+    },
+    {
+      "id": "nist",
+      "name": "US National Institute of Standards and Technology privacy news",
+      "listing": "https://www.nist.gov/news-events/news-updates/org/258376",
+      "hosts": [
+        "www.nist.gov"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "additional-12",
+      "topic_terms": [
+        "privacy",
+        "data protection",
+        "personal data",
+        "personal information"
+      ],
+      "source_id": "37bea39f-6ebe-4684-880d-19c715399c4b",
+      "publisher_id": "72004e05-87db-4028-b2cc-826c86894ced",
+      "source_kind": "html"
+    },
+    {
+      "id": "iapp",
+      "name": "International Association of Privacy Professionals News",
+      "listing": "https://iapp.org/news",
+      "hosts": [
+        "iapp.org"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "professional-publication",
+      "cohort": "additional-12",
+      "source_id": "4f056a27-ce76-40f8-b7ec-3eb21dc1d439",
+      "publisher_id": "e71bdd7b-50cc-49e7-bb4b-932b67b2e86f",
+      "source_kind": "html"
+    },
+    {
+      "id": "fpf",
+      "name": "Future of Privacy Forum",
+      "listing": "https://fpf.org/blog/",
+      "hosts": [
+        "fpf.org"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "research-organization",
+      "cohort": "additional-12",
+      "source_id": "e532813d-f9af-484b-ae30-1fa5e3cbe9cb",
+      "publisher_id": "16bb7303-10fb-4557-ad75-c356c5f8a3a8",
+      "source_kind": "html"
+    },
+    {
+      "id": "gpa",
+      "name": "Global Privacy Assembly Latest News",
+      "listing": "https://globalprivacyassembly.com/news-events/latest-news/",
+      "hosts": [
+        "globalprivacyassembly.com"
+      ],
+      "language": "en",
+      "cadence": "weekly",
+      "kind": "international-network",
+      "cohort": "additional-12",
+      "source_id": "e55fce7d-7b55-445d-9c8b-0841095ac7f1",
+      "publisher_id": "1c417538-fefd-4ff4-be71-fc6d3b5f6b7c",
+      "source_kind": "html"
+    },
+    {
+      "id": "g7-dpa",
+      "name": "G7 Data Protection and Privacy Authorities Roundtable",
+      "listing": "https://www.priv.gc.ca/en/about-the-opc/what-we-do/international-collaboration/international-events/g7-2025/membership/",
+      "hosts": [
+        "www.priv.gc.ca"
+      ],
+      "language": "en",
+      "cadence": "weekly",
+      "kind": "international-network",
+      "cohort": "additional-12",
+      "source_id": "c1c51983-486c-4a6e-98ef-43eaaee88d5a",
+      "publisher_id": "e5bb6a05-60ca-41b0-aeff-68e8b2346f59",
+      "source_kind": "html",
+      "adapter_scope": "official_opc_g7_membership_hub_linked_deliverables",
+      "verification_status": "official_g7_hub_and_detail_verified_coverage_incomplete_policy_hold",
+      "verification": "Official Canada OPC G7 membership hub returned 200 and links the 2026 communiqué. Detail returned 200 and Trafilatura extracted about 6916 characters; modification date 2026-07-08 is distinct from meeting dates 2026-06-25/26. Hub continuation and recurring weekly coverage are not established."
+    },
+    {
+      "id": "global-cbpr",
+      "name": "Global CBPR Forum",
+      "listing": "https://www.globalcbpr.org/news/",
+      "hosts": [
+        "www.globalcbpr.org",
+        "globalcbpr.org"
+      ],
+      "language": "en",
+      "cadence": "weekly",
+      "kind": "international-network",
+      "cohort": "additional-12",
+      "source_id": "ed10f3a1-4d0d-4409-9ae4-7d320ae92abc",
+      "publisher_id": "99d67ba2-6a6d-46e5-9563-dcbf427ef66c",
+      "source_kind": "html",
+      "adapter_scope": "official_news_item_with_verified_annual_report_and_work_program_pdfs",
+      "verification_status": "official_listing_detail_two_pdfs_and_publication_date_verified_human_review_required_pagination_incomplete",
+      "verification": "Crawlee production probe: official news listing returned 200 with 12 candidates and no next-page link. The June 10, 2026 news item links the official annual report and work-program PDFs; each is 2 pages and both cover sheets say May 26, 2026. The collector uses the news listing date as publication date and retains PDF document dates separately. Trafilatura is attempted on the item page before pypdf extracts both approved attachments (7,031 combined characters)."
+    },
+    {
+      "id": "ripd",
+      "name": "Red Iberoamericana de Protección de Datos",
+      "listing": "https://www.redipd.org/noticias/rss.xml",
+      "hosts": [
+        "www.redipd.org"
+      ],
+      "language": "es",
+      "cadence": "weekly",
+      "kind": "international-network",
+      "cohort": "additional-12",
+      "source_id": "d5a9b352-8ebf-401a-8d83-378262cc0c12",
+      "publisher_id": "40fef387-6b15-4654-8bd2-5f99f4cec0ec",
+      "source_kind": "official-rss",
+      "route_status": "robots_allow_rss_311_and_detail_previously_verified_current_crawlee_http_500_feed_window_and_terms_pending"
+    },
+    {
+      "id": "iso-iec-sc27",
+      "name": "ISO/IEC JTC 1/SC 27 privacy and security standards updates",
+      "listing": "https://committee.iso.org/sites/jtc1sc27/home/news.html",
+      "hosts": [
+        "committee.iso.org",
+        "www.iso.org"
+      ],
+      "language": "en",
+      "cadence": "weekly",
+      "kind": "standards-body",
+      "cohort": "additional-12",
+      "source_id": "3fd924b0-3a38-4ba6-b9b2-5154ecca3a39",
+      "publisher_id": "ab505e8c-590d-43da-a0a6-8bd44d95522f",
+      "source_kind": "html",
+      "adapter_scope": "official_news_table_to_exact_standard_pdf",
+      "verification_status": "official_listing_pdf_and_month_evidence_verified_full_publication_date_unavailable_human_review_required",
+      "verification": "Crawlee production probe: official news table returned 200; the verified ISO/IEC TS 27560-2023 PDF was 1 page and pypdf extracted 2,081 characters. The listing records only 2025-05, so no full publication date is invented; the standard's September 2023 issue date remains separate from the 2025 announcement. The route leaves publication_date unresolved and requires human review."
+    },
+    {
+      "id": "noyb",
+      "name": "noyb News",
+      "listing": "https://noyb.eu/en/news",
+      "hosts": [
+        "noyb.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "civil-society-organization",
+      "cohort": "additional-source",
+      "source_id": "87f2775b-40f2-4af1-926c-da151cd51242",
+      "publisher_id": "516e3336-b54d-4700-bb1e-688b083df437",
+      "source_kind": "html"
+    },
+    {
+      "id": "nl-ap",
+      "name": "Dutch Autoriteit Persoonsgegevens official article RSS",
+      "listing": "https://autoriteitpersoonsgegevens.nl/feed/article/rss.xml",
+      "hosts": [
+        "autoriteitpersoonsgegevens.nl"
+      ],
+      "language": "nl",
+      "cadence": "daily",
+      "kind": "supervisory-authority-rss",
+      "cohort": "additional-source",
+      "topic_terms": [
+        "privacy",
+        "persoonsgegevens",
+        "gegevensbescherming",
+        "gegevensverwerking",
+        "toezicht"
+      ],
+      "verification_status": "official_rss_and_robots_allowed_detail_verified_coverage_incomplete_terms_hold",
+      "verification": "Official RSS returned 10 entries; a linked /actueel/* detail was independently fetched as HTTP 200 and Trafilatura extracted 936 characters dated 2026-10-30. Protego 0.6.2 correctly applies the observed longer Allow: /actueel/* rule over Disallow: /actueel; the generic RSS is a rolling window without continuation, and terms/reuse permission is not established.",
+      "source_id": "1d9ac2d7-02f7-4777-8677-c00fb702d021",
+      "publisher_id": "6283604f-f595-469e-8619-0640714ae80c",
+      "source_kind": "rss"
+    },
+    {
+      "id": "vn-gov",
+      "name": "Vietnam Government Online Newspaper",
+      "listing": "https://en.baochinhphu.vn/",
+      "hosts": [
+        "en.baochinhphu.vn"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "government-news",
+      "cohort": "additional-source",
+      "topic_terms": [
+        "privacy",
+        "personal data",
+        "personal information",
+        "data protection",
+        "cybersecurity",
+        "cyber security"
+      ],
+      "listing_is_topic_scoped": false,
+      "verification_status": "homepage_and_timeline_routes_verified_known_relevant_story_found_homepage_not_policy_timeline",
+      "verification": "Official home spotlight exposes the privacy-related Decree 363 story omitted from observed policies pages 1–5. Detail returned HTTP 200/68536 bytes; Trafilatura extracted 4309 characters and meta/JSON-LD/visible dates agree on 2026-11-02. The official policies listing and timeline pages 1–5 returned 200; each timeline fragment had 24 entries. The source adapter checks home spotlight then policies/timeline; listing completeness remains unverified.",
+      "source_id": "9e9815e2-2028-4384-a5e5-6ebd1f2e2f55",
+      "publisher_id": "6d736b06-8da2-4e27-aeaf-77ecd43094ad",
+      "source_kind": "html",
+      "adapter_scope": "official_policies_listing_timeline_pages_and_body_aware_relevance"
+    },
+    {
+      "id": "freevacy",
+      "name": "Freevacy Privacy Newsfeed",
+      "listing": "https://www.freevacy.com/news",
+      "hosts": [
+        "www.freevacy.com"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "news-aggregator",
+      "cohort": "additional-source",
+      "source_id": "91874208-ed99-4249-8aca-24d8c964ddb2",
+      "publisher_id": "bdcbff4b-4507-465a-b1a7-4f16d7ae24b4",
+      "source_kind": "html"
+    },
+    {
+      "id": "overview-legal",
+      "name": "overview.legal",
+      "listing": "https://overview.legal/this-week?ui=v1",
+      "hosts": [
+        "overview.legal"
+      ],
+      "language": "en",
+      "cadence": "weekly",
+      "kind": "news-aggregator",
+      "cohort": "additional-source",
+      "source_id": "94a8de6e-c573-4459-a983-e7424cd3cead",
+      "publisher_id": "1eb81b68-a366-4624-a4ca-7987b59f7203",
+      "source_kind": "html"
+    },
+    {
+      "id": "eur-lex",
+      "name": "EUR-Lex News",
+      "listing": "https://eur-lex.europa.eu/content/news/index.html",
+      "hosts": [
+        "eur-lex.europa.eu"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "previously-tested-held",
+      "hold_reason": "user_deferred_2026_10_29",
+      "runtime_enabled": false,
+      "verification": "Prior probe recorded HTTP 202 empty body; recheck through Crawlee requested, retain user hold regardless.",
+      "source_id": "76ed096b-7297-5e5a-b85d-bda00b89a82f",
+      "publisher_id": "9b111660-4f4f-56e0-b488-e395c364abc3",
+      "source_kind": "html",
+      "verification_status": "held_by_user"
+    }
+  ]
+}

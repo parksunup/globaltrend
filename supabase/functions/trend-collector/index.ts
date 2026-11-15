@@ -12,7 +12,6 @@ async function rpc(name: string, args: Record<string, unknown> = {}) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(args),
-    signal: AbortSignal.timeout(15000),
   });
   if (!r.ok) {
     await r.body?.cancel();

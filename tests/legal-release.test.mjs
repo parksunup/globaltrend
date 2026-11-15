@@ -5,13 +5,13 @@ import { loadLegalTranslation } from '../lib/legal-translation-review.ts';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 
-test('seven immutable packages retain 119 cells and six translated bodies including GDPR HTML export', () => {
+test('seven immutable packages retain 126 cells and six translated bodies including GDPR HTML export', () => {
   const packages = buildLegalReviewPackages();
   assert.equal(packages.length, 7);
-  assert.equal(packages.reduce((n, p) => n + p.cells.length, 0), 119);
+  assert.equal(packages.reduce((n, p) => n + p.cells.length, 0), 126);
   assert.equal(packages.filter(p => p.document).length, 6);
   for (const p of packages) {
-    assert.equal(p.cells.length, 17);
+    assert.equal(p.cells.length, 18);
     assert.match(p.contentHash, /^[a-f0-9]{64}$/);
     assert.equal(p.contentHash, buildLegalReviewPackages().find(q => q.recordId === p.recordId).contentHash);
     assert.ok(p.cells.every(c => c.jurisdiction === p.jurisdiction));
@@ -25,7 +25,7 @@ test('only published versions yield public cells and text; no repository draft f
   const p = buildLegalReviewPackages().find(p => p.jurisdiction === 'JP');
   assert.equal(publishedLegalBundle([{status:'draft', review_payload:p}]).cells.length, 0);
   const bundle = publishedLegalBundle([{status:'published', review_payload:p}]);
-  assert.equal(bundle.cells.length, 17);
+  assert.equal(bundle.cells.length, 18);
   assert.equal(bundle.documents[0].reviewStatus, 'published');
   assert.ok(bundle.documents[0].sections.every(s => s.reviewStatus === 'published'));
   assert.equal(p.document.reviewStatus, 'not_started');

@@ -19,12 +19,14 @@ export const expansionCandidates: Record<string, string> = {
   "eu-parliament":
     "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
   "eu-council": "https://www.consilium.europa.eu/en/press/press-releases/",
-  "eur-lex": "https://eur-lex.europa.eu/content/news/index.html",
   "cn-cac": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
   "cn-tc260": "https://www.tc260.org.cn/tc260/tzgg/list.shtml",
 };
 
 export async function probe(source: string) {
+  // EUR-Lex was explicitly deferred by the user. Keep this guard before URL
+  // lookup, client construction, and the catch block so no network path can run.
+  if (source === "eur-lex") throw new Error("source_held_by_user");
   const url = expansionCandidates[source];
   if (!url) throw new Error("unknown_probe_source");
   const started = Date.now();

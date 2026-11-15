@@ -1,0 +1,4 @@
+-r ../collector/requirements.txt
+crawlee[httpx]==1.11.0
+trafilatura==2.3.1
+scrapling[fetchers]==0.4.11

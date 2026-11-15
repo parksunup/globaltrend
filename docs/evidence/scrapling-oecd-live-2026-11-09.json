@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-11-09T10:45:02.221916+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "oecd",
+      "since": "2026-11-02",
+      "until": "2026-11-09",
+      "status": "no_candidates",
+      "coverage_complete": false,
+      "pages": 2,
+      "discovered": 0,
+      "out_of_range": 0,
+      "details_attempted": 0,
+      "items": [],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 14702
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:17.144030+00:00"
+}

@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-11-09T10:45:02.180336+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "cn-cac",
+      "since": "2026-10-28",
+      "until": "2026-10-28",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 16,
+      "out_of_range": 15,
+      "details_attempted": 1,
+      "items": [
+        {
+          "url": "https://www.cac.gov.cn/2026-10/28/c_1794942554784626.htm",
+          "title_original": "通过个人信息保护合规审计服务认证的专业机构名单（第三批）",
+          "content_text": "落实《中华人民共和国个人信息保护法》《个人信息保护合规审计管理办法》相关要求，中央网信办（国家网信办）数据与技术保障中心、中国网络安全审查认证和市场监管大数据中心、北京赛西认证有限责任公司依据《中华人民共和国认证认可条例》以及相关认证规则、实践指南开展专业机构认证工作。 近期，第三批专业机构认证工作已完成，21家机构获个人信息保护合规审计服务认证证书。具体名单如下: 具体信息可通过认证机构官方网站查询。 中央网信办（国家网信办）数据与技术保障中心 中国网络安全审查认证和市场监管大数据中心 北京赛西认证有限责任公司 2026年10月28日",
+          "content_hash": "04d01ccf5ce8d50897a0906e8bc53cb37f92ece4ce8f8f9da4f8bfe977a68860",
+          "published_date": "2026-10-28",
+          "metadata": {
+            "parser_version": "cac-official-article-v1",
+            "read_scope": "official_cac_notice_html",
+            "date_observations": [
+              {
+                "meaning": "published_display_candidate",
+                "value": "2026-10-28",
+                "locator": "#loadingInfoPage li .times"
+              },
+              {
+                "meaning": "published_display_candidate",
+                "value": "2026年10月28日 11:02",
+                "locator": "#pubtime"
+              }
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "short_notice": true,
+            "short_notice_reason": "original_notice_is_brief_or_needs_attachment_review",
+            "related_documents": [],
+            "unread_attachments": [],
+            "factual_status": "official_notice_not_independent_legal_finding",
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 2,
+      "robots_requests": 1,
+      "downloaded_bytes": 30807
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:14.223739+00:00"
+}

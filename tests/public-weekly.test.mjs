@@ -42,7 +42,7 @@ test('home podcast player renders the monthly issue and edition label',()=>{
  const playerSource=fs.readFileSync(new URL('../app/public/home-podcast-player.tsx',import.meta.url),'utf8');
  const playerCode=ts.transpileModule(playerSource,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
  const player={exports:{}};
- new Function('require','module','exports',playerCode)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/link'?({href,children})=>React.createElement('a',{href},children):name.includes('weekly-label')?require('../lib/weekly-label.ts'):require(name),player,player.exports);
+ new Function('require','module','exports',playerCode)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/link'?({href,children})=>React.createElement('a',{href},children):name.includes('weekly-label')?require('../lib/weekly-label.ts'):name.includes('podcast-brand')?require('../lib/podcast-brand.ts'):require(name),player,player.exports);
  const html=renderToStaticMarkup(React.createElement(player.exports.default,{podcast:{issueKey:'2026-10-W1-2',title:'주제',description:'소개',start:'2026-10-05',end:'2026-10-11',audioUrl:'https://audio.example.test/file',mime:'audio/mp4'}}));
  assert.ok(html.includes('2026년 10월 1주-2'));
  assert.ok(!html.includes('2026-10-W1-2'));
@@ -52,7 +52,7 @@ const require=createRequire(import.meta.url);
 const source=fs.readFileSync(new URL('../app/public/weekly/written-weekly-report.tsx',import.meta.url),'utf8');
 const code=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
 const mod={exports:{}};
-new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/link'?({href,children})=>React.createElement('a',{href},children):name.includes('weekly-label')?require('../lib/weekly-label.ts'):require(name),mod,mod.exports);
+new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/link'?({href,children})=>React.createElement('a',{href},children):name.includes('weekly-label')?require('../lib/weekly-label.ts'):name.includes('podcast-brand')?require('../lib/podcast-brand.ts'):require(name),mod,mod.exports);
 
 test('written weekly view renders the eight selected reports and no podcast selection',()=>{
  const reports=Array.from({length:8},(_,i)=>({id:`report-${i}`,title_ko:`선정 동향 ${i+1}`,one_line_summary_ko:'한 줄 요약',detailed_summary_ko:'본문 첫 문단\n\n둘째 문단'}));
@@ -69,7 +69,7 @@ test('written and podcast archives offer every issue in a dropdown selector',()=
  const source=fs.readFileSync(new URL('../app/public/weekly/weekly-issue-picker.tsx',import.meta.url),'utf8');
  const code=ts.transpileModule(source,{compilerOptions:{jsx:ts.JsxEmit.ReactJSX,module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText;
  const mod={exports:{}};
-  new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/navigation'?({useRouter:()=>({push:()=>{}})}):name.includes('weekly-label')?require('../lib/weekly-label.ts'):require(name),mod,mod.exports);
+  new Function('require','module','exports',code)(name=>name.endsWith('.css')?new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)}):name==='next/navigation'?({useRouter:()=>({push:()=>{}})}):name.includes('weekly-label')?require('../lib/weekly-label.ts'):name.includes('podcast-brand')?require('../lib/podcast-brand.ts'):require(name),mod,mod.exports);
  const issues=Array.from({length:60},(_,i)=>({issue_key:`2026-01-W1-${i+1}`,title:`제${i}호`,week_start:'2026-01-05',week_end:'2026-01-11'}));
  for(const basePath of ['/public/weekly','/public/weekly/podcast']){
   const podcast=basePath.endsWith('/podcast');

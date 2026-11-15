@@ -1,0 +1,71 @@
+{
+  "started_at": "2026-11-09T10:45:02.239884+00:00",
+  "method": "Scrapling upstream Fetcher; robots-aware; minimum 5 seconds per host",
+  "results": [
+    {
+      "source": "vn-gov",
+      "since": "2026-11-02",
+      "until": "2026-11-09",
+      "status": "partial",
+      "coverage_complete": false,
+      "pages": 1,
+      "discovered": 26,
+      "out_of_range": 0,
+      "details_attempted": 3,
+      "items": [
+        {
+          "url": "https://en.baochinhphu.vn/respect-for-constitution-and-law-helps-maintain-discipline-and-drive-national-development-111261108155943542.htm",
+          "title_original": "Respect for Constitution and law helps maintain discipline and drive national development",
+          "content_text": "# Respect for Constitution and law helps maintain discipline and drive national development ## VGP – Respect for the Constitution and the law would help maintain discipline and drive national development, wrote General Secretary and President To Lam in his latest article released on Sunday on the occasion of the Viet Nam Law Day 2026 (November 8, 2026). Respect for the Constitution must be reflected in every decision and action of agencies, organizations, and competent persons. The Constitution possesses the highest legal effect, thus all legal provisions must conform to the Constitution; all public power activities must have a lawful basis, strictly adhere to assigned jurisdiction, and be subject to control. Any legal document or administrative act violating the Constitution or the law must be detected and handled in a timely manner and within prescribed authority. Neither development objectives nor task urgency may be cited as justification for disregarding constitutionality and legality. Concurrently, competent authorities must proactively amend inadequate regulations and promptly remove obstacles to development. Resolution No. 27-NQ/TW on continuing to build and perfect the socialist rule-of-law State of Viet Nam clearly defined the relationship: *Party leadership, State management, and People's mastery*. The leadership and governing capacity of the Party is reflected in the quality of institutionalizing guidelines and in practical results achieved, bringing tangible improvements to the people's lives. Respect for the Constitution also requires that human rights and citizens' rights be guaranteed and protected substantively. Human rights and citizens' rights may only be restricted in accordance with provisions of law in necessary cases for reasons prescribed by the Constitution. The safety, dignity, and legitimate rights and interests of every individual are values that the State is obligated to protect. According to the top Vietnamese leader, Resolution No. 66-NQ/TW mandates the renovation of law-making and law-enforcement work, turning the law into a catalyst for development. Enhancing management efficiency must go hand in hand with expanding development opportunities, ensuring that administrative burdens are not shifted onto citizens and businesses. The legal system must create favorable conditions for integrating science, technology, and innovation into production, mobilizing social resources, expanding business opportunities, and leveraging the advantages of international integration. Alongside encouraging new development models, the law must guarantee access to education, employment, and essential services. A transparent, stable, and consistently enforced legal framework reduces risks and costs while boosting investor confidence. This forms the basis for efficiently mobilizing and allocating resources, turning the law into a national competitive advantage. Administrative procedure reform must facilitate fast and convenient resolution of administrative affairs, lower compliance costs, and clearly define enforcement responsibilities. Law-making and law enforcement must be tied to outcome-based accountability. Agencies involved in drafting, promulgating, and enforcing laws must coordinate to monitor impacts, rectify implementation flaws, and promptly amend or recommend amendments to inadequate provisions within their authority. Bottlenecks must be correctly identified by their root causes. Unreasonable regulations must be amended; cadres with limited capacity must be trained. Digital transformation must enhance governance efficiency and public service quality. The exploitation and sharing of data must strictly comply with the law while the application of technology must ensure information security, personal data protection, and privacy rights. To Lam also stressed the need to cultivate a culture of the rule of law rooted in the exemplary behavior of cadres and Party members, and the active, voluntary participation of the eople. Such a culture should be nurtured by legal awareness, public service ethics, and the experience of being treated fairly. Clear regulations, thoroughly explained and equitably applied, will reinforce public trust and encourage voluntary compliance. Citizens are the primary subjects who participate in drafting, implementing, and protecting the law. Their participation must be guaranteed in policy consultation, supervision, reporting inadequacies, and evaluating implementation results. Legal dissemination and education must empower citizens to exercise their rights, fulfill their obligations, and reach the right beneficiaries when assistance is needed. Policy explanations must be coupled with dialogue and listening to feedback for timely adjustments. Digital technology adoption must go hand-in-hand with direct assistance for vulnerable groups and individuals in disadvantaged regions. Respect for the Constitution and the law serves as both the foundation and the driver for building a nation characterized by discipline, integrity, democracy, equality, civilization, development, and prosperity. This is not only an immediate mandate but also a choice of strategic significance, ensuring that Viet Nam advances firmly into a new era of rapid, sustainable development and realizes its aspiration for a prosperous and happy country./.",
+          "content_hash": "71cffb7cbc098792e12bd31b7f4efdb57fda8ae4373bdadb5a5c535f995ecd7a",
+          "published_date": "2026-11-08",
+          "metadata": {
+            "parser_version": "scrapling-vn-gov-official-detail-v1",
+            "read_scope": "official_government_news_detail_body",
+            "source_attribution": "Vietnam Government Online Newspaper",
+            "date_observations": [
+              {
+                "meaning": "official_published_attribute",
+                "locator": "meta[property=\"article:published_time\"]@content",
+                "value": "2026-11-08T15:59:00+07:00"
+              },
+              {
+                "meaning": "official_published_display",
+                "locator": "[data-role=publishdate]",
+                "value": "November 08, 2026 3:59 PM GMT+7",
+                "date": "2026-11-08"
+              }
+            ],
+            "relevance_checked_against_body": true,
+            "privacy_relevant": true,
+            "relevance_terms": [
+              "personal data",
+              "privacy"
+            ],
+            "requires_review": true,
+            "ai_ready": false,
+            "extraction_method": "trafilatura",
+            "related_documents": [],
+            "unread_attachments": [],
+            "collector": "scrapling-separate-v1",
+            "collector_transport": "scrapling.fetchers.Fetcher",
+            "source_listing_url": "https://en.baochinhphu.vn/",
+            "database_writes": false
+          }
+        }
+      ],
+      "errors": [
+        {
+          "url": "https://en.baochinhphu.vn/viet-nam-appoints-new-consuls-general-in-us-russia-111261106161711515.htm",
+          "reason": "explicit_item_limit_reached"
+        }
+      ],
+      "transport": "upstream_scrapling_fetcher",
+      "database_writes": false,
+      "requests": 4,
+      "robots_requests": 1,
+      "downloaded_bytes": 357078
+    }
+  ],
+  "finished_at": "2026-11-09T10:45:23.355567+00:00"
+}

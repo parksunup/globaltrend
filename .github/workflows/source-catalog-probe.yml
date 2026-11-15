@@ -1,0 +1,47 @@
+name: Source catalog probe (read only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'Eligible source ID, or all 36 probe-eligible sources (held sources are never requested)'
+        type: string
+        default: all
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned Crawlee and Trafilatura
+        run: python -m pip install -r scripts/collector-crawlee/requirements.txt
+      - name: Validate catalog and adapters
+        run: |
+          python -m unittest discover -s tests -p 'test_source_catalog.py'
+      - name: Probe every requested source without database writes
+        id: probe
+        shell: bash
+        run: |
+          args=(--output work/source-catalog-probe.json)
+          if [ "${{ inputs.source }}" != "all" ]; then args+=(--source "${{ inputs.source }}"); fi
+          set +e
+          python -m scripts.catalog_probe "${args[@]}"
+          result=$?
+          echo "exit_code=$result" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Publish diagnostic artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: source-catalog-probe
+          path: work/source-catalog-probe.json
+          if-no-files-found: warn
+      - name: Fail when a selected source did not yield a body
+        if: steps.probe.outputs.exit_code != '0'
+        run: exit 1

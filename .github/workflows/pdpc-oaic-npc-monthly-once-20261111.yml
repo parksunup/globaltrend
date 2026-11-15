@@ -1,0 +1,97 @@
+name: One-time PDPC OAIC NPC monthly verification 2026-11-11 20:40 KST
+
+on:
+  schedule:
+    - cron: '40 11 11 11 *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: globaltrend-pdpc-oaic-npc-monthly-once-20261111
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.repository == 'parksunup/globaltrend' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      COLLECTOR_RUNNER: github-hosted
+      COLLECTOR_DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      RUN_EVENT: ${{ github.event_name }}
+      COLLECTOR_SINCE: '2026-10-11'
+      COLLECTOR_UNTIL: '2026-11-11'
+      SCHEDULE_ENABLED: ${{ vars.SCHEDULE_ENABLED }}
+      COLLECTION_ENABLED: ${{ vars.COLLECTION_ENABLED }}
+      FREE_LIMITS_VERIFIED: ${{ vars.FREE_LIMITS_VERIFIED }}
+      CLOUD_PIPELINE_VERIFIED: ${{ vars.CLOUD_PIPELINE_VERIFIED }}
+      SUPABASE_URL: ${{ secrets.COLLECTOR_SUPABASE_URL }}
+      SUPABASE_SECRET_KEY: ${{ secrets.COLLECTOR_SUPABASE_SECRET_KEY }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.COLLECTOR_SUPABASE_SECRET_KEY }}
+    steps:
+      - name: Confirm the one-time scheduled date
+        id: date_guard
+        shell: bash
+        run: |
+          if [ "$(date -u +%F)" = '2026-11-11' ] && { [ '${{ github.event.schedule }}' = '40 11 11 11 *' ] || [ '${{ github.event_name }}' = 'workflow_dispatch' ]; }; then
+            echo 'proceed=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'proceed=false' >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.date_guard.outputs.proceed == 'true'
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        if: steps.date_guard.outputs.proceed == 'true'
+        with:
+          python-version: '3.12'
+      - name: Install Crawlee collector dependencies
+        if: steps.date_guard.outputs.proceed == 'true'
+        run: python -m pip install -r scripts/collector/requirements.txt
+      - name: Collect only PDPC, OAIC, and NPC for one month
+        id: collect
+        if: steps.date_guard.outputs.proceed == 'true'
+        env:
+          COLLECTOR_ACTUAL_RUNNER: ${{ runner.environment }}
+        shell: bash
+        run: |
+          set +e
+          python -m scripts.collector.run --scheduled --write \
+            --since "$COLLECTOR_SINCE" --until "$COLLECTOR_UNTIL" \
+            --source-set config/pdpc-oaic-npc-monthly-source-set-20261111.json \
+            --output work/pdpc-oaic-npc-monthly-result.json
+          collector_status=$?
+          exit "$collector_status"
+      - name: Add full result to the run summary
+        if: always() && steps.date_guard.outputs.proceed == 'true'
+        shell: bash
+        run: |
+          if [ -f work/pdpc-oaic-npc-monthly-result.json ]; then
+            {
+              echo '## One-time monthly collection: PDPC, OAIC, NPC'
+              echo
+              echo 'Range: 2026-10-11 through 2026-11-11 (KST dates)'
+              echo
+              echo '```json'
+              cat work/pdpc-oaic-npc-monthly-result.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload execution evidence
+        if: always() && steps.date_guard.outputs.proceed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdpc-oaic-npc-monthly-20261111
+          path: work/pdpc-oaic-npc-monthly-result.json
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Disable this one-time schedule after its occurrence
+        if: always() && steps.date_guard.outputs.proceed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh workflow disable 'One-time PDPC OAIC NPC monthly verification 2026-11-11 20:40 KST' --repo "$GH_REPO" || true

@@ -127,11 +127,11 @@ Deno.test("DPC exact detail date wins over a conflicting listing date with revie
 });
 Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
   const p = discover(
-    "ftc",
-    '<?xml version="1.0"?><rss><channel><item><title>A real title</title><link>https://www.ftc.gov/news-events/news/press-releases/a</link></item></channel></rss>',
-    "https://www.ftc.gov/feed.xml",
+    "ripd",
+    '<?xml version="1.0"?><rss><channel><item><title>A real title</title><link>https://www.redipd.org/noticias/example</link></item></channel></rss>',
+    "https://www.redipd.org/noticias/rss.xml",
   );
-  eq(p.rows[0]?.url, "https://www.ftc.gov/news-events/news/press-releases/a");
+  eq(p.rows[0]?.url, "https://www.redipd.org/noticias/example");
 });
 Deno.test("historical fullwidth Japanese dates preserve the original date meaning", () => {
   eq(parseDate("令和８年７月17日"), "2026-07-17");

@@ -9,6 +9,8 @@ __pycache__/
 .env.*
 !.env.example
 /work/
+/storage/
+/.venv/
 integration-*.log
 .team-workspace/
 .podcast-private/

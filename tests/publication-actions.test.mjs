@@ -1,3 +1,4 @@
+import { hasCompleteLegalCriteria } from '../lib/legal-criteria.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -45,6 +46,7 @@ function harness(path,{role='admin',environment='production',rows=[],failId}={})
       if(name==='next/cache') return {revalidatePath(){}};
       if(name==='next/navigation') return {redirect(location){throw Object.assign(new Error('redirect'),{location});}};
       if(name.endsWith('supabase/server')) return {createClient:async()=>db};
+      if(name.endsWith('legal-criteria')) return {hasCompleteLegalCriteria};
       if(name.endsWith('legal-release')) return {buildLegalReviewPackages:()=>[]};
       throw new Error(name);
     }};

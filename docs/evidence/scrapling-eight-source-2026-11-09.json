@@ -1,0 +1,83 @@
+{
+  "run_at": "2026-11-09T01:40:32.855299+00:00",
+  "method": "Scrapling Fetcher HTTP only",
+  "database_writes": false,
+  "detail_pages_requested": false,
+  "policy": "robots checked before listing; per-host delay >=5s; no stealth/proxy/captcha",
+  "results": [
+    {
+      "source": "calprivacy",
+      "status": "listing_fetched",
+      "http_status": 200,
+      "final_url": "https://privacy.ca.gov/category/content-types/news/press-release/",
+      "characters": 636,
+      "preview": "Read more about CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information\nCalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal Information\nOct 12, 2026\n|\nPress release\nNewsroom About CalPrivacy Newsroom Subscribe to our mailing lists Contact us CalPrivacy Launches First‑Ever Delete Week to Help Californians Protect Their Personal InformationOctober 12, 2026SACRAMENTO, CA — CalPrivacy today announced the statewide launch o",
+      "crawl_delay_seconds": 5,
+      "requests": 1,
+      "note": "listing-only diagnostic; detail URLs require separate robots check and paced request"
+    },
+    {
+      "source": "cn-cac",
+      "status": "listing_fetched",
+      "http_status": 200,
+      "final_url": "https://www.cac.gov.cn/wxzw/sjzl/A093708index_1.htm",
+      "characters": 1102,
+      "preview": "设为首页\n加入收藏\n手机版\n繁体\n搜索\n首 页\n时政要闻\n网信政务\n互动服务\n热点专题\n当前位置：\n首页\n>\n网信政务\n>\n数据治理\n数据治理\n数据出境安全评估\n个人信息出境标准合同\n个人信息出境认证\n个人信息保护\n数据出境负面清单\n政策法规\n工作动态\n通过个人信息保护合规审计服务认证的专业机构名单（第三批）\n2026-10-28\n关于30款App个人信息收集使用问题的通报\n2026-09-20\n数据出境安全管理政策法规问答（2026年9月）\n2026-09-11\n《网络数据安全风险评估办法》实施有关事项答记者问\n2026-08-20\n2026年个人信息保护系列专项行动取得阶段性成效\n2026-08-19\n个人信息保护政策法规问答（2026年8月）\n2026-08-12\n国家互联网信息办公室关于《大型个人信息处理者个人信息保护规定（征求意见稿）》公开征求意见的通知\n2026-08-07\n数据出境安全管理政策法规问答（2026年7月）\n2026-07-24\n专家解读｜善治护权开新篇——《中国个人信息保护报告（2025年）》的实践图景与时代意涵\n2026-06-15\n专家解读｜赓续薪火，开",
+      "crawl_delay_seconds": 5,
+      "requests": 1,
+      "note": "listing-only diagnostic; detail URLs require separate robots check and paced request"
+    },
+    {
+      "source": "eu-parliament",
+      "status": "access_denied",
+      "http_status": 403,
+      "stage": "listing",
+      "requests": 1,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "ftc",
+      "status": "robots_disallowed",
+      "stage": "listing",
+      "requests": 0,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "hk-pcpd",
+      "status": "listing_fetched",
+      "http_status": 200,
+      "final_url": "https://www.info.gov.hk/gia/general/today.htm",
+      "characters": 349,
+      "preview": "Go to main content\nBrand HK\n|\nFont Size:\n|\nSitemap\n09-11-2026\nRed flags hoisted at some beaches\nRed fire danger warning\nPress Release\n(Please click month and year to change the calendar date)\nArchives\nYesterday's Press Releases\nBack to top\nToday's Press Releases\nPress Release\n(Please click month and year to change the calendar date)\nPrivacy Policy",
+      "crawl_delay_seconds": 5,
+      "requests": 1,
+      "note": "listing-only diagnostic; detail URLs require separate robots check and paced request"
+    },
+    {
+      "source": "oecd",
+      "status": "access_denied",
+      "http_status": 403,
+      "stage": "listing",
+      "requests": 1,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "ripd",
+      "status": "failed",
+      "error": "http_500",
+      "requests": 1,
+      "crawl_delay_seconds": 5
+    },
+    {
+      "source": "vn-gov",
+      "status": "listing_fetched",
+      "http_status": 200,
+      "final_url": "https://en.baochinhphu.vn/",
+      "characters": 6920,
+      "preview": "SOCIALIST REPUBLIC OF VIET NAM\nGovernment News\nVietnamese\nChinese\nhome\nPolitics\nPolicies\nEconomy\nSociety\nCulture\nOpinion\nSpeeches\nJ. Statements\nPrime Minister\n14th National Party Congress\nGENERAL SECRETARY, PRESIDENT TO LAM\nGoverment PORTAL\nAn Giang\nBinh Duong\nBinh Phuoc\nBinh Thuan\nBinh Dinh\nBac Lieu\nBac Giang\nBac Kan\nBac Ninh\nBen Tre\nCao Bang\nCa Mau\nCan Tho\nDien Bien\nDa Nang\nDa Lat\nDak Lak\nDak Nong\nDong Nai\nDong Thap\nGia Lai\nHa Noi\nHo Chi Minh\nHa Giang\nHa Nam\nHa Tinh\nHoa Binh\nHung Yen\nHai Duong",
+      "crawl_delay_seconds": 5,
+      "requests": 1,
+      "note": "listing-only diagnostic; detail URLs require separate robots check and paced request"
+    }
+  ]
+}

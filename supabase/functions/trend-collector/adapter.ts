@@ -487,9 +487,6 @@ export async function extract(
     nodes.map((n) => textNodes(n as unknown as Node).join(" ")).join(" "),
   );
   if (body.length < 10) throw new Error("empty_body");
-  if (body.length > 80000) {
-    throw new Error("long_document_requires_chunked_reading");
-  }
   const observations: Observation[] = dateNode
     ? [
       {

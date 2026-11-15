@@ -16,3 +16,5 @@
 - 제17조(5) 범죄·정보주체 표는 행과 열의 의미를 표 셀 표지로 보존했습니다.
 
 재사용 표기: Contains public sector information licensed under the [Open Government Licence v3.0](https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/). 자체 비공식 번역이며 영국 정부의 승인·공식 번역이 아닙니다. OGL의 복제·배포·개작 허용과 출처 표시 조건은 TNA 공식 검색 색인에서 확인했습니다. 직접 페이지 열람 실패와 전체 현행성 미확정은 구별합니다.
+
+2026-11-02 용어·표현 편집: 한국법에 익숙한 공통 표기를 우선하되 각 법률의 정의·조건·예외를 보존했습니다. [편집 범위와 남은 검토](../terminology-edit-review-20261102.md). 사람 의미·법률 검수 완료로 표시하지 않습니다.
