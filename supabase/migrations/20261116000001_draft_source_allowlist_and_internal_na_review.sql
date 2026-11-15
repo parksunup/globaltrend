@@ -159,7 +159,7 @@ declare
   definition text;
   old_gate text := $old$not exists(select 1 from public.sources s where s.id=si.source_id and s.is_active and s.terms_reviewed_at is not null)$old$;
   new_gate text := $new$not private.trend_draft_source_allowed(si.source_id)$new$;
-  old_readiness text := $old$or (r.metadata->>'ai_ready' is distinct from 'true' and si.published_at is not null and not j.date_absent_at_claim)$old$;
+  old_readiness text := $old$or r.metadata->>'ai_ready' is distinct from 'true'$old$;
   old_quote text := $old$length(coalesce(evidence->>'quote',''))<12$old$;
 begin
   definition := pg_get_functiondef('public.submit_trend_draft(uuid,text,jsonb)'::regprocedure);
