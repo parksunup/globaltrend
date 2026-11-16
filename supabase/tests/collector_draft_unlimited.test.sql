@@ -21,7 +21,7 @@ select 'target', draft_job_id from public.ingest_source_item(
  (select id from public.sources where name = 'EDPB 뉴스·보도자료'), null,
  'https://www.edpb.europa.eu/test-unlimited-target', 'Target item', '2026-10-07', null, now(), 'en', 'news',
  'The board published the targeted final guideline on personal data processing.', repeat('b', 64), null,
- '{"ai_ready":true}'::jsonb, 'trend-ko-v1');
+ '{"ai_ready":false}'::jsonb, 'trend-ko-v1');
 insert into target_jobs(kind, job)
 select 'already-reported', draft_job_id from public.ingest_source_item(
  (select id from public.sources where name = 'EDPB 뉴스·보도자료'), null,
@@ -51,7 +51,7 @@ select ok(not exists(select 1 from pg_trigger where tgrelid='public.reports'::re
  and tgname='collector_require_auto_report_date_before_insert' and not tgisinternal),
  'a missing publication date is not blocked by a report trigger');
 select is((public.claim_trend_draft_jobs('target-worker', 1, (select job from target_jobs where kind = 'target'))->0->>'job_id')::uuid,
- (select job from target_jobs where kind = 'target'), 'targeted claim returns only the requested job');
+ (select job from target_jobs where kind = 'target'), 'targeted claim accepts ai_ready=false when the current source text and date are present');
 select is((select status from public.draft_jobs where id = (select job from target_jobs where kind = 'other')),
  'pending', 'targeted claim leaves a different job untouched');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('reported-target-worker', 1,

@@ -103,16 +103,25 @@ declare
   new_storage text := $new$if pg_database_size(current_database()) >= 400000000 then raise insufficient_resources using message = format('draft_queue_storage_guard: database_bytes=%s stop_bytes=400000000', pg_database_size(current_database())); end if;$new$;
 begin
   definition := pg_get_functiondef('public.claim_trend_draft_jobs(text,integer,uuid)'::regprocedure);
-  if position(old_readiness in definition) = 0 or position(old_publication_date in definition) = 0
-     or position(old_limit in definition) = 0
+  -- Production may already have had the readiness/date predicates removed by
+  -- an earlier operational repair. They are optional legacy anchors; their
+  -- absence must not prevent the remaining PR #149 policy from being applied.
+  if position(old_limit in definition) = 0
      or position(old_status in definition) = 0 or position(old_storage in definition) = 0 then
     raise exception 'draft claim retry/storage anchor drift';
   end if;
-  definition := replace(definition, old_readiness, '');
-  definition := replace(definition, old_publication_date, '');
+  if position(old_readiness in definition) > 0 then
+    definition := replace(definition, old_readiness, '');
+  end if;
+  if position(old_publication_date in definition) > 0 then
+    definition := replace(definition, old_publication_date, '');
+  end if;
   definition := replace(definition, old_limit, new_limit);
   definition := replace(definition, old_status, new_status);
   definition := replace(definition, old_storage, new_storage);
+  if position(old_readiness in definition) > 0 or position(old_publication_date in definition) > 0 then
+    raise exception 'draft claim retained a legacy readiness/date gate';
+  end if;
   execute definition;
 end;
 $draft_claim_retry_and_storage$;
@@ -187,16 +196,24 @@ declare
   definition text;
   old_gate text := $old$not exists(select 1 from public.sources s where s.id=si.source_id and s.is_active and s.terms_reviewed_at is not null)$old$;
   new_gate text := $new$not private.trend_draft_source_allowed(si.source_id)$new$;
-  old_readiness text := $old$or r.metadata->>'ai_ready' is distinct from 'true'$old$;
+  old_readiness_legacy text := $old$or r.metadata->>'ai_ready' is distinct from 'true'$old$;
+  old_readiness_date_aware text := $old$or (r.metadata->>'ai_ready' is distinct from 'true' and si.published_at is not null and not j.date_absent_at_claim)$old$;
   old_quote text := $old$length(coalesce(evidence->>'quote',''))<12$old$;
 begin
   definition := pg_get_functiondef('public.submit_trend_draft(uuid,text,jsonb)'::regprocedure);
-  if position(old_gate in definition) = 0 or position(old_readiness in definition) = 0 or position(old_quote in definition) = 0 then
+  if position(old_gate in definition) = 0 or position(old_quote in definition) = 0
+     or (position(old_readiness_legacy in definition) = 0 and position(old_readiness_date_aware in definition) = 0) then
     raise exception 'draft submit source/readiness anchor drift';
   end if;
   definition := replace(definition, old_gate, new_gate);
-  definition := replace(definition, old_readiness, '');
+  definition := replace(definition, old_readiness_legacy, '');
+  definition := replace(definition, old_readiness_date_aware, '');
   definition := replace(definition, old_quote, $new$length(coalesce(evidence->>'quote',''))<1$new$);
+  if position('r.metadata->>' || quote_literal('ai_ready') in definition) > 0
+     or position('and si.published_at is not null' in definition) > 0
+     or position('not j.date_absent_at_claim' in definition) > 0 then
+    raise exception 'draft submit retained a legacy readiness/date gate';
+  end if;
   execute definition;
 end;
 $draft_submit_source_gate$;

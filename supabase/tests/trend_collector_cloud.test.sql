@@ -14,7 +14,7 @@ select draft_job_id,source_item_id,source_item_revision_id from public.ingest_so
  (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector',
  'Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. The consultation closes on 20 November 2026.',
- repeat('c',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
+ repeat('c',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-one',1)),1,'worker claims one job');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-two',1)),0,'second worker cannot take held lease');
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two','{}'),
@@ -23,7 +23,7 @@ update public.draft_jobs set lease_until=now()-interval '1 minute' where id=(sel
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-two',1)),1,'expired lease is reclaimed');
 select is((select attempts from public.draft_jobs where id=(select job from test_context)),2,'reclaim increments attempts');
 
-create temporary table test_payload as select '{"title_ko":"개인정보 지침 발표","summary_ko":"위원회가 지침을 발표했습니다. 의견 제출 기한은 원문을 다시 확인해야 합니다.","details_ko":"위원회가 개인정보에 관한 최종 지침을 발표했다고 설명했습니다.","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"작성자 해석: 지침 적용 범위를 확인해야 합니다.","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"본문 첫 문장","claim":"최종 지침 발표"}],"limitations":["연결 지침 전문 미열람"]}'::jsonb as draft;
+create temporary table test_payload as select '{"title_ko":"개인정보 지침 발표","summary_ko":"위원회가 지침을 발표했습니다. 의견 제출 기한은 원문을 다시 확인해야 합니다.","details_ko":"위원회가 개인정보에 관한 최종 지침을 발표했다고 설명했습니다.","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"작성자 해석: 지침 적용 범위를 확인해야 합니다.","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"guidelines","locator":"본문 첫 문장의 단어","claim":"최종 지침 발표"}],"limitations":["연결 지침 전문 미열람"]}'::jsonb as draft;
 update test_payload set draft=pg_temp.test_writing_review(draft || jsonb_build_object('summary_ko','이사회, 개인정보 처리 최종 지침 발표','details_ko','- 이사회는 개인정보 처리에 관한 최종 지침을 발표'),(select job from test_context));
 update public.sources set terms_reviewed_at=null where name='EDPB 뉴스·보도자료';
 select ok(private.trend_draft_source_allowed((select id from public.sources where name='EDPB 뉴스·보도자료')),
@@ -36,7 +36,7 @@ select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)
  (select jsonb_set(draft,'{evidence,0,quote}','"Invented unsupported evidence text"')::text from test_payload)),
  '22023','Evidence quote is missing from the exact revision','unfounded evidence is rejected');
 select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
- 'exact evidence allows draft submission');
+ 'dated ai_ready=false source can submit a draft with exact evidence');
 select results_eq('select status,human_reviewed from public.reports where source_item_id=(select item from test_context)',
  $$values ('draft'::text,false)$$,'automatic draft remains unpublished and human unreviewed');
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
