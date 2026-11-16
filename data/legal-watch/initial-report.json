@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-11-16T14:59:53.832900+00:00",
+  "sourceCommit": "0383703ecdaa5686a4c79e3a74befdf439cc2054",
+  "laws": [
+    {
+      "id": "pipa",
+      "jurisdiction": "KR",
+      "name": "한국 개인정보 보호법",
+      "url": "https://www.law.go.kr/법령/개인정보보호법",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:44.282514+00:00",
+      "status": "error",
+      "error": "http_403",
+      "changes": null,
+      "events": [],
+      "baselineOrigin": "first_observation",
+      "lastSuccessAt": null
+    },
+    {
+      "id": "appi",
+      "jurisdiction": "JP",
+      "name": "일본 APPI",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:44.283528+00:00",
+      "status": "changed",
+      "error": null,
+      "changes": {
+        "added": [
+          "supplement:令和八年七月一七日法律第六二号:2",
+          "supplement:令和八年七月一七日法律第六二号:3",
+          "supplement:令和八年七月一七日法律第六二号:4"
+        ],
+        "removed": [],
+        "modified": [
+          "main:2",
+          "main:63"
+        ],
+        "metadataChanged": true
+      },
+      "events": [
+        {
+          "id": "e0477050902bdaaa68876743ccfe5e87d41735493819f4a82c22f1c3ececacb6",
+          "kind": "source_changed",
+          "createdAt": "2026-11-16T14:59:44.283528+00:00",
+          "beforeDigest": "9ae1e5bf2e66cf8f566b1264264c3a51465d5be98e006fc42c2b78d42f6471fc",
+          "afterDigest": "9727affd91e8f8150decd6cd7d1e47ec5de5f75dff7e4134d8675b39b3ee8f68",
+          "changes": {
+            "added": [
+              "supplement:令和八年七月一七日法律第六二号:2",
+              "supplement:令和八年七月一七日法律第六二号:3",
+              "supplement:令和八年七月一七日法律第六二号:4"
+            ],
+            "removed": [],
+            "modified": [
+              "main:2",
+              "main:63"
+            ],
+            "metadataChanged": true
+          },
+          "reviewed": false,
+          "sourceUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "coverage": "article_text",
+      "version": "415AC0000000057_20261102_508AC0000000062",
+      "articleCount": 253,
+      "digest": "9727affd91e8f8150decd6cd7d1e47ec5de5f75dff7e4134d8675b39b3ee8f68",
+      "lastSuccessAt": "2026-11-16T14:59:44.283528+00:00"
+    },
+    {
+      "id": "pipl",
+      "jurisdiction": "CN",
+      "name": "중국 PIPL",
+      "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "scope": "선정 법문 페이지와 유효성 표시 점검. 새 개정 법률의 별도 게시 여부는 공식 검색에서 추가 확인해야 합니다.",
+      "checkedAt": "2026-11-16T14:59:44.284305+00:00",
+      "status": "partial",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "fb23efc2d019e5bf30004e348e1165b679ac73a09d40b327294a628584f0bb52",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-16T14:59:44.284305+00:00",
+          "beforeDigest": null,
+          "afterDigest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044"
+        }
+      ],
+      "baselineOrigin": "first_observation",
+      "coverage": "index_and_status_only",
+      "version": "2021-08-20 / status 3",
+      "articleCount": 74,
+      "digest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829",
+      "lastSuccessAt": "2026-11-16T14:59:44.284305+00:00"
+    },
+    {
+      "id": "gdpr",
+      "jurisdiction": "EU",
+      "name": "EU GDPR",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:44.284910+00:00",
+      "status": "error",
+      "error": "http_202",
+      "changes": null,
+      "events": [],
+      "baselineOrigin": "first_observation",
+      "lastSuccessAt": null
+    },
+    {
+      "id": "uk-gdpr",
+      "jurisdiction": "GB",
+      "name": "영국 UK GDPR",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:44.783906+00:00",
+      "status": "baseline",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "47a30a9f0d7ada9c6b4aa807fc6b65bebcaa60c5fe96147e57e9d9919a086d37",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-16T14:59:44.783906+00:00",
+          "beforeDigest": "8c8dac28382e6bd2e097918cf0a490e4f85770f4d6728749a5de499cab1a0a04",
+          "afterDigest": "8c8dac28382e6bd2e097918cf0a490e4f85770f4d6728749a5de499cab1a0a04",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "coverage": "article_text",
+      "version": "UK GDPR current XML",
+      "articleCount": 118,
+      "digest": "8c8dac28382e6bd2e097918cf0a490e4f85770f4d6728749a5de499cab1a0a04",
+      "lastSuccessAt": "2026-11-16T14:59:44.783906+00:00"
+    },
+    {
+      "id": "ccpa",
+      "jurisdiction": "US-CA",
+      "name": "미국 캘리포니아 CCPA",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?division=3.&part=4.&lawCode=CIV&title=1.81.5",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:45.646146+00:00",
+      "status": "error",
+      "error": "http_403",
+      "changes": null,
+      "events": [],
+      "baselineOrigin": "first_observation",
+      "lastSuccessAt": null
+    },
+    {
+      "id": "pdpa",
+      "jurisdiction": "SG",
+      "name": "싱가포르 PDPA",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?WholeDoc=1",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
+      "checkedAt": "2026-11-16T14:59:45.956569+00:00",
+      "status": "error",
+      "error": "incomplete_article_structure",
+      "changes": null,
+      "events": [],
+      "baselineOrigin": "first_observation",
+      "lastSuccessAt": null
+    }
+  ]
+}
