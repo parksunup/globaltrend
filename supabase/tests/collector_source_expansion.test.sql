@@ -1,5 +1,5 @@
 begin;
-select plan(18);
+select plan(20);
 select is((select count(*)::integer from public.collector_edge_sources where slug in ('edps','ec','calprivacy','oaic','ca-opc','hk-pcpd','eu-parliament','eu-council','eur-lex','cn-cac','cn-tc260')),11,'all 11 new sources tracked regardless of environment seed size');
 select is((select count(*)::integer from public.collector_edge_sources e join public.sources s on s.id=e.source_id where s.parser_config->>'expansion_phase' in ('1','2')),11,'no phase 1/2 source silently omitted');
 select is((select count(*)::integer from public.collector_edge_sources e join public.sources s on s.id=e.source_id where s.parser_config->>'expansion_phase' in ('1','2') and s.is_active),8,'eight phase 1/2 routes are active after pending reviews');
@@ -14,6 +14,11 @@ select ok(private.collector_cloud_cursor_valid('{"page":"https://ec.europa.eu/co
 select ok(private.collector_cloud_cursor_valid('{"page":"https://www.europarl.europa.eu/rss/doc/press-releases/en.xml","offset":0}'::jsonb,'eu-parliament'),'Parliament official RSS cursor allowed');
 select ok(not private.collector_cloud_cursor_valid('{"page":"https://evil.example/","offset":0}'::jsonb,'ec'),'new cloud routes cannot use arbitrary hosts');
 select ok(not has_function_privilege('anon','public.collector_cloud_take(text,text)','EXECUTE') and not has_function_privilege('authenticated','public.collector_cloud_take(text,text)','EXECUTE'),'cloud collection remains private');
+update public.collector_edge_control set enabled=true where singleton;
+select is(public.collector_cloud_take('pgtap-disabled-route-test','hk-pcpd'),null::jsonb,
+ 'known disabled cloud route returns no claim');
+select is(public.collector_cloud_take('pgtap-unknown-source-test','unknown-source-slug'),null::jsonb,
+ 'unknown cloud source returns no claim without raising');
 select ok(private.collector_cloud_cursor_valid('{"page":"https://www.europarl.europa.eu/rss/doc/press-releases/en.xml","offset":0,"frozen_urls":["https://www.europarl.europa.eu/news/en/press-room/20261020IPR48312/"],"frozen_next":null}'::jsonb,'eu-parliament'),'committed URL snapshot resumes privately');
 select ok(not private.collector_cloud_cursor_valid('{"page":"https://www.europarl.europa.eu/rss/doc/press-releases/en.xml","offset":0,"frozen_urls":["https://evil.example/data"],"frozen_next":null}'::jsonb,'eu-parliament'),'frozen detail identities cannot leave source');
 select ok(not private.collector_cloud_cursor_valid('{"page":"https://www.europarl.europa.eu/rss/doc/press-releases/en.xml","offset":2,"frozen_urls":["https://www.europarl.europa.eu/news/en/press-room/20261020IPR48312/"],"frozen_next":null}'::jsonb,'eu-parliament'),'snapshot ordinal cannot skip past end');

@@ -247,7 +247,7 @@ def run(*, now=None, registry_path=REGISTRY_PATH, call_rpc=rpc_call,
             _capacity_ok(call_rpc)
             report = collect(
                 slug, since, until,
-                max_pages=source.get("max_pages", registry.get("max_pages_per_source", 10)),
+                max_pages=source.get("max_pages", registry.get("max_pages_per_source")),
                 max_items=source.get("max_items", registry.get("max_items_per_source", 30)),
             )
             outcome.update({
