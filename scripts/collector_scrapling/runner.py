@@ -225,7 +225,15 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
 
         next_url = None
         try:
-            if source_id == "ftc":
+            if source_id == "cn-cac":
+                proves_before = getattr(adapter, "proves_before_window", None)
+                if proves_before and proves_before(rows, since):
+                    terminal_verified = True
+                else:
+                    next_url = _next_page(adapter, html, final_url, None)
+                    if not next_url and not rows:
+                        terminal_verified = True
+            elif source_id == "ftc":
                 page_dates = adapter.listing_dates(rows)
                 if page_dates is None:
                     ftc_dates_ordered = False
@@ -237,8 +245,8 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                             and max(page_dates) > ftc_previous_page_oldest):
                         ftc_dates_ordered = False
                     ftc_previous_page_oldest = min(page_dates)
-                if (ftc_dates_ordered
-                        and adapter.proves_before_window(rows, since)):
+                proves_before = getattr(adapter, "proves_before_window", None)
+                if ftc_dates_ordered and proves_before and proves_before(rows, since):
                     terminal_verified = True
                 else:
                     # Do not use an unproven date cutoff. Exhaust verified
@@ -365,6 +373,7 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
         not result["errors"] and result["pages"] > 0 and (
             source_id == "hk-pcpd" and len(visited) == len(initial)
             or source_id in ("ftc", "vn-gov") and terminal_verified
+            or source_id == "cn-cac" and terminal_verified
             or source_id in paginated_sources and not queue
         )
     )

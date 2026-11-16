@@ -40,6 +40,7 @@ class ScraplingRunnerTests(unittest.TestCase):
         client = _MemoryClient({listing: (html_listing, "text/html"), detail: (html_detail, "text/html")})
         with patch.object(runner, "_adapter", return_value=adapter):
             result = runner.collect_source("cn-cac", "2026-10-28", "2026-10-28", client=client)
+        # A same-day oldest item does not prove that older pages are out of range.
         self.assertEqual(result["status"], "partial")
         self.assertFalse(result["database_writes"])
         self.assertEqual(len(result["items"]), 1)
