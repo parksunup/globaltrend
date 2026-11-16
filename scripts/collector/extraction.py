@@ -257,7 +257,7 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
             pdf_data, final_url, pdf_type = client.get(link['url'])
         except Exception:
             if html_attempt and html_attempt.get('content_text'):
-                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_fetch_failed')
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_fetch_failed', links)
             raise
         expected = urlsplit(link['url'])
         actual = urlsplit(final_url)
@@ -267,13 +267,13 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
                          not actual.query and not actual.fragment)
         if not same_identity or pdf_type not in ('application/pdf', 'application/octet-stream'):
             if html_attempt and html_attempt.get('content_text'):
-                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_response_mismatch')
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_response_mismatch', links)
             raise ValueError('verified_source_pdf_response_mismatch')
         pdf = parsers.extract_pdf(pdf_data, final_url, source)
         text = parsers.normalize(' '.join(page['text'] for page in pdf['pages']))
         if not text:
             if html_attempt and html_attempt.get('content_text'):
-                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_text_empty')
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_text_empty', links)
             raise ValueError('verified_source_pdf_text_empty')
         body_parts.append(link['title'] + '\n' + text)
         pages.extend({'document_url': final_url, 'document_title': link['title'],
@@ -319,13 +319,19 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
     }
 
 
-def _official_html_fallback(source, item, page_url, row, reason):
+def _official_html_fallback(source, item, page_url, row, reason, links=None):
     """Retain useful official notice text when its optional PDF is unavailable."""
     if not item or not item.get('content_text'):
         raise ValueError('verified_source_pdf_attachment_missing' if reason == 'official_pdf_not_linked' else reason)
     from . import parsers
     body = parsers.normalize(item['content_text'])
     metadata = dict(item.get('metadata') or {})
+    related = list(metadata.get('related_documents') or [])
+    known = {document.get('url') for document in related if isinstance(document, dict)}
+    for link in links or []:
+        if link['url'] not in known:
+            related.append({'url': link['url'], 'title': link.get('title', ''), 'read': False})
+            known.add(link['url'])
     metadata.update({
         'parser_version': 'verified-source-html-fallback-v1',
         'read_scope': 'official_html_body_pdf_unavailable',
@@ -335,7 +341,11 @@ def _official_html_fallback(source, item, page_url, row, reason):
         'factual_status': 'official_html_body_machine_extracted_pdf_unavailable',
         'extraction_method': 'trafilatura_html_fallback',
         'pdf_fallback_reason': reason,
-        'unread_attachments': [],
+        'related_documents': related,
+        'unread_attachments': [
+            document['url'] for document in related
+            if isinstance(document, dict) and document.get('url') and document.get('read') is not True
+        ],
     })
     item['content_text'] = body
     item['content_hash'] = hashlib.sha256(body.encode()).hexdigest()
