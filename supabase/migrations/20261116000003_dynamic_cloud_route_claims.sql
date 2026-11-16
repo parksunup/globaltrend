@@ -19,7 +19,7 @@ begin
   updated_definition := regexp_replace(
     definition,
     predicate,
-    'exists (select 1 from public.collector_cloud_routes enabled_route join public.collector_edge_sources routed_source on routed_source.source_id=enabled_route.source_id where routed_source.slug=p_slug and enabled_route.enabled)',
+    'exists (select 1 from public.collector_cloud_routes enabled_route join public.collector_edge_sources routed_source on routed_source.source_id=enabled_route.source_id where routed_source.slug=p_slug and routed_source.source_id=public.collector_edge_sources.source_id and enabled_route.enabled)',
     'i'
   );
 
