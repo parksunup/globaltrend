@@ -212,7 +212,9 @@ def main():
             record=collected
         except (FetchError,ValueError) as e:
             record.update(status='failed',reason=str(e),coverage_complete=False)
-        if record.get('reason','') and record['reason'].startswith('database_'):
+        # Only a confirmed storage capacity stop is global. A per-source RPC,
+        # progress, or ingest error must not prevent later sources from running.
+        if record.get('reason') in ('database_storage_cap', 'database_capacity_guard'):
             database_stop=True
         result['sources'].append(record)
     result['finished_at']=dt.datetime.now(dt.timezone.utc).isoformat()
