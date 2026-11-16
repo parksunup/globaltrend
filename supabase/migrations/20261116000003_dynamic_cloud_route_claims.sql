@@ -8,6 +8,8 @@ declare
   updated_definition text;
   predicate text;
   source_lookup text;
+  source_lookup_position integer;
+  source_lookup_end integer;
 begin
   select pg_get_functiondef('public.collector_cloud_take(text,text)'::regprocedure)
     into definition;
@@ -37,9 +39,19 @@ begin
   updated_definition := regexp_replace(
     updated_definition,
     source_lookup,
-    'select * into s from public.collector_edge_sources where slug=p_slug; if not found then return null; end if',
+    'select * into s from public.collector_edge_sources where slug=p_slug',
     'i'
   );
+  source_lookup_position := strpos(lower(updated_definition),
+    'select * into s from public.collector_edge_sources where slug=p_slug');
+  source_lookup_end := strpos(substr(updated_definition, source_lookup_position), ';');
+  if source_lookup_position = 0 or source_lookup_end = 0 then
+    raise exception 'could not locate complete cloud source lookup statement';
+  end if;
+  source_lookup_end := source_lookup_position + source_lookup_end - 1;
+  updated_definition := substr(updated_definition, 1, source_lookup_end)
+    || ' if not found then return null; end if'
+    || substr(updated_definition, source_lookup_end + 1);
 
   execute updated_definition;
 end;
