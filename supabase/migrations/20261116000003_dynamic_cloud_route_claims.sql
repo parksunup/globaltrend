@@ -57,7 +57,7 @@ begin
     raise exception 'cloud route correlation was lost during source lookup rewrite';
   end if;
   updated_definition := substr(updated_definition, 1, source_lookup_end)
-    || ' if not found then return null; end if'
+    || ' if not found then return null; end if;'
     || substr(updated_definition, source_lookup_end + 1);
 
   execute updated_definition;
