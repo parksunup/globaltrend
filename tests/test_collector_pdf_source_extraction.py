@@ -140,6 +140,30 @@ class PdfSourceExtractionTests(unittest.TestCase):
         self.assertTrue(any(o['meaning']=='published_notice_dateline'
                             for o in item['metadata']['date_observations']))
 
+    def test_html_fallback_keeps_failed_official_pdf_visible_as_unread(self):
+        page = 'https://www.globalcbpr.org/the-forum-releases-its-annual-report-2025-2026-and-annual-work-program-for-2026-2027/'
+        pdf_url = 'https://www.globalcbpr.org/wp-content/uploads/GlobalCBPRForum-Annual-Report-2025-2026.pdf'
+        row = {'url': page, 'title': 'Annual report', 'date_observations': []}
+        html_item = {
+            'title_original': 'Annual report',
+            'content_text': 'Official HTML body remains available to draft from.',
+            'content_hash': 'old-hash',
+            'published_date': None,
+            'metadata': {'related_documents': [], 'unread_attachments': []},
+        }
+        client = FakePdfClient({})
+        with patch.object(extraction, '_trafilatura_item', return_value=html_item), \
+             patch('scripts.collector.pdf_source_routes.discover_pdf_links',
+                   return_value=[{'url': pdf_url, 'title': 'Annual report'}]):
+            item = extraction.extract_verified_pdf_attachments(
+                'global-cbpr', '<main>Official HTML body</main>', page, 'text/html', row, client)
+
+        self.assertEqual(item['content_text'], 'Official HTML body remains available to draft from.')
+        self.assertEqual(item['metadata']['unread_attachments'], [pdf_url])
+        self.assertEqual(item['metadata']['related_documents'], [
+            {'url': pdf_url, 'title': 'Annual report', 'read': False},
+        ])
+
 
 if __name__ == '__main__':
     unittest.main()
