@@ -1,6 +1,6 @@
 begin;
 set local search_path = public, extensions;
-select plan(21);
+select plan(26);
 \ir fixtures/writing-review.inc
 select has_function('public','claim_trend_draft_jobs',array['text','integer'],'claim function exists');
 select ok(not has_function_privilege('anon','public.claim_trend_draft_jobs(text,integer)','execute'),'anonymous cannot claim');
@@ -15,6 +15,20 @@ select draft_job_id,source_item_id,source_item_revision_id from public.ingest_so
  'Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. The consultation closes on 20 November 2026.',
  repeat('c',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
+create temporary table undated_context (job uuid,item uuid,revision uuid);
+insert into undated_context(job,item,revision)
+select draft_job_id,source_item_id,source_item_revision_id from public.ingest_source_item(
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-undated',
+ 'Undated source with limited extraction metadata',null,null,now(),'en','news',
+ 'The board published final guidelines on personal data. The official page does not identify a publication date.',
+ repeat('f',64),null,'{"ai_ready":false,"date_observation":"publication date not stated"}'::jsonb,'trend-ko-v1');
+create temporary table dated_unready_context (item uuid);
+insert into dated_unready_context(item)
+select source_item_id from public.ingest_source_item(
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-dated-unready',
+ 'Dated source with limited extraction metadata','2026-10-07',null,now(),'en','news',
+ 'The board published a separate final guideline on personal data processing.',
+ repeat('8',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-one',1)),1,'worker claims one job');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-two',1)),0,'second worker cannot take held lease');
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two','{}'),
@@ -39,6 +53,21 @@ select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)'
  'dated ai_ready=false source can submit a draft with exact evidence');
 select results_eq('select status,human_reviewed from public.reports where source_item_id=(select item from test_context)',
  $$values ('draft'::text,false)$$,'automatic draft remains unpublished and human unreviewed');
+select is(jsonb_array_length(public.claim_trend_draft_jobs('undated-unready-worker',1,(select job from undated_context))),1,
+ 'undated ai_ready=false material remains eligible for an individual draft');
+create temporary table undated_payload as
+ select pg_temp.test_writing_review((select draft from test_payload),(select job from undated_context)) as draft;
+select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,public.collector_seal_trend_draft(%L::jsonb))',
+ (select job from undated_context),'undated-unready-worker',(select draft::text from undated_payload)),
+ 'undated ai_ready=false material can be submitted as an individual draft');
+select results_eq('select status,human_reviewed,published_at is null from public.reports where source_item_id=(select item from undated_context)',
+ $$values ('draft'::text,false,true)$$,'undated draft remains unpublished and unreviewed');
+select is((select count(*)::integer from public.weekly_digest_candidates('2026-10-05','2026-10-11')
+ where id=(select id from public.reports where source_item_id=(select item from undated_context))),0,
+ 'undated individual draft is excluded only from the date-bounded weekly candidates');
+select is((select reason from public.collector_completion_gaps('2026-10-05','2026-10-11')
+ where item_id=(select item from dated_unready_context)),'korean_draft_required',
+ 'ai_ready=false does not mislabel a dated draft gap as a source block');
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
  '42501','Active job lease is required','duplicate submit is rejected');
 
@@ -63,3 +92,4 @@ select ok(not has_function_privilege('anon','public.get_trend_collector_review()
 select ok(not (select prosecdef from pg_proc where oid='public.get_trend_collector_review()'::regprocedure),'public review entrypoint does not elevate caller privileges');
 select * from finish();
 rollback;
+
