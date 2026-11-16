@@ -15,20 +15,7 @@ select draft_job_id,source_item_id,source_item_revision_id from public.ingest_so
  'Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. The consultation closes on 20 November 2026.',
  repeat('c',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
-create temporary table undated_context (job uuid,item uuid,revision uuid);
-insert into undated_context(job,item,revision)
-select draft_job_id,source_item_id,source_item_revision_id from public.ingest_source_item(
- (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-undated',
- 'Undated source with limited extraction metadata',null,null,now(),'en','news',
- 'The board published final guidelines on personal data. The official page does not identify a publication date.',
- repeat('f',64),null,'{"ai_ready":false,"date_observation":"publication date not stated"}'::jsonb,'trend-ko-v1');
-create temporary table dated_unready_context (item uuid);
-insert into dated_unready_context(item)
-select source_item_id from public.ingest_source_item(
- (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-dated-unready',
- 'Dated source with limited extraction metadata','2026-10-07',null,now(),'en','news',
- 'The board published a separate final guideline on personal data processing.',
- repeat('8',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
+update public.source_items set relevance_status='relevant' where id=(select item from test_context);
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-one',1)),1,'worker claims one job');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-two',1)),0,'second worker cannot take held lease');
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two','{}'),
@@ -53,6 +40,22 @@ select lives_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)'
  'dated ai_ready=false source can submit a draft with exact evidence');
 select results_eq('select status,human_reviewed from public.reports where source_item_id=(select item from test_context)',
  $$values ('draft'::text,false)$$,'automatic draft remains unpublished and human unreviewed');
+create temporary table undated_context (job uuid,item uuid,revision uuid);
+insert into undated_context(job,item,revision)
+select draft_job_id,source_item_id,source_item_revision_id from public.ingest_source_item(
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-undated',
+ 'Undated source with limited extraction metadata',null,null,now(),'en','news',
+ 'The board published final guidelines on personal data. The official page does not identify a publication date.',
+ repeat('f',64),null,'{"ai_ready":false,"date_observation":"publication date not stated"}'::jsonb,'trend-ko-v1');
+update public.source_items set relevance_status='relevant' where id=(select item from undated_context);
+create temporary table dated_unready_context (item uuid);
+insert into dated_unready_context(item)
+select source_item_id from public.ingest_source_item(
+ (select id from public.sources where name = 'EDPB 뉴스·보도자료'),null,'https://www.edpb.europa.eu/test-collector-dated-unready',
+ 'Dated source with limited extraction metadata','2026-10-07',null,now(),'en','news',
+ 'The board published a separate final guideline on personal data processing.',
+ repeat('8',64),null,'{"ai_ready":false}'::jsonb,'trend-ko-v1');
+update public.source_items set relevance_status='relevant' where id=(select item from dated_unready_context);
 select is(jsonb_array_length(public.claim_trend_draft_jobs('undated-unready-worker',1,(select job from undated_context))),1,
  'undated ai_ready=false material remains eligible for an individual draft');
 create temporary table undated_payload as
