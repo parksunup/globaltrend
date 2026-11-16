@@ -103,13 +103,19 @@ declare
   new_storage text := $new$if pg_database_size(current_database()) >= 400000000 then raise insufficient_resources using message = format('draft_queue_storage_guard: database_bytes=%s stop_bytes=400000000', pg_database_size(current_database())); end if;$new$;
 begin
   definition := pg_get_functiondef('public.claim_trend_draft_jobs(text,integer,uuid)'::regprocedure);
-  if position(old_readiness in definition) = 0 or position(old_publication_date in definition) = 0
-     or position(old_limit in definition) = 0
+  -- Some production revisions already allowed undated items and did not use
+  -- ai_ready as a claim predicate. Those optional predicates must not prevent
+  -- applying the shared source gate and retry/storage fixes.
+  if position(old_limit in definition) = 0
      or position(old_status in definition) = 0 or position(old_storage in definition) = 0 then
     raise exception 'draft claim retry/storage anchor drift';
   end if;
-  definition := replace(definition, old_readiness, '');
-  definition := replace(definition, old_publication_date, '');
+  if position(old_readiness in definition) > 0 then
+    definition := replace(definition, old_readiness, '');
+  end if;
+  if position(old_publication_date in definition) > 0 then
+    definition := replace(definition, old_publication_date, '');
+  end if;
   definition := replace(definition, old_limit, new_limit);
   definition := replace(definition, old_status, new_status);
   definition := replace(definition, old_storage, new_storage);
@@ -187,15 +193,20 @@ declare
   definition text;
   old_gate text := $old$not exists(select 1 from public.sources s where s.id=si.source_id and s.is_active and s.terms_reviewed_at is not null)$old$;
   new_gate text := $new$not private.trend_draft_source_allowed(si.source_id)$new$;
-  old_readiness text := $old$or r.metadata->>'ai_ready' is distinct from 'true'$old$;
+  old_readiness text := $old$r.metadata->>'ai_ready' is distinct from 'true'$old$;
   old_quote text := $old$length(coalesce(evidence->>'quote',''))<12$old$;
 begin
   definition := pg_get_functiondef('public.submit_trend_draft(uuid,text,jsonb)'::regprocedure);
-  if position(old_gate in definition) = 0 or position(old_readiness in definition) = 0 or position(old_quote in definition) = 0 then
+  if position(old_gate in definition) = 0 or position(old_quote in definition) = 0 then
     raise exception 'draft submit source/readiness anchor drift';
   end if;
   definition := replace(definition, old_gate, new_gate);
-  definition := replace(definition, old_readiness, '');
+  -- Replace only the readiness expression. This handles both the original
+  -- standalone predicate and production variants that combine readiness with
+  -- publication-date context or a date_absent_at_claim marker.
+  if position(old_readiness in definition) > 0 then
+    definition := replace(definition, old_readiness, 'false');
+  end if;
   definition := replace(definition, old_quote, $new$length(coalesce(evidence->>'quote',''))<1$new$);
   execute definition;
 end;
