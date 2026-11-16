@@ -78,7 +78,7 @@ select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
  'https://www.edpb.europa.eu/test-collector','Original title','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data. Updated later.',repeat('d',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
-select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-three',1)),0,
+select is(jsonb_array_length(public.claim_trend_draft_jobs('worker-three',1,(select id from public.draft_jobs where input_hash=repeat('d',64)))),0,
  'existing report blocks a new revision claim');
 select is((select status from public.draft_jobs where input_hash=repeat('d',64)),
  'pending','reported revision remains pending without consuming a lease');
@@ -87,7 +87,7 @@ select is((select title_ko from public.reports where source_item_id=(select item
 select public.ingest_source_item((select id from public.sources where name='EDPB 뉴스·보도자료'),null,
  'https://www.edpb.europa.eu/test-stale','Stale input','2026-10-07',null,now(),'en','news',
  'The board published final guidelines on personal data.',repeat('e',64),null,'{"ai_ready":true}'::jsonb,'trend-ko-v1');
-select public.claim_trend_draft_jobs('stale-worker',1);
+select public.claim_trend_draft_jobs('stale-worker',1,(select id from public.draft_jobs where input_hash=repeat('e',64)));
 update public.source_items set current_revision_id=null where canonical_url='https://www.edpb.europa.eu/test-stale';
 select is((public.submit_trend_draft((select id from public.draft_jobs where input_hash=repeat('e',64)),
  'stale-worker',(select draft from test_payload))->>'status'),'superseded','old revision is rejected without touching reports');
