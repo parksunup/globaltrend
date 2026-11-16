@@ -1,0 +1,50 @@
+name: Legal amendment watch
+on:
+  schedule:
+    - cron: '30 0 * * 1' # Monday 09:30 KST; scheduling can be delayed by GitHub.
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: legal-amendment-watch
+  cancel-in-progress: false
+jobs:
+  check:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Restore previous observations and open review events
+        run: python scripts/legal-watch/artifacts.py --out .legal-watch/previous.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Check official sources without publishing legal content
+        run: python scripts/legal-watch/watch.py --previous .legal-watch/previous.json --out .legal-watch
+      - name: Keep identifiers and hashes for the next run
+        uses: actions/upload-artifact@v4
+        with:
+          name: legal-amendment-watch
+          path: |
+            .legal-watch/report.json
+            .legal-watch/checkpoint.json
+          retention-days: 90
+          if-no-files-found: error
+      - name: Add a review summary
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          report=json.loads(Path('.legal-watch/report.json').read_text())
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as summary:
+            summary.write('## 법령 변경 점검\n\n공식 출처의 변경 후보입니다. 번역·비교표를 자동 수정하거나 공개하지 않습니다.\n\n')
+            for law in report['laws']:
+              pending=sum(not e['reviewed'] for e in law['events'])
+              summary.write(f"- {law['name']}: {law['status']} / 검토 대기 {pending} / {law.get('error') or '응답 확인'}\n")
+          PY

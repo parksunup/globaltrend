@@ -264,3 +264,7 @@ pnpm supabase:stop
 ### 통합검색 구현 브랜치
 
 `/public/unified-search`는 공개 동향·법제 비교 요약·조문을 함께 찾습니다. 기본 검색은 단어와 미리 정한 관련 표현을 사용하며, 실제 임베딩 서비스는 선택 설정입니다. [동작 범위·선택적 로컬 임베딩 설정](./docs/unified-search.md)을 참고하세요.
+
+### 법령 변경 점검
+
+`/work/legal-updates`에서 공식 출처 변경 후보·미완료 검토·영향 후보 비교 기준을 확인하고 Codex 수정 요청과 검토 패킷을 받을 수 있습니다. [점검 범위·주간 실행·검토 후 공개 절차](./docs/legal-amendment-watch.md)를 확인하세요.
