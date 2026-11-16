@@ -32,16 +32,19 @@ begin
   end if;
 
   -- Unknown slugs must return NULL rather than raising NO_DATA_FOUND.
-  source_lookup := $regex$select\s+\*\s+into\s+strict\s+s\s+from\s+public\.collector_edge_sources\s+where\s+slug\s*=\s*p_slug$regex$;
+  source_lookup := $regex$select\s+\*\s+into\s+strict\s+s\s+from\s+public\.collector_edge_sources\s+where\s+slug\s*=\s*p_slug\s+and\s+exists\s*\([^;]*\);$regex$;
   if regexp_count(updated_definition, source_lookup, 1, 'i') <> 1 then
     raise exception 'expected one strict source lookup in collector_cloud_take';
   end if;
   updated_definition := regexp_replace(
     updated_definition,
-    source_lookup,
-    'select * into s from public.collector_edge_sources where slug=p_slug',
+    $regex$into\s+strict\s+s$regex$,
+    'into s',
     'i'
   );
+  if updated_definition ~* 'into\s+strict\s+s\s+from\s+public[.]collector_edge_sources' then
+    raise exception 'strict cloud source lookup remained after rewrite';
+  end if;
   source_lookup_position := strpos(lower(updated_definition),
     'select * into s from public.collector_edge_sources where slug=p_slug');
   source_lookup_end := strpos(substr(updated_definition, source_lookup_position), ';');
@@ -49,6 +52,10 @@ begin
     raise exception 'could not locate complete cloud source lookup statement';
   end if;
   source_lookup_end := source_lookup_position + source_lookup_end - 1;
+  if position('exists (select 1 from public.collector_cloud_routes route_row'
+      in lower(substr(updated_definition,source_lookup_position,source_lookup_end-source_lookup_position+1)))=0 then
+    raise exception 'cloud route correlation was lost during source lookup rewrite';
+  end if;
   updated_definition := substr(updated_definition, 1, source_lookup_end)
     || ' if not found then return null; end if'
     || substr(updated_definition, source_lookup_end + 1);
