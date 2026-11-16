@@ -245,7 +245,7 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
     from .pdf_source_routes import discover_pdf_links
     links = discover_pdf_links(source, html, page_url, row)
     if not links:
-        raise ValueError('verified_source_pdf_attachment_missing')
+        return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_not_linked')
     # The helper only emits source-specific URLs observed on official pages.
     from . import parsers
     from urllib.parse import unquote, urlsplit
@@ -253,7 +253,12 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
     documents = []
     body_parts = []
     for link in links:
-        pdf_data, final_url, pdf_type = client.get(link['url'])
+        try:
+            pdf_data, final_url, pdf_type = client.get(link['url'])
+        except Exception:
+            if html_attempt and html_attempt.get('content_text'):
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_fetch_failed')
+            raise
         expected = urlsplit(link['url'])
         actual = urlsplit(final_url)
         same_identity = (actual.scheme == expected.scheme == 'https' and
@@ -261,10 +266,14 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
                          unquote(actual.path) == unquote(expected.path) and
                          not actual.query and not actual.fragment)
         if not same_identity or pdf_type not in ('application/pdf', 'application/octet-stream'):
+            if html_attempt and html_attempt.get('content_text'):
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_response_mismatch')
             raise ValueError('verified_source_pdf_response_mismatch')
         pdf = parsers.extract_pdf(pdf_data, final_url, source)
         text = parsers.normalize(' '.join(page['text'] for page in pdf['pages']))
         if not text:
+            if html_attempt and html_attempt.get('content_text'):
+                return _official_html_fallback(source, html_attempt, page_url, row, 'official_pdf_text_empty')
             raise ValueError('verified_source_pdf_text_empty')
         body_parts.append(link['title'] + '\n' + text)
         pages.extend({'document_url': final_url, 'document_title': link['title'],
@@ -308,3 +317,28 @@ def extract_verified_pdf_attachments(source, html, page_url, content_type, row, 
                                   else 'trafilatura_attempt_then_pypdf'),
         },
     }
+
+
+def _official_html_fallback(source, item, page_url, row, reason):
+    """Retain useful official notice text when its optional PDF is unavailable."""
+    if not item or not item.get('content_text'):
+        raise ValueError('verified_source_pdf_attachment_missing' if reason == 'official_pdf_not_linked' else reason)
+    from . import parsers
+    body = parsers.normalize(item['content_text'])
+    metadata = dict(item.get('metadata') or {})
+    metadata.update({
+        'parser_version': 'verified-source-html-fallback-v1',
+        'read_scope': 'official_html_body_pdf_unavailable',
+        'requires_review': True,
+        'ai_ready': False,
+        'source_page_url': page_url,
+        'factual_status': 'official_html_body_machine_extracted_pdf_unavailable',
+        'extraction_method': 'trafilatura_html_fallback',
+        'pdf_fallback_reason': reason,
+        'unread_attachments': [],
+    })
+    item['content_text'] = body
+    item['content_hash'] = hashlib.sha256(body.encode()).hexdigest()
+    item['published_date'] = parsers.expansion.listing_date(row or {})
+    item['metadata'] = metadata
+    return item
