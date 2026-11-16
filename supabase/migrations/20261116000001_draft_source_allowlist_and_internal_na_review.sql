@@ -1,5 +1,6 @@
--- Draft writing is allowed for the exact 31 sources in the original-19 and
--- additional-12 cohorts. Collection activation and access-review fields are
+-- Draft writing is allowed for the exact 34 sources approved by the project
+-- lead, including the original-19, additional-12, Freevacy, noyb and overview.legal.
+-- Collection activation and access-review fields are
 -- intentionally left untouched; they govern collection, not writer eligibility.
 create or replace function private.trend_draft_source_allowed(p_source_id uuid)
 returns boolean
@@ -45,7 +46,7 @@ as $$
     -- The original seed creates a few baseline source rows with generated IDs.
     -- Resolve those rows by their publisher's exact approved catalog acronym so
     -- clean migration replay and an already-populated production DB share the
-    -- same 31-source allowlist.
+    -- same 34-source allowlist.
     select 1
     from public.sources s
     join public.publishers p on p.id=s.publisher_id
@@ -55,7 +56,8 @@ as $$
         'CALPRIVACY','CPPA','OAIC','CA-OPC','OPC','HK-PCPD','PCPD',
         'EU-PARLIAMENT','EP','EU-COUNCIL','CN-CAC','CAC','CN-TC260','TC260',
         'ES-AEPD','AEPD','EDPS','ANPD-BR','NPC-PH','JPDP-MY','NIST','IAPP','FPF',
-        'GPA','G7-DPA','GLOBAL-CBPR','RIPD','ISO-IEC-SC27'
+        'GPA','G7-DPA','GLOBAL-CBPR','RIPD','ISO-IEC-SC27',
+        'FREEVACY','NOYB','OVERVIEW-LEGAL'
       ])
   );
 $$;
