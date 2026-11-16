@@ -225,7 +225,15 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
 
         next_url = None
         try:
-            if source_id == "ftc":
+            if source_id == "cn-cac":
+                proves_before = getattr(adapter, "proves_before_window", None)
+                if proves_before and proves_before(rows, since):
+                    terminal_verified = True
+                else:
+                    next_url = _next_page(adapter, html, final_url, None)
+                    if not next_url and not rows:
+                        terminal_verified = True
+            elif source_id == "ftc":
                 page_dates = adapter.listing_dates(rows)
                 if page_dates is None:
                     ftc_dates_ordered = False
@@ -237,8 +245,8 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                             and max(page_dates) > ftc_previous_page_oldest):
                         ftc_dates_ordered = False
                     ftc_previous_page_oldest = min(page_dates)
-                if (ftc_dates_ordered
-                        and adapter.proves_before_window(rows, since)):
+                proves_before = getattr(adapter, "proves_before_window", None)
+                if ftc_dates_ordered and proves_before and proves_before(rows, since):
                     terminal_verified = True
                 else:
                     # Do not use an unproven date cutoff. Exhaust verified
@@ -329,7 +337,7 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                 })
                 if not item.get("published_date") and window is None:
                     item["metadata"]["requires_review"] = True
-                    item["metadata"]["ai_ready"] = False
+                    item["metadata"]["ai_ready"] = True
                     item["metadata"]["date_range_status"] = "unknown_date_retained_for_review"
                 item_by_url[url] = {"url": url, **item}
             except (FetchFailure, CollectionError, ValueError) as error:
@@ -357,13 +365,16 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
     result["requests"] = getattr(client, "requests", None)
     result["robots_requests"] = getattr(client, "robots_requests", None)
     result["downloaded_bytes"] = getattr(client, "bytes_received", None)
-    # Completeness requires a source-specific terminal proof: exact daily
-    # archives for PCPD, verified topic pagination exhaustion for FTC, or an
-    # empty/ordered-date cutoff on Vietnam's official timeline.
+    # A date-window scan is complete when its source-specific archive was
+    # exhausted. Unknown dates affect weekly issue selection, not whether the
+    # article itself can be drafted from the available official text.
+    paginated_sources = {"calprivacy"}
     result["coverage_complete"] = (
-        not result["errors"] and result["unknown_date_candidates"] == 0 and (
+        not result["errors"] and result["pages"] > 0 and (
             source_id == "hk-pcpd" and len(visited) == len(initial)
-            or source_id in ("ftc", "vn-gov") and terminal_verified and bool(result["pages"])
+            or source_id in ("ftc", "vn-gov") and terminal_verified
+            or source_id == "cn-cac" and terminal_verified
+            or source_id in paginated_sources and not queue
         )
     )
     if result["coverage_complete"]:
@@ -371,13 +382,15 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
             "hk-pcpd": "every_inclusive_official_daily_archive_visited",
             "ftc": "topic_listing_paginated_to_end_or_verified_date_cutoff",
             "vn-gov": "official_timeline_empty_fragment_or_ordered_date_cutoff",
+            "cn-cac": "official_listing_dates_descending_and_oldest_before_window",
+            "calprivacy": "official_category_pagination_exhausted",
         }.get(source_id)
     if result["items"]:
         result["status"] = "success" if result["coverage_complete"] else "partial"
     elif result["coverage_complete"]:
         result["status"] = "empty_window"
         result["reason"] = "full_window_checked_no_in_range_relevant_items"
-    elif result["pages"] and not result["items"]:
+    elif result["pages"] and not result["items"] and not result["coverage_complete"]:
         result["status"] = "partial"
         result["reason"] = "empty_window_not_exhaustively_verified"
     else:

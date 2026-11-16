@@ -106,6 +106,11 @@ def execution_outcome(records):
     return 'success'
 
 
+def database_failure_stops_run(reason):
+    """Return true only when the database reports a confirmed global capacity stop."""
+    return reason in ('database_storage_cap', 'database_capacity_guard')
+
+
 def select_configs(registry_sources, source=None, source_set_path=None):
     if source and source_set_path:
         raise ValueError('source_and_source_set_are_mutually_exclusive')
@@ -212,7 +217,9 @@ def main():
             record=collected
         except (FetchError,ValueError) as e:
             record.update(status='failed',reason=str(e),coverage_complete=False)
-        if record.get('reason','') and record['reason'].startswith('database_'):
+        # Only a confirmed storage capacity stop is global. A per-source RPC,
+        # progress, or ingest error must not prevent later sources from running.
+        if database_failure_stops_run(record.get('reason')):
             database_stop=True
         result['sources'].append(record)
     result['finished_at']=dt.datetime.now(dt.timezone.utc).isoformat()

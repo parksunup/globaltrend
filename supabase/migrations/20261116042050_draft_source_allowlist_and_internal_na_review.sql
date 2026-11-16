@@ -105,9 +105,9 @@ declare
   new_storage text := $new$if pg_database_size(current_database()) >= 400000000 then raise insufficient_resources using message = format('draft_queue_storage_guard: database_bytes=%s stop_bytes=400000000', pg_database_size(current_database())); end if;$new$;
 begin
   definition := pg_get_functiondef('public.claim_trend_draft_jobs(text,integer,uuid)'::regprocedure);
-  -- Production may already have had the readiness/date predicates removed by
-  -- an earlier operational repair. They are optional legacy anchors; their
-  -- absence must not prevent the remaining PR #149 policy from being applied.
+  -- Some production revisions already allowed undated items and did not use
+  -- ai_ready as a claim predicate. Those optional predicates must not prevent
+  -- applying the shared source gate and retry/storage fixes.
   if position(old_limit in definition) = 0
      or position(old_status in definition) = 0 or position(old_storage in definition) = 0 then
     raise exception 'draft claim retry/storage anchor drift';

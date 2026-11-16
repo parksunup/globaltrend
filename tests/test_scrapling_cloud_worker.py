@@ -22,7 +22,8 @@ class ScraplingCloudWorkerTests(unittest.TestCase):
             path = Path(directory) / "registry.json"
             path.write_text(json.dumps({
                 "collector": "scrapling-separate-v1", "timezone": "Asia/Seoul", "lookback_days": 3,
-                "max_pages_per_source": None, "max_items_per_source": None,
+                # A missing page cap means the worker must traverse the full source pagination.
+                "max_items_per_source": None,
                 "sources": [{"source": slug, "source_id": slug + "-id", "language": "en"}
                             for slug in ("cn-cac", "hk-pcpd", "vn-gov", "ftc", "calprivacy")],
             }), encoding="utf-8")

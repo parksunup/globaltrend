@@ -40,6 +40,7 @@ class ScraplingRunnerTests(unittest.TestCase):
         client = _MemoryClient({listing: (html_listing, "text/html"), detail: (html_detail, "text/html")})
         with patch.object(runner, "_adapter", return_value=adapter):
             result = runner.collect_source("cn-cac", "2026-10-28", "2026-10-28", client=client)
+        # A same-day oldest item does not prove that older pages are out of range.
         self.assertEqual(result["status"], "partial")
         self.assertFalse(result["database_writes"])
         self.assertEqual(len(result["items"]), 1)
@@ -60,7 +61,7 @@ class ScraplingRunnerTests(unittest.TestCase):
         self.assertEqual(result["discovered"], 0)
         self.assertFalse(result["errors"])
 
-    def test_unknown_dates_are_retained_for_review_and_other_sources_not_complete(self):
+    def test_unknown_dates_are_retained_and_remain_eligible_for_drafting(self):
         listing = runner.LISTINGS["calprivacy"]
         detail = "https://privacy.ca.gov/2026/11/privacy-update/"
         adapter = SimpleNamespace(
@@ -76,9 +77,9 @@ class ScraplingRunnerTests(unittest.TestCase):
             result = runner.collect_source("calprivacy", "2026-11-01", "2026-11-09", client=client)
         item = result["items"][0]
         self.assertTrue(item["metadata"]["requires_review"])
-        self.assertFalse(item["metadata"]["ai_ready"])
+        self.assertTrue(item["metadata"]["ai_ready"])
         self.assertEqual(item["metadata"]["date_range_status"], "unknown_date_retained_for_review")
-        self.assertFalse(result["coverage_complete"])
+        self.assertTrue(result["coverage_complete"])
 
     def test_ftc_walks_past_ten_pages_and_certifies_empty_filtered_window(self):
         listing = "https://search.ftc.gov/news-events/news/press-releases?search=privacy&field_mission%5B29%5D=29"
@@ -156,7 +157,7 @@ class ScraplingRunnerTests(unittest.TestCase):
         self.assertTrue(result["coverage_complete"])
         self.assertEqual(result["status"], "success")
 
-    def test_unknown_vietnam_date_cannot_be_reported_as_a_proven_empty_window(self):
+    def test_unknown_vietnam_date_does_not_block_window_coverage(self):
         from scripts.collector_scrapling.adapters import vn_gov
         home, policies = vn_gov.HOME, vn_gov.POLICIES
         page = f"{vn_gov.TIMELINE}/2.htm"
@@ -176,8 +177,8 @@ class ScraplingRunnerTests(unittest.TestCase):
             result = runner.collect_source("vn-gov", "2026-11-11", "2026-11-13",
                                            client=_MemoryClient(responses))
         self.assertEqual(result["unknown_date_candidates"], 1)
-        self.assertFalse(result["coverage_complete"])
-        self.assertEqual(result["status"], "partial")
+        self.assertTrue(result["coverage_complete"])
+        self.assertEqual(result["status"], "empty_window")
 
 
 if __name__ == "__main__":
