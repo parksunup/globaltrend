@@ -1,5 +1,6 @@
--- Draft writing is allowed for the exact 31 sources in the original-19 and
--- additional-12 cohorts. Collection activation and access-review fields are
+-- Draft writing is allowed for the exact 34 sources approved by the project
+-- lead, including the original-19, additional-12, Freevacy, noyb and overview.legal.
+-- Collection activation and access-review fields are
 -- intentionally left untouched; they govern collection, not writer eligibility.
 create or replace function private.trend_draft_source_allowed(p_source_id uuid)
 returns boolean
@@ -45,7 +46,7 @@ as $$
     -- The original seed creates a few baseline source rows with generated IDs.
     -- Resolve those rows by their publisher's exact approved catalog acronym so
     -- clean migration replay and an already-populated production DB share the
-    -- same 31-source allowlist.
+    -- same 34-source allowlist.
     select 1
     from public.sources s
     join public.publishers p on p.id=s.publisher_id
@@ -55,7 +56,8 @@ as $$
         'CALPRIVACY','CPPA','OAIC','CA-OPC','OPC','HK-PCPD','PCPD',
         'EU-PARLIAMENT','EP','EU-COUNCIL','CN-CAC','CAC','CN-TC260','TC260',
         'ES-AEPD','AEPD','EDPS','ANPD-BR','NPC-PH','JPDP-MY','NIST','IAPP','FPF',
-        'GPA','G7-DPA','GLOBAL-CBPR','RIPD','ISO-IEC-SC27'
+        'GPA','G7-DPA','GLOBAL-CBPR','RIPD','ISO-IEC-SC27',
+        'FREEVACY','NOYB','OVERVIEW-LEGAL'
       ])
   );
 $$;
@@ -119,6 +121,9 @@ begin
   definition := replace(definition, old_limit, new_limit);
   definition := replace(definition, old_status, new_status);
   definition := replace(definition, old_storage, new_storage);
+  if position(old_readiness in definition) > 0 or position(old_publication_date in definition) > 0 then
+    raise exception 'draft claim retained a legacy readiness/date gate';
+  end if;
   execute definition;
 end;
 $draft_claim_retry_and_storage$;
@@ -193,21 +198,24 @@ declare
   definition text;
   old_gate text := $old$not exists(select 1 from public.sources s where s.id=si.source_id and s.is_active and s.terms_reviewed_at is not null)$old$;
   new_gate text := $new$not private.trend_draft_source_allowed(si.source_id)$new$;
-  old_readiness text := $old$r.metadata->>'ai_ready' is distinct from 'true'$old$;
+  old_readiness_legacy text := $old$or r.metadata->>'ai_ready' is distinct from 'true'$old$;
+  old_readiness_date_aware text := $old$or (r.metadata->>'ai_ready' is distinct from 'true' and si.published_at is not null and not j.date_absent_at_claim)$old$;
   old_quote text := $old$length(coalesce(evidence->>'quote',''))<12$old$;
 begin
   definition := pg_get_functiondef('public.submit_trend_draft(uuid,text,jsonb)'::regprocedure);
-  if position(old_gate in definition) = 0 or position(old_quote in definition) = 0 then
+  if position(old_gate in definition) = 0 or position(old_quote in definition) = 0
+     or (position(old_readiness_legacy in definition) = 0 and position(old_readiness_date_aware in definition) = 0) then
     raise exception 'draft submit source/readiness anchor drift';
   end if;
   definition := replace(definition, old_gate, new_gate);
-  -- Replace only the readiness expression. This handles both the original
-  -- standalone predicate and production variants that combine readiness with
-  -- publication-date context or a date_absent_at_claim marker.
-  if position(old_readiness in definition) > 0 then
-    definition := replace(definition, old_readiness, 'false');
-  end if;
+  definition := replace(definition, old_readiness_legacy, '');
+  definition := replace(definition, old_readiness_date_aware, '');
   definition := replace(definition, old_quote, $new$length(coalesce(evidence->>'quote',''))<1$new$);
+  if position('r.metadata->>' || quote_literal('ai_ready') in definition) > 0
+     or position('and si.published_at is not null' in definition) > 0
+     or position('not j.date_absent_at_claim' in definition) > 0 then
+    raise exception 'draft submit retained a legacy readiness/date gate';
+  end if;
   execute definition;
 end;
 $draft_submit_source_gate$;
