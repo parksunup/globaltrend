@@ -382,6 +382,8 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
             "hk-pcpd": "every_inclusive_official_daily_archive_visited",
             "ftc": "topic_listing_paginated_to_end_or_verified_date_cutoff",
             "vn-gov": "official_timeline_empty_fragment_or_ordered_date_cutoff",
+            "cn-cac": "official_listing_dates_descending_and_oldest_before_window",
+            "calprivacy": "official_category_pagination_exhausted",
         }.get(source_id)
     if result["items"]:
         result["status"] = "success" if result["coverage_complete"] else "partial"

@@ -15,6 +15,12 @@ ROOT=Path(__file__).resolve().parents[1]
 
 
 class AutomationTests(unittest.TestCase):
+    def test_only_confirmed_database_capacity_errors_stop_later_sources(self):
+        self.assertTrue(run.database_failure_stops_run('database_storage_cap'))
+        self.assertTrue(run.database_failure_stops_run('database_capacity_guard'))
+        self.assertFalse(run.database_failure_stops_run('database_rpc_failure:collector_commit'))
+        self.assertFalse(run.database_failure_stops_run('database_http_400:collector_commit'))
+
     def test_oaic_is_out_of_crawlee_daily_set_but_legacy_edge_source_remains(self):
         crawlee=json.loads((ROOT/'config/crawlee-daily-source-set.json').read_text())
         self.assertNotIn('oaic',crawlee['sources'])
@@ -181,10 +187,28 @@ class AutomationTests(unittest.TestCase):
             def preflight(self, cfg): return {'allowed':True}
             def range_start(self, *args): return '2026-10-01'
             def record_run(self, result): raise AssertionError('write after capacity stop')
-        code, result, created, calls = self.execute([self.config()], Store(),
+        configs=[self.config(),self.config(source='ico',source_id='d7c96a28-2fca-49ad-a631-3a62cf0a03b9')]
+        code, result, created, calls = self.execute(configs, Store(),
             dict(source='edpb', status='failed', coverage_complete=False, reason='database_storage_cap'))
         self.assertEqual(code, 1)
+        self.assertEqual(calls, 1)
+        self.assertEqual(result['sources'][1]['reason'],'database_writes_stopped')
         self.assertEqual(result['run_log']['status'], 'skipped')
+
+    def test_source_database_rpc_failure_does_not_stop_next_source(self):
+        class Store:
+            run_id='test'
+            def preflight(self, cfg): return {'allowed':True}
+            def range_start(self, *args): return '2026-10-01'
+            def record_run(self, result): pass
+        configs=[self.config(),self.config(source='ico',source_id='d7c96a28-2fca-49ad-a631-3a62cf0a03b9')]
+        code, result, created, calls = self.execute(configs, Store(),
+            dict(source='edpb', status='failed', coverage_complete=False,
+                 reason='database_rpc_failure:collector_cloud_commit'))
+        self.assertEqual(code,1)
+        self.assertEqual(calls,2)
+        self.assertEqual(len(result['sources']),2)
+        self.assertTrue(all(source['status']=='failed' for source in result['sources']))
 
     def test_progress_rpc_failure_is_preserved_in_result_file(self):
         class Store:
