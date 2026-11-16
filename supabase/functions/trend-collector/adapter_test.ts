@@ -51,6 +51,10 @@ Deno.test("official hosts, normalized hashes and scope are preserved", async () 
   eq(x.content_text, "Café report original body content.");
   eq(x.content_hash.length, 64);
 });
+Deno.test("month-only dates stay unassigned instead of inventing a day", () => {
+  eq(parseDate("2025-05"), null);
+  eq(parseDate("May 2025"), null);
+});
 Deno.test("invalid complete dates are rejected", () => {
   eq(parseDate("31 February 2026"), null);
   eq(parseDate("21 October 2026"), "2026-10-21");
