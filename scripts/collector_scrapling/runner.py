@@ -329,7 +329,7 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
                 })
                 if not item.get("published_date") and window is None:
                     item["metadata"]["requires_review"] = True
-                    item["metadata"]["ai_ready"] = False
+                    item["metadata"]["ai_ready"] = True
                     item["metadata"]["date_range_status"] = "unknown_date_retained_for_review"
                 item_by_url[url] = {"url": url, **item}
             except (FetchFailure, CollectionError, ValueError) as error:
@@ -357,13 +357,15 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
     result["requests"] = getattr(client, "requests", None)
     result["robots_requests"] = getattr(client, "robots_requests", None)
     result["downloaded_bytes"] = getattr(client, "bytes_received", None)
-    # Completeness requires a source-specific terminal proof: exact daily
-    # archives for PCPD, verified topic pagination exhaustion for FTC, or an
-    # empty/ordered-date cutoff on Vietnam's official timeline.
+    # A date-window scan is complete when its source-specific archive was
+    # exhausted. Unknown dates affect weekly issue selection, not whether the
+    # article itself can be drafted from the available official text.
+    paginated_sources = {"calprivacy"}
     result["coverage_complete"] = (
-        not result["errors"] and result["unknown_date_candidates"] == 0 and (
+        not result["errors"] and result["pages"] > 0 and (
             source_id == "hk-pcpd" and len(visited) == len(initial)
-            or source_id in ("ftc", "vn-gov") and terminal_verified and bool(result["pages"])
+            or source_id in ("ftc", "vn-gov") and terminal_verified
+            or source_id in paginated_sources and not queue
         )
     )
     if result["coverage_complete"]:
@@ -377,7 +379,7 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
     elif result["coverage_complete"]:
         result["status"] = "empty_window"
         result["reason"] = "full_window_checked_no_in_range_relevant_items"
-    elif result["pages"] and not result["items"]:
+    elif result["pages"] and not result["items"] and not result["coverage_complete"]:
         result["status"] = "partial"
         result["reason"] = "empty_window_not_exhaustively_verified"
     else:
