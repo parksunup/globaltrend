@@ -488,12 +488,11 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                             if date is None: result['unknown_date']+=1
                             # Eligibility is not a positive relevance decision or human approval.
                             item['metadata'].update({'relevance_reason':'full_body_available_human_relevance_review_pending',
-                                'ai_ready':date is not None and not item['metadata']['requires_review'],
+                                'ai_ready':True,
                                 'pr16_commit':'547a83611cad948439598e2974e7ce8afd10781d'})
                             saved=store.ingest(config,url,item)
                             key='new' if saved.get('item_created') else 'changed' if saved.get('content_changed') else 'duplicate'
                             result[key]+=1
-                            if date is None: result['held']+=1
                 except (FetchError,ValueError) as e:
                     result['failed_url']=url
                     if str(e).startswith('database_'): raise
