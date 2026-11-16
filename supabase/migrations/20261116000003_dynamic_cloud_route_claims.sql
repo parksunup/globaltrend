@@ -1,4 +1,4 @@
--- Let the cloud worker claim any source explicitly enabled for cloud routing.
+-- Let the cloud worker inspect any source with a registered cloud route.
 -- Source approval and database capacity are still checked by the function.
 -- This rewrite accepts the different hard-coded allowlists found in production
 -- and in clean migration replay, without changing the surrounding function.
@@ -7,6 +7,7 @@ declare
   definition text;
   updated_definition text;
   predicate text;
+  source_lookup text;
 begin
   select pg_get_functiondef('public.collector_cloud_take(text,text)'::regprocedure)
     into definition;
@@ -19,7 +20,7 @@ begin
   updated_definition := regexp_replace(
     definition,
     predicate,
-    'exists (select 1 from public.collector_cloud_routes enabled_route join public.collector_edge_sources routed_source on routed_source.source_id=enabled_route.source_id where routed_source.slug=p_slug and routed_source.source_id=public.collector_edge_sources.source_id and enabled_route.enabled)',
+    'exists (select 1 from public.collector_cloud_routes route_row where route_row.source_id=public.collector_edge_sources.source_id)',
     'i'
   );
 
@@ -27,6 +28,18 @@ begin
      or updated_definition ~* 'slug\s+in\s*\([^)]*\)' then
     raise exception 'cloud route allowlist rewrite did not apply';
   end if;
+
+  -- Unknown slugs must return NULL rather than raising NO_DATA_FOUND.
+  source_lookup := $regex$select\s+\*\s+into\s+strict\s+s\s+from\s+public\.collector_edge_sources\s+where\s+slug\s*=\s*p_slug$regex$;
+  if regexp_count(updated_definition, source_lookup, 1, 'i') <> 1 then
+    raise exception 'expected one strict source lookup in collector_cloud_take';
+  end if;
+  updated_definition := regexp_replace(
+    updated_definition,
+    source_lookup,
+    'select * into s from public.collector_edge_sources where slug=p_slug; if not found then return null; end if',
+    'i'
+  );
 
   execute updated_definition;
 end;
