@@ -18,4 +18,3 @@ language sql stable security invoker set search_path=public,pg_temp as $$
 $$;
 revoke all on function public.collector_completion_gaps(date,date) from public,anon,authenticated,service_role;
 grant execute on function public.collector_completion_gaps(date,date) to service_role;
-
