@@ -5,6 +5,8 @@
 
 > **현재 기준:** 아래 최초 점검표는 당시 상태와 검토안을 보존한 기록입니다. 2026-11-15 사용자 결정 및 아래의 통합 PR 반영사항이 해당 권고를 대체합니다. 구현된 변경과 과거 운영 스냅샷을 혼동하지 마세요.
 
+> **2026-11-17 운영 재대조:** `private.trend_draft_source_allowed`를 운영 DB의 현재 출처 목록과 대조한 결과, `nl-ap`, `freevacy`, `overview-legal`은 허용 상태입니다. `original-19`·`additional-12`만을 작성 허용목록으로 다시 적용한 클라우드 작성자가 이 세 출처를 거부한 것은 문서와 작성자 측의 중복 허용목록 불일치입니다. 운영 claim/submit RPC가 출처 허용 여부의 단일 기준이며, 이 문서와 작성 지침의 과거 31개 범위를 현재 전체 허용목록으로 사용하지 않습니다. 같은 시점 실패 작업 4건 중 3건은 이 불일치였고, 나머지 `overview-legal` 1건은 원문 판본 내용이 `Skip to content`뿐이라 본문 근거가 없는 별도 추출 실패입니다.
+
 ## 핵심 발견
 
 가장 먼저 고쳐야 할 것은 `ai_ready` 판정의 불일치다. 현재 운영 `claim_trend_draft_jobs`는 `ai_ready`를 보지 않고 조건에 맞는 작업을 선점하지만, 이어지는 `submit_trend_draft`는 게시일이 있는 `ai_ready=false` 자료를 `Source approval was revoked`로 거부한다. 즉 작성자가 제출할 수 없는 작업을 claim해 시도 횟수와 임대를 소모하는 경로다.
