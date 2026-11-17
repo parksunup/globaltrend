@@ -1,9 +1,9 @@
 import type {LegalReviewPackage} from './legal-release';
 export type WatchChanges={added:string[];removed:string[];modified:string[];metadataChanged:boolean};
 export type WatchEvent={id:string;kind:'source_changed'|'baseline_review';createdAt:string;beforeDigest:string|null;afterDigest:string;changes:WatchChanges;reviewed:boolean};
-export type WatchLaw={id:string;jurisdiction:string;name:string;url:string;scope:string;checkedAt:string;status:'changed'|'unchanged'|'baseline'|'partial'|'error';error:string|null;version?:string;coverage?:string;articleCount?:number;digest?:string;baselineOrigin:string;lastSuccessAt?:string|null;acquiredUrl?:string;primaryError?:string|null;events:WatchEvent[]};
+export type WatchLaw={id:string;jurisdiction:string;name:string;url:string;scope:string;checkedAt:string;status:'changed'|'unchanged'|'baseline'|'partial'|'error';error:string|null;version?:string;coverage?:string;articleCount?:number;digest?:string;baselineOrigin:string;lastSuccessAt?:string|null;acquiredUrl?:string;primaryError?:string|null;additionalDirectCheckNote?:string;diagnosticRunId?:number;events:WatchEvent[]};
 export type WatchReport={schemaVersion:1;generatedAt:string;sourceCommit:string;laws:WatchLaw[]};
-export type WatchSource={id:string;jurisdiction:string;name:string;url:string;scope:string;parser:string;allowedHosts?:string[]};
+export type WatchSource={id:string;jurisdiction:string;name:string;url:string;scope:string;parser:string;allowedHosts?:string[];additionalDirectCheckNote?:string};
 const hash=(v:unknown)=>typeof v==='string'&&/^[a-f0-9]{64}$/.test(v);
 const string=(v:unknown,max=1000)=>typeof v==='string'&&v.length<=max;
 const list=(v:unknown)=>Array.isArray(v)&&v.length<=12000&&v.every(x=>string(x,240));
@@ -13,7 +13,7 @@ export function validateWatchReport(value:unknown,sources:WatchSource[]):WatchRe
   if(law.acquiredUrl){const u=new URL(law.acquiredUrl);if(u.protocol!=='https:'||u.username||u.password||u.port||!(source.allowedHosts??[new URL(source.url).hostname]).includes(u.hostname))throw Error('invalid_official_body_url');}
   for(const e of law.events){if(!hash(e.id)||!hash(e.afterDigest)||(e.beforeDigest!==null&&!hash(e.beforeDigest))||!['source_changed','baseline_review'].includes(e.kind)||typeof e.reviewed!=='boolean'||!e.changes||!list(e.changes.added)||!list(e.changes.removed)||!list(e.changes.modified)||typeof e.changes.metadataChanged!=='boolean')throw Error('invalid_event');}
   // Configuration is trusted; artifact names and links are never used as arbitrary HTML or fetch targets.
-  law.name=source.name;law.jurisdiction=source.jurisdiction;law.scope=source.scope;
+  law.name=source.name;law.jurisdiction=source.jurisdiction;law.scope=source.scope;law.additionalDirectCheckNote=source.additionalDirectCheckNote;
  }
  return r;
 }

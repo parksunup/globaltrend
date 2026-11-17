@@ -4,6 +4,7 @@ on:
     types: [opened, synchronize, reopened]
     paths:
       - scripts/legal-watch/direct_diagnostic.py
+      - scripts/legal-watch/browser_diagnostic.py
       - scripts/legal-watch/watch.py
       - .github/workflows/legal-direct-source-diagnostic.yml
   workflow_dispatch:
@@ -28,9 +29,15 @@ jobs:
           python-version: '3.12'
       - name: Read public official sources and keep metadata only
         run: python scripts/legal-watch/direct_diagnostic.py
+      - name: Install the pinned ordinary browser client
+        run: python -m pip install playwright==1.62.0
+      - name: Check the legislature in an ordinary browser without CAPTCHA automation
+        run: python scripts/legal-watch/browser_diagnostic.py
       - uses: actions/upload-artifact@v4
         with:
           name: legal-direct-source-diagnostic
-          path: .legal-watch/direct-diagnostic.json
+          path: |
+            .legal-watch/direct-diagnostic.json
+            .legal-watch/browser-diagnostic.json
           retention-days: 7
           if-no-files-found: error

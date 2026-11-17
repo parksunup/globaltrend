@@ -1,21 +1,50 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-17T01:59:03.951393+00:00",
-  "sourceCommit": "73cd326e1f7260570cf78e8fab3d55d25434622a",
+  "generatedAt": "2026-11-17T06:50:04.267472+00:00",
+  "sourceCommit": "1faf1589f5523c39d01a93f9a6078a1415eca00e",
   "laws": [
     {
       "id": "pipa",
       "jurisdiction": "KR",
       "name": "한국 개인정보 보호법",
       "url": "https://www.law.go.kr/법령/개인정보보호법",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-17T01:58:57.842266+00:00",
-      "status": "error",
-      "error": "http_503",
-      "changes": null,
-      "events": [],
-      "baselineOrigin": "configuration_changed",
-      "lastSuccessAt": null
+      "scope": "공식 현행 안내의 lsiSeq를 확인해 본문을 읽고, 본칙과 부칙의 식별자를 구분합니다. 2026-09-11 선정 원문과 대조하며 부분 시행·시행예정 개정 및 하위법령의 적용은 별도 검토합니다.",
+      "checkedAt": "2026-11-17T06:27:13.846349+00:00",
+      "status": "baseline",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "91b8567269b6363b0b657ef35db9144098c7911a0c281229fd19d167085c652d",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T06:27:13.846349+00:00",
+          "beforeDigest": "e092bf5a414846862bf2dc8a214938c0ea498ab9eb86d4e2f0c47028949b7f7d",
+          "afterDigest": "e092bf5a414846862bf2dc8a214938c0ea498ab9eb86d4e2f0c47028949b7f7d",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://www.law.go.kr/법령/개인정보보호법"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "coverage": "article_text",
+      "version": "법률 제21445호 · 시행 2026. 9. 11.",
+      "articleCount": 140,
+      "digest": "e092bf5a414846862bf2dc8a214938c0ea498ab9eb86d4e2f0c47028949b7f7d",
+      "lastSuccessAt": "2026-11-17T06:27:13.846349+00:00",
+      "acquiredUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "primaryError": null,
+      "observationOrigin": "github_read_only_diagnostic",
+      "diagnosticRunId": 44031306007
     },
     {
       "id": "appi",
@@ -272,7 +301,8 @@
       "digest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
       "lastSuccessAt": "2026-11-17T01:58:59.034520+00:00",
       "acquiredUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
-      "primaryError": null
+      "primaryError": null,
+      "additionalDirectCheckNote": "캘리포니아 주 의회 법전의 직접 대조는 2026-11-17 별도 진단에서도 403으로 미완료입니다. 확보한 본문은 감독기관의 공식 편찬 PDF입니다."
     },
     {
       "id": "pdpa",

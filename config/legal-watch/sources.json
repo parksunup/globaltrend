@@ -106,7 +106,8 @@
       ],
       "minimumArticles": 46,
       "scope": "캘리포니아 감독기관이 현재 안내하는 시행일 도래 법문 PDF 46개 조문을 점검합니다. 주 의회 법전 접근 실패를 대체한 공식 편찬본이며 모든 후속 개정·별도 규칙의 현행성을 보증하지 않습니다.",
-      "baselineUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf"
+      "baselineUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "additionalDirectCheckNote": "캘리포니아 주 의회 법전의 직접 대조는 2026-11-17 별도 진단에서도 403으로 미완료입니다. 확보한 본문은 감독기관의 공식 편찬 PDF입니다."
     },
     {
       "id": "pdpa",
