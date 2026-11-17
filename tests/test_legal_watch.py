@@ -125,4 +125,30 @@ class WatchTests(unittest.TestCase):
   def fetch(s,url):calls.append(url);return landing if len(calls)==1 else b'%PDF-fake'
   with patch.object(w,'fetch_bytes',side_effect=fetch),patch.object(w,'parse_source',return_value=snapshot()):w.fetch_source(source)
   self.assertEqual(calls[-1],'https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf')
+ def test_chinese_attachment_uses_public_official_endpoint_and_checks_the_index(self):
+  from xml.sax.saxutils import escape
+  source={**SOURCE,'parser':'chinese-docx','identity':['测试法'],'selectedId':'selected-id','url':'https://flk.npc.gov.cn/details','allowedHosts':['flk.npc.gov.cn'],'minimumArticles':2}
+  data={'title':'测试法','bbbs':'selected-id','gbrq':'2021-08-20','sxrq':'2021-11-01','sxx':3,'ossFile':{'ossWordPath':'prod/20210820/'+'a'*32+'.docx'},'content':{'children':[{'title':'第一条'},{'title':'第二条'}]},'urlIn':'http://172.16.0.1/private'}
+  def docx(paragraphs):
+   stream=io.BytesIO();xml='<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>'+''.join('<w:p><w:r><w:t>'+escape(p)+'</w:t></w:r></w:p>' for p in paragraphs)+'</w:body></w:document>'
+   with zipfile.ZipFile(stream,'w') as archive:archive.writestr('word/document.xml',xml)
+   return stream.getvalue()
+  raw=docx(['测试法','第一条 为测试保留完整的条件和例外。','第二条 为测试保留另外的条件和例外。']);calls=[]
+  def fetch(s,url):
+   calls.append(url);return json.dumps({'data':data},ensure_ascii=False).encode() if url==source['url'] else raw
+  with patch.object(w,'fetch_bytes',side_effect=fetch):result=w.fetch_source(source)
+  self.assertEqual(set(result['articles']),{'main:1','main:2'});self.assertEqual(result['coverage'],'article_text');self.assertTrue(calls[-1].startswith('https://flk.npc.gov.cn/law-search/file/download?'));self.assertNotIn('172.16',str(calls));self.assertNotIn('保留',json.dumps(result,ensure_ascii=False))
+  data['content']['children'].append({'title':'第三条'})
+  with patch.object(w,'fetch_bytes',side_effect=fetch):
+   with self.assertRaisesRegex(w.SourceError,'attachment_index_mismatch'):w.fetch_source(source)
+  data['ossFile']['ossWordPath']='../private.docx'
+  with patch.object(w,'fetch_bytes',side_effect=fetch):
+   with self.assertRaisesRegex(w.SourceError,'unapproved_attachment_path'):w.fetch_source(source)
+ def test_chinese_docx_rejects_wrong_archives_duplicate_members_and_noncontiguous_articles(self):
+  import chinese_source as docx
+  with self.assertRaises(ValueError):docx.document_paragraphs(b'not an archive')
+  stream=io.BytesIO()
+  with zipfile.ZipFile(stream,'w') as archive:archive.writestr('../word/document.xml','<x/>')
+  with self.assertRaisesRegex(ValueError,'unsafe_docx_members'):docx.document_paragraphs(stream.getvalue())
+  with self.assertRaisesRegex(ValueError,'noncontiguous_docx_articles'):docx.article_bodies('第一条 完整测试条件和例外。\n第三条 缺失第二条的测试条件。',w.chinese_number)
 if __name__=='__main__':unittest.main()

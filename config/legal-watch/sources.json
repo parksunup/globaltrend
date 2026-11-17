@@ -38,7 +38,7 @@
       "id": "pipl",
       "jurisdiction": "CN",
       "name": "중국 PIPL",
-      "parser": "chinese-html",
+      "parser": "chinese-docx",
       "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
       "allowedHosts": [
         "flk.npc.gov.cn"
@@ -46,8 +46,9 @@
       "identity": [
         "中华人民共和国个人信息保护法"
       ],
-      "scope": "선정 법문 페이지와 유효성 표시 점검. 새 개정 법률의 별도 게시 여부는 공식 검색에서 추가 확인해야 합니다.",
-      "minimumArticles": 70
+      "scope": "NPC 선정 DB 항목의 본문 Word 첨부파일 74개 조문과 공식 목차·유효성 메타데이터를 함께 대조합니다. 새 개정 법률이 별도 DB 항목으로 게시되는 경우 공식 검색에서 추가 확인해야 합니다.",
+      "minimumArticles": 74,
+      "selectedId": "ff8081817b6472a3017b656cc2040044"
     },
     {
       "id": "gdpr",
