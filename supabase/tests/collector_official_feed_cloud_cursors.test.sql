@@ -1,5 +1,5 @@
 begin;
-select plan(6);
+select plan(7);
 
 select is(
   private.collector_cloud_cursor_valid(
@@ -27,13 +27,23 @@ select is(
   private.collector_cloud_cursor_valid(
     jsonb_build_object(
       'page','https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml',
-      'offset',1,
+      'offset',0
+    ),'eu-parliament'),
+  true,
+  'European Parliament Open Data API listing host passes the base validator'
+);
+
+select is(
+  private.collector_cloud_cursor_valid(
+    jsonb_build_object(
+      'page','https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml',
+      'offset',0,
       'frozen_urls',jsonb_build_array(
         'https://data.europarl.europa.eu/api/v2/documents/2026-001'),
       'frozen_next',null
     ),'eu-parliament'),
   true,
-  'European Parliament Open Data API feed cursor remains valid'
+  'European Parliament Open Data API frozen document URL passes both validators'
 );
 
 with urls as (
