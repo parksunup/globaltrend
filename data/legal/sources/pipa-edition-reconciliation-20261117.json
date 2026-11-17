@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "checkedOnKst": "2026-11-17",
+  "sourceRunUrl": "https://github.com/parksunup/globaltrend/actions/runs/44031306007",
+  "sourceCommit": "1faf1589f5523c39d01a93f9a6078a1415eca00e",
+  "currentAndSelectedSnapshotsMatch": true,
+  "archiveSnapshotMatchesRemote": true,
+  "sourceSnapshotDigest": "e092bf5a414846862bf2dc8a214938c0ea498ab9eb86d4e2f0c47028949b7f7d",
+  "priorMainArticles": 131,
+  "selectedMainArticles": 127,
+  "supplementaryGroups": 13,
+  "preservedReferenceSections": [
+    {
+      "originalSectionId": "pipa-제2조",
+      "referenceSectionId": "pending-pipa-제2조",
+      "difference": "text_differs_beyond_whitespace",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제7조의9",
+      "referenceSectionId": "pending-pipa-제7조의9",
+      "difference": "text_differs_beyond_whitespace",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제28조의12",
+      "referenceSectionId": "pipa-제28조의12",
+      "difference": "not_in_selected_main",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제28조의13",
+      "referenceSectionId": "pipa-제28조의13",
+      "difference": "not_in_selected_main",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제28조의14",
+      "referenceSectionId": "pipa-제28조의14",
+      "difference": "not_in_selected_main",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제28조의15",
+      "referenceSectionId": "pipa-제28조의15",
+      "difference": "not_in_selected_main",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제32조의2",
+      "referenceSectionId": "pending-pipa-제32조의2",
+      "difference": "text_differs_beyond_whitespace",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제37조의2",
+      "referenceSectionId": "pending-pipa-제37조의2",
+      "difference": "text_differs_beyond_whitespace",
+      "humanReviewStatus": "not_started"
+    },
+    {
+      "originalSectionId": "pipa-제75조",
+      "referenceSectionId": "pending-pipa-제75조",
+      "difference": "text_differs_beyond_whitespace",
+      "humanReviewStatus": "not_started"
+    }
+  ],
+  "originalBytesSha256": "8be7841e351778aef6f58c5c2615fdccbeab714f24839aefde903dd0930f9df9",
+  "preservedOriginal": "../official/pipa-preserved-20261117.json",
+  "humanReviewStatus": "not_started",
+  "published": false,
+  "scope": "현행·선정 원문의 기술적 일치와 기존 자료의 판본 차이를 정리함. 참고 규정 9개의 별도 판본·시행일과 의미·법률 검수는 미완료."
+}
