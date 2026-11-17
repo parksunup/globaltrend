@@ -54,7 +54,7 @@
       "jurisdiction": "EU",
       "name": "EU GDPR",
       "parser": "eu-html",
-      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679",
+      "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
       "allowedHosts": [
         "eur-lex.europa.eu"
       ],
@@ -63,7 +63,10 @@
         "General Data Protection Regulation"
       ],
       "minimumArticles": 90,
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+      "scope": "공식 ELI 페이지의 Current consolidated version 링크를 따라 통합 본문 99개 조문을 점검합니다. 연결 실패 시 고정 판본 확보로 구분하며 모든 후속 법률·정오표의 효력과 기존 번역 정확성은 별도 검토합니다.",
+      "fallbackUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "fallbackVersion": "CELEX:02016R0679-20160504 · 고정 공식 통합 판본",
+      "resolver": "eu-current-consolidation"
     },
     {
       "id": "uk-gdpr",
@@ -79,41 +82,42 @@
         "2016/679",
         "General Data Protection"
       ],
-      "minimumArticles": 90,
+      "minimumArticles": 120,
       "baselineUrl": "https://www.legislation.gov.uk/eur/2016/679/2026-10-16/data.xml",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+      "scope": "본칙 120개 조문 자리의 본문·삭제 표시 점검. 8ZA·12A와 번호 뒤 마침표도 구분하며, 서문·고려사항·부속서는 별도 검토합니다.",
+      "parserVersion": 2
     },
     {
       "id": "ccpa",
       "jurisdiction": "US-CA",
       "name": "미국 캘리포니아 CCPA",
-      "parser": "california-html",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?division=3.&part=4.&lawCode=CIV&title=1.81.5",
+      "parser": "california-pdf",
+      "url": "https://cppa.ca.gov/regulations/",
       "allowedHosts": [
-        "leginfo.legislature.ca.gov"
+        "cppa.ca.gov"
       ],
       "identity": [
-        "1798.100",
-        "Consumer Privacy"
+        "CALIFORNIA CONSUMER PRIVACY ACT"
       ],
-      "minimumArticles": 30,
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+      "minimumArticles": 46,
+      "scope": "캘리포니아 감독기관이 현재 안내하는 시행일 도래 법문 PDF 46개 조문을 점검합니다. 주 의회 법전 접근 실패를 대체한 공식 편찬본이며 모든 후속 개정·별도 규칙의 현행성을 보증하지 않습니다.",
+      "baselineUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf"
     },
     {
       "id": "pdpa",
       "jurisdiction": "SG",
       "name": "싱가포르 PDPA",
-      "parser": "singapore-html",
-      "url": "https://sso.agc.gov.sg/Act/PDPA2012?WholeDoc=1",
+      "parser": "singapore-pdf",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
       "allowedHosts": [
         "sso.agc.gov.sg"
       ],
       "identity": [
         "Personal Data Protection Act 2012"
       ],
-      "minimumArticles": 50,
-      "baselineUrl": "https://sso.agc.gov.sg/Act/PDPA2012?DocDate=20261016&ValidDate=20261016&WholeDoc=1",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+      "minimumArticles": 101,
+      "baselineUrl": "https://sso.agc.gov.sg/Act/PDPA2012?DocDate=20261016&ValidDate=20261016&ViewType=Pdf",
+      "scope": "SSO의 현재 통합 PDF 본칙 90개 조문 단위와 11개 부속표를 점검합니다. PDF 시행 표제와 선정 판본을 구분하며 모든 미시행 개정·하위규칙의 효력을 확정하지 않습니다."
     }
   ]
 }

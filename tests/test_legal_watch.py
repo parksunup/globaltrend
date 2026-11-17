@@ -2,12 +2,15 @@ import base64
 import importlib.util
 import io
 import json
+import sys
+from unittest.mock import patch
 from pathlib import Path
 import unittest
 import urllib.error
 import zipfile
 ROOT=Path(__file__).resolve().parents[1]
 def module(name,path):
+ sys.path.insert(0,str((ROOT/path).parent))
  spec=importlib.util.spec_from_file_location(name,ROOT/path);m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m);return m
 w=module('law_watch',Path('scripts/legal-watch/watch.py'));artifacts=module('law_artifacts',Path('scripts/legal-watch/artifacts.py'))
 SOURCE={'id':'appi','jurisdiction':'JP','name':'日本法','url':'https://laws.e-gov.go.jp/current','baselineUrl':'https://laws.e-gov.go.jp/previous','allowedHosts':['laws.e-gov.go.jp'],'identity':['個人情報'],'parser':'egov','scope':'本則','minimumArticles':1}
@@ -82,4 +85,44 @@ class WatchTests(unittest.TestCase):
    if source['id']=='one':raise w.SourceError('http_403')
    return snapshot()
   report,state=w.run({'sources':sources},{},{'reviews':[]},fetch);self.assertEqual(len(report['laws']),2);self.assertEqual(set(seen),{'one','two'});self.assertNotIn('old words',json.dumps(state))
+ def test_uk_multi_letter_and_terminal_dot_article_identifiers_are_not_dropped(self):
+  source={**SOURCE,'parser':'uk-xml','identity':['GDPR'],'minimumArticles':3}
+  raw=b'<Law>GDPR<P1 id="article-8ZA">8ZA conditions and exceptions</P1><P1 id="article-12A.">12A conditions and exceptions</P1><P1 id="article-13">13 conditions and exceptions</P1></Law>'
+  self.assertEqual(set(w.parse_source(source,raw)['articles']),{'main:8ZA','main:12A','main:13'})
+ def test_pdf_section_boundaries_exclude_contents_citations_and_footnote_years(self):
+  import pdf_sources as pdf
+  sg='Personal Data Protection\nversion in force from 16/10/2026\n1. Short title (contents)\n'
+  sg+='1. This Act is the Personal Data Protection Act 2012.\n'
+  sg+='\n'.join(f'{n}. condition and exception body' for n in range(2,91))+'\n2014. Continued citation year\n'
+  sg+='\n'.join(name+' SCHEDULE\nconditions and exceptions' for name in pdf.ORDINALS)
+  articles,_,_=pdf.singapore(sg);self.assertEqual(len(articles),101);self.assertNotIn('main:2014',articles);self.assertIn('schedule:11',articles)
+  ca='CALIFORNIA CONSUMER PRIVACY ACT effective 01/01/2026\nContents\n1798.100. Contents only\f'
+  ca+='1798.100. General Duties\n(a) conditions and exceptions\n     1798.140.\n'
+  ca+='\n'.join(f'1798.{n}. Example heading\n(a) conditions and exceptions' for n in range(101,145))+'\n1798.199.100.\n(a) final statutory section'
+  sections,_,_=pdf.california(ca);self.assertEqual(len(sections),46);self.assertIn('main:1798.199.100',sections)
+  with self.assertRaises(ValueError):pdf.singapore(sg.replace('ELEVENTH SCHEDULE','Missing schedule'))
+ def test_eu_resolves_current_version_from_official_page_instead_of_assuming_pinned_date(self):
+  source={**SOURCE,'parser':'eu-html','identity':['2016/679'],'resolver':'eu-current-consolidation','allowedHosts':['eur-lex.europa.eu']}
+  landing=b'Current consolidated version <a href="?uri=CELEX:02016R0679-20261101">version</a>'
+  body=b'2016/679<div id="art_1">Article 1 conditions and exceptions</div>'
+  calls=[]
+  def fetch(s,url):calls.append(url);return landing if len(calls)==1 else body
+  with patch.object(w,'fetch_bytes',side_effect=fetch):result=w.read_official(source,'https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng')
+  self.assertEqual(result['version'],'CELEX:02016R0679-20261101');self.assertIn('20261101',calls[-1])
+  with patch.object(w,'fetch_bytes',return_value=b'2016/679 without current edition link'):
+   with self.assertRaises(w.SourceError):w.read_official(source,'https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng')
+ def test_fixed_edition_fallback_is_partial_and_retains_primary_failure(self):
+  source={**SOURCE,'parser':'eu-html','identity':['2016/679'],'fallbackUrl':'https://laws.e-gov.go.jp/fixed','fallbackVersion':'fixed edition'}
+  def fetch(s,url):
+   if url==source['url']:raise w.SourceError('http_202')
+   return b'2016/679<div id="art_1">Article 1 condition and exception</div>'
+  with patch.object(w,'fetch_bytes',side_effect=fetch):result=w.fetch_source(source)
+  self.assertEqual(result['coverage'],'fixed_official_edition');self.assertEqual(result['primaryError'],'http_202')
+ def test_california_resolver_ignores_future_regulations_and_unapproved_object_hosts(self):
+  source={**SOURCE,'parser':'california-pdf','url':'https://cppa.ca.gov/regulations/'}
+  landing=b'<a href="/pdf/99990101_ccpa_statute.pdf">California Consumer Privacy Act (Effective future)</a><a href="https://evil.test/pdf/20260101_ccpa_statute.pdf">California Consumer Privacy Act (Effective now)</a><a href="/regulations/pdf/ccpa_statute_eff_20260101.pdf">CCPA Regulations (Effective now)</a><a href="/pdf/20260101_ccpa_statute.pdf">California Consumer Privacy Act (Effective January 1, 2026)</a>'
+  calls=[]
+  def fetch(s,url):calls.append(url);return landing if len(calls)==1 else b'%PDF-fake'
+  with patch.object(w,'fetch_bytes',side_effect=fetch),patch.object(w,'parse_source',return_value=snapshot()):w.fetch_source(source)
+  self.assertEqual(calls[-1],'https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf')
 if __name__=='__main__':unittest.main()
