@@ -5,7 +5,7 @@
   "versionLabel": "법률 제21445호, 2026. 3. 10. 일부개정 · 2026. 9. 11. 시행",
   "officialUrl": "https://law.go.kr/LSW/lsInfoR.do?chrClsCd=010202&efYd=20260911&lsiSeq=283839",
   "sourceSha256": "70c505dc867c972a94ba30db8b03f0c17daa21222f59c5368750797d1605d3a5",
-  "scopeNote": "국가법령정보센터의 2026-09-11 시행 선정 본칙 127개 조문과 부칙 13개 묶음을 현행 안내가 제공하는 본문과 다시 대조했습니다. 이전 제출 자료의 추가·상이 규정 9개는 판본 대조 참고로 보존했습니다. 이 참고 자료의 판본·시행일은 미확정이며 현재 적용 규정으로 확인한 것이 아닙니다. 번역·비교표의 사람 의미·법률 검수는 미완료입니다.",
+  "scopeNote": "국가법령정보센터의 2026-09-11 시행 선정 본칙 127개 조문과 부칙 13개 묶음을 현행 안내가 제공하는 본문과 다시 대조했습니다. 이전 제출 자료의 추가·상이 규정 9개는 판본 대조 참고로 보존했습니다. 참고 7개는 2027-03-09 시행 개정, 2개는 인증 의무·과태료 관련 2027-07-01 시행 예외에 연결되며 공식 시행예정 본문과 일치합니다. 현재 적용 규정으로 확인한 것이 아닙니다. 번역·비교표의 사람 의미·법률 검수는 미완료입니다.",
   "sections": [
     {
       "id": "pipa-제1조",
@@ -2121,8 +2121,15 @@
         "9. “인공지능기술”이란 「인공지능 발전과 신뢰 기반 조성 등에 관한 기본법」 제2조제3호에 따른 인공지능기술을 말한다."
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제2조"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제2조",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "942fa9759119038df6972cddad818517d36690f0f6ab0e4fb325ea73142ac003",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pending-pipa-제7조의9",
@@ -2159,8 +2166,15 @@
         "[본조신설 2020. 2. 4.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제7조의9"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제7조의9",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "04c4c6f51767c80cbb5bb5a6186d5dcac062eb2bc1482a979b67040eb6bcdd7d",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pipa-제28조의12",
@@ -2184,8 +2198,15 @@
         "[본조신설 2026. 9. 8.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제28조의12"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제28조의12",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "c2aaf4dea65c56045e9682ce762322e89008ec8b3d28857fed1d76a371f9cb2a",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pipa-제28조의13",
@@ -2199,8 +2220,15 @@
         "[본조신설 2026. 9. 8.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제28조의13"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제28조의13",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "4c997b12bcc5df99817ddc3cd8b75aae1bc833360e47b4f7b015ef85f5bcb8a6",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pipa-제28조의14",
@@ -2218,8 +2246,15 @@
         "[본조신설 2026. 9. 8.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제28조의14"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제28조의14",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "fa844f989d44c002ce803c1d21de9de1a84e1a0d9d30c4597f9109e6e6fedaa6",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pipa-제28조의15",
@@ -2230,8 +2265,15 @@
         "[본조신설 2026. 9. 8.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제28조의15"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제28조의15",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "3eb7896b7a37c75cfa864269a3d7864098bf9abd89daddb47cf6cb47c81e2274",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pending-pipa-제32조의2",
@@ -2253,8 +2295,15 @@
         "[본조신설 2015. 7. 24.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제32조의2"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21445호의 2027-07-01 시행 관련 규정입니다(인증 의무(제32조의2 제1항 단서)와 해당 위반 과태료(제75조 제2항 제15호)의 시행일 예외). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제32조의2",
+      "plannedEdition": {
+        "effectiveDate": "2027-07-01",
+        "amendingLawNumber": "21445",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20270701&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "3ed0569ae077f97b5349199528923422bc02e728d76dcae7f4c57f4dee360691",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pending-pipa-제37조의2",
@@ -2269,8 +2318,15 @@
         "[본조신설 2023. 3. 14.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제37조의2"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21910호의 2027-03-09 시행 관련 규정입니다(AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제37조의2",
+      "plannedEdition": {
+        "effectiveDate": "2027-03-09",
+        "amendingLawNumber": "21910",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "07a383a264c6ec250ceacd6bab635e2792c60b7a34b94de0787c0333bb51be64",
+        "humanReviewStatus": "not_started"
+      }
     },
     {
       "id": "pending-pipa-제75조",
@@ -2335,20 +2391,37 @@
         "[전문개정 2023. 3. 14.]"
       ],
       "reviewStatus": "source_verification_pending",
-      "sourceVerificationNote": "이전 제출 자료의 추가 규정입니다. 재확보한 2026-09-11 현행·선정 본문과 차이가 있어 판본·시행일을 별도로 대조해야 합니다. 현재 적용 조문으로 확인한 것은 아니며 기존 본문을 보존했습니다.",
-      "originalSectionId": "pipa-제75조"
+      "sourceVerificationNote": "보존된 이 문구는 법률 제21445호의 2027-07-01 시행 관련 규정입니다(인증 의무(제32조의2 제1항 단서)와 해당 위반 과태료(제75조 제2항 제15호)의 시행일 예외). 지정 시행예정 판본의 같은 조문과 공백 정규화 해시가 일치했습니다. 2026-11-17 현재 적용 조문으로 확인한 것은 아니며, 조건·예외·법률 효과의 사람 검수는 미완료입니다.",
+      "originalSectionId": "pipa-제75조",
+      "plannedEdition": {
+        "effectiveDate": "2027-07-01",
+        "amendingLawNumber": "21445",
+        "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20270701&ancYnChk=0&chrClsCd=010202",
+        "sourceHash": "c4bf9bba5efa4ce7550692056ed58eeb380bcfd280df76b88357367ba8188aaf",
+        "humanReviewStatus": "not_started"
+      }
     }
   ],
   "sourceVerification": {
-    "status": "selected_main_reverified_with_unverified_references",
+    "status": "selected_main_reverified_with_planned_references",
     "checkedAt": "2026-11-17T06:27:13.846349+00:00",
     "snapshotDigest": "e092bf5a414846862bf2dc8a214938c0ea498ab9eb86d4e2f0c47028949b7f7d",
     "sourceRunUrl": "https://github.com/parksunup/globaltrend/actions/runs/44031306007",
     "sourceCommit": "1faf1589f5523c39d01a93f9a6078a1415eca00e",
     "mainArticleCount": 127,
     "supplementaryGroupCount": 13,
-    "unverifiedReferenceCount": 9,
+    "unverifiedReferenceCount": 0,
     "humanReviewStatus": "not_started",
-    "preservedOriginal": "pipa-preserved-20261117.json"
+    "preservedOriginal": "pipa-preserved-20261117.json",
+    "plannedEditionVerification": {
+      "record": "../sources/pipa-planned-editions-20261117.json",
+      "matchedReferenceCount": 9,
+      "effectiveDates": [
+        "2027-03-09",
+        "2027-07-01"
+      ],
+      "humanReviewStatus": "not_started"
+    },
+    "plannedReferenceCount": 9
   }
 }
