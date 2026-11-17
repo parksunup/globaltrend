@@ -199,7 +199,14 @@ def read_official(source,url,historical=False,resolve=True):
             sequences={n['attrs'].get('value','') for n in nodes(tree.root) if n['tag']=='input' and n['attrs'].get('id')=='lsiSeq'}
             if len(sequences)!=1 or not re.fullmatch(r'\d{5,10}',next(iter(sequences))):raise SourceError('current_korean_sequence_not_confirmed')
             sequence=next(iter(sequences))
-            url='https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq='+sequence+'&ancYnChk=0&chrClsCd=010202'
+            dates={n['attrs'].get('value','') for n in nodes(tree.root) if n['tag']=='input' and n['attrs'].get('id')=='efYd'}
+            if not dates:dates=set(re.findall(r'\bvar\s+efYd\s*=\s*[\'\"](\d{8})[\'\"]',raw.decode('utf-8-sig')))
+            if len(dates)!=1:raise SourceError('current_korean_date_not_confirmed')
+            date=next(iter(dates))
+            try:enforced=datetime.strptime(date,'%Y%m%d').date()
+            except ValueError:raise SourceError('current_korean_date_not_confirmed') from None
+            if enforced>datetime.now(timezone.utc).date():raise SourceError('not_currently_enforced')
+            url='https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq='+sequence+'&efYd='+date+'&ancYnChk=0&chrClsCd=010202'
             raw=fetch_bytes(source,url)
     if source['parser']=='chinese-docx':
         data=json.loads(raw).get('data') or {}

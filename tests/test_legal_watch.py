@@ -71,9 +71,9 @@ class WatchTests(unittest.TestCase):
  def test_korean_current_resolver_uses_official_sequence_and_rejects_missing_or_ambiguous_values(self):
   source={**SOURCE,'parser':'korean-html','identity':['개인정보 보호법'],'resolver':'korean-current-body','minimumArticles':1,'allowedHosts':['www.law.go.kr']}
   raw='<h2>개인정보 보호법</h2>[시행 2026. 9. 11.] [법률 제21445호, 일부개정]<p class="pty1_p4">제1조(목적) 조건과 예외를 보존한다.</p>'.encode();calls=[]
-  def fetch(s,url):calls.append(url);return b'<input id="lsiSeq" value="283839">' if len(calls)==1 else raw
+  def fetch(s,url):calls.append(url);return b'<input id="lsiSeq" value="283839"><input id="efYd" value="20260911">' if len(calls)==1 else raw
   with patch.object(w,'fetch_bytes',side_effect=fetch):result=w.read_official(source,'https://www.law.go.kr/law')
-  self.assertIn('lsiSeq=283839',calls[-1]);self.assertEqual(result['metadata']['lawNumber'],'21445')
+  self.assertIn('lsiSeq=283839',calls[-1]);self.assertIn('efYd=20260911',calls[-1]);self.assertEqual(result['metadata']['lawNumber'],'21445')
   with patch.object(w,'fetch_bytes',return_value=b'<input id="lsiSeq" value="283839"><input id="lsiSeq" value="999999">'):
    with self.assertRaisesRegex(w.SourceError,'current_korean_sequence_not_confirmed'):w.read_official(source,'https://www.law.go.kr/law')
  def test_config_change_and_fetch_failure_keep_unreviewed_events(self):
