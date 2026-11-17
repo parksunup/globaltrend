@@ -19,9 +19,9 @@ select is(public.collector_cloud_take('pgtap-disabled-route-test','hk-pcpd'),nul
  'known disabled cloud route returns no claim');
 select is(public.collector_cloud_take('pgtap-unknown-source-test','unknown-source-slug'),null::jsonb,
  'unknown cloud source returns no claim without raising');
-select ok(private.collector_cloud_cursor_valid('{"page":"https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml","offset":0,"frozen_urls":["https://data.europarl.europa.eu/api/v2/documents/IPR-2026-48312"],"frozen_next":null}'::jsonb,'eu-parliament'),'committed API URL snapshot resumes privately');
+select ok(private.collector_cloud_cursor_valid('{"page":"https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml","offset":0,"frozen_urls":["https://data.europarl.europa.eu/api/v2/documents/20261020IPR48312"],"frozen_next":null}'::jsonb,'eu-parliament'),'committed API URL snapshot resumes privately');
 select ok(not private.collector_cloud_cursor_valid('{"page":"https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml","offset":0,"frozen_urls":["https://evil.example/data"],"frozen_next":null}'::jsonb,'eu-parliament'),'frozen detail identities cannot leave source');
-select ok(not private.collector_cloud_cursor_valid('{"page":"https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml","offset":2,"frozen_urls":["https://data.europarl.europa.eu/api/v2/documents/IPR-2026-48312"],"frozen_next":null}'::jsonb,'eu-parliament'),'snapshot ordinal cannot skip past end');
+select ok(not private.collector_cloud_cursor_valid('{"page":"https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml","offset":2,"frozen_urls":["https://data.europarl.europa.eu/api/v2/documents/20261020IPR48312"],"frozen_next":null}'::jsonb,'eu-parliament'),'snapshot ordinal cannot skip past end');
 select ok(not has_function_privilege('anon','private.collector_cloud_frozen_cursor_valid(jsonb,text)','EXECUTE'),'snapshot validation grants no new public authority');
 select * from finish();
 rollback;

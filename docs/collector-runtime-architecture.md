@@ -2,11 +2,20 @@
 
 ## 실행 위치
 
-국제요정의 기존 수집 계약을 유지합니다. Supabase에는 출처 승인 상태, 다음 수집 시각, 작업 대기열과 커서가 남습니다. Supabase Cron은 기존 `trend-cloud-python.yml`을 GitHub Actions에 요청하고, Actions 작업자가 Python과 Crawlee를 실행해 공식 페이지/API/RSS를 읽습니다. 작업자는 수집 결과를 기존 `collector_cloud_take` / `collector_cloud_commit` 계약으로 저장합니다. 이 결과가 기존 `source_items` 및 `draft_jobs` 흐름에 연결됩니다.
+이번 네 출처의 실제 수집 실행기는 GitHub Actions의 Python/Crawlee 작업자입니다. Supabase Cron은 정해진 시간에 기존 `trend-cloud-python.yml`을 시작하고, Supabase DB는 출처 승인 상태·작업 선점·임대·커서·중복 방지·원자적 저장을 맡습니다. 작업자는 `collector_cloud_take` / `collector_cloud_commit` 계약으로 결과를 저장하고, 검증된 본문은 기존 `source_items` 및 `draft_jobs` 흐름으로 이어집니다.
 
-Supabase Edge Function만으로 실행하지 않는 이유는 이번 요청 중 IMDA 경로가 Crawlee 기반 Python 수집을 요구하기 때문입니다. Edge Function은 Deno 런타임이라 이 저장소의 Python/Crawlee 실행기를 그대로 돌릴 수 없습니다. RSS와 JSON API만 Edge에서 별도로 구현하면 같은 출처·날짜·본문 판정과 저장 로직을 두 군데 관리하게 됩니다. 따라서 기존 Supabase 스케줄과 상태 관리는 유지하고, 실제 HTTP 수집·파싱은 GitHub Actions의 기존 Crawlee 작업자 한 곳으로 모읍니다.
+둘 중 하나만 고르는 구조가 아닙니다.
 
-이 구성은 사용자 PC와 Codex 크레딧을 수집 실행에 사용하지 않습니다. 기존 Supabase Cron과 GitHub Actions 실행 환경을 사용하며, 신규 유료 API나 별도 수집 서비스를 추가하지 않습니다.
+| 역할 | 담당 | 여기서 하는 일 |
+|---|---|---|
+| 예약·상태 관리 | Supabase Cron / DB | 수집 시간을 정하고, 승인된 출처별 작업을 한 번씩 배정하며, 진행 위치와 결과를 기록합니다. |
+| 실제 수집·파싱 | GitHub Actions | 기존 Python 작업자가 Crawlee를 사용해 공식 페이지·RSS·API를 읽고 본문·날짜를 판정합니다. |
+| 원고 대기열 연결 | Supabase DB | 검증된 결과만 기존 저장·초안 작성 흐름으로 넘깁니다. |
+| Supabase Edge Function | 다른 Edge 실행기 출처에만 사용 | Deno 기반 Edge 수집 경로는 그대로 두되, 이번 네 출처는 이 실행기로 중복 수집하지 않습니다. |
+
+GitHub Actions를 실제 수집기로 택한 이유는 사용자가 IMDA 수집에 Crawlee를 지정했고, 이번 대상들이 같은 Python 수집·파싱 파이프라인을 공유하기 때문입니다. EC RSS나 Parliament API만 Edge로 따로 옮기면 출처 검증, 게시일 판정, 본문 추출, 오류 처리 로직이 Python과 Deno에 이중으로 생깁니다. 또한 Supabase Edge Functions에는 실행 시간·메모리 제한이 있어 OCR 같은 무거운 처리를 넣기에도 맞지 않습니다. 그래서 **Supabase가 예약과 데이터 상태를 맡고 GitHub Actions가 수집 작업을 실행**하는 편이 현재 코드와 요청에 가장 잘 맞습니다.
+
+이 구성은 사용자 PC와 Codex 크레딧을 수집 실행에 사용하지 않습니다. 기존 Supabase Cron과 GitHub Actions 실행 환경을 쓰며, 신규 유료 API나 별도 수집 서비스를 추가하지 않습니다. 저장소가 공개인 동안 표준 GitHub 호스티드 실행기는 무료로 제공되지만, 저장소 공개 상태나 GitHub 요금 정책이 달라지면 실행 비용 조건을 다시 확인해야 합니다.
 
 ## 출처별 흐름
 
