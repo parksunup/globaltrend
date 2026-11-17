@@ -136,7 +136,8 @@
       "language": "en",
       "cadence": "daily",
       "kind": "official",
-      "cohort": "original-19"
+      "cohort": "original-19",
+      "route_status": "held_by_user_request_2026-11-17; do_not_retry_until_official_source_route_is_stable"
     },
     {
       "id": "calprivacy",
@@ -201,7 +202,8 @@
       "language": "en",
       "cadence": "daily",
       "kind": "official",
-      "cohort": "original-19"
+      "cohort": "original-19",
+      "route_status": "held_by_user_request_2026-11-17; do_not_retry_until_official_source_route_is_stable"
     },
     {
       "id": "eu-council",

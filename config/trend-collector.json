@@ -211,13 +211,13 @@
         "ec.europa.eu"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
+      "hold_reason": "사용자 요청으로 수집 보류: 공식 원문 접근·작성 경로 안정화 전까지 재시도하지 않음",
       "adapter_scope": "official_presscorner_paginated_search_api_identity_checked_document_api_detail_trafilatura_first",
       "executor": "cloud-python",
       "cadence": "daily",
@@ -325,13 +325,13 @@
         "www.europarl.europa.eu"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
+      "hold_reason": "사용자 요청으로 수집 보류: 공식 원문 접근·작성 경로 안정화 전까지 재시도하지 않음",
       "adapter_scope": "official_press_or_news_body",
       "executor": "cloud-python",
       "cadence": "daily",
