@@ -1,15 +1,15 @@
 # APPI 누락·순서·사람 검수 상태 목록
 
-판본: `415AC0000000057_20261001_507AC0000000070`. 본칙 번역 초안 제1조~제185조; 선택 공식 판본 전체 번역 초안·사람 검수 미완료. 원문 전체 목록은 appi.json의 provisions 및 coverage.missing_node_ids에 있습니다. 숫자 대조는 구조 검증이며 번역 정확성 검수는 아닙니다.
+판본: `415AC0000000057_20261102_508AC0000000062`. 본칙 번역 초안 제1조~제185조; 선택 공식 판본 전체 번역 초안·사람 검수 미완료. 원문 전체 목록은 appi.json의 provisions 및 coverage.missing_node_ids에 있습니다. 숫자 대조는 구조 검증이며 번역 정확성 검수는 아닙니다.
 
 | 단위 | 원문 수 | 번역 초안 수 | 남은 수 |
 | --- | ---: | ---: | ---: |
 | Chapter | 8 | 8 | 0 |
 | Section | 20 | 20 | 0 |
 | Subsection | 8 | 8 | 0 |
-| Article | 250 | 250 | 0 |
-| Paragraph | 523 | 523 | 0 |
-| Item | 282 | 282 | 0 |
+| Article | 253 | 253 | 0 |
+| Paragraph | 528 | 528 | 0 |
+| Item | 284 | 284 | 0 |
 | Subitem1 | 16 | 16 | 0 |
 | SupplProvision | 22 | 22 | 0 |
 | AppdxTable | 2 | 2 | 0 |
@@ -306,6 +306,9 @@
 | `suppl21-a13` | 第十三条 | [초안](./appi.md#suppl21-a13) | 미착수 |
 | `suppl22` | 附　則 令和八年七月一七日法律第六二号 (원문 제공 부칙 발췌) | [초안](./appi.md#suppl22) | 미착수 |
 | `suppl22-a1` | 第一条 | [초안](./appi.md#suppl22-a1) | 미착수 |
+| `suppl22-a2` | 第二条 | [초안](./appi.md#suppl22-a2) | 미착수 |
+| `suppl22-a3` | 第三条 | [초안](./appi.md#suppl22-a3) | 미착수 |
+| `suppl22-a4` | 第四条 | [초안](./appi.md#suppl22-a4) | 미착수 |
 | `suppl22-a8` | 第八条 | [초안](./appi.md#suppl22-a8) | 미착수 |
 | `law-table1` | 別表第一 | [초안](./appi.md#law-table1) | 미착수 |
 | `law-table2` | 別表第二 | [초안](./appi.md#law-table2) | 미착수 |

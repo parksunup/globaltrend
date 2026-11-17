@@ -103,19 +103,19 @@ def render():
     completion_description = (f"{remaining_description} 미번역. **전문 미완성·사람 검수 전 초안**."
                               if missing else "본칙·제공 부칙·별표 전체 초안 작성. **사람 검수 전·비공식 번역**.")
     lines = [
-        f"# 개인정보 보호에 관한 법률(APPI) — 일본 — 2026-10-01 시행 판본 — {scope_status}", "",
+        f"# 개인정보 보호에 관한 법률(APPI) — 일본 — {doc['source']['selected_revision_enforcement_date']} 시행 판본 — {scope_status}", "",
         "- 공식 법률명: 個人情報の保護に関する法律 (平成十五年法律第五十七号)",
         "- 관할권: 일본 (`JP`)",
         "- 공식 원문: https://laws.e-gov.go.jp/document?lawid=415AC0000000057",
         f"- 공식 API·선택 판본: https://laws.e-gov.go.jp/api/2/law_data/{version}",
-        f"- 판본 식별자: `{version}`; 원문 API 상태: `CurrentEnforced`.",
-        "- 선택 개정 판본 시행일: 2026-10-01. 법률 최초 공포일: 2003-05-30. 법 전체의 단일 최초 시행일과 구분합니다.",
+        f"- 판본 식별자: `{version}`; 원문 API 상태: `{doc['source']['version_status']}`.",
+        f"- 선택 개정 판본 시행일: {doc['source']['selected_revision_enforcement_date']}. 법률 최초 공포일: 2003-05-30. 법 전체의 단일 최초 시행일과 구분합니다.",
         f"- 번역 상태: 본칙 제1조~제{last}조 작성({len(drafted)}/{len(main)}개, {percent}%). "
         + completion_description,
         "- 출처: e-Gov 법령검색의 위 공식 판본. 원문을 기초로 이 프로젝트가 한국어로 번역·가공한 비공식 초안이며 일본 정부가 작성한 번역이 아닙니다.",
-        "- 조사일: 2026-10-06. 원문 제공 범위에는 일부 개정법 부칙의 발췌(`Extract=true`)가 포함됩니다. 각 개정법 전체를 번역한 문서는 아닙니다.",
+        f"- 조사일: {doc['source']['retrieved_at']}. 원문 제공 범위에는 일부 개정법 부칙의 발췌(`Extract=true`)가 포함됩니다. 각 개정법 전체를 번역한 문서는 아닙니다.",
         "- [조항별 JSON](./appi.json) · [누락·검수 목록](./appi-status.md) · [용어·이용조건·대조 메모](./appi-review-notes.md)",
-        "", "## 번역 본문", "",
+        "", "> 용어·판본 편집은 사람 검수가 아닙니다. [법제 용어집](../../../docs/translation/legal-glossary.md)과 법률별 정의를 따르며, 번역 전문과 비교표를 각각 검수해야 합니다.", "", "## 번역 본문", "",
     ]
     for node in nodes:
         if node["translation_status"] != "draft":

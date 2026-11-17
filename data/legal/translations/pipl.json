@@ -7,7 +7,14 @@
   "source": {
     "original_url": "https://www.miit.gov.cn/jgsj/zfs/fl/art/2022/art_515a4b20c12f430eab54bb4f56d89f56.html",
     "selected_revision_enforcement_date": "2021-11-01 시행 · 2021-08-20 통과 본문",
-    "scope_note": "2021-08-20 통과·2021-11-01 시행 PIPL 제1~74조 전문 자체 비공식 번역. 공업정보화부 2022-01-29 게재 원문 기준. 사람 검수 전. 후속 하위 법령 전문 번역 또는 모든 개정의 현행성 확인을 포함하지 않음. 개인정보처리자는 제73조의 목적·방식 결정자이며 GDPR processor와 동일하지 않음. 용어 편집(2026-11-02): 민감정보·개인정보처리자·수탁자는 PIPL의 정의와 조건을 따른다. 특히 개인정보처리자는 처리 목적·방식을 정하는 주체이며 한국법과 정의가 일치한다는 뜻이 아니다. 사람 검수 전."
+    "scope_note": "2021-08-20 통과·2021-11-01 시행 PIPL 제1~74조 전문 자체 비공식 번역. 공업정보화부 2022-01-29 게재 원문 기준. 사람 검수 전. 후속 하위 법령 전문 번역 또는 모든 개정의 현행성 확인을 포함하지 않음. 개인정보처리자는 제73조의 목적·방식 결정자이며 GDPR processor와 동일하지 않음. 용어 편집(2026-11-02): 민감정보·개인정보처리자·수탁자는 PIPL의 정의와 조건을 따른다. 특히 개인정보처리자는 처리 목적·방식을 정하는 주체이며 한국법과 정의가 일치한다는 뜻이 아니다. 사람 검수 전.",
+    "followup_check": {
+      "checked_on": "2026-11-17",
+      "status": "body_obtained_watch_partial",
+      "record": "../sources/amendment-review-20261117.json",
+      "human_review_status": "not_started",
+      "full_currentness_verified": false
+    }
   },
   "translation": {
     "language": "ko",

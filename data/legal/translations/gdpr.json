@@ -12,7 +12,14 @@
     "selected_revision_enforcement_date": "2016-05-24",
     "application_date": "2018-05-25",
     "retrieved_at": "2026-10-12",
-    "scope_note": "2016년 영어 관보 원판 + 2018-05-23 영어 정오표. 2026년 전체 현행성 미확정. PR15의 공개 HTML 자체 한국어 번역 초안을 구조 변환했으며 번역문을 새로 생성하지 않았습니다. 원자료 © European Union. EU 공식 번역·승인 자료가 아닙니다. 용어 편집(2026-11-02): 개인정보처리자(controller)는 처리 목적·수단을 정하는 주체, 수탁자(processor)는 그를 대신해 처리하는 주체를 뜻한다. 각 정의·권리·의무는 GDPR을 따르며 한국 개인정보 보호법과 같은 제도로 단정하지 않는다. 사람 검수 전."
+    "scope_note": "2016년 영어 관보 원판 + 2018-05-23 영어 정오표. 2026년 전체 현행성 미확정. PR15의 공개 HTML 자체 한국어 번역 초안을 구조 변환했으며 번역문을 새로 생성하지 않았습니다. 원자료 © European Union. EU 공식 번역·승인 자료가 아닙니다. 용어 편집(2026-11-02): 개인정보처리자(controller)는 처리 목적·수단을 정하는 주체, 수탁자(processor)는 그를 대신해 처리하는 주체를 뜻한다. 각 정의·권리·의무는 GDPR을 따르며 한국 개인정보 보호법과 같은 제도로 단정하지 않는다. 사람 검수 전.",
+    "followup_check": {
+      "checked_on": "2026-11-17",
+      "status": "official_body_recovered",
+      "record": "../sources/amendment-review-20261117.json",
+      "human_review_status": "not_started",
+      "full_currentness_verified": false
+    }
   },
   "translation": {
     "language": "ko",
