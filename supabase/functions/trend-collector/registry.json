@@ -140,6 +140,31 @@
       "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
+      "source": "imda",
+      "source_id": "bab5bef0-c433-586d-b7c6-68b5214361ef",
+      "listing": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1",
+      "hosts": [
+        "www.imda.gov.sg"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_release_archive_server_rendered_listing_and_article_body",
+      "verification_status": "official_archive_detail_robots_and_terms_route_reviewed",
+      "verification": "Official IMDA release archive responds with a server-rendered, date-ordered release list and article details. robots.txt permits this listing and article path; it disallows unrelated paths such as /search and /upload, which this route never requests. A sample page and details were checked. Only privacy/data-protection-relevant releases are ingested; body and dates are machine extracted and remain subject to human relevance review. This is not a claim of a reuse license.",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "coverage_complete": false,
+      "approval_basis": "User requested an official alternative route for Singapore privacy developments when PDPC collection fails; IMDA is the parent authority of PDPC and its official press release archive provides a direct, robots-permitted route.",
+      "pagination_order": "newest_first",
+      "runtime_activation_basis": "user_requested_singapore_pdpc_alternate_imda_route"
+    },
+    {
       "source": "ppc",
       "source_id": "1f948872-529c-4db2-85af-4740d5f2bae3",
       "listing": "https://www.ppc.go.jp/news/press/",
@@ -211,14 +236,16 @@
         "ec.europa.eu"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
+      "hold_reason": "사용자 요청으로 수집 보류: 공식 원문 접근·작성 경로 안정화 전까지 재시도하지 않음",
       "adapter_scope": "official_presscorner_paginated_search_api_identity_checked_document_api_detail_trafilatura_first",
+      "verification_status": "held_by_user",
+      "verification": "사용자 지시에 따라 유럽연합 집행위원회(EC) 수집을 보류합니다. 안정적인 공식 목록·본문 경로가 확인되기 전까지 재시도하지 않습니다.",
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
@@ -325,14 +352,16 @@
         "www.europarl.europa.eu"
       ],
       "language": "en",
-      "enabled": true,
+      "enabled": false,
       "permissions": {
-        "collect": true,
-        "store": true,
-        "ai": true
+        "collect": false,
+        "store": false,
+        "ai": false
       },
-      "hold_reason": null,
+      "hold_reason": "사용자 요청으로 수집 보류: 공식 원문 접근·작성 경로 안정화 전까지 재시도하지 않음",
       "adapter_scope": "official_press_or_news_body",
+      "verification_status": "held_by_user",
+      "verification": "사용자 지시에 따라 유럽의회 수집을 보류합니다. 안정적인 공식 목록·본문 경로가 확인되기 전까지 재시도하지 않습니다.",
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,

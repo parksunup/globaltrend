@@ -455,11 +455,11 @@ def extract_publication_document(source,data,url,content_type,row=None):
         'gpa':'main .wpb_text_column, main article, main',
         'noyb':'main .field--name-body, main article, main',
         'freevacy':'main .article-body, main article, main',
-        'overview-legal':'main article, main .post-content, main',
+        'overview-legal':'article.rd-text, main .rd-text, main article, main .post-content, main',
     }[source]
     body_node=next((soup.select_one(s) for s in selector.split(', ') if soup.select_one(s)),None)
     if body_node is None:raise ValueError('publication_main_body_missing')
-    for node in body_node.select('script,style,nav,header,footer,form,button,[aria-hidden="true"]'):
+    for node in body_node.select('script,style,nav,header,footer,form,button,aside,[aria-hidden="true"],.rd-text-head'):
         node.decompose()
     body=normalize(body_node.get_text('\n',strip=True))
     if not body:raise ValueError('publication_main_body_empty')
@@ -516,7 +516,7 @@ def extract_publication_document(source,data,url,content_type,row=None):
     return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
         'published_date':published,
         'metadata':{'normalization_version':NORMALIZATION_VERSION,
-            'parser_version':'publication-source-fallback-v1','read_scope':'source_article_main_body',
+            'parser_version':'publication-source-fallback-v2','read_scope':'source_article_main_body',
             'date_observations':observations,'requires_review':True,'related_documents':[],
             'unread_attachments':[],'factual_status':'public_publication_text_not_independently_reviewed',
             'source_type':(row or {}).get('source_type'),'source_name':(row or {}).get('source_name'),
@@ -791,6 +791,8 @@ def discover_pdpc_sitemap(data,url):
     return rows,None
 
 def discover_listing(source,html,url,fetch=None,response_headers=None):
+    if source == 'imda':
+        return discover_imda_listing(html, url)
     if source in expansion.ROUTES:return expansion.discover(source,html,url,response_headers)
     if source=='ico':
         payload=ico_search_request(html,url)
@@ -946,6 +948,114 @@ def discover(source,html,url):
         found[target]=row
     next_link=soup.select_one('a[rel~="next"],.pager__item--next a,.pager-next a')
     return list(found.values()),urljoin(url,next_link['href']) if next_link else None
+
+
+def _imda_flight_texts(html):
+    """Decode Next.js flight payload strings without executing site scripts."""
+    texts=[]
+    for match in re.finditer(r'<script[^>]*>(.*?)</script>',html,re.S|re.I):
+        script=match.group(1).strip()
+        if not script.startswith('self.__next_f.push('):
+            continue
+        payload=script[len('self.__next_f.push('):].rstrip()
+        if payload.endswith(';'): payload=payload[:-1].rstrip()
+        if payload.endswith(')'): payload=payload[:-1].rstrip()
+        try:
+            value=json.loads(payload)
+        except (json.JSONDecodeError,TypeError):
+            continue
+        if isinstance(value,list) and len(value)>1 and isinstance(value[1],str):
+            texts.append(value[1])
+    return texts
+
+
+def _json_object_at(text,start):
+    if start<0 or start>=len(text) or text[start]!='{':
+        return None
+    depth=0; quoted=False; escaped=False
+    for index in range(start,len(text)):
+        char=text[index]
+        if quoted:
+            if escaped: escaped=False
+            elif char=='\\': escaped=True
+            elif char=='"': quoted=False
+            continue
+        if char=='"': quoted=True
+        elif char=='{': depth+=1
+        elif char=='}':
+            depth-=1
+            if depth==0:
+                try: return json.loads(text[start:index+1])
+                except json.JSONDecodeError: return None
+    return None
+
+
+def discover_imda_listing(html,url):
+    """Read IMDA's server-rendered official release listing and teaser text."""
+    parsed=urlsplit(url)
+    query=parse_qs(parsed.query,keep_blank_values=True)
+    if (parsed.scheme!='https' or parsed.hostname!='www.imda.gov.sg' or
+            parsed.path!='/resources/press-releases-factsheets-and-speeches' or
+            set(query)-{'page'} or any(len(v)!=1 for v in query.values())):
+        raise ValueError('imda_listing_route_unverified')
+    page=listing_page_number(url)
+    payload=None
+    for text in _imda_flight_texts(html):
+        marker='initialDetails":'
+        position=text.find(marker)
+        if position<0: continue
+        start=text.find('{',position+len(marker))
+        candidate=_json_object_at(text,start)
+        if isinstance(candidate,dict) and isinstance(candidate.get('resultList'),list):
+            payload=candidate;break
+    if (not isinstance(payload,dict) or type(payload.get('currentPage')) is not int or
+            payload['currentPage']!=page or type(payload.get('totalPage')) is not int or
+            payload['totalPage']<page or type(payload.get('totalItems')) is not int or
+            not isinstance(payload.get('resultList'),list) or not payload['resultList']):
+        raise ValueError('imda_listing_schema_changed')
+    rows=[]; all_dates=[]
+    for item in payload['resultList']:
+        if not isinstance(item,dict): raise ValueError('imda_listing_schema_changed')
+        title=normalize(item.get('page_title') or item.get('teaser_title') or '')
+        permalink=item.get('permalink')
+        teaser=normalize(item.get('teaser_description') or '')
+        raw_date=item.get('publish_date')
+        if not title or not isinstance(permalink,str) or not permalink.startswith('/') or not isinstance(raw_date,str):
+            raise ValueError('imda_listing_schema_changed')
+        parsed_date=parse_date(raw_date)
+        if not parsed_date: raise ValueError('imda_listing_date_unparsed')
+        target=urljoin('https://www.imda.gov.sg/',permalink.lstrip('/'))
+        if urlsplit(target).hostname!='www.imda.gov.sg': raise ValueError('imda_listing_link_unapproved')
+        all_dates.append(parsed_date)
+        text=' '.join((title,teaser)).casefold()
+        relevant=bool(re.search(r'privacy|personal data|data protection|pdpc|data protection trustmark|privacy-enhancing|personal information',text))
+        rows.append({'url':target,'title':title,'published_date':parsed_date,
+            'date_observations':[{'meaning':'official_listing_publish_date','locator':'IMDA release listing publish_date','value':raw_date}],
+            'feed_text':teaser,'source_name':'Infocomm Media Development Authority (IMDA)',
+            'source_type':'official_government_press_release','privacy_relevant':relevant,
+            'listing_route':'imda_official_listing','issuer':'Infocomm Media Development Authority (IMDA)'})
+    if any(all_dates[index]>all_dates[index-1] for index in range(1,len(all_dates))):
+        raise ValueError('imda_listing_date_order_changed')
+    next_url=listing_next_url(url,page) if page<payload['totalPage'] else None
+    return rows,next_url
+
+
+def extract_official_listing_teaser(source_name,row):
+    """Keep only an issuing agency's own listing excerpt with its limited scope."""
+    title=normalize((row or {}).get('title',''))
+    body=normalize((row or {}).get('feed_text',''))
+    if not title or not body or not (row or {}).get('privacy_relevant'):
+        raise ValueError('official_listing_teaser_not_relevant_or_empty')
+    published=(row or {}).get('published_date')
+    observations=list((row or {}).get('date_observations') or [])
+    return {'title_original':title,'content_text':body,
+        'content_hash':hashlib.sha256(body.encode()).hexdigest(),'published_date':published,
+        'metadata':{'normalization_version':NORMALIZATION_VERSION,'parser_version':'imda-official-listing-teaser-v1',
+            'read_scope':'official_listing_teaser_only','date_observations':observations,
+            'source_name':source_name,'source_type':'official_government_press_release',
+            'publisher_label':'IMDA','issuer':'Infocomm Media Development Authority (IMDA)',
+            'primary_source_verified_by_this_listing':True,'requires_review':True,
+            'ai_ready':False,'factual_status':'official_issuer_teaser_not_full_release'}}
 
 
 def cnil_listing_date(row):

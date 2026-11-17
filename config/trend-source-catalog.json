@@ -91,6 +91,27 @@
       "cohort": "original-19"
     },
     {
+      "id": "imda",
+      "name": "Infocomm Media Development Authority (IMDA), Singapore",
+      "listing": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1",
+      "hosts": [
+        "www.imda.gov.sg"
+      ],
+      "language": "en",
+      "cadence": "daily",
+      "kind": "official",
+      "cohort": "additional-source",
+      "topic_terms": [
+        "privacy",
+        "personal data",
+        "data protection",
+        "PDPC",
+        "data protection trustmark"
+      ],
+      "listing_is_topic_scoped": false,
+      "route_status": "official_imda_release_archive_verified; robots_allows_route; teaser_and_detail_extraction_reviewed"
+    },
+    {
       "id": "ppc",
       "name": "Personal Information Protection Commission Japan",
       "listing": "https://www.ppc.go.jp/news/press/",
@@ -136,7 +157,10 @@
       "language": "en",
       "cadence": "daily",
       "kind": "official",
-      "cohort": "original-19"
+      "cohort": "original-19",
+      "route_status": "held_by_user_request_2026-11-17; do_not_retry_until_official_source_route_is_stable",
+      "verification_status": "held_by_user",
+      "verification": "사용자 지시에 따라 유럽연합 집행위원회(EC) 수집을 보류합니다. 안정적인 공식 목록·본문 경로가 확인되기 전까지 재시도하지 않습니다."
     },
     {
       "id": "calprivacy",
@@ -201,7 +225,10 @@
       "language": "en",
       "cadence": "daily",
       "kind": "official",
-      "cohort": "original-19"
+      "cohort": "original-19",
+      "route_status": "held_by_user_request_2026-11-17; do_not_retry_until_official_source_route_is_stable",
+      "verification_status": "held_by_user",
+      "verification": "사용자 지시에 따라 유럽의회 수집을 보류합니다. 안정적인 공식 목록·본문 경로가 확인되기 전까지 재시도하지 않습니다."
     },
     {
       "id": "eu-council",

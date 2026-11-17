@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import hashlib
 import re
-from datetime import date
+from datetime import date, datetime
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
@@ -14,6 +14,23 @@ HOSTS = {"privacy.ca.gov"}
 LISTING_URL = "https://privacy.ca.gov/category/content-types/news/press-release/"
 ARTICLE_PATH = re.compile(r"^/\d{4}/\d{2}/[^?#]+/?$")
 PRIVACY_TERMS = re.compile(r"privacy|personal\s+information|consumer\s+data", re.I)
+
+
+def _parse_visible_date(value: str) -> str | None:
+    raw = " ".join((value or "").split())
+    if not raw:
+        return None
+    try:
+        return date.fromisoformat(raw[:10]).isoformat()
+    except ValueError:
+        pass
+    # CalPrivacy currently displays dates such as "Nov 13, 2026".
+    for pattern in ("%b %d, %Y", "%B %d, %Y"):
+        try:
+            return datetime.strptime(raw, pattern).date().isoformat()
+        except ValueError:
+            pass
+    return None
 
 
 def _text(node) -> str:
@@ -45,7 +62,7 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
     for card in soup.select("article.post"):
         title_node = card.select_one(".cat-info h2, .title")
         title = _text(title_node)
-        if not title or not PRIVACY_TERMS.search(title):
+        if not title:
             continue
         anchor = card.select_one(".thumbnail-link[href], .title[href], h2 a[href]")
         if not anchor:
@@ -53,7 +70,10 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
         target = _canonical(anchor.get("href", ""), listing_url)
         if not target:
             continue
-        row = {"url": target, "title": title}
+        row = {"url": target, "title": title,
+               "privacy_relevant_title": bool(PRIVACY_TERMS.search(title))}
+        if not row["privacy_relevant_title"]:
+            continue
         date_node = card.select_one(".post-meta .published, time[datetime]")
         if date_node:
             value = date_node.get("datetime") or _text(date_node)
@@ -66,6 +86,32 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
         found[target] = row
 
     return list(found.values())
+
+
+def proves_before_window(rows: list[dict], since: str) -> bool:
+    """CalPrivacy's verified press-release listing is newest-first by date.
+
+    A page is a safe stopping point only when every visible card has a parsed
+    date, dates are non-increasing in page order, and the oldest card predates
+    the requested window. Unknown or unordered dates require normal pagination.
+    """
+    if not rows:
+        return False
+    dates: list[str] = []
+    for row in rows:
+        value = row.get("published_date")
+        if not value:
+            for observation in row.get("date_observations") or []:
+                value = observation.get("date") or observation.get("value")
+                if value:
+                    break
+        parsed = _parse_visible_date(str(value) if value else "")
+        if not parsed:
+            return False
+        dates.append(parsed)
+    if any(dates[index] > dates[index - 1] for index in range(1, len(dates))):
+        return False
+    return dates[-1] < date.fromisoformat(since).isoformat()
 
 
 def next_page_url(html: str, listing_url: str) -> str | None:

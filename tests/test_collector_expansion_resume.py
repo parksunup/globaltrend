@@ -16,26 +16,13 @@ class ExpandedCloudResumeTests(unittest.TestCase):
     def claim(self,slug):
         return dict(slug=slug,source_id=self.config(slug)['source_id'],since='2026-10-26',until='2026-10-28',cursor=None,lease_until='2099-01-01T00:00:00+00:00')
 
-    def test_mutating_parliament_listing_keeps_exact_committed_url_order(self):
-        claim=self.claim('eu-parliament');urls=[f'https://www.europarl.europa.eu/news/en/press-room/2026102{i}IPR4831{i}/' for i in range(3)]
-        listings=[];details=[]
+    def test_user_held_parliament_route_does_not_attempt_collection(self):
+        claim=self.claim('eu-parliament')
         class Client(HttpClient):
-            def get(self,url):
-                if url.endswith('.xml'):
-                    listings.append(url)
-                    text='<rss><channel>'+''.join(f'<item><title>Release {i} revision {len(listings) if i==2 else 0}</title><link>{u}</link></item>' for i,u in enumerate(urls))+'</channel></rss>'
-                    return text.encode(),url,'application/rss+xml'
-                details.append(url)
-                return (FIXTURES/'eu-parliament-detail.html').read_bytes().replace(b'2026-10-23',b'2026-10-27'),url,'text/html'
-        bundles=[]
+            def get(self,url): self.fail('held route must not make a network request')
         with patch('scripts.collector.cloud_step.HttpClient',Client):
-            for _ in urls:
-                bundle=prepare(claim);bundles.append(bundle);claim['cursor']=bundle['cursor']
-        self.assertEqual(details,urls)
-        self.assertEqual(len(listings),1)
-        self.assertTrue(bundles[-1]['result']['listing_scan_complete'])
-        self.assertTrue(all(len(b['operations'])==1 for b in bundles))
-        self.assertEqual(details,urls)
+            with self.assertRaisesRegex(ValueError,'cloud_source_not_assigned'):
+                prepare(claim)
 
     def test_frozen_listing_keeps_date_observations_for_detail_extraction(self):
         from scripts.collector import extraction
@@ -82,7 +69,7 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         claim.update(backlog_id='synthetic-backlog',detail={'url':target,'title':'Original release'})
         class Client(HttpClient):
             def get(self,url):return (FIXTURES/'eu-parliament-detail.html').read_bytes(),target.replace('IPR48312','IPR99999'),'text/html'
-        with patch('scripts.collector.cloud_step.HttpClient',Client):bundle=prepare(claim)
+        with patch('scripts.collector.cloud_step.validate_claim'), patch('scripts.collector.cloud_step.HttpClient',Client):bundle=prepare(claim)
         self.assertEqual(bundle['operations'],[])
         self.assertFalse(bundle['backlog_resolved'])
         self.assertEqual(bundle['result']['reason'],'detail_redirect_identity_mismatch')

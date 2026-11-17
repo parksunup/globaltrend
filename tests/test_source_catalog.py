@@ -11,10 +11,10 @@ class SourceCatalogTests(unittest.TestCase):
     def test_full_requested_scope_is_present_once(self):
         catalog = load_catalog()
         sources = catalog['sources']
-        self.assertEqual(37, len(sources))
+        self.assertEqual(38, len(sources))
         ids = [source['id'] for source in sources]
         self.assertEqual(len(ids), len(set(ids)))
-        self.assertEqual({'original-19': 19, 'additional-12': 12, 'additional-source': 5,
+        self.assertEqual({'original-19': 19, 'additional-12': 12, 'additional-source': 6,
                           'previously-tested-held': 1},
                          {cohort: sum(source['cohort'] == cohort for source in sources)
                           for cohort in ('original-19', 'additional-12', 'additional-source',

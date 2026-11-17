@@ -138,10 +138,11 @@ class CloudWorkerTests(unittest.TestCase):
             with self.assertRaisesRegex(cloud_worker.WorkerError, 'source_not_enabled_for_cloud_python'):
                 cloud_worker.eligible_sources(registry_path, source_id='disabled')
 
-    def test_configured_cloud_sources_include_edps_official_rss(self):
+    def test_edps_is_active_while_ec_and_parliament_remain_held(self):
         sources = cloud_worker.eligible_sources()
         by_slug = {row['source']: row for row in sources}
-        self.assertTrue({'ec', 'eu-parliament', 'edps'}.issubset(by_slug))
+        self.assertTrue({'edps'}.issubset(by_slug))
+        self.assertFalse({'ec', 'eu-parliament'} & set(by_slug))
         self.assertEqual(by_slug['edps']['listing'], 'https://social.edps.europa.eu/@EDPS.rss')
         self.assertTrue(by_slug['edps']['permissions']['collect'])
         self.assertTrue(by_slug['edps']['permissions']['store'])
