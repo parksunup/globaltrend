@@ -16,6 +16,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from pdf_sources import pdf_text, singapore, california
+from chinese_source import document_paragraphs, article_bodies
 
 MAX_BYTES = 6_000_000
 PARSER_VERSION = 1
@@ -165,6 +166,30 @@ def fetch_bytes(source,url):
 
 def read_official(source,url,historical=False,resolve=True):
     raw=fetch_bytes(source,url);consolidation=None
+    if source['parser']=='chinese-docx':
+        data=json.loads(raw).get('data') or {}
+        if data.get('title') not in source['identity'] or data.get('bbbs')!=source.get('selectedId'):raise SourceError('chinese_document_identity_mismatch')
+        path=(data.get('ossFile') or {}).get('ossWordPath','')
+        if not re.fullmatch(r'prod/\d{8}/[a-f0-9]{32}\.docx',path):raise SourceError('unapproved_attachment_path')
+        # Stay on the public official endpoint; never request urlIn/private IPs or signed storage URLs.
+        query=urllib.parse.urlencode({'filePath':'/'+path,'fileName':data['title']+'.docx'})
+        body_url='https://flk.npc.gov.cn/law-search/file/download?'+query
+        try:
+            text=document_paragraphs(fetch_bytes(source,body_url))
+            bodies=article_bodies(text,chinese_number)
+        except (ValueError,ET.ParseError) as error:raise SourceError(str(error)) from None
+        if data['title'] not in text:raise SourceError('attachment_identity_not_confirmed')
+        index=set()
+        def walk_index(node):
+            title=str(node.get('title',''));match=re.match(r'^第([零〇一二三四五六七八九十百千\d]+)条',title)
+            if match:index.add('main:'+chinese_number(match[1]))
+            for child in node.get('children') or []:walk_index(child)
+        walk_index(data.get('content') or {})
+        if len(bodies)<source.get('minimumArticles',1) or set(bodies)!=index:raise SourceError('attachment_index_mismatch')
+        metadata={k:data.get(k) for k in ['bbbs','gbrq','sxrq','sxx','xfFlag']}
+        metadata['officialAttachmentPath']=path
+        articles={key:{'label':key,'hash':digest(normal(body))} for key,body in bodies.items()}
+        return {'articles':articles,'metadata':metadata,'version':str(data.get('gbrq',''))+' / status '+str(data.get('sxx','')),'coverage':'article_text','acquiredUrl':body_url,'digest':digest({'articles':articles,'metadata':metadata})}
     if resolve and source.get('resolver')=='eu-current-consolidation':
         page=raw.decode('utf-8')
         dates=set(re.findall(r'CELEX:02016R0679-(\d{8})',page))
