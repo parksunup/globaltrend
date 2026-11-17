@@ -8,6 +8,7 @@ from pathlib import Path
 import unittest
 import urllib.error
 import zipfile
+import warnings
 ROOT=Path(__file__).resolve().parents[1]
 def module(name,path):
  sys.path.insert(0,str((ROOT/path).parent))
@@ -150,5 +151,14 @@ class WatchTests(unittest.TestCase):
   stream=io.BytesIO()
   with zipfile.ZipFile(stream,'w') as archive:archive.writestr('../word/document.xml','<x/>')
   with self.assertRaisesRegex(ValueError,'unsafe_docx_members'):docx.document_paragraphs(stream.getvalue())
+  duplicate=io.BytesIO()
+  with warnings.catch_warnings():
+   warnings.simplefilter('ignore',UserWarning)
+   with zipfile.ZipFile(duplicate,'w') as archive:
+    archive.writestr('word/document.xml','<x/>');archive.writestr('word/document.xml','<y/>')
+  with self.assertRaisesRegex(ValueError,'unsafe_docx_members'):docx.document_paragraphs(duplicate.getvalue())
+  entity=io.BytesIO()
+  with zipfile.ZipFile(entity,'w') as archive:archive.writestr('word/document.xml','<!DOCTYPE x [<!ENTITY ex SYSTEM "https://example.test/">]><x/>')
+  with self.assertRaisesRegex(ValueError,'unsafe_docx_xml'):docx.document_paragraphs(entity.getvalue())
   with self.assertRaisesRegex(ValueError,'noncontiguous_docx_articles'):docx.article_bodies('第一条 完整测试条件和例外。\n第三条 缺失第二条的测试条件。',w.chinese_number)
 if __name__=='__main__':unittest.main()
