@@ -1,6 +1,7 @@
 """Trafilatura-first body extraction shared by every production collector path."""
 import datetime as dt
 import hashlib
+import json
 
 from bs4 import BeautifulSoup
 
@@ -281,8 +282,9 @@ def extract_official_rss_summary(row):
 
 def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
     """Fetch and extract only a PDF manifestation linked by an EP Open Data record."""
-    from urllib.parse import urlsplit
+    from urllib.parse import urlsplit,urljoin
     from . import parsers, expansion
+    from .core import FetchError,canonical_url
     try:
         payload=json.loads(document_json.decode('utf-8') if isinstance(document_json,bytes) else document_json)
     except (UnicodeDecodeError,TypeError,json.JSONDecodeError):
@@ -295,32 +297,45 @@ def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
     expected=urlsplit(api_url).path.rsplit('/',1)[-1]
     if not isinstance(ident,str) or ident.rsplit('/',1)[-1]!=expected:
         raise ValueError('eu_parliament_detail_identity_mismatch')
-    title=entity.get('title') or entity.get('label')
+    title=entity.get('title_dcterms') or entity.get('title') or entity.get('label')
     if isinstance(title,dict):title=title.get('en') or title.get('@value')
     title=parsers.normalize(title or '')
     if not title:raise ValueError('eu_parliament_detail_title_missing')
+    # JSON-LD compacts is_exemplified_by as a relative IRI. Resolve it only
+    # against the API's declared @base and keep the configured official hosts.
+    context=payload.get('@context')
+    contexts=context if isinstance(context,list) else [context]
+    api_base=next((entry.get('@base') for entry in contexts
+                   if isinstance(entry,dict) and isinstance(entry.get('@base'),str)),None)
+    if api_base!='https://data.europarl.europa.eu/':
+        raise ValueError('eu_parliament_jsonld_base_unverified')
     urls=[]
     def visit(value):
-        if isinstance(value,str) and value.startswith('https://'):
-            parsed=urlsplit(value)
-            if (parsed.scheme=='https' and parsed.hostname=='www.europarl.europa.eu' and
-                    not parsed.username and not parsed.password and parsed.port in (None,443) and
-                    parsed.path.lower().endswith('.pdf') and not parsed.fragment):
-                urls.append(value)
+        if isinstance(value,str):
+            candidate=urljoin(api_base,value)
+            try:parsed=urlsplit(canonical_url(candidate,expansion.ROUTES['eu-parliament']['hosts']))
+            except ValueError:return
+            if parsed.path.lower().endswith('.pdf') and not parsed.query and not parsed.fragment:
+                urls.append(parsed.geturl())
         elif isinstance(value,dict):
             for child in value.values():visit(child)
         elif isinstance(value,list):
             for child in value:visit(child)
-    visit(entity)
+    visit(entity.get('is_realized_by'))
     if not urls:raise ValueError('eu_parliament_pdf_manifestation_missing')
     pdf_url=sorted(set(urls),key=lambda value:('/EN/' not in urlsplit(value).path.upper(),len(value)))[0]
-    data,final,content_type=client.get(pdf_url)
-    if urlsplit(final).hostname!='www.europarl.europa.eu' or not data.startswith(b'%PDF-'):
+    try:data,final,content_type=client.get(pdf_url)
+    except FetchError as error:
+        if str(error) in ('http_403','http_404','http_410','network_policy_denied_403'):
+            raise ValueError('eu_parliament_manifestation_unavailable') from None
+        raise
+    if urlsplit(final).hostname not in expansion.ROUTES['eu-parliament']['hosts'] or not data.startswith(b'%PDF-'):
         raise ValueError('eu_parliament_manifestation_not_pdf')
     pdf=parsers.extract_pdf(data,'eu-parliament')
     body=parsers.normalize('\n'.join(page['text'] for page in pdf['pages']))
     if len(body)<100:raise ValueError('eu_parliament_pdf_text_too_short')
-    date_value=entity.get('date_document') or entity.get('date') or entity.get('publication_date')
+    date_value=(entity.get('document_date') or entity.get('date_document') or
+                entity.get('date') or entity.get('publication_date'))
     published=expansion.date(date_value) if isinstance(date_value,str) else None
     # Keep date-unknown full text for review; never infer a publication date.
     observations=list((row or {}).get('date_observations') or [])

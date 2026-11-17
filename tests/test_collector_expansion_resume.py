@@ -54,6 +54,36 @@ class ExpandedCloudResumeTests(unittest.TestCase):
             'joint-press-statement-michael-mcgrath-commissioner-democracy-justice-rule-law-and-consumer-2026-11-16_en')
         self.assertEqual(expansion.listing_date(rows[0]),'2026-11-16')
 
+    def test_commission_feeds_skip_off_route_syndicated_and_non_english_entries(self):
+        from scripts.collector.core import fetch_listing
+        ec_xml='''<?xml version="1.0"?><rss version="2.0"><channel>
+          <item><title>English privacy statement</title>
+            <link>https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2057</link>
+            <pubDate>Mon, 16 Nov 2026 12:00:00 GMT</pubDate></item>
+          <item><title>Portuguese speech</title>
+            <link>https://ec.europa.eu/commission/presscorner/detail/pt/speech_26_2462</link>
+            <pubDate>Mon, 16 Nov 2026 15:17:37 GMT</pubDate></item>
+        </channel></rss>'''
+        client=lambda xml:type('Client',(),{
+            'get':lambda self,url:(xml.encode(),url,'application/rss+xml')})()
+        ec_rows,_=fetch_listing('ec',client(ec_xml),self.config('ec')['listing'])
+        self.assertEqual([row['url'] for row in ec_rows],[
+            'https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2057'
+        ])
+
+        news_xml='''<?xml version="1.0"?><rss version="2.0"><channel>
+          <item><title>Commission privacy news</title>
+            <link>https://commission.europa.eu/news-and-media/news/example-privacy-news-2026-11-16_en</link>
+            <pubDate>Mon, 16 Nov 2026 00:00:00 +0100</pubDate></item>
+          <item><title>Related Press Corner item</title>
+            <link>https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2361</link>
+            <pubDate>Mon, 16 Nov 2026 12:00:00 GMT</pubDate></item>
+        </channel></rss>'''
+        news_rows,_=fetch_listing('ec-news',client(news_xml),self.config('ec-news')['listing'])
+        self.assertEqual([row['url'] for row in news_rows],[
+            'https://commission.europa.eu/news-and-media/news/example-privacy-news-2026-11-16_en'
+        ])
+
     def test_commission_news_detail_requires_real_body_and_reconciles_feed_date(self):
         url='https://commission.europa.eu/news-and-media/news/joint-press-statement-michael-mcgrath-commissioner-democracy-justice-rule-law-and-consumer-2026-11-16_en'
         row={'url':url,'title':'EU data adequacy statement','date_observations':[
@@ -78,6 +108,42 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         self.assertTrue(item['metadata']['requires_review'])
         self.assertEqual(item['metadata']['license'],'CC BY 4.0')
         self.assertTrue(item['metadata']['attribution_required'])
+
+    def test_parliament_api_jsonld_uses_actual_title_and_publication_date_fields(self):
+        data={'@context':[{'@base':'https://data.europarl.europa.eu/'},
+                          'https://data.europarl.europa.eu/api/v2/context.jsonld'],
+            'data':[{'id':'eli/dl/doc/2026-001','title_dcterms':{'en':'Privacy safeguards'},
+                'document_date':'2026-11-12','description':'Official document text about privacy safeguards and data protection.'}]}
+        item=expansion.extract('eu-parliament',json.dumps(data),
+            'https://data.europarl.europa.eu/api/v2/documents/2026-001')
+        self.assertEqual(item['title_original'],'Privacy safeguards')
+        self.assertEqual(item['published_date'],'2026-11-12')
+        self.assertTrue(item['metadata']['ai_ready'])
+
+    def test_parliament_linked_pdf_resolves_only_declared_official_jsonld_base(self):
+        from scripts.collector import extraction
+        from scripts.collector.core import FetchError
+        data={'@context':[{'@base':'https://data.europarl.europa.eu/'},
+                          'https://data.europarl.europa.eu/api/v2/context.jsonld'],
+            'data':[{'id':'eli/dl/doc/2026-001','title_dcterms':{'en':'Privacy safeguards'},
+                'is_realized_by':[{'is_embodied_by':[{'is_exemplified_by':
+                    'distribution/records/2026-001_en.pdf'}]}]}]}
+        class Client:
+            def __init__(self):self.requested=None
+            def get(self,url):
+                self.requested=url
+                raise FetchError('http_404')
+        client=Client()
+        with self.assertRaisesRegex(ValueError,'eu_parliament_manifestation_unavailable'):
+            extraction.extract_eu_parliament_linked_pdf(json.dumps(data),
+                'https://data.europarl.europa.eu/api/v2/documents/2026-001',{},client)
+        self.assertEqual(client.requested,
+            'https://data.europarl.europa.eu/distribution/records/2026-001_en.pdf')
+
+    def test_parliament_detail_negotiates_jsonld(self):
+        self.assertEqual(expansion.detail_request_headers('eu-parliament'),
+                         {'Accept':'application/ld+json'})
+        self.assertIsNone(expansion.detail_request_headers('ec'))
 
     def test_frozen_listing_keeps_date_observations_for_detail_extraction(self):
         from scripts.collector import extraction
@@ -122,7 +188,7 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         claim=self.claim('eu-parliament');target='https://data.europarl.europa.eu/api/v2/documents/2026-001'
         claim.update(backlog_id='synthetic-backlog',detail={'url':target,'title':'Original release'})
         class Client(HttpClient):
-            def get(self,url):return b'{"data":[]}',target.replace('2026-001','2026-002')+'?format=application%2Fld%2Bjson&language=en','application/ld+json'
+            def get(self,url,headers=None):return b'{"data":[]}',target.replace('2026-001','2026-002')+'?format=application%2Fld%2Bjson&language=en','application/ld+json'
         with patch('scripts.collector.cloud_step.validate_claim'), patch('scripts.collector.cloud_step.HttpClient',Client):bundle=prepare(claim)
         self.assertEqual(bundle['operations'],[])
         self.assertFalse(bundle['backlog_resolved'])

@@ -363,7 +363,12 @@ def collect_frozen(config,client,store,since,until):
             result['discovered']+=1
             row=cursor.get('frozen_rows',[{} for _ in urls])[ordinal]
             try:
-                body,received,ctype=client.get(detail_request_url(source,url))
+                request_headers=detail_request_headers(source)
+                detail_url=detail_request_url(source,url)
+                if request_headers:
+                    body,received,ctype=client.get(detail_url,headers=request_headers)
+                else:
+                    body,received,ctype=client.get(detail_url)
                 verify_detail_response(source,url,received)
                 try:
                     item=extraction.extract_document(source,body,url,ctype,row)
@@ -375,6 +380,7 @@ def collect_frozen(config,client,store,since,until):
                     except ValueError as pdf_error:
                         if str(pdf_error) not in (
                             'eu_parliament_manifestation_missing',
+                            'eu_parliament_manifestation_unavailable',
                             'eu_parliament_pdf_text_too_short',
                         ):
                             raise
@@ -505,6 +511,12 @@ def detail_request_url(source,url):
     if source!='ec':return url
     code=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
     return 'https://ec.europa.eu/commission/presscorner/api/documents?'+urlencode({'language':'en','reference':code})
+
+def detail_request_headers(source):
+    # EP's API negotiates JSON-LD through Accept. The query parameter alone is
+    # not sufficient: its default */* response is RDF/XML and cannot be parsed
+    # by the document adapter.
+    return {'Accept':'application/ld+json'} if source=='eu-parliament' else None
 
 def discover(source,html,url,response_headers=None):
     from .parsers import normalize
@@ -748,7 +760,19 @@ def discover(source,html,url,response_headers=None):
         if re.search(r'<!DOCTYPE|<!ENTITY',html,re.I):raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
         feed_meaning='expansion_feed_publication_rfc822' if source in ('ec','ec-news') else 'expansion_feed_publication'
-        for item in root.findall('./channel/item'):add(item.findtext('link',''),item.findtext('title',''),item.findtext('pubDate'),'RSS pubDate',feed_meaning)
+        for item in root.findall('./channel/item'):
+            raw_link=item.findtext('link','')
+            if source in ('ec','ec-news'):
+                # The Commission feeds include syndicated Press Corner entries
+                # and, for Press Corner, occasional non-English items even
+                # when language=en is requested. Only retain article links
+                # belonging to this source's verified English route; never
+                # fail the entire feed or fetch a different source's link.
+                candidate=urlsplit(raw_link)
+                if (candidate.hostname!=c['host'] or
+                        not re.fullmatch(c['article_path'],candidate.path)):
+                    continue
+            add(raw_link,item.findtext('title',''),item.findtext('pubDate'),'RSS pubDate',feed_meaning)
         nxt=None
     else:
         soup=BeautifulSoup(html,'html.parser')
@@ -875,7 +899,7 @@ def extract(source,input,url,row=None):
         identifier=entity.get('id') or entity.get('identifier')
         if not isinstance(identifier,str) or identifier.rsplit('/',1)[-1]!=expected:
             raise ValueError('eu_parliament_detail_identity_mismatch')
-        title=entity.get('title') or entity.get('label')
+        title=entity.get('title_dcterms') or entity.get('title') or entity.get('label')
         if isinstance(title,dict):title=title.get('en') or title.get('@value')
         if not isinstance(title,str) or not title.strip():raise ValueError('eu_parliament_detail_title_missing')
         body_values=[]
@@ -884,7 +908,8 @@ def extract(source,input,url,row=None):
             if isinstance(value,str) and value.strip():body_values.append(value)
             elif isinstance(value,list):body_values.extend(v for v in value if isinstance(v,str) and v.strip())
         body=normalize(' '.join(body_values))
-        date_value=entity.get('date_document') or entity.get('date') or entity.get('publication_date')
+        date_value=(entity.get('document_date') or entity.get('date_document') or
+                    entity.get('date') or entity.get('publication_date'))
         if isinstance(date_value,str):observations.append({'meaning':'official_published_attribute','locator':'European Parliament Open Data API document date','value':date_value})
         published_values={date(value) for value in [date_value] if isinstance(value,str)}-{None}
         listed=listing_date(row) if row else None
