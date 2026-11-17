@@ -17,8 +17,11 @@ begin
   if n<>1 then raise exception 'cloud cursor host guard drift: expected one EC branch, found %',n; end if;
   definition=replace(definition,old_branch,new_branch);
   n=(length(definition)-length(replace(definition,old_limit,'')))/length(old_limit);
-  if n<>1 then raise exception 'cloud cursor size guard drift: expected one base limit, found %',n; end if;
-  definition=replace(definition,old_limit,new_limit);
+  if n=1 then
+    definition=replace(definition,old_limit,new_limit);
+  elsif definition ~ 'octet_length\(c::text\)\s*>' then
+    raise exception 'cloud cursor size guard drift: unexpected base cursor limit';
+  end if;
   execute definition;
 
   definition=pg_get_functiondef('private.collector_cloud_frozen_cursor_valid(jsonb,text)'::regprocedure);
