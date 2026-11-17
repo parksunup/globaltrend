@@ -381,7 +381,8 @@
       "listing": "https://data.europarl.europa.eu/api/v2/documents/feed",
       "hosts": [
         "data.europarl.europa.eu",
-        "www.europarl.europa.eu"
+        "www.europarl.europa.eu",
+        "redmapl3.europarl.europa.eu"
       ],
       "language": "en",
       "enabled": true,

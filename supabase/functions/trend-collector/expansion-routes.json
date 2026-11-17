@@ -49,7 +49,8 @@
     "host": "data.europarl.europa.eu",
     "hosts": [
       "data.europarl.europa.eu",
-      "www.europarl.europa.eu"
+      "www.europarl.europa.eu",
+      "redmapl3.europarl.europa.eu"
     ],
     "listing": "https://data.europarl.europa.eu/api/v2/documents/feed",
     "feed": true,

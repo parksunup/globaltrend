@@ -2,6 +2,7 @@
 import datetime as dt
 import hashlib
 import json
+import re
 
 from bs4 import BeautifulSoup
 
@@ -341,18 +342,41 @@ def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
     observations=list((row or {}).get('date_observations') or [])
     if isinstance(date_value,str):
         observations.append({'meaning':'official_published_attribute','locator':'European Parliament Open Data API document date','value':date_value})
+    cover_date=_eu_parliament_cover_date(pdf['pages'][0].get('text',''),expected)
+    cover_published=expansion.date(cover_date) if cover_date else None
+    date_conflict=bool(published and cover_published and published!=cover_published)
+    if date_conflict:
+        published=None
+    elif published is None and cover_published:
+        published=cover_published
+        observations.append({'meaning':'official_document_date','locator':'European Parliament PDF cover date following the matching document identifier','value':cover_date})
     observations.append({'meaning':'official_manifestation_link','locator':'European Parliament Open Data API linked PDF manifestation','value':pdf_url})
     body=parsers.normalize(body)
     return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
         'published_date':published,'metadata':{'normalization_version':parsers.NORMALIZATION_VERSION,
             'parser_version':'ep-open-data-linked-pdf-v1','read_scope':'official_open_data_linked_pdf_text',
-            'date_observations':observations,'pdf_pages':pdf['pages'],'pdf_ocr_pages':pdf['ocr_pages'],
-            'requires_review':not bool(published),'related_documents':[{'url':pdf_url,'title':title,'read':True}],
+            'date_observations':observations,'date_conflict':date_conflict,
+            'pdf_pages':pdf['pages'],'pdf_ocr_pages':pdf['ocr_pages'],
+            'requires_review':not bool(published) or date_conflict,'related_documents':[{'url':pdf_url,'title':title,'read':True}],
             'unread_attachments':pdf['related_documents'],'factual_status':'official_european_parliament_document_not_independently_reviewed',
             'license':'CC BY 4.0','attribution_required':True,
             'attribution':'European Parliament Open Data',
-            'relevance_reason':'official_open_data_full_text_human_topic_review_pending','ai_ready':bool(published),
+            'relevance_reason':'official_open_data_full_text_human_topic_review_pending','ai_ready':bool(published) and not date_conflict,
             'extraction_method':pdf['extraction_method']}}
+
+
+def _eu_parliament_cover_date(page_text,document_id):
+    """Read a cover date only when it follows this record's matching EP identifier."""
+    match=re.fullmatch(r'([A-Za-z]+)-([0-9]+)-([0-9]{4})-([0-9]+)',document_id)
+    if not match:return None
+    prefix,term,year,number=match.groups()
+    cover_identifier=f'{prefix}{term}-{number}/{year}'
+    compact=re.sub(r'\s+',' ',page_text or '')
+    found=re.search(re.escape(cover_identifier)+r'\s+([0-9]{1,2}[.][0-9]{1,2}[.][0-9]{4})(?:\s|$)',compact)
+    if not found:return None
+    value=found.group(1)
+    try:return dt.datetime.strptime(value,'%d.%m.%Y').date().isoformat()
+    except ValueError:return None
 
 
 def extract_verified_pdf_attachments(source, html, page_url, content_type, row, client):

@@ -139,6 +139,50 @@ class ExpandedCloudResumeTests(unittest.TestCase):
                 'https://data.europarl.europa.eu/api/v2/documents/2026-001',{},client)
         self.assertEqual(client.requested,
             'https://data.europarl.europa.eu/distribution/records/2026-001_en.pdf')
+        self.assertIn('redmapl3.europarl.europa.eu',
+                      expansion.ROUTES['eu-parliament']['hosts'])
+
+    def test_parliament_pdf_cover_date_is_used_only_after_matching_document_id(self):
+        from scripts.collector import extraction
+        from unittest.mock import patch
+        data={'@context':[{'@base':'https://data.europarl.europa.eu/'},
+                          'https://data.europarl.europa.eu/api/v2/context.jsonld'],
+            'data':[{'id':'eli/dl/doc/A-10-2026-0278','title_dcterms':{'en':'Privacy safeguards'},
+                'is_realized_by':[{'is_embodied_by':[{'is_exemplified_by':
+                    'distribution/records/A-10-2026-0278_en.pdf'}]}]}]}
+        class Client:
+            def get(self,url):
+                self.requested=url
+                return b'%PDF-1.7 sample','https://redmapl3.europarl.europa.eu/distribution/records/A-10-2026-0278_en.pdf','application/pdf'
+        parsed={'pages':[{'text':'A10-0278/2026\n21.10.2026\nREPORT\n'+'Official text. '*30}],
+                'ocr_pages':[],'related_documents':[],'extraction_method':'pymupdf'}
+        with patch('scripts.collector.parsers.extract_pdf',return_value=parsed):
+            item=extraction.extract_eu_parliament_linked_pdf(json.dumps(data),
+                'https://data.europarl.europa.eu/api/v2/documents/A-10-2026-0278',{},Client())
+        self.assertEqual(item['published_date'],'2026-10-21')
+        self.assertTrue(item['metadata']['ai_ready'])
+        self.assertEqual(item['metadata']['date_observations'][-2]['locator'],
+                         'European Parliament PDF cover date following the matching document identifier')
+
+    def test_parliament_api_and_cover_date_conflict_is_held(self):
+        from scripts.collector import extraction
+        from unittest.mock import patch
+        data={'@context':[{'@base':'https://data.europarl.europa.eu/'},
+                          'https://data.europarl.europa.eu/api/v2/context.jsonld'],
+            'data':[{'id':'eli/dl/doc/A-10-2026-0278','title_dcterms':{'en':'Privacy safeguards'},
+                'document_date':'2026-10-20','is_realized_by':[{'is_embodied_by':[{'is_exemplified_by':
+                    'distribution/records/A-10-2026-0278_en.pdf'}]}]}]}
+        class Client:
+            def get(self,url):
+                return b'%PDF-1.7 sample','https://redmapl3.europarl.europa.eu/distribution/records/A-10-2026-0278_en.pdf','application/pdf'
+        parsed={'pages':[{'text':'A10-0278/2026\n21.10.2026\nREPORT\n'+'Official text. '*30}],
+                'ocr_pages':[],'related_documents':[],'extraction_method':'pymupdf'}
+        with patch('scripts.collector.parsers.extract_pdf',return_value=parsed):
+            item=extraction.extract_eu_parliament_linked_pdf(json.dumps(data),
+                'https://data.europarl.europa.eu/api/v2/documents/A-10-2026-0278',{},Client())
+        self.assertIsNone(item['published_date'])
+        self.assertTrue(item['metadata']['date_conflict'])
+        self.assertFalse(item['metadata']['ai_ready'])
 
     def test_parliament_detail_negotiates_jsonld(self):
         self.assertEqual(expansion.detail_request_headers('eu-parliament'),
