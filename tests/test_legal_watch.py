@@ -18,6 +18,20 @@ SOURCE={'id':'appi','jurisdiction':'JP','name':'日本法','url':'https://laws.e
 def snapshot(text='old words',number='1'):
  a={'main:'+number:{'label':'第'+number+'条','hash':w.digest(text)}};return {'articles':a,'metadata':{},'version':'v1','coverage':'article_text','digest':w.digest(a)}
 class WatchTests(unittest.TestCase):
+ def test_planned_edition_diagnostic_rejects_wrong_effective_date(self):
+  diagnostic=module('law_direct_diagnostic',Path('scripts/legal-watch/direct_diagnostic.py'))
+  target=next(t for t in diagnostic.targets() if t[0]=='pipa-planned-20270309')
+  wrong=snapshot();wrong['metadata']={'lawNumber':'21910','enforcementLabel':'2026. 9. 11.'}
+  result=diagnostic.check(target,lambda s,url=None:wrong)
+  self.assertEqual(result['status'],'error');self.assertEqual(result['error'],'planned_edition_not_confirmed');self.assertNotIn('snapshot',result)
+ def test_planned_edition_diagnostic_keeps_distinct_dates_and_readonly_scope(self):
+  diagnostic=module('law_direct_diagnostic',Path('scripts/legal-watch/direct_diagnostic.py'))
+  planned=[t for t in diagnostic.targets() if '-planned-' in t[0]]
+  self.assertEqual(len(planned),2)
+  for target in planned:
+   source=target[1];value=snapshot();value['metadata']=source['diagnosticExpectedEdition']
+   result=diagnostic.check(target,lambda s,url=None:value)
+   self.assertEqual(result['status'],'body_obtained');self.assertIn('efYd=',result['entryUrl']);self.assertNotIn('reviewed',result)
  def test_japanese_base64_xml_and_historical_revision(self):
   raw=json.dumps({'revision_info':{'law_title':'個人情報','current_revision_status':'CurrentEnforced'},'law_full_text':base64.b64encode('<Law><MainProvision><Article Num="1"><ArticleCaption>条文</ArticleCaption><Paragraph>条件と例外を保持する本文です。</Paragraph></Article></MainProvision></Law>'.encode()).decode()},ensure_ascii=False).encode()
   result=w.parse_source(SOURCE,raw);self.assertIn('main:1',result['articles']);self.assertNotIn('条件',json.dumps(result,ensure_ascii=False))
