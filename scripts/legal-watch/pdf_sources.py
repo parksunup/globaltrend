@@ -10,9 +10,12 @@ ORDINALS = 'FIRST SECOND THIRD FOURTH FIFTH SIXTH SEVENTH EIGHTH NINTH TENTH ELE
 
 def pdf_text(raw):
     if not raw.startswith(b'%PDF-'): raise ValueError('not_pdf')
-    if not shutil.which('pdftotext'): raise ValueError('pdf_tool_unavailable')
+    if not shutil.which('pdftotext') or not shutil.which('pdfinfo'): raise ValueError('pdf_tool_unavailable')
     with tempfile.TemporaryDirectory(prefix='legal-watch-') as directory:
         source=Path(directory)/'source.pdf';target=Path(directory)/'text.txt';source.write_bytes(raw)
+        info=subprocess.run(['pdfinfo',str(source)],capture_output=True,timeout=10)
+        pages=re.search(rb'^Pages:\s*(\d+)\s*$',info.stdout,re.M)
+        if info.returncode or not pages or not 1<=int(pages[1])<=150: raise ValueError('pdf_page_limit_or_metadata_failure')
         result=subprocess.run(['pdftotext','-layout','-f','1','-l','150',str(source),str(target)],capture_output=True,timeout=20)
         if result.returncode or not target.exists() or target.stat().st_size>LIMIT: raise ValueError('pdf_extraction_failed')
         return target.read_text(encoding='utf-8')

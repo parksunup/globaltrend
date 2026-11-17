@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-16T14:59:53.832900+00:00",
-  "sourceCommit": "0383703ecdaa5686a4c79e3a74befdf439cc2054",
+  "generatedAt": "2026-11-17T01:28:48.577790+00:00",
+  "sourceCommit": "c39759fc0b842e0c56075f113f120cdc60e3ac89",
   "laws": [
     {
       "id": "pipa",
@@ -9,12 +9,12 @@
       "name": "한국 개인정보 보호법",
       "url": "https://www.law.go.kr/법령/개인정보보호법",
       "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:44.282514+00:00",
+      "checkedAt": "2026-11-17T01:28:44.386199+00:00",
       "status": "error",
-      "error": "http_403",
+      "error": "network_unavailable",
       "changes": null,
       "events": [],
-      "baselineOrigin": "first_observation",
+      "baselineOrigin": "configuration_changed",
       "lastSuccessAt": null
     },
     {
@@ -23,21 +23,14 @@
       "name": "일본 APPI",
       "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
       "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:44.283528+00:00",
-      "status": "changed",
+      "checkedAt": "2026-11-17T01:28:44.387216+00:00",
+      "status": "unchanged",
       "error": null,
       "changes": {
-        "added": [
-          "supplement:令和八年七月一七日法律第六二号:2",
-          "supplement:令和八年七月一七日法律第六二号:3",
-          "supplement:令和八年七月一七日法律第六二号:4"
-        ],
+        "added": [],
         "removed": [],
-        "modified": [
-          "main:2",
-          "main:63"
-        ],
-        "metadataChanged": true
+        "modified": [],
+        "metadataChanged": false
       },
       "events": [
         {
@@ -68,7 +61,9 @@
       "version": "415AC0000000057_20261102_508AC0000000062",
       "articleCount": 253,
       "digest": "9727affd91e8f8150decd6cd7d1e47ec5de5f75dff7e4134d8675b39b3ee8f68",
-      "lastSuccessAt": "2026-11-16T14:59:44.283528+00:00"
+      "lastSuccessAt": "2026-11-17T01:28:44.387216+00:00",
+      "acquiredUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "primaryError": null
     },
     {
       "id": "pipl",
@@ -76,7 +71,7 @@
       "name": "중국 PIPL",
       "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
       "scope": "선정 법문 페이지와 유효성 표시 점검. 새 개정 법률의 별도 게시 여부는 공식 검색에서 추가 확인해야 합니다.",
-      "checkedAt": "2026-11-16T14:59:44.284305+00:00",
+      "checkedAt": "2026-11-17T01:28:44.389599+00:00",
       "status": "partial",
       "error": null,
       "changes": {
@@ -107,30 +102,74 @@
       "version": "2021-08-20 / status 3",
       "articleCount": 74,
       "digest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829",
-      "lastSuccessAt": "2026-11-16T14:59:44.284305+00:00"
+      "lastSuccessAt": "2026-11-17T01:28:44.389599+00:00",
+      "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "primaryError": null
     },
     {
       "id": "gdpr",
       "jurisdiction": "EU",
       "name": "EU GDPR",
-      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:44.284910+00:00",
-      "status": "error",
-      "error": "http_202",
-      "changes": null,
-      "events": [],
-      "baselineOrigin": "first_observation",
-      "lastSuccessAt": null
+      "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+      "scope": "공식 ELI 페이지의 Current consolidated version 링크를 따라 통합 본문 99개 조문을 점검합니다. 연결 실패 시 고정 판본 확보로 구분하며 모든 후속 법률·정오표의 효력과 기존 번역 정확성은 별도 검토합니다.",
+      "checkedAt": "2026-11-17T01:28:44.390487+00:00",
+      "status": "unchanged",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "23df46d34e21a090472ebfcf61508da5b97c8aa06cdaf6ce94aa08a00a8e6544",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:50.413027+00:00",
+          "beforeDigest": null,
+          "afterDigest": "6de2c51c4c2b0d212fbc3bc9978a328589539292f299cd8c215dadc3393e0a31",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679"
+        },
+        {
+          "id": "02171fdd3a934c033bf3c2ea059d5b4b91946328b74c6e29eef917fb16e2801e",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:20:38.749421+00:00",
+          "beforeDigest": null,
+          "afterDigest": "3d53ac4b20079ec3dbf76e272d56544e69d74047b7e103c991cea9a618be170b",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng"
+        }
+      ],
+      "baselineOrigin": "configuration_changed",
+      "coverage": "article_text",
+      "version": "CELEX:02016R0679-20160504",
+      "articleCount": 99,
+      "digest": "3d53ac4b20079ec3dbf76e272d56544e69d74047b7e103c991cea9a618be170b",
+      "lastSuccessAt": "2026-11-17T01:28:44.390487+00:00",
+      "acquiredUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "primaryError": null
     },
     {
       "id": "uk-gdpr",
       "jurisdiction": "GB",
       "name": "영국 UK GDPR",
       "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:44.783906+00:00",
-      "status": "baseline",
+      "scope": "본칙 120개 조문 자리의 본문·삭제 표시 점검. 8ZA·12A와 번호 뒤 마침표도 구분하며, 서문·고려사항·부속서는 별도 검토합니다.",
+      "checkedAt": "2026-11-17T01:28:45.189504+00:00",
+      "status": "unchanged",
       "error": null,
       "changes": {
         "added": [],
@@ -153,42 +192,113 @@
           },
           "reviewed": false,
           "sourceUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
+        },
+        {
+          "id": "e7fbe2d4717d68ccc22e2fa18ed37bc90028376ec96f8b3825cce790d937bb67",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:51.154832+00:00",
+          "beforeDigest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+          "afterDigest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
         }
       ],
       "baselineOrigin": "selected_edition",
       "coverage": "article_text",
       "version": "UK GDPR current XML",
-      "articleCount": 118,
-      "digest": "8c8dac28382e6bd2e097918cf0a490e4f85770f4d6728749a5de499cab1a0a04",
-      "lastSuccessAt": "2026-11-16T14:59:44.783906+00:00"
+      "articleCount": 120,
+      "digest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+      "lastSuccessAt": "2026-11-17T01:28:45.189504+00:00",
+      "acquiredUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "primaryError": null
     },
     {
       "id": "ccpa",
       "jurisdiction": "US-CA",
       "name": "미국 캘리포니아 CCPA",
-      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?division=3.&part=4.&lawCode=CIV&title=1.81.5",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:45.646146+00:00",
-      "status": "error",
-      "error": "http_403",
-      "changes": null,
-      "events": [],
-      "baselineOrigin": "first_observation",
-      "lastSuccessAt": null
+      "url": "https://cppa.ca.gov/regulations/",
+      "scope": "캘리포니아 감독기관이 현재 안내하는 시행일 도래 법문 PDF 46개 조문을 점검합니다. 주 의회 법전 접근 실패를 대체한 공식 편찬본이며 모든 후속 개정·별도 규칙의 현행성을 보증하지 않습니다.",
+      "checkedAt": "2026-11-17T01:28:45.666769+00:00",
+      "status": "unchanged",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "c3e84530ce75c62701ae01685b8c5e78f0c5a889fab97de4554ebfcb3d941aeb",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:51.981354+00:00",
+          "beforeDigest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+          "afterDigest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://cppa.ca.gov/regulations/"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "coverage": "article_text",
+      "version": "01/01/2026",
+      "articleCount": 46,
+      "digest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+      "lastSuccessAt": "2026-11-17T01:28:45.666769+00:00",
+      "acquiredUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "primaryError": null
     },
     {
       "id": "pdpa",
       "jurisdiction": "SG",
       "name": "싱가포르 PDPA",
-      "url": "https://sso.agc.gov.sg/Act/PDPA2012?WholeDoc=1",
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다.",
-      "checkedAt": "2026-11-16T14:59:45.956569+00:00",
-      "status": "error",
-      "error": "incomplete_article_structure",
-      "changes": null,
-      "events": [],
-      "baselineOrigin": "first_observation",
-      "lastSuccessAt": null
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+      "scope": "SSO의 현재 통합 PDF 본칙 90개 조문 단위와 11개 부속표를 점검합니다. PDF 시행 표제와 선정 판본을 구분하며 모든 미시행 개정·하위규칙의 효력을 확정하지 않습니다.",
+      "checkedAt": "2026-11-17T01:28:46.563097+00:00",
+      "status": "unchanged",
+      "error": null,
+      "changes": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      },
+      "events": [
+        {
+          "id": "ab883574b02d65ac3fc8be3d51f68cf72f285d8c6165b2a376db996792a5f1b8",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:52.534276+00:00",
+          "beforeDigest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+          "afterDigest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "coverage": "article_text",
+      "version": "16/10/2026",
+      "articleCount": 101,
+      "digest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+      "lastSuccessAt": "2026-11-17T01:28:46.563097+00:00",
+      "acquiredUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+      "primaryError": null
     }
   ]
 }

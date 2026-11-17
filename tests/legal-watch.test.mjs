@@ -81,8 +81,12 @@ test('Preview status uses only safe bundled evidence and sends no private payloa
 });
 test('monitor page distinguishes initial evidence, change candidates, limited checks and source failures',async()=>{
  const state={env:{VERCEL_ENV:'preview'},session:{user:{id:'editor'},canEdit:true}};const Component=server('app/work/legal-updates/page.tsx',state).default;const html=renderToStaticMarkup(await Component());
- assert.match(html,/초기 수동 점검/);assert.match(html,/변경 후보 발견/);assert.match(html,/목차·유효성만 확인/);assert.match(html,/공식 원문 확인 실패/);assert.match(html,/원문을 확인|전체 조문 구조/);assert.match(html,/검토 후 공개/);assert.equal((html.match(/<section[^>]+id="(?:pipa|appi|pipl|gdpr|uk-gdpr|ccpa|pdpa)"/g)??[]).length,7);
+ assert.match(html,/초기 수동 점검/);assert.match(html,/변경 후보 발견/);assert.match(html,/목차·유효성만 확인/);assert.match(html,/공식 원문 확인 실패/);assert.match(html,/변경이 없다는 뜻이 아닙니다/);assert.match(html,/검토 후 공개/);assert.equal((html.match(/<section[^>]+id="(?:pipa|appi|pipl|gdpr|uk-gdpr|ccpa|pdpa)"/g)??[]).length,7);
 });
 test('production monitoring screen requires team membership and does not read results first',async()=>{
  const state={};const html=renderToStaticMarkup(await server('app/work/legal-updates/page.tsx',state).default());assert.match(html,/팀 계정으로 로그인/);assert.equal(state.reads,undefined);
+});
+
+test("artifact body links cannot point outside the configured official hosts",()=>{
+ const report=structuredClone(initial);report.laws[0].acquiredUrl="https://evil.test/body";assert.throws(()=>validateWatchReport(report,sources),/invalid_official_body_url/);
 });

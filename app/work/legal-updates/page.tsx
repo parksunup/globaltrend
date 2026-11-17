@@ -27,7 +27,7 @@ export default async function LegalUpdates(){
   {report.laws.map((law:WatchLaw)=>{
    const p=packages.find(p=>p.jurisdiction===law.jurisdiction&&(p.document?.id===law.id||p.recordId.endsWith('-'+law.id)));const impact=lawImpact(law,p),events=pendingEvents(law),packet=reviewPacket(law,p,report);
    return <section key={law.id} id={law.id} className={`${styles.card} ${watch.card}`} aria-labelledby={'title-'+law.id}>
-    <div className={watch.heading}><h2 id={'title-'+law.id}>{law.name}</h2><strong>{law.coverage==='fixed_official_edition'?' 고정 판본만 확인':labels[law.status]}</strong></div><p>{law.scope}</p><p><a href={law.url} target="_blank" rel="noopener noreferrer">공식 출처 ↗</a> · 최근 성공: {displayTime(law.lastSuccessAt)}</p>
+    <div className={watch.heading}><h2 id={'title-'+law.id}>{law.name}</h2><strong>{law.coverage==='fixed_official_edition'?'고정 판본만 확인':law.status==='unchanged'&&events.some(e=>e.kind==='source_changed')?'변경 후보 발견 · 검토 대기(직전 원문과 동일)':labels[law.status]}</strong></div><p>{law.scope}</p><p><a href={law.url} target="_blank" rel="noopener noreferrer">공식 출처 ↗</a> · 최근 성공: {displayTime(law.lastSuccessAt)}</p>
     {law.acquiredUrl&&law.acquiredUrl!==law.url&&<p><a href={law.acquiredUrl} target="_blank" rel="noopener noreferrer">확보한 공식 본문 ↗</a></p>}
     {law.coverage==='fixed_official_edition'&&<p className={watch.caution}>최신 통합 원문 요청은 실패해 고정된 공식 판본을 확보했습니다. 본문을 대조할 수 있지만 최신 판본·후속 개정 확인이 끝났다는 뜻은 아닙니다. 원 요청 오류: {law.primaryError}</p>}
     {law.status==='error'&&<p role="status">{failure(law.error)} 변경이 없다는 뜻이 아닙니다. 코드: {law.error}</p>}
