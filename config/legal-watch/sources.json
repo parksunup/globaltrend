@@ -15,8 +15,12 @@
         "개인정보 보호법",
         "개인정보보호법"
       ],
-      "minimumArticles": 60,
-      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+      "minimumArticles": 120,
+      "scope": "공식 현행 안내의 lsiSeq를 확인해 본문을 읽고, 본칙과 부칙의 식별자를 구분합니다. 2026-09-11 선정 원문과 대조하며 부분 시행·시행예정 개정 및 하위법령의 적용은 별도 검토합니다.",
+      "parserVersion": 2,
+      "resolver": "korean-current-body",
+      "baselineUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "minimumMainArticles": 120
     },
     {
       "id": "appi",

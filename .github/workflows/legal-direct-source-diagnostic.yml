@@ -1,0 +1,36 @@
+name: Legal direct source diagnostic
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - scripts/legal-watch/direct_diagnostic.py
+      - scripts/legal-watch/watch.py
+      - .github/workflows/legal-direct-source-diagnostic.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    if: >-
+      (github.event_name == 'pull_request' &&
+       github.event.pull_request.head.repo.full_name == github.repository &&
+       github.head_ref == 'feat/legal-amendment-watch') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/feat/legal-amendment-watch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read public official sources and keep metadata only
+        run: python scripts/legal-watch/direct_diagnostic.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: legal-direct-source-diagnostic
+          path: .legal-watch/direct-diagnostic.json
+          retention-days: 7
+          if-no-files-found: error

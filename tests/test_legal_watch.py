@@ -63,6 +63,19 @@ class WatchTests(unittest.TestCase):
   source={**SOURCE,'parser':'korean-html','identity':['개인정보 보호법'],'minimumArticles':2}
   raw='개인정보 보호법<p>제6조(일반) 조건과 예외를 보존합니다.</p><p>제6조의2(추가) 별도의 예외를 보존합니다.</p>'.encode()
   parsed=w.parse_source(source,raw);self.assertEqual(set(parsed['articles']),{'main:6','main:6-2'})
+ def test_korean_official_body_separates_main_and_supplementary_article_numbers(self):
+  source={**SOURCE,'parser':'korean-html','identity':['개인정보 보호법'],'minimumArticles':3,'minimumMainArticles':2}
+  raw='<h2>개인정보 보호법</h2>[시행 2026. 9. 11.] [법률 제21445호, 2026. 3. 10., 일부개정]<p class="pty1_p4">제1조(목적) 개인정보를 보호한다.</p><p class="pty1_dep1">조건과 예외를 모두 보존한다.</p><p class="pty1_p4">제2조(정의) 개인정보를 정의한다.</p><p class="pty3">부칙 &lt;법률 제21445호, 2026. 3. 10.&gt;</p><p class="pty3_dep1">제1조(시행일) 시행 관계를 보존한다.</p>'.encode()
+  parsed=w.parse_source(source,raw);self.assertEqual(len(parsed['articles']),3);self.assertEqual(sum(k.startswith('main:') for k in parsed['articles']),2);self.assertTrue(any(k.startswith('supplement:21445:') for k in parsed['articles']));self.assertEqual(parsed['metadata']['lawNumber'],'21445')
+  with self.assertRaisesRegex(w.SourceError,'korean_title_not_confirmed'):w.parse_source(source,raw.replace('<h2>개인정보 보호법</h2>'.encode(),'<h2>다른 법률</h2><p>개인정보 보호법을 인용한다.</p>'.encode()))
+ def test_korean_current_resolver_uses_official_sequence_and_rejects_missing_or_ambiguous_values(self):
+  source={**SOURCE,'parser':'korean-html','identity':['개인정보 보호법'],'resolver':'korean-current-body','minimumArticles':1,'allowedHosts':['www.law.go.kr']}
+  raw='<h2>개인정보 보호법</h2>[시행 2026. 9. 11.] [법률 제21445호, 일부개정]<p class="pty1_p4">제1조(목적) 조건과 예외를 보존한다.</p>'.encode();calls=[]
+  def fetch(s,url):calls.append(url);return b'<input id="lsiSeq" value="283839">' if len(calls)==1 else raw
+  with patch.object(w,'fetch_bytes',side_effect=fetch):result=w.read_official(source,'https://www.law.go.kr/law')
+  self.assertIn('lsiSeq=283839',calls[-1]);self.assertEqual(result['metadata']['lawNumber'],'21445')
+  with patch.object(w,'fetch_bytes',return_value=b'<input id="lsiSeq" value="283839"><input id="lsiSeq" value="999999">'):
+   with self.assertRaisesRegex(w.SourceError,'current_korean_sequence_not_confirmed'):w.read_official(source,'https://www.law.go.kr/law')
  def test_config_change_and_fetch_failure_keep_unreviewed_events(self):
   r,state=w.check_one(SOURCE,{},[],lambda s,url=None:snapshot('old' if url else 'changed'))
   old=json.loads(json.dumps(state))
