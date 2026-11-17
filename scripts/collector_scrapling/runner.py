@@ -182,8 +182,8 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
     candidate_seen = set()
     detail_seen = set()
     terminal_verified = False
-    ftc_dates_ordered = True
-    ftc_previous_page_oldest = None
+    date_order_verified = True
+    previous_page_oldest = None
     result = {
         "source": source_id,
         "since": since,
@@ -225,34 +225,51 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
 
         next_url = None
         try:
-            if source_id == "cn-cac":
-                proves_before = getattr(adapter, "proves_before_window", None)
-                if proves_before and proves_before(rows, since):
+            proves_before = getattr(adapter, "proves_before_window", None)
+            if proves_before:
+                page_dates_fn = getattr(adapter, "listing_dates", None)
+                page_dates = page_dates_fn(rows) if page_dates_fn else [
+                    row.get("published_date") or next((
+                        item.get("value") for item in row.get("date_observations", [])
+                        if item.get("value")
+                    ), None) for row in rows
+                ]
+                normalized_dates = []
+                for value in page_dates or []:
+                    try:
+                        normalized_dates.append(date.fromisoformat(str(value)[:10]).isoformat())
+                    except (TypeError, ValueError):
+                        try:
+                            from datetime import datetime
+                            normalized_dates.append(datetime.strptime(
+                                str(value).strip(), "%b %d, %Y"
+                            ).date().isoformat())
+                        except (TypeError, ValueError):
+                            try:
+                                normalized_dates.append(datetime.strptime(
+                                    str(value).strip(), "%B %d, %Y"
+                                ).date().isoformat())
+                            except (TypeError, ValueError):
+                                normalized_dates = []
+                                break
+                if not normalized_dates:
+                    date_order_verified = False
+                elif (any(normalized_dates[index] > normalized_dates[index - 1]
+                          for index in range(1, len(normalized_dates))) or
+                      previous_page_oldest is not None and max(normalized_dates) > previous_page_oldest):
+                    date_order_verified = False
+                else:
+                    previous_page_oldest = min(normalized_dates)
+                if date_order_verified and proves_before(rows, since):
                     terminal_verified = True
                 else:
+                    # A date cutoff is reusable across adapters only when the
+                    # source explicitly proves newest-first order and every
+                    # observed page preserves that order. Otherwise paginate.
                     next_url = _next_page(adapter, html, final_url, None)
-                    if not next_url and not rows:
+                    if not next_url and source_id in ("cn-cac", "ftc") and not rows:
                         terminal_verified = True
-            elif source_id == "ftc":
-                page_dates = adapter.listing_dates(rows)
-                if page_dates is None:
-                    ftc_dates_ordered = False
-                elif page_dates:
-                    if not all(page_dates[index] <= page_dates[index - 1]
-                               for index in range(1, len(page_dates))):
-                        ftc_dates_ordered = False
-                    if (ftc_previous_page_oldest is not None
-                            and max(page_dates) > ftc_previous_page_oldest):
-                        ftc_dates_ordered = False
-                    ftc_previous_page_oldest = min(page_dates)
-                proves_before = getattr(adapter, "proves_before_window", None)
-                if ftc_dates_ordered and proves_before and proves_before(rows, since):
-                    terminal_verified = True
-                else:
-                    # Do not use an unproven date cutoff. Exhaust verified
-                    # pagination instead when dates are missing or unordered.
-                    next_url = _next_page(adapter, html, final_url, None)
-                    if not next_url:
+                    elif not next_url and source_id == "ftc":
                         terminal_verified = True
             else:
                 next_url = _next_page(adapter, html, final_url, since)
@@ -274,6 +291,8 @@ def collect_source(source_id, since, until, *, client=None, max_pages=None, max_
             if url in candidate_seen:
                 continue
             candidate_seen.add(url)
+            if source_id == "calprivacy" and row.get("privacy_relevant_title") is not True:
+                continue
             window = _in_range(row, since, until)
             # Fetch all Vietnam timeline candidates, including rows whose
             # listing date is outside the window, so the detail date can be
