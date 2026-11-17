@@ -29,7 +29,7 @@
     {
       "path": "data/legal/README.md",
       "pr": 15,
-      "sha256": "a3afdd759e12678f9615a64a102dfcee6723442c3dd8b1bdb860bab616f89a4c",
+      "sha256": "f06e3ba3e6a2abf4e75ef767f16eb07575f6bd3488137881c08df0e88a352950",
       "revisions": [
         {
           "previous_sha256": "08d5b38f9f42df07dc38a60ef202ecfea6f26d81cf0bf2d5b0898d8ac7e51ca8",
@@ -54,6 +54,12 @@
           "changed_on": "2026-11-17",
           "reason": "최신 한국 원문 확인 상태와 캘리포니아 직접·브라우저 진단의 미완료 상태 구분.",
           "evidence": "data/legal/sources/direct-source-diagnostic-20261117.json"
+        },
+        {
+          "previous_sha256": "a3afdd759e12678f9615a64a102dfcee6723442c3dd8b1bdb860bab616f89a4c",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
@@ -105,7 +111,7 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
+      "sha256": "ca0b88b484a41fe286baedd75b1a66aaecb81b0a85cbcc37c4a6a98a96641257",
       "imported_sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -126,13 +132,19 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
+      "sha256": "cee83f1ba697dcf2feb676a9530e379443f3cc94bd205fc890b34992c954bea5",
       "imported_sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -153,6 +165,12 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
@@ -718,7 +736,7 @@
     {
       "path": "public/review-drafts/comparison.html",
       "pr": 15,
-      "sha256": "4cf560084733aa9756b7dd69695a4cb3f3dfe502e271269451d9c7023f1dbbfc",
+      "sha256": "b02d354b33b3441b1df1a99616ed8bb909174627945298384a126a0a28baa5d9",
       "imported_sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -739,13 +757,19 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "4cf560084733aa9756b7dd69695a4cb3f3dfe502e271269451d9c7023f1dbbfc",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
+      "sha256": "ca0b88b484a41fe286baedd75b1a66aaecb81b0a85cbcc37c4a6a98a96641257",
       "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
       "derived_from": "data/legal/criteria-mapping.csv",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -767,13 +791,19 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
+      "sha256": "cee83f1ba697dcf2feb676a9530e379443f3cc94bd205fc890b34992c954bea5",
       "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
       "derived_from": "data/legal/criteria-mapping.md",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -795,6 +825,12 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
+          "changed_on": "2026-11-17",
+          "reason": "보존 참고 규정 9개의 공식 시행예정 본문·판본·시행일 대조 근거 반영. 현행 본문·사람 검수 상태 유지.",
+          "evidence": "data/legal/sources/pipa-planned-editions-20261117.json"
         }
       ]
     },
