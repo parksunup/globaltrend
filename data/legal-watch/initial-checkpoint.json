@@ -1,7 +1,10 @@
 {
   "schemaVersion": 1,
   "sources": {
-    "pipa": {},
+    "pipa": {
+      "events": [],
+      "baselineOrigin": "configuration_changed"
+    },
     "appi": {
       "configHash": "080c35cbf56a375e9442f83944cdb772c1476f3e1bdc366d9d6df0b9e3dcc886",
       "snapshot": {
@@ -1027,7 +1030,8 @@
         },
         "version": "415AC0000000057_20261102_508AC0000000062",
         "coverage": "article_text",
-        "digest": "9727affd91e8f8150decd6cd7d1e47ec5de5f75dff7e4134d8675b39b3ee8f68"
+        "digest": "9727affd91e8f8150decd6cd7d1e47ec5de5f75dff7e4134d8675b39b3ee8f68",
+        "acquiredUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml"
       },
       "events": [
         {
@@ -1054,7 +1058,7 @@
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-16T14:59:44.283528+00:00"
+      "lastSuccessAt": "2026-11-17T01:28:44.387216+00:00"
     },
     "pipl": {
       "configHash": "ee2a0ee0a0c656b74e89c3f212d8fa596898a3589ef455597821633a72e08abc",
@@ -1366,7 +1370,8 @@
         },
         "version": "2021-08-20 / status 3",
         "coverage": "index_and_status_only",
-        "digest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829"
+        "digest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829",
+        "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044"
       },
       "events": [
         {
@@ -1386,11 +1391,454 @@
         }
       ],
       "baselineOrigin": "first_observation",
-      "lastSuccessAt": "2026-11-16T14:59:44.284305+00:00"
+      "lastSuccessAt": "2026-11-17T01:28:44.389599+00:00"
     },
-    "gdpr": {},
+    "gdpr": {
+      "configHash": "4c789c2c68814f4f7294f50b929880fddae5566ffeecadcaff17c01e45285e92",
+      "snapshot": {
+        "articles": {
+          "main:1": {
+            "label": "Article 1",
+            "hash": "ee00511b30bb455233c58896512bbfeefd33ef1765a79e0b7da8e8be190dd832"
+          },
+          "main:2": {
+            "label": "Article 2",
+            "hash": "c87035e2239e9d8b4578581570a4ed98bfd3794d78a85946c622671cbcc16234"
+          },
+          "main:3": {
+            "label": "Article 3",
+            "hash": "6c8225e627e9f0e79ef9bf8bfe78a12923a852e87c38e84535454163f9bb53ee"
+          },
+          "main:4": {
+            "label": "Article 4",
+            "hash": "544494e07194b897093fab90304384ae22f278cd369540a889446f5ae29d1b73"
+          },
+          "main:5": {
+            "label": "Article 5",
+            "hash": "650a9ecd15d751b5dd7df552cc0ce92bb3e4363ba78ff11024d0db8dcc786a25"
+          },
+          "main:6": {
+            "label": "Article 6",
+            "hash": "37018ccba1b6199d13ae4a4cba8f43cb1eeb9e650bf229aaf67e26432cd920ca"
+          },
+          "main:7": {
+            "label": "Article 7",
+            "hash": "9664b8e8834913b414123f4711f14e169716b12437a467a435e1cf356c0ac093"
+          },
+          "main:8": {
+            "label": "Article 8",
+            "hash": "2d40221b41fa742bf00d314291e85e8470a8d51ab3e83c4dc1e1c3a87d124535"
+          },
+          "main:9": {
+            "label": "Article 9",
+            "hash": "aa1e3b1ae1fc160a7d32a6c154daa4d65b158b08f6831060dbe40167ea371ffb"
+          },
+          "main:10": {
+            "label": "Article 10",
+            "hash": "5339e5b26de1bf125248f2961750d96330c206da2528456948e8ea25cb25d1c0"
+          },
+          "main:11": {
+            "label": "Article 11",
+            "hash": "f6a4395b12cc80ecaa0ea91e6f5586ced292517194be4f6d027190ccd2049c95"
+          },
+          "main:12": {
+            "label": "Article 12",
+            "hash": "74ca83558ce6c08365c5faff98560a7121053e01924051934ca61c800cbb34a4"
+          },
+          "main:13": {
+            "label": "Article 13",
+            "hash": "92d43f8f6a758522dbd180887bf1e2c6b7c7b2d8ff468dafac7aeba6a32c026b"
+          },
+          "main:14": {
+            "label": "Article 14",
+            "hash": "42ad1d030ad5d4ef0e4f765612445318e92a5ffed8737784ccf59197cbf3d531"
+          },
+          "main:15": {
+            "label": "Article 15",
+            "hash": "b1c687d54fec23d2dd4facf05a50054a35a70858804d55019ff50378bc8c1def"
+          },
+          "main:16": {
+            "label": "Article 16",
+            "hash": "f1ba63bce02374221f6eed6c4184e68482cf90852c235f238bd7d15c476ed4c9"
+          },
+          "main:17": {
+            "label": "Article 17",
+            "hash": "8644fff90524c67b52b40e9d1f8f5d486d47e46ad525bb8abfd7baae7e170ed3"
+          },
+          "main:18": {
+            "label": "Article 18",
+            "hash": "6d9c555962db298793566acb0d8830d062ec25962b4a89fd702be57fe4ab14ce"
+          },
+          "main:19": {
+            "label": "Article 19",
+            "hash": "a906ec5dff278dbac3b38b72dbaf3beb54117dae5efdb7c0c9184aaf1beaf202"
+          },
+          "main:20": {
+            "label": "Article 20",
+            "hash": "1a06f809566b8e68391e78aa245ea3da1a4b8bb6e07fe379202360f2c916b4d5"
+          },
+          "main:21": {
+            "label": "Article 21",
+            "hash": "ecf69943f1edebd364e96ec48144c31ada95527d3e78facee65ef23759e24e30"
+          },
+          "main:22": {
+            "label": "Article 22",
+            "hash": "d114bb4a51187f730914900374e5599edb8641c0f6f1ed59bba712567d1615d1"
+          },
+          "main:23": {
+            "label": "Article 23",
+            "hash": "161fd24c42a71f5fc4986d2b943ca2e9c921bfe608c1dc981a5402440e6eacab"
+          },
+          "main:24": {
+            "label": "Article 24",
+            "hash": "b1666fedd1908ca5d57dd33ee7e0bf25ff31dc63cef8eaf2c3c6bfc20ccc8b1d"
+          },
+          "main:25": {
+            "label": "Article 25",
+            "hash": "9d265e8fa5bbf579d3f362ea447ea02fb587d8514917a7871f969c0ff11377c8"
+          },
+          "main:26": {
+            "label": "Article 26",
+            "hash": "ca234e16503dd4d1dbfbf99c71b486e5e54687df42619e0ea284c74b35452d71"
+          },
+          "main:27": {
+            "label": "Article 27",
+            "hash": "0d671eb1bc47dd05facd2797a9df9fe10ecedec16e1219132fc1041a1177849c"
+          },
+          "main:28": {
+            "label": "Article 28",
+            "hash": "941a4f170229c93478958d1328a5ea57da5f322bea9cc910cf500aeb58eb8262"
+          },
+          "main:29": {
+            "label": "Article 29",
+            "hash": "29ad1492a7c8627411737deb438505d55b06e4c402b92dcd59cc1cafedf3c59d"
+          },
+          "main:30": {
+            "label": "Article 30",
+            "hash": "3f15337d93ef183806d2ab1f37ae925757e5128f756fbe05eea07e46df0fc2bc"
+          },
+          "main:31": {
+            "label": "Article 31",
+            "hash": "7cb60f098e42ce083338712d313880b26adece094c9108ab313070dc4cdcb78b"
+          },
+          "main:32": {
+            "label": "Article 32",
+            "hash": "6b536f453556a8d36a9d53288d0bbe743dca2928c63dda50584d4e356ab1ba4c"
+          },
+          "main:33": {
+            "label": "Article 33",
+            "hash": "5ece23be01a5235041575cfea79f5adbc3967812253f9d468d351fe59b2feba9"
+          },
+          "main:34": {
+            "label": "Article 34",
+            "hash": "9265dd5220e6a0207ea7826f2016408a107216d0fd9d7e3d338abae9534d50a4"
+          },
+          "main:35": {
+            "label": "Article 35",
+            "hash": "3767b0396cb9220c21685a60a0a7db7f664ef2e3fda0582d9c9a8ac7e1e67880"
+          },
+          "main:36": {
+            "label": "Article 36",
+            "hash": "b6e2dc520705546de10b9611b0e08193af6d8541841196879efe6de06595ee75"
+          },
+          "main:37": {
+            "label": "Article 37",
+            "hash": "95dab209915bf654ef7894088b9294d9149cc98ca484458cb1a0e4875d30e09f"
+          },
+          "main:38": {
+            "label": "Article 38",
+            "hash": "16426e4fe6b4565bc2d4e6d5792204887cd07517be97954db01e7aa4427e2d3d"
+          },
+          "main:39": {
+            "label": "Article 39",
+            "hash": "5e77195e9dd946aef9f761c85f4228f82275a3ad1bbf2755a64d71a313398408"
+          },
+          "main:40": {
+            "label": "Article 40",
+            "hash": "6e95a6cad83e8ba3964d8fb6b6d51af385e0bd53525d0b4a295625fcfa67cc26"
+          },
+          "main:41": {
+            "label": "Article 41",
+            "hash": "ce31577d8dfabb35ed7370d1d6efc3ebb1eb91f751bce1546165c4f988887323"
+          },
+          "main:42": {
+            "label": "Article 42",
+            "hash": "2ff16ad9a0ae3976d14eee01d899022f6615938139d000d6d2fadae2d83a06a5"
+          },
+          "main:43": {
+            "label": "Article 43",
+            "hash": "8bdf3df0d5856506378dbfb2ca5031243ba23fed7402de59d081a464a5a92c28"
+          },
+          "main:44": {
+            "label": "Article 44",
+            "hash": "8b52fe395e7f2731e9ed834e1fbdb70aba2d8b64023b9083e811c0eb3e0a2b5a"
+          },
+          "main:45": {
+            "label": "Article 45",
+            "hash": "8eb4d1ca13ad55e03d51dc049840d3fb2bc4051a62605175fa73c2d06e323011"
+          },
+          "main:46": {
+            "label": "Article 46",
+            "hash": "7fd2f40d767684581043ae3837b2f478d19c825ad15c778664adf09ed6c6f243"
+          },
+          "main:47": {
+            "label": "Article 47",
+            "hash": "7e3f6c56c2422c510f0e094b15eeb89d48caa6b83bb2175501413f610a7497de"
+          },
+          "main:48": {
+            "label": "Article 48",
+            "hash": "871debaab133a44f6f4b7270d5efc35d0e7bfdeae3a4f59cd2d8cb3afa9e7511"
+          },
+          "main:49": {
+            "label": "Article 49",
+            "hash": "b46f90af0a121127182519a3fef262db3098172f404af6de329db015aa29b4e6"
+          },
+          "main:50": {
+            "label": "Article 50",
+            "hash": "a01d54e1d08f5ef663d56ee8d15034dd857ebd8948bb24a6fb3ad1b53d270343"
+          },
+          "main:51": {
+            "label": "Article 51",
+            "hash": "e48ac2533a15e78da59683fd0733e47df54ba2d8f02ee4a79a386a35e67c55d3"
+          },
+          "main:52": {
+            "label": "Article 52",
+            "hash": "5127cea1c3198ac16c1a7e506b6c8ac6d24853c6aa2f1751063e27bd8f50175a"
+          },
+          "main:53": {
+            "label": "Article 53",
+            "hash": "68ba640b4713c2f01c1f6a62ee153ad5be52aeee21b4f8418436070f5be5d9e6"
+          },
+          "main:54": {
+            "label": "Article 54",
+            "hash": "a3063243c8a8be08fe77b5cb188bc8642c08f7cb4dc4ee047445fc2b386ed8de"
+          },
+          "main:55": {
+            "label": "Article 55",
+            "hash": "457969baa1e9d7670fa1d220f2a96a6aed0031b5023cfbc64e71aa5b531d5847"
+          },
+          "main:56": {
+            "label": "Article 56",
+            "hash": "ecc7f5a5d6bccfc3e1fb6185eb302c15318a98b7e798f7c0e71691e94f5eed9d"
+          },
+          "main:57": {
+            "label": "Article 57",
+            "hash": "89c79dd7bd4c2c7e9e53f1a07236541bff22f59368cdd03177f2d22946b490b0"
+          },
+          "main:58": {
+            "label": "Article 58",
+            "hash": "69914df1a1006d7222e25fa6ab0b398c709f81c6ae12e8a6453f35a8d91313a9"
+          },
+          "main:59": {
+            "label": "Article 59",
+            "hash": "3edebd73f5ff713ca319345430e057e284942bbb3144cf329e2c5d32d6f95a17"
+          },
+          "main:60": {
+            "label": "Article 60",
+            "hash": "7cae30862caceefd2f80a3362bc54b0a9e33ad1680424c2f8823ffbac94f08f2"
+          },
+          "main:61": {
+            "label": "Article 61",
+            "hash": "dac461f1f040616bbfed847438cb018226070103f25b6a68edadb9f39c8483da"
+          },
+          "main:62": {
+            "label": "Article 62",
+            "hash": "bb16a79b12cd1381a0dbaac44c5f034fc9bebfce61109cf7150b0de26a81cf8d"
+          },
+          "main:63": {
+            "label": "Article 63",
+            "hash": "dd6e967e1b336162d7c6759f797b6d8720b8b0f042c1b9a4803bdbab66397ebd"
+          },
+          "main:64": {
+            "label": "Article 64",
+            "hash": "1f4bc786c745fa91cdfe22e24cb4285f53c8ddb37149c703717580d56e7c2091"
+          },
+          "main:65": {
+            "label": "Article 65",
+            "hash": "57241c5894e568368d4ec8c847503ef65c45013a5b14e8987ee4526b40614278"
+          },
+          "main:66": {
+            "label": "Article 66",
+            "hash": "8d70d2117382483b915d3cd68dccd87cc37262921acea3aee56d5b664f46e958"
+          },
+          "main:67": {
+            "label": "Article 67",
+            "hash": "f96dd4a25d3f354832238276973eefa6b307b2ceb0544aa340977b33943bd52e"
+          },
+          "main:68": {
+            "label": "Article 68",
+            "hash": "f1bf308de0d1ea50ae01701fb4d5a4aad89a40ed91973a3619a064c53f6ae77c"
+          },
+          "main:69": {
+            "label": "Article 69",
+            "hash": "77e8f21bd1f2f746c091d78e7ffda38b55c8cf3f64da3b43d8999d815ca1666c"
+          },
+          "main:70": {
+            "label": "Article 70",
+            "hash": "4bf56ba62989b26e595854d8b6a57207c3ef03913da1defd3d7a094462688dba"
+          },
+          "main:71": {
+            "label": "Article 71",
+            "hash": "2598bcc2c204e32fefddb810df7b1d98cc4827850bd9ba96856d0d618d18c484"
+          },
+          "main:72": {
+            "label": "Article 72",
+            "hash": "6712f98a158a91a8a48f992c45f3e6da31a9c0422f38c1f87817a511234a59bd"
+          },
+          "main:73": {
+            "label": "Article 73",
+            "hash": "a56803b4e02fdb10bf7509148ab8c349201ba35ae47e5642ec16b803d22b6017"
+          },
+          "main:74": {
+            "label": "Article 74",
+            "hash": "37780f456a30ab2e9e63ac59f5b3bde9547121eb04b1712ccf880b6b934f18da"
+          },
+          "main:75": {
+            "label": "Article 75",
+            "hash": "7ccd8536e6e867a6f1d2b059428e97b1967e0ef83317ad96bc7c87c4fffe33ea"
+          },
+          "main:76": {
+            "label": "Article 76",
+            "hash": "386e270e661669fb0c72fcafcd2c199819450bcb815c7590b76e821ac13f9ef2"
+          },
+          "main:77": {
+            "label": "Article 77",
+            "hash": "3739b6df9c900a7669c690c73f243107f1e15baeecd685caf304fd9fd0897134"
+          },
+          "main:78": {
+            "label": "Article 78",
+            "hash": "aef95624377685ba389fecf0d178a6d724f4720949c96c3c7e75a21f8e77d039"
+          },
+          "main:79": {
+            "label": "Article 79",
+            "hash": "a984ed4d6034eeb2f7951afcd8b03c8fc1bebdf6ab01868ab029975729c0ffe3"
+          },
+          "main:80": {
+            "label": "Article 80",
+            "hash": "92b7a10b3e8af361edb04d8aa8ace6d7dc823e194b6362cdd6300ed78a88509f"
+          },
+          "main:81": {
+            "label": "Article 81",
+            "hash": "b23590b0702113658aab77d0277bcfefaa51181a2c843593e540bbee2279b1fe"
+          },
+          "main:82": {
+            "label": "Article 82",
+            "hash": "c468b505bacdc4a4c8191509ae3f962bd2e4a48becbfdfa36ccc997d54425da0"
+          },
+          "main:83": {
+            "label": "Article 83",
+            "hash": "0fbb42a31f62b5d42b7b8642cbbbfe40d3ab16fcea7da4bccf8b79c94337098c"
+          },
+          "main:84": {
+            "label": "Article 84",
+            "hash": "9051b53e2299955c19880b0e08363c5f6bd92abd63a48601416da859ee124cc9"
+          },
+          "main:85": {
+            "label": "Article 85",
+            "hash": "a6a65e1685976eac0763a519a943254d0805afea3a2225afc38dbc3d10d19175"
+          },
+          "main:86": {
+            "label": "Article 86",
+            "hash": "04fe3c3dfed4bdf6a7decd1842927e5f4277fb0b22a86d2e17b0053ef14c1761"
+          },
+          "main:87": {
+            "label": "Article 87",
+            "hash": "47d0d3562b7d653e73a1c460638d39d7cb1df44bde3afa884ddf197396590b5d"
+          },
+          "main:88": {
+            "label": "Article 88",
+            "hash": "783e990f64e80b1cf62d5bc8c02a909dc79920aa45f1b1f855ad78b9138d5390"
+          },
+          "main:89": {
+            "label": "Article 89",
+            "hash": "ca7a573bd40095b97282929b1dc766cb4a989a2c47848fe873ace8fcfa9f9eaf"
+          },
+          "main:90": {
+            "label": "Article 90",
+            "hash": "7bc086cb429c61825e131e43db32739ecfc5ac8cc2ba112ef5d38df573e3325e"
+          },
+          "main:91": {
+            "label": "Article 91",
+            "hash": "ae301f99631622d3ee4a074db1e34c9347fdef1ba383bb41a31ec22d199bcd3a"
+          },
+          "main:92": {
+            "label": "Article 92",
+            "hash": "a91e3557ab02952fa95096c656bf959bf1c7eaf28552a4c62b07df8c7328eaa9"
+          },
+          "main:93": {
+            "label": "Article 93",
+            "hash": "7e6c212b02d155cae8dc670bbbbc1cfc2b9542136a97dd66a610cd811f5aaec7"
+          },
+          "main:94": {
+            "label": "Article 94",
+            "hash": "8c6727a5a3f9d24e3105f88dcbf7b6334a894ff2840ec714ede759a240b55cba"
+          },
+          "main:95": {
+            "label": "Article 95",
+            "hash": "bf6ddcb702916701376b900118e5b0d4c386f8bca5e329f62e193941d0c7fd53"
+          },
+          "main:96": {
+            "label": "Article 96",
+            "hash": "6a4ffc3a103b2a67a9e9e97b5724c691fb2230b263b5ead803829042a7d3c23a"
+          },
+          "main:97": {
+            "label": "Article 97",
+            "hash": "e3a7e40820057cffe48dbff67838e21e679dc520991d3863f447c0dcd05b3704"
+          },
+          "main:98": {
+            "label": "Article 98",
+            "hash": "17f99639bd1bab0a7eb799fa711481ff675f6e4b4f8ff1931175bedf2ed84ff4"
+          },
+          "main:99": {
+            "label": "Article 99",
+            "hash": "434804798ff98c2e63abdf7c2978909b2fe614ed007021211b1ab0fa82699236"
+          }
+        },
+        "metadata": {
+          "officialConsolidationDate": "20160504"
+        },
+        "version": "CELEX:02016R0679-20160504",
+        "coverage": "article_text",
+        "digest": "3d53ac4b20079ec3dbf76e272d56544e69d74047b7e103c991cea9a618be170b",
+        "acquiredUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504"
+      },
+      "events": [
+        {
+          "id": "23df46d34e21a090472ebfcf61508da5b97c8aa06cdaf6ce94aa08a00a8e6544",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:50.413027+00:00",
+          "beforeDigest": null,
+          "afterDigest": "6de2c51c4c2b0d212fbc3bc9978a328589539292f299cd8c215dadc3393e0a31",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02016R0679"
+        },
+        {
+          "id": "02171fdd3a934c033bf3c2ea059d5b4b91946328b74c6e29eef917fb16e2801e",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:20:38.749421+00:00",
+          "beforeDigest": null,
+          "afterDigest": "3d53ac4b20079ec3dbf76e272d56544e69d74047b7e103c991cea9a618be170b",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng"
+        }
+      ],
+      "baselineOrigin": "configuration_changed",
+      "lastSuccessAt": "2026-11-17T01:28:44.390487+00:00"
+    },
     "uk-gdpr": {
-      "configHash": "9eea87f5b6002228b0d06b0bec6ec44c70b8f8816815fdf97ffd944a218f9ae3",
+      "configHash": "570fb701f8b1977138c43d9e196dc3a91c753a10923786f166d94f9505c07b1d",
       "snapshot": {
         "articles": {
           "main:1": {
@@ -1429,6 +1877,10 @@
             "label": "article-8",
             "hash": "6b16508305d1dab8b29439c1aa8e78f0d2ac875224ea459573fe05c73a533b75"
           },
+          "main:8ZA": {
+            "label": "article-8ZA",
+            "hash": "aef3d656557eb830fbafd3a4aa2725b57a3119dedf0f78251df5fc755358b9de"
+          },
           "main:8A": {
             "label": "article-8A",
             "hash": "bc227923758be03dd8a875dd9501f0f5590996a503e77e121e4db48bf94847e5"
@@ -1452,6 +1904,10 @@
           "main:12": {
             "label": "article-12",
             "hash": "a53ea8474f3ada59ee17de0104cf9b1fd416fefe65c42f79ee7b9f1814ddf80f"
+          },
+          "main:12A": {
+            "label": "article-12A.",
+            "hash": "c18e30f70539c54c0d519fa7bb53e76f944b1b4212043c1b01b7934a84d0e694"
           },
           "main:13": {
             "label": "article-13",
@@ -1869,7 +2325,8 @@
         "metadata": {},
         "version": "UK GDPR current XML",
         "coverage": "article_text",
-        "digest": "8c8dac28382e6bd2e097918cf0a490e4f85770f4d6728749a5de499cab1a0a04"
+        "digest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+        "acquiredUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
       },
       "events": [
         {
@@ -1886,12 +2343,679 @@
           },
           "reviewed": false,
           "sourceUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
+        },
+        {
+          "id": "e7fbe2d4717d68ccc22e2fa18ed37bc90028376ec96f8b3825cce790d937bb67",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:51.154832+00:00",
+          "beforeDigest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+          "afterDigest": "4b436f189024574da86421effe5f33d67aea6f60c7d4ce07d05ae29819aa4858",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml"
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-16T14:59:44.783906+00:00"
+      "lastSuccessAt": "2026-11-17T01:28:45.189504+00:00"
     },
-    "ccpa": {},
-    "pdpa": {}
+    "ccpa": {
+      "configHash": "dfbcf5f668ab412362184927d6ff3f7ae87129a1e37936dbb4a82f4ff1f6ba0e",
+      "snapshot": {
+        "articles": {
+          "main:1798.100": {
+            "label": "main:1798.100",
+            "hash": "8b0fe7775aac92a5c3ceab5f86d32bf40452752d99f8b6814ecb10766e1c289d"
+          },
+          "main:1798.105": {
+            "label": "main:1798.105",
+            "hash": "3418aa86d8181656f29287e357525e8c80499d4da998b36ba5c1d01023ff2b2b"
+          },
+          "main:1798.106": {
+            "label": "main:1798.106",
+            "hash": "2cef5631488d9b50d5016d9419aaf7add75b79e09d893923d1173295dc84af4a"
+          },
+          "main:1798.110": {
+            "label": "main:1798.110",
+            "hash": "2d72696ad351fe5a3dd5674a91877ebd8d41a7db9b448f9e27636440f8199b7e"
+          },
+          "main:1798.115": {
+            "label": "main:1798.115",
+            "hash": "f3cbba7c167b77ba603e7e21b6c8613b50c96d87e0f1bad78356caf06b255891"
+          },
+          "main:1798.120": {
+            "label": "main:1798.120",
+            "hash": "6f6ec7c2eb3fa0a02cba270c472861eafa8669ff7a10a62670ca16fd91c0c118"
+          },
+          "main:1798.121": {
+            "label": "main:1798.121",
+            "hash": "066a9f3fa813058201fc85d575e928f457ad848e3ae131e85459907e87400c22"
+          },
+          "main:1798.125": {
+            "label": "main:1798.125",
+            "hash": "6085ce32f38e3ff3c408ee0d2681b52055f71c333a75c6383e1c0e4ea84de6d8"
+          },
+          "main:1798.130": {
+            "label": "main:1798.130",
+            "hash": "67b540dc39e00153de971a3bf19cb236f480e157b93c696fd7f82e5befbe6e3f"
+          },
+          "main:1798.135": {
+            "label": "main:1798.135",
+            "hash": "f085c29ae2001f2f5998e493597cbb5ea2fe93982fe18fddb880d10c34eb72fa"
+          },
+          "main:1798.136": {
+            "label": "main:1798.136",
+            "hash": "101e86045a7939d2592bcdd7ababecab2e8919d454f8edfb7890397a80647ae9"
+          },
+          "main:1798.140": {
+            "label": "main:1798.140",
+            "hash": "5ca80b1121a1247fcb8390659f11d09a6a1d58073123018590436b603cc8e27c"
+          },
+          "main:1798.145": {
+            "label": "main:1798.145",
+            "hash": "62c71bb767056528b0fe343cbf1e1f2150811ebbcc84ddedaf709fec2bdcdc9e"
+          },
+          "main:1798.146": {
+            "label": "main:1798.146",
+            "hash": "a15ce11e4ae1cb25d56d02e16784a44417b399e9056d79b0bbb2d20843706d4f"
+          },
+          "main:1798.148": {
+            "label": "main:1798.148",
+            "hash": "e8c932a5f1c060752015f520bed512ee7d0970db0d935d651961e3d9886311d6"
+          },
+          "main:1798.150": {
+            "label": "main:1798.150",
+            "hash": "7b1f210950e415678512bd71251b87ac3bb7fba44ee102dc28542ea1772427bd"
+          },
+          "main:1798.155": {
+            "label": "main:1798.155",
+            "hash": "2f9f9ec32c5dee715bdaf381ef5022fcbaf57de1b953ccf640826865a2860589"
+          },
+          "main:1798.160": {
+            "label": "main:1798.160",
+            "hash": "3911d3317ff7b8d0c36c29743b99cfc179963c191a4cbdd24a888ddf8428d949"
+          },
+          "main:1798.175": {
+            "label": "main:1798.175",
+            "hash": "e861b856d1a32c9e331ac63a18af875f4529138262a522804b004ff50164f571"
+          },
+          "main:1798.180": {
+            "label": "main:1798.180",
+            "hash": "85d445e5f175eb747877922e55f355a75ac79a6def4e4eff865dd5d8d2934857"
+          },
+          "main:1798.185": {
+            "label": "main:1798.185",
+            "hash": "7241041df6662c0a5495cc3e3596eea05641f9941b63d27a088940daecb6e924"
+          },
+          "main:1798.190": {
+            "label": "main:1798.190",
+            "hash": "03e196f7ad88249577a2afc403ec408e1b246e5e31c15cd31b1b638e61ea6814"
+          },
+          "main:1798.192": {
+            "label": "main:1798.192",
+            "hash": "7977590cedfbed8707326dd6a05d972b43b9c8691f08ada7bf83078e4b0e16cf"
+          },
+          "main:1798.194": {
+            "label": "main:1798.194",
+            "hash": "57d19fd0ef625f7f3942e45265b79ed64a6165a564aa0bb52eae7f1ec2a67c4f"
+          },
+          "main:1798.196": {
+            "label": "main:1798.196",
+            "hash": "facd73f4add202a62dec1f865da8e1092ce0cb37d6ed7197c581db59225c96d3"
+          },
+          "main:1798.198": {
+            "label": "main:1798.198",
+            "hash": "fbd4035326c6a61ba106e59980b55fa88494c36a696c7014c2f2346438ea8454"
+          },
+          "main:1798.199": {
+            "label": "main:1798.199",
+            "hash": "07fbbed49da602cecf393b8acc811d1adfb8bf9c897fd357fa3e444e0059250d"
+          },
+          "main:1798.199.10": {
+            "label": "main:1798.199.10",
+            "hash": "f6d2a1e194e7480ae14c0807f8421e602bbb4cf4149f6daafda4985c0bd2767f"
+          },
+          "main:1798.199.15": {
+            "label": "main:1798.199.15",
+            "hash": "1613dc619a9fbeea3d1bff1abe1767b24bb3232dd9e6a8439f853bfced7b7138"
+          },
+          "main:1798.199.20": {
+            "label": "main:1798.199.20",
+            "hash": "4beb4f9a17b4688c005607809b0bd6b94e65e44eded65c1dacbd7f5292ea3b7a"
+          },
+          "main:1798.199.25": {
+            "label": "main:1798.199.25",
+            "hash": "a9ddfd36931a49a2828efea91a25351ba1a8acb69887c0b1cadf5e0a2fa5f3d7"
+          },
+          "main:1798.199.30": {
+            "label": "main:1798.199.30",
+            "hash": "be4695375de4db2e8f56946536f1d51b16c5867077b3987e69dbe30716253b0b"
+          },
+          "main:1798.199.35": {
+            "label": "main:1798.199.35",
+            "hash": "1393088d43fa42d237826f898eadd11f8473002eb43af97305178aa2c4fabb0c"
+          },
+          "main:1798.199.40": {
+            "label": "main:1798.199.40",
+            "hash": "55299b44284cfb16f335005459ce6f4150230a7c2b01a0dc7d90069771c046c7"
+          },
+          "main:1798.199.45": {
+            "label": "main:1798.199.45",
+            "hash": "2c9f448923c41a37c9430a5c301dbffc211fcf72d65d35546bd954e7f176f589"
+          },
+          "main:1798.199.50": {
+            "label": "main:1798.199.50",
+            "hash": "21a20aa180051246709bc0385573f54332759a0a17c7c363f0a081660d26ed64"
+          },
+          "main:1798.199.55": {
+            "label": "main:1798.199.55",
+            "hash": "86b1ccb8c9dc1e62c0f33f5cdaa019caee991212e03c4825efc73e77884ca28e"
+          },
+          "main:1798.199.60": {
+            "label": "main:1798.199.60",
+            "hash": "d5cb2753f3c51eb12be7196a6bef0f8b6f551df10b7770dcff789d9cbefe2e7d"
+          },
+          "main:1798.199.65": {
+            "label": "main:1798.199.65",
+            "hash": "9004adfff2f4ea06aafb7ffd70e1310eb66f735a2a4a55837311273e7c84f29f"
+          },
+          "main:1798.199.70": {
+            "label": "main:1798.199.70",
+            "hash": "bd930912f2151aaf2ae22fcc8de307cf9664bd537718108992a7ada3c93357b9"
+          },
+          "main:1798.199.75": {
+            "label": "main:1798.199.75",
+            "hash": "795d58d1e6ee64f3cbeeb8cb25dd249a2b5334cd491fdefc3cdbeff0c7b4aee2"
+          },
+          "main:1798.199.80": {
+            "label": "main:1798.199.80",
+            "hash": "ca157181f99623fb549f12e7a9f218e156a9f401732e1cf0dd7e26f816820d5a"
+          },
+          "main:1798.199.85": {
+            "label": "main:1798.199.85",
+            "hash": "e769ba69ad19488ef81620c5698c244ab519a0c6cc8d6a41122ff4e8bfa174b1"
+          },
+          "main:1798.199.90": {
+            "label": "main:1798.199.90",
+            "hash": "071c7e3eeab9e7faf2a4f5a953cf947209a2b672b6f65ae7764d6532f3efc636"
+          },
+          "main:1798.199.95": {
+            "label": "main:1798.199.95",
+            "hash": "05207e40462f426a265e6482165a253cacdecd6c7a73961bae16c24e657bf33f"
+          },
+          "main:1798.199.100": {
+            "label": "main:1798.199.100",
+            "hash": "0a92797bbe033ec15fe5e3481bcac3e41dc14f60c1d87032f2dfcb105e4514e0"
+          }
+        },
+        "metadata": {
+          "effectiveDate": "01/01/2026"
+        },
+        "version": "01/01/2026",
+        "coverage": "article_text",
+        "digest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+        "acquiredUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf"
+      },
+      "events": [
+        {
+          "id": "c3e84530ce75c62701ae01685b8c5e78f0c5a889fab97de4554ebfcb3d941aeb",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:51.981354+00:00",
+          "beforeDigest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+          "afterDigest": "6c2bf9cd6ef3c7cfae73a0a51e4930a6711267ddc1d5a6cb76896f703a4584fe",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://cppa.ca.gov/regulations/"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "lastSuccessAt": "2026-11-17T01:28:45.666769+00:00"
+    },
+    "pdpa": {
+      "configHash": "c5e08caa82f990d3cc7421fba4bc869921e2b8d60d5bcbf43ad89a9269467a99",
+      "snapshot": {
+        "articles": {
+          "main:1": {
+            "label": "main:1",
+            "hash": "fec73d5e3b052b85811cef4c0e370c959477d28aa4e292315be489273f42e89b"
+          },
+          "main:2": {
+            "label": "main:2",
+            "hash": "92dad50c55aeb7d49807c864819b4c06f26483e576368dda68a88e2b4a9efd8f"
+          },
+          "main:3": {
+            "label": "main:3",
+            "hash": "e64493f2965d8766034e30febfb8cddc7e43dae9b68a4627f239d518eee65ef4"
+          },
+          "main:4": {
+            "label": "main:4",
+            "hash": "a4fb7f8ce3f2c5493a5a1404b62eda7b14d4a5f7853af1d36f0df1c35fa97d21"
+          },
+          "main:5": {
+            "label": "main:5",
+            "hash": "f750393fd187bc3812dc530cdeb39d2ec3b9a8f6f53652b5bef482042ab19b2f"
+          },
+          "main:6": {
+            "label": "main:6",
+            "hash": "0fc77d5a026dade750dc1e3f778b3ee2d0ac60f2ed441a178474df5d06744e9a"
+          },
+          "main:7": {
+            "label": "main:7",
+            "hash": "41e277c6218028d29949c09da3c3be23374eb3fdfa64da368704fb7962da94d4"
+          },
+          "main:8": {
+            "label": "main:8",
+            "hash": "84616bb5bf1ec4e2850361903bf36666793f841d2c3716b1774846b4ffff6212"
+          },
+          "main:9": {
+            "label": "main:9",
+            "hash": "f84614dcad7fd23637190a0344ce0e4f2ee112b5d4204f50fad1f73483c62372"
+          },
+          "main:10": {
+            "label": "main:10",
+            "hash": "81d0554c2c7c793efb7900cc4436bbdfb916e7a422691329904a31fa62e01fef"
+          },
+          "main:11": {
+            "label": "main:11",
+            "hash": "b093807fa68dee69e7cd7ff0ff3ed91b40fb71306568ab1ba611fb11d822a9b7"
+          },
+          "main:12": {
+            "label": "main:12",
+            "hash": "351ca1d9d1bd98b2c7c51bf58fb7d6ca397429f598cf66bc290dbc9023452e32"
+          },
+          "main:13": {
+            "label": "main:13",
+            "hash": "678a9ef3c51823cc2bd31b4c587d9efda1fbee3366044c493d1c514cd1f57710"
+          },
+          "main:14": {
+            "label": "main:14",
+            "hash": "822f068337ea770cec500f91593dba469f961d3419c466fc332abfda7c349656"
+          },
+          "main:15": {
+            "label": "main:15",
+            "hash": "3831595ad086bc14efd76eab98eb2cc6412758b42f3d4b3ed86f91208b66bfe0"
+          },
+          "main:15a": {
+            "label": "main:15a",
+            "hash": "c76178292a46c5e8608514191b55c8c735b0aff6af3a96e0106682ff46fdc4d0"
+          },
+          "main:16": {
+            "label": "main:16",
+            "hash": "b3223c14661e53fa3b8243307af16fd66d30998bb09770b9d84df25b41713dec"
+          },
+          "main:17": {
+            "label": "main:17",
+            "hash": "220a5fbf48dfc58cd115679706dab427dbce27651474e048ac1725666e33a12f"
+          },
+          "main:18": {
+            "label": "main:18",
+            "hash": "a9af6b0760a1fdbdc0d5ae587a3c462a5b6377ca726d7b9a9fe4fffaebc1139d"
+          },
+          "main:19": {
+            "label": "main:19",
+            "hash": "816ed8b1ec94f23013bb6c0641f63b7b9f55073ee79a598986d9b8c5a666ecb4"
+          },
+          "main:20": {
+            "label": "main:20",
+            "hash": "5c19d48094d31228c9fb00433f7b88b9f94de271b910465b9a3981774708329b"
+          },
+          "main:21": {
+            "label": "main:21",
+            "hash": "726b03336274144192b6d31ea927d00d26c9c33edf347cc5536a86c1ea273f4b"
+          },
+          "main:22": {
+            "label": "main:22",
+            "hash": "c1f7c3b5dd7aef616737cdbac2fadf3e579df801fadd3cd95fc920c7424a737f"
+          },
+          "main:22a": {
+            "label": "main:22a",
+            "hash": "7d63cd96d4205a1a44cad0ea1b63a7c38ab3ed636ec982c3d1a93b01ec45d90a"
+          },
+          "main:23": {
+            "label": "main:23",
+            "hash": "ed41b4c1313596eb222f0cac40feeb40944e74a1062c371f0a4142973fa2c3e3"
+          },
+          "main:24": {
+            "label": "main:24",
+            "hash": "ce4a1d78ddefa98005ec7611bfa6ce8a0d3f16863e9cab4eac396da51143b52f"
+          },
+          "main:25": {
+            "label": "main:25",
+            "hash": "26355543e2833a8c0917e3805399bb0dcbea37d47a2956d1261a691a844b9fdd"
+          },
+          "main:26": {
+            "label": "main:26",
+            "hash": "f23d600426dcd5c00440c79ad2e553bd08453b6740336c83b04323193ee10e9b"
+          },
+          "main:26a": {
+            "label": "main:26a",
+            "hash": "69c49872ba148b2635329f6c65810f9c96b86b86f6ca53876b6aa806aa3d9044"
+          },
+          "main:26b": {
+            "label": "main:26b",
+            "hash": "8cb99ef07f887c04d877aae6107b9daf4d0acc2bc3ea38db875f4978461fe706"
+          },
+          "main:26c": {
+            "label": "main:26c",
+            "hash": "104006be53f34cfe1eaca72588e5998c4593b45cde2ca874add4e7a529ceb0a3"
+          },
+          "main:26d": {
+            "label": "main:26d",
+            "hash": "904d13050c6e25bc24d6fcc7f60593efaea69ad261a9ccbfde7a3c8033803beb"
+          },
+          "main:26e": {
+            "label": "main:26e",
+            "hash": "e2047af3fc050cef9e8ec9c17a559a34a602657dd9e82839f9f23038bf86a1c2"
+          },
+          "main:27-32": {
+            "label": "main:27-32",
+            "hash": "564eceae8359678220dbc3bfd88faac254b6d8910c0107314320218eef6f2f74"
+          },
+          "main:33": {
+            "label": "main:33",
+            "hash": "3719c52900fa48b6b903863a5da780ad87a1a918e33abcbf32544ef15cbeecfd"
+          },
+          "main:34": {
+            "label": "main:34",
+            "hash": "6841c9a7d4c7f35e139aa6a884d7b9d6767fde237630f278af241bdf54d457da"
+          },
+          "main:35": {
+            "label": "main:35",
+            "hash": "3d76ed2f2f1065e7656d7053c3faed3315f1c7541a29ace6ebc892cd12760977"
+          },
+          "main:36": {
+            "label": "main:36",
+            "hash": "01caf40e1b03f5a28559a37205e73cbc2cd24d73c4ac7549231e154259ab7074"
+          },
+          "main:37": {
+            "label": "main:37",
+            "hash": "ccee81a5c451b9e7a9c4107d8d3527638dad5ea495e001d4ea6bd8ae278849bc"
+          },
+          "main:38": {
+            "label": "main:38",
+            "hash": "c6338ec846a744495d6ea68e339bb7b6b8e6b61eae2aa8b94884988a70616795"
+          },
+          "main:39": {
+            "label": "main:39",
+            "hash": "d4c6ae0d4127fc038f8db312a83632fa522ea0e57d2a4703a6e721bb27516a64"
+          },
+          "main:40": {
+            "label": "main:40",
+            "hash": "0b1e32921f79ec64440c6581b15fef70355945be241e5bc4dfc39c59a35edcfb"
+          },
+          "main:41": {
+            "label": "main:41",
+            "hash": "7537684cee4112be8753cb81bc2a79a5ed02818f6f3fb830b929b3ed3b9c91a8"
+          },
+          "main:42": {
+            "label": "main:42",
+            "hash": "bfc67388586e360ee62f95cb2e9186961a918b12e3e316d38f3ce5c2c4962758"
+          },
+          "main:43": {
+            "label": "main:43",
+            "hash": "531bfbca427435e5bd21ebf56af3bbb8eba5a8cb4b734fefbb747bea1cc818ff"
+          },
+          "main:43a": {
+            "label": "main:43a",
+            "hash": "4e5d9862d2f3ff35004ea7e82ef739206434e566bbdbab89288d85efdaa3b7a4"
+          },
+          "main:44": {
+            "label": "main:44",
+            "hash": "9f095a5839efb6c2563112fb1a322674d264a69aef9a3200d2181fb2296b7d6c"
+          },
+          "main:45": {
+            "label": "main:45",
+            "hash": "aefe1ea15398756cfe10510be73ff68fb6f86847e7b0aa0370ec22acb0ca29d0"
+          },
+          "main:46": {
+            "label": "main:46",
+            "hash": "ac6a47b1a1c741de3dd13446642c55bc7dc425e94f29a5cf0a30afee1fe34a80"
+          },
+          "main:47": {
+            "label": "main:47",
+            "hash": "adaf92a90092741638c26dcdfa7a03a55d9dd1d227602eef1b2a7ecf5850084f"
+          },
+          "main:48": {
+            "label": "main:48",
+            "hash": "4a50e31ee1b45b224218c23f7b345a91ae0702a61a73e6cae87f315e8977871a"
+          },
+          "main:48a": {
+            "label": "main:48a",
+            "hash": "e04aa880334562902bceaeda8211432ce28ac0302ec066e28498bac900818e4c"
+          },
+          "main:48b": {
+            "label": "main:48b",
+            "hash": "95107ffc2130c8154450009a77e60b3b334f73fa1f0065bb76ab917d3ec0560e"
+          },
+          "main:48c": {
+            "label": "main:48c",
+            "hash": "ff599084020abc0e1673f19af6d73f78ca0049eb94f356676fc4c39bd9907794"
+          },
+          "main:48d": {
+            "label": "main:48d",
+            "hash": "93ad19995c1d1c6dc854ee5fba1acd44cff44403c64a099b3e00836fc8495606"
+          },
+          "main:48e": {
+            "label": "main:48e",
+            "hash": "aea9ce8027f04723bde233c039db9925f03a439da5956434d51a7d30194e96fb"
+          },
+          "main:48f": {
+            "label": "main:48f",
+            "hash": "000e5e3e46cbbd26bb55aacfaf34bbe477354b28732261c41558e4f12d5f5fc8"
+          },
+          "main:48g": {
+            "label": "main:48g",
+            "hash": "3d783b45cc2b20f0c76f7b62dc709bb9234e07198946613d3b418a142cb4e866"
+          },
+          "main:48h": {
+            "label": "main:48h",
+            "hash": "c8292333fdc1326fd895b275af2ecb851946986c9fcc948df5f24f9421ff86fe"
+          },
+          "main:48i": {
+            "label": "main:48i",
+            "hash": "20deb6af0654ebc2c60c717459ed8918ab5000995797902c486f23b7b01249ec"
+          },
+          "main:48j": {
+            "label": "main:48j",
+            "hash": "5aa3f9290fb34233085b9efe6a21defd8fd3a14a7a54da69f22423b42a823430"
+          },
+          "main:48k": {
+            "label": "main:48k",
+            "hash": "6ab4580e75e3fd427a46a7a7ca8b542d66f7d57def8434de96e0c975406e846c"
+          },
+          "main:48l": {
+            "label": "main:48l",
+            "hash": "0926db030b16d7a9ea5c95ddcdbc7d74f6148798f7d62bee66572165689c06b2"
+          },
+          "main:48m": {
+            "label": "main:48m",
+            "hash": "2882944746f725d125b575568e0c52a4c05e9c267686f3e4d48ba5b75546ee6c"
+          },
+          "main:48n": {
+            "label": "main:48n",
+            "hash": "9470b1772d39a62e13ca84fffa0259af242e3d415f15247eaa403fc2ef94aebb"
+          },
+          "main:48o": {
+            "label": "main:48o",
+            "hash": "52f27ed51d9dc03a0947bc40cba636a20af48e7cb964a5304783924552dc170e"
+          },
+          "main:48p": {
+            "label": "main:48p",
+            "hash": "e5c70147684385b6c8a793855f231630d0a928a0e5a291fec416e82914e61446"
+          },
+          "main:48q": {
+            "label": "main:48q",
+            "hash": "30c771c5f8762d505055ece8fad4cf3a6e12e6d319cff7b5c8a3d8b98b48fdd5"
+          },
+          "main:48r": {
+            "label": "main:48r",
+            "hash": "380b3d0491284785ee6e90d19040332c74feeb0142ae9bb146c5d22efe240fb1"
+          },
+          "main:49": {
+            "label": "main:49",
+            "hash": "911de45b1ed3980bb64e796ae12f964c3b58226010441c51964b3caf103e9605"
+          },
+          "main:50": {
+            "label": "main:50",
+            "hash": "e91d0a03e90eb023f4c6fb744cd5fbd2173abbd2e7fc6119534399aa3c8e14ec"
+          },
+          "main:51": {
+            "label": "main:51",
+            "hash": "0451188905c202c9e191481278b745be5163af9763f0f858a75a27d81f235218"
+          },
+          "main:52": {
+            "label": "main:52",
+            "hash": "3c17e1662555ef47966fc38955b01728a449f2a14540ba1cc9b09c6e3b520cef"
+          },
+          "main:52a": {
+            "label": "main:52a",
+            "hash": "964e44dae521652fdd8a13a5b50f1ca3208a2bdd6a4a4790a31bd00201d0b0fc"
+          },
+          "main:53": {
+            "label": "main:53",
+            "hash": "efc68a242801483e7ee61f403b3a985ef0a0b4be35c0005af80c1f22210ddec2"
+          },
+          "main:54": {
+            "label": "main:54",
+            "hash": "4efcd39be63125d651ed39e59f8fd148ff3b1dd9f5bba6d0f411be6719a37d9f"
+          },
+          "main:55": {
+            "label": "main:55",
+            "hash": "58adc0fb9aa79a403d87f3dc24afe0982864020f3ea379d714900a5d24419053"
+          },
+          "main:56": {
+            "label": "main:56",
+            "hash": "0062860538004d50afe819c2d3cae7597539c40d9cda9d43c68c5cdd6d6b4e32"
+          },
+          "main:57": {
+            "label": "main:57",
+            "hash": "17924d3434abefc0c5d7cbc500d49f084857cfbc52822fb682fa42cfe22af0e0"
+          },
+          "main:58": {
+            "label": "main:58",
+            "hash": "a0f28987138f5a8309ed1247113a8559396337c46fca7d33c44c33fdabeb9d26"
+          },
+          "main:59": {
+            "label": "main:59",
+            "hash": "fd3933d8b6390c03fc67135cddc751bbe716ee74bb19c529acf2fa49a05088f3"
+          },
+          "main:60": {
+            "label": "main:60",
+            "hash": "30292102f12b1835741d9f5822a8607c51591bb72e21c0755a32d7cc3863e9c0"
+          },
+          "main:61": {
+            "label": "main:61",
+            "hash": "297f37ed8eeb82b52c78c79c3de1b825a5e1b27cb1653033b034797167af1bca"
+          },
+          "main:62": {
+            "label": "main:62",
+            "hash": "819a29d9a84d92ef499653648528a7e0cf3499df43ad032e225caef71844235c"
+          },
+          "main:63": {
+            "label": "main:63",
+            "hash": "d3eb9995b9787b77daa901927e7ccd02e6bc5fef7c8ab7b35e5be617fe3bf78c"
+          },
+          "main:64": {
+            "label": "main:64",
+            "hash": "9587b864c65c7b95403b42a777b11fc98b53a934de41d013b08334b8c949c6e9"
+          },
+          "main:65": {
+            "label": "main:65",
+            "hash": "f0a6113e2efcbdc291bdaac8681cd84bad243c2cb11ad3112b05ff719a9c6132"
+          },
+          "main:66": {
+            "label": "main:66",
+            "hash": "c893af83ca8de0784e516763537390cd0bc21131f2caafabea15516a25d00e7d"
+          },
+          "main:67": {
+            "label": "main:67",
+            "hash": "365378d8955759aeff93728437d5547c307ba738ccc3475f2328483b6322ddc0"
+          },
+          "main:68": {
+            "label": "main:68",
+            "hash": "cfd20d55d700b539eabee2fe900cecfad44e0337500a4ee19283a7ee85583504"
+          },
+          "schedule:1": {
+            "label": "schedule:1",
+            "hash": "692c9eb2dbb370683614ee70f73006438af81173fec8b20718f631eac726a706"
+          },
+          "schedule:2": {
+            "label": "schedule:2",
+            "hash": "b0b4ca8e8a321bf5bc7f619bf4c0a55f09f8b36732b9cece4cab106e8dcc4075"
+          },
+          "schedule:3": {
+            "label": "schedule:3",
+            "hash": "1ef67e98be9ed3168a49eeb130ef077b7dea1fa6b73359c0656e4b73e48c760b"
+          },
+          "schedule:4": {
+            "label": "schedule:4",
+            "hash": "4cde5cf63ba084ade5f52d45369aada0585c154cd371eea1f7d13b46b58461d1"
+          },
+          "schedule:5": {
+            "label": "schedule:5",
+            "hash": "04498a75616d4dc840c399930e368c9b002fcc3f22a39b14b37e26b0fd339368"
+          },
+          "schedule:6": {
+            "label": "schedule:6",
+            "hash": "0a92fdc6cac5fda3797f4ef1e1fbe39536563ffe2cf8f1a6d5f064a9c9b8ac1f"
+          },
+          "schedule:7": {
+            "label": "schedule:7",
+            "hash": "b7919e5d0c08e1721acdc53297b9f81563aa1c7055e28531f74b69a6d93b4503"
+          },
+          "schedule:8": {
+            "label": "schedule:8",
+            "hash": "f40163660be7a749688dcc77030991fa38a9d6cca5a4364c6eb659f7c1969b45"
+          },
+          "schedule:9": {
+            "label": "schedule:9",
+            "hash": "662ff48ea84e683940955420665db9d7241f171fae215cc8f2b4f58cf73839e5"
+          },
+          "schedule:10": {
+            "label": "schedule:10",
+            "hash": "d385691cfc6c3e3e323413cb05ac0c8a7a67dc025b09c1e125dad2ddc2f04421"
+          },
+          "schedule:11": {
+            "label": "schedule:11",
+            "hash": "ade3ef1b7634bbec1f311ccbbfefe0264c268b0454a71ec837586bddd0f6b45d"
+          }
+        },
+        "metadata": {
+          "versionInForceFrom": "16/10/2026"
+        },
+        "version": "16/10/2026",
+        "coverage": "article_text",
+        "digest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+        "acquiredUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf"
+      },
+      "events": [
+        {
+          "id": "ab883574b02d65ac3fc8be3d51f68cf72f285d8c6165b2a376db996792a5f1b8",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:16:52.534276+00:00",
+          "beforeDigest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+          "afterDigest": "2f0f8077575295468b7442a7da6f2aa3ed2fec1e834646c20a45533bd05881e6",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf"
+        }
+      ],
+      "baselineOrigin": "selected_edition",
+      "lastSuccessAt": "2026-11-17T01:28:46.563097+00:00"
+    }
   }
 }

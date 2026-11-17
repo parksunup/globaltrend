@@ -73,6 +73,8 @@ def parse_source(source, raw, historical=False):
         try:
             article_texts,metadata,version=(singapore if source['parser']=='singapore-pdf' else california)(pdf_text(raw))
         except ValueError as error: raise SourceError(str(error)) from None
+        date_format='%d/%m/%Y' if source['parser']=='singapore-pdf' else '%m/%d/%Y'
+        if not historical and datetime.strptime(version,date_format).date()>datetime.now(timezone.utc).date():raise SourceError('not_currently_enforced')
         articles={key:{'label':key,'hash':digest(normal(body))} for key,body in article_texts.items()}
         if len(articles)<source.get('minimumArticles',1): raise SourceError('incomplete_article_structure')
         return {'articles':articles,'metadata':metadata,'version':version,'coverage':'article_text','digest':digest({'articles':articles,'metadata':metadata})}
