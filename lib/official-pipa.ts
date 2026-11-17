@@ -10,7 +10,7 @@ type OfficialPipa = {
   versionLabel: string;
   officialUrl: string;
   scopeNote: string;
-  sections: { id: string; group: "main" | "supplementary"; title: string; lines: string[] }[];
+  sections: { id: string; group: "main" | "supplementary" | "reference"; title: string; lines: string[]; reviewStatus?: string; sourceVerificationNote?: string }[];
 };
 
 export function loadOfficialPipa(root = process.cwd()): LegalTranslationDocument {
@@ -30,8 +30,8 @@ export function loadOfficialPipa(root = process.cwd()): LegalTranslationDocument
       id: section.id,
       group: section.group,
       title: section.title,
-      context: `공식 한국어 원문 · ${section.group === "main" ? "본칙" : "부칙"}`,
-      reviewStatus: "official",
+      context: section.group === "reference" ? `판본 대조 참고 · ${section.sourceVerificationNote ?? "별도 판본·시행일 확인 필요"}` : `공식 한국어 원문 · ${section.group === "main" ? "본칙" : "부칙"}`,
+      reviewStatus: section.reviewStatus ?? "official",
       lines: section.lines.map((text, index) => ({
         id: `${section.id}-line-${index + 1}`,
         label: "",
@@ -47,7 +47,7 @@ export function officialPipaInstrument(law: LegalTranslationDocument): Submissio
     group: "legal",
     kind: "법제 목록",
     title: law.title,
-    subtitle: "대한민국 · 국가법령정보센터 공식 원문",
+    subtitle: "대한민국 · 공식 선정 원문과 판본 대조 참고",
     summary: law.scopeNote,
     status: "published",
     fields: [{ label: "관할권", value: "KR" }],

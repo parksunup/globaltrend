@@ -19,3 +19,5 @@
 APPI 본칙·제공 부칙·별표 전체 초안과 조항 연결은 [appi.md](./translations/appi.md), [appi.json](./translations/appi.json)에 있다. 누락·이용조건·용어 검토는 [APPI 검토 메모](./translations/appi-review-notes.md), 나머지 법률과 영국 보완 법령은 [전체 검토 메모](./review-notes.md)를 참조한다.
 
 [7개 법제 진행표](./translation-progress.md)와 [17개 기준 분류·요약표](./criteria-mapping.md)는 한국·일본 34개 셀의 사람 검수 전 초안이다. 다른 5개 법제 85개 셀은 미검토다. 한국은 [공식 한국어 원문 색인](./sources/pipa-index.md)에서 본문을 연결하며 원문 자체는 저장소에 포함하지 않는다.
+
+2026-11-17 한국 원문 재대조: 현행·선정 본칙 127개와 부칙 13묶음을 확인했습니다. 이전 제출의 추가·상이 규정 9개는 참고로 보존했습니다. [판본 조정 기록](./sources/pipa-edition-reconciliation-20261117.json).
