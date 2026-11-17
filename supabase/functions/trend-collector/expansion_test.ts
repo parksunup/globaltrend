@@ -3,13 +3,11 @@ import { expansionCandidates, probe } from "./expansion-probe.ts";
 import { advance, recordListingPage } from "./runtime.ts";
 import {
   additionalListing,
-  detailRequestUrl,
   expansionListingDate,
-  listingRequestUrl,
   nextWithinWindow,
-  verifyDetailResponse,
 } from "./expansion.ts";
 import routes from "./expansion-routes.json" with { type: "json" };
+import registry from "./registry.json" with { type: "json" };
 import manifest from "../../../tests/fixtures/collector-expansion/manifest.json" with {
   type: "json",
 };
@@ -31,6 +29,11 @@ const fixtureEvidenceGaps: Record<string, string> = {
   ftc: "Current official route has no captured listing and detail fixture pair; route remains separately subject to robots/access review.",
   "g7-dpa": "The route points to a cross-agency OPC membership hub; no reproducible listing and detail fixture pair is committed here.",
 };
+// These routes are collected by the Python/Crawlee cloud worker. Their
+// behavior is tested by the Python collector suite, not the Deno Edge suite.
+const cloudPythonSources = new Set(
+  registry.sources.filter((source) => source.executor === "cloud-python").map((source) => source.source),
+);
 Deno.test("EUR-Lex explicit user hold rejects before any network-capable path", async () => {
   assert(!("eur-lex" in expansionCandidates));
   let rejected = false;
@@ -79,40 +82,6 @@ Deno.test("listing cycle detection retains fingerprints beyond 50 pages", () => 
   }
   assert(caught, "cycle older than 50 pages must still be detected");
 });
-Deno.test("EC official search receives explicit whole-day discovery bounds", () => {
-  const u = new URL(
-    listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
-  );
-  assert(u.pathname === "/commission/presscorner/api/search");
-  assert(u.searchParams.get("datefrom") === "26102026");
-  assert(u.searchParams.get("dateto") === "29102026");
-  assert(u.searchParams.get("pagesize") === "10");
-});
-Deno.test("an empty validated date-scoped EC result is a normal no-material result", () => {
-  const found = discover(
-    "ec",
-    JSON.stringify({
-      totalNumber: 0,
-      pageSize: 10,
-      pageNumber: 1,
-      docuLanguageListResources: [],
-    }),
-    listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
-  );
-  assert(found.rows.length === 0 && found.next === null);
-});
-Deno.test("EC accepts observed zero-based response page and retains eventDate", async () => {
-  const data = JSON.parse(await fixture("ec-listing.json"));
-  data.pageNumber = 0;
-  data.docuLanguageListResources[0].eventDate = "2026-10-28T09:00:00+02:00";
-  const found = discover(
-    "ec",
-    JSON.stringify(data),
-    listingRequestUrl("ec", routes.ec.listing, "2026-10-26", "2026-10-28"),
-  );
-  assert(found.rows.length === data.totalNumber);
-  assert(expansionListingDate(found.rows[0]) === "2026-10-28");
-});
 Deno.test("CA OPC Advice to Parliament is an approved paginated listing stream", async () => {
   const listing = additionalListing("ca-opc", 1)!;
   assert(listing === "https://www.priv.gc.ca/en/opc-actions-and-decisions/advice-to-parliament/?Filter=True&Page=1&o=d");
@@ -126,28 +95,8 @@ Deno.test("CA OPC Advice to Parliament is an approved paginated listing stream",
   assert(found.rows[0].url.endsWith("/parl_261102/"));
   assert(found.next?.includes("Page=2"));
 });
-Deno.test("Parliament canonical slugs may change but the official article ID must match", () => {
-  const u = manifest["eu-parliament"].url!;
-  verifyDetailResponse("eu-parliament", u, u + "official-title");
-  let rejected = false;
-  try {
-    verifyDetailResponse("eu-parliament", u, u.replace("IPR48312", "IPR99999"));
-  } catch {
-    rejected = true;
-  }
-  assert(rejected);
-});
-Deno.test("EC preserves separately supplied official quotations and attribution", async () => {
-  const item = await extract(
-    "ec",
-    await fixture("ec-detail.json"),
-    manifest.ec.url,
-  );
-  assert(item.content_text.includes("Roxana Mînzatu"));
-  assert(item.content_text.includes("We can see from the findings"));
-});
 for (const [source, c] of Object.entries(routes)) {
-  if (source in fixtureEvidenceGaps) continue;
+  if (source in fixtureEvidenceGaps || cloudPythonSources.has(source)) continue;
   Deno.test(`${source}: observed official listing and full detail, no date inference`, async () => {
     const ext = source === "ec"
       ? "json"
@@ -221,25 +170,6 @@ Deno.test("AEPD uses the card heading and its official publication time, never t
   try {
     discover("es-aepd", '<a class="more-link" href="https://evil.example/noticia">X</a>', routes["es-aepd"].listing);
   } catch { rejected = true; }
-  assert(rejected);
-});
-Deno.test("EC retrieves official body API using document reference, never SPA shell or law text", () => {
-  assert(
-    detailRequestUrl(
-      "ec",
-      "https://ec.europa.eu/commission/presscorner/detail/en/ip_26_2274",
-    ) ===
-      "https://ec.europa.eu/commission/presscorner/api/documents?language=en&reference=IP%2F26%2F2274",
-  );
-  let rejected = false;
-  try {
-    detailRequestUrl(
-      "ec",
-      "https://evil.example/commission/presscorner/detail/en/ip_26_2274",
-    );
-  } catch {
-    rejected = true;
-  }
   assert(rejected);
 });
 Deno.test("TC260 follows observed archive paging; dated descending pages stop at the daily boundary", async () => {

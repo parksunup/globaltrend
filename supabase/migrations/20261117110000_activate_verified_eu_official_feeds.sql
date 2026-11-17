@@ -93,12 +93,13 @@ do $cloud_cursor$
 declare definition text; old_pattern text; new_pattern text; n integer; branch_count integer;
 begin
   definition=pg_get_functiondef('private.collector_cloud_cursor_valid(jsonb,text)'::regprocedure);
-  old_pattern=$old$when slug='eu-parliament' then '^https://www[.]europarl[.]europa[.]eu/' when slug='imda' then '^https://www[.]imda[.]gov[.]sg/resources/press-releases-factsheets-and-speeches([?]page=[0-9]+)?$'$old$;
-  new_pattern=$new$when slug='ec-news' then '^https://commission[.]europa[.]eu/(node/2/rss_en|news-and-media/news/[a-z0-9][a-z0-9-]*-[0-9]{4}-[0-9]{2}-[0-9]{2}_en)$'
-  when slug='eu-parliament' then '^https://data[.]europarl[.]europa[.]eu/api/v2/'
-  when slug = 'imda' then '^https://www[.]imda[.]gov[.]sg/resources/press-releases-factsheets-and-speeches([?]page=[0-9]+)?$'$new$;
+  -- Change the Parliament host prefix directly instead of matching the whole
+  -- CASE branch: earlier migration histories format the adjacent IMDA branch
+  -- with and without spaces around '='.
+  old_pattern=$old$'^https://www[.]europarl[.]europa[.]eu/'$old$;
+  new_pattern=$new$'^https://data[.]europarl[.]europa[.]eu/api/v2/'$new$;
   n=(length(definition)-length(replace(definition,old_pattern,'')))/length(old_pattern);
-  if n<>1 then raise exception 'cloud cursor route drift: expected one existing Parliament/IMDA branch, found %',n; end if;
+  if n<>1 then raise exception 'cloud cursor route drift: expected one existing Parliament prefix, found %',n; end if;
   definition=replace(definition,old_pattern,new_pattern);
   if position(new_pattern in definition)=0 then raise exception 'cloud cursor route update postcondition failed'; end if;
   execute definition;
