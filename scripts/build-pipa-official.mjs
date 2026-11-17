@@ -1,9 +1,17 @@
 import { createHash } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const source = process.argv[2];
 if (!source) throw new Error("Usage: node scripts/build-pipa-official.mjs <official HTML file>");
+
+const outputPath = resolve("data/legal/official/pipa-20260911.json");
+if (existsSync(outputPath)) {
+  const existing = JSON.parse(readFileSync(outputPath, "utf8"));
+  if (existing.sections?.some((section) => section.group === "reference")) {
+    throw new Error("판본 대조 참고 자료가 있습니다. 기존 참고 자료와 이력을 보존하는 판본 조정 절차를 사용하세요.");
+  }
+}
 
 const html = readFileSync(source, "utf8");
 const officialUrl = "https://law.go.kr/LSW/lsInfoR.do?chrClsCd=010202&efYd=20260911&lsiSeq=283839";
@@ -55,5 +63,5 @@ const output = {
   scopeNote: "국가법령정보센터의 2026. 9. 11. 시행 판본 본칙과 부칙입니다. 본칙 조문 표제 수에는 삭제 조문도 포함됩니다. 이후 시행되는 개정규정과 최신 개정 여부는 공식 원문에서 확인해 주세요.",
   sections,
 };
-writeFileSync(resolve("data/legal/official/pipa-20260911.json"), `${JSON.stringify(output, null, 2)}\n`);
+writeFileSync(outputPath, `${JSON.stringify(output, null, 2)}\n`);
 console.log(`Extracted ${sections.length} PIPA articles from the official HTML`);

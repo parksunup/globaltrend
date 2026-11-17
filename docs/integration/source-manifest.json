@@ -29,7 +29,7 @@
     {
       "path": "data/legal/README.md",
       "pr": 15,
-      "sha256": "500a35fdf7683328347ea1a0b3de6df05bc4e83f5dfa305813cdc836034f84f7",
+      "sha256": "7d526cd4d5e25d62f850bd7841af1774d6830ae316dabe201a644810b4ad1888",
       "revisions": [
         {
           "previous_sha256": "08d5b38f9f42df07dc38a60ef202ecfea6f26d81cf0bf2d5b0898d8ac7e51ca8",
@@ -42,6 +42,12 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "500a35fdf7683328347ea1a0b3de6df05bc4e83f5dfa305813cdc836034f84f7",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
@@ -93,7 +99,7 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
+      "sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
       "imported_sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -108,13 +114,19 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
+      "sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
       "imported_sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -129,6 +141,12 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
@@ -185,7 +203,7 @@
     {
       "path": "data/legal/instruments.csv",
       "pr": 15,
-      "sha256": "5e40ba028c0595cdcd4a926115cc076f04b93d5eac0410d19b18cac500fb1535",
+      "sha256": "40408a5d99f316ebdc36006019490219d9a9c7693b475afeffaf378b8c072df1",
       "revisions": [
         {
           "previous_sha256": "dae04dca7dcf75d60a7d334574c14f67c6cbf20975672db5f00081030cab2dd9",
@@ -198,13 +216,19 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "5e40ba028c0595cdcd4a926115cc076f04b93d5eac0410d19b18cac500fb1535",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/instruments.md",
       "pr": 15,
-      "sha256": "e4eb53c0a596c824cea60f7d7514a9e1e4a85bf1a6d102d5a4fd3cc3b47dd6d1",
+      "sha256": "f35032d4d5cb06bbb4a8c42a7df25c12d20261582b33750d21342698a673a593",
       "revisions": [
         {
           "previous_sha256": "74d1eed4f02903220f1c0972080fbd924c88bd581f3ce677885c113d93cfc486",
@@ -217,6 +241,12 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "e4eb53c0a596c824cea60f7d7514a9e1e4a85bf1a6d102d5a4fd3cc3b47dd6d1",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
@@ -682,7 +712,7 @@
     {
       "path": "public/review-drafts/comparison.html",
       "pr": 15,
-      "sha256": "a7d097077b61eb0b226f305059eb3b094e4b47d89c83b444cb117174d316fe7e",
+      "sha256": "4cf560084733aa9756b7dd69695a4cb3f3dfe502e271269451d9c7023f1dbbfc",
       "imported_sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -697,13 +727,19 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "a7d097077b61eb0b226f305059eb3b094e4b47d89c83b444cb117174d316fe7e",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
+      "sha256": "f5c70a01890bac700898f1eb0edfdb239f83613755c63dea1da02adc957937c1",
       "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
       "derived_from": "data/legal/criteria-mapping.csv",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -719,13 +755,19 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
+      "sha256": "e6643e4f07782d2cea724f4578ea5de4bf347a42154894b2462f52c692f84f13",
       "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
       "derived_from": "data/legal/criteria-mapping.md",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -741,6 +783,12 @@
           "changed_on": "2026-11-17",
           "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        },
+        {
+          "previous_sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
+          "changed_on": "2026-11-17",
+          "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
         }
       ]
     },

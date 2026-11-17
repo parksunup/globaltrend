@@ -18,6 +18,8 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
   const [tocOpen, setTocOpen] = useState(false);
   const query = articleQuery.trim().toLocaleLowerCase();
   const dateLabel = /^\d{4}-\d{2}-\d{2}$/.test(law.version) ? "시행일" : "자료 기준";
+  const referenceCount = law.sections.filter((section) => section.group === "reference").length;
+  const groupLabel = (group: typeof groups[number]) => law.jurisdiction === "KR" && group.id === "reference" ? "판본 대조 참고" : group.label;
   const matchingSections = query ? law.sections.filter((section) => `${section.title} ${section.context}`.toLocaleLowerCase().includes(query) || section.lines.some((line) => `${line.label ?? ""} ${line.text}`.toLocaleLowerCase().includes(query))) : [];
   return <section className={styles.fullLawPage}>
     <Link href={returnTo}>← {returnTo.includes("view=compare") ? "법제 비교로" : "국가별 법제로"} 돌아가기</Link>
@@ -25,6 +27,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
     <h1>{law.title}</h1>
     <p>{law.officialName}</p>
     <p>{dateLabel}: {law.version} · {law.reviewStatus === "official" ? "본칙 조문 표제" : "조문"} {law.articleCount}개</p>
+    {law.jurisdiction === "KR" && referenceCount > 0 && <p className={styles.lawScopeNote} role="status">이전 제출 자료 중 {referenceCount}개 규정은 판본 대조 참고로 보존했습니다. 별도 판본·시행일을 확인해야 하며 현재 적용 조문으로 확인한 것은 아닙니다.</p>}
     {law.scopeNote && <details className={styles.lawScopeNote}><summary>{law.reviewStatus === "official" ? "원문 범위와 판본 안내" : "번역 범위와 판본 안내"}</summary><p>{law.scopeNote}</p></details>}
     {law.officialUrl && <a href={law.officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
     <div className={styles.lawSearchBar}><label htmlFor="law-article-search">조문 검색</label><input id="law-article-search" type="search" value={articleQuery} onChange={(event) => setArticleQuery(event.target.value)} placeholder="조문 번호나 단어를 입력하세요 (예: 제2조, 개인정보)" />{articleQuery && <button type="button" onClick={() => setArticleQuery("")}>검색 지우기</button>}</div>
@@ -38,7 +41,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
           const sections = law.sections.filter((section) => section.group === group.id && (!query || matchingSections.includes(section)));
           if (!sections.length) return null;
           return <details key={group.id} open={Boolean(query) || group.id === "main"}>
-            <summary>{group.label} <span>{sections.length}</span></summary>
+            <summary>{groupLabel(group)} <span>{sections.length}</span></summary>
             <div>{sections.map((section) => <a key={section.id} href={`#${section.id}`} onClick={() => setTocOpen(false)}>{section.title}</a>)}</div>
           </details>;
         })}
@@ -54,7 +57,7 @@ export default function PublicLawReader({ law, returnTo }: { law: LegalTranslati
             const sections = law.sections.filter((section) => section.group === group.id);
             if (!sections.length) return null;
             return <section key={group.id} id={group.id} className={styles.lawTextGroup}>
-              <h2>{group.label}</h2>
+              <h2>{groupLabel(group)}</h2>
               {sections.map((section) => <article key={section.id} id={section.id} className={styles.lawTextArticle}>
                 <small>{section.context}</small>
                 <h3>{section.title}</h3>
