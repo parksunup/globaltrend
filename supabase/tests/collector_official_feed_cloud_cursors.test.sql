@@ -1,5 +1,5 @@
 begin;
-select plan(7);
+select plan(8);
 
 select is(
   private.collector_cloud_cursor_valid(
@@ -69,6 +69,16 @@ select is(private.collector_cloud_cursor_valid(
   jsonb_build_object('page','https://commission.europa.eu/node/2/rss_en',
     'offset',0,'frozen_urls',urls.value,'frozen_next',null),'ec-news'),
   true,'bounded multi-item EC News snapshots are accepted') from urls;
+
+with urls as (
+  select jsonb_agg('https://commission.europa.eu/news-and-media/news/'||repeat('a',100)||n::text||
+    '-2026-11-'||lpad((1+((n-1)%28))::text,2,'0')||'_en' order by n) value
+  from generate_series(1,101) n
+)
+select is(private.collector_cloud_cursor_valid(jsonb_build_object(
+  'page','https://commission.europa.eu/node/2/rss_en','offset',100,
+  'frozen_urls',urls.value,'frozen_next',null),'ec-news'),
+  true,'official feed cursor does not impose an arbitrary 100-item ceiling') from urls;
 
 select is(private.collector_cloud_cursor_valid(
   jsonb_build_object('page','https://evil.example/node/2/rss_en','offset',0,

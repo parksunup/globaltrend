@@ -37,8 +37,7 @@ begin
  if not (c ? 'frozen_urls') then return not (c ? 'frozen_next'); end if;
  if slug not in ('ec','ec-news','eu-parliament') or jsonb_typeof(c->'frozen_urls') is distinct from 'array' then return false; end if;
  count_urls=jsonb_array_length(c->'frozen_urls');
- if count_urls not between 1 and 100
-  or octet_length(c::text)>50000
+ if count_urls<1 or octet_length(c::text)>50000
   or not (c ? 'frozen_next') then return false; end if;
  if jsonb_typeof(c->'offset') is distinct from 'number' or (c->>'offset') !~ '^[0-9]{1,6}$'
   or (c->>'offset')::integer>count_urls then return false; end if;
