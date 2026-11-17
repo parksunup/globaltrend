@@ -1058,307 +1058,307 @@
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-17T01:28:44.387216+00:00"
+      "lastSuccessAt": "2026-11-17T01:58:57.842987+00:00"
     },
     "pipl": {
-      "configHash": "ee2a0ee0a0c656b74e89c3f212d8fa596898a3589ef455597821633a72e08abc",
+      "configHash": "bb44ea9dfbf06af2240e5e114681ab3acaa9ecbc481fac5daa88a7343fe7d207",
       "snapshot": {
         "articles": {
           "main:1": {
-            "label": "第一条",
-            "hash": "971f68678e21edb9376e688e57125c7c6b4b9250890053d777d3452cb0ea70fb"
+            "label": "main:1",
+            "hash": "c141ed6c6bf3f10719d615fcaf604d7fb1b18466ddcad1eec3f23f099bf3a9b0"
           },
           "main:2": {
-            "label": "第二条",
-            "hash": "bb3500370bbcf58205d7d6610d70c5a485d10bebe9ad9423cd5268a23fe34f5f"
+            "label": "main:2",
+            "hash": "f9739b657582261d580cce708deb69b917b799e3cfadbd3dc581945f70e67a4b"
           },
           "main:3": {
-            "label": "第三条",
-            "hash": "eb1eb91ab865d86bd8a4c17497874f9dc37fce147d072ef37253932916615925"
+            "label": "main:3",
+            "hash": "ddb17392d904facfc4207c88fa1dc13153667f5234b37029e5315f7ba16dde90"
           },
           "main:4": {
-            "label": "第四条",
-            "hash": "d444e4d314fe015c239172cd9cc1750cdf6b87b235002df25c8703663bddecaa"
+            "label": "main:4",
+            "hash": "e9f4800f86d32d52ed0bcad7ad7201af9df9beb2fb5697fde260e7bbdfccab07"
           },
           "main:5": {
-            "label": "第五条",
-            "hash": "9ad9b1c825e7effbcdcc0f155945360973056324782e7be78eaedbf7cfcd43fb"
+            "label": "main:5",
+            "hash": "48f26a5d24a8e948929006d5475225db239887ae5b736f839cd4d2b53546a220"
           },
           "main:6": {
-            "label": "第六条",
-            "hash": "78e8e8a101cc779ec2b279ba300bd71fbf05316d9a102b065eefde4a7c4aaf66"
+            "label": "main:6",
+            "hash": "5e0177fe9f69bd215d9b03d932b91f375a371d8def522f396d7ac0c02def033d"
           },
           "main:7": {
-            "label": "第七条",
-            "hash": "e3c99ac64b55ebb18b8c28eee114ad7d3938bfecee52d45525bda602743b766c"
+            "label": "main:7",
+            "hash": "efabc168edbde8772a3207540bb35dde3b1f18e40d80279222a5162aae2d5da6"
           },
           "main:8": {
-            "label": "第八条",
-            "hash": "13951ebb6a589a9e9f90c930a88d10b8c68f05445ad9c3620321a0a6de96d80e"
+            "label": "main:8",
+            "hash": "c40216b2c23dc21ba0e60611f89ff0937585ff07b222f18a9a117e3752081981"
           },
           "main:9": {
-            "label": "第九条",
-            "hash": "755ed7f4064507e62966786352f897d3fae65daf4f8c42e6304f1801da57b291"
+            "label": "main:9",
+            "hash": "a92f60c7a34448d7fa60b71a6c4707e186955e675648326085c0a4b3336b4ebf"
           },
           "main:10": {
-            "label": "第十条",
-            "hash": "1c044c07c0f164c3e4393809483fd918f6adc7f7e3bbc233d3562bb6b78f6155"
+            "label": "main:10",
+            "hash": "c8b4a1b4ac058b8d8ab6c19f979a8a4ca25f906de64139573f4891a887d1703c"
           },
           "main:11": {
-            "label": "第十一条",
-            "hash": "8047a02bfe589ba149eb78c6371d4d3b1f2f2f7747ab0623af6280c4c2f3bbb8"
+            "label": "main:11",
+            "hash": "353c7ce0e0d6ec44e741316ac2879a34989a947fea6e03ec80fe77f1720a9890"
           },
           "main:12": {
-            "label": "第十二条",
-            "hash": "f07f89b1d22803aaa46074b85d26902e65bd34a0967d59f7f6c484e1986cbda0"
+            "label": "main:12",
+            "hash": "268d4d66d7d166733359ecd6a2bf45fe1fe217969d8a6c9091148e549134a2c8"
           },
           "main:13": {
-            "label": "第十三条",
-            "hash": "e1a356459d0ca7bcaebe2abc729dc8c74ff7f634a13dc469657f6cd135719e3e"
+            "label": "main:13",
+            "hash": "8fd8c86efca51478cdba9b96f8ed3f73b9c095cf1fb2aa505b1723c985d86e74"
           },
           "main:14": {
-            "label": "第十四条",
-            "hash": "8082207a1e6a9cb66d51b91f9564fdbcd811a8e2968151d10609e6a5b2e5be77"
+            "label": "main:14",
+            "hash": "3a482a432692fea85f261a5cb7003b3cf2343eae703bcf088f0b446b3a3d5c5d"
           },
           "main:15": {
-            "label": "第十五条",
-            "hash": "7fad506ab7ad339a641e9c90bc9222f94a2aaf3cf19bbefbd69a7c89997117b1"
+            "label": "main:15",
+            "hash": "94cbe8eecdce3831051663b2667fdeaa881976319212fc2e1069969505df0255"
           },
           "main:16": {
-            "label": "第十六条",
-            "hash": "8e8de954cb14d75c0f536f6df22462749c618a7ae2b69aa4b6074317afa5f73b"
+            "label": "main:16",
+            "hash": "c81b3a03b19c8734326a390e28bcfa7c088dab96bc2faed932b7506a70c617ce"
           },
           "main:17": {
-            "label": "第十七条",
-            "hash": "60145f348fabd99963383da09e33a1f938423b1a2b48f810744e68d683ed7609"
+            "label": "main:17",
+            "hash": "d01564310b4d263f304f385be6c411442dcbc8837a6ab0a76e793ad78cf78c9b"
           },
           "main:18": {
-            "label": "第十八条",
-            "hash": "792c40c40820148bb32a3db757b11374aa88ac93d091f1a6fc78950ca905cf67"
+            "label": "main:18",
+            "hash": "9dbd21d64ca099c89813bdaef85a32725a522948b3f48b3780aba1d4009a2b0a"
           },
           "main:19": {
-            "label": "第十九条",
-            "hash": "84797ba82df645cee88b7c42e171e54fa74655d3884af907e40aa32210146085"
+            "label": "main:19",
+            "hash": "86228878f6144c68549a3d90e261ee8c781f45d0c0c1ab4380f703691ba0c501"
           },
           "main:20": {
-            "label": "第二十条",
-            "hash": "00276366fda32cc7823cdf51de24eb704f61e65dbb25f39c6b12ae28be1c28f8"
+            "label": "main:20",
+            "hash": "96e8091cbe690a352fb57a6afd58cc9308b995a135feff263c3c1f9ab0442fa4"
           },
           "main:21": {
-            "label": "第二十一条",
-            "hash": "f57538201b0a27f6e6cee74ff2403cb9889abc4f3a0c9cddbb25a434eddfc9f8"
+            "label": "main:21",
+            "hash": "80dbc22b08dccb8194b0b7b682df89b5e197ef97715afa55c88da2683b746f46"
           },
           "main:22": {
-            "label": "第二十二条",
-            "hash": "192c666c6c09143e78ab4ad364d323c8e2a1745f340f085c52823fbf3f72173c"
+            "label": "main:22",
+            "hash": "c4bee49c06830b3ccebb140f800fff8ed26906b880b78439aab2d6cb14c52b92"
           },
           "main:23": {
-            "label": "第二十三条",
-            "hash": "704b33328066c1c21261eaab0221b8f3c676a5a962b1a302bd97c66b98d66440"
+            "label": "main:23",
+            "hash": "957aba8f4f6601c8703aaa4f38ea18b737a7d6554aca043f1fd973cc9552a237"
           },
           "main:24": {
-            "label": "第二十四条",
-            "hash": "9de65e2be88ff7e3a05bf750166f33ea42b041fdb021f5020d62264f65f3858f"
+            "label": "main:24",
+            "hash": "7df1721c387dcf357e0ecef0ab4247f5951e439ec9b435fec6c9333fc42a5840"
           },
           "main:25": {
-            "label": "第二十五条",
-            "hash": "ce4db6ce8afcd13fd4a6cf3a0013d55ae47da35e4d68eeb7a427d5ae8a1b3de1"
+            "label": "main:25",
+            "hash": "b68af72842a847102b69c059a2d3690fa52523f44489638704ecab9c8bfef426"
           },
           "main:26": {
-            "label": "第二十六条",
-            "hash": "7a3f747f5e086f4ec5e1eddbde5b30173f3851b846be4decfbc887490d52ff4a"
+            "label": "main:26",
+            "hash": "0b6321be6fda09b578efde1855c1671ee874ed3594578508d180025d1819bde4"
           },
           "main:27": {
-            "label": "第二十七条",
-            "hash": "19d651066f88594f541622326f1bece4b849061fbb182b30053f6b1cb78cb223"
+            "label": "main:27",
+            "hash": "ba92ce343c786db726e015d63d61be8ece69044b4a8682c0b8bd41255bffaa50"
           },
           "main:28": {
-            "label": "第二十八条",
-            "hash": "88992edd5ccf9f712c5fa93ab3ebbbff39739e39a2655fdbb065296aba1e5e11"
+            "label": "main:28",
+            "hash": "c7b7112c54f0f5bb1964da6ea3e29d526962660fdd125a980a66ac6dacf87251"
           },
           "main:29": {
-            "label": "第二十九条",
-            "hash": "9abed4f8464696df34a7e29caaf644875df60cac101d8e9eb25ddf6bd9eaffaf"
+            "label": "main:29",
+            "hash": "78445bff157691805afa08dd9f351e5467764e84e62660dd0c427d45467fb8e8"
           },
           "main:30": {
-            "label": "第三十条",
-            "hash": "6950e717b61652b8eb4f6e160e1d6bcf11e2f698fe64da0990e26f4618fefc50"
+            "label": "main:30",
+            "hash": "9b13d4b64f51579ff2e64f9168ee56246bcec53ef16cedca42b11d95fd6bd691"
           },
           "main:31": {
-            "label": "第三十一条",
-            "hash": "6f0269fe1ad3b7513076121e2fac37456d34022d1f0190b49be602af5dfb8e9b"
+            "label": "main:31",
+            "hash": "db4d4d6bae9e27a81d255672b5b9a6bf25beb4474217ac91fd01641bc69423e7"
           },
           "main:32": {
-            "label": "第三十二条",
-            "hash": "6af8c99aacf39557437358b0f6547271455255bb0336415f6ce4eec2f68c4c0f"
+            "label": "main:32",
+            "hash": "a5a54ff5ef7d15c3e1c94f83470aeace731144c05e2c13a30e6189a937014e07"
           },
           "main:33": {
-            "label": "第三十三条",
-            "hash": "821fc5ffc5e3b66877dc1524597256584a23871b0940c39eb1d4838d72e61318"
+            "label": "main:33",
+            "hash": "0867e8795727e357de9f8da432e98fb7ae904f519422b3c577f62869aef184f3"
           },
           "main:34": {
-            "label": "第三十四条",
-            "hash": "921f1c898ea69121425da5209e8b3c4ce34c324ad5d0b06fdcb2ce0cf04d07d7"
+            "label": "main:34",
+            "hash": "d131efa935f01b2f744bfe7c410880638ad31491ad32c68ebf00f8a286df009c"
           },
           "main:35": {
-            "label": "第三十五条",
-            "hash": "904dd250f5e4a0d6e4ffbb2bb715915074b1536eb2ba20b4bb809fb1feec775f"
+            "label": "main:35",
+            "hash": "e32c11e0a26d4fc73b42f05b13d32816ee3971d2ec7323ab9df617be248525a1"
           },
           "main:36": {
-            "label": "第三十六条",
-            "hash": "43818e3374d733d41074c44ca2393174725d923075de79e78dda92987a47aa4a"
+            "label": "main:36",
+            "hash": "2313082408e403b69378866b8bceaed1a5abe17687022af102e38b350c29c818"
           },
           "main:37": {
-            "label": "第三十七条",
-            "hash": "43409ae950f41f1d136a10ebf9dd834aed44b8d7a56a97622fd669e849d564b7"
+            "label": "main:37",
+            "hash": "d84e681f78f80b520ae79a0ae6b43ebcbfc8c063867dcb873302e4a92921ef9b"
           },
           "main:38": {
-            "label": "第三十八条",
-            "hash": "5bd4ff971efc1cbcaa7e45c365823c5623006b1972244d53ee5ff59d55222b44"
+            "label": "main:38",
+            "hash": "dab81d0aeb3d4fcb60a35cbc89fcee76e580b8e1c074943381b6ecab7ae80013"
           },
           "main:39": {
-            "label": "第三十九条",
-            "hash": "327eb3ad4f6115826e3d94f4a0c5776672e11c30ec0da76092492f84091e3feb"
+            "label": "main:39",
+            "hash": "5df34a49a145630cfe55448ba30155d3c29f3f1cecb71ec6885f681d25808826"
           },
           "main:40": {
-            "label": "第四十条",
-            "hash": "0aeac4213387a7aef922e66b8139ef14f02d718da776b98de9a5f19d9329c45e"
+            "label": "main:40",
+            "hash": "49023d563e8611ee7aed2de96d71c1255b52ea69b53606f507db085c5dc9d297"
           },
           "main:41": {
-            "label": "第四十一条",
-            "hash": "0afa9ba4a94487506abb50d1aad46cf1c655db45c3f7f5d4afb373ebb7362015"
+            "label": "main:41",
+            "hash": "ede1d86be1a8b54407fc29b8997f2f6e346e9a0caaac913da5cd308f9c38b039"
           },
           "main:42": {
-            "label": "第四十二条",
-            "hash": "d3fda31e90ac22ed215fd6a317f5a6619444cc986562d0983b1cebd609e59000"
+            "label": "main:42",
+            "hash": "68cb5016ba09412bc60d0dbbdad817434138457a49f1af5a1cdb3a704fba761b"
           },
           "main:43": {
-            "label": "第四十三条",
-            "hash": "1275021ab771d9c10c9df73539ee49d378f11a35a2c4fc79214f3757c45da6df"
+            "label": "main:43",
+            "hash": "34637b64060074d7153e3886c6005c8f0b3281e34e3ad11575ac6e6a75424640"
           },
           "main:44": {
-            "label": "第四十四条",
-            "hash": "8e200ebde3bace078a1f31526fe096d88909b8b86554a8c14e30d4e12a1a4515"
+            "label": "main:44",
+            "hash": "b24bb36883f5635ca95620f803c3f571829e6030bbf2cd0597cbec436b31efe0"
           },
           "main:45": {
-            "label": "第四十五条",
-            "hash": "bb74a26261329cca328784ffc1b35aa046d0d8671d04ccd2b5486a6e95ec087c"
+            "label": "main:45",
+            "hash": "01f9ffcc40052a66141bb91a1b3741970edbaff2c060c5b63b54c882d2775550"
           },
           "main:46": {
-            "label": "第四十六条",
-            "hash": "e941638201e04296a2526a7d2e90eabd241c5b3052a4bf1b8607faf8744210ce"
+            "label": "main:46",
+            "hash": "c6922f4aa318ec3555c2e68eb438b0df8f66d6d640de5a94edcab97bc4380365"
           },
           "main:47": {
-            "label": "第四十七条",
-            "hash": "e0cf3306d2149670f0e0a63b5a4d94c15023d16f5acf4b27c9ac97162bc68859"
+            "label": "main:47",
+            "hash": "038c646aa6e4e486a960960467c67cfedd3d486f949f918591aa752afeffc660"
           },
           "main:48": {
-            "label": "第四十八条",
-            "hash": "cbddccd1dd7c89979241a5732a3b25470fcccec35bdc08231298befdfc5daa9c"
+            "label": "main:48",
+            "hash": "9ae6f3aad5f6a2bc5195dc2201ddb424aa2749d30333cdea1f45c540230429f4"
           },
           "main:49": {
-            "label": "第四十九条",
-            "hash": "5f67076f337602a07b3dcf80e187afef923f13278fec372b9044d5df0672ed04"
+            "label": "main:49",
+            "hash": "23437bc56be98ba134bb9d936e14bd8ef378e65138e2a5b07f3a828bc9715e2a"
           },
           "main:50": {
-            "label": "第五十条",
-            "hash": "6a8a38de87a42f53620cbd78886c25f90ad709bee8f7f5ceab8d1d0d94d6f201"
+            "label": "main:50",
+            "hash": "5cb49ea777c3ab30cd7cae1acfff63ad83df04cdef44f92cad61a8f698493442"
           },
           "main:51": {
-            "label": "第五十一条",
-            "hash": "600479753728a73e97eda05b4841c2656b467db8518b64f12246daa6b088823f"
+            "label": "main:51",
+            "hash": "a444d5f7f9fa2d9b79298b9d0bfe6d1f5b0eb130fe6b7114899e16bdd038fff4"
           },
           "main:52": {
-            "label": "第五十二条",
-            "hash": "739be4b28cb8a90ef7f2df2e2ff09b85802e24709619ff0971d339d01fe8d3ab"
+            "label": "main:52",
+            "hash": "a3df924190fc039b9cd6607a89d227836da97c4488bb6cbc702cbc8312b10624"
           },
           "main:53": {
-            "label": "第五十三条",
-            "hash": "7aa6e8d9672778cb469fd3a5e487f12fa9f486d79e7745126281ecb7d38fdddd"
+            "label": "main:53",
+            "hash": "47a8f605da4d6405242c9eaaf7336d16abf939a4b5be3c3777938d5782c83f65"
           },
           "main:54": {
-            "label": "第五十四条",
-            "hash": "b17814d8eff170dc2a879d426fcbf51b64df723f28aea91c4a87192ff1b29f89"
+            "label": "main:54",
+            "hash": "1fa140750ea8e109c77d5a289be545d6bff57cb785bf144294143ec1a78e1c75"
           },
           "main:55": {
-            "label": "第五十五条",
-            "hash": "04f761e9885ea21693cdc05d7ad317a4e9e38cc46b150c0c3eb5a29f5932bbfc"
+            "label": "main:55",
+            "hash": "658fe267fd81e5b276f9fe249da602d740c9f356ea8d7aa42ccb5871e8770ed7"
           },
           "main:56": {
-            "label": "第五十六条",
-            "hash": "e5804ed3bfa7e44377fe90dab506e858ef94a6848ce1fc7e30d137e840c6bcf1"
+            "label": "main:56",
+            "hash": "26e6449101f12698eaa6aae7201cdd80eb86fc0a0b10718146abeb45ed47bacc"
           },
           "main:57": {
-            "label": "第五十七条",
-            "hash": "58e9bdbfb94004d69cd3393287b309669af01dd70810aecb0be454eb506b11ea"
+            "label": "main:57",
+            "hash": "0adea7b0bf14957bf3ad1bc1dafca0c068052553de93172f6e63be7ff717159e"
           },
           "main:58": {
-            "label": "第五十八条",
-            "hash": "9587ab8d1bc9844da46c652b1a759b702c1acc3329659cf92b7e14e09fb3058e"
+            "label": "main:58",
+            "hash": "27ece6ef3f1c56e6a809300b8a3f1032e389f6b46b219f78c03be1f1635dfbdc"
           },
           "main:59": {
-            "label": "第五十九条",
-            "hash": "1f852bc39e04094d3371ef55a003ec9b938022ebcfa0c8d3b07b569a1ab921bd"
+            "label": "main:59",
+            "hash": "51954634d2133d95efe1b91602c2d57aa5f175c6f11d8618aec17e36f6126b73"
           },
           "main:60": {
-            "label": "第六十条",
-            "hash": "617ba84c433d909dd5f64d7235b2ee886cc14ef5adfe74f7bb28b34e3144eda2"
+            "label": "main:60",
+            "hash": "997cd7f209d4b0080b72f13bd54b6554c214840838a6d5df4cb97ac315e42c2e"
           },
           "main:61": {
-            "label": "第六十一条",
-            "hash": "bfca2ecee0eff83439c2e6be6a7559a28144713352b2c6ebdb4fea63d58ace3f"
+            "label": "main:61",
+            "hash": "76b273c39fda92a4d6f6b3733a476fc3da8392ed62101cf9b572b9a7343bdf4c"
           },
           "main:62": {
-            "label": "第六十二条",
-            "hash": "312fa110280496ba3dfe780294d22ebb50913a5f183b9661ad70d6892a3f13e2"
+            "label": "main:62",
+            "hash": "605d4aa6f921a68a93339edfb9f307eb93e31e7302edf7401a625aee6c9c741d"
           },
           "main:63": {
-            "label": "第六十三条",
-            "hash": "db55614817b1efe979a78b27e2d61805b76bbe09ba5613e27e3a63bd5f998644"
+            "label": "main:63",
+            "hash": "13ddb3f246c552dba9a620287cd5e5ff962c32b41344745e76be90548caaddc4"
           },
           "main:64": {
-            "label": "第六十四条",
-            "hash": "5465d5a1ffbdb4dad58db9d471253e5360cf29c50962f984b06e946dd746823b"
+            "label": "main:64",
+            "hash": "fe74346da170a9279ab06dff9670b01284841c6a95de8907e619d1ae85ad1c3e"
           },
           "main:65": {
-            "label": "第六十五条",
-            "hash": "8db8f5232f4bb5aebeaf838c8b479d58c6906295a4d6a1d9cd0dd18359c10345"
+            "label": "main:65",
+            "hash": "21606c52a80bc3dfc5ef594d6c6c9fcabf703978c2997c79c88304c312fc6433"
           },
           "main:66": {
-            "label": "第六十六条",
-            "hash": "3dc5a0c095da25b67bc2d20e16410eb3521c672291d0b1c7671b373c33328a3e"
+            "label": "main:66",
+            "hash": "6cdb2768c2bf3aed421a820a8aeade54362fdc4a04e270625d73da223d1dd4bd"
           },
           "main:67": {
-            "label": "第六十七条",
-            "hash": "789f5132379930317f57969b61e6b928a24fa4412b58d69744d106681cc67673"
+            "label": "main:67",
+            "hash": "64c8ae3a7c7f663b5e4a556c7f5912bf012164fa25b00d703204e99024c85ad8"
           },
           "main:68": {
-            "label": "第六十八条",
-            "hash": "dd929c5cc4b7b55583d2f9f61f8c73d8666d9790b60fd53a103423d6a5cd1eac"
+            "label": "main:68",
+            "hash": "8bbde5a46d7b919190848ae9e50e669c80591866912e86b2cc2a640dd5e97c90"
           },
           "main:69": {
-            "label": "第六十九条",
-            "hash": "8172e5c07c9346bc830a487b545e1e5ade6845a393f9f762da544b43e89e31d6"
+            "label": "main:69",
+            "hash": "472efe0dceeeae03fd4ed2358c575198d4712c4943f649cbd0cb050b317d1b7f"
           },
           "main:70": {
-            "label": "第七十条",
-            "hash": "6b5e3bebebd19bb37923ea2a89e062aa678a3f8f79e24799919911c700b1e652"
+            "label": "main:70",
+            "hash": "3ca8da7870ca66d218e33beafea90d79457273852cf3166fa8f6b0f277329e31"
           },
           "main:71": {
-            "label": "第七十一条",
-            "hash": "fc14a45e305b953bbd2c505b2a1965c8fa9249cc77137fd3944cbe72dee7451a"
+            "label": "main:71",
+            "hash": "de3e7c9a5bf69cea596fc14f9482ca244198a85a4a67da639528e3295372db83"
           },
           "main:72": {
-            "label": "第七十二条",
-            "hash": "9826c4429f0c4fa528bc2839991e1456712342839323bdfe389213269097c717"
+            "label": "main:72",
+            "hash": "78e06c79671e6b499d6d986101c25dca38fe791fa80b230f9a2c4acfc681405a"
           },
           "main:73": {
-            "label": "第七十三条",
-            "hash": "4d9055e5193e373a1f1c19e0558fb41989d9c4faac96f22c074c00057597a2ce"
+            "label": "main:73",
+            "hash": "defb931f9f761071389c1d040869ac41442fff941d3add3ece49f2fb92d3ad4a"
           },
           "main:74": {
-            "label": "第七十四条",
-            "hash": "e84a758a18ae3e2063ae9da93cdc032d0e3b6202fd5180245e544bf74a0692cc"
+            "label": "main:74",
+            "hash": "1de07bfc2fca5dc2a7f4f02051cfd2e9bcaac4794dc807e69a86529807a3e7e7"
           }
         },
         "metadata": {
@@ -1366,12 +1366,13 @@
           "gbrq": "2021-08-20",
           "sxrq": "2021-11-01",
           "sxx": 3,
-          "xfFlag": 0
+          "xfFlag": 0,
+          "officialAttachmentPath": "prod/20210820/25a02f9550c14835aa178b7c2610360f.docx"
         },
         "version": "2021-08-20 / status 3",
-        "coverage": "index_and_status_only",
-        "digest": "d1e3c246ea32fed2aa46df3ba21a481066fff1c6dc948d92c8ae04e2a1500829",
-        "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044"
+        "coverage": "article_text",
+        "acquiredUrl": "https://flk.npc.gov.cn/law-search/file/download?filePath=%2Fprod%2F20210820%2F25a02f9550c14835aa178b7c2610360f.docx&fileName=%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E4%B8%AA%E4%BA%BA%E4%BF%A1%E6%81%AF%E4%BF%9D%E6%8A%A4%E6%B3%95.docx",
+        "digest": "7448f8273e2d899f0e7ac99a3f17bc5e578c8400a7d85da5a05d4603c6d97659"
       },
       "events": [
         {
@@ -1388,10 +1389,25 @@
           },
           "reviewed": false,
           "sourceUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044"
+        },
+        {
+          "id": "670c1270a3344ae6ba38640ab3bee101b08aac25b26112e1e05c5afe6222b582",
+          "kind": "baseline_review",
+          "createdAt": "2026-11-17T01:46:37.072016+00:00",
+          "beforeDigest": null,
+          "afterDigest": "7448f8273e2d899f0e7ac99a3f17bc5e578c8400a7d85da5a05d4603c6d97659",
+          "changes": {
+            "added": [],
+            "removed": [],
+            "modified": [],
+            "metadataChanged": false
+          },
+          "reviewed": false,
+          "sourceUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044"
         }
       ],
-      "baselineOrigin": "first_observation",
-      "lastSuccessAt": "2026-11-17T01:28:44.389599+00:00"
+      "baselineOrigin": "configuration_changed",
+      "lastSuccessAt": "2026-11-17T01:58:57.843957+00:00"
     },
     "gdpr": {
       "configHash": "4c789c2c68814f4f7294f50b929880fddae5566ffeecadcaff17c01e45285e92",
@@ -1835,7 +1851,7 @@
         }
       ],
       "baselineOrigin": "configuration_changed",
-      "lastSuccessAt": "2026-11-17T01:28:44.390487+00:00"
+      "lastSuccessAt": "2026-11-17T01:58:57.845083+00:00"
     },
     "uk-gdpr": {
       "configHash": "570fb701f8b1977138c43d9e196dc3a91c753a10923786f166d94f9505c07b1d",
@@ -2361,7 +2377,7 @@
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-17T01:28:45.189504+00:00"
+      "lastSuccessAt": "2026-11-17T01:58:58.535809+00:00"
     },
     "ccpa": {
       "configHash": "dfbcf5f668ab412362184927d6ff3f7ae87129a1e37936dbb4a82f4ff1f6ba0e",
@@ -2578,7 +2594,7 @@
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-17T01:28:45.666769+00:00"
+      "lastSuccessAt": "2026-11-17T01:58:59.034520+00:00"
     },
     "pdpa": {
       "configHash": "c5e08caa82f990d3cc7421fba4bc869921e2b8d60d5bcbf43ad89a9269467a99",
@@ -3015,7 +3031,7 @@
         }
       ],
       "baselineOrigin": "selected_edition",
-      "lastSuccessAt": "2026-11-17T01:28:46.563097+00:00"
+      "lastSuccessAt": "2026-11-17T01:59:00.824702+00:00"
     }
   }
 }
