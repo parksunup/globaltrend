@@ -25,6 +25,8 @@ export function publicSearchDocuments(stories: PublishedStory[], legal: LegalBun
         if (!['published', 'official'].includes(law.reviewStatus) || !/^[a-z0-9-]+$/.test(law.id))
             continue;
         for (const section of law.sections) {
+            if (section.reviewStatus === 'source_verification_pending')
+                continue;
             const text = section.lines.map(line => line.text).filter(Boolean).join('\n');
             if (!text.trim())
                 continue;
