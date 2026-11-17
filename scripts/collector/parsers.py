@@ -1068,18 +1068,18 @@ def discover_imda_listing(html,url):
             payload['currentPage']!=page or type(payload.get('totalPage')) is not int or
             payload['totalPage']<page or type(payload.get('totalItems')) is not int or
             not isinstance(payload.get('resultList'),list) or not payload['resultList']):
-        raise ValueError('imda_listing_schema_changed')
+        return _discover_imda_rendered_listing(html,url,page)
     rows=[]; all_dates=[]
     for item in payload['resultList']:
-        if not isinstance(item,dict): raise ValueError('imda_listing_schema_changed')
+        if not isinstance(item,dict): return _discover_imda_rendered_listing(html,url,page)
         title=normalize(item.get('page_title') or item.get('teaser_title') or '')
         permalink=item.get('permalink')
         teaser=normalize(item.get('teaser_description') or '')
         raw_date=item.get('publish_date')
         if not title or not isinstance(permalink,str) or not permalink.startswith('/') or not isinstance(raw_date,str):
-            raise ValueError('imda_listing_schema_changed')
+            return _discover_imda_rendered_listing(html,url,page)
         parsed_date=parse_date(raw_date)
-        if not parsed_date: raise ValueError('imda_listing_date_unparsed')
+        if not parsed_date: return _discover_imda_rendered_listing(html,url,page)
         target=urljoin('https://www.imda.gov.sg/',permalink.lstrip('/'))
         if urlsplit(target).hostname!='www.imda.gov.sg': raise ValueError('imda_listing_link_unapproved')
         all_dates.append(parsed_date)
@@ -1093,6 +1093,44 @@ def discover_imda_listing(html,url):
     if any(all_dates[index]>all_dates[index-1] for index in range(1,len(all_dates))):
         raise ValueError('imda_listing_date_order_changed')
     next_url=listing_next_url(url,page) if page<payload['totalPage'] else None
+    return rows,next_url
+
+
+def _discover_imda_rendered_listing(html,url,page):
+    """Use the official rendered cards when IMDA changes its Next.js payload."""
+    soup=BeautifulSoup(html,'html.parser')
+    cards=soup.select('.teaser-card')
+    if not cards:
+        raise ValueError('imda_listing_schema_changed')
+    rows=[];all_dates=[]
+    for card in cards:
+        link=card.select_one('a.teaser-card__anchor-link[href], a[class*="teaser-card__anchor-link"][href]')
+        title_node=card.select_one('.teaser-card__title')
+        date_node=card.select_one('.date')
+        title=normalize(title_node.get_text(' ',strip=True) if title_node else '')
+        raw_date=normalize(date_node.get_text(' ',strip=True) if date_node else '')
+        href=link.get('href') if link else None
+        if not title or not isinstance(href,str) or not href.startswith('/resources/press-releases-factsheets-and-speeches/') or not raw_date:
+            raise ValueError('imda_rendered_card_schema_changed')
+        parsed_date=parse_date(raw_date)
+        if not parsed_date:raise ValueError('imda_listing_date_unparsed')
+        target=urljoin('https://www.imda.gov.sg/',href.lstrip('/'))
+        if urlsplit(target).hostname!='www.imda.gov.sg':raise ValueError('imda_listing_link_unapproved')
+        teaser_node=card.select_one('.teaser-card__description, .teaser-card__summary, p')
+        teaser=normalize(teaser_node.get_text(' ',strip=True) if teaser_node else '')
+        all_dates.append(parsed_date)
+        text=' '.join((title,teaser)).casefold()
+        relevant=bool(re.search(r'privacy|personal data|data protection|pdpc|data protection trustmark|privacy-enhancing|personal information',text))
+        rows.append({'url':target,'title':title,'published_date':parsed_date,
+            'date_observations':[{'meaning':'official_listing_publish_date','locator':'IMDA rendered release card date','value':raw_date}],
+            'feed_text':teaser,'source_name':'Infocomm Media Development Authority (IMDA)',
+            'source_type':'official_government_press_release','privacy_relevant':relevant,
+            'listing_route':'imda_official_listing','issuer':'Infocomm Media Development Authority (IMDA)'})
+    if any(all_dates[index]>all_dates[index-1] for index in range(1,len(all_dates))):
+        raise ValueError('imda_listing_date_order_changed')
+    # IMDA currently renders ten cards per page. Continue only when a full page
+    # was observed; a shorter final page ends the scan without inventing totals.
+    next_url=listing_next_url(url,page) if len(cards)>=10 else None
     return rows,next_url
 
 

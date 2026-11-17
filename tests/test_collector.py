@@ -137,6 +137,38 @@ class CollectorTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'imda_listing_route_unverified'):
             parsers.discover_imda_listing(html,'https://www.imda.gov.sg/search?page=1')
 
+    def test_imda_listing_falls_back_to_official_rendered_cards_when_flight_shape_changes(self):
+        from collector import parsers
+        html='''<main><article class="Pcfx9q_teaser-card teaser-card">
+          <a class="Pcfx9q_teaser-card__anchor-link" href="/resources/press-releases-factsheets-and-speeches/privacy-update"></a>
+          <div class="Pcfx9q_teaser-card__title teaser-card__title">IMDA issues a personal data protection update</div>
+          <div class="Pcfx9q_date date">28 Oct 2026</div>
+          <p>Personal data protection guidance.</p>
+        </article></main>'''
+        rows,next_page=parsers.discover_imda_listing(html,
+            'https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1')
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['published_date'],'2026-10-28')
+        self.assertTrue(rows[0]['privacy_relevant'])
+        self.assertIsNone(next_page)
+
+    def test_imda_rendered_card_fallback_does_not_accept_unknown_markup(self):
+        from collector import parsers
+        html='<main><article class="teaser-card"><a href="/resources/press-releases-factsheets-and-speeches/x">x</a></article></main>'
+        with self.assertRaisesRegex(ValueError,'imda_rendered_card_schema_changed'):
+            parsers.discover_imda_listing(html,
+                'https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1')
+
+    def test_imda_rendered_card_fallback_continues_only_after_a_full_observed_page(self):
+        from collector import parsers
+        cards=''.join(f'''<article class="teaser-card"><a class="teaser-card__anchor-link" href="/resources/press-releases-factsheets-and-speeches/story-{i}"></a>
+          <div class="teaser-card__title">Official release {i}</div><div class="date">{28-i} Oct 2026</div></article>'''
+          for i in range(10))
+        rows,next_page=parsers.discover_imda_listing('<main>'+cards+'</main>',
+            'https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1')
+        self.assertEqual(len(rows),10)
+        self.assertEqual(next_page,'https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=2')
+
     def test_verified_newest_first_page_before_window_completes_without_fetching_older_pages(self):
         import json
         payload={'initialDetails':{'currentPage':1,'totalPage':9,'totalItems':90,'resultList':[
