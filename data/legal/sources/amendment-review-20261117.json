@@ -55,14 +55,14 @@
     },
     {
       "lawId": "pipl",
-      "monitorStatus": "partial",
-      "monitorCoverage": "index_and_status_only",
+      "monitorStatus": "baseline",
+      "monitorCoverage": "article_text",
       "officialEntryUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
-      "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
-      "status": "body_obtained_watch_partial",
-      "translationCheck": "NPC 공식 2021-08-20 게시 본문에서 제1~74조의 연속 표제를 확보. 기존 번역도 74조이며 본문은 변경하지 않음. HTTP 제공본 확보는 HTTPS NPC DB 첨부파일 대조 완료와 구분.",
-      "comparisonCheck": "중국 18개 기준의 본법 판본을 유지. 자동 점검은 여전히 DB 목차·유효성만 확인하며 본문 확인 완료로 승격하지 않음.",
-      "remaining": "NPC DB가 발급한 첨부파일 URL은 연결 경로에서 403. DB 항목과 본문 첨부파일 일치 및 새 개정의 별도 게시 여부 미확인.",
+      "acquiredUrl": "https://flk.npc.gov.cn/law-search/file/download?filePath=/prod/20210820/25a02f9550c14835aa178b7c2610360f.docx&fileName=中华人民共和国个人信息保护法_20210820.docx",
+      "status": "official_db_attachment_verified",
+      "translationCheck": "NPC DB가 지정한 공식 Word 첨부파일을 같은 공식 호스트의 공개 다운로드 경로로 확보. DB 목차와 제1~74조 본문의 식별자가 모두 일치한다. NPC 2021년 게시 본문과 조문별 대조 시 제63조 4곳·제69조 1곳의 세미콜론 폭만 다르며, 공백·장절 제목·해당 문장부호 폭을 제외한 문자 내용은 74개 조문 모두 일치. 기존 번역 본문은 유지하고 공식 근거를 NPC DB로 연결.",
+      "comparisonCheck": "중국 18개 기준의 본법 선정 판본을 유지하고 공식 근거와 확보 상태를 NPC DB 본문으로 갱신. 조건·예외·별도 후속 규칙과 사람 검수 상태는 유지.",
+      "remaining": "선정 DB 항목과 첨부 본문 확인은 완료. 새 개정이 별도 DB 항목으로 게시되는 경우 및 모든 하위규칙의 현행성·번역 의미·법률 검수는 별도 확인 대상.",
       "additionalReceipt": {
         "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
         "transport": "http",
@@ -149,6 +149,105 @@
         "officialEndpoint": "https://flk.npc.gov.cn/law-search/download/pc?format=docx&bbbs=ff8081817b6472a3017b656cc2040044&fileId=",
         "objectHost": "flkoss.obs-bj2.cucloud.cn",
         "result": "CONNECT 403; signed query not retained"
+      },
+      "bodyComparisonRecord": "pipl-attachment-check-20261117.json",
+      "priorObservation": {
+        "lawId": "pipl",
+        "monitorStatus": "partial",
+        "monitorCoverage": "index_and_status_only",
+        "officialEntryUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+        "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+        "status": "body_obtained_watch_partial",
+        "translationCheck": "NPC 공식 2021-08-20 게시 본문에서 제1~74조의 연속 표제를 확보. 기존 번역도 74조이며 본문은 변경하지 않음. HTTP 제공본 확보는 HTTPS NPC DB 첨부파일 대조 완료와 구분.",
+        "comparisonCheck": "중국 18개 기준의 본법 판본을 유지. 자동 점검은 여전히 DB 목차·유효성만 확인하며 본문 확인 완료로 승격하지 않음.",
+        "remaining": "NPC DB가 발급한 첨부파일 URL은 연결 경로에서 403. DB 항목과 본문 첨부파일 일치 및 새 개정의 별도 게시 여부 미확인.",
+        "additionalReceipt": {
+          "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+          "transport": "http",
+          "bytes": 42748,
+          "sha256": "23eeb747cb57b852929e30906c51b5816095dc43977868543a4bce5b3540b429",
+          "leadingArticleLabels": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+            "32",
+            "33",
+            "34",
+            "35",
+            "36",
+            "37",
+            "38",
+            "39",
+            "40",
+            "41",
+            "42",
+            "43",
+            "44",
+            "45",
+            "46",
+            "47",
+            "48",
+            "49",
+            "50",
+            "51",
+            "52",
+            "53",
+            "54",
+            "55",
+            "56",
+            "57",
+            "58",
+            "59",
+            "60",
+            "61",
+            "62",
+            "63",
+            "64",
+            "65",
+            "66",
+            "67",
+            "68",
+            "69",
+            "70",
+            "71",
+            "72",
+            "73",
+            "74"
+          ]
+        },
+        "attachmentAttempt": {
+          "officialEndpoint": "https://flk.npc.gov.cn/law-search/download/pc?format=docx&bbbs=ff8081817b6472a3017b656cc2040044&fileId=",
+          "objectHost": "flkoss.obs-bj2.cucloud.cn",
+          "result": "CONNECT 403; signed query not retained"
+        }
       }
     },
     {
@@ -376,6 +475,111 @@
       "id": "kr-double",
       "url": "https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
       "error": "<urlopen error Tunnel connection failed: 502 Bad Gateway>"
+    },
+    {
+      "id": "kr-recorded-body",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-current-body",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsId=011357&ancYnChk=0&chrClsCd=010202",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-no-www",
+      "url": "https://law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "cn-public-download",
+      "url": "https://flk.npc.gov.cn/law-search/file/download?filePath=/prod/20210820/25a02f9550c14835aa178b7c2610360f.docx&fileName=中华人民共和国个人信息保护法_20210820.docx",
+      "status": 200,
+      "bytes": 30818,
+      "sha256": "1815f84f43dd5011442c817a197d745c9aef631f5db3b6c7a75be1acc2b5cd8b"
+    },
+    {
+      "id": "cn-ofd-link",
+      "url": "https://flk.npc.gov.cn/law-search/amazonFile/ofdGenerateLink?filePath=prod/20210820/25a02f9550c14835aa178b7c2610360f.docx",
+      "status": 200,
+      "bytes": 690,
+      "sha256": "7cf7accb29f0c326bea50dfbf8d1d1202cf26f98f812759a35c99ef1ca3f8f06"
+    },
+    {
+      "id": "cn-preview-link",
+      "url": "https://flk.npc.gov.cn/law-search/amazonFile/previewLink?filePath=prod%2F20210820%2F25a02f9550c14835aa178b7c2610360f.docx",
+      "status": 200,
+      "bytes": 647,
+      "sha256": "14fbfa5b78de9bd7413831d0a42e34ceb5c94a1ca143d43e7cd60765274ca8be"
+    },
+    {
+      "id": "ca-display-body",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CIV&division=3.&title=1.81.5.&part=4.",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "ca-section-law",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.100.",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "kr-privacy-home",
+      "url": "https://www.privacy.go.kr/front/main/main.do",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-pipc-home",
+      "url": "https://www.pipc.go.kr/np/default/page.do?mCode=H010000000",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "ca-bill",
+      "url": "https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB566",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "ca-pub-home",
+      "url": "https://leginfo.legislature.ca.gov/pub/",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "cn-json-details",
+      "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "status": 200,
+      "bytes": 13699,
+      "sha256": "684e21366f78fa136818cceb14380a278d498046c185e272ba58d72ff7759daa"
+    },
+    {
+      "id": "kr-pdf-print",
+      "url": "https://www.law.go.kr/LSW/lsPdfPrint.do?lsiSeq=283839",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "kr-rtf-print",
+      "url": "https://www.law.go.kr/LSW/lsRtfPrint.do?lsiSeq=283839",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-http-body",
+      "url": "http://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "error": "timed out"
     }
-  ]
+  ],
+  "followupNetworkDiagnostics": {
+    "koreanOfficialBody": {
+      "response": 503,
+      "reason": "upstream connection timeout; response body reports upstream connect error or disconnect/reset before headers",
+      "exportAttempts": "PDF 403; RTF 503; HTTP official body timeout",
+      "officialMirrors": "privacy.go.kr and pipc.go.kr both returned 503"
+    },
+    "californiaLegislature": {
+      "response": 403,
+      "reason": "Just a moment browser-check page with challenges.cloudflare.com reference",
+      "ordinaryBrowserAttempt": {
+        "errorType": "Error",
+        "message": "Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.100.\n"
+      }
+    },
+    "scope": "외부 출처 연결 결과이며 Supabase·GitHub 인증 또는 Vercel 팀 권한 오류로 해석하지 않음."
+  }
 }

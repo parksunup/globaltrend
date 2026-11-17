@@ -29,13 +29,19 @@
     {
       "path": "data/legal/README.md",
       "pr": 15,
-      "sha256": "936f6498993f5d6da88f8e4899f26a88fc2753a930fdba0f9abf523c1cd1021d",
+      "sha256": "500a35fdf7683328347ea1a0b3de6df05bc4e83f5dfa305813cdc836034f84f7",
       "revisions": [
         {
           "previous_sha256": "08d5b38f9f42df07dc38a60ef202ecfea6f26d81cf0bf2d5b0898d8ac7e51ca8",
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "936f6498993f5d6da88f8e4899f26a88fc2753a930fdba0f9abf523c1cd1021d",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
@@ -87,7 +93,7 @@
     {
       "path": "data/legal/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "5e246266a60cb9c3c2fb0398f5dc7adaf8e970cee910593885ecbf0f0516ecfa",
+      "sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
       "imported_sha256": "17a889ab289f703d0f6b796b862cbe6e3383105cbd22655f7247f427b77bd3ab",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -96,13 +102,19 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "5e246266a60cb9c3c2fb0398f5dc7adaf8e970cee910593885ecbf0f0516ecfa",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/criteria-mapping.md",
       "pr": 15,
-      "sha256": "f67aa837f83fb47f23b0d2a133ba3dfc39883e5d87bd683f99108a1f30536387",
+      "sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
       "imported_sha256": "376f8c93e13d9cc90dd212fe2fffcd4f48e0a5dc6a911b9ef06b2478fb886a5f",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -111,6 +123,12 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "f67aa837f83fb47f23b0d2a133ba3dfc39883e5d87bd683f99108a1f30536387",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
@@ -167,26 +185,38 @@
     {
       "path": "data/legal/instruments.csv",
       "pr": 15,
-      "sha256": "02db0a35b70d3465221256198814836194ae53c1226743eb0ac8d2da6d92b270",
+      "sha256": "5e40ba028c0595cdcd4a926115cc076f04b93d5eac0410d19b18cac500fb1535",
       "revisions": [
         {
           "previous_sha256": "dae04dca7dcf75d60a7d334574c14f67c6cbf20975672db5f00081030cab2dd9",
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "02db0a35b70d3465221256198814836194ae53c1226743eb0ac8d2da6d92b270",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/instruments.md",
       "pr": 15,
-      "sha256": "e635dc0ea0497980573702bfea9a20c5b1d475d748a78d0c51534024465d4d7a",
+      "sha256": "e4eb53c0a596c824cea60f7d7514a9e1e4a85bf1a6d102d5a4fd3cc3b47dd6d1",
       "revisions": [
         {
           "previous_sha256": "74d1eed4f02903220f1c0972080fbd924c88bd581f3ce677885c113d93cfc486",
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "e635dc0ea0497980573702bfea9a20c5b1d475d748a78d0c51534024465d4d7a",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
@@ -540,14 +570,22 @@
     {
       "path": "data/legal/translations/pipl-review-notes.md",
       "pr": 15,
-      "sha256": "739e906e06c9be06d70fd46eb17f6f276148c03f0444e10166c0f52c71b120d4",
+      "sha256": "97717575eccc039927d97981b42c4e5a27c5970139372f96263e87485405e90d",
       "imported_sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86",
-      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
+      "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained",
+      "revisions": [
+        {
+          "previous_sha256": "739e906e06c9be06d70fd46eb17f6f276148c03f0444e10166c0f52c71b120d4",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
+        }
+      ]
     },
     {
       "path": "data/legal/translations/pipl.json",
       "pr": 15,
-      "sha256": "88aaf6ceb5ef94b647d357d16bbe1845eebb15735ec696adf363016fc70a33c2",
+      "sha256": "33e6fc53f64787651d98f5e45ef356ac37a1794d74e6ecbcccfccb206c38f68f",
       "imported_sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained",
       "revisions": [
@@ -556,13 +594,19 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "88aaf6ceb5ef94b647d357d16bbe1845eebb15735ec696adf363016fc70a33c2",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
     {
       "path": "data/legal/translations/pipl.md",
       "pr": 15,
-      "sha256": "cd9e0e534564294dc9b189420a02c4327c3904cde1f1b27518a52d9610d7edc2",
+      "sha256": "2d557015d80c184e7399f576ed130dfe88fe5a8fa084fcbc521e52f29c928ed2",
       "imported_sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained",
       "revisions": [
@@ -571,6 +615,12 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "cd9e0e534564294dc9b189420a02c4327c3904cde1f1b27518a52d9610d7edc2",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
@@ -632,7 +682,7 @@
     {
       "path": "public/review-drafts/comparison.html",
       "pr": 15,
-      "sha256": "435003edbcab0285b0f6218d78f84b6ff247c8d62bb54b23749f212ddd16c91f",
+      "sha256": "a7d097077b61eb0b226f305059eb3b094e4b47d89c83b444cb117174d316fe7e",
       "imported_sha256": "0414d2ba196360260996cdf3ab5e9bd8cdf95a26ee5927b113a9e3536c598613",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
       "revisions": [
@@ -641,13 +691,19 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "435003edbcab0285b0f6218d78f84b6ff247c8d62bb54b23749f212ddd16c91f",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.csv",
       "pr": 15,
-      "sha256": "5e246266a60cb9c3c2fb0398f5dc7adaf8e970cee910593885ecbf0f0516ecfa",
+      "sha256": "7da61e5b7599c0c487070e2eda15bee651d519ed653a56eefc80208a741eb59a",
       "imported_sha256": "0ddb115210939307b486e45c0a684185902a14f1b9671062ee67f9791bac04f4",
       "derived_from": "data/legal/criteria-mapping.csv",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -657,13 +713,19 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "5e246266a60cb9c3c2fb0398f5dc7adaf8e970cee910593885ecbf0f0516ecfa",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },
     {
       "path": "public/review-drafts/criteria-mapping.md",
       "pr": 15,
-      "sha256": "f67aa837f83fb47f23b0d2a133ba3dfc39883e5d87bd683f99108a1f30536387",
+      "sha256": "6f58b3a9f9193fc7f743f7950f82e48cd480546c18228ce60fe474902066a1b5",
       "imported_sha256": "afab2be25c330e17ad1f16b5ff5f74f66babf37c9f34bae41cb7c5e87f2e01ab",
       "derived_from": "data/legal/criteria-mapping.md",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained; 2026-11-03 사용자 요청에 따른 역외 적용 7셀 추가, 기존 119셀 보존",
@@ -673,6 +735,12 @@
           "changed_on": "2026-11-17",
           "reason": "공식 원문 재확보·APPI 2026-11-02 판본 수정 초안 및 대응 문서·공개 초안 미러 동기화. 사람 검수 미착수.",
           "evidence": "data/legal/amendment-review-20261117.md"
+        },
+        {
+          "previous_sha256": "f67aa837f83fb47f23b0d2a133ba3dfc39883e5d87bd683f99108a1f30536387",
+          "changed_on": "2026-11-17",
+          "reason": "중국 NPC DB 공식 Word 첨부 본문 확보·74조 대조 및 18셀 근거·미러 동기화. 사람 검수 미착수.",
+          "evidence": "data/legal/sources/pipl-attachment-check-20261117.json"
         }
       ]
     },

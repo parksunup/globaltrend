@@ -5,16 +5,19 @@
   "korean_title": "중국 개인정보보호법 한국어 전문 번역 초안",
   "jurisdiction_code": "CN",
   "source": {
-    "original_url": "https://www.miit.gov.cn/jgsj/zfs/fl/art/2022/art_515a4b20c12f430eab54bb4f56d89f56.html",
+    "original_url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
     "selected_revision_enforcement_date": "2021-11-01 시행 · 2021-08-20 통과 본문",
-    "scope_note": "2021-08-20 통과·2021-11-01 시행 PIPL 제1~74조 전문 자체 비공식 번역. 공업정보화부 2022-01-29 게재 원문 기준. 사람 검수 전. 후속 하위 법령 전문 번역 또는 모든 개정의 현행성 확인을 포함하지 않음. 개인정보처리자는 제73조의 목적·방식 결정자이며 GDPR processor와 동일하지 않음. 용어 편집(2026-11-02): 민감정보·개인정보처리자·수탁자는 PIPL의 정의와 조건을 따른다. 특히 개인정보처리자는 처리 목적·방식을 정하는 주체이며 한국법과 정의가 일치한다는 뜻이 아니다. 사람 검수 전.",
+    "scope_note": "2021-08-20 통과·2021-11-01 시행 PIPL 제1~74조 전문 자체 비공식 번역. 공업정보화부 2022-01-29 게재 원문 기준. 사람 검수 전. 후속 하위 법령 전문 번역 또는 모든 개정의 현행성 확인을 포함하지 않음. 개인정보처리자는 제73조의 목적·방식 결정자이며 GDPR processor와 동일하지 않음. 용어 편집(2026-11-02): 민감정보·개인정보처리자·수탁자는 PIPL의 정의와 조건을 따른다. 특히 개인정보처리자는 처리 목적·방식을 정하는 주체이며 한국법과 정의가 일치한다는 뜻이 아니다. 사람 검수 전. 2026-11-17 2차 확인: NPC DB 공식 Word 첨부 본문 74조와 DB 목차를 대조했고 NPC 2021년 게시 본문과도 대조했다. 제63·69조의 세미콜론 폭 차이는 기록하고 법문 개정으로 처리하지 않았다. 선정 본문의 확보를 모든 후속 개정의 현행성이나 사람 검수 완료로 확대하지 않는다.",
     "followup_check": {
       "checked_on": "2026-11-17",
-      "status": "body_obtained_watch_partial",
+      "status": "official_db_attachment_verified",
       "record": "../sources/amendment-review-20261117.json",
       "human_review_status": "not_started",
-      "full_currentness_verified": false
-    }
+      "full_currentness_verified": false,
+      "comparison_record": "../sources/pipl-attachment-check-20261117.json"
+    },
+    "previous_original_url": "https://www.miit.gov.cn/jgsj/zfs/fl/art/2022/art_515a4b20c12f430eab54bb4f56d89f56.html",
+    "attachment_url": "https://flk.npc.gov.cn/law-search/file/download?filePath=/prod/20210820/25a02f9550c14835aa178b7c2610360f.docx&fileName=中华人民共和国个人信息保护法_20210820.docx"
   },
   "translation": {
     "language": "ko",
