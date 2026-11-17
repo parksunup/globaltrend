@@ -12,8 +12,8 @@ const cell=(id,citation)=>({id,criterionName:id,articleNumbers:[citation],summar
 const p={contentHash:'d'.repeat(64),versionLabel:'이전 판본',cells:[cell('scope','제3조'),cell('rights','제4조')],recordId:'kr-pipa',instrument:{},document:null};
 function crc(buf){let c=0xffffffff;for(const b of buf){c^=b;for(let i=0;i<8;i++)c=(c>>>1)^((c&1)?0xedb88320:0);}return (c^0xffffffff)>>>0;}
 function zip(files){const locals=[],central=[];let offset=0;for(const [name,value] of Object.entries(files)){const text=Buffer.from(value),bytes=deflateRawSync(text),filename=Buffer.from(name);const l=Buffer.alloc(30);l.writeUInt32LE(0x04034b50);l.writeUInt16LE(20,4);l.writeUInt16LE(8,8);l.writeUInt32LE(crc(text),14);l.writeUInt32LE(bytes.length,18);l.writeUInt32LE(text.length,22);l.writeUInt16LE(filename.length,26);locals.push(l,filename,bytes);const c=Buffer.alloc(46);c.writeUInt32LE(0x02014b50);c.writeUInt16LE(20,4);c.writeUInt16LE(20,6);c.writeUInt16LE(8,10);c.writeUInt32LE(crc(text),16);c.writeUInt32LE(bytes.length,20);c.writeUInt32LE(text.length,24);c.writeUInt16LE(filename.length,28);c.writeUInt32LE(offset,42);central.push(c,filename);offset+=l.length+filename.length+bytes.length;}const cd=Buffer.concat(central),end=Buffer.alloc(22);end.writeUInt32LE(0x06054b50);end.writeUInt16LE(Object.keys(files).length,8);end.writeUInt16LE(Object.keys(files).length,10);end.writeUInt32LE(cd.length,12);end.writeUInt32LE(offset,16);return Buffer.concat([...locals,cd,end]);}
-test('live initial report accounts for every law, source failures and the recovered Chinese attachment',()=>{
- const report=validateWatchReport(structuredClone(initial),sources);assert.equal(report.laws.length,sources.length);assert.ok(report.laws.some(l=>l.status==='error'));assert.equal(report.laws.find(l=>l.id==='pipl').coverage,'article_text');
+test('live initial report accounts for every recovered primary source and the pending direct crosscheck',()=>{
+ const report=validateWatchReport(structuredClone(initial),sources);assert.equal(report.laws.length,sources.length);assert.equal(report.laws.find(l=>l.id==='pipa').coverage,'article_text');assert.equal(report.laws.find(l=>l.id==='pipl').coverage,'article_text');
  assert.throws(()=>validateWatchReport({...initial,laws:initial.laws.slice(1)},sources));assert.throws(()=>validateWatchReport({...initial,laws:[initial.laws[0],...initial.laws.slice(0,-1)]},sources));
 });
 test('article impact preserves explanations and exceptions and routes unmapped changes to full review',()=>{
@@ -77,10 +77,10 @@ test('status endpoint blocks anonymous and inactive roles before reading Actions
  }
 });
 test('Preview status uses only safe bundled evidence and sends no private payload',async()=>{
- const state={env:{VERCEL_ENV:'preview'},session:{user:{id:'editor'},canEdit:true}};const response=await server('app/api/legal-updates/status/route.ts',state).GET();assert.equal(response.status,200);assert.equal(state.options.allowRemote,false);assert.match(response.headers.get('cache-control'),/private, no-store/);const body=await response.json();assert.equal(body.total,7);assert.ok(body.failed>0);assert.equal(body.laws,undefined);
+ const failure=structuredClone(initial);Object.assign(failure.laws[0],{status:'error',error:'http_503'});const state={report:failure,env:{VERCEL_ENV:'preview'},session:{user:{id:'editor'},canEdit:true}};const response=await server('app/api/legal-updates/status/route.ts',state).GET();assert.equal(response.status,200);assert.equal(state.options.allowRemote,false);assert.match(response.headers.get('cache-control'),/private, no-store/);const body=await response.json();assert.equal(body.total,7);assert.ok(body.failed>0);assert.equal(body.directPending,1);assert.equal(body.laws,undefined);
 });
 test('monitor page distinguishes initial evidence, change candidates, limited checks and source failures',async()=>{
- const partial=structuredClone(initial);Object.assign(partial.laws.find(l=>l.id==='pipl'),{status:'partial',coverage:'index_and_status_only'});
+ const partial=structuredClone(initial);Object.assign(partial.laws[0],{status:'error',error:'http_503'});Object.assign(partial.laws.find(l=>l.id==='pipl'),{status:'partial',coverage:'index_and_status_only'});
  const state={report:partial,env:{VERCEL_ENV:'preview'},session:{user:{id:'editor'},canEdit:true}};const Component=server('app/work/legal-updates/page.tsx',state).default;const html=renderToStaticMarkup(await Component());
  assert.match(html,/초기 수동 점검/);assert.match(html,/변경 후보 발견/);assert.match(html,/목차·유효성만 확인/);assert.match(html,/공식 원문 확인 실패/);assert.match(html,/변경이 없다는 뜻이 아닙니다/);assert.match(html,/검토 후 공개/);assert.equal((html.match(/<section[^>]+id="(?:pipa|appi|pipl|gdpr|uk-gdpr|ccpa|pdpa)"/g)??[]).length,7);
 });
