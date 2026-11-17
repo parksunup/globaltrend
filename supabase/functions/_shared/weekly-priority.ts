@@ -11,20 +11,25 @@ export type WeeklyPriorityInput = {
   jurisdictions: string[];
 };
 
-export type WeeklyPriority = PodcastScore & { reasons: string[] };
+export type WeeklyPriority = Omit<PodcastScore, 'recommended'> & { reasons: string[] };
 
 /** Weekly selection and podcast recommendations share the exact podcast-main-v1 points. */
 export function weeklyPriority(candidate: WeeklyPriorityInput): WeeklyPriority {
   const scored = scorePodcastStory(candidate);
   return {
-    ...scored,
+    score: scored.score,
+    criteria: scored.criteria,
+    stage: scored.stage,
+    change: scored.change,
+    scope: scored.scope,
+    practical: scored.practical,
+    depth: scored.depth,
     reasons: [
       `${scored.score}점`,
       `제도·판단 변화 ${scored.change}/35`,
       `영향 범위 ${scored.scope}/25`,
       `실무 관련성 ${scored.practical}/25`,
       `설명 근거 ${scored.depth}/15`,
-      ...(scored.recommended ? ['팟캐스트 메인 추천 기준 충족'] : []),
     ],
   };
 }

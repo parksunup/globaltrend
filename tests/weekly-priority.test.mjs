@@ -14,7 +14,8 @@ test('weekly selection uses the podcast 100-point rubric and explains every comp
  assert.equal(result.scope,25);
  assert.equal(result.practical,25);
  assert.equal(result.depth,15);
- assert.deepEqual(result.reasons,['100점','제도·판단 변화 35/35','영향 범위 25/25','실무 관련성 25/25','설명 근거 15/15','팟캐스트 메인 추천 기준 충족']);
+ assert.deepEqual(result.reasons,['100점','제도·판단 변화 35/35','영향 범위 25/25','실무 관련성 25/25','설명 근거 15/15']);
+ assert.equal('recommended' in result,false);
  const podcast=rankPodcastStories([{id:row.id,title:row.title,summary:row.summary,details:row.details,officialDate:row.date,officialUrl:'https://example.org/source',source:'공식 기관'}],row.date,row.date)[0];
  assert.equal(result.score,podcast.score);
  assert.deepEqual(result.criteria,podcast.criteria);
