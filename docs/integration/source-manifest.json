@@ -29,7 +29,7 @@
     {
       "path": "data/legal/README.md",
       "pr": 15,
-      "sha256": "7d526cd4d5e25d62f850bd7841af1774d6830ae316dabe201a644810b4ad1888",
+      "sha256": "a3afdd759e12678f9615a64a102dfcee6723442c3dd8b1bdb860bab616f89a4c",
       "revisions": [
         {
           "previous_sha256": "08d5b38f9f42df07dc38a60ef202ecfea6f26d81cf0bf2d5b0898d8ac7e51ca8",
@@ -48,6 +48,12 @@
           "changed_on": "2026-11-17",
           "reason": "한국 현행·선정 원문 127개 본칙·13개 부칙 묶음 재대조와 기존 별도 규정 9개 보존·구분. 사람 검수 미착수.",
           "evidence": "data/legal/sources/pipa-edition-reconciliation-20261117.json"
+        },
+        {
+          "previous_sha256": "7d526cd4d5e25d62f850bd7841af1774d6830ae316dabe201a644810b4ad1888",
+          "changed_on": "2026-11-17",
+          "reason": "최신 한국 원문 확인 상태와 캘리포니아 직접·브라우저 진단의 미완료 상태 구분.",
+          "evidence": "data/legal/sources/direct-source-diagnostic-20261117.json"
         }
       ]
     },
