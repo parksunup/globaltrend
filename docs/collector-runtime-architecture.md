@@ -2,7 +2,7 @@
 
 ## 실행 위치
 
-이번 네 출처의 실제 수집 실행기는 GitHub Actions의 Python/Crawlee 작업자입니다. Supabase Cron은 정해진 시간에 기존 `trend-cloud-python.yml`을 시작하고, Supabase DB는 출처 승인 상태·작업 선점·임대·커서·중복 방지·원자적 저장을 맡습니다. 작업자는 `collector_cloud_take` / `collector_cloud_commit` 계약으로 결과를 저장하고, 검증된 본문은 기존 `source_items` 및 `draft_jobs` 흐름으로 이어집니다.
+이번 네 출처의 실제 수집 실행기는 GitHub Actions의 Python 작업자입니다. Supabase Cron은 정해진 시간에 기존 `trend-cloud-python.yml`을 시작하고, Supabase DB는 출처 승인 상태·작업 선점·임대·커서·중복 방지·원자적 저장을 맡습니다. 작업자는 `collector_cloud_take` / `collector_cloud_commit` 계약으로 결과를 저장하고, 검증된 본문은 기존 `source_items` 및 `draft_jobs` 흐름으로 이어집니다. IMDA는 같은 일일 실행에서 그날 PDPC 결과를 먼저 확인한 뒤, PDPC가 실패·부분 완료했거나 실행 결과가 없을 때만 대체 경로로 수집합니다. PDPC가 정상 완료했거나 확인된 빈 기간이면 IMDA 작업을 건너뜁니다.
 
 둘 중 하나만 고르는 구조가 아닙니다.
 
@@ -19,7 +19,7 @@ GitHub Actions를 실제 수집기로 택한 이유는 사용자가 IMDA 수집�
 
 ## 출처별 흐름
 
-- **싱가포르 IMDA**: PDPC와 별도로 공식 IMDA 보도자료 목록을 매일 확인합니다. PDPC 수집 장애가 발생할 때까지 기다리는 단일 장애 연동 대신 독립 수집을 계속해 대체 경로에서 놓치는 자료를 줄입니다. Crawlee는 허용된 목록·상세 경로만 요청합니다. 목록 요약만 확인되거나 게시일이 없으면 자동 초안 대상에 넣지 않습니다.
+- **싱가포르 PDPC → IMDA 대체 경로**: 매일 03시(KST) PDPC 수집이 끝난 뒤 06시 작업자가 당일 결과를 확인합니다. PDPC가 실패 또는 부분 완료했거나 당일 결과가 없으면 IMDA 공식 보도자료 목록을 Crawlee 기반 Python 작업자로 수집합니다. PDPC가 정상 완료했거나 공식 목록에서 확인된 빈 기간이면 IMDA는 실행하지 않습니다. IMDA는 허용된 목록·상세 경로만 요청합니다. 목록 요약만 확인되거나 게시일이 없으면 자동 초안 대상에 넣지 않습니다.
 - **유럽연합 집행위원회 Press Corner**: 공식 RSS에서 항목을 찾은 뒤, 해당 항목의 Press Corner 문서 API에서 본문과 날짜를 확인합니다.
 - **유럽연합 집행위원회 News**: 공식 RSS에서 항목을 찾은 뒤, 집행위원회 뉴스 상세 페이지에서 본문과 게시일을 확인합니다. RSS 게시일과 상세 페이지 날짜가 다르면 자동 작성 대상에서 보류합니다.
 - **유럽의회**: Open Data API v2의 문서 Atom 피드를 읽고, 각 항목의 같은 API 문서 상세를 확인합니다. API에 전문이 없을 때만 그 레코드가 직접 연결한 공식 PDF를 읽습니다. 피드의 `updated` 시각은 게시일로 쓰지 않습니다.

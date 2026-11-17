@@ -162,7 +162,8 @@
       "coverage_complete": false,
       "approval_basis": "User requested an official alternative route for Singapore privacy developments when PDPC collection fails; IMDA is the parent authority of PDPC and its official press release archive provides a direct, robots-permitted route.",
       "pagination_order": "newest_first",
-      "runtime_activation_basis": "user_requested_singapore_pdpc_alternate_imda_route"
+      "runtime_activation_basis": "user_requested_singapore_pdpc_alternate_imda_route",
+      "fallback_for": "pdpc"
     },
     {
       "source": "ppc",
