@@ -5,6 +5,19 @@ from scripts.collector import parsers
 
 
 class CloudStepTests(unittest.TestCase):
+    def test_overview_case_body_falls_back_from_navigation_only_to_full_decision_text(self):
+        from scripts.collector import extraction
+        short={'title_original':'Decision','content_text':'Skip to content','content_hash':'x',
+          'published_date':None,'metadata':{'requires_review':True,'ai_ready':False}}
+        text='The supervisory authority found that the municipality had not completed a case-specific risk assessment before using its AI monitoring system. '
+        html='<html><body><main><article class="rd-text"><h2>Full text</h2><p>'+text*12+'</p></article></main></body></html>'
+        with patch('scripts.collector.extraction._trafilatura_item',return_value=short):
+            item=extraction.extract_document('overview-legal',html.encode(),'https://overview.legal/posts/1','text/html',{'title':'Decision'})
+        self.assertGreater(len(item['content_text']),500)
+        self.assertIn('case-specific risk assessment',item['content_text'])
+        self.assertNotIn('Skip to content',item['content_text'])
+        self.assertEqual('source_parser_short_body_fallback',item['metadata']['extraction_method'])
+
     def test_oecd_discovers_related_press_release_on_topic_page(self):
         rows, _ = parsers.discover_listing('oecd', '<main><a href="/en/about/news/press-releases/2026/10/privacy.html">Privacy announcement</a></main>', 'https://www.oecd.org/en/topics/privacy-and-data-protection.html', None)
         self.assertEqual([r['url'] for r in rows], ['https://www.oecd.org/en/about/news/press-releases/2026/10/privacy.html'])
@@ -228,7 +241,7 @@ class OecdTopicAndNewsroomResumeTests(unittest.TestCase):
             ('/en/about/news/press-releases/2026/10/release-1.html','Newsroom release 1'),
         ]
         urls=['https://www.oecd.org'+path for path,_ in rows]
-        registry=json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text())
+        registry=json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
         oecd=next(source for source in registry['sources'] if source['source']=='oecd')
         class Client:
             def __init__(self,fail):
@@ -411,7 +424,7 @@ class OECDPressReleaseTests(unittest.TestCase):
     def test_old_conflicted_backlog_resolves_without_ingest(self):
         from scripts.collector import cloud_step
         import json
-        config=next(s for s in json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text())['sources'] if s['source']=='oecd')
+        config=next(s for s in json.loads((cloud_step.ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))['sources'] if s['source']=='oecd')
         class Client:
             def __init__(self,*args,**kwargs): self.budget={'requests':0,'bytes':0}
             def get(self,url):

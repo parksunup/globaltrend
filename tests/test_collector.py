@@ -121,6 +121,49 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(self.parsers.ftc_listing_date(rows[0]),'2026-11-08')
         self.assertIsNone(next_page)
 
+    def test_imda_official_listing_extracts_release_cards_and_verified_pagination(self):
+        import json
+        from collector import parsers
+        payload={'initialDetails':{'currentPage':1,'totalPage':4,'totalItems':31,'resultList':[
+            {'page_title':'IMDA issues privacy update','permalink':'/resources/press-releases-factsheets-and-speeches/press-releases/2026/imda-privacy-update',
+             'teaser_description':'The update concerns personal data protection.','publish_date':'2026-11-16T10:00:00'},
+            {'page_title':'IMDA publishes another data protection update','permalink':'/resources/press-releases-factsheets-and-speeches/press-releases/2026/data-protection-update',
+             'teaser_description':'The release discusses PDPC guidance.','publish_date':'2026-11-15T10:00:00'}]}}
+        html='<script>self.__next_f.push([1,'+json.dumps(json.dumps(payload,separators=(',',':')))+']);</script>'
+        rows,next_page=parsers.discover_imda_listing(html,'https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1')
+        self.assertEqual(2,len(rows));self.assertTrue(all(row['privacy_relevant'] for row in rows))
+        self.assertEqual('2026-11-16',rows[0]['published_date'])
+        self.assertEqual('https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=2',next_page)
+        with self.assertRaisesRegex(ValueError,'imda_listing_route_unverified'):
+            parsers.discover_imda_listing(html,'https://www.imda.gov.sg/search?page=1')
+
+    def test_verified_newest_first_page_before_window_completes_without_fetching_older_pages(self):
+        import json
+        payload={'initialDetails':{'currentPage':1,'totalPage':9,'totalItems':90,'resultList':[
+            {'page_title':'IMDA personal data decision','permalink':'/resources/press-releases-factsheets-and-speeches/press-releases/2026/decision',
+             'teaser_description':'Personal data protection decision.','publish_date':'2026-10-02T10:00:00'},
+            {'page_title':'IMDA data protection update','permalink':'/resources/press-releases-factsheets-and-speeches/press-releases/2026/update',
+             'teaser_description':'Data protection guidance.','publish_date':'2026-10-01T10:00:00'}]}}
+        html='<script>self.__next_f.push([1,'+json.dumps(json.dumps(payload,separators=(',',':')))+']);</script>'
+        listing='https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1'
+        class Client:
+            requests=0
+            def get(self,url):
+                self.requests+=1
+                return html.encode(),url,'text/html'
+        class Store:
+            def resume(self,*args): return None
+            def progress(self,*args): self.cursor=args[-1]
+            def ingest(self,*args): raise AssertionError('out-of-window detail must not be fetched')
+        client=Client();store=Store()
+        config={'source':'imda','enabled':True,'listing':listing,'hosts':['www.imda.gov.sg'],
+          'pagination_order':'newest_first','permissions':{'collect':True,'store':True,'ai':True}}
+        result=self.core.collect(config,client,store,'2026-11-01','2026-11-17',max_pages=1)
+        self.assertEqual(1,client.requests)
+        self.assertEqual(2,result['out_of_range'])
+        self.assertEqual('verified_newest_first_date_boundary_before_window',result['reason'])
+        self.assertTrue(result['coverage_complete']);self.assertEqual('complete',result['status'])
+
     def test_npc_rss_uses_full_official_content_encoded_and_date(self):
         rss='''<rss xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><item>
         <title>NPC statement on reported data leaks</title><link>https://privacy.gov.ph/npc-statement/</link>

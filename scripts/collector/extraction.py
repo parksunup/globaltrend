@@ -14,6 +14,10 @@ SOURCE_ADAPTER_MIN_BODY_CHARS = {
     'pdpc': 500,
     'ppc': 500,
     'cn-tc260': 500,
+    # overview.legal hydrates its long decision text outside the first
+    # extraction candidate. A short navigation-only result must fall back to
+    # the page's dedicated .rd-text document body instead of being stored.
+    'overview-legal': 500,
 }
 
 

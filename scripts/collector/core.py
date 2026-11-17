@@ -293,6 +293,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
     fpf_expected_total=(cursor or {}).get('fpf_expected_total')
     fpf_expected_pages=(cursor or {}).get('fpf_expected_pages')
     oecd_cycle_complete=False
+    ordered_date_boundary_complete=False
     page=(cursor or {}).get('page') or config['listing']; next_page=None
     had_pagination=(cursor or {}).get('had_pagination',False); prior_failures=(cursor or {}).get('failures',0); prior_unknown_dates=(cursor or {}).get('unknown_dates',0)
     prior_excluded_hosts=(cursor or {}).get('excluded_unapproved_host_count',0)
@@ -385,6 +386,27 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                     result['listing_date_boundary']={'url':page,**boundary}
                 if config['source']!='cn-tc260' or tc260_date_order_valid:
                     next_page=expansion.next_within_window(config['source'],rows,next_page,since)
+            # A source-specific, verified newest-first declaration plus a
+            # complete set of explicit publication dates makes the first
+            # listing page an authoritative lower boundary. Do not fetch older
+            # pages once the oldest card is before the requested window.
+            if (next_page and config.get('pagination_order')=='newest_first' and
+                    page==(cursor or {}).get('page',config['listing'])):
+                ordered_dates=[]
+                for row in rows:
+                    observations=row.get('date_observations',[])
+                    date_value=row.get('published_date')
+                    if not date_value and len(observations)==1 and observations[0].get('meaning')=='official_listing_publish_date':
+                        date_value=parsers.parse_date(observations[0].get('value',''))
+                    ordered_dates.append(date_value)
+                if (ordered_dates and all(isinstance(value,str) for value in ordered_dates) and
+                        all(ordered_dates[index]<=ordered_dates[index-1] for index in range(1,len(ordered_dates))) and
+                        ordered_dates[-1]<since):
+                    next_page=None
+                    ordered_date_boundary_complete=True
+                    result['listing_date_order_verified']=True
+                    result['date_window_boundary']={'oldest_listing_date':ordered_dates[-1],
+                        'requested_since':since,'basis':'configured_verified_newest_first_listing'}
             if config['source']=='edpb' and next_page:
                 next_page=expansion.listing_request_url('edpb',next_page,since,until)
             if not rows:
@@ -425,6 +447,14 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                     continue
                 if url in seen_items: continue
                 row_hash=hashlib.sha256(url.encode()).hexdigest()
+                if config['source']=='imda' and row.get('privacy_relevant') is not True:
+                    result['topic_excluded']=result.get('topic_excluded',0)+1
+                    if hasattr(store,'progress'):
+                        save_progress({'page':page,'offset':index+1,'fingerprint':fingerprint,
+                            'had_pagination':had_pagination,'failures':prior_failures,
+                            'unknown_dates':prior_unknown_dates+result['unknown_date'],
+                            'excluded_unapproved_host_count':prior_excluded_hosts+result['excluded_unapproved_host_count']})
+                    continue
                 if config['source'] in ('ftc','oecd') and row_hash in processed_urls:
                     if hasattr(store,'progress'):
                         save_progress({'page':page,'offset':index+1,'fingerprint':fingerprint,
@@ -438,6 +468,7 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                 seen_items.add(url); result['discovered']+=1
                 try:
                     listing_date=(parsers.cnil_listing_date(row) if config['source']=='cnil' else
+                                  row.get('published_date') if config['source']=='imda' else
                                   parsers.ftc_listing_date(row) if config['source'] in ('ftc','edps','nl-ap') else
                                   expansion.listing_date(row) if config['source'] in expansion.ROUTES else None)
                     if listing_date and not since<=listing_date<=until:
@@ -571,11 +602,14 @@ def collect(config,client,store,since,until,max_pages=None,max_items=None):
                       sorted(set(fpf_completed_pages))==list(range(1,fpf_expected_pages+1)) and
                       result['failed']==0 and result['unknown_date']==0 and result['held']==0 and
                       prior_failures==0 and prior_unknown_dates==0)
-        result['coverage_complete']=bool(fpf_complete)
-        result['status']='complete' if fpf_complete else 'partial'
+        ordered_window_complete=(ordered_date_boundary_complete and result['failed']==0 and
+            result['unknown_date']==0 and prior_failures==0 and prior_unknown_dates==0)
+        result['coverage_complete']=bool(fpf_complete or ordered_window_complete)
+        result['status']='complete' if (fpf_complete or ordered_window_complete) else 'partial'
         if config['source']!='oecd' or oecd_cycle_complete:
             result['listing_scan_complete']=True
         result['reason']=('official_fpf_blog_date_window_exhausted' if fpf_complete else
+                          'verified_newest_first_date_boundary_before_window' if ordered_window_complete else
                           'unapproved_external_listing_links' if prior_excluded_hosts or result['excluded_unapproved_host_count'] else
                           'listing_exhaustiveness_unverified_or_unknown_date_or_detail_failure')
         if config['source']=='edpb':

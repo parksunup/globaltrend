@@ -65,7 +65,7 @@ class ScraplingRunnerTests(unittest.TestCase):
         listing = runner.LISTINGS["calprivacy"]
         detail = "https://privacy.ca.gov/2026/11/privacy-update/"
         adapter = SimpleNamespace(
-            parse_listing=lambda source_id, html, url: [{"url": detail, "title": "Privacy update"}],
+            parse_listing=lambda source_id, html, url: [{"url": detail, "title": "Privacy update", "privacy_relevant_title": True}],
             parse_detail=lambda source_id, html, url, row: {
                 "title_original": row["title"], "content_text": "Official text",
                 "content_hash": "abc", "published_date": None,

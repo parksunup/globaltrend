@@ -72,6 +72,8 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
             continue
         row = {"url": target, "title": title,
                "privacy_relevant_title": bool(PRIVACY_TERMS.search(title))}
+        if not row["privacy_relevant_title"]:
+            continue
         date_node = card.select_one(".post-meta .published, time[datetime]")
         if date_node:
             value = date_node.get("datetime") or _text(date_node)
