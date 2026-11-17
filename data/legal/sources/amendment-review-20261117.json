@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 1,
+  "checkedOnKst": "2026-11-17",
+  "scope": "7개 기본법의 원문 재확보·선정 판본 및 변경 후보 대조. 번역 의미·모든 하위법령의 전수 검토가 아님.",
+  "humanReviewStatus": "not_started",
+  "published": false,
+  "laws": [
+    {
+      "lawId": "pipa",
+      "monitorStatus": "error",
+      "monitorCoverage": null,
+      "officialEntryUrl": "https://www.law.go.kr/법령/개인정보보호법",
+      "acquiredUrl": null,
+      "status": "blocked",
+      "translationCheck": "기존 한국어 공식 원문은 보존. 신규 현행 본문 대조 불가.",
+      "comparisonCheck": "18개 한국 셀을 새 판본으로 갱신하거나 완료 표시하지 않음.",
+      "remaining": "국가법령정보센터 공식 본문 접근 복구 후 판본·조문을 대조해야 함."
+    },
+    {
+      "lawId": "appi",
+      "monitorStatus": "unchanged",
+      "monitorCoverage": "article_text",
+      "officialEntryUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "acquiredUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "status": "updated_draft",
+      "translationCheck": "공식 현재 JSON 1,327개 구조 노드의 내용 해시·순서·상위 관계·표·번호를 대조. 제2조 제8항 8개 호, 제63조 제1항 및 제22부칙 묶음 제2~4조 수정·신설 초안.",
+      "comparisonCheck": "일본 18개 기준을 변경 범위와 별도 대조. 법 적용 범위에 방재청·경과조치, 모든 일본 셀에 선정 판본을 반영.",
+      "remaining": "번역 의미·경과규정의 실제 적용 및 별도 개정법 시행 관계에 대한 사람 검수.",
+      "changedNodes": [
+        "main-c1",
+        "main-a2",
+        "main-a2-p8",
+        "main-a2-p8-i1",
+        "main-a2-p8-i2",
+        "main-a2-p8-i3",
+        "main-a2-p8-i4",
+        "main-a2-p8-i5",
+        "main-a2-p8-i6",
+        "main-a2-p8-i7",
+        "main-a2-p8-i8",
+        "main-c5",
+        "main-c5-s2",
+        "main-a63",
+        "main-a63-p1",
+        "suppl22",
+        "suppl22-a2",
+        "suppl22-a2-p1",
+        "suppl22-a2-p2",
+        "suppl22-a2-p3",
+        "suppl22-a3",
+        "suppl22-a3-p1",
+        "suppl22-a4",
+        "suppl22-a4-p1"
+      ]
+    },
+    {
+      "lawId": "pipl",
+      "monitorStatus": "partial",
+      "monitorCoverage": "index_and_status_only",
+      "officialEntryUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "acquiredUrl": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "status": "body_obtained_watch_partial",
+      "translationCheck": "NPC 공식 2021-08-20 게시 본문에서 제1~74조의 연속 표제를 확보. 기존 번역도 74조이며 본문은 변경하지 않음. HTTP 제공본 확보는 HTTPS NPC DB 첨부파일 대조 완료와 구분.",
+      "comparisonCheck": "중국 18개 기준의 본법 판본을 유지. 자동 점검은 여전히 DB 목차·유효성만 확인하며 본문 확인 완료로 승격하지 않음.",
+      "remaining": "NPC DB가 발급한 첨부파일 URL은 연결 경로에서 403. DB 항목과 본문 첨부파일 일치 및 새 개정의 별도 게시 여부 미확인.",
+      "additionalReceipt": {
+        "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+        "transport": "http",
+        "bytes": 42748,
+        "sha256": "23eeb747cb57b852929e30906c51b5816095dc43977868543a4bce5b3540b429",
+        "leadingArticleLabels": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19",
+          "20",
+          "21",
+          "22",
+          "23",
+          "24",
+          "25",
+          "26",
+          "27",
+          "28",
+          "29",
+          "30",
+          "31",
+          "32",
+          "33",
+          "34",
+          "35",
+          "36",
+          "37",
+          "38",
+          "39",
+          "40",
+          "41",
+          "42",
+          "43",
+          "44",
+          "45",
+          "46",
+          "47",
+          "48",
+          "49",
+          "50",
+          "51",
+          "52",
+          "53",
+          "54",
+          "55",
+          "56",
+          "57",
+          "58",
+          "59",
+          "60",
+          "61",
+          "62",
+          "63",
+          "64",
+          "65",
+          "66",
+          "67",
+          "68",
+          "69",
+          "70",
+          "71",
+          "72",
+          "73",
+          "74"
+        ]
+      },
+      "attachmentAttempt": {
+        "officialEndpoint": "https://flk.npc.gov.cn/law-search/download/pc?format=docx&bbbs=ff8081817b6472a3017b656cc2040044&fileId=",
+        "objectHost": "flkoss.obs-bj2.cucloud.cn",
+        "result": "CONNECT 403; signed query not retained"
+      }
+    },
+    {
+      "lawId": "gdpr",
+      "monitorStatus": "baseline",
+      "monitorCoverage": "article_text",
+      "officialEntryUrl": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+      "acquiredUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "status": "official_body_recovered",
+      "translationCheck": "공식 ELI의 Current consolidated version이 가리키는 CELEX:02016R0679-20160504의 99개 조문과 기존 조사에 사용한 OP 통합 본문 99개 조문의 정규화 해시가 모두 일치. 번역 문구를 불필요하게 바꾸지 않음.",
+      "comparisonCheck": "EU 18개 기준의 기존 선정 판본 유지. 별도 GDPR 절차법·후속 지침을 본법 변경으로 합치지 않음.",
+      "remaining": "원문 확보·해시 일치는 번역 의미·개별 사건 적용에 관한 사람 검수와 구분. 모든 후속 법률·언어별 정오표 효력의 전수 재검토를 뜻하지 않음.",
+      "normalizedArticleChanges": {
+        "added": [],
+        "removed": [],
+        "modified": [],
+        "metadataChanged": false
+      }
+    },
+    {
+      "lawId": "uk-gdpr",
+      "monitorStatus": "unchanged",
+      "monitorCoverage": "article_text",
+      "officialEntryUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "acquiredUrl": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "status": "selected_current_body_equal",
+      "translationCheck": "2026-10-16 지정 XML과 현재 XML의 본칙 120개 자리 전체, EURetained·Footnotes·Commentaries 텍스트 해시가 일치. 누락되었던 8ZA·12A 식별자를 점검기에 포함.",
+      "comparisonCheck": "영국 18개 기준의 판본 유지. XML에 남은 삭제·교차참조·편집 표지를 임의로 개정하지 않음.",
+      "remaining": "원문과 기존 번역의 의미 및 모든 시행·경과규정 해석은 사람 검수 대상.",
+      "selectedAndCurrentNormalizedHashes": {
+        "EURetained": "43f6dbbb7a4fcd6dc7a87ae2b1f305b7fe0f6831e8bd682e24c6ec921d4a8fad",
+        "Footnotes": "daa06851b0b09c145c9401e28fbca120f6ed3f5df89862452af0faf703070628",
+        "Commentaries": "d0e3c26429b1dd29ca7bfaffc5a9051266f13dcb0ba656ea4744df801dd8f57b"
+      }
+    },
+    {
+      "lawId": "ccpa",
+      "monitorStatus": "unchanged",
+      "monitorCoverage": "article_text",
+      "officialEntryUrl": "https://cppa.ca.gov/regulations/",
+      "acquiredUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "status": "official_body_recovered",
+      "translationCheck": "감독기관이 현재 안내하는 2026-01-01 시행 PDF의 본칙 46개 조문을 확보. 기존 번역의 46개 조문 식별자와 일치. 오래된 2024년 PDF는 갱신 근거에서 제외.",
+      "comparisonCheck": "캘리포니아 18개 기준의 기존 2026-01-01 판본 유지. 별도 CCPA Regulations 파일을 본법으로 오인하지 않음.",
+      "remaining": "주 의회 법전 직접 요청은 403. 감독기관 편찬 PDF 확보와 주 법전·전체 후속 개정 대조 완료는 구분.",
+      "officialPdfSha256": "d1bb2a12e84d754c87a94d11984d2dbc5613bc47766d0a23bdc4e3a70b876ae1"
+    },
+    {
+      "lawId": "pdpa",
+      "monitorStatus": "unchanged",
+      "monitorCoverage": "article_text",
+      "officialEntryUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+      "acquiredUrl": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+      "status": "official_body_recovered",
+      "translationCheck": "SSO 현재 PDF와 2026-10-16 지정 PDF의 원본 바이트가 동일. 본칙 90개 단위(27~32조 묶음 삭제 포함)와 11개 부속표를 확보해 기존 번역 구조와 대조.",
+      "comparisonCheck": "싱가포르 18개 기준의 2026-10-16 선정 판본 유지. 제6B부·제12부속표 잔존 참조를 실제 제공 본문으로 임의 보충하지 않음.",
+      "remaining": "번역 의미·모든 후속 규칙 및 미시행 개정의 적용은 사람 검수와 추가 법률 조사 대상.",
+      "currentAndSelectedPdfSha256": "04aa3475bbe5df3a16cc010da05726abdf07f4987534d0695df6cc589bd3cf59"
+    }
+  ],
+  "attempts": [
+    {
+      "id": "kr-selected",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-body",
+      "url": "https://www.law.go.kr/LSW/lsLinkCommonInfo.do?lsJoLnkSeq=1022084871&chrClsCd=010202",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "eu-consolidated",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "status": 200,
+      "bytes": 464605,
+      "sha256": "6fd4f727dead2355e90f6ca7cf11ab8b1e974e2430933990a1ca09ca520215a0"
+    },
+    {
+      "id": "eu-op",
+      "url": "https://op.europa.eu/o/opportal-service/download-handler?identifier=5f2552c2-cc45-11e6-ad7c-01aa75ed71a1&format=xhtml&language=en&productionSystem=cellar&part=",
+      "status": 200,
+      "bytes": 462324,
+      "sha256": "a681ff22f32f125749af6e96947224369efc132edb8a95b12637e357df1056de"
+    },
+    {
+      "id": "ca-title",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?division=3.&part=4.&lawCode=CIV&title=1.81.5.",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "ca-section",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1798.100.&lawCode=CIV",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "id": "cn-congress",
+      "url": "http://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+      "status": 200,
+      "bytes": 42748,
+      "sha256": "23eeb747cb57b852929e30906c51b5816095dc43977868543a4bce5b3540b429"
+    },
+    {
+      "id": "cn-gov",
+      "url": "https://www.gov.cn/xinwen/2021-08/20/content_5632486.htm",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "sg-print",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf&_=20261117",
+      "status": 200,
+      "bytes": 464598,
+      "sha256": "04aa3475bbe5df3a16cc010da05726abdf07f4987534d0695df6cc589bd3cf59"
+    },
+    {
+      "id": "sg-current",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Within&WholeDoc=1",
+      "status": 200,
+      "bytes": 270298,
+      "sha256": "5e388a298612ec0bab7f64f55b4e83c1e89d69e05497d6c521487462d43d4056"
+    },
+    {
+      "id": "jp-current",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "status": 200,
+      "bytes": 739144,
+      "sha256": "60e71a01756876f22d071aa0de0d6272014e4abd9e71a594ca3c4afe75bc6066"
+    },
+    {
+      "id": "jp-selected",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070?law_full_text_format=xml",
+      "status": 200,
+      "bytes": 733545,
+      "sha256": "eba4209c96b88c5f4902b8a1064b3d614cbc7211f7b3da5b8cba512f32e4854f"
+    },
+    {
+      "id": "uk-selected",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/2026-10-16/data.xml",
+      "status": 200,
+      "bytes": 1689500,
+      "sha256": "ba15ca4e56a653935d257ea7a41398599e1ea1afd66412144213e6707d266bce"
+    },
+    {
+      "id": "uk-current",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "status": 200,
+      "bytes": 1675157,
+      "sha256": "6ba7970fbc5da9c143bb190caa3722d4f97cfb8aef9f9f16966c1fa0a260dda2"
+    },
+    {
+      "id": "eu-latest-html",
+      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "cn-npc-https",
+      "url": "https://www.npc.gov.cn/npc/c2/c30834/202108/t20210820_313088.html",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-mobile",
+      "url": "https://www.law.go.kr/법령/개인정보보호법/(20260911,21445,20260310)",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "kr-flseq",
+      "url": "https://www.law.go.kr/LSW/lsInfoP.do?lsId=011357&ancYnChk=0",
+      "error": "HTTP Error 503: Service Unavailable"
+    },
+    {
+      "id": "ca-cppafull",
+      "url": "https://cppa.ca.gov/regulations/pdf/cppa_act.pdf",
+      "status": 200,
+      "bytes": 464007,
+      "sha256": "e9f88d3ec46c9dff111a27cbe63d734c26904b760d239694d333913e35ff5be1"
+    },
+    {
+      "id": "jp-current-json",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057",
+      "status": 200,
+      "bytes": 558667,
+      "sha256": "a06d46312f7c6a238f32a082569843dad15ca1a206dd4a966a17c25c99d40552"
+    },
+    {
+      "id": "jp-selected-json",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070",
+      "status": 200,
+      "bytes": 554242,
+      "sha256": "50cb9c36ee07419ed97dadcad0d3f53814c104bfd6655ff2b7a5a3d58d294c2c"
+    },
+    {
+      "id": "sg-selected-pdf",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?DocDate=20261016&ValidDate=20261016&ViewType=Pdf",
+      "status": 200,
+      "bytes": 464598,
+      "sha256": "04aa3475bbe5df3a16cc010da05726abdf07f4987534d0695df6cc589bd3cf59"
+    },
+    {
+      "id": "ca-landing",
+      "url": "https://cppa.ca.gov/regulations/consumer_privacy_act.html",
+      "status": 200,
+      "bytes": 96149,
+      "sha256": "997d00f8b5eb0c4dee8a324a12fefbafe0f1af78c7b13decb85ec6ba0908a235"
+    },
+    {
+      "id": "ca-laws",
+      "url": "https://cppa.ca.gov/regulations/",
+      "status": 200,
+      "bytes": 26040,
+      "sha256": "6cb295bc8c1bc1f7fa563f139c922c28f98056fae004e81eee5de84ea16d4c06"
+    },
+    {
+      "id": "eu-eli",
+      "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+      "status": 200,
+      "bytes": 1070568,
+      "sha256": "f91b38c250d465ddf02a387be37133ab29e93cb1752acb50d95e4e6f9ea79d4a"
+    },
+    {
+      "id": "cn-policy",
+      "url": "https://www.gov.cn/zhengce/2021-08/20/content_5632486.htm",
+      "error": "HTTP Error 404: Not Found"
+    },
+    {
+      "id": "kr-double",
+      "url": "https://www.law.go.kr/LSW//lsInfoP.do?lsiSeq=283839&chrClsCd=010202&urlMode=lsInfoP&efYd=20260911&ancYnChk=0",
+      "error": "<urlopen error Tunnel connection failed: 502 Bad Gateway>"
+    }
+  ]
+}
