@@ -24,16 +24,45 @@ begin
   end if;
   execute definition;
 
-  definition=pg_get_functiondef('private.collector_cloud_frozen_cursor_valid(jsonb,text)'::regprocedure);
-  n=(length(definition)-length(replace(definition,old_limit,'')))/length(old_limit);
-  if n=1 then
-    definition=replace(definition,old_limit,new_limit);
-  elsif definition ~ 'octet_length\(c::text\)\s*>' then
-    raise exception 'frozen cursor size guard drift: unexpected size limit';
-  end if;
-  execute definition;
 end;
 $cloud_cursor$;
+
+-- Rebuild the frozen cursor validator in one canonical definition. Production
+-- and clean migration replay had accumulated different branch formatting,
+-- which made replacement based on a historical function body unreliable.
+create or replace function private.collector_cloud_frozen_cursor_valid(c jsonb,slug text)
+returns boolean language plpgsql immutable set search_path=pg_catalog as $$
+declare u jsonb; path_pattern text; listing_pattern text; count_urls integer;
+begin
+ if not (c ? 'frozen_urls') then return not (c ? 'frozen_next'); end if;
+ if slug not in ('ec','ec-news','eu-parliament') or jsonb_typeof(c->'frozen_urls') is distinct from 'array' then return false; end if;
+ count_urls=jsonb_array_length(c->'frozen_urls');
+ if count_urls not between 1 and 100
+  or octet_length(c::text)>50000
+  or not (c ? 'frozen_next') then return false; end if;
+ if jsonb_typeof(c->'offset') is distinct from 'number' or (c->>'offset') !~ '^[0-9]{1,6}$'
+  or (c->>'offset')::integer>count_urls then return false; end if;
+ if slug='ec' then
+  path_pattern='^https://ec[.]europa[.]eu/commission/presscorner/detail/en/(ip|qanda|statement|speech|memo|mex)_[0-9]{2}_[0-9]+$';
+  listing_pattern='^https://ec[.]europa[.]eu/commission/presscorner/api/rss[?]language=en$';
+ elsif slug='ec-news' then
+  path_pattern='^https://commission[.]europa[.]eu/news-and-media/news/[a-z0-9][a-z0-9-]*-[0-9]{4}-[0-9]{2}-[0-9]{2}_en$';
+  listing_pattern='^https://commission[.]europa[.]eu/node/2/rss_en$';
+ else
+  path_pattern='^https://data[.]europarl[.]europa[.]eu/api/v2/documents/[A-Za-z0-9][A-Za-z0-9._-]*$';
+  listing_pattern='^https://data[.]europarl[.]europa[.]eu/api/v2/documents/feed[?]format=application%2[Ff]atom%2[Bb]xml$';
+ end if;
+ if c->>'page' !~ listing_pattern then return false; end if;
+ if jsonb_typeof(c->'frozen_next') not in ('null','string') then return false; end if;
+ if c->'frozen_next'<>'null'::jsonb
+  and (slug='eu-parliament' or c->>'frozen_next' !~ listing_pattern) then return false; end if;
+ for u in select value from jsonb_array_elements(c->'frozen_urls') loop
+  if jsonb_typeof(u) is distinct from 'string' or u#>>'{}' !~ path_pattern
+   or octet_length(u#>>'{}')>2048 then return false; end if;
+ end loop;
+ if (select count(distinct value) from jsonb_array_elements(c->'frozen_urls'))<>count_urls then return false; end if;
+ return true;
+end; $$;
 
 -- Supabase owns the daily enqueue clock; GitHub Actions runs the Crawlee/Python
 -- collectors afterward. Restore the provisioned enqueue schedule if it exists.
