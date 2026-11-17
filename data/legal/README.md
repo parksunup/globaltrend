@@ -1,5 +1,6 @@
 # 법제 담당 첫 작업
 
+> 2026-11-17 최신 상태: 한국 현행·선정 본칙 127개·부칙 13묶음 확인. 이전 추가·상이 규정 9개는 판본 대조 참고로 보존. 캘리포니아 주 법전 직접 대조와 사람 의미·법률 검수는 미완료. 아래 이전 조사 기록과 구분합니다.
 1. `instruments.template.md`를 `instruments.md`로 복사합니다.
 2. `instruments.template.csv`를 `instruments.csv`로 복사합니다.
 3. `review-notes.template.md`를 `review-notes.md`로 복사합니다.

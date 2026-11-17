@@ -582,12 +582,31 @@
       "response": 503,
       "reason": "upstream connection timeout; response body reports upstream connect error or disconnect/reset before headers",
       "exportAttempts": "PDF 403; RTF 503; HTTP official body timeout",
-      "officialMirrors": "privacy.go.kr and pipc.go.kr both returned 503"
+      "officialMirrors": "privacy.go.kr and pipc.go.kr both returned 503",
+      "recoveredWithReadOnlyDiagnostic": {
+        "runUrl": "https://github.com/parksunup/globaltrend/actions/runs/44036204437",
+        "currentAndSelectedBodyMatch": true,
+        "mainArticles": 127,
+        "supplementaryGroups": 13
+      }
     },
     "californiaLegislature": {
       "response": 403,
       "reason": "Just a moment browser-check page with challenges.cloudflare.com reference",
       "ordinaryBrowserAttempt": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-11-17T07:07:11.118637+00:00",
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?division=3.&part=4.&lawCode=CIV&title=1.81.5.",
+        "tlsVerificationEnabled": true,
+        "status": "body_not_confirmed",
+        "initialHttpStatus": 403,
+        "title": "Just a moment...",
+        "error": "identity_not_confirmed",
+        "blockedOutOfScopeHosts": [
+          "challenges.cloudflare.com"
+        ]
+      },
+      "previousOrdinaryBrowserAttempt": {
         "errorType": "Error",
         "message": "Page.goto: net::ERR_CERT_AUTHORITY_INVALID at https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1798.100.\n"
       }
