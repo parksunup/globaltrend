@@ -25,7 +25,7 @@ def schedule_or_user_hold(source):
     # that no network or database action occurred.
     return (
         "source_held_by_user" in source.get("eligibility_reasons", [])
-        and str(source.get("reason", "")).startswith("user_deferred_")
+        or bool(source.get("hold_reason"))
     )
 
 

@@ -42,9 +42,8 @@ do $imda_cursor$
 declare definition text; old_pattern text; new_pattern text; n integer;
 begin
   definition=pg_get_functiondef('private.collector_cloud_cursor_valid(jsonb,text)'::regprocedure);
-  old_pattern=$old$when slug='eu-parliament' then '^https://www[.]europarl[.]europa[.]eu/' else '^$'$old$;
-  new_pattern=$new$when slug='eu-parliament' then '^https://www[.]europarl[.]europa[.]eu/'
-   when slug='imda' then '^https://www[.]imda[.]gov[.]sg/resources/press-releases-factsheets-and-speeches([?]page=[0-9]+)?$' else '^$'$new$;
+  old_pattern=$old$'^https://www[.]europarl[.]europa[.]eu/'$old$;
+  new_pattern=$new$'^https://www[.]europarl[.]europa[.]eu/' when slug = 'imda' then '^https://www[.]imda[.]gov[.]sg/resources/press-releases-factsheets-and-speeches([?]page=[0-9]+)?$'$new$;
   n=(length(definition)-length(replace(definition,old_pattern,'')))/length(old_pattern);
   if n<>1 then raise exception 'IMDA cursor guard drift: expected one current branch, found %',n; end if;
   definition=replace(definition,old_pattern,new_pattern);
