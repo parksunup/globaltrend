@@ -27,12 +27,20 @@ test("a comparison citation opens the matching Korean article", () => {
 });
 
 
-test("uncertain prior Korean provisions remain readable with an edition warning", () => {
+test("planned Korean provisions remain separate from current law with their distinct effective dates", () => {
   const law = loadOfficialPipa();
   const reference = law.sections.find(section => section.id === "pipa-제28조의12");
   assert.equal(reference.group, "reference");
   assert.equal(reference.reviewStatus, "source_verification_pending");
   assert.match(reference.context, /현재 적용 조문으로 확인한 것은 아니/);
+  assert.match(reference.context, /2027-03-09/);
+  for (const id of ["pending-pipa-제32조의2", "pending-pipa-제75조"]) {
+    const planned = law.sections.find(section => section.id === id);
+    assert.equal(planned.group, "reference");
+    assert.equal(planned.reviewStatus, "source_verification_pending");
+    assert.match(planned.context, /2027-07-01/);
+    assert.match(planned.context, /사람 검수는 미완료/);
+  }
   assert.ok(reference.lines.some(line => line.text.includes("인공지능기술 개발")));
   assert.ok(!law.sections.find(section => section.id === "pipa-제2조").lines.some(line => line.text.includes("인공지능기술")));
   const preview = citedLegalPreview(law, "제28조의12");

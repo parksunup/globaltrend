@@ -69,5 +69,14 @@
   "preservedOriginal": "../official/pipa-preserved-20261117.json",
   "humanReviewStatus": "not_started",
   "published": false,
-  "scope": "현행·선정 원문의 기술적 일치와 기존 자료의 판본 차이를 정리함. 참고 규정 9개의 별도 판본·시행일과 의미·법률 검수는 미완료."
+  "scope": "현행·선정 원문의 기술적 일치와 기존 자료의 판본 차이를 정리함. 참고 규정 9개의 별도 판본·시행일과 의미·법률 검수는 미완료.",
+  "plannedEditionFollowup": {
+    "record": "pipa-planned-editions-20261117.json",
+    "matchedReferenceCount": 9,
+    "effectiveDates": [
+      "2027-03-09",
+      "2027-07-01"
+    ],
+    "humanReviewStatus": "not_started"
+  }
 }
