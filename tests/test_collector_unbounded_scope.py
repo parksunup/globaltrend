@@ -14,11 +14,11 @@ class UnboundedCollectorScopeTests(unittest.TestCase):
 
     def test_frozen_official_listing_cursor_accepts_more_than_one_hundred_urls(self):
         urls = [
-            f'https://www.europarl.europa.eu/news/en/press-room/20261108IPR{i:08d}/privacy-update-{i}'
+            f'https://data.europarl.europa.eu/api/v2/documents/2026-{i:04d}'
             for i in range(101)
         ]
         cursor = {
-            'page': 'https://www.europarl.europa.eu/rss/doc/press-releases/en.xml',
+            'page': 'https://data.europarl.europa.eu/api/v2/documents/feed?format=application%2Fatom%2Bxml',
             'offset': 100,
             'frozen_urls': urls,
             'frozen_next': None,

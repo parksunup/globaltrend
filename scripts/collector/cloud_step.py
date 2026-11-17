@@ -163,7 +163,12 @@ def prepare(claim):
                 url = detail['url']
                 canonical_detail = detail['url']
             else:
-                body, url, ctype = client.get(parsers.expansion.detail_request_url(claim['slug'],detail['url']))
+                detail_url=parsers.expansion.detail_request_url(claim['slug'],detail['url'])
+                request_headers=parsers.expansion.detail_request_headers(claim['slug'])
+                if request_headers:
+                    body, url, ctype = client.get(detail_url,headers=request_headers)
+                else:
+                    body, url, ctype = client.get(detail_url)
                 if claim['slug'] in parsers.expansion.ROUTES:
                     parsers.expansion.verify_detail_response(claim['slug'],detail['url'],url)
                 canonical_detail=detail['url'] if claim['slug']=='ec' else url
