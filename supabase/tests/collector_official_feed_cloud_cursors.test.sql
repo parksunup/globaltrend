@@ -5,7 +5,7 @@ select is(
   private.collector_cloud_cursor_valid(
     jsonb_build_object(
       'page','https://commission.europa.eu/node/2/rss_en',
-      'offset',1,
+      'offset',0,
       'frozen_urls',jsonb_build_array(
         'https://commission.europa.eu/news-and-media/news/privacy-update-2026-11-16_en'),
       'frozen_next',null
@@ -61,9 +61,9 @@ select is(private.collector_cloud_cursor_valid(
   true,'bounded multi-item EC News snapshots are accepted') from urls;
 
 select is(private.collector_cloud_cursor_valid(
-  jsonb_build_object('page','https://www.wired-gov.net/wg/home.nsf/nav/latest+news?id=BDEX-6ZFKSH&open=',
-    'offset',0,'padding',repeat('x',5000)),'ico'),
-  false,'the larger cursor allowance remains limited to official EC and Parliament feed routes');
+  jsonb_build_object('page','https://evil.example/node/2/rss_en','offset',0,
+    'padding',repeat('x',5000)),'ec-news'),
+  false,'large official-feed cursors still reject a page outside the approved Commission domain');
 
 select * from finish();
 rollback;
