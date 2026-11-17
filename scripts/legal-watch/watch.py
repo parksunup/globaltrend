@@ -135,13 +135,40 @@ def parse_source(source, raw, historical=False):
                 ids=[n['attrs'].get('id','') for n in nodes(node)]
                 id_=next((x for x in ids if re.fullmatch(r'pr[\dA-Za-z.]+-',x)), '')
                 if id_:add('main:'+id_[2:-1].lower(),html_text(node),'section '+id_[2:-1])
-        if parser in ('korean-html','california-html'):
+        official_korean=[n for n in nodes(tree.root) if n['tag']=='p' and 'pty1_p4' in n['attrs'].get('class','').split()] if parser=='korean-html' else []
+        if official_korean:
+            if not any(n['tag']=='h2' and normal(html_text(n)) in source['identity'] for n in nodes(tree.root)):raise SourceError('korean_title_not_confirmed')
+            current=None;parts=[];supplement=None;supplement_parts=[]
+            def flush_main():
+                if current:add(current,' '.join(parts))
+            def flush_supplement():
+                if supplement:add(supplement,' '.join(supplement_parts))
+            for node in nodes(tree.root):
+                if node['tag']!='p':continue
+                classes=node['attrs'].get('class','').split();body=normal(html_text(node))
+                if 'pty1_p4' in classes:
+                    flush_main();match=re.match(r'^제\s*(\d+)\s*조(?:의\s*(\d+))?',body)
+                    if not match:raise SourceError('unrecognized_korean_article')
+                    current='main:'+match[1]+('-'+match[2] if match[2] else '');parts=[body]
+                elif any(c.startswith('pty1_') for c in classes) and current:parts.append(body)
+                elif 'pty3' in classes:
+                    flush_main();current=None;parts=[];flush_supplement()
+                    law=re.search(r'제\s*(\d+)\s*호',body)
+                    supplement='supplement:'+(law[1] if law else 'original')+':'+digest(body)[:12];supplement_parts=[body]
+                elif any(c.startswith('pty3_') for c in classes) and supplement:supplement_parts.append(body)
+            flush_main();flush_supplement()
+            editions=re.findall(r'\[시행\s*([^\]]+)\]\s*\[법률\s*제(\d+)호[^\]]*\]',html_text(tree.root))
+            if len(set(editions))!=1:raise SourceError('korean_edition_not_confirmed')
+            metadata={'enforcementLabel':normal(editions[0][0]),'lawNumber':editions[0][1]}
+            version='법률 제'+metadata['lawNumber']+'호 · 시행 '+metadata['enforcementLabel']
+        if parser=='california-html' or (parser=='korean-html' and not official_korean):
             plain=html_text(tree.root)
             pattern=r'^\s*(제\s*(\d+)\s*조(?:의\s*(\d+))?)[^\n]*' if parser=='korean-html' else r'^\s*((1798\.\d+(?:\.\d+)?)\.)\s*'
             matches=list(re.finditer(pattern,plain,re.M))
             for i,m in enumerate(matches):
                 identifier=m[2]+('-'+m[3] if parser=='korean-html' and m[3] else '');add('main:'+identifier,plain[m.start():matches[i+1].start() if i+1<len(matches) else len(plain)],m[1].strip()[:80])
     if len(articles)<source.get('minimumArticles',1):raise SourceError('incomplete_article_structure')
+    if sum(key.startswith('main:') for key in articles)<source.get('minimumMainArticles',0):raise SourceError('incomplete_main_articles')
     return {'articles':articles,'metadata':metadata,'version':version,'coverage':coverage,'digest':digest({'articles':articles,'metadata':metadata})}
 
 class OfficialRedirect(urllib.request.HTTPRedirectHandler):
@@ -166,6 +193,14 @@ def fetch_bytes(source,url):
 
 def read_official(source,url,historical=False,resolve=True):
     raw=fetch_bytes(source,url);consolidation=None
+    if resolve and source.get('resolver')=='korean-current-body':
+        tree=Tree(raw.decode('utf-8-sig'))
+        if not any(n['tag']=='p' and 'pty1_p4' in n['attrs'].get('class','').split() for n in nodes(tree.root)):
+            sequences={n['attrs'].get('value','') for n in nodes(tree.root) if n['tag']=='input' and n['attrs'].get('id')=='lsiSeq'}
+            if len(sequences)!=1 or not re.fullmatch(r'\d{5,10}',next(iter(sequences))):raise SourceError('current_korean_sequence_not_confirmed')
+            sequence=next(iter(sequences))
+            url='https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq='+sequence+'&ancYnChk=0&chrClsCd=010202'
+            raw=fetch_bytes(source,url)
     if source['parser']=='chinese-docx':
         data=json.loads(raw).get('data') or {}
         if data.get('title') not in source['identity'] or data.get('bbbs')!=source.get('selectedId'):raise SourceError('chinese_document_identity_mismatch')
