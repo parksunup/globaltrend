@@ -3,7 +3,7 @@
 -- Supabase owns schedules, claims, route state and draft-job creation.
 do $sources$
 declare
-  initial_since date := (now() at time zone 'Asia/Seoul')::date - 7;
+  initial_since date := (now() at time zone 'Asia/Seoul')::date - 2;
   initial_until date := (now() at time zone 'Asia/Seoul')::date;
 begin
   update public.publishers
