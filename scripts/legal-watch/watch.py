@@ -15,6 +15,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+from pdf_sources import pdf_text, singapore, california
 
 MAX_BYTES = 6_000_000
 PARSER_VERSION = 1
@@ -68,6 +69,13 @@ def chinese_number(value):
     return str(result+digit)
 
 def parse_source(source, raw, historical=False):
+    if source['parser'] in ('singapore-pdf','california-pdf'):
+        try:
+            article_texts,metadata,version=(singapore if source['parser']=='singapore-pdf' else california)(pdf_text(raw))
+        except ValueError as error: raise SourceError(str(error)) from None
+        articles={key:{'label':key,'hash':digest(normal(body))} for key,body in article_texts.items()}
+        if len(articles)<source.get('minimumArticles',1): raise SourceError('incomplete_article_structure')
+        return {'articles':articles,'metadata':metadata,'version':version,'coverage':'article_text','digest':digest({'articles':articles,'metadata':metadata})}
     text = raw.decode('utf-8-sig', errors='strict')
     if not text.strip(): raise SourceError('empty_response')
     if not any(identity.lower() in text.lower() for identity in source['identity']): raise SourceError('identity_not_confirmed')
@@ -100,7 +108,7 @@ def parse_source(source, raw, historical=False):
         root=ET.fromstring(text)
         for article in root.iter():
             identifier=article.attrib.get('id','')
-            if tag(article)=='P1' and re.fullmatch(r'article-\d+[A-Za-z]?',identifier):add('main:'+identifier.removeprefix('article-'),contents(article),identifier)
+            if tag(article)=='P1' and re.fullmatch(r'article-\d+[A-Za-z]*\.?',identifier):add('main:'+identifier.removeprefix('article-').rstrip('.'),contents(article),identifier)
         # Primary articles are tracked, not inherited EU recitals or every subordinate instrument.
         version='UK GDPR current XML'
     elif parser=='chinese-html':
@@ -141,18 +149,52 @@ class OfficialRedirect(urllib.request.HTTPRedirectHandler):
 def validate_url(url,hosts):
     u=urllib.parse.urlsplit(url)
     if u.scheme!='https' or u.hostname not in hosts or u.username or u.password or u.port not in (None,443):raise SourceError('unapproved_source_url')
-def fetch_source(source,url=None):
-    historical=url is not None
-    url=url or source['url'];validate_url(url,set(source['allowedHosts']))
+def fetch_bytes(source,url):
+    validate_url(url,set(source['allowedHosts']))
     request=urllib.request.Request(urllib.parse.quote(url,safe=':/?=&.%'),headers={'User-Agent':'GlobalTrend-LegalWatch/1.0 (official law change checks)','Accept':'application/json, application/xml, text/html'})
     try:
         with urllib.request.build_opener(OfficialRedirect(source)).open(request,timeout=20) as response:
             if response.status!=200:raise SourceError('http_'+str(response.status))
             raw=response.read(MAX_BYTES+1)
             if len(raw)>MAX_BYTES:raise SourceError('source_too_large')
-            return parse_source(source,raw,historical=historical)
+            return raw
     except urllib.error.HTTPError as e:raise SourceError('http_'+str(e.code)) from None
     except (urllib.error.URLError,TimeoutError):raise SourceError('network_unavailable') from None
+
+def read_official(source,url,historical=False,resolve=True):
+    raw=fetch_bytes(source,url);consolidation=None
+    if resolve and source.get('resolver')=='eu-current-consolidation':
+        page=raw.decode('utf-8')
+        dates=set(re.findall(r'CELEX:02016R0679-(\d{8})',page))
+        if 'Current consolidated version' not in page or len(dates)!=1:raise SourceError('current_consolidation_not_confirmed')
+        consolidation=next(iter(dates))
+        url='https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-'+consolidation
+        raw=fetch_bytes(source,url)
+    if source['parser']=='california-pdf' and not raw.startswith(b'%PDF-'):
+        tree=Tree(raw.decode('utf-8'));choices=[]
+        for node in nodes(tree.root):
+            href=node['attrs'].get('href','');match=re.fullmatch(r'/pdf/(\d{8})_ccpa_statute\.pdf',href)
+            label=normal(html_text(node))
+            if node['tag']=='a' and match and 'California Consumer Privacy Act' in label and 'Effective' in label:
+                date=datetime.strptime(match[1],'%Y%m%d').date()
+                if date<=datetime.now(timezone.utc).date():choices.append((date,urllib.parse.urljoin(url,href)))
+        if not choices:raise SourceError('official_statute_link_not_found')
+        url=max(choices)[1];raw=fetch_bytes(source,url)
+    result=parse_source(source,raw,historical=historical);result['acquiredUrl']=url
+    if consolidation:
+        result['version']='CELEX:02016R0679-'+consolidation
+        result['metadata']['officialConsolidationDate']=consolidation
+        result['digest']=digest({'articles':result['articles'],'metadata':result['metadata']})
+    return result
+
+def fetch_source(source,url=None):
+    historical=url is not None
+    try:return read_official(source,url or source['url'],historical=historical,resolve=not historical)
+    except SourceError as error:
+        if historical or not source.get('fallbackUrl'):raise
+        result=read_official(source,source['fallbackUrl'],resolve=False)
+        result.update(coverage='fixed_official_edition',primaryError=str(error),version=source.get('fallbackVersion','선정 공식 판본'))
+        return result
 
 def compare(before,after):
     a=before['articles'];b=after['articles']
@@ -165,7 +207,10 @@ def reviewed(event, receipt):
     return receipt.get('eventId')==event['id'] and receipt.get('sourceDigest')==event['afterDigest'] and receipt.get('translationReviewed') is True and receipt.get('comparisonReviewed') is True and bool(re.fullmatch(r'[a-f0-9]{40}',str(receipt.get('translationCommitSha',''))))
 
 def check_one(source, previous, reviews, fetcher=fetch_source):
-    checked_at=now();config=digest({'url':source['url'],'baselineUrl':source.get('baselineUrl'),'parser':source['parser'],'parserVersion':PARSER_VERSION})
+    checked_at=now();settings={'url':source['url'],'baselineUrl':source.get('baselineUrl'),'parser':source['parser'],'parserVersion':source.get('parserVersion',PARSER_VERSION)}
+    if source.get('fallbackUrl'):settings['fallbackUrl']=source['fallbackUrl']
+    if source.get('resolver'):settings['resolver']=source['resolver']
+    config=digest(settings)
     prior=copy.deepcopy(previous) if previous.get('configHash')==config else {'events':copy.deepcopy(previous.get('events',[])),'baselineOrigin':'configuration_changed' if previous else 'first_observation'}
     result={'id':source['id'],'jurisdiction':source['jurisdiction'],'name':source['name'],'url':source['url'],'scope':source['scope'],'checkedAt':checked_at,'status':'error','error':None,'changes':None,'events':prior.get('events',[]),'baselineOrigin':prior.get('baselineOrigin','first_observation')}
     try:
@@ -186,7 +231,7 @@ def check_one(source, previous, reviews, fetcher=fetch_source):
         if len(events)>1000:raise SourceError('review_queue_limit')
         for e in events:
             e['reviewed']=any(reviewed(e,r) for r in reviews)
-        result.update(coverage=current.get('coverage','article_text'),status='partial' if current.get('coverage')!='article_text' else 'changed' if has_changes else 'unchanged' if prior.get('snapshot') else 'baseline',version=current['version'],articleCount=len(current['articles']),digest=current['digest'],changes=changes,events=events,lastSuccessAt=checked_at)
+        result.update(coverage=current.get('coverage','article_text'),status='partial' if current.get('coverage')!='article_text' else 'changed' if has_changes else 'unchanged' if prior.get('snapshot') else 'baseline',version=current['version'],articleCount=len(current['articles']),digest=current['digest'],changes=changes,events=events,lastSuccessAt=checked_at,acquiredUrl=current.get('acquiredUrl',source['url']),primaryError=current.get('primaryError'))
         checkpoint={'configHash':config,'snapshot':current,'events':events,'baselineOrigin':result['baselineOrigin'],'lastSuccessAt':checked_at}
         return result,checkpoint
     except (SourceError,ValueError,ET.ParseError,UnicodeError,KeyError,TypeError) as error:
