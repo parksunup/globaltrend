@@ -138,14 +138,19 @@ class CloudWorkerTests(unittest.TestCase):
             with self.assertRaisesRegex(cloud_worker.WorkerError, 'source_not_enabled_for_cloud_python'):
                 cloud_worker.eligible_sources(registry_path, source_id='disabled')
 
-    def test_edps_is_active_while_ec_and_parliament_remain_held(self):
+    def test_requested_eu_official_sources_are_active_cloud_routes(self):
         sources = cloud_worker.eligible_sources()
         by_slug = {row['source']: row for row in sources}
-        self.assertTrue({'edps'}.issubset(by_slug))
-        self.assertFalse({'ec', 'eu-parliament'} & set(by_slug))
+        self.assertTrue({'edps', 'ec', 'ec-news', 'eu-parliament'}.issubset(by_slug))
         self.assertEqual(by_slug['edps']['listing'], 'https://social.edps.europa.eu/@EDPS.rss')
         self.assertTrue(by_slug['edps']['permissions']['collect'])
         self.assertTrue(by_slug['edps']['permissions']['store'])
+        self.assertTrue(by_slug['ec']['listing'].startswith('https://ec.europa.eu/commission/presscorner/api/rss'))
+        self.assertEqual(by_slug['ec-news']['listing'], 'https://commission.europa.eu/node/2/rss_en')
+        self.assertEqual(by_slug['eu-parliament']['listing'], 'https://data.europarl.europa.eu/api/v2/documents/feed')
+        for slug in ('ec', 'ec-news', 'eu-parliament'):
+            self.assertTrue(by_slug[slug]['permissions']['collect'])
+            self.assertTrue(by_slug[slug]['permissions']['store'])
 
     def test_invalid_claim_and_bundle_are_rejected_before_commit(self):
         bad_claim = claim_for()

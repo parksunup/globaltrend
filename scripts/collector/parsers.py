@@ -535,7 +535,7 @@ def extract_document(source,data,url,content_type,row=None):
     if source in expansion.PUBLICATION_SOURCE_IDS:
         return extract_publication_document(source,data,url,content_type,row)
     if source in expansion.ROUTES and source!='ppc':
-        if content_type not in ('text/html','application/xhtml+xml') and not (source in ('ec','anpd-br') and content_type=='application/json'):raise ValueError('unsupported_document_type')
+        if content_type not in ('text/html','application/xhtml+xml') and not (source in ('ec','anpd-br','eu-parliament') and content_type in ('application/json','application/ld+json')):raise ValueError('unsupported_document_type')
         return expansion.extract(source,data.decode('utf-8','replace'),url,row)
     if content_type in ('text/html','application/xhtml+xml'):
         item=extract(source,data.decode('utf-8','replace'),url)
@@ -867,6 +867,62 @@ def discover_rss(html,url,keep_feed_text=False,prefer_content_encoded=False):
                 'raw':date_node.text or ''}]
         rows.append(row)
     return rows,None
+
+
+def discover_eu_parliament_feed(xml,url):
+    """Resolve Atom feed entries to their matching official Open Data API records."""
+    from . import expansion
+    if re.search(r'<!DOCTYPE|<!ENTITY',xml,re.I):
+        raise ValueError('xml_entities_rejected')
+    try:
+        root=ET.fromstring(xml)
+    except ET.ParseError:
+        raise ValueError('eu_parliament_feed_xml_invalid') from None
+    from .core import canonical_url
+    feed_url=canonical_url(url,expansion.ROUTES['eu-parliament']['hosts'])
+    rows={}
+    for entry in root.iter():
+        if entry.tag.rsplit('}',1)[-1].lower()!='entry':
+            continue
+        title_node=next((node for node in entry if node.tag.rsplit('}',1)[-1].lower()=='title'),None)
+        title=normalize(''.join(title_node.itertext())) if title_node is not None else ''
+        id_node=next((node for node in entry if node.tag.rsplit('}',1)[-1].lower()=='id'),None)
+        identity=(id_node.text or '').strip() if id_node is not None else ''
+        candidates=[]
+        for node in entry:
+            if node.tag.rsplit('}',1)[-1].lower()!='link':
+                continue
+            href=node.get('href') or (node.text or '').strip()
+            if not href:
+                continue
+            target=urljoin(feed_url,href)
+            parsed=urlsplit(target)
+            if (parsed.scheme=='https' and parsed.hostname=='data.europarl.europa.eu'
+                    and re.fullmatch(expansion.ROUTES['eu-parliament']['article_path'],parsed.path)):
+                candidates.append(parsed._replace(query='',fragment='').geturl())
+        if not candidates and identity:
+            parsed=urlsplit(urljoin(feed_url,identity))
+            if (parsed.scheme=='https' and parsed.hostname=='data.europarl.europa.eu'
+                    and re.fullmatch(expansion.ROUTES['eu-parliament']['article_path'],parsed.path)):
+                candidates.append(parsed._replace(query='',fragment='').geturl())
+        targets=sorted(set(candidates))
+        if not title or len(targets)!=1:
+            # Ignore non-document entries, but fail on an ambiguous document
+            # entry so a wrong record cannot be drafted under this title.
+            if title and candidates:
+                raise ValueError('eu_parliament_feed_entry_identity_ambiguous')
+            continue
+        target=targets[0]
+        document_id=urlsplit(target).path.rsplit('/',1)[-1]
+        if identity and identity.rsplit('/',1)[-1]!=document_id:
+            raise ValueError('eu_parliament_feed_entry_identity_mismatch')
+        row={'url':target,'title':title,'rss_source':'eu-parliament-open-data'}
+        updated=next((node for node in entry if node.tag.rsplit('}',1)[-1].lower()=='updated'),None)
+        if updated is not None and updated.text:
+            row['date_observations']=[{'meaning':'listing_updated_not_publication_date',
+                'locator':'European Parliament Open Data Atom feed updated','value':normalize(updated.text)}]
+        rows[target]=row
+    return list(rows.values())
 
 
 def discover(source,html,url):

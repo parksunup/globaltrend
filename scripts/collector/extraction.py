@@ -124,6 +124,8 @@ def _trafilatura_item(source, data, url, content_type, row=None):
 
 def extract_document(source, data, url, content_type, row=None):
     """Use Trafilatura for body text first, then adapter for metadata; fall back on body failure."""
+    if source=='imda':
+        return extract_imda_release(data,url,row)
     item = _trafilatura_item(source, data, url, content_type, row)
     minimum = SOURCE_ADAPTER_MIN_BODY_CHARS.get(source)
     if item is not None and minimum and len(item['content_text']) < minimum:
@@ -152,6 +154,61 @@ def extract_document(source, data, url, content_type, row=None):
     item['metadata']['extraction_method'] = 'source_parser_fallback'
     item['metadata']['trafilatura_first_attempt'] = 'no_usable_main_text'
     return item
+
+
+def extract_imda_release(data,url,row=None):
+    """Prefer full official IMDA article text; preserve short official teasers as review-only."""
+    from . import parsers
+    raw=data.decode('utf-8','replace') if isinstance(data,(bytes,bytearray)) else str(data)
+    soup=BeautifulSoup(raw,'html.parser')
+    title=parsers.normalize((row or {}).get('title',''))
+    if not title:
+        node=soup.select_one('main h1,article h1,h1')
+        title=parsers.normalize(node.get_text(' ',strip=True) if node else '')
+    if not title:raise ValueError('imda_article_title_missing')
+    full_candidates=[]
+    for script in soup.select('script[type="application/ld+json"]'):
+        try:payload=json.loads(script.get_text(strip=True))
+        except (TypeError,json.JSONDecodeError):continue
+        candidates=payload if isinstance(payload,list) else [payload]
+        for candidate in candidates:
+            if not isinstance(candidate,dict):continue
+            graph=candidate.get('@graph')
+            if isinstance(graph,list):candidates.extend(graph)
+            body=candidate.get('articleBody')
+            if isinstance(body,str):full_candidates.append(body)
+    for selector in ('article.detail-content','main article.detail-content','.detail-content'):
+        node=soup.select_one(selector)
+        if node:
+            for part in node.select('script,style,nav,footer,template,button,[hidden]'):part.decompose()
+            value=parsers.normalize(node.get_text('\n',strip=True))
+            if value:full_candidates.append(value)
+            break
+    full=next((parsers.normalize(value) for value in full_candidates
+               if len(parsers.normalize(value))>=100 and not re.search(r'\{\{|\$\{|\bloading\b',value,re.I)),None)
+    description=''
+    for selector,attribute in (('meta[name="description"]','content'),('meta[property="og:description"]','content')):
+        node=soup.select_one(selector)
+        if node and node.get(attribute):
+            description=parsers.normalize(node.get(attribute));break
+    published=(row or {}).get('published_date')
+    if not isinstance(published,str) or not re.fullmatch(r'\d{4}-\d{2}-\d{2}',published):published=None
+    observations=list((row or {}).get('date_observations') or [])
+    body=full or description or parsers.normalize((row or {}).get('feed_text',''))
+    if not body:raise ValueError('imda_article_and_official_teaser_empty')
+    complete=full is not None
+    body=parsers.normalize(body)
+    return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+        'published_date':published,'metadata':{'normalization_version':parsers.NORMALIZATION_VERSION,
+            'parser_version':'imda-release-body-v2' if complete else 'imda-official-teaser-v2',
+            'read_scope':'official_article_body' if complete else 'official_article_metadata_or_listing_teaser_only',
+            'source_body_completeness':'full_article_body' if complete else 'official_summary_only',
+            'date_observations':observations,'requires_review':not complete,
+            'related_documents':[],'unread_attachments':[],
+            'factual_status':'official_imda_release_machine_extracted_not_human_reviewed',
+            'relevance_reason':'official_imda_privacy_topic_human_review_pending',
+            'ai_ready':bool(published and complete),
+            'extraction_method':'imda_official_article_body' if complete else 'imda_official_teaser_fallback'}}
 
 
 def extract_official_rss_post(row):
@@ -220,6 +277,67 @@ def extract_official_rss_summary(row):
             'source_body_completeness': 'summary_only',
         },
     }
+
+
+def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
+    """Fetch and extract only a PDF manifestation linked by an EP Open Data record."""
+    from urllib.parse import urlsplit
+    from . import parsers, expansion
+    try:
+        payload=json.loads(document_json.decode('utf-8') if isinstance(document_json,bytes) else document_json)
+    except (UnicodeDecodeError,TypeError,json.JSONDecodeError):
+        raise ValueError('eu_parliament_detail_json_invalid') from None
+    entity=payload.get('data') if isinstance(payload,dict) else None
+    if isinstance(entity,list):
+        entity=entity[0] if len(entity)==1 else None
+    if not isinstance(entity,dict):raise ValueError('eu_parliament_detail_schema_changed')
+    ident=entity.get('id') or entity.get('identifier')
+    expected=urlsplit(api_url).path.rsplit('/',1)[-1]
+    if not isinstance(ident,str) or ident.rsplit('/',1)[-1]!=expected:
+        raise ValueError('eu_parliament_detail_identity_mismatch')
+    title=entity.get('title') or entity.get('label')
+    if isinstance(title,dict):title=title.get('en') or title.get('@value')
+    title=parsers.normalize(title or '')
+    if not title:raise ValueError('eu_parliament_detail_title_missing')
+    urls=[]
+    def visit(value):
+        if isinstance(value,str) and value.startswith('https://'):
+            parsed=urlsplit(value)
+            if (parsed.scheme=='https' and parsed.hostname=='www.europarl.europa.eu' and
+                    not parsed.username and not parsed.password and parsed.port in (None,443) and
+                    parsed.path.lower().endswith('.pdf') and not parsed.fragment):
+                urls.append(value)
+        elif isinstance(value,dict):
+            for child in value.values():visit(child)
+        elif isinstance(value,list):
+            for child in value:visit(child)
+    visit(entity)
+    if not urls:raise ValueError('eu_parliament_pdf_manifestation_missing')
+    pdf_url=sorted(set(urls),key=lambda value:('/EN/' not in urlsplit(value).path.upper(),len(value)))[0]
+    data,final,content_type=client.get(pdf_url)
+    if urlsplit(final).hostname!='www.europarl.europa.eu' or not data.startswith(b'%PDF-'):
+        raise ValueError('eu_parliament_manifestation_not_pdf')
+    pdf=parsers.extract_pdf(data,'eu-parliament')
+    body=parsers.normalize('\n'.join(page['text'] for page in pdf['pages']))
+    if len(body)<100:raise ValueError('eu_parliament_pdf_text_too_short')
+    date_value=entity.get('date_document') or entity.get('date') or entity.get('publication_date')
+    published=expansion.date(date_value) if isinstance(date_value,str) else None
+    # Keep date-unknown full text for review; never infer a publication date.
+    observations=list((row or {}).get('date_observations') or [])
+    if isinstance(date_value,str):
+        observations.append({'meaning':'official_published_attribute','locator':'European Parliament Open Data API document date','value':date_value})
+    observations.append({'meaning':'official_manifestation_link','locator':'European Parliament Open Data API linked PDF manifestation','value':pdf_url})
+    body=parsers.normalize(body)
+    return {'title_original':title,'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+        'published_date':published,'metadata':{'normalization_version':parsers.NORMALIZATION_VERSION,
+            'parser_version':'ep-open-data-linked-pdf-v1','read_scope':'official_open_data_linked_pdf_text',
+            'date_observations':observations,'pdf_pages':pdf['pages'],'pdf_ocr_pages':pdf['ocr_pages'],
+            'requires_review':not bool(published),'related_documents':[{'url':pdf_url,'title':title,'read':True}],
+            'unread_attachments':pdf['related_documents'],'factual_status':'official_european_parliament_document_not_independently_reviewed',
+            'license':'CC BY 4.0','attribution_required':True,
+            'attribution':'European Parliament Open Data',
+            'relevance_reason':'official_open_data_full_text_human_topic_review_pending','ai_ready':bool(published),
+            'extraction_method':pdf['extraction_method']}}
 
 
 def extract_verified_pdf_attachments(source, html, page_url, content_type, row, client):

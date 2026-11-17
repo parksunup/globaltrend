@@ -268,7 +268,7 @@ def fetch_listing(source,client,page):
             sitemap='https://www.pdpc.gov.sg/sitemap.xml'
             sitemap_data,sitemap_final,_=fetch(sitemap)
             return parsers.discover_pdpc_sitemap(sitemap_data,sitemap_final)
-    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):
+    if ctype not in ('text/html','application/xhtml+xml','application/rss+xml','application/atom+xml','text/xml','application/xml') and not (source in ('ec','anpd-br') and ctype=='application/json'):
         raise ValueError('unsupported_listing_type')
     return parsers.discover_listing(source,data.decode('utf-8','replace'),final,fetch)
 

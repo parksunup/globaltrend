@@ -11,18 +11,73 @@ FIXTURES = ROOT / 'tests/fixtures/collector-expansion'
 
 class ExpandedCloudResumeTests(unittest.TestCase):
     def config(self, slug):
-        return next(c for c in json.loads((ROOT/'config/trend-collector.json').read_text())['sources'] if c['source']==slug)
+        return next(c for c in json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))['sources'] if c['source']==slug)
 
     def claim(self,slug):
         return dict(slug=slug,source_id=self.config(slug)['source_id'],since='2026-10-26',until='2026-10-28',cursor=None,lease_until='2099-01-01T00:00:00+00:00')
 
-    def test_user_held_parliament_route_does_not_attempt_collection(self):
-        claim=self.claim('eu-parliament')
-        class Client(HttpClient):
-            def get(self,url): self.fail('held route must not make a network request')
-        with patch('scripts.collector.cloud_step.HttpClient',Client):
-            with self.assertRaisesRegex(ValueError,'cloud_source_not_assigned'):
-                prepare(claim)
+    def test_parliament_route_is_assigned_to_the_cloud_python_worker(self):
+        from scripts.collector.cloud_worker import eligible_sources
+        enabled={source['source'] for source in eligible_sources()}
+        self.assertTrue({'ec','ec-news','eu-parliament'}<=enabled)
+
+    def test_parliament_atom_feed_selects_the_api_document_link(self):
+        xml='''<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">
+          <entry><id>https://data.europarl.europa.eu/api/v2/documents/2026-001</id>
+            <title>Privacy safeguards in digital services</title><updated>2026-10-28T10:00:00Z</updated>
+            <link rel="self" href="https://data.europarl.europa.eu/api/v2/documents/2026-001"/>
+            <link rel="alternate" href="https://www.europarl.europa.eu/news/en/press-room/20261028IPR00001/"/>
+          </entry></feed>'''
+        from scripts.collector.core import fetch_listing
+        rows,nxt=fetch_listing('eu-parliament',type('Client',(),{
+            'get':lambda self,url:(xml.encode(),url,'application/atom+xml')})(),
+            expansion.ROUTES['eu-parliament']['listing']+'?format=application%2Fatom%2Bxml')
+        self.assertEqual(nxt,None)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['url'],'https://data.europarl.europa.eu/api/v2/documents/2026-001')
+        self.assertEqual(rows[0]['date_observations'][0]['meaning'],'listing_updated_not_publication_date')
+
+    def test_commission_news_rss_article_route_uses_observed_date_and_url_shape(self):
+        from scripts.collector.core import fetch_listing
+        xml='''<?xml version="1.0"?><rss version="2.0"><channel><item>
+          <title>EU and Kenya advance towards data adequacy arrangement</title>
+          <link>https://commission.europa.eu/news-and-media/news/joint-press-statement-michael-mcgrath-commissioner-democracy-justice-rule-law-and-consumer-2026-11-16_en</link>
+          <pubDate>Mon, 16 Nov 2026 00:00:00 +0100</pubDate>
+          <description>Safe data flows and stronger digital trade.</description>
+        </item></channel></rss>'''
+        rows,nxt=fetch_listing('ec-news',type('Client',(),{
+            'get':lambda self,url:(xml.encode(),url,'application/rss+xml')})(),
+            self.config('ec-news')['listing'])
+        self.assertIsNone(nxt)
+        self.assertEqual(len(rows),1)
+        self.assertEqual(rows[0]['url'].rsplit('/',1)[-1],
+            'joint-press-statement-michael-mcgrath-commissioner-democracy-justice-rule-law-and-consumer-2026-11-16_en')
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-11-16')
+
+    def test_commission_news_detail_requires_real_body_and_reconciles_feed_date(self):
+        url='https://commission.europa.eu/news-and-media/news/joint-press-statement-michael-mcgrath-commissioner-democracy-justice-rule-law-and-consumer-2026-11-16_en'
+        row={'url':url,'title':'EU data adequacy statement','date_observations':[
+            {'meaning':'expansion_feed_publication_rfc822','locator':'RSS pubDate','value':'Mon, 16 Nov 2026 00:00:00 +0100'}]}
+        html='''<html><head><meta property="article:published_time" content="2026-11-16T00:00:00+01:00"></head>
+          <main><h1>EU and Kenya data adequacy arrangement</h1><article><div class="field--name-body">
+          <p>Full official article text describing the agreement and safeguards for cross-border personal data flows.</p>
+          </div></article></main></html>'''
+        item=expansion.extract('ec-news',html,url,row)
+        self.assertEqual(item['published_date'],'2026-11-16')
+        self.assertTrue(item['metadata']['ai_ready'])
+        self.assertIn('Full official article text',item['content_text'])
+
+    def test_parliament_full_text_without_exact_publication_date_is_held(self):
+        body='Substantive official document text about privacy and safeguards. '*3
+        data={'data':{'id':'https://data.europarl.europa.eu/api/v2/documents/2026-001',
+            'title':'Privacy safeguards','description':body}}
+        item=expansion.extract('eu-parliament',json.dumps(data),
+            'https://data.europarl.europa.eu/api/v2/documents/2026-001')
+        self.assertIsNone(item['published_date'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertTrue(item['metadata']['requires_review'])
+        self.assertEqual(item['metadata']['license'],'CC BY 4.0')
+        self.assertTrue(item['metadata']['attribution_required'])
 
     def test_frozen_listing_keeps_date_observations_for_detail_extraction(self):
         from scripts.collector import extraction
@@ -53,22 +108,21 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         url=expansion.listing_request_url('ec',self.config('ec')['listing'],'2026-10-26','2026-10-28')
         from urllib.parse import urlsplit,parse_qs
         parsed=urlsplit(url);query=parse_qs(parsed.query)
-        self.assertEqual(parsed.path,'/commission/presscorner/api/search')
-        self.assertEqual(query['datefrom'],['26102026'])
-        self.assertEqual(query['dateto'],['29102026'])
-        self.assertEqual(query['pagesize'],['10'])
+        self.assertEqual(parsed.path,'/commission/presscorner/api/rss')
+        self.assertEqual(query['language'],['en'])
 
-    def test_parliament_redirect_allows_same_id_slug_only(self):
-        requested='https://www.europarl.europa.eu/news/en/press-room/20261020IPR48312/'
-        expansion.verify_detail_response('eu-parliament',requested,requested+'legitimate-title-slug')
+    def test_parliament_api_detail_redirect_must_keep_document_identity(self):
+        requested='https://data.europarl.europa.eu/api/v2/documents/2026-001'
+        expected=expansion.detail_request_url('eu-parliament',requested)
+        expansion.verify_detail_response('eu-parliament',requested,expected)
         with self.assertRaisesRegex(ValueError,'detail_redirect_identity_mismatch'):
-            expansion.verify_detail_response('eu-parliament',requested,requested.replace('IPR48312','IPR99999'))
+            expansion.verify_detail_response('eu-parliament',requested,expected.replace('2026-001','2026-002'))
 
     def test_backlog_does_not_resolve_a_different_redirected_article(self):
-        claim=self.claim('eu-parliament');target='https://www.europarl.europa.eu/news/en/press-room/20261020IPR48312/'
+        claim=self.claim('eu-parliament');target='https://data.europarl.europa.eu/api/v2/documents/2026-001'
         claim.update(backlog_id='synthetic-backlog',detail={'url':target,'title':'Original release'})
         class Client(HttpClient):
-            def get(self,url):return (FIXTURES/'eu-parliament-detail.html').read_bytes(),target.replace('IPR48312','IPR99999'),'text/html'
+            def get(self,url):return b'{"data":[]}',target.replace('2026-001','2026-002')+'?format=application%2Fld%2Bjson&language=en','application/ld+json'
         with patch('scripts.collector.cloud_step.validate_claim'), patch('scripts.collector.cloud_step.HttpClient',Client):bundle=prepare(claim)
         self.assertEqual(bundle['operations'],[])
         self.assertFalse(bundle['backlog_resolved'])
