@@ -356,7 +356,10 @@ def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
         'published_date':published,'metadata':{'normalization_version':parsers.NORMALIZATION_VERSION,
             'parser_version':'ep-open-data-linked-pdf-v1','read_scope':'official_open_data_linked_pdf_text',
             'date_observations':observations,'date_conflict':date_conflict,
-            'pdf_pages':pdf['pages'],'pdf_ocr_pages':pdf['ocr_pages'],
+            # content_text already contains the text from every PDF page.
+            # Keeping each full page text again in metadata can push large EP
+            # amendments over the cloud commit limit, so retain only the count.
+            'pdf_page_count':len(pdf['pages']),'pdf_ocr_pages':pdf['ocr_pages'],
             'requires_review':not bool(published) or date_conflict,'related_documents':[{'url':pdf_url,'title':title,'read':True}],
             'unread_attachments':pdf['related_documents'],'factual_status':'official_european_parliament_document_not_independently_reviewed',
             'license':'CC BY 4.0','attribution_required':True,
