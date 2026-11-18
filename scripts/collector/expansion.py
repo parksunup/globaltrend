@@ -301,6 +301,20 @@ def _bounded_frozen_cursor(cursor,source):
         raise ValueError('expansion_frozen_cursor_invalid')
     if type(cursor.get('offset')) is not int or not 0<=cursor['offset']<=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
+    if source=='eu-parliament':
+        hashes=cursor.get('processed_document_hashes',[])
+        if (not isinstance(hashes,list) or len(hashes)>4000 or
+                any(not isinstance(value,str) or not re.fullmatch(r'[0-9a-f]{64}',value) for value in hashes) or
+                len(set(hashes))!=len(hashes)):
+            raise ValueError('eu_parliament_feed_identity_cursor_invalid')
+
+def _eu_parliament_feed_identity(row):
+    """Identify one API-feed version without treating its updated time as publication date."""
+    observations=row.get('date_observations') or []
+    updated=next((item.get('value') for item in observations
+                  if item.get('meaning')=='listing_updated_not_publication_date'),None)
+    identity={'version':1,'url':row['url'],'updated':updated or ''}
+    return hashlib.sha256(json.dumps(identity,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 def collect_frozen(config,client,store,since,until):
     """Freeze URL identities in the existing atomic DB cursor, one body per commit.
@@ -353,15 +367,37 @@ def collect_frozen(config,client,store,since,until):
                     result.update(listing_scan_complete=not bool(nxt),reason='scoped_official_listing_empty')
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
-            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
-                        frozen_rows=rows,frozen_next=nxt)
+            if source=='eu-parliament':
+                previous=set(cursor.get('processed_document_hashes',[]))
+                identities=[_eu_parliament_feed_identity(row) for row in rows]
+                pending=[(row,identity) for row,identity in zip(rows,identities) if identity not in previous]
+                current_hashes=list(dict.fromkeys(identities))
+                if len(current_hashes)>4000:
+                    raise ValueError('eu_parliament_feed_identity_cursor_capacity_exceeded')
+                if not pending:
+                    next_cursor={'page':page,'offset':0,'processed_document_hashes':current_hashes}
+                    if nxt:
+                        next_cursor['page']=nxt
+                        store.progress(config,since,until,next_cursor)
+                        result.update(reason='official_feed_unchanged_page_complete')
+                    else:
+                        store.progress(config,since,until,next_cursor);store.checkpoint(config,until)
+                        result.update(listing_scan_complete=True,reason='official_feed_unchanged')
+                    return result
+                rows=[row for row,_ in pending]
+                cursor=dict(page=page,offset=0,frozen_urls=[row['url'] for row in rows],
+                            frozen_next=nxt,processed_document_hashes=current_hashes)
+            else:
+                cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
+                            frozen_rows=rows,frozen_next=nxt)
         _bounded_frozen_cursor(cursor,source)
         urls=cursor['frozen_urls']
         per_run_page_drain=source in ('anpd-br','nist')
         while cursor['offset']<len(urls):
             ordinal=cursor['offset'];url=urls[ordinal]
             result['discovered']+=1
-            row=cursor.get('frozen_rows',[{} for _ in urls])[ordinal]
+            frozen_rows=cursor.get('frozen_rows')
+            row=frozen_rows[ordinal] if frozen_rows else {}
             try:
                 request_headers=detail_request_headers(source)
                 detail_url=detail_request_url(source,url)
@@ -415,10 +451,16 @@ def collect_frozen(config,client,store,since,until):
                 break
         if cursor['offset']>=len(urls):
             if cursor['frozen_next']:
-                store.progress(config,since,until,dict(page=cursor['frozen_next'],offset=0))
+                next_cursor=dict(page=cursor['frozen_next'],offset=0)
+                if source=='eu-parliament':next_cursor['processed_document_hashes']=cursor.get('processed_document_hashes',[])
+                store.progress(config,since,until,next_cursor)
                 result['reason']='frozen_listing_page_complete'
             else:
-                store.progress(config,since,until,None);store.checkpoint(config,until)
+                if source=='eu-parliament':
+                    store.progress(config,since,until,dict(page=cursor['page'],offset=0,
+                        processed_document_hashes=cursor.get('processed_document_hashes',[])))
+                else:store.progress(config,since,until,None)
+                store.checkpoint(config,until)
                 result.update(listing_scan_complete=True,reason='listing_exhaustiveness_unverified')
         else:
             result['reason']='frozen_listing_page_items_processed'
