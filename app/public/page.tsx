@@ -13,6 +13,13 @@ import HomeVisitorCounts from "./home-visitor-counts";
 import {rankWeeklyCandidates} from '../../lib/weekly-priority';
 import {formatMonthlyWeek} from '../../lib/weekly-label';
 
+function timelineLabel(region: string, title: string) {
+  const titleStart = title.trimStart().toLocaleLowerCase();
+  const duplicatedRegion = region.split(/[·,，]/).map(part => part.trim()).filter(Boolean)
+    .some(part => titleStart.startsWith(part.toLocaleLowerCase()) && /[\s,，·:：\-–—]/.test(titleStart[part.length] ?? ""));
+  return duplicatedRegion ? title : `${region}, ${title}`;
+}
+
 export const dynamic = "force-dynamic";
 
 export default async function PublicHome() {
@@ -77,7 +84,7 @@ export default async function PublicHome() {
       <div className={styles.timelinePanel}>
         <div className={styles.panelTitle}><h2>주간 동향</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
         {timelineStories.length ? <ol className={styles.timeline}>{timelineStories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
-          <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{story.region}, {story.title}</Link>
+          <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{timelineLabel(story.region, story.title)}</Link>
         </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
       </div>
 
