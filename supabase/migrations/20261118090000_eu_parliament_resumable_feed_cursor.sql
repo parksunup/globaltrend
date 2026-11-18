@@ -72,10 +72,20 @@ declare definition text; old_guard text; new_guard text; n integer;
 begin
  definition=pg_get_functiondef('public.collector_cloud_commit(uuid,text,uuid,jsonb,text)'::regprocedure);
  old_guard='octet_length(p_bundle::text)>500000';
- new_guard='octet_length(p_bundle::text)>(case when slug=''eu-parliament'' then 2000000 else 500000 end)';
+ new_guard='(slug=''eu-parliament'' and octet_length(p_bundle::text)>2000000)';
  n=(length(definition)-length(replace(definition,old_guard,'')))/length(old_guard);
- if n<>1 then raise exception 'cloud bundle byte guard drift: expected one 500 KB limit, found %',n; end if;
- definition=replace(definition,old_guard,new_guard);
+ if n=1 then
+  definition=replace(definition,old_guard,new_guard);
+ else
+  old_guard='jsonb_typeof(p_bundle) is distinct from ''object'' or false';
+  n=(length(definition)-length(replace(definition,old_guard,'')))/length(old_guard);
+  if n=1 then
+   new_guard='jsonb_typeof(p_bundle) is distinct from ''object'' or (slug=''eu-parliament'' and octet_length(p_bundle::text)>2000000)';
+   definition=replace(definition,old_guard,new_guard);
+  elsif definition !~ $rx$slugs*=s*'eu-parliament's+ands+octet_length(p_bundle::text)s*>s*2000000$rx$ then
+   raise exception 'cloud bundle byte guard drift: bounded route-specific guard not found';
+  end if;
+ end if;
  execute definition;
 end;
 $bundle_limit$;
