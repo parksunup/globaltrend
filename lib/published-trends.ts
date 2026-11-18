@@ -72,7 +72,9 @@ export async function loadPublishedStories(id?: string): Promise<PublishedStory[
   if (reports.some(report => !itemById.has(report.source_item_id))) {
     throw new Error("Published reports have unreadable source items");
   }
-  const sourceIds = [...new Set(sourceItems.map(row => row.source_id))];
+  // Retained published items can temporarily have no source row. Do not pass null
+  // through PostgREST's UUID `in` filter, which makes the entire public catalog fail.
+  const sourceIds = [...new Set(sourceItems.map(row => row.source_id).filter((id): id is string => Boolean(id)))];
   const sourceNames = new Map<string, string>();
   for (const ids of batches(sourceIds, LOOKUP_BATCH_SIZE)) {
     const { data, error } = await supabase.from("sources").select("id,name").in("id", ids);
