@@ -1,10 +1,6 @@
 name: NotebookLM cloud podcast
 on:
   workflow_dispatch:
-  schedule:
-    # Mondays 11:00 KST (02:00 UTC). Manual dispatch remains available.
-    # GitHub may delay/drop cron events; verify actual run timestamps.
-    - cron: '0 2 * * 1'
 permissions:
   contents: read
   id-token: write
