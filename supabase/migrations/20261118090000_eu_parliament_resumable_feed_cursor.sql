@@ -2,14 +2,18 @@
 -- the full official API feed to resume and skip unchanged document versions.
 create or replace function private.collector_cloud_cursor_valid(c jsonb,slug text) returns boolean
 language plpgsql immutable set search_path=pg_catalog as $$
-declare field text;
+declare field text; cursor_offset numeric;
 begin
  if c='null'::jsonb then return true; end if;
  if c is null or jsonb_typeof(c)<>'object'
-  or octet_length(c::text)>(case when slug='eu-parliament' then 250000 when slug in ('ec','ec-news') then 50000 else 4000 end)
+  or (slug in ('ec','ec-news') and octet_length(c::text)>50000)
+  or (slug='eu-parliament' and octet_length(c::text)>250000)
   or jsonb_typeof(c->'page') is distinct from 'string'
   or (c->>'page') !~ (case when slug='ftc' then '^https://www[.]ftc[.]gov/' when slug='oecd' then '^https://www[.]oecd[.]org/' when slug='ec' then '^https://ec[.]europa[.]eu/commission/presscorner/' when slug='ec-news' then '^https://commission[.]europa[.]eu/' when slug='eu-parliament' then '^https://data[.]europarl[.]europa[.]eu/api/v2/' when slug='imda' then '^https://www[.]imda[.]gov[.]sg/resources/press-releases-factsheets-and-speeches([?]page=[0-9]+)?$' else '^$' end)
-  or jsonb_typeof(c->'offset') is distinct from 'number' or (c->>'offset') !~ '^[0-9]{1,6}$' then return false; end if;
+  or jsonb_typeof(c->'offset') is distinct from 'number' or (c->>'offset') !~ '^[0-9]+$' then return false; end if;
+ begin cursor_offset=(c->>'offset')::numeric;
+ exception when numeric_value_out_of_range then return false;
+ end;
  if not private.collector_cloud_frozen_cursor_valid(c,slug) then return false; end if;
  foreach field in array array['failures','unknown_dates','excluded_unapproved_host_count'] loop
   if c ? field and (jsonb_typeof(c->field) is distinct from 'number' or (c->>field) !~ '^[0-9]{1,9}$') then return false; end if;
@@ -18,13 +22,13 @@ begin
  if c ? 'fingerprint' and (c->>'fingerprint') !~ '^[0-9a-f]{64}$' then return false; end if;
  if c ? 'snapshot_id' and (c->>'snapshot_id') !~ '^[0-9a-fA-F-]{36}$' then return false; end if;
  if c ? 'processed_url_hashes' then
-  if jsonb_typeof(c->'processed_url_hashes') is distinct from 'array' or jsonb_array_length(c->'processed_url_hashes')>50 then return false; end if;
+  if jsonb_typeof(c->'processed_url_hashes') is distinct from 'array' then return false; end if;
   if exists(select 1 from jsonb_array_elements(c->'processed_url_hashes') h(value)
    where jsonb_typeof(value) is distinct from 'string' or value#>>'{}' !~ '^[0-9a-f]{64}$') then return false; end if;
  end if;
  if c ? 'processed_document_hashes' then
   if slug<>'eu-parliament' or jsonb_typeof(c->'processed_document_hashes') is distinct from 'array'
-   or jsonb_array_length(c->'processed_document_hashes')>4000 then return false; end if;
+   then return false; end if;
   if exists(select 1 from jsonb_array_elements(c->'processed_document_hashes') h(value)
    where jsonb_typeof(value) is distinct from 'string' or value#>>'{}' !~ '^[0-9a-f]{64}$') then return false; end if;
   if (select count(distinct value) from jsonb_array_elements(c->'processed_document_hashes'))<>jsonb_array_length(c->'processed_document_hashes') then return false; end if;

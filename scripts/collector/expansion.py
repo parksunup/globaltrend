@@ -303,7 +303,7 @@ def _bounded_frozen_cursor(cursor,source):
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
     if source=='eu-parliament':
         hashes=cursor.get('processed_document_hashes',[])
-        if (not isinstance(hashes,list) or len(hashes)>4000 or
+        if (not isinstance(hashes,list) or
                 any(not isinstance(value,str) or not re.fullmatch(r'[0-9a-f]{64}',value) for value in hashes) or
                 len(set(hashes))!=len(hashes)):
             raise ValueError('eu_parliament_feed_identity_cursor_invalid')
@@ -372,8 +372,6 @@ def collect_frozen(config,client,store,since,until):
                 identities=[_eu_parliament_feed_identity(row) for row in rows]
                 pending=[(row,identity) for row,identity in zip(rows,identities) if identity not in previous]
                 current_hashes=list(dict.fromkeys(identities))
-                if len(current_hashes)>4000:
-                    raise ValueError('eu_parliament_feed_identity_cursor_capacity_exceeded')
                 if not pending:
                     next_cursor={'page':page,'offset':0,'processed_document_hashes':current_hashes}
                     if nxt:
