@@ -7,7 +7,7 @@ declare
   old_branch text;
   new_branch text;
   old_limit text := 'octet_length(c::text)>4000';
-  new_limit text := 'octet_length(c::text)>case when slug in (''ec'',''ec-news'',''eu-parliament'') then 50000 else 4000 end';
+  new_limit text := 'octet_length(c::text)>(case when slug in (''ec'',''ec-news'',''eu-parliament'') then 50000 else 4000 end)';
   n integer;
 begin
   definition=pg_get_functiondef('private.collector_cloud_cursor_valid(jsonb,text)'::regprocedure);
