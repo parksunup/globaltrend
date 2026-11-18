@@ -161,6 +161,8 @@ class ExpandedCloudResumeTests(unittest.TestCase):
                 'https://data.europarl.europa.eu/api/v2/documents/A-10-2026-0278',{},Client())
         self.assertEqual(item['published_date'],'2026-10-21')
         self.assertTrue(item['metadata']['ai_ready'])
+        self.assertEqual(item['metadata']['pdf_page_count'],1)
+        self.assertNotIn('pdf_pages',item['metadata'])
         self.assertEqual(item['metadata']['date_observations'][-2]['locator'],
                          'European Parliament PDF cover date following the matching document identifier')
 
