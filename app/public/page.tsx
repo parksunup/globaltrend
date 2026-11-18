@@ -10,7 +10,7 @@ import {createClient} from '../../lib/supabase/server';
 import {loadLatestPublicPodcast} from '../../lib/public-podcast';
 import HomePodcastPlayer from './home-podcast-player';
 import HomeVisitorCounts from "./home-visitor-counts";
-import {rankWeeklyCandidates,weeklyPriority} from '../../lib/weekly-priority';
+import {rankWeeklyCandidates} from '../../lib/weekly-priority';
 import {formatMonthlyWeek} from '../../lib/weekly-label';
 
 export const dynamic = "force-dynamic";
@@ -54,7 +54,6 @@ export default async function PublicHome() {
   })));
   const featuredEntry=featuredReportId?rankedWeekly.find(candidate=>candidate.id===featuredReportId)??rankedWeekly[0]:rankedWeekly[0];
   const featured=featuredEntry?.story;
-  const featuredReasons=featuredEntry?weeklyPriority(featuredEntry).reasons:[];
   const timelineStories=featured?stories.filter(story=>story.id!==featured.id):stories;
   const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
@@ -87,7 +86,7 @@ export default async function PublicHome() {
         <p className={styles.featureKicker}>{featured ? `${weeklyStart?formatMonthlyWeek(weeklyStart)+' · ':''}${featuredReportId?'담당자 추천 자료':'주간 동향 중 중요도 우선 자료'}` : "공개된 주간 동향이 없습니다"}</p>
         <h2>{featured ? featured.title : "주간 동향을 준비하고 있습니다"}</h2>
         <h3>{featured ? featured.summary : "작업실에서 주간 동향을 공개하면 이곳에 표시됩니다."}</h3>
-        {featured&&<div className={styles.featureSource}><span>선정 기준</span><b>{featuredReasons.join(' · ')}</b><span>공식 출처</span><b>{featured.institution}</b></div>}
+        {featured&&<div className={styles.featureSource}><span>공식 출처</span><b>{featured.institution}</b></div>}
         <p className={styles.featureBody}>{featured?.details || ""}</p>
         <Link className={styles.featureLink} href={featured ? `/public/trends/${featured.id}` : "/public/search"}>{featured ? "동향 자세히 보기" : "동향 검색 열기"} <span>→</span></Link>
       </article>
