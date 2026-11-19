@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "pipa",
+      "jurisdiction": "KR",
+      "name": "한국 개인정보 보호법",
+      "parser": "korean-html",
+      "url": "https://www.law.go.kr/법령/개인정보보호법",
+      "allowedHosts": [
+        "www.law.go.kr",
+        "law.go.kr"
+      ],
+      "identity": [
+        "개인정보 보호법",
+        "개인정보보호법"
+      ],
+      "minimumArticles": 120,
+      "scope": "공식 현행 안내의 lsiSeq를 확인해 본문을 읽고, 본칙과 부칙의 식별자를 구분합니다. 2026-09-11 선정 원문과 대조하며 부분 시행·시행예정 개정 및 하위법령의 적용은 별도 검토합니다.",
+      "parserVersion": 2,
+      "resolver": "korean-current-body",
+      "baselineUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20260911&ancYnChk=0&chrClsCd=010202",
+      "minimumMainArticles": 120
+    },
+    {
+      "id": "appi",
+      "jurisdiction": "JP",
+      "name": "일본 APPI",
+      "parser": "egov",
+      "url": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057?law_full_text_format=xml",
+      "allowedHosts": [
+        "laws.e-gov.go.jp"
+      ],
+      "identity": [
+        "個人情報の保護に関する法律"
+      ],
+      "minimumArticles": 100,
+      "baselineUrl": "https://laws.e-gov.go.jp/api/2/law_data/415AC0000000057_20261001_507AC0000000070?law_full_text_format=xml",
+      "scope": "현행 본문 위주 점검. 시행예정 개정·하위법령·공식 사이트 밖의 해석 변경은 별도 확인이 필요합니다."
+    },
+    {
+      "id": "pipl",
+      "jurisdiction": "CN",
+      "name": "중국 PIPL",
+      "parser": "chinese-docx",
+      "url": "https://flk.npc.gov.cn/law-search/search/flfgDetails?bbbs=ff8081817b6472a3017b656cc2040044",
+      "allowedHosts": [
+        "flk.npc.gov.cn"
+      ],
+      "identity": [
+        "中华人民共和国个人信息保护法"
+      ],
+      "scope": "NPC 선정 DB 항목의 본문 Word 첨부파일 74개 조문과 공식 목차·유효성 메타데이터를 함께 대조합니다. 새 개정 법률이 별도 DB 항목으로 게시되는 경우 공식 검색에서 추가 확인해야 합니다.",
+      "minimumArticles": 74,
+      "selectedId": "ff8081817b6472a3017b656cc2040044"
+    },
+    {
+      "id": "gdpr",
+      "jurisdiction": "EU",
+      "name": "EU GDPR",
+      "parser": "eu-html",
+      "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj/eng",
+      "allowedHosts": [
+        "eur-lex.europa.eu"
+      ],
+      "identity": [
+        "2016/679",
+        "General Data Protection Regulation"
+      ],
+      "minimumArticles": 90,
+      "scope": "공식 ELI 페이지의 Current consolidated version 링크를 따라 통합 본문 99개 조문을 점검합니다. 연결 실패 시 고정 판본 확보로 구분하며 모든 후속 법률·정오표의 효력과 기존 번역 정확성은 별도 검토합니다.",
+      "fallbackUrl": "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-20160504",
+      "fallbackVersion": "CELEX:02016R0679-20160504 · 고정 공식 통합 판본",
+      "resolver": "eu-current-consolidation"
+    },
+    {
+      "id": "uk-gdpr",
+      "jurisdiction": "GB",
+      "name": "영국 UK GDPR",
+      "parser": "uk-xml",
+      "url": "https://www.legislation.gov.uk/eur/2016/679/data.xml",
+      "allowedHosts": [
+        "www.legislation.gov.uk",
+        "legislation.gov.uk"
+      ],
+      "identity": [
+        "2016/679",
+        "General Data Protection"
+      ],
+      "minimumArticles": 120,
+      "baselineUrl": "https://www.legislation.gov.uk/eur/2016/679/2026-10-16/data.xml",
+      "scope": "본칙 120개 조문 자리의 본문·삭제 표시 점검. 8ZA·12A와 번호 뒤 마침표도 구분하며, 서문·고려사항·부속서는 별도 검토합니다.",
+      "parserVersion": 2
+    },
+    {
+      "id": "ccpa",
+      "jurisdiction": "US-CA",
+      "name": "미국 캘리포니아 CCPA",
+      "parser": "california-pdf",
+      "url": "https://cppa.ca.gov/regulations/",
+      "allowedHosts": [
+        "cppa.ca.gov"
+      ],
+      "identity": [
+        "CALIFORNIA CONSUMER PRIVACY ACT"
+      ],
+      "minimumArticles": 46,
+      "scope": "캘리포니아 감독기관이 현재 안내하는 시행일 도래 법문 PDF 46개 조문을 점검합니다. 주 의회 법전 접근 실패를 대체한 공식 편찬본이며 모든 후속 개정·별도 규칙의 현행성을 보증하지 않습니다.",
+      "baselineUrl": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
+      "additionalDirectCheckNote": "캘리포니아 주 의회 법전의 직접 대조는 2026-11-17 별도 진단에서도 403으로 미완료입니다. 확보한 본문은 감독기관의 공식 편찬 PDF입니다."
+    },
+    {
+      "id": "pdpa",
+      "jurisdiction": "SG",
+      "name": "싱가포르 PDPA",
+      "parser": "singapore-pdf",
+      "url": "https://sso.agc.gov.sg/Act/PDPA2012?ViewType=Pdf",
+      "allowedHosts": [
+        "sso.agc.gov.sg"
+      ],
+      "identity": [
+        "Personal Data Protection Act 2012"
+      ],
+      "minimumArticles": 101,
+      "baselineUrl": "https://sso.agc.gov.sg/Act/PDPA2012?DocDate=20261016&ValidDate=20261016&ViewType=Pdf",
+      "scope": "SSO의 현재 통합 PDF 본칙 90개 조문 단위와 11개 부속표를 점검합니다. PDF 시행 표제와 선정 판본을 구분하며 모든 미시행 개정·하위규칙의 효력을 확정하지 않습니다."
+    }
+  ]
+}

@@ -22,6 +22,7 @@ function render(readOnly,productionOrigin) {
   if(name.endsWith('submission-documents'))return ()=>React.createElement('p',null,'읽을 수 있는 비교표');
   if(name.endsWith('translation-review')||name.endsWith('team-login')||name.endsWith('team-weekly-panel'))return Empty;
   if(name.endsWith('team-trend-publication')||name.endsWith('team-workspace-prompts')||name.endsWith('supabase/client'))return {};
+  if(name.endsWith('legal-watch-notice'))return Empty;
   throw Error(name);
  }});
  return renderToStaticMarkup(React.createElement(exports.default,{role:'legal',readOnly,productionOrigin}));

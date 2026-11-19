@@ -7,7 +7,14 @@
   "source": {
     "original_url": "https://cppa.ca.gov/pdf/20260101_ccpa_statute.pdf",
     "selected_revision_enforcement_date": "2026-01-01 시행 표제 · 2025-12 게시 PDF",
-    "scope_note": "CPPA선정법문66쪽의 제1798.100~1798.199.100조 46개 조문 전문 자체 비공식 번역. PDF에 실린 적용 종료 예외·장래 적용 조문도 종료일·적용일을 포함하여 보존함. 별도 시행규칙·제1798.82조 전문은 범위 밖. 원문 법정 금액은 물가조정 후 실제 적용액과 구별. 일부 원문 교차참조의 정합성 및 주 법전·모든 후속개정 현행성은 미확정. 사람 검수 전. 용어 편집(2026-11-02): 서비스 제공자(service provider)와 계약자(contractor)는 CCPA의 서로 다른 정의를 따른다. 민감정보의 범위도 한국법과 다를 수 있다. 행정상 금전제재와 민사상 제재금을 구별한다. 사람 검수 전."
+    "scope_note": "CPPA선정법문66쪽의 제1798.100~1798.199.100조 46개 조문 전문 자체 비공식 번역. PDF에 실린 적용 종료 예외·장래 적용 조문도 종료일·적용일을 포함하여 보존함. 별도 시행규칙·제1798.82조 전문은 범위 밖. 원문 법정 금액은 물가조정 후 실제 적용액과 구별. 일부 원문 교차참조의 정합성 및 주 법전·모든 후속개정 현행성은 미확정. 사람 검수 전. 용어 편집(2026-11-02): 서비스 제공자(service provider)와 계약자(contractor)는 CCPA의 서로 다른 정의를 따른다. 민감정보의 범위도 한국법과 다를 수 있다. 행정상 금전제재와 민사상 제재금을 구별한다. 사람 검수 전.",
+    "followup_check": {
+      "checked_on": "2026-11-17",
+      "status": "official_body_recovered",
+      "record": "../sources/amendment-review-20261117.json",
+      "human_review_status": "not_started",
+      "full_currentness_verified": false
+    }
   },
   "translation": {
     "language": "ko",

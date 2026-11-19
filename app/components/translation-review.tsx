@@ -71,7 +71,7 @@ export default function TranslationReview({ lawId, title, sections, officialName
     </header>
     <div className={styles.controls}>
       <div className={styles.tabs} role="group" aria-label="번역 범위">
-        {(["main", "supplementary", "appendix", "reference"] as const).map((value) => <button type="button" key={value} aria-pressed={group === value} onClick={() => { setGroup(value); setQuery(""); setSelectedId(sections.find((section) => section.group === value)?.id ?? ""); }}>{groupNames[value]} <span>{counts[value]}</span></button>)}
+        {(["main", "supplementary", "appendix", "reference"] as const).map((value) => <button type="button" key={value} aria-pressed={group === value} onClick={() => { setGroup(value); setQuery(""); setSelectedId(sections.find((section) => section.group === value)?.id ?? ""); }}>{value === "reference" && lawId === "pipa" ? "판본 대조 참고" : groupNames[value]} <span>{counts[value]}</span></button>)}
       </div>
       <label className={styles.search}>조문 또는 본문 검색 <input value={query} onChange={(event) => { setQuery(event.target.value); setSelectedId(""); }} placeholder="예: 제2조, 개인정보" /></label>
     </div>

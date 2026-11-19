@@ -1,0 +1,146 @@
+{
+  "schemaVersion": 1,
+  "checkedOnKst": "2026-11-17",
+  "sourceRunUrl": "https://github.com/parksunup/globaltrend/actions/runs/44055727946",
+  "sourceCommit": "26d8de77f358f7b751482112c94d9b7d0281d76d",
+  "amendmentTextUrl": "https://www.law.go.kr/LSW/lsRvsDocListP.do?chrClsCd=010202&lsId=011357&lsRvsGubun=all",
+  "scope": "참고 규정 9개의 시행예정 본문 해시 대조와 개정문·부칙 시행일 구분. 현행 본문 대체·법률 의미 검수·발행 아님.",
+  "humanReviewStatus": "not_started",
+  "published": false,
+  "plannedSnapshots": [
+    {
+      "id": "pipa-planned-20270309",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "checkedAt": "2026-11-17T09:27:39.428490+00:00",
+      "metadata": {
+        "enforcementLabel": "2027. 3. 9.",
+        "lawNumber": "21910"
+      },
+      "digest": "46f5dc81f733c86cee9babfdce7a118980775007d69fe8f0f1c1d038cf04823b",
+      "mainArticleCount": 131,
+      "supplementaryGroupCount": 14
+    },
+    {
+      "id": "pipa-planned-20270701",
+      "url": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20270701&ancYnChk=0&chrClsCd=010202",
+      "checkedAt": "2026-11-17T09:27:43.198828+00:00",
+      "metadata": {
+        "enforcementLabel": "2027. 7. 1.",
+        "lawNumber": "21445"
+      },
+      "digest": "1a02187d2cb8c68210dd43d43b7c2037b9cba407084ff5ffe9150b747b91c581",
+      "mainArticleCount": 131,
+      "supplementaryGroupCount": 14
+    }
+  ],
+  "references": [
+    {
+      "referenceSectionId": "pending-pipa-제2조",
+      "originalSectionId": "pipa-제2조",
+      "articleId": "main:2",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "942fa9759119038df6972cddad818517d36690f0f6ab0e4fb325ea73142ac003",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pending-pipa-제7조의9",
+      "originalSectionId": "pipa-제7조의9",
+      "articleId": "main:7-9",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "04c4c6f51767c80cbb5bb5a6186d5dcac062eb2bc1482a979b67040eb6bcdd7d",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pipa-제28조의12",
+      "originalSectionId": "pipa-제28조의12",
+      "articleId": "main:28-12",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "c2aaf4dea65c56045e9682ce762322e89008ec8b3d28857fed1d76a371f9cb2a",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pipa-제28조의13",
+      "originalSectionId": "pipa-제28조의13",
+      "articleId": "main:28-13",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "4c997b12bcc5df99817ddc3cd8b75aae1bc833360e47b4f7b015ef85f5bcb8a6",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pipa-제28조의14",
+      "originalSectionId": "pipa-제28조의14",
+      "articleId": "main:28-14",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "fa844f989d44c002ce803c1d21de9de1a84e1a0d9d30c4597f9109e6e6fedaa6",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pipa-제28조의15",
+      "originalSectionId": "pipa-제28조의15",
+      "articleId": "main:28-15",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "3eb7896b7a37c75cfa864269a3d7864098bf9abd89daddb47cf6cb47c81e2274",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pending-pipa-제32조의2",
+      "originalSectionId": "pipa-제32조의2",
+      "articleId": "main:32-2",
+      "effectiveDate": "2027-07-01",
+      "amendingLawNumber": "21445",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20270701&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "3ed0569ae077f97b5349199528923422bc02e728d76dcae7f4c57f4dee360691",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "인증 의무(제32조의2 제1항 단서)와 해당 위반 과태료(제75조 제2항 제15호)의 시행일 예외"
+    },
+    {
+      "referenceSectionId": "pending-pipa-제37조의2",
+      "originalSectionId": "pipa-제37조의2",
+      "articleId": "main:37-2",
+      "effectiveDate": "2027-03-09",
+      "amendingLawNumber": "21910",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=289415&efYd=20270309&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "07a383a264c6ec250ceacd6bab635e2792c60b7a34b94de0787c0333bb51be64",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "AI 관련 정의·위원회 심의·이용 특례 및 자동화된 결정 표기 개정"
+    },
+    {
+      "referenceSectionId": "pending-pipa-제75조",
+      "originalSectionId": "pipa-제75조",
+      "articleId": "main:75",
+      "effectiveDate": "2027-07-01",
+      "amendingLawNumber": "21445",
+      "sourceUrl": "https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq=283839&efYd=20270701&ancYnChk=0&chrClsCd=010202",
+      "sourceHash": "c4bf9bba5efa4ce7550692056ed58eeb380bcfd280df76b88357367ba8188aaf",
+      "humanReviewStatus": "not_started",
+      "normalizedTextMatches": true,
+      "amendmentScope": "인증 의무(제32조의2 제1항 단서)와 해당 위반 과태료(제75조 제2항 제15호)의 시행일 예외"
+    }
+  ]
+}

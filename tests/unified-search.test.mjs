@@ -9,6 +9,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import ts from 'typescript';
 import {parseSearchFilters,rankPublicDocuments,searchHref,quickSearchQuestions,normalizeSearchText} from '../lib/unified-search.ts';
 import {semanticSearch} from '../lib/search-semantic-provider.ts';
+import {loadOfficialPipa} from '../lib/official-pipa.ts';
 const require=createRequire(import.meta.url);
 const doc=(extra={})=>({id:'article:gdpr:main-a3',kind:'article',title:'제3조 적용 범위',text:'EU 역외 적용의 조건과 예외를 확인한다.',url:'/public/laws/gdpr#main-a3',jurisdictions:['EU'],tags:['GDPR'],date:'',version:'2016-05-04 선정 판본',sourceUrl:'https://eur-lex.europa.eu/',lawId:'gdpr',lawTitle:'GDPR',...extra});
 const trend=doc({id:'trend:one',kind:'trend',title:'아동 개인정보 안내',text:'미성년자 연령 확인 안내',jurisdictions:['KR'],tags:['아동'],date:'2026-11-08',url:'/public/trends/61000000-0000-4000-8000-000000000001',lawTitle:undefined});
@@ -122,4 +123,16 @@ test('official Korean PIPA does not remove other newly published Korean laws',as
  const previousUrl=process.env.NEXT_PUBLIC_SUPABASE_URL,previousKey=process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
  process.env.NEXT_PUBLIC_SUPABASE_URL='http://127.0.0.1:4295';process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY='offline-test';
  try{const corpus=await load.loadPublishedLegalForSearch();assert.deepEqual(Array.from(corpus.documents,law=>law.id),['pipa','pipa-decree']);assert.equal(corpus.documents[0].title,official.title);}finally{if(previousUrl===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_URL;else process.env.NEXT_PUBLIC_SUPABASE_URL=previousUrl;if(previousKey===undefined)delete process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;else process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=previousKey;}
+});
+
+test('edition references remain readable without being indexed as verified current legislation',()=>{
+ const law=loadOfficialPipa();
+ const {publicSearchDocuments}=loader({'./published-trends':{},'./public-legal':{}})('lib/unified-search-data.ts');
+ const references=law.sections.filter(section=>section.reviewStatus==='source_verification_pending');
+ assert.equal(references.length,9);
+ const documents=publicSearchDocuments([],{cells:[],instruments:[],documents:[law]});
+ assert.ok(documents.some(document=>document.id==='article:pipa:pipa-제1조'));
+ assert.ok(references.every(section=>!documents.some(document=>document.id===`article:pipa:${section.id}`)));
+ assert.equal(law.sections.filter(section=>section.group==='reference').length,9);
+ assert.ok(references.some(section=>section.lines.some(line=>line.text.includes('인공지능기술'))));
 });

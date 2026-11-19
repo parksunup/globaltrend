@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "scope": "7개 법률의 후속 시도 이력. 최신 보고서는 initial-report.json이며 과거 실패를 삭제하지 않음.",
+  "runs": [
+    {
+      "generatedAt": "2026-11-17T01:46:48.326640+00:00",
+      "sourceCommit": "3c6314cd4257d60a557ca82b6c092f94d1ea7938",
+      "laws": [
+        {
+          "id": "pipa",
+          "status": "error",
+          "error": "http_502",
+          "articleCount": null,
+          "coverage": null
+        },
+        {
+          "id": "appi",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 253,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pipl",
+          "status": "baseline",
+          "error": null,
+          "articleCount": 74,
+          "coverage": "article_text"
+        },
+        {
+          "id": "gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 99,
+          "coverage": "article_text"
+        },
+        {
+          "id": "uk-gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 120,
+          "coverage": "article_text"
+        },
+        {
+          "id": "ccpa",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 46,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pdpa",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 101,
+          "coverage": "article_text"
+        }
+      ]
+    },
+    {
+      "generatedAt": "2026-11-17T01:56:34.706220+00:00",
+      "sourceCommit": "01cfa9dad6f202cd83f26dd87fac6adfaab26228",
+      "laws": [
+        {
+          "id": "pipa",
+          "status": "error",
+          "error": "http_503",
+          "articleCount": null,
+          "coverage": null
+        },
+        {
+          "id": "appi",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 253,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pipl",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 74,
+          "coverage": "article_text"
+        },
+        {
+          "id": "gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 99,
+          "coverage": "article_text"
+        },
+        {
+          "id": "uk-gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 120,
+          "coverage": "article_text"
+        },
+        {
+          "id": "ccpa",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 46,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pdpa",
+          "status": "error",
+          "error": "http_202",
+          "articleCount": null,
+          "coverage": null
+        }
+      ]
+    },
+    {
+      "generatedAt": "2026-11-17T01:59:03.951393+00:00",
+      "sourceCommit": "73cd326e1f7260570cf78e8fab3d55d25434622a",
+      "laws": [
+        {
+          "id": "pipa",
+          "status": "error",
+          "error": "http_503",
+          "articleCount": null,
+          "coverage": null
+        },
+        {
+          "id": "appi",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 253,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pipl",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 74,
+          "coverage": "article_text"
+        },
+        {
+          "id": "gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 99,
+          "coverage": "article_text"
+        },
+        {
+          "id": "uk-gdpr",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 120,
+          "coverage": "article_text"
+        },
+        {
+          "id": "ccpa",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 46,
+          "coverage": "article_text"
+        },
+        {
+          "id": "pdpa",
+          "status": "unchanged",
+          "error": null,
+          "articleCount": 101,
+          "coverage": "article_text"
+        }
+      ]
+    }
+  ],
+  "singaporeSingleRetry": {
+    "status": "success",
+    "articleCount": 101,
+    "version": "16/10/2026"
+  }
+}

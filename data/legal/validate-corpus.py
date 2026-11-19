@@ -31,7 +31,7 @@ def walk(node):
             yield from walk(child)
 
 
-def validate(source_path=None, pipa_source_path=None):
+def validate(source_path=None, pipa_source_path=None, appi_only=False):
     document = json.loads((BASE / "translations/appi.json").read_text())
     nodes = document["provisions"]
     by_id = {node["node_id"]: node for node in nodes}
@@ -204,6 +204,11 @@ def validate(source_path=None, pipa_source_path=None):
                       and original_cell["attr"] == saved_cell["source_attributes"],
                       f"공식 원문 표 셀 순서·내용 해시·속성 불일치: {saved_cell['node_id']}")
 
+    if appi_only:
+        check(source_path is not None, "APPI 전용 대조에는 공식 원문 파일이 필요합니다.")
+        print(f"APPI 원문 전체 구조·해시·순서·번역 노드 대조 통과: {len(nodes)}개 노드. 사람 검수 미완료.")
+        return
+
     with (BASE / "criteria-mapping.csv").open() as stream:
         cells = list(csv.DictReader(stream))
     pipa_index = json.loads((BASE / "sources/pipa-index.json").read_text())
@@ -319,5 +324,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--appi-source", type=Path)
     parser.add_argument("--pipa-source", type=Path)
+    parser.add_argument("--appi-only", action="store_true", help="공식 APPI 전체 구조 대조만 실행. 공통 데이터 검사는 npm run validate:data로 별도 실행")
     args = parser.parse_args()
-    validate(args.appi_source, args.pipa_source)
+    validate(args.appi_source, args.pipa_source, args.appi_only)

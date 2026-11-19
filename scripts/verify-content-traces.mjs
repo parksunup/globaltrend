@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-const routes=['public/unified-search','public/laws','public/laws/[lawId]','work/new/law','work','legal-translation','legal-translation/[lawId]'];
+const routes=['work/legal-updates','public/unified-search','public/laws','public/laws/[lawId]','work/new/law','work','legal-translation','legal-translation/[lawId]'];
 for(const route of routes){
  const trace=JSON.parse(readFileSync(`.next/server/app/${route}/page.js.nft.json`,'utf8'));
  for(const file of ['data/derived/gdpr.json',...['appi','pipl','uk-gdpr','ccpa','pdpa'].map(id=>`data/legal/translations/${id}.json`)]){
@@ -13,3 +13,5 @@ for(const route of ['','team','public','public/search','public/unified-search','
  assert.ok(trace.files.some(path=>path.replaceAll('\\','/').endsWith('/data/trends/editorial/report-drafts.json')),`${route||'/'}: missing report editorial collection`);
 }
 console.log('Verified: edited trend collection is included in all search, detail, weekly and worker bundles.');
+
+for(const route of ['work/legal-updates/page','api/legal-updates/status/route']){const trace=JSON.parse(readFileSync(`.next/server/app/${route}.js.nft.json`,'utf8'));for(const file of ['data/legal-watch/initial-report.json','config/legal-watch/sources.json'])assert.ok(trace.files.some(path=>path.replaceAll('\\','/').endsWith('/'+file)),`${route}: missing legal watch metadata ${file}`);}
