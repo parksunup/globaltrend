@@ -95,7 +95,7 @@ function summary(id: string, corpus: Corpus): LegalTranslationSummary {
   return {
     id,
     jurisdiction: typeof corpus.jurisdiction_code === "string" ? corpus.jurisdiction_code : "",
-    title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역 초안`,
+    title: typeof corpus.korean_title === "string" && corpus.korean_title.trim() ? corpus.korean_title.trim() : `${id.toUpperCase()} 한국어 번역`,
     officialName: typeof corpus.official_name === "string" && corpus.official_name.trim() ? corpus.official_name.trim() : id.toUpperCase(),
     version: corpus.source?.selected_revision_enforcement_date || "판본 확인 필요",
     reviewStatus: corpus.translation?.human_review_status || "검토 필요",
