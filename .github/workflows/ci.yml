@@ -49,6 +49,11 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm build
       - run: node scripts/verify-content-traces.mjs
+      - name: Build ChatGPT advisor desktop app
+        working-directory: apps/business-advisor-desktop
+        run: |
+          npm ci --ignore-scripts
+          npm run build
 
   database:
     runs-on: ubuntu-latest
