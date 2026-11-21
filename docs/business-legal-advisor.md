@@ -1,49 +1,51 @@
-# 기업 개인정보 보호 도우미 앱
+# 기업 개인정보 상담 앱
 
 ## 사용자가 원하는 방식
 
-국제요정에서 앱을 내려받아 실행하고, 질문을 살펴본 뒤 자기 ChatGPT 계정을 연결해 사용하는 데스크톱 앱입니다. ChatGPT 프로그램 설치는 필요하지 않습니다. 계정 연결은 시스템 브라우저에서 사용자가 직접 승인합니다. 앱은 이용자의 ChatGPT 연결로 모델에 질문하고, 공개된 법제 자료와 상담 사례를 근거로 답변과 출처를 보여줍니다.
+사용자는 국제요정 사이트에서 앱을 내려받고, 자기 ChatGPT 계정을 연결한 뒤 궁금한 점을 자유롭게 물어봅니다. 앱은 **검색결과를 나열하는 통합검색 서비스가 아닙니다.** 국제요정의 질문은행·기업 안내서·상담사례·공개 법제 및 동향 자료를 내부에서 찾아, 사용자의 현재 질문과 대화 흐름에 맞게 자연어로 답하는 상담 앱입니다. 매 답변마다 웹 검색을 기본으로 실행해 최신 자료도 함께 확인합니다.
 
-## 이음오피스에서 가져온 연결 구조
-
-이음오피스 저장소 `pblsketch/openoffice`의 직접 ChatGPT 연결 모듈을 기준으로 합니다. 해당 구현은 Apache-2.0 라이선스이며, 상류 커밋은 `92e0022e98d2cfb0734ec381d8b32a3274fb055f`입니다.
-
-- OAuth PKCE와 state/nonce 검증
-- 시스템 브라우저에서 ChatGPT 계정 승인
-- 로컬 `127.0.0.1` 콜백으로 앱 복귀
-- ID 토큰 서명·발급자·대상 확인
-- 갱신·연결 해제·접근권한 거부 처리
-- 이용자 계정 권한을 사용해 공개 Responses API 호출
-
-상류의 `oauth.ts`, `connection.ts`, `credentials.ts`를 앱의 `src/vendor/ieumoffice-chatgpt/`로 가져오고 라이선스·NOTICE를 함께 보관합니다. Electron main process가 연결 토큰과 API 요청을 관리하고, renderer에는 필요한 IPC만 노출합니다. 토큰은 Electron `safeStorage`로 OS 보안 저장소에 봉인하며 안전한 저장소를 쓸 수 없으면 연결을 시작하지 않습니다. Codex 로그인 파일이나 브라우저 쿠키는 읽지 않습니다.
-
-## 현재 구현 상태
+## 현재 구현
 
 - 앱 위치: `apps/business-advisor-desktop/`
-- 로컬 앱 빌드와 실행 명령은 해당 폴더의 README를 따릅니다.
-- OAuth 화면, 연결 상태, 연결 해제, 질문 UI와 Responses API 호출을 구현했습니다.
-- `store: false`로 요청하지만, 이것만으로 앱 전체의 개인정보 처리 검토가 완료되는 것은 아닙니다.
-- 사람 검수 완료된 7개 법제 번역을 자가진단 데이터와 연결했습니다. 새로 만든 자가진단 질문·조항 간 연결은 별도로 검토할 항목입니다.
-- **법제 근거를 답변에 붙이는 연결**은 앱이 발행 자료를 읽고, 선택된 관할의 근거를 질문과 함께 보내고, 답변에 인용을 표시하는 작업입니다. 근거를 찾지 못하면 법률 답변 생성으로 넘어가지 않아야 합니다.
-- 공개 상담 사례집은 현재 저장소에서 이용 가능한 자료를 확인해야 합니다. 이용할 수 있는 사례집이 없으면 법령 설명과 사례집을 이미 학습했다고 말하지 않습니다.
-- Windows x64 ZIP 패키징과 `business-advisor-v*` 태그 기반 GitHub Release 자동 게시 workflow를 추가했습니다. 국제요정 다운로드 페이지도 실제 공개 Release asset만 표시하도록 연결했습니다.
-- 현재 공개 Release asset은 아직 없으므로 웹사이트에서 내려받을 파일은 없습니다. 앱 PR 검토·병합 후 버전 태그를 발행하면 workflow가 ZIP을 올리고 다운로드 페이지가 링크를 표시합니다.
-- 실제 사용자 계정으로 로그인·권한 동의·요청·토큰 만료/폐기까지 끝까지 확인하기 전에는 실계정 연결 완료라고 표시하지 않습니다. 설치파일도 아직 코드 서명되지 않았습니다.
+- 대화 UI는 국가 선택을 선행조건으로 두지 않고, 사용자가 지역·상황을 문장에 적어 이어서 묻습니다.
+- 연결된 계정의 모델 목록을 불러와 선택할 수 있으며, Responses API 요청은 `store: false`로 보냅니다.
+- 웹 검색은 매 답변의 기본 과정입니다. 연결 계정이나 선택한 모델에서 웹 검색을 지원하지 않으면 내부 자료만으로 자동 대체하지 않고, 웹 검색이 가능한 설정으로 다시 연결하도록 오류를 안내합니다.
+- 자가점검 결과 화면에서 사용자가 상담 버튼을 누르면 선택 지역의 답변 수와 보완 항목만 딥링크로 데스크톱 앱에 전달합니다. 결과는 사이트 DB에 저장하지 않고 앱 실행 중 메모리에서만 보관합니다. 준비 완료 답변과 ‘해당 없음’ 사유는 전송하지 않습니다.
+- 답변 아래에 웹 인용과 해당 국제요정 자료 인용을 따로 보여주며, 참고한 발췌도 열어볼 수 있습니다.
+- 대화 이력은 앱 실행 중 메모리에만 있습니다. 사이트 DB나 앱 서버에 저장하지 않습니다.
+- API는 답변 생성을 위한 내부 자료 조회만 합니다. 팀 작업실의 비공개·미발행 자료에는 접근하지 않습니다.
+- 자료범위와 답변 흐름은 [`business-advisor/conversation-app.md`](business-advisor/conversation-app.md)에 정리했습니다.
 
-## 자료 기반 응답 원칙
+## 상담에 연결된 자료
 
-1. 사용자가 선택한 국가·주제에 맞는 발행된 공식 법령, 공개 설명자료와 이용 가능한 상담 사례를 찾습니다.
-2. 모델에 보내는 근거에는 제목, 기관·관할, 판본·게시일, 조항·문단 위치, 원문 링크를 포함합니다.
-3. 답변은 근거의 적용 범위 안에서 작성하고, 사실관계가 달라지면 결과가 달라지는 부분을 분리합니다.
-4. 인용한 각 근거를 사용자가 직접 열어 볼 수 있게 표시합니다.
-5. 근거가 없거나 연결 서비스가 실패하면 근거 없음 상태를 알리고 법률 답변을 만들어내지 않습니다.
-6. 사용자가 입력한 상담 내용을 로그에 남기지 않습니다. 저장이 필요하면 그 동의·보유기간·삭제 방법을 별도로 설계합니다.
+`/api/business-advisor/chat-context`에서 다음 자료 전체를 내부 검색 대상으로 사용합니다.
 
-## 자료 출처 및 공식 문서
+1. 일본·중국·EU·영국·캘리포니아·싱가포르 6개 관할의 자가점검 질문은행(현재 129개 문항).
+2. `docs/business-advisor/guides/`의 관할별 기업 안내서 6개.
+3. `docs/business-advisor/references/`에 보존한 사용자 제공 PDF 3종의 전체 Markdown 변환본: 중국 기업 규제대응 안내서, EU GDPR 안내서, 해외 개인정보보호 상담사례집.
+4. `docs/jurisdiction-specific-self-assessments-2026-11.md`의 질문 설계와 공통 범주 누락 점검 기록.
+5. `loadPublicSearchCorpus()`가 제공하는 공개 동향, 발행 법제 번역, 발행된 법제 비교 자료.
 
-- [IeumOffice/OpenOffice 소스 저장소](https://github.com/pblsketch/openoffice)
-- [OpenAI Sign in with ChatGPT 안내](https://developers.openai.com/siwc/quickstart)
-- [오픈소스 앱에서 ChatGPT plan 사용](https://developers.openai.com/siwc/token-sharing-open-source)
-- [Sign in with ChatGPT의 오픈소스 통합 안내](https://developers.openai.com/cookbook/articles/sign-in-with-chatgpt)
-- [OpenAI 앱 사용 및 연결 안내](https://help.openai.com/en/articles/20001542-using-your-chatgpt-plan-in-other-apps-and-sites)
+정적 자료는 배포 파일 추적 목록에 명시해 서버리스 API에서도 읽을 수 있게 했습니다. 공개 DB에 연결할 수 없을 때도 저장소에 포함된 안내서·자가점검·PDF 변환본으로 대화를 이어가며, 발행 자료 연결이 끊긴 상태를 답변 아래에 알립니다. 정적 원문 파일이 빠진 경우에는 일부만 조용히 건너뛰지 않고 API 오류로 처리합니다.
 
+## 계정 연결과 개인정보
+
+이음오피스/OpenOffice의 Apache-2.0 Sign in with ChatGPT 연결을 바탕으로 OAuth PKCE, state/nonce 검증, 로컬 loopback 콜백, 토큰 갱신과 폐기를 사용합니다. 토큰은 Electron `safeStorage`로 OS 보안 저장소에 보호합니다. 앱은 비밀번호·브라우저 쿠키·Codex 로그인 파일을 읽지 않습니다. 원본과 라이선스 고지는 `apps/business-advisor-desktop/THIRD-PARTY-NOTICE.md`와 `third-party/`를 확인하세요.
+
+사용자가 입력한 질문·대화 맥락·관련 발췌문은 답변 생성을 위해 사용자의 ChatGPT 연결로 전송됩니다. `store: false`는 요청 저장 옵션이며, OpenAI의 계정·요금제·데이터 처리 조건 전체를 대체하지 않습니다. 로그인 연결, 실제 계정 모델 사용, 웹 검색 허용 여부는 계정·조직·모델 정책에 따라 다를 수 있습니다.
+
+## 공개·검증 상태
+
+- Windows 앱 빌드와 Next.js 프로덕션 빌드·타입검사를 확인했습니다.
+- 실제 ChatGPT 사용자 계정 로그인, 대화 응답, 모델 사용, 웹 검색 성공 여부는 계정이 연결된 실환경에서 아직 확인하지 않았습니다. 실계정 동작까지 검증했다고 주장하지 않습니다.
+- 코드 서명된 Windows 설치파일 또는 공개 GitHub Release는 아직 만들지 않았습니다. 기존 다운로드 페이지는 실제 Release ZIP이 생길 때만 다운로드 링크를 노출합니다.
+- ChatGPT 연결 전에는 질문을 보낼 수 없습니다. 연결을 위해 시스템 브라우저에서 사용자가 로그인·승인을 해야 합니다.
+- 답변은 참고용 일반 정보이며 법률 자문·법적 준수 판정·인증이 아닙니다. 인용된 공식 원문과 시행 시점을 확인해야 합니다.
+
+## 관련 설계 문서와 공식 출처
+
+- [`docs/business-advisor/conversation-app.md`](business-advisor/conversation-app.md)
+- [`docs/jurisdiction-specific-self-assessments-2026-11.md`](jurisdiction-specific-self-assessments-2026-11.md)
+- [OpenAI Sign in with ChatGPT quickstart](https://developers.openai.com/siwc/quickstart)
+- [OpenAI Sign in with ChatGPT: models and inference](https://developers.openai.com/siwc/token-sharing-open-source/models-and-inference)
+- [OpenAI Help: Using your ChatGPT plan in other apps and sites](https://help.openai.com/en/articles/20001542-using-your-chatgpt-plan-in-other-apps-and-sites)

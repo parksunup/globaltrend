@@ -19,6 +19,12 @@
   "build": {
     "appId": "org.globaltrend.business-advisor",
     "productName": "GlobalTrend 기업 개인정보 보호 도우미",
+    "protocols": [
+      {
+        "name": "GlobalTrend 자가점검 상담 연결",
+        "schemes": ["globaltrend-advisor"]
+      }
+    ],
     "directories": {
       "output": "release"
     },

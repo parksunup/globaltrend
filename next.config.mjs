@@ -3,6 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
     "/api/podcast/extension": ["./extensions/notebooklm-bridge/*"],
+    "/api/business-advisor/chat-context": ["./docs/business-advisor/guides/*.md", "./docs/business-advisor/references/*.md", "./data/business-readiness/questions/*.json", "./docs/jurisdiction-specific-self-assessments-2026-11.md"],
     "/": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/team": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/public": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],

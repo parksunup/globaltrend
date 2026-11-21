@@ -35,7 +35,7 @@ export default async function BusinessAdvisorDownloadPage() {
     <section className={styles.hero}>
       <p className={styles.kicker}>GLOBALTREND BUSINESS ADVISOR</p>
       <h1>기업 개인정보 보호 도우미</h1>
-      <p className={styles.lede}>ChatGPT 계정을 앱에 직접 연결해, 해외 개인정보 보호 법제의 발행 근거를 찾아보는 데스크톱 앱입니다.</p>
+      <p className={styles.lede}>ChatGPT 계정을 앱에 연결하고 궁금한 점을 자연어로 물어보세요. 국제요정의 기업 안내서·상담사례·자가점검·공개 법제와 동향 자료를 참고하며, 매 답변에서 웹 검색도 함께 활용해 대화합니다.</p>
     </section>
     <section className={styles.card}>
       {unavailable ? <>
@@ -62,7 +62,7 @@ export default async function BusinessAdvisorDownloadPage() {
     </section>
     <section className={styles.details}>
       <h2>사용 방법</h2>
-      <ol><li>Windows용 앱 파일을 내려받아 압축을 풉니다.</li><li>앱을 실행하고 ChatGPT 계정을 연결합니다. 로그인은 시스템 브라우저에서 진행됩니다.</li><li>확인할 국가를 고르고 질문을 입력합니다. 발행 자료에서 근거를 찾은 경우에만 ChatGPT에 답변을 요청합니다.</li></ol>
+      <ol><li>Windows용 앱 파일을 내려받아 압축을 풉니다.</li><li>앱을 실행하고 ChatGPT 계정을 연결합니다. 로그인은 시스템 브라우저에서 진행됩니다.</li><li>궁금한 점과 국가·사업 상황을 편하게 적어 대화를 이어갑니다. 질문마다 국가를 미리 고를 필요는 없습니다.</li></ol>
       <p>ChatGPT 프로그램 설치는 필요하지 않습니다. 앱은 Codex 로그인이나 브라우저 쿠키를 읽지 않습니다. 답변은 일반 정보이며 법률 자문이나 법적 준수 판정이 아닙니다.</p>
       <p><Link href="/public/business-readiness">기업 개인정보 자가점검으로 돌아가기 →</Link></p>
     </section>

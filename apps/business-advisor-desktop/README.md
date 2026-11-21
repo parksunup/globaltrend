@@ -1,40 +1,52 @@
-# GlobalTrend 기업 개인정보 보호 도우미 데스크톱 앱
+# GlobalTrend 기업 개인정보 보호 도우미
 
-기업용 상담 도우미를 제공하는 별도 Electron 앱 시제품입니다. 사용자는 본인의 ChatGPT 계정으로 연결하고, 앱은 국제요정의 공개 법령 근거를 먼저 검색한 뒤 근거가 있을 때만 ChatGPT Responses API에 질문과 출처를 전달합니다.
+국제요정에서 내려받아 사용하는 Windows 데스크톱 대화형 상담 앱입니다. 사용자는 ChatGPT 계정을 연결한 뒤, 미리 검색식을 만들거나 자료를 고를 필요 없이 자연어로 궁금한 점을 묻고 후속 질문을 이어갈 수 있습니다. 이 앱은 통합검색 화면이 아닙니다.
 
-## 실행
+## 상담 흐름
+
+1. 앱에서 본인 ChatGPT 계정을 연결합니다. 로그인은 시스템 브라우저에서 진행되며 앱은 비밀번호를 받지 않습니다.
+2. 앱은 현재 대화와 질문을 이용해 국제요정 공개 자료 전체에서 관련 대목을 찾습니다. 검색 결과 목록은 별도 화면으로 보여주지 않고 답변을 만들 내부 참고자료로만 씁니다.
+3. 내부 참고자료에는 관할별 최종 자가점검 질문은행 6개, 기업용 안내서 6개, 사용자가 제공한 PDF 3종의 Markdown 변환본, 공개 동향·법제 번역·비교 자료가 포함됩니다. 공개 DB 연결이 없는 경우에도 저장소의 안내서·자가점검·변환본은 이용할 수 있습니다.
+4. ChatGPT Responses API에 질문·대화 이력·관련 근거를 보내 자연스러운 한국어 답변을 만들고, 매 답변에서 Responses API 웹 검색 도구로 최신 정보를 함께 확인합니다. 사용 가능한 모델은 연결된 계정에서 확인해 선택할 수 있습니다.
+5. 답변 아래에는 인용한 국제요정 자료와 웹 출처를 따로 표시합니다. 찾은 자료가 일부에 그쳐도 답할 수 있는 사실을 먼저 설명하고, 확인하지 못한 범위만 구분하도록 지시합니다.
+
+국제요정 자료 검색은 대화형 답변을 위한 내부 검색(RAG)입니다. 사용자가 검색어·필터를 조합하거나 결과를 훑는 통합검색 제품을 추가하는 것이 아닙니다. 대화 이력은 현재 앱 실행 중 메모리에만 두며 서버에 저장하지 않습니다. Responses 요청은 `store: false`로 보냅니다.
+
+## 개발 실행
 
 ```sh
 npm install
 npm start
 ```
 
-Windows 64비트 배포용 ZIP은 다음 명령으로 만들 수 있습니다.
+Windows 64비트 배포용 ZIP:
 
 ```sh
 npm run dist:win
 ```
 
-결과는 `release/GlobalTrend-Business-Advisor-<version>-Windows-x64.zip`에 생성됩니다. 이 파일은 아직 코드 서명되지 않으며 Git에는 추가하지 않습니다. GitHub Actions는 `business-advisor-v<version>` 형식의 태그를 명시적으로 push할 때만 빌드하고 GitHub Release에 ZIP을 게시합니다. 공개 버전이 실제로 생긴 뒤 국제요정의 `/public/business-advisor-download` 페이지가 GitHub Releases API에서 파일을 찾아 다운로드 링크를 보여줍니다.
+출력은 `release/GlobalTrend-Business-Advisor-<version>-Windows-x64.zip`입니다. 코드 서명은 아직 구성되지 않았습니다. GitHub Actions는 `business-advisor-v*` 태그를 push할 때 빌드하고 Release에 게시합니다.
 
-이 연결은 IeumOffice의 **Sign in with ChatGPT** 구조를 따릅니다. 사용자가 시스템 브라우저에서 이 로컬 앱을 ChatGPT 계정에 직접 허용하고, 앱은 자체 OAuth 토큰으로 OpenAI 공개 Responses API를 호출합니다. Codex 프로그램이나 CLI를 실행하지 않고, Codex 로그인 파일도 읽지 않습니다. Claude Code 구독 로그인과도 별도 경로이며 이 앱에는 포함하지 않았습니다.
+## ChatGPT 계정 연결
 
-OAuth 흐름(PKCE, state/nonce, 127.0.0.1 loopback 콜백, ID 토큰 검증, ChatGPT 요금제 권한 확인, 토큰 갱신·폐기)은 IeumOffice/OpenOffice의 Apache-2.0 구현에서 가져왔습니다. 이 앱은 Electron `safeStorage`를 이용해 OS 보안 저장소에 토큰을 봉인하며, 보안 저장소가 없거나 Linux의 `basic_text` backend면 연결을 거부합니다. 출처 및 라이선스는 `THIRD-PARTY-NOTICE.md`와 `third-party/`를 참고하세요.
+이음오피스의 Sign in with ChatGPT 구조를 따라 OAuth PKCE, 로컬 loopback 콜백, ID 토큰 검증, 토큰 갱신·폐기와 접근권한 확인을 사용합니다. 모델 요청은 앱 사용자의 OAuth 토큰으로 이루어지며, 앱에 OpenAI API 키를 넣지 않습니다. 토큰은 Electron `safeStorage`의 OS 보안 저장소로 보호합니다. 안전한 저장소를 사용할 수 없으면 로그인을 시작하지 않습니다.
 
-질문은 먼저 공개 사이트의 근거 API로 전송됩니다. API는 현재 발행 중인 법령 자료에서 관련 조항을 검색하고 `published` 또는 `official`인 자료만 반환합니다. Electron main process는 반환된 근거가 있을 때에만 질문과 근거를 Responses API로 전송하고 `store: false`를 요청합니다. 근거가 없거나 API에 연결하지 못하면 모델에 질문을 보내지 않습니다. 답변은 `[1]` 형식으로 근거를 인용하고, 앱에는 공식 원문 링크를 함께 표시합니다. 이 플래그는 별도 개인정보 영향 검토를 대체하지 않습니다.
+웹 검색은 모든 답변에서 기본으로 실행하며, 국제요정 저장 자료와 함께 종합합니다. 연결된 계정이나 선택한 모델에서 웹 검색을 지원하지 않으면 내부 자료만으로 조용히 대체하지 않고 오류를 안내합니다. 웹 검색이 실행되어도 법령의 현행 효력이 자동으로 보증되지는 않으므로, 공식 원문 링크와 시행일을 확인해야 합니다.
 
-기본 근거 API 주소는 `https://globaltrend-six.vercel.app/api/business-advisor/evidence`입니다. Preview 배포를 시험할 때는 실행 전에 `GLOBALTREND_EVIDENCE_API_URL` 환경변수에 해당 배포의 `/api/business-advisor/evidence` 주소를 설정합니다. Responses API 모델 기본값은 `gpt-5-mini`이며, 바꾸려면 `GLOBALTREND_CHATGPT_MODEL` 환경변수에 계정에서 사용할 수 있는 모델 ID를 지정합니다.
+자가점검 웹 결과 화면에서 앱으로 연결할 때는 `globaltrend-advisor://assessment` 딥링크로 선택 지역의 요약과 보완 항목을 전달합니다. 앱은 이를 실행 중 메모리에서만 유지하고 ChatGPT 대화 맥락으로 사용합니다. 웹 사이트에는 자가점검 답변을 저장하지 않습니다.
 
-웹 API는 공개 발행 자료용 Supabase 설정이 있어야 근거를 찾을 수 있습니다. 저장소 연결이 설정되지 않은 배포는 이유를 표시하고 질문에 대한 법률 답변 생성을 중단합니다. API 운영 환경이 올바른 프로젝트를 보고 있는지와 공개 자료가 들어있는지는 배포 뒤 별도로 확인해야 합니다.
+## 서버 자료 API
 
-## 아직 확인하지 않은 사항
+기본 주소는 `https://globaltrend-six.vercel.app/api/business-advisor/chat-context`입니다. Preview 환경에서는 `GLOBALTREND_CHAT_CONTEXT_API_URL`로 같은 API의 Preview URL을 지정할 수 있습니다. API는 대화형 답변을 만들 내부 근거를 찾아 앱에 돌려줍니다. 사용자에게 별도 검색결과 화면을 제공하지 않으며 비공개 팀 원고나 미발행 자료는 읽지 않습니다.
 
-- 실제 OpenAI 계정으로 로그인·동의·토큰 갱신·연결 해제를 끝까지 시험하지 않았습니다.
-- 실제 계정이 구독 공유에 적격한지, 요청 모델이 사용 가능한지, 응답 형식이 현재 API와 맞는지 확인하지 않았습니다.
-- 진단 질문지·진단 결과·상담 사례집은 아직 앱에 연결되지 않았습니다. 현재 근거 검색은 공개된 법령 자료뿐입니다.
-- 공개 근거 API가 실제 운영 환경의 Supabase 설정과 발행 법령을 읽는지 실서비스에서 확인하지 않았습니다.
-- 실제 모델 연결은 계정의 구독 자격, 허용 모델, 계정별 정책과 OpenAI 응답에 따라 달라집니다.
-- 실제 ChatGPT 계정 연결을 검증하지 않았으며, 코드 서명과 자동 업데이트는 아직 없습니다.
-- 배포 파이프라인과 웹 다운로드 화면은 추가했지만, 현재 GitHub Release에 앱 바이너리는 게시되어 있지 않습니다.
+## 개인정보 및 한계
 
-실제 로그인은 계정이 연결된 사용자가 앱에서 직접 실행해야 합니다. 로그인 없이 이 경로를 실계정에서 검증했다고 주장하지 않습니다.
+- 상담 입력과 대화 내용은 앱이나 국제요정 DB에 저장하지 않습니다. 질문·대화 이력·검색된 내부 자료는 답변 생성을 위해 사용자의 ChatGPT 연결로 전송됩니다.
+- `store: false`는 Responses 요청의 저장 옵션입니다. OpenAI 계정·요금제·보안 정책의 데이터 처리조건을 대체하지 않습니다.
+- ChatGPT 프로그램 설치는 필요 없습니다. ChatGPT 데스크톱 앱 또는 브라우저의 기존 쿠키는 사용하지 않습니다.
+- 답변은 일반 정보이며 법률 자문, 법 준수 판정 또는 인증이 아닙니다. 개인별 사실관계와 최신 법령은 인용한 공식 출처를 확인해야 합니다.
+- 실제 사용자 계정으로 로그인·동의·토큰 갱신·연결 해제·모델 요청·웹 검색까지 실계정 검증을 마치기 전에는 해당 경로가 계정에서 작동한다고 단정하지 않습니다.
+
+## 출처 및 라이선스
+
+OAuth 연결 코드는 `src/vendor/ieumoffice-chatgpt/`에 둔 IeumOffice/OpenOffice의 Apache-2.0 구현을 사용합니다. 세부 출처와 고지는 `THIRD-PARTY-NOTICE.md`와 `third-party/`를 확인해 주세요.

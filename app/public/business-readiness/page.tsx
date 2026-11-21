@@ -14,12 +14,12 @@ export default function BusinessReadinessPage() {
     <section className={styles.hero}>
       <p className={styles.kicker}>BUSINESS PRIVACY READINESS</p>
       <h1>해외 진출 전,<br />개인정보 보호 준비를 점검하세요</h1>
-      <p className={styles.lede}>진출하려는 국가와 사업 상황을 선택하면 확인할 항목과 참고 근거를 안내합니다.</p>
+      <p className={styles.lede}>진출 지역을 고르면 그 지역 안내서에 맞춘 쉬운 질문을 차례로 보여드립니다. 답을 바탕으로 더 살펴볼 자료와 준비할 일을 정리합니다.</p>
     </section>
-    <aside className={styles.prototypeNotice} role="note"><strong>자가점검 안내</strong><span>기존 7개 법제 번역은 사람 검수가 완료된 자료입니다. 이 페이지에서 새로 연결한 질문·조항과 보완 안내는 별도로 확인 중입니다. 결과는 실제 준수 판정이나 법률 자문이 아닙니다.</span></aside>
+    <aside className={styles.prototypeNotice} role="note"><strong>자가점검 안내</strong><span>일본·중국·EU·영국·캘리포니아·싱가포르 질문을 각각 다른 안내서에 근거해 구성했습니다. 답변은 준비 상황을 정리하는 데 쓰이며, 법률상 준수 여부나 위반 여부를 판정하지 않습니다.</span></aside>
     <BusinessReadinessFlow />
     <section className={styles.nextStep}>
-      <div><p className={styles.kicker}>LEGAL GUIDANCE PILOT</p><h2>근거를 확인하고 더 알아보기</h2><p>ChatGPT 계정으로 로그인해 공개 법령 설명자료를 바탕으로 질문할 수 있는 별도 앱을 시범 준비했습니다.</p></div>
+      <div><p className={styles.kicker}>LEGAL GUIDANCE PILOT</p><h2>궁금한 점을 이어서 상담하기</h2><p>ChatGPT 계정을 연결하고 자연어로 질문해 주세요. 국제요정의 안내서·상담사례·자가점검·공개 자료와 가능한 경우 웹 검색을 함께 참고해 대화합니다.</p></div>
       <div className={styles.nextLinks}>
         <Link href="/public/business-advisor-download">상담 앱 다운로드 <span aria-hidden="true">→</span></Link>
         <Link href="/public/laws">국가별 법제와 근거 보기 <span aria-hidden="true">→</span></Link>
