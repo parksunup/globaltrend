@@ -61,9 +61,9 @@ select results_eq(
   'one immutable content revision is stored'
 );
 select results_eq(
-  $$select count(*)::bigint from public.draft_jobs where input_hash = repeat('a', 64)$,
-  array[0::bigint],
-  'unscored source does not create a draft job'
+  $$select count(*)::bigint from public.draft_jobs where input_hash = repeat('a', 64)$$,
+  array[1::bigint],
+  'one draft job is queued'
 );
 
 select lives_ok(
@@ -89,8 +89,8 @@ select results_eq(
   $$select (select count(*) from public.source_items where canonical_url = 'https://example.test/privacy/item-1')::bigint
           + (select count(*) from public.source_item_revisions where content_hash = repeat('a', 64))::bigint
           + (select count(*) from public.draft_jobs where input_hash = repeat('a', 64))::bigint$$,
-  array[2::bigint],
-  'redelivery creates no duplicate item, revision, or premature job'
+  array[3::bigint],
+  'redelivery creates no duplicate item, revision, or job'
 );
 
 select lives_ok(
@@ -115,8 +115,8 @@ select lives_ok(
 select results_eq(
   $$select (select count(*) from public.source_item_revisions where source_item_id = (select id from public.source_items where canonical_url = 'https://example.test/privacy/item-1'))::bigint,
           (select count(*) from public.draft_jobs where source_item_id = (select id from public.source_items where canonical_url = 'https://example.test/privacy/item-1'))::bigint$$,
-  $values (2::bigint, 0::bigint)$,
-  'changed content keeps both revisions without creating an unreviewed job'
+  $$values (2::bigint, 2::bigint)$$,
+  'changed content keeps both revisions and queues a second job'
 );
 
 select throws_ok(
