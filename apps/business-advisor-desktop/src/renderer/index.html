@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'none'; img-src 'self' data:; object-src 'none'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GlobalTrend 기업 개인정보 보호 도우미</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#top" aria-label="GlobalTrend 상담 도우미 홈"><span class="brand-mark">G</span><span>GlobalTrend<small>기업 개인정보 보호 도우미</small></span></a>
+        <div class="account-area"><span id="status" role="status">계정 연결을 확인하고 있습니다.</span><button id="connect" class="connect">ChatGPT 계정 연결</button><button id="disconnect" class="text-button" hidden>연결 끊기</button></div>
+      </header>
+
+      <section class="intro" id="top">
+        <p class="eyebrow">BUSINESS PRIVACY ADVISOR</p>
+        <h1>궁금한 점을 편하게 물어보세요</h1>
+        <p>해외 개인정보 보호 준비부터 구체적인 상황까지, 국제요정의 자료를 바탕으로 자연스럽게 대화합니다.</p>
+      </section>
+
+      <section class="chat-card" aria-label="개인정보 보호 상담 대화">
+        <div class="chat-toolbar">
+          <div><strong>상담 대화</strong><span>필요한 지역과 상황을 질문에 함께 적어 주세요.</span></div>
+          <button id="new-chat" class="text-button">새 대화</button>
+        </div>
+        <div id="transcript" class="transcript" aria-live="polite" aria-relevant="additions text">
+          <article class="message assistant-message welcome">
+            <div class="avatar">GT</div>
+            <div class="message-body"><span class="speaker">국제요정 상담 도우미</span><p>안녕하세요. 어떤 점이 궁금하신가요? 예를 들어 “싱가포르에서 온라인 서비스를 운영하는데 아동 정보와 해외 이전을 어떻게 준비해야 하나요?”처럼 편하게 적어 주세요. 필요한 경우 대화 중에 상황을 더 여쭤보겠습니다.</p></div>
+          </article>
+        </div>
+        <form id="composer" class="composer">
+          <label class="sr-only" for="question">질문 입력</label>
+          <textarea id="question" rows="3" maxlength="8000" placeholder="궁금한 점이나 회사 상황을 입력해 주세요…" required></textarea>
+          <div class="composer-footer">
+            <div class="preferences"><label for="model">답변 모델</label><select id="model" aria-label="답변 모델"><option value="gpt-5-mini">gpt-5-mini</option></select><span class="web-option">국제요정 자료와 웹을 함께 확인</span></div>
+            <div class="send-area"><span>Enter로 줄바꿈 · Ctrl+Enter로 보내기</span><button id="send" type="submit" disabled>보내기 <span aria-hidden="true">↑</span></button></div>
+          </div>
+        </form>
+      </section>
+      <p class="privacy-note">대화는 이 앱의 실행 중에만 유지되고 서버에 저장하지 않습니다. 질문과 관련 자료는 답변 생성을 위해 사용자의 ChatGPT 연결로 전달됩니다. 답변은 참고용 일반 정보이며 법률 자문이나 준수 인증이 아닙니다.</p>
+      <p id="error" class="error" role="alert" hidden></p>
+      <footer class="app-footer"><span>근거를 확인하고, 필요한 부분은 원문까지 살펴보세요.</span><span>국제요정 · GlobalTrend</span></footer>
+    </main>
+    <script src="renderer.js"></script>
+  </body>
+</html>

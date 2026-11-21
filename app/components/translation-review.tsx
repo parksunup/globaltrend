@@ -59,13 +59,11 @@ export default function TranslationReview({ lawId, title, sections, officialName
   return <main className={styles.page}>
     <header className={styles.header}>
       <Link href="/legal-translation">← 법률별 번역 목록</Link>
-      <p className={styles.kicker}>{reviewStatus === "published" ? "법제 전문 · 검수 완료·발행됨" : "법제 전문 · 미발행 · 제출 자료"}</p>
+      <p className={styles.kicker}>{reviewStatus === "published" ? "법제 전문 · 사람 검수 완료 · 발행됨" : reviewStatus === "completed" || reviewStatus === "human_reviewed" ? "법제 전문 · 사람 검수 완료" : "법제 전문 · 검토 상태 확인 필요"}</p>
       <h1>{title}</h1>
       <p>{officialName}의 조문 순서에 따라 한국어 번역을 읽을 수 있습니다. 번역 범위와 공식 원문을 함께 확인해 주세요.</p>
       <div className={styles.meta}><span>판본: {version}</span><span>본칙 {counts.main}항목 · 부칙 {counts.supplementary}항목 · 별표·부속서 {counts.appendix}항목 · 참고 {counts.reference}항목</span></div>
-      {scopeNote && (reviewStatus === "published"
-        ? <details className={styles.caveat}><summary>작성 당시 판본·번역 범위 기록</summary><p>아래 기록은 현재 검수·발행 상태를 뜻하지 않습니다.</p><p>{scopeNote}</p></details>
-        : <p className={styles.caveat}>번역 범위: {scopeNote}</p>)}
+      {scopeNote && <details className={styles.caveat}><summary>번역 범위와 판본 안내</summary><p>{scopeNote}</p></details>}
       {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer">공식 원문 보기 ↗</a>}
       {safeSha && <a href={`https://github.com/parksunup/globaltrend/blob/${safeSha}/data/legal/translations/${lawId}.md`} target="_blank" rel="noopener noreferrer">작성 당시 번역 원본 파일 보기 ↗</a>}
     </header>
