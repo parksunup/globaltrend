@@ -53,6 +53,48 @@ const answerSummary: Record<Answer, { label: string; summary: string; needsActio
   not_applicable: { label: "해당 없음", summary: "회사에 해당하지 않는다고 답하셨습니다. 그렇게 판단한 이유를 기록해 두면 다시 확인할 때 도움이 됩니다.", needsAction: false },
 };
 
+function downloadAssessmentReport(results: Array<{ item: Question; answer: Answer; outcome: typeof answerSummary[Answer]; reason?: string }>) {
+  const today = new Intl.DateTimeFormat("sv-SE").format(new Date());
+  const jurisdictionLabels = [...new Set(results.map(({ item }) => jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction))];
+  const needsAction = results.filter(({ outcome }) => outcome.needsAction).length;
+  const lines = [
+    "기업 자가진단 결과",
+    `작성일: ${today}`,
+    `선택한 관할: ${jurisdictionLabels.join(" · ") || "없음"}`,
+    `응답한 질문: ${results.length}개 · 추가로 살펴볼 항목: ${needsAction}개`,
+    "",
+    "이 결과는 이용자가 선택한 답변을 정리한 참고자료입니다. 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아니며, 법률상 준수 여부나 위반 여부를 판정하지 않습니다. 최신 법령·공식 지침과 실제 상황을 확인하고 판단·조치할 책임은 이용자에게 있습니다.",
+    "",
+    ...results.flatMap(({ item, answer, outcome, reason }) => {
+      const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
+      const guide = guides[item.jurisdiction];
+      const reference = guide?.questions.find(({ questionId }) => questionId === item.id);
+      const sections = reference?.sectionIds.map(id => guide?.sections.find(section => section.id === id)).filter((section): section is GuideSection => Boolean(section)) ?? [];
+      return [
+        `## ${jurisdiction?.flag ?? ""} ${jurisdiction?.label ?? item.jurisdiction} · ${item.category}`,
+        `질문: ${item.question}`,
+        `내 답변: ${answerSummary[answer].label}`,
+        `결과 안내: ${outcome.summary}`,
+        ...(reason ? [`해당 없음으로 답한 이유: ${reason}`] : []),
+        ...(outcome.needsAction ? [`확인해 볼 내용: ${item.helpText}`] : []),
+        `근거 메모: ${item.sourceNote}`,
+        ...(sections.length ? [`안내서 항목: ${sections.map(section => section.title).join(" · ")}`, `한국어 안내서: ${window.location.origin}${guide?.guidePath}`] : []),
+        `공식 안내: ${item.sourceUrl || jurisdiction?.guideUrl || "주소가 지정되지 않음"}`,
+        "",
+      ];
+    }),
+  ];
+  const file = new Blob(["\ufeff", lines.join("\n")], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(file);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `기업-자가진단-결과-${today}.txt`;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 export default function BusinessReadinessFlow() {
   const [selected, setSelected] = useState<string[]>([]);
   const [started, setStarted] = useState(false);
@@ -158,16 +200,17 @@ export default function BusinessReadinessFlow() {
       {results.length === 0 && <p className={styles.empty}>응답 결과가 없습니다. 앞 단계로 돌아가 답을 선택해 주세요.</p>}
       <div className={styles.controls}>
         <button type="button" className={styles.secondary} onClick={() => { setShowResult(false); setIndex(Math.max(questions.length - 1, 0)); }}>답변 돌아보기</button>
+        {results.length > 0 && <button type="button" className={styles.secondary} onClick={() => downloadAssessmentReport(results)}>결과 내려받기 (.txt)</button>}
         <button type="button" className={styles.primary} onClick={reset}>새로 점검하기</button>
       </div>
       <div className={styles.advisorHandoff}>
-        <div><strong>결과를 바탕으로 더 알아볼까요?</strong><p>보완이 필요한 답변을 상담 앱으로 넘기면 관련 자료와 웹 검색을 함께 확인해 준비 순서를 안내합니다. 버튼을 누르면 결과가 이 기기의 상담 앱으로 전달됩니다.</p></div>
+        <div><strong>결과를 바탕으로 더 알아볼까요?</strong><p>보완이 필요한 답변을 상담 앱으로 넘기면 이 점검 결과가 대화 맥락에 포함됩니다. 관련 자료와 웹 검색을 함께 확인해 기업 상황에 맞는 준비 순서를 안내합니다.</p></div>
         <button type="button" className={styles.primary} disabled={handoffBusy} onClick={() => void consultWithResult(results)}>{handoffBusy ? "상담 앱을 여는 중…" : "자가점검 결과를 토대로 AI 상담하기"}<span aria-hidden="true"> →</span></button>
-        <a className={styles.appDownload} href="/public/business-advisor-download">상담 앱이 아직 없다면 내려받기 ↗</a>
-        {handoffError && <p className={styles.handoffError} role="alert">{handoffError} <a href="/public/business-advisor-download">상담 앱 내려받기 ↗</a></p>}
+        <a className={styles.appDownload} href="/public/business-advisor-download">국제요정 상담소 앱이 아직 없다면 내려받기 ↗</a>
+        {handoffError && <p className={styles.handoffError} role="alert">{handoffError} <a href="/public/business-advisor-download">국제요정 상담소 앱 내려받기 ↗</a></p>}
       <p className={styles.handoffNote}>답변은 이 사이트에 저장하지 않습니다. 버튼을 누르면 선택한 지역과 보완 항목이 상담 앱으로 전달되고, 상담을 시작할 때 사용자의 ChatGPT 연결로 전송됩니다. 해당 없음의 자유 입력 사유와 준비 완료 답변은 전달하지 않습니다. 상담 앱의 답변도 개인정보보호위원회나 해외 감독기구의 공식 유권해석이 아니며, 답변 확인과 실제 조치의 책임은 이용자에게 있습니다.</p>
       </div>
-      <p className={styles.dataNote}>응답은 이 브라우저 화면에서만 계산하며 서버에 저장하지 않습니다.</p>
+      <p className={styles.dataNote}>응답은 이 브라우저 화면에서만 계산하며 서버에 저장하지 않습니다. 내려받은 결과 파일은 사용자의 기기에 저장되며, 직접 보관·관리해 주세요.</p>
     </section>;
   }
 

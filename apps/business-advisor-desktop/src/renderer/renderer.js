@@ -25,7 +25,7 @@ function showError(message) {
 }
 
 function updateControls() {
-  send.disabled = !signedIn || busy || !question.value.trim()
+  send.disabled = !signedIn || busy || !question.value.trim() || !model.value
   question.disabled = !signedIn || busy
   model.disabled = !signedIn || busy
 }
@@ -165,6 +165,12 @@ async function refresh() {
       const available = await window.advisor.models()
       const previous = model.value
       model.replaceChildren()
+      if (!available.length) {
+        const option = document.createElement('option')
+        option.value = ''
+        option.textContent = '현재 계정에서 사용할 수 있는 GPT 모델이 없습니다'
+        model.append(option)
+      }
       available.forEach(item => {
         const option = document.createElement('option')
         option.value = item.id
@@ -172,9 +178,8 @@ async function refresh() {
         model.append(option)
       })
       if (available.some(item => item.id === previous)) model.value = previous
-      else if (available.some(item => item.id === 'gpt-6.2-sol')) model.value = 'gpt-6.2-sol'
-      else if (available.some(item => item.id === 'gpt-6.2-astra')) model.value = 'gpt-6.2-astra'
       else if (available.length) model.value = available[0].id
+      else model.value = ''
     } catch (cause) {
       if (cause instanceof Error && cause.message.includes('연결이 만료')) signedIn = false
       showError(cause instanceof Error ? cause.message : String(cause))

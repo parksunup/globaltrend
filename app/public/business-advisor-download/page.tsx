@@ -4,8 +4,8 @@ import styles from "./download.module.css";
 
 export const dynamic = "force-dynamic";
 export const metadata = {
-  title: "국제요정 상담소 · 해외 진출 기업 개인정보 보호 도우미",
-  description: "국제요정 상담소를 내려받아 해외 진출 기업의 개인정보 보호 질문을 안내서와 공개 자료, 웹 검색을 바탕으로 상담하세요.",
+  title: "국제요정 상담소 · 국제요정",
+  description: "국제요정 상담소를 내려받아 개인정보·데이터 정책 업무와 기업의 해외 진출 준비에 관한 질문을 안내서, 공개 자료, 웹 검색을 바탕으로 상담하세요.",
 };
 
 type ReleaseAsset = { name: string; browser_download_url: string; size: number; content_type?: string };
@@ -37,10 +37,9 @@ export default async function BusinessAdvisorDownloadPage() {
   return <main className={styles.site}>
     <PublicHeader active="/public/business-advisor-download" />
     <section className={styles.hero}>
-      <p className={styles.kicker}>GLOBALTREND · BUSINESS ADVISOR</p>
+      <p className={styles.kicker}>GLOBALTREND · AI ADVISOR</p>
       <h1>국제요정 상담소</h1>
-      <h2>해외 진출 기업 개인정보 보호 도우미</h2>
-      <p className={styles.lede}>ChatGPT 계정을 앱에 연결하고 궁금한 점을 자연어로 물어보세요. 국제요정의 기업 안내서·상담사례·자가점검·공개 법제와 동향 자료를 참고하며, 매 답변에서 웹 검색도 함께 활용해 대화합니다.</p>
+      <p className={styles.lede}>정책 담당자는 개인정보·데이터 정책 업무 중 궁금한 점을 자연어로 물어보고, 기업은 해외 진출과 개인정보 보호 준비를 상담할 수 있습니다. 국제요정의 안내서·상담사례·자가진단·공개 법제와 동향 자료, 웹 검색을 함께 참고합니다.</p>
     </section>
     <section className={styles.card}>
       {unavailable ? <>
@@ -68,8 +67,8 @@ export default async function BusinessAdvisorDownloadPage() {
     <section className={styles.details}>
       <h2>사용 방법</h2>
       <ol><li>Windows용 단일 실행 파일을 내려받습니다.</li><li>파일을 열어 앱을 실행하고 ChatGPT 계정을 연결합니다. 로그인은 시스템 브라우저에서 진행됩니다.</li><li>궁금한 점과 국가·사업 상황을 편하게 적어 대화를 이어갑니다. 질문마다 국가를 미리 고를 필요는 없습니다.</li></ol>
-      <p>ChatGPT 프로그램 설치는 필요하지 않습니다. 앱은 Codex 로그인이나 브라우저 쿠키를 읽지 않습니다. 상담 앱의 답변과 안내자료는 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 최신 법령·공식 지침과 회사의 실제 상황을 확인하고 이에 따른 판단과 조치를 할 책임은 이용자에게 있습니다.</p>
-      <p><Link href="/public/business-readiness">기업 상담소로 돌아가기 →</Link></p>
+      <p>ChatGPT 프로그램 설치는 필요하지 않습니다. 앱은 Codex 로그인이나 브라우저 쿠키를 읽지 않습니다. 상담 앱의 답변과 안내자료는 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 최신 법령·공식 지침과 질문의 실제 상황을 확인하고 이에 따른 판단과 조치를 할 책임은 이용자에게 있습니다.</p>
+      <p><Link href="/public/business-readiness">기업 자가진단으로 돌아가기 →</Link></p>
     </section>
     <PublicFooter />
   </main>;
