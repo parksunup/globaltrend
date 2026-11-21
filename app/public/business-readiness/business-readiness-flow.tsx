@@ -8,6 +8,7 @@ import uk from "../../../data/business-readiness/questions/UK.json";
 import california from "../../../data/business-readiness/questions/US-CA.json";
 import singapore from "../../../data/business-readiness/questions/SG.json";
 import guideCatalog from "../../../data/business-readiness/guides-content.json";
+import { downloadAssessmentDocx, openAssessmentPdf } from "../../../lib/business-readiness/assessment-report";
 import styles from "./business-readiness.module.css";
 import MarkdownContent from "./markdown-content";
 
@@ -53,48 +54,6 @@ const answerSummary: Record<Answer, { label: string; summary: string; needsActio
   not_applicable: { label: "해당 없음", summary: "회사에 해당하지 않는다고 답하셨습니다. 그렇게 판단한 이유를 기록해 두면 다시 확인할 때 도움이 됩니다.", needsAction: false },
 };
 
-function downloadAssessmentReport(results: Array<{ item: Question; answer: Answer; outcome: typeof answerSummary[Answer]; reason?: string }>) {
-  const today = new Intl.DateTimeFormat("sv-SE").format(new Date());
-  const jurisdictionLabels = [...new Set(results.map(({ item }) => jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction))];
-  const needsAction = results.filter(({ outcome }) => outcome.needsAction).length;
-  const lines = [
-    "기업 자가진단 결과",
-    `작성일: ${today}`,
-    `선택한 관할: ${jurisdictionLabels.join(" · ") || "없음"}`,
-    `응답한 질문: ${results.length}개 · 추가로 살펴볼 항목: ${needsAction}개`,
-    "",
-    "이 결과는 이용자가 선택한 답변을 정리한 참고자료입니다. 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아니며, 법률상 준수 여부나 위반 여부를 판정하지 않습니다. 최신 법령·공식 지침과 실제 상황을 확인하고 판단·조치할 책임은 이용자에게 있습니다.",
-    "",
-    ...results.flatMap(({ item, answer, outcome, reason }) => {
-      const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
-      const guide = guides[item.jurisdiction];
-      const reference = guide?.questions.find(({ questionId }) => questionId === item.id);
-      const sections = reference?.sectionIds.map(id => guide?.sections.find(section => section.id === id)).filter((section): section is GuideSection => Boolean(section)) ?? [];
-      return [
-        `## ${jurisdiction?.flag ?? ""} ${jurisdiction?.label ?? item.jurisdiction} · ${item.category}`,
-        `질문: ${item.question}`,
-        `내 답변: ${answerSummary[answer].label}`,
-        `결과 안내: ${outcome.summary}`,
-        ...(reason ? [`해당 없음으로 답한 이유: ${reason}`] : []),
-        ...(outcome.needsAction ? [`확인해 볼 내용: ${item.helpText}`] : []),
-        `근거 메모: ${item.sourceNote}`,
-        ...(sections.length ? [`안내서 항목: ${sections.map(section => section.title).join(" · ")}`, `한국어 안내서: ${window.location.origin}${guide?.guidePath}`] : []),
-        `공식 안내: ${item.sourceUrl || jurisdiction?.guideUrl || "주소가 지정되지 않음"}`,
-        "",
-      ];
-    }),
-  ];
-  const file = new Blob(["\ufeff", lines.join("\n")], { type: "text/plain;charset=utf-8" });
-  const url = URL.createObjectURL(file);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `기업-자가진단-결과-${today}.txt`;
-  document.body.append(anchor);
-  anchor.click();
-  anchor.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
 export default function BusinessReadinessFlow() {
   const [selected, setSelected] = useState<string[]>([]);
   const [started, setStarted] = useState(false);
@@ -104,6 +63,7 @@ export default function BusinessReadinessFlow() {
   const [showResult, setShowResult] = useState(false);
   const [handoffBusy, setHandoffBusy] = useState(false);
   const [handoffError, setHandoffError] = useState("");
+  const [reportError, setReportError] = useState("");
 
   const questions = useMemo(() => jurisdictions
     .filter(({ code }) => selected.includes(code))
@@ -162,6 +122,33 @@ export default function BusinessReadinessFlow() {
       return answer ? [{ item, answer, outcome: answerSummary[answer], reason: naReasons[item.id] }] : [];
     });
     const actionCount = results.filter(({ outcome }) => outcome.needsAction).length;
+    const reportDate = new Intl.DateTimeFormat("sv-SE").format(new Date());
+    const jurisdictionLabels = [...new Set(results.map(({ item }) => jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction))];
+    const report = {
+      date: reportDate,
+      jurisdictions: jurisdictionLabels,
+      questionCount: results.length,
+      actionCount,
+      entries: results.map(({ item, answer, outcome, reason }) => {
+        const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
+        const guide = guides[item.jurisdiction];
+        const reference = guide?.questions.find(({ questionId }) => questionId === item.id);
+        const sections = reference?.sectionIds.map(id => guide?.sections.find(section => section.id === id)).filter((section): section is GuideSection => Boolean(section)) ?? [];
+        return {
+          jurisdiction: jurisdiction?.label ?? item.jurisdiction,
+          category: item.category,
+          question: item.question,
+          answer: answerSummary[answer].label,
+          summary: outcome.summary,
+          ...(reason ? { reason } : {}),
+          ...(outcome.needsAction ? { action: item.helpText } : {}),
+          guideSections: sections.map(section => section.title),
+          ...(guide?.guidePath ? { guideUrl: `${window.location.origin}${guide.guidePath}` } : {}),
+          sourceNote: item.sourceNote,
+          officialUrl: item.sourceUrl || jurisdiction?.guideUrl || "",
+        };
+      }),
+    };
     return <section className={styles.flow} aria-live="polite">
       <div className={styles.resultHeader}>
         <p className={styles.kicker}>점검 결과</p>
@@ -200,9 +187,17 @@ export default function BusinessReadinessFlow() {
       {results.length === 0 && <p className={styles.empty}>응답 결과가 없습니다. 앞 단계로 돌아가 답을 선택해 주세요.</p>}
       <div className={styles.controls}>
         <button type="button" className={styles.secondary} onClick={() => { setShowResult(false); setIndex(Math.max(questions.length - 1, 0)); }}>답변 돌아보기</button>
-        {results.length > 0 && <button type="button" className={styles.secondary} onClick={() => downloadAssessmentReport(results)}>결과 내려받기 (.txt)</button>}
         <button type="button" className={styles.primary} onClick={reset}>새로 점검하기</button>
       </div>
+      {results.length > 0 && <div className={styles.reportDownloads}>
+        <div><strong>결과를 문서로 보관하기</strong><p>밝은 국제요정 디자인의 Word 문서를 내려받거나 PDF로 저장할 수 있습니다.</p></div>
+        <div className={styles.reportDownloadActions}>
+          <button type="button" className={styles.secondary} onClick={() => downloadAssessmentDocx(report, `기업-자가진단-결과-${reportDate}.docx`)}>Word 다운로드 (.docx)</button>
+          <button type="button" className={styles.primary} onClick={() => setReportError(openAssessmentPdf(report) ? "" : "PDF 저장 창이 열리지 않았습니다. 브라우저의 팝업 차단을 해제한 뒤 다시 눌러 주세요.")}>PDF로 저장</button>
+        </div>
+        {reportError && <p className={styles.reportError} role="alert">{reportError}</p>}
+        <p className={styles.reportHint}>PDF로 저장을 누르면 인쇄 창이 열립니다. 대상 프린터에서 ‘PDF로 저장’을 선택해 주세요. 결과 파일은 이 기기에 저장되며 서버로 전송되지 않습니다.</p>
+      </div>}
       <div className={styles.advisorHandoff}>
         <div><strong>결과를 바탕으로 더 알아볼까요?</strong><p>보완이 필요한 답변을 상담 앱으로 넘기면 이 점검 결과가 대화 맥락에 포함됩니다. 관련 자료와 웹 검색을 함께 확인해 기업 상황에 맞는 준비 순서를 안내합니다.</p></div>
         <button type="button" className={styles.primary} disabled={handoffBusy} onClick={() => void consultWithResult(results)}>{handoffBusy ? "상담 앱을 여는 중…" : "자가점검 결과를 토대로 AI 상담하기"}<span aria-hidden="true"> →</span></button>
