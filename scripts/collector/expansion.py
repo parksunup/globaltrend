@@ -316,6 +316,26 @@ def _eu_parliament_feed_identity(row):
     identity={'version':1,'url':row['url'],'updated':updated or ''}
     return hashlib.sha256(json.dumps(identity,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
+_EU_PARLIAMENT_PRIVACY_TERMS=(
+    'privacy','data protection','personal data','personal information','data subject',
+    'data subjects','gdpr','general data protection regulation','eprivacy','e-privacy',
+    'privacy rights','privacy safeguards','protection of personal data',
+    'protección de datos','datos personales','privacidad','données personnelles',
+    'protection des données','vie privée','personenbezogene daten','datenschutz',
+    'dati personali','protezione dei dati','dados pessoais','proteção de dados',
+    'privacidade','persoonsgegevens','gegevensbescherming','dane osobowe',
+    'ochrona danych osobowych','персональные данные','защита данных',
+)
+
+def eu_parliament_topic_screen(text):
+    """High precision discovery gate; candidates still need editorial review."""
+    normalized=' '.join(str(text or '').casefold().split())
+    matched=sorted({term for term in _EU_PARLIAMENT_PRIVACY_TERMS if term in normalized})
+    return {'status':'candidate' if matched else 'excluded',
+            'version':'eu-parliament-privacy-screen-v1',
+            'matched_terms':matched,
+            'reason':'explicit_privacy_or_personal_data_evidence' if matched else 'no_explicit_privacy_or_personal_data_evidence'}
+
 def collect_frozen(config,client,store,since,until):
     """Freeze URL identities in the existing atomic DB cursor, one body per commit.
 
@@ -424,14 +444,24 @@ def collect_frozen(config,client,store,since,until):
                         result['held']+=1
                         result['held_reason']='official_api_record_has_no_extractable_body'
                 if item is not None:
+                    if source=='eu-parliament':
+                        item['metadata']['topic_screen']=eu_parliament_topic_screen(
+                            item['title_original']+' '+item['content_text'])
+                        if item['metadata']['topic_screen']['status']=='excluded':
+                            result['topic_excluded']=result.get('topic_excluded',0)+1
+                            item=None
+                if item is not None:
                     published=item['published_date']
                     if published and not since<=published<=until:result['out_of_range']=1
-                    elif source in ('ec','ec-news','eu-parliament') and not re.search(
-                        r'privacy|personal data|data protection|GDPR|AI Act|artificial intelligence|cyber.?security|digital identity|biometric|surveillance|data governance|Data Act|online safety',
+                    elif source in ('ec','ec-news') and not re.search(
+                        r'privacy|personal data|data protection|GDPR|artificial intelligence|data breach',
                         item['title_original']+' '+item['content_text'],re.I):
                         result['topic_excluded']=result.get('topic_excluded',0)+1
                     else:
-                        item['metadata']['relevance_reason']='full_body_available_human_relevance_review_pending'
+                        item['metadata']['relevance_reason']=(
+                            'eu_parliament_privacy_candidate_requires_editorial_review'
+                            if source=='eu-parliament' else
+                            'full_body_available_human_relevance_review_pending')
                         store.ingest(config,url,item)
                         if published is None:result['unknown_date']=1;result['held']+=1
             except (FetchError,ValueError) as error:
@@ -961,13 +991,13 @@ def extract(source,input,url,row=None):
         return {'title_original':normalize(title),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
             'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'ep-open-data-document-v1',
                 'read_scope':'official_open_data_api_document_text','date_observations':observations,
-                'requires_review':not bool(published),'date_conflict':date_conflict,
+                'requires_review':True,'date_conflict':date_conflict,
                 'related_documents':[],'unread_attachments':[],
                 'license':'CC BY 4.0','attribution_required':True,
                 'attribution':'European Parliament Open Data',
                 'factual_status':'official_european_parliament_document_not_independently_reviewed',
-                'relevance_reason':'official_open_data_full_text_human_topic_review_pending',
-                'ai_ready':bool(published),'extraction_method':'european_parliament_open_data_api'}}
+                'relevance_reason':'official_open_data_full_text_and_privacy_relevance_require_human_review',
+                'ai_ready':False,'extraction_method':'european_parliament_open_data_api'}}
     if source=='ec':
         data=json.loads(input);body=data.get('docuLanguageResource',{});expected=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
         if str(data.get('refCd','')).upper()!=expected or not isinstance(body.get('title'),str) or not isinstance(body.get('htmlContent'),str) or data.get('originalLanguage') is None:raise ValueError('ec_detail_schema_or_identity_changed')
