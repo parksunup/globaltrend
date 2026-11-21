@@ -41,7 +41,8 @@ def _credentials(environ=None):
 
 
 def rpc_call(name, args, environ=None, opener=urllib.request.urlopen):
-    if name not in ('collector_cloud_take', 'collector_cloud_commit'):
+    if name not in ('collector_cloud_take', 'collector_cloud_commit',
+                    'collector_imda_fallback_due'):
         raise WorkerError('rpc_not_allowed')
     base, key = _credentials(environ)
     body = json.dumps(args, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
@@ -179,6 +180,17 @@ def run_source(source, worker, call_rpc=rpc_call, prepare=prepare_claim_file):
             return outcomes
 
 
+def source_is_due(source, call_rpc=None):
+    """Only use IMDA as the alternate route when today's PDPC run is incomplete."""
+    if source.get('fallback_for') != 'pdpc':
+        return True
+    call_rpc = call_rpc or rpc_call
+    due = call_rpc('collector_imda_fallback_due', {})
+    if type(due) is not bool:
+        raise WorkerError('imda_fallback_status_invalid')
+    return due
+
+
 def _worker_id(override=None, environ=None):
     if override:
         base = override
@@ -208,6 +220,10 @@ def main(argv=None):
     for source in sources:
         worker = worker_base + ':' + source['source']
         try:
+            if not source_is_due(source, call_rpc=rpc_call):
+                results.append({'source': source['source'], 'status': 'skipped',
+                                'reason': 'pdpc_collection_succeeded'})
+                continue
             results.extend(run_source(source, worker))
         except WorkerError as error:
             # A source failure must not prevent the remaining configured sources

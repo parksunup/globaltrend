@@ -221,7 +221,7 @@ class ExpansionTests(unittest.TestCase):
             if source in ('jpdp-my','global-cbpr','iso-iec-sc27',
                           'iapp','fpf','gpa','noyb','freevacy','overview-legal',
                           'ico','hk-pcpd','g7-dpa','vn-gov','eu-council','nl-ap','ppc',
-                          'calprivacy','cn-cac','ftc','ripd'):
+                          'calprivacy','cn-cac','ftc','ripd','ec','ec-news','eu-parliament'):
                 continue
             with self.subTest(source=source):
                 ext='json' if source in ('ec','anpd-br') else 'xml' if c.get('feed') else 'html'
@@ -252,24 +252,26 @@ class ExpansionTests(unittest.TestCase):
         item=expansion.extract('ec',(FIXTURES/'ec-detail.json').read_text(),url)
         self.assertIn('Roxana Mînzatu',item['content_text'])
         self.assertIn('We can see from the findings',item['content_text'])
-    def test_ec_accepts_observed_zero_based_response_page_and_keeps_event_date(self):
-        data=json.loads((FIXTURES/'ec-listing.json').read_text())
-        data['pageNumber']=0
-        data['docuLanguageListResources'][0]['eventDate']='2026-10-28T09:00:00+02:00'
-        rows,nxt=expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
-        self.assertEqual(len(rows),data['totalNumber'])
-        self.assertEqual(expansion.listing_date(rows[0]),'2026-10-28')
-        data['pageNumber']=7
-        with self.assertRaisesRegex(ValueError,'ec_listing_schema_or_page_changed'):
-            expansion.discover('ec',json.dumps(data),expansion.ROUTES['ec']['listing'])
+    def test_commission_rss_discovery_keeps_publisher_calendar_date(self):
+        feed='''<?xml version="1.0"?><rss version="2.0"><channel><item>
+          <title>Commission statement on personal data safeguards</title>
+          <link>https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2431</link>
+          <pubDate>Fri, 13 Nov 2026 00:00:00 +0100</pubDate>
+        </item></channel></rss>'''
+        rows,next_page=expansion.discover('ec',feed,expansion.ROUTES['ec']['listing'])
+        self.assertIsNone(next_page)
+        self.assertEqual(rows[0]['url'],'https://ec.europa.eu/commission/presscorner/detail/en/statement_26_2431')
+        self.assertEqual(expansion.listing_date(rows[0]),'2026-11-13')
 
-    def test_ec_accepts_live_statement_and_speech_reference_classes(self):
-        for reference in ('STATEMENT/26/2431','SPEECH/26/2428'):
-            payload={'totalNumber':1,'pageNumber':1,'pageSize':10,
-                     'docuLanguageListResources':[{'refCode':reference,'title':'Official release','eventDate':'2026-11-13'}]}
-            rows,next_page=expansion.discover('ec',json.dumps(payload),expansion.ROUTES['ec']['listing'])
+    def test_commission_rss_accepts_official_statement_and_speech_references(self):
+        for reference in ('statement_26_2431','speech_26_2428'):
+            feed=f'''<rss version="2.0"><channel><item><title>Official release</title>
+              <link>https://ec.europa.eu/commission/presscorner/detail/en/{reference}</link>
+              <pubDate>Fri, 13 Nov 2026 09:00:00 +0100</pubDate>
+            </item></channel></rss>'''
+            rows,next_page=expansion.discover('ec',feed,expansion.ROUTES['ec']['listing'])
             self.assertIsNone(next_page)
-            self.assertEqual(rows[0]['url'],'https://ec.europa.eu/commission/presscorner/detail/en/'+reference.lower().replace('/','_'))
+            self.assertTrue(rows[0]['url'].endswith('/'+reference))
     def test_ca_opc_advice_to_parliament_is_an_approved_paginated_listing(self):
         route=expansion.ROUTES['ca-opc'];listing=route['additional_listings'][1]
         html='<main><section aria-label="Main content"><div class="entry"><time datetime="2026-11-02">November 2, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261102/">Statement by the Privacy Commissioner of Canada on Bill C-22</a></h2></div><div class="entry"><time datetime="2026-10-07">October 7, 2026</time><h2><a href="/en/opc-actions-and-decisions/advice-to-parliament/2026/parl_261007/">Statement by the Privacy Commissioner of Canada on security screening</a></h2></div><ul><li class="next"><a rel="next" href="?o=d&amp;Page=2&amp;Filter=True">Next</a></li></ul></section></main>'

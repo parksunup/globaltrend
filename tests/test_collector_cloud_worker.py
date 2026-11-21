@@ -138,13 +138,46 @@ class CloudWorkerTests(unittest.TestCase):
             with self.assertRaisesRegex(cloud_worker.WorkerError, 'source_not_enabled_for_cloud_python'):
                 cloud_worker.eligible_sources(registry_path, source_id='disabled')
 
-    def test_configured_cloud_sources_include_edps_official_rss(self):
+    def test_requested_eu_official_sources_are_active_cloud_routes(self):
         sources = cloud_worker.eligible_sources()
         by_slug = {row['source']: row for row in sources}
-        self.assertTrue({'ec', 'eu-parliament', 'edps'}.issubset(by_slug))
+        self.assertTrue({'edps', 'ec', 'ec-news', 'eu-parliament', 'imda'}.issubset(by_slug))
         self.assertEqual(by_slug['edps']['listing'], 'https://social.edps.europa.eu/@EDPS.rss')
         self.assertTrue(by_slug['edps']['permissions']['collect'])
         self.assertTrue(by_slug['edps']['permissions']['store'])
+        self.assertTrue(by_slug['ec']['listing'].startswith('https://ec.europa.eu/commission/presscorner/api/rss'))
+        self.assertEqual(by_slug['ec-news']['listing'], 'https://commission.europa.eu/node/2/rss_en')
+        self.assertEqual(by_slug['eu-parliament']['listing'], 'https://data.europarl.europa.eu/api/v2/documents/feed')
+        for slug in ('ec', 'ec-news', 'eu-parliament'):
+            self.assertTrue(by_slug[slug]['permissions']['collect'])
+            self.assertTrue(by_slug[slug]['permissions']['store'])
+        self.assertEqual(by_slug['imda']['fallback_for'], 'pdpc')
+
+    def test_imda_fallback_runs_only_when_pdpc_is_incomplete(self):
+        imda = {**SOURCE, 'source': 'imda', 'fallback_for': 'pdpc'}
+        self.assertFalse(cloud_worker.source_is_due(imda, lambda *_: False))
+        self.assertTrue(cloud_worker.source_is_due(imda, lambda *_: True))
+        self.assertTrue(cloud_worker.source_is_due(SOURCE, lambda *_: self.fail(
+            'ordinary source must not query fallback status')))
+
+    def test_main_skips_imda_after_successful_pdpc_and_runs_it_after_failure(self):
+        imda = {**SOURCE, 'source': 'imda', 'fallback_for': 'pdpc'}
+        for due, expected_calls in ((False, 0), (True, 1)):
+            output = io.StringIO()
+            with (patch.object(cloud_worker, 'eligible_sources', return_value=[imda]),
+                  patch.object(cloud_worker, 'rpc_call', return_value=due),
+                  patch.object(cloud_worker, 'run_source', return_value=[
+                      {'source': 'imda', 'status': 'idle'}
+                  ]) as run_source,
+                  redirect_stdout(output)):
+                status = cloud_worker.main([])
+            self.assertEqual(status, 0)
+            self.assertEqual(run_source.call_count, expected_calls)
+            result = json.loads(output.getvalue())['sources'][0]
+            if due:
+                self.assertEqual(result['status'], 'idle')
+            else:
+                self.assertEqual(result['reason'], 'pdpc_collection_succeeded')
 
     def test_invalid_claim_and_bundle_are_rejected_before_commit(self):
         bad_claim = claim_for()

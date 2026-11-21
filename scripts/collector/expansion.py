@@ -178,7 +178,7 @@ _PUBLICATION_ROUTES={
 }
 for _source,_route in _PUBLICATION_ROUTES.items():
     ROUTES[_source]=dict(_route)
-CLOUD_SOURCES=('ec','eu-parliament','anpd-br','nist','ico','g7-dpa','vn-gov','hk-pcpd')
+CLOUD_SOURCES=('ec','ec-news','eu-parliament','anpd-br','nist','ico','g7-dpa','vn-gov','hk-pcpd')
 
 def listing_request_url(source,url,since,until):
     from .core import canonical_url
@@ -251,6 +251,16 @@ def listing_request_url(source,url,since,until):
         if parsed.hostname!='www.priv.gc.ca' or parsed.path!='/en/about-the-opc/what-we-do/international-collaboration/international-events/g7-2025/membership/':
             raise ValueError('g7_membership_hub_unverified')
         return url
+    if source=='eu-parliament':
+        parsed=urlsplit(canonical_url(url,ROUTES[source]['hosts']))
+        if parsed.path!='/api/v2/documents/feed' or parse_qs(parsed.query):
+            raise ValueError('eu_parliament_listing_path_unverified')
+        return parsed._replace(query=urlencode({'format':'application/atom+xml'})).geturl()
+    if source=='ec' and urlsplit(url).path=='/commission/presscorner/api/rss':
+        parsed=urlsplit(canonical_url(url,[ROUTES[source]['host']]))
+        if parse_qs(parsed.query).get('language')!=['en']:
+            raise ValueError('ec_presscorner_rss_language_unverified')
+        return url
     if source!='ec':return url
     start=dt.date.fromisoformat(since);end=dt.date.fromisoformat(until)
     if start>end:raise ValueError('invalid_expansion_range')
@@ -270,12 +280,7 @@ def verify_detail_response(source,requested,received):
     expected=detail_request_url(source,requested)
     hosts=ROUTES[source].get('hosts',[ROUTES[source]['host']])
     actual=canonical_url(received,hosts)
-    if source=='eu-parliament':
-        original=re.search(r'/press-room/(\d{8}IPR\d+)(?:/|$)',urlsplit(requested).path)
-        redirected=re.search(r'/press-room/(\d{8}IPR\d+)(?:/|$)',urlsplit(actual).path)
-        _canonical(actual,source,requested)
-        if original and redirected and original[1]==redirected[1]:return
-    elif canonical_url(expected,hosts)==actual:return
+    if canonical_url(expected,hosts)==actual:return
     if source=='ppc':
         # PPC article links omit the final slash, while the official server
         # redirects the same article to its slash-terminated canonical URL.
@@ -296,6 +301,20 @@ def _bounded_frozen_cursor(cursor,source):
         raise ValueError('expansion_frozen_cursor_invalid')
     if type(cursor.get('offset')) is not int or not 0<=cursor['offset']<=len(urls):raise ValueError('expansion_frozen_cursor_invalid')
     if cursor.get('frozen_next') is not None:canonical_url(cursor['frozen_next'],[ROUTES[source]['host']])
+    if source=='eu-parliament':
+        hashes=cursor.get('processed_document_hashes',[])
+        if (not isinstance(hashes,list) or
+                any(not isinstance(value,str) or not re.fullmatch(r'[0-9a-f]{64}',value) for value in hashes) or
+                len(set(hashes))!=len(hashes)):
+            raise ValueError('eu_parliament_feed_identity_cursor_invalid')
+
+def _eu_parliament_feed_identity(row):
+    """Identify one API-feed version without treating its updated time as publication date."""
+    observations=row.get('date_observations') or []
+    updated=next((item.get('value') for item in observations
+                  if item.get('meaning')=='listing_updated_not_publication_date'),None)
+    identity={'version':1,'url':row['url'],'updated':updated or ''}
+    return hashlib.sha256(json.dumps(identity,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 def collect_frozen(config,client,store,since,until):
     """Freeze URL identities in the existing atomic DB cursor, one body per commit.
@@ -342,31 +361,79 @@ def collect_frozen(config,client,store,since,until):
                         store.progress(config,since,until,None);store.checkpoint(config,until)
                         result.update(listing_scan_complete=True,reason='source_listing_exhausted_without_relevant_item')
                     return result
-                if source=='ec':
+                if source in ('ec','ec-news','eu-parliament'):
                     if nxt:store.progress(config,since,until,dict(page=nxt,offset=0))
                     else:store.progress(config,since,until,None);store.checkpoint(config,until)
                     result.update(listing_scan_complete=not bool(nxt),reason='scoped_official_listing_empty')
                     return result
                 raise ValueError('listing_empty_or_structure_changed')
-            cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
-                        frozen_rows=rows,frozen_next=nxt)
+            if source=='eu-parliament':
+                previous=set(cursor.get('processed_document_hashes',[]))
+                identities=[_eu_parliament_feed_identity(row) for row in rows]
+                pending=[(row,identity) for row,identity in zip(rows,identities) if identity not in previous]
+                current_hashes=list(dict.fromkeys(identities))
+                if not pending:
+                    next_cursor={'page':page,'offset':0,'processed_document_hashes':current_hashes}
+                    if nxt:
+                        next_cursor['page']=nxt
+                        store.progress(config,since,until,next_cursor)
+                        result.update(reason='official_feed_unchanged_page_complete')
+                    else:
+                        store.progress(config,since,until,next_cursor);store.checkpoint(config,until)
+                        result.update(listing_scan_complete=True,reason='official_feed_unchanged')
+                    return result
+                rows=[row for row,_ in pending]
+                cursor=dict(page=page,offset=0,frozen_urls=[row['url'] for row in rows],
+                            frozen_next=nxt,processed_document_hashes=current_hashes)
+            else:
+                cursor=dict(page=page,offset=0,frozen_urls=[r['url'] for r in rows],
+                            frozen_rows=rows,frozen_next=nxt)
         _bounded_frozen_cursor(cursor,source)
         urls=cursor['frozen_urls']
         per_run_page_drain=source in ('anpd-br','nist')
         while cursor['offset']<len(urls):
             ordinal=cursor['offset'];url=urls[ordinal]
             result['discovered']+=1
-            row=cursor.get('frozen_rows',[{} for _ in urls])[ordinal]
+            frozen_rows=cursor.get('frozen_rows')
+            row=frozen_rows[ordinal] if frozen_rows else {}
             try:
-                body,received,ctype=client.get(detail_request_url(source,url))
-                verify_detail_response(source,url,received)
-                item=extraction.extract_document(source,body,url,ctype,row)
-                published=item['published_date']
-                if published and not since<=published<=until:result['out_of_range']=1
+                request_headers=detail_request_headers(source)
+                detail_url=detail_request_url(source,url)
+                if request_headers:
+                    body,received,ctype=client.get(detail_url,headers=request_headers)
                 else:
-                    item['metadata']['relevance_reason']='full_body_available_human_relevance_review_pending'
-                    store.ingest(config,url,item)
-                    if published is None:result['unknown_date']=1;result['held']=1
+                    body,received,ctype=client.get(detail_url)
+                verify_detail_response(source,url,received)
+                try:
+                    item=extraction.extract_document(source,body,url,ctype,row)
+                except ValueError as error:
+                    if source!='eu-parliament' or str(error)!='eu_parliament_api_has_metadata_only_no_draft_body':
+                        raise
+                    try:
+                        item=extraction.extract_eu_parliament_linked_pdf(body,url,row,client)
+                    except ValueError as pdf_error:
+                        if str(pdf_error) not in (
+                            'eu_parliament_manifestation_missing',
+                            'eu_parliament_manifestation_unavailable',
+                            'eu_parliament_pdf_text_too_short',
+                        ):
+                            raise
+                        # Keep the feed/API record from pinning this entire
+                        # source queue forever when no usable text exists.
+                        item=None
+                        result['held']+=1
+                        result['held_reason']='official_api_record_has_no_extractable_body'
+                if item is not None:
+                    published=item['published_date']
+                    if published and not since<=published<=until:result['out_of_range']=1
+                    elif source in ('ec','ec-news','eu-parliament') and not re.search(
+                        r'privacy|personal data|data protection|GDPR|AI Act|artificial intelligence|cyber.?security|digital identity|biometric|surveillance|data governance|Data Act|online safety',
+                        item['title_original']+' '+item['content_text'],re.I):
+                        result['topic_excluded']=result.get('topic_excluded',0)+1
+                    else:
+                        item['metadata']['relevance_reason']='full_body_available_human_relevance_review_pending'
+                        store.ingest(config,url,item)
+                        if published is None:result['unknown_date']=1;result['held']+=1
             except (FetchError,ValueError) as error:
                 result.update(status='failed',reason='detail_failure:'+str(error),failed=1,failed_url=url)
                 store.discovery_failure(config,url,'Official source document',str(error))
@@ -382,10 +449,16 @@ def collect_frozen(config,client,store,since,until):
                 break
         if cursor['offset']>=len(urls):
             if cursor['frozen_next']:
-                store.progress(config,since,until,dict(page=cursor['frozen_next'],offset=0))
+                next_cursor=dict(page=cursor['frozen_next'],offset=0)
+                if source=='eu-parliament':next_cursor['processed_document_hashes']=cursor.get('processed_document_hashes',[])
+                store.progress(config,since,until,next_cursor)
                 result['reason']='frozen_listing_page_complete'
             else:
-                store.progress(config,since,until,None);store.checkpoint(config,until)
+                if source=='eu-parliament':
+                    store.progress(config,since,until,dict(page=cursor['page'],offset=0,
+                        processed_document_hashes=cursor.get('processed_document_hashes',[])))
+                else:store.progress(config,since,until,None)
+                store.checkpoint(config,until)
                 result.update(listing_scan_complete=True,reason='listing_exhaustiveness_unverified')
         else:
             result['reason']='frozen_listing_page_items_processed'
@@ -425,6 +498,15 @@ def listing_date(row):
     obs=row.get('date_observations',[])
     if len(obs)!=1:return None
     meaning=obs[0].get('meaning')
+    if meaning=='expansion_feed_publication_rfc822':
+        try:
+            value=parsedate_to_datetime(obs[0].get('value',''))
+            if value is None or value.utcoffset() is None:return None
+            # The Commission feed reports its publisher-local calendar date.
+            # Preserve that date instead of shifting midnight to UTC's prior day.
+            return value.date().isoformat()
+        except (TypeError,ValueError,OverflowError):
+            return None
     if meaning in ('expansion_listing_published','expansion_feed_publication'):return date(obs[0]['value'])
     if meaning=='listing_published_display' and row.get('source_type') in ('professional_publication','research_organization','civil_society_organization'):
         value=obs[0]['value']
@@ -461,9 +543,20 @@ def detail_request_url(source,url):
     if source=='anpd-br':
         path=urlsplit(url).path
         return 'https://www.gov.br/anpd/++api++'+path[len('/anpd'):]
+    if source=='eu-parliament':
+        parsed=urlsplit(url)
+        if parsed.hostname!='data.europarl.europa.eu' or not re.fullmatch(r'/api/v2/documents/[A-Za-z0-9][A-Za-z0-9._-]*',parsed.path):
+            raise ValueError('eu_parliament_detail_path_unverified')
+        return parsed._replace(query=urlencode({'format':'application/ld+json','language':'en'})).geturl()
     if source!='ec':return url
     code=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
     return 'https://ec.europa.eu/commission/presscorner/api/documents?'+urlencode({'language':'en','reference':code})
+
+def detail_request_headers(source):
+    # EP's API negotiates JSON-LD through Accept. The query parameter alone is
+    # not sufficient: its default */* response is RDF/XML and cannot be parsed
+    # by the document adapter.
+    return {'Accept':'application/ld+json'} if source=='eu-parliament' else None
 
 def discover(source,html,url,response_headers=None):
     from .parsers import normalize
@@ -485,6 +578,9 @@ def discover(source,html,url,response_headers=None):
             row['url']=_canonical(row['url'],source,url)
             row['rss_source']='nl-ap'
         return parsed,nxt
+    if source=='eu-parliament':
+        from .parsers import discover_eu_parliament_feed
+        return discover_eu_parliament_feed(html,url),None
     if source=='eu-council':
         from .parsers import discover_rss
         parsed,_=discover_rss(html,url,keep_feed_text=True)
@@ -703,7 +799,20 @@ def discover(source,html,url,response_headers=None):
     elif c.get('feed'):
         if re.search(r'<!DOCTYPE|<!ENTITY',html,re.I):raise ValueError('xml_entities_rejected')
         root=ET.fromstring(html)
-        for item in root.findall('./channel/item'):add(item.findtext('link',''),item.findtext('title',''),item.findtext('pubDate'),'RSS pubDate','expansion_feed_publication')
+        feed_meaning='expansion_feed_publication_rfc822' if source in ('ec','ec-news') else 'expansion_feed_publication'
+        for item in root.findall('./channel/item'):
+            raw_link=item.findtext('link','')
+            if source in ('ec','ec-news'):
+                # The Commission feeds include syndicated Press Corner entries
+                # and, for Press Corner, occasional non-English items even
+                # when language=en is requested. Only retain article links
+                # belonging to this source's verified English route; never
+                # fail the entire feed or fetch a different source's link.
+                candidate=urlsplit(raw_link)
+                if (candidate.hostname!=c['host'] or
+                        not re.fullmatch(c['article_path'],candidate.path)):
+                    continue
+            add(raw_link,item.findtext('title',''),item.findtext('pubDate'),'RSS pubDate',feed_meaning)
         nxt=None
     else:
         soup=BeautifulSoup(html,'html.parser')
@@ -818,6 +927,47 @@ def extract(source,input,url,row=None):
                 'factual_status':'official_agency_news_not_independently_reviewed',
                 'relevance_reason':'official_personal_data_protection_authority_news_human_relevance_review_pending',
                 'ai_ready':False,'extraction_method':'official_plone_rest_api'}}
+    if source=='eu-parliament':
+        try:data=json.loads(input)
+        except (TypeError,json.JSONDecodeError) as error:raise ValueError('eu_parliament_detail_json_invalid') from error
+        entity=data.get('data') if isinstance(data,dict) else None
+        if isinstance(entity,list):
+            if len(entity)!=1:raise ValueError('eu_parliament_detail_identity_ambiguous')
+            entity=entity[0]
+        if not isinstance(entity,dict):raise ValueError('eu_parliament_detail_schema_changed')
+        expected=urlsplit(url).path.rsplit('/',1)[-1]
+        identifier=entity.get('id') or entity.get('identifier')
+        if not isinstance(identifier,str) or identifier.rsplit('/',1)[-1]!=expected:
+            raise ValueError('eu_parliament_detail_identity_mismatch')
+        title=entity.get('title_dcterms') or entity.get('title') or entity.get('label')
+        if isinstance(title,dict):title=title.get('en') or title.get('@value')
+        if not isinstance(title,str) or not title.strip():raise ValueError('eu_parliament_detail_title_missing')
+        body_values=[]
+        for field in ('description','abstract','summary','content','text'):
+            value=entity.get(field)
+            if isinstance(value,str) and value.strip():body_values.append(value)
+            elif isinstance(value,list):body_values.extend(v for v in value if isinstance(v,str) and v.strip())
+        body=normalize(' '.join(body_values))
+        date_value=(entity.get('document_date') or entity.get('date_document') or
+                    entity.get('date') or entity.get('publication_date'))
+        if isinstance(date_value,str):observations.append({'meaning':'official_published_attribute','locator':'European Parliament Open Data API document date','value':date_value})
+        published_values={date(value) for value in [date_value] if isinstance(value,str)}-{None}
+        listed=listing_date(row) if row else None
+        if listed:published_values.add(listed)
+        published=next(iter(published_values)) if len(published_values)==1 else None
+        date_conflict=len(published_values)>1
+        if len(body)<40:
+            raise ValueError('eu_parliament_api_has_metadata_only_no_draft_body')
+        return {'title_original':normalize(title),'content_text':body,'content_hash':hashlib.sha256(body.encode()).hexdigest(),
+            'published_date':published,'metadata':{'normalization_version':'main-body-nfc-v1','parser_version':'ep-open-data-document-v1',
+                'read_scope':'official_open_data_api_document_text','date_observations':observations,
+                'requires_review':not bool(published),'date_conflict':date_conflict,
+                'related_documents':[],'unread_attachments':[],
+                'license':'CC BY 4.0','attribution_required':True,
+                'attribution':'European Parliament Open Data',
+                'factual_status':'official_european_parliament_document_not_independently_reviewed',
+                'relevance_reason':'official_open_data_full_text_human_topic_review_pending',
+                'ai_ready':bool(published),'extraction_method':'european_parliament_open_data_api'}}
     if source=='ec':
         data=json.loads(input);body=data.get('docuLanguageResource',{});expected=urlsplit(url).path.rsplit('/',1)[1].replace('_','/').upper()
         if str(data.get('refCd','')).upper()!=expected or not isinstance(body.get('title'),str) or not isinstance(body.get('htmlContent'),str) or data.get('originalLanguage') is None:raise ValueError('ec_detail_schema_or_identity_changed')

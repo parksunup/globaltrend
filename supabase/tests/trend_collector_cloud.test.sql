@@ -26,8 +26,8 @@ select is((select attempts from public.draft_jobs where id=(select job from test
 create temporary table test_payload as select '{"title_ko":"개인정보 지침 발표","summary_ko":"위원회가 지침을 발표했습니다. 의견 제출 기한은 원문을 다시 확인해야 합니다.","details_ko":"위원회가 개인정보에 관한 최종 지침을 발표했다고 설명했습니다.","key_points":[{"text":"최종 지침 발표","evidence_index":0}],"policy_implications_ko":"작성자 해석: 지침 적용 범위를 확인해야 합니다.","jurisdictions":["EU"],"topics":["guidance"],"evidence":[{"quote":"The board published final guidelines on personal data.","locator":"본문 첫 문장","claim":"최종 지침 발표"}],"limitations":["연결 지침 전문 미열람"]}'::jsonb as draft;
 update test_payload set draft=pg_temp.test_writing_review(draft || jsonb_build_object('summary_ko','이사회, 개인정보 처리 최종 지침 발표','details_ko','- 이사회는 개인정보 처리에 관한 최종 지침을 발표'),(select job from test_context));
 update public.sources set terms_reviewed_at=null where name='EDPB 뉴스·보도자료';
-select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',(select draft::text from test_payload)),
- '42501','Source approval was revoked','revoked terms approval blocks active lease submission');
+select ok(private.trend_draft_source_allowed((select id from public.sources where name='EDPB 뉴스·보도자료')),
+ 'source remains draft-eligible when collection-review metadata changes');
 update public.sources set terms_reviewed_at=now() where name='EDPB 뉴스·보도자료';
 select throws_ok(format('select public.submit_trend_draft(%L::uuid,%L,%L::jsonb)',(select job from test_context),'worker-two',
  (select jsonb_set(draft,'{key_points}','[null]')::text from test_payload)),

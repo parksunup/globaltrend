@@ -65,6 +65,24 @@ def parse_listing(source_id: str, html: str, listing_url: str) -> list[dict]:
     return list(rows.values())
 
 
+def proves_before_window(rows: list[dict], since: str) -> bool:
+    """CAC's official data-governance listing is newest-first by display date."""
+    if not rows:
+        return False
+    dates = []
+    for row in rows:
+        value = row.get("published_date")
+        if not value:
+            return False
+        try:
+            dates.append(date.fromisoformat(str(value)).isoformat())
+        except ValueError:
+            return False
+    if any(dates[index] > dates[index - 1] for index in range(1, len(dates))):
+        return False
+    return dates[-1] < since
+
+
 def parse_detail(source_id: str, html: str, url: str, row: dict) -> dict:
     """Read CAC's title, visible publication date, body, and linked assets.
 

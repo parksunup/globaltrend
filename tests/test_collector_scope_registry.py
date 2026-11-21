@@ -18,7 +18,7 @@ class CollectorScopeRegistryTests(unittest.TestCase):
 
     def test_every_requested_catalog_id_has_both_runtime_registry_records(self):
         expected = set(self.catalog_by_id)
-        self.assertEqual(37, len(expected))
+        self.assertEqual(39, len(expected))
         self.assertTrue(expected <= set(self.cloud_by_id))
         self.assertTrue(expected <= set(self.edge_by_id))
 

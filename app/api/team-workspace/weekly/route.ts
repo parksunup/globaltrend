@@ -5,7 +5,28 @@ export const dynamic='force-dynamic';
 const headers={'Cache-Control':'private, no-store','Vary':'Cookie','X-Robots-Tag':'noindex, nofollow'};
 async function membership(){const db=await createClient();const {data:{user}}=await db.auth.getUser();if(!user)return {db,canRead:false,canManage:false};const {data:member}=await db.from('team_memberships').select('role,is_active').eq('user_id',user.id).maybeSingle();return {db,canRead:Boolean(member?.is_active&&['admin','editor'].includes(member.role)),canManage:Boolean(member?.is_active&&member.role==='admin')};}
 function period(start:string){if(!/^\d{4}-\d{2}-\d{2}$/.test(start))return null;const day=new Date(`${start}T00:00:00Z`);if(Number.isNaN(day.valueOf())||day.toISOString().slice(0,10)!==start||day.getUTCDay()!==1)return null;const end=new Date(day);end.setUTCDate(end.getUTCDate()+6);return {start,end:end.toISOString().slice(0,10),key:monthlyWeekIssueKey(start)};}
-export async function GET(request:Request){const {db,canRead}=await membership();if(!canRead)return Response.json({error:'팀 계정으로 로그인해 주세요.'},{status:403,headers});const target=period(new URL(request.url).searchParams.get('start')??'');if(!target)return Response.json({error:'대상 주의 월요일을 선택해 주세요.'},{status:400,headers});const {data,error}=await db.from('written_weekly_issues').select('issue_key,title,status,selection_notes').eq('issue_key',target.key).maybeSingle();if(error)return Response.json({error:'주간호 선정안을 읽지 못했습니다.'},{status:500,headers});if(!data)return Response.json({issue:null},{headers});const {data:featured,error:featuredError}=await db.from('homepage_featured_weekly_reports').select('report_id').eq('issue_key',target.key).maybeSingle();if(featuredError)return Response.json({error:'메인 추천 설정을 읽지 못했습니다.'},{status:500,headers});return Response.json({issue:{...data,featured_report_id:featured?.report_id??null}},{headers});}
+export async function GET(request:Request){
+ const {db,canRead}=await membership();
+ if(!canRead)return Response.json({error:'팀 계정으로 로그인해 주세요.'},{status:403,headers});
+ const params=new URL(request.url).searchParams;
+ const latest=params.get('latest')==='published';
+ let data,error;
+ if(latest){
+  const result=await db.from('written_weekly_issues').select('issue_key,title,status,selection_notes,week_start')
+   .eq('status','published').order('week_start',{ascending:false}).order('issue_key',{ascending:false}).limit(1).maybeSingle();
+  data=result.data;error=result.error;
+ }else{
+  const target=period(params.get('start')??'');
+  if(!target)return Response.json({error:'대상 주의 월요일을 선택해 주세요.'},{status:400,headers});
+  const result=await db.from('written_weekly_issues').select('issue_key,title,status,selection_notes,week_start').eq('issue_key',target.key).maybeSingle();
+  data=result.data;error=result.error;
+ }
+ if(error)return Response.json({error:'주간호 선정안을 읽지 못했습니다.'},{status:500,headers});
+ if(!data)return Response.json({issue:null},{headers});
+ const {data:featured,error:featuredError}=await db.from('homepage_featured_weekly_reports').select('report_id').eq('issue_key',data.issue_key).maybeSingle();
+ if(featuredError)return Response.json({error:'메인 추천 설정을 읽지 못했습니다.'},{status:500,headers});
+ return Response.json({issue:{...data,featured_report_id:featured?.report_id??null}},{headers});
+}
 export async function POST(request:Request){if(process.env.VERCEL_ENV==='preview')return Response.json({error:'미리보기에서는 저장하지 않습니다.'},{status:403,headers});if(request.headers.get('origin')!==new URL(request.url).origin)return Response.json({error:'작업실에서만 저장할 수 있습니다.'},{status:403,headers});const {db,canManage}=await membership();if(!canManage)return Response.json({error:'주간 선정안 저장은 총괄 관리자만 할 수 있습니다.'},{status:403,headers});let body:{action?:string;start:string;end:string;key:string;title:string;selection:{report_id:string;reason:string}[];report_id?:string|null};try{if(Number(request.headers.get('content-length')??0)>20000)throw Error();body=await request.json();}catch{return Response.json({error:'선정안 형식을 확인해 주세요.'},{status:400,headers});}if(body?.action==='set-featured'){
  const target=typeof body.start==='string'?period(body.start):null;
  if(!target||target.key!==body.key||target.end!==body.end||!(body.report_id===null||typeof body.report_id==='string'&&/^[a-f0-9-]{36}$/i.test(body.report_id)))return Response.json({error:'메인 추천 자료를 다시 확인해 주세요.'},{status:400,headers});

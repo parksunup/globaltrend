@@ -1,10 +1,6 @@
 name: NotebookLM cloud podcast
 on:
   workflow_dispatch:
-  schedule:
-    # Low-frequency maintenance. GitHub may delay/drop cron events; monitor
-    # actual verification timestamps, never infer success from this schedule.
-    - cron: '17 * * * *'
 permissions:
   contents: read
   id-token: write

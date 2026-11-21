@@ -45,13 +45,11 @@ on conflict (day) do update set claims = 10;
 select is(jsonb_array_length(public.claim_trend_draft_jobs('missing-worker', 1, 'ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid)), 0,
  'unknown target does not claim another job');
 select is(jsonb_array_length(public.claim_trend_draft_jobs('undated-worker', 1,
- (select job from target_jobs where kind = 'undated'))), 0,
- 'an undated item cannot be claimed even when a faulty importer marks it ready');
-select throws_ok(format('insert into public.reports(source_item_id,title_ko,automation_metadata) values (%L::uuid,%L,%L::jsonb)',
- (select j.source_item_id from public.draft_jobs j join target_jobs t on t.job=j.id where t.kind='undated'),
- '날짜 없는 자동 초안', '{"job_id":"undated-test"}'),
- '22023', 'Auto draft requires a verified publication date',
- 'an existing worker lease cannot submit an undated automatic report');
+ (select job from target_jobs where kind = 'undated'))), 1,
+ 'an undated item with usable current text can be claimed for an individual draft');
+select ok(not exists(select 1 from pg_trigger where tgrelid='public.reports'::regclass
+ and tgname='collector_require_auto_report_date_before_insert' and not tgisinternal),
+ 'a missing publication date is not blocked by a report trigger');
 select is((public.claim_trend_draft_jobs('target-worker', 1, (select job from target_jobs where kind = 'target'))->0->>'job_id')::uuid,
  (select job from target_jobs where kind = 'target'), 'targeted claim returns only the requested job');
 select is((select status from public.draft_jobs where id = (select job from target_jobs where kind = 'other')),

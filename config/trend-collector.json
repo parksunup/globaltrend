@@ -140,6 +140,32 @@
       "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
     },
     {
+      "source": "imda",
+      "source_id": "bab5bef0-c433-586d-b7c6-68b5214361ef",
+      "listing": "https://www.imda.gov.sg/resources/press-releases-factsheets-and-speeches?page=1",
+      "hosts": [
+        "www.imda.gov.sg"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_release_archive_server_rendered_listing_and_article_body",
+      "verification_status": "official_archive_detail_robots_and_terms_route_reviewed",
+      "verification": "Official IMDA release archive responds with a server-rendered, date-ordered release list and article details. robots.txt permits this listing and article path; it disallows unrelated paths such as /search and /upload, which this route never requests. A sample page and details were checked. Only privacy/data-protection-relevant releases are ingested; body and dates are machine extracted and remain subject to human relevance review. This is not a claim of a reuse license.",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "coverage_complete": false,
+      "approval_basis": "User requested an official alternative route for Singapore privacy developments when PDPC collection fails; IMDA is the parent authority of PDPC and its official press release archive provides a direct, robots-permitted route.",
+      "pagination_order": "newest_first",
+      "runtime_activation_basis": "user_requested_singapore_pdpc_alternate_imda_route",
+      "fallback_for": "pdpc"
+    },
+    {
       "source": "ppc",
       "source_id": "1f948872-529c-4db2-85af-4740d5f2bae3",
       "listing": "https://www.ppc.go.jp/news/press/",
@@ -206,7 +232,7 @@
     {
       "source": "ec",
       "source_id": "5e5d193b-d98c-524a-9949-c35e8938caad",
-      "listing": "https://ec.europa.eu/commission/presscorner/api/search?language=en&pagesize=10&pagenumber=1",
+      "listing": "https://ec.europa.eu/commission/presscorner/api/rss?language=en",
       "hosts": [
         "ec.europa.eu"
       ],
@@ -218,12 +244,44 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_presscorner_paginated_search_api_identity_checked_document_api_detail_trafilatura_first",
+      "adapter_scope": "official_press_corner_rss_to_identity_checked_document_api_full_body",
+      "verification_status": "official_press_corner_rss_and_document_api_verified",
+      "verification": "Official Press Corner RSS is used only to discover entries; every entry is followed through its official document API and publication date/body are extracted. Feed window is rolling and not represented as complete historical coverage.",
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
       "expansion_phase": 1,
-      "runtime_activation_basis": "user_explicitly_activated_pr114_crawlee_source_set_2026-11-11"
+      "runtime_activation_basis": "user_requested_ec_presscorner_rss_route",
+      "approval_basis": "User requested official Press Corner RSS collection into the automatic Korean draft source pipeline."
+    },
+    {
+      "source": "ec-news",
+      "source_id": "6215bf4c-3cdb-5eb8-9dad-f5904bab3cd5",
+      "listing": "https://commission.europa.eu/node/2/rss_en",
+      "hosts": [
+        "commission.europa.eu"
+      ],
+      "language": "en",
+      "enabled": true,
+      "permissions": {
+        "collect": true,
+        "store": true,
+        "ai": true
+      },
+      "hold_reason": null,
+      "adapter_scope": "official_commission_news_rss_to_article_body",
+      "verification_status": "official_rss_and_article_route_verified",
+      "verification": "Official Commission News RSS was reachable as application/rss+xml and exposed 30 entries. Entries are followed only on the Commission news host; detail body and publication date must be extracted before draft eligibility. Rolling window is not complete archive coverage.",
+      "executor": "cloud-python",
+      "cadence": "daily",
+      "lookback_days": 7,
+      "expansion_phase": 1,
+      "name": "European Commission News",
+      "publisher_id": "96191444-95f6-5553-8f3e-eb8e18ed205a",
+      "jurisdiction": "EU",
+      "publisher_type": "government",
+      "approval_basis": "User requested the European Commission news RSS as an additional official route into the draft pipeline.",
+      "runtime_activation_basis": "user_requested_ec_news_rss_route"
     },
     {
       "source": "calprivacy",
@@ -320,9 +378,11 @@
     {
       "source": "eu-parliament",
       "source_id": "0d91c2b9-8884-5533-95c2-09469c6db19b",
-      "listing": "https://www.europarl.europa.eu/rss/doc/press-releases/en.xml",
+      "listing": "https://data.europarl.europa.eu/api/v2/documents/feed",
       "hosts": [
-        "www.europarl.europa.eu"
+        "data.europarl.europa.eu",
+        "www.europarl.europa.eu",
+        "redmapl3.europarl.europa.eu"
       ],
       "language": "en",
       "enabled": true,
@@ -332,11 +392,15 @@
         "ai": true
       },
       "hold_reason": null,
-      "adapter_scope": "official_press_or_news_body",
+      "adapter_scope": "official_open_data_api_document_feed_detail_and_text",
+      "verification_status": "official_open_data_api_v2_route_verified",
+      "verification": "Uses the European Parliament Open Data API v2 documents feed (published or updated within its documented feed window), then fetches each entry from the same official API. Draft eligibility requires an exact document publication date and substantive text; metadata-only records are held for review and not sent to automated drafting. API documentation states CC BY 4.0 attribution. Feed-window completeness is not historical archive coverage.",
       "executor": "cloud-python",
       "cadence": "daily",
       "lookback_days": 3,
-      "expansion_phase": 2
+      "expansion_phase": 2,
+      "approval_basis": "User explicitly requested automatic collection through the European Parliament Open Data API and handoff to the Korean draft pipeline.",
+      "runtime_activation_basis": "user_requested_european_parliament_open_data_api_route"
     },
     {
       "source": "eu-council",

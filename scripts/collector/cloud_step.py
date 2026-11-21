@@ -16,7 +16,7 @@ from . import extraction
 ROOT = Path(__file__).resolve().parents[2]
 def validate_claim(claim):
     if claim.get('slug') not in ('oecd', 'ftc'):
-        configs=json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+        configs=json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))['sources']
         if not any(c['source']==claim.get('slug') and c['source_id']==claim.get('source_id') and c.get('enabled') and c.get('executor')=='cloud-python' for c in configs):
             raise ValueError('cloud_source_not_assigned')
     expires = dt.datetime.fromisoformat(claim['lease_until'].replace('Z', '+00:00'))
@@ -118,7 +118,7 @@ class PreparedStore:
 
 def prepare(claim):
     validate_claim(claim)
-    registry = json.loads((ROOT/'config/trend-collector.json').read_text())
+    registry = json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))
     config = next(c for c in registry['sources'] if c['source'] == claim['slug'])
     if config['source_id'] != claim['source_id']:
         raise ValueError('claim_source_mismatch')
@@ -148,7 +148,7 @@ def prepare(claim):
                 # These official RSS feeds carry a body we can save without
                 # fetching linked detail pages. NPC has full content:encoded;
                 # NL AP supplies a short summary and blocks detail URLs.
-                source_config = next(c for c in json.loads((ROOT/'config/trend-collector.json').read_text())['sources']
+                source_config = next(c for c in json.loads((ROOT/'config/trend-collector.json').read_text(encoding='utf-8'))['sources']
                                      if c['source'] == claim['slug'])
                 body, feed_url, ctype = client.get(source_config['listing'])
                 if ctype not in ('application/rss+xml', 'application/xml', 'text/xml'):
@@ -163,7 +163,12 @@ def prepare(claim):
                 url = detail['url']
                 canonical_detail = detail['url']
             else:
-                body, url, ctype = client.get(parsers.expansion.detail_request_url(claim['slug'],detail['url']))
+                detail_url=parsers.expansion.detail_request_url(claim['slug'],detail['url'])
+                request_headers=parsers.expansion.detail_request_headers(claim['slug'])
+                if request_headers:
+                    body, url, ctype = client.get(detail_url,headers=request_headers)
+                else:
+                    body, url, ctype = client.get(detail_url)
                 if claim['slug'] in parsers.expansion.ROUTES:
                     parsers.expansion.verify_detail_response(claim['slug'],detail['url'],url)
                 canonical_detail=detail['url'] if claim['slug']=='ec' else url
@@ -302,7 +307,7 @@ def main():
     parser.add_argument('--claim', required=True)
     parser.add_argument('--output', required=True)
     args = parser.parse_args()
-    bundle = prepare(json.loads(Path(args.claim).read_text()))
+    bundle = prepare(json.loads(Path(args.claim).read_text(encoding='utf-8')))
     path = Path(args.output)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(bundle, ensure_ascii=False, indent=2))
