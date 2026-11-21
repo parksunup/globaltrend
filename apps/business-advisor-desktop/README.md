@@ -1,4 +1,6 @@
-# GlobalTrend 기업 개인정보 보호 도우미
+# 국제요정 상담소
+
+해외 진출 기업 개인정보 보호 도우미
 
 국제요정에서 내려받아 사용하는 Windows 데스크톱 대화형 상담 앱입니다. 사용자는 ChatGPT 계정을 연결한 뒤, 미리 검색식을 만들거나 자료를 고를 필요 없이 자연어로 궁금한 점을 묻고 후속 질문을 이어갈 수 있습니다. 이 앱은 통합검색 화면이 아닙니다.
 
@@ -19,13 +21,13 @@ npm install
 npm start
 ```
 
-Windows 64비트 배포용 ZIP:
+Windows 64비트 단일 실행 파일:
 
 ```sh
 npm run dist:win
 ```
 
-출력은 `release/GlobalTrend-Business-Advisor-<version>-Windows-x64.zip`입니다. 코드 서명은 아직 구성되지 않았습니다. GitHub Actions는 `business-advisor-v*` 태그를 push할 때 빌드하고 Release에 게시합니다.
+출력은 `release/국제요정-상담소-<version>-Windows-x64.exe` 단일 실행 파일입니다. 압축 해제 없이 실행할 수 있으며, Electron 런타임이 포함되어 파일 크기가 큽니다. 코드 서명은 아직 구성되지 않았으므로 Windows에서 실행 전 경고가 표시될 수 있습니다. GitHub Actions는 `business-advisor-v*` 태그를 push할 때 빌드하고 Release에 게시합니다.
 
 ## ChatGPT 계정 연결
 

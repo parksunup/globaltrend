@@ -7,12 +7,17 @@ import eu from "../../../data/business-readiness/questions/EU.json";
 import uk from "../../../data/business-readiness/questions/UK.json";
 import california from "../../../data/business-readiness/questions/US-CA.json";
 import singapore from "../../../data/business-readiness/questions/SG.json";
+import guideCatalog from "../../../data/business-readiness/guides-content.json";
 import styles from "./business-readiness.module.css";
+import MarkdownContent from "./markdown-content";
 
 type Answer = "ready" | "partial" | "not_started" | "unknown" | "not_applicable";
 type Question = { id: string; category: string; question: string; helpText: string; sourceNote: string; sourceUrl?: string; jurisdiction: string };
 type QuestionFile = { jurisdiction: string; guidePath: string; questions: Omit<Question, "jurisdiction">[] };
-type Jurisdiction = { code: string; label: string; shortName: string; guideUrl: string };
+type Jurisdiction = { code: string; label: string; shortName: string; flag: string; guideUrl: string };
+type GuideSection = { id: string; title: string; markdown: string };
+type GuideEntry = { guidePath: string; sections: GuideSection[]; questions: Array<{ questionId: string; sectionIds: string[]; externalNote: string; coverageNote: string; unmappedReason: string }> };
+const guides = guideCatalog as Record<string, GuideEntry>;
 
 const questionFiles: Record<string, QuestionFile> = {
   JP: jp as QuestionFile,
@@ -24,12 +29,12 @@ const questionFiles: Record<string, QuestionFile> = {
 };
 
 const jurisdictions: Jurisdiction[] = [
-  { code: "JP", label: "일본", shortName: "개인정보 보호법(APPI)", guideUrl: "https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/" },
-  { code: "CN", label: "중국", shortName: "개인정보보호법(PIPL)", guideUrl: "https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm" },
-  { code: "EU", label: "EU", shortName: "GDPR", guideUrl: "https://www.edpb.europa.eu/sme_en" },
-  { code: "UK", label: "영국", shortName: "UK GDPR", guideUrl: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/" },
-  { code: "US-CA", label: "미국 캘리포니아주", shortName: "CCPA/CPRA", guideUrl: "https://cppa.ca.gov/regulations/" },
-  { code: "SG", label: "싱가포르", shortName: "PDPA", guideUrl: "https://www.pdpc.gov.sg/guidelines-and-consultation" },
+  { code: "JP", label: "일본", shortName: "개인정보 보호법(APPI)", flag: "🇯🇵", guideUrl: "https://www.ppc.go.jp/personalinfo/legal/guidelines_tsusoku/" },
+  { code: "CN", label: "중국", shortName: "개인정보보호법(PIPL)", flag: "🇨🇳", guideUrl: "https://www.cac.gov.cn/2025-02/14/c_1741233507681519.htm" },
+  { code: "EU", label: "EU", shortName: "GDPR", flag: "🇪🇺", guideUrl: "https://www.edpb.europa.eu/sme_en" },
+  { code: "UK", label: "영국", shortName: "UK GDPR", flag: "🇬🇧", guideUrl: "https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/" },
+  { code: "US-CA", label: "미국 캘리포니아주", shortName: "CCPA/CPRA", flag: "🇺🇸", guideUrl: "https://cppa.ca.gov/regulations/" },
+  { code: "SG", label: "싱가포르", shortName: "PDPA", flag: "🇸🇬", guideUrl: "https://www.pdpc.gov.sg/guidelines-and-consultation" },
 ];
 
 const answerOptions: { id: Answer; label: string }[] = [
@@ -120,10 +125,13 @@ export default function BusinessReadinessFlow() {
         <p className={styles.kicker}>점검 결과</p>
         <h2>확인할 준비 항목을 모았어요</h2>
         <p>선택한 관할 {selected.length}곳 · 답변한 질문 {results.length}개 · 추가로 살펴볼 항목 {actionCount}개</p>
-        <p className={styles.caveat}>이 결과는 답변을 정리한 참고자료입니다. 법률상 준수 여부나 위반 여부를 판정하지 않습니다.</p>
+        <p className={styles.caveat}>이 결과는 입력한 답변을 정리한 참고자료이며, 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 답변의 정확성과 최신 법령·공식 지침 확인, 실제 적용 및 후속 조치의 책임은 이용자에게 있습니다.</p>
       </div>
       <div className={styles.resultList}>{results.map(({ item, answer, outcome, reason }) => {
         const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
+        const guide = guides[item.jurisdiction];
+        const guideReference = guide?.questions.find(reference => reference.questionId === item.id);
+        const guideSections = guideReference?.sectionIds.map(id => guide.sections.find(section => section.id === id)).filter((section): section is GuideSection => Boolean(section)) ?? [];
         return <article className={styles.resultCard} key={item.id}>
           <div className={styles.resultMeta}><span>{jurisdiction?.label} · {item.category}</span><b data-level={answer === "ready" ? "check" : outcome.needsAction ? "attention" : "unknown"}>{outcome.label}</b></div>
           <h3>{item.question}</h3>
@@ -134,6 +142,14 @@ export default function BusinessReadinessFlow() {
             <summary>근거와 안내자료 보기</summary>
             <div className={styles.sources}>
               <p>{item.sourceNote}</p>
+              {guideSections.map(section => <section className={styles.guideExcerpt} key={section.id}>
+                <strong>{section.title}</strong>
+                <MarkdownContent markdown={section.markdown.replace(/^#{1,4}\s+.*(?:\r?\n)+/, "")} className={styles.guideExcerptText} />
+                <a href={`${guide?.guidePath}#${encodeURIComponent(section.id)}`}>안내서에서 이 부분 열기 ↗</a>
+              </section>)}
+              {guideReference?.externalNote && <p className={styles.coverageNote}>{guideReference.externalNote}</p>}
+              {guideReference?.coverageNote && <p className={styles.coverageNote}>{guideReference.coverageNote}</p>}
+              {guideReference?.unmappedReason && <p className={styles.coverageNote}>{guideReference.unmappedReason}</p>}
               {jurisdiction && <p><a href={item.sourceUrl || jurisdiction.guideUrl} target="_blank" rel="noreferrer">{item.sourceUrl ? "관련 공식 안내 열기 ↗" : `${jurisdiction.label} 공식 안내자료 열기 ↗`}</a></p>}
             </div>
           </details>
@@ -149,7 +165,7 @@ export default function BusinessReadinessFlow() {
         <button type="button" className={styles.primary} disabled={handoffBusy} onClick={() => void consultWithResult(results)}>{handoffBusy ? "상담 앱을 여는 중…" : "자가점검 결과를 토대로 AI 상담하기"}<span aria-hidden="true"> →</span></button>
         <a className={styles.appDownload} href="/public/business-advisor-download">상담 앱이 아직 없다면 내려받기 ↗</a>
         {handoffError && <p className={styles.handoffError} role="alert">{handoffError} <a href="/public/business-advisor-download">상담 앱 내려받기 ↗</a></p>}
-        <p className={styles.handoffNote}>답변은 이 사이트에 저장하지 않습니다. 버튼을 누르면 선택한 지역과 보완 항목이 상담 앱으로 전달되고, 상담을 시작할 때 사용자의 ChatGPT 연결로 전송됩니다. 해당 없음의 자유 입력 사유와 준비 완료 답변은 전달하지 않습니다.</p>
+      <p className={styles.handoffNote}>답변은 이 사이트에 저장하지 않습니다. 버튼을 누르면 선택한 지역과 보완 항목이 상담 앱으로 전달되고, 상담을 시작할 때 사용자의 ChatGPT 연결로 전송됩니다. 해당 없음의 자유 입력 사유와 준비 완료 답변은 전달하지 않습니다. 상담 앱의 답변도 개인정보보호위원회나 해외 감독기구의 공식 유권해석이 아니며, 답변 확인과 실제 조치의 책임은 이용자에게 있습니다.</p>
       </div>
       <p className={styles.dataNote}>응답은 이 브라우저 화면에서만 계산하며 서버에 저장하지 않습니다.</p>
     </section>;
@@ -163,7 +179,7 @@ export default function BusinessReadinessFlow() {
       <p className={styles.instruction}>지역마다 다른 질문을 보여드립니다. 선택한 지역이 여러 곳이면 각 지역 질문이 차례로 이어집니다.</p>
       <div className={styles.jurisdictions}>{jurisdictions.map((jurisdiction) => <label key={jurisdiction.code} className={selected.includes(jurisdiction.code) ? styles.jurisdictionSelected : ""}>
         <input type="checkbox" checked={selected.includes(jurisdiction.code)} onChange={() => toggleJurisdiction(jurisdiction.code)} />
-        <span><strong>{jurisdiction.label}</strong><small>{jurisdiction.shortName} · {questionFiles[jurisdiction.code].questions.length}개 질문</small></span>
+        <span><strong><span aria-hidden="true" className={styles.flagIcon}>{jurisdiction.flag}</span> {jurisdiction.label}</strong><small>{jurisdiction.shortName} · {questionFiles[jurisdiction.code].questions.length}개 질문</small></span>
       </label>)}</div>
       <div className={styles.controls}>
         <span className={styles.selectionCount}>{selected.length}개 지역 · 질문 {selectedQuestions}개</span>

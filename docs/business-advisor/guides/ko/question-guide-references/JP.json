@@ -1,0 +1,41 @@
+{
+  "jurisdiction": "JP",
+  "guidePath": "docs/business-advisor/guides/japan-appi-guide.md",
+  "mappingBasis": "각 질문 JSON의 기존 sourceNote에 적힌 안내서 절 및 원문 쪽수만 매핑 근거로 사용했습니다. 질문 문구는 근거로 사용하지 않았습니다.",
+  "sections": [
+    { "id": "jp-sec-1", "title": "1. 자료 선정과 읽기 범위" },
+    { "id": "jp-sec-2", "title": "2. 누구에게 적용되는지 먼저 판단합니다" },
+    { "id": "jp-sec-3", "title": "3. 목적을 구체적으로 정하고, 수집·이용을 목적과 연결합니다" },
+    { "id": "jp-sec-4", "title": "4. 일본 밖의 사업자에게 데이터를 제공할 때 별도 경로를 확인합니다" },
+    { "id": "jp-sec-5", "title": "5. 국내외 제3자 제공은 ‘보낼 때’와 ‘받을 때’를 모두 기록합니다" },
+    { "id": "jp-sec-6", "title": "6. 직원·수탁업체·재수탁업체의 처리도 회사 관리 범위에 둡니다" },
+    { "id": "jp-sec-7", "title": "7. 보안, 보유기간, 사고 대응을 운영 절차로 만듭니다" },
+    { "id": "jp-sec-8", "title": "8. 소규모 기업 점검표를 적용하는 법" },
+    { "id": "jp-sec-9", "title": "9. 자가진단 도구에 옮길 때의 설계 기준" },
+    { "id": "jp-sec-10", "title": "10. 법령·개정 상태 표기 원칙" },
+    { "id": "jp-extra-review", "title": "통칙편 추가 전수 검토: 기존 요약에서 빠진 범위" }
+  ],
+  "questions": [
+    { "questionId": "JP-01", "sourceNote": "안내서 §2·추가 전수검토표 1–2, 21–24·170–176쪽", "sectionIds": ["jp-sec-2", "jp-extra-review"] },
+    { "questionId": "JP-02", "sourceNote": "안내서 §2·§10·추가 전수검토표 1–2, 41–55, 100–125, 154–169쪽", "sectionIds": ["jp-sec-2", "jp-sec-10", "jp-extra-review"] },
+    { "questionId": "JP-03", "sourceNote": "안내서 §2·§5·추가 전수검토표 21–24, 76–125쪽", "sectionIds": ["jp-sec-2", "jp-sec-5", "jp-extra-review"] },
+    { "questionId": "JP-04", "sourceNote": "안내서 §3·추가 전수검토표 1–55쪽", "sectionIds": ["jp-sec-3", "jp-extra-review"] },
+    { "questionId": "JP-05", "sourceNote": "안내서 §10·추가 전수검토표 41–55쪽", "sectionIds": ["jp-sec-10", "jp-extra-review"] },
+    { "questionId": "JP-06", "sourceNote": "안내서 §3·추가 전수검토표 41–55쪽", "sectionIds": ["jp-sec-3", "jp-extra-review"] },
+    { "questionId": "JP-07", "sourceNote": "안내서 §5·추가 전수검토표 76–125쪽", "sectionIds": ["jp-sec-5", "jp-extra-review"] },
+    { "questionId": "JP-08", "sourceNote": "안내서 §7·추가 전수검토표 56–65쪽", "sectionIds": ["jp-sec-7", "jp-extra-review"] },
+    { "questionId": "JP-09", "sourceNote": "안내서 §7–8·추가 전수검토표 56–75, 177–189쪽", "sectionIds": ["jp-sec-7", "jp-sec-8", "jp-extra-review"] },
+    { "questionId": "JP-10", "sourceNote": "안내서 §6–8·추가 전수검토표 56–65, 177–189쪽; 위탁처 감독 리플릿 1쪽", "sectionIds": ["jp-sec-6", "jp-sec-7", "jp-sec-8", "jp-extra-review"], "externalNote": "위탁처 감독 리플릿 PDF 1쪽은 안내서 §6에 요약되어 있습니다." },
+    { "questionId": "JP-11", "sourceNote": "안내서 §5–6·추가 전수검토표 76–99쪽", "sectionIds": ["jp-sec-5", "jp-sec-6", "jp-extra-review"] },
+    { "questionId": "JP-12", "sourceNote": "안내서 §5·추가 전수검토표 100–125쪽", "sectionIds": ["jp-sec-5", "jp-extra-review"] },
+    { "questionId": "JP-13", "sourceNote": "안내서 §4·추가 전수검토표 100–125, 170–176쪽; 외국 제3자 제공편 PDF 1–62쪽", "sectionIds": ["jp-sec-4", "jp-extra-review"], "externalNote": "외국 제3자 제공편 PDF 1–62쪽은 안내서 §4에서 요약합니다. 상세 원문은 안내서 부록의 보존 목록을 확인해 주세요." },
+    { "questionId": "JP-14", "sourceNote": "안내서 §5·추가 전수검토표 76–125쪽; 제3자 제공 확인·기록 의무편 PDF 1–37쪽", "sectionIds": ["jp-sec-5", "jp-extra-review"], "externalNote": "제3자 제공 확인·기록 의무편 PDF 1–37쪽은 안내서 §5에 요약합니다. 상세 원문은 안내서 부록의 보존 목록을 확인해 주세요." },
+    { "questionId": "JP-15", "sourceNote": "안내서 §10·추가 전수검토표 154–169쪽; 가명·익명가공정보편 PDF 1–44쪽", "sectionIds": ["jp-sec-10", "jp-extra-review"], "externalNote": "가명·익명가공정보편 PDF 1–44쪽은 안내서 §10 및 추가 검토표에 요약합니다." },
+    { "questionId": "JP-16", "sourceNote": "안내서 §10·추가 전수검토표 154–169쪽; 가명·익명가공정보편 PDF 45–62쪽", "sectionIds": ["jp-sec-10", "jp-extra-review"], "externalNote": "가명·익명가공정보편 PDF 45–62쪽은 안내서 §10 및 추가 검토표에 요약합니다." },
+    { "questionId": "JP-17", "sourceNote": "안내서 §9·추가 전수검토표 126–153쪽", "sectionIds": ["jp-sec-9", "jp-extra-review"] },
+    { "questionId": "JP-18", "sourceNote": "안내서 §7·추가 전수검토표 56–75쪽", "sectionIds": ["jp-sec-7", "jp-extra-review"] },
+    { "questionId": "JP-19", "sourceNote": "안내서 §7·§9·추가 전수검토표 126–153, 177–189쪽", "sectionIds": ["jp-sec-7", "jp-sec-9", "jp-extra-review"] },
+    { "questionId": "JP-20", "sourceNote": "안내서 §1·추가 전수검토표 154–169쪽. 업종별 지침은 PPC 색인만 확인했으며 개별 지침 전문은 미열람", "sectionIds": ["jp-sec-1", "jp-sec-10", "jp-extra-review"], "coverageNote": "업종별 PPC 개별 지침 전문은 확인하지 않았습니다. 안내서에 수록된 범위만 표시합니다." },
+    { "questionId": "JP-21", "sourceNote": "PPC APPI Q&A, ‘동의의 결과를 판단할 능력이 없는 아동의 연령’ 문답. 나이는 일률적인 법정 경계가 아니며 개별 사정에 따라 판단합니다.", "sectionIds": [], "unmappedReason": "안내서 본문과 추가 검토표에 아동의 동의 능력에 관한 내용이 없습니다. sourceNote가 별도로 인용한 PPC Q&A에만 연결된 근거이므로 안내서 발췌를 억지로 연결하지 않습니다." }
+  ]
+}

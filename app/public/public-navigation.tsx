@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styles from "./public.module.css";
 import { usePublicTheme } from "./public-theme";
 
-const entries = [["/public", "Main"], ["/public/weekly", "주간 동향"], ["/public/search", "해외동향"], ["/public/laws", "국가별 법제"], ["/public/unified-search", "통합 검색"], ["/public/business-readiness", "기업 자가점검"]];
+const entries = [["/public", "Main"], ["/public/weekly", "주간 동향"], ["/public/search", "해외동향"], ["/public/laws", "국가별 법제"], ["/public/unified-search", "통합 검색"], ["/public/business-readiness", "기업 상담소"]];
 export function PublicHeader({ active }: { active: string }) {
   const { theme, toggleTheme } = usePublicTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,7 +18,7 @@ export function PublicHeader({ active }: { active: string }) {
       <Link href="/public/search" aria-label="동향 검색" className={styles.mobileSearch}>검색</Link>
       <button type="button" className={styles.mobileMenuButton} aria-expanded={menuOpen} aria-controls="public-navigation" onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? "닫기" : "메뉴"}</button>
     </div>
-    <nav id="public-navigation" className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`} aria-label="주요 메뉴">{entries.map(([href, label]) => <Link key={href} href={href} className={active === href ? styles.navActive : ""} aria-current={active === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}</Link>)}</nav>
+    <nav id="public-navigation" className={`${styles.nav} ${menuOpen ? styles.navOpen : ""}`} aria-label="주요 메뉴">{entries.map(([href, label]) => href === "/public/business-readiness" ? <span key={href} className={styles.newNavEntry}><span className={styles.newBadge}>New</span><Link href={href} className={active === href ? styles.navActive : ""} aria-current={active === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}</Link></span> : <Link key={href} href={href} className={active === href ? styles.navActive : ""} aria-current={active === href ? "page" : undefined} onClick={() => setMenuOpen(false)}>{label}</Link>)}</nav>
     <Link href="/work" className={styles.workspaceLink}>작업실</Link>
     <button type="button" className={styles.themeToggle} onClick={toggleTheme} aria-label={theme === "dark" ? "밝은 테마로 전환" : "어두운 테마로 전환"} aria-pressed={theme === "light"}>
       <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>{theme === "dark" ? "밝게" : "어둡게"}

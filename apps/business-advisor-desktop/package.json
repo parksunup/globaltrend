@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/copy-renderer.mjs",
     "start": "npm run build && electron .",
-    "dist:win": "npm run build && electron-builder --win zip --x64"
+    "dist:win": "npm run build && electron-builder --win portable --x64"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
@@ -18,7 +18,7 @@
   },
   "build": {
     "appId": "org.globaltrend.business-advisor",
-    "productName": "GlobalTrend 기업 개인정보 보호 도우미",
+    "productName": "국제요정 상담소",
     "protocols": [
       {
         "name": "GlobalTrend 자가점검 상담 연결",
@@ -38,11 +38,11 @@
     "win": {
       "target": [
         {
-          "target": "zip",
+          "target": "portable",
           "arch": ["x64"]
         }
       ],
-      "artifactName": "GlobalTrend-Business-Advisor-${version}-Windows-${arch}.${ext}"
+      "artifactName": "국제요정-상담소-${version}-Windows-${arch}.${ext}"
     }
   }
 }

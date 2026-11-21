@@ -35,7 +35,14 @@ function addMessage(role, text = '') {
   article.className = `message ${role === 'user' ? 'user-message' : 'assistant-message'}`
   const avatar = document.createElement('div')
   avatar.className = 'avatar'
-  avatar.textContent = role === 'user' ? '나' : 'GT'
+  if (role === 'user') avatar.textContent = '나'
+  else {
+    avatar.classList.add('fairy-avatar')
+    const fairy = document.createElement('img')
+    fairy.src = 'assets/fairy.png'
+    fairy.alt = ''
+    avatar.append(fairy)
+  }
   const body = document.createElement('div')
   body.className = 'message-body'
   const speaker = document.createElement('span')
@@ -165,7 +172,9 @@ async function refresh() {
         model.append(option)
       })
       if (available.some(item => item.id === previous)) model.value = previous
-      else if (available.some(item => item.id === 'gpt-5-mini')) model.value = 'gpt-5-mini'
+      else if (available.some(item => item.id === 'gpt-6.2-sol')) model.value = 'gpt-6.2-sol'
+      else if (available.some(item => item.id === 'gpt-6.2-astra')) model.value = 'gpt-6.2-astra'
+      else if (available.length) model.value = available[0].id
     } catch (cause) {
       if (cause instanceof Error && cause.message.includes('연결이 만료')) signedIn = false
       showError(cause instanceof Error ? cause.message : String(cause))

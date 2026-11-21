@@ -1,0 +1,278 @@
+{
+  "jurisdiction": "EU",
+  "guidePath": "docs/business-advisor/guides/eu-gdpr-guide.md",
+  "mappingBasis": "기존 질문의 sourceNote를 담당 EU 안내서의 실제 절과 대조해 연결했습니다. 질문은행을 안내서 작성의 근거로 사용하지 않았습니다.",
+  "sections": [
+    {
+      "id": "eu-21-processing",
+      "title": "처리의 범위와 역외 적용"
+    },
+    {
+      "id": "eu-21-special",
+      "title": "개인정보와 특별한 유형의 개인정보"
+    },
+    {
+      "id": "eu-21-principles",
+      "title": "여섯 원칙과 책임 입증"
+    },
+    {
+      "id": "eu-22-role",
+      "title": "역할은 계약서 명칭보다 목적·수단 결정으로 판단"
+    },
+    {
+      "id": "eu-22-subprocessors",
+      "title": "하위 프로세서와 계약 사슬"
+    },
+    {
+      "id": "eu-22-contract",
+      "title": "컨트롤러–프로세서 계약의 핵심 항목"
+    },
+    {
+      "id": "eu-23-bases",
+      "title": "제6조 법적 근거 6가지"
+    },
+    {
+      "id": "eu-23-consent",
+      "title": "동의"
+    },
+    {
+      "id": "eu-23-child",
+      "title": "아동의 온라인 동의"
+    },
+    {
+      "id": "eu-23-special",
+      "title": "특별한 유형의 개인정보(special categories of personal data)"
+    },
+    {
+      "id": "eu-24-common",
+      "title": "모든 권리에 공통인 운영 절차"
+    },
+    {
+      "id": "eu-24-rights",
+      "title": "권리별 적용과 예외"
+    },
+    {
+      "id": "eu-25-design",
+      "title": "설계·기본설정"
+    },
+    {
+      "id": "eu-25-record",
+      "title": "처리활동 기록(ROPA)"
+    },
+    {
+      "id": "eu-25-dpia",
+      "title": "DPIA"
+    },
+    {
+      "id": "eu-26-dpo",
+      "title": "2.6 Data Protection Officer — 필요 여부와 독립적 역할"
+    },
+    {
+      "id": "eu-27-org",
+      "title": "조직 조치"
+    },
+    {
+      "id": "eu-27-tech",
+      "title": "기술·물리 조치"
+    },
+    {
+      "id": "eu-28-breach",
+      "title": "2.8 Data breaches — 모든 사고의 기록과 위험에 따른 통지"
+    },
+    {
+      "id": "eu-29-transfer",
+      "title": "2.9 International data transfers — 위치·접근을 포함한 이전 판별"
+    },
+    {
+      "id": "eu-29-adequacy",
+      "title": "적정성 결정"
+    },
+    {
+      "id": "eu-29-safeguards",
+      "title": "적절한 보호조치"
+    },
+    {
+      "id": "eu-29-supplementary",
+      "title": "보완조치와 예외"
+    },
+    {
+      "id": "eu-210-faq1",
+      "title": "FAQ 페이지 1"
+    },
+    {
+      "id": "eu-210-faq2",
+      "title": "FAQ 페이지 2"
+    },
+    {
+      "id": "eu-210-faq3",
+      "title": "FAQ 페이지 3"
+    },
+    {
+      "id": "eu-3",
+      "title": "3. 2026년 사업자용 DPbDD 요약 PDF 전체 학습 기록"
+    },
+    {
+      "id": "eu-4",
+      "title": "4. EU 특성에 맞는 기업 자가진단 설계 시사점"
+    },
+    {
+      "id": "eu-5",
+      "title": "5. 현재 법과 입법 중인 변경안 구분"
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "EU-01",
+      "sourceNote": "안내서 §2.1 ‘처리의 범위와 역외 적용’, §4 ‘조건부 분기’; EDPB Data protection basics; GDPR 제3조.",
+      "sectionIds": [
+        "eu-21-processing",
+        "eu-4"
+      ],
+      "coverageNote": "§4의 “조건부 분기”는 별도 소제목이 아니라 해당 절의 글머리 항목이므로 절 전체를 연결합니다."
+    },
+    {
+      "questionId": "EU-02",
+      "sourceNote": "안내서 §2.2 ‘실제 의사결정에 따른 역할 구분’, §4 ‘처리 단위로 묻기’; EDPB Data controller or data processor; GDPR 제4조·제26조·제28조.",
+      "sectionIds": [
+        "eu-22-role",
+        "eu-4"
+      ],
+      "coverageNote": "§4의 “처리 단위로 묻기”는 별도 소제목이 아니라 해당 절의 글머리 항목이므로 절 전체를 연결합니다."
+    },
+    {
+      "questionId": "EU-03",
+      "sourceNote": "안내서 §2.5 ‘처리활동 기록(ROPA)’, §4 ‘근거와 실행 증거를 연결’; EDPB Be compliant 및 FAQ 2; GDPR 제30조.",
+      "sectionIds": [
+        "eu-25-record",
+        "eu-4"
+      ],
+      "coverageNote": "§4의 “근거와 실행 증거를 연결”은 별도 소제목이 아니라 해당 절의 글머리 항목이므로 절 전체를 연결합니다."
+    },
+    {
+      "questionId": "EU-04",
+      "sourceNote": "안내서 §2.3 ‘제6조 법적 근거 6가지’, §4 ‘처리 단위로 묻기’; EDPB Process personal data lawfully; GDPR 제6조.",
+      "sectionIds": [
+        "eu-23-bases",
+        "eu-4"
+      ],
+      "coverageNote": "§4의 “처리 단위로 묻기”는 별도 소제목이 아니라 해당 절의 글머리 항목이므로 절 전체를 연결합니다."
+    },
+    {
+      "questionId": "EU-05",
+      "sourceNote": "안내서 §2.1 ‘여섯 원칙과 책임 입증’, §3 2쪽 ‘기본설정의 네 차원’; EDPB Data protection basics 및 DPbDD 요약 PDF 2쪽; GDPR 제5조.",
+      "sectionIds": [
+        "eu-21-principles",
+        "eu-3"
+      ],
+      "coverageNote": "PDF 2쪽은 별도 소제목으로 분리하지 않았으며, §3의 원문 학습 기록 전체를 연결합니다."
+    },
+    {
+      "questionId": "EU-06",
+      "sourceNote": "안내서 §2.1 ‘개인정보와 특별한 유형의 개인정보’, §2.3 ‘특별범주 개인정보’; EDPB Data protection basics·Process personal data lawfully; GDPR 제9조·제10조.",
+      "sectionIds": [
+        "eu-21-special",
+        "eu-23-special"
+      ]
+    },
+    {
+      "questionId": "EU-07",
+      "sourceNote": "안내서 §2.3 ‘동의’·‘아동의 온라인 동의’; EDPB Process personal data lawfully; GDPR 제7조·제8조 및 회원국별 제8조 연령 규정.",
+      "sectionIds": [
+        "eu-23-consent",
+        "eu-23-child"
+      ]
+    },
+    {
+      "questionId": "EU-08",
+      "sourceNote": "안내서 §2.4 ‘정보 제공’ 및 §2.10 EDPB FAQ; EDPB Respect individuals’ rights; GDPR 제12–14조.",
+      "sectionIds": [
+        "eu-24-rights",
+        "eu-210-faq1"
+      ],
+      "coverageNote": "정보 제공은 권리별 적용과 예외 절의 글머리 항목으로 설명되며 별도 소제목은 없습니다."
+    },
+    {
+      "questionId": "EU-09",
+      "sourceNote": "안내서 §2.4 ‘모든 권리에 공통인 운영 절차’와 ‘권리별 적용과 예외’; EDPB Respect individuals’ rights 및 FAQ 1–3; GDPR 제12–22조.",
+      "sectionIds": [
+        "eu-24-common",
+        "eu-24-rights",
+        "eu-210-faq1",
+        "eu-210-faq2",
+        "eu-210-faq3"
+      ]
+    },
+    {
+      "questionId": "EU-10",
+      "sourceNote": "안내서 §2.2 ‘하위 프로세서와 계약 사슬’·‘컨트롤러–프로세서 계약의 핵심 항목’; EDPB Data controller or data processor 및 FAQ 1·3; GDPR 제28조.",
+      "sectionIds": [
+        "eu-22-subprocessors",
+        "eu-22-contract"
+      ]
+    },
+    {
+      "questionId": "EU-11",
+      "sourceNote": "안내서 §2.5 ‘설계·기본설정’·‘DPIA’, §3 PDF 1–4쪽, §4 ‘위험 기반 결과’; EDPB Be compliant 및 2026 DPbDD 요약; GDPR 제25조·제35–36조.",
+      "sectionIds": [
+        "eu-25-design",
+        "eu-25-dpia",
+        "eu-3",
+        "eu-4"
+      ]
+    },
+    {
+      "questionId": "EU-12",
+      "sourceNote": "안내서 §2.6 ‘의무 선임 여부’ 및 §4 ‘조건부 분기’; EDPB Data Protection Officer; GDPR 제37–39조·제27조. EU 대리인 조건은 GDPR 제27조에 따라 별도로 확인합니다.",
+      "sectionIds": [
+        "eu-26-dpo",
+        "eu-4"
+      ],
+      "coverageNote": "EU 대리인 요건(제27조)은 독립적으로 설명한 안내서 절이 없습니다. §4는 조건부 추가 확인이 필요하다는 설계 원칙만 설명합니다."
+    },
+    {
+      "questionId": "EU-13",
+      "sourceNote": "안내서 §2.7 ‘위험 평가’·‘조직 조치’·‘기술·물리 조치’, §4 ‘위험 기반 결과’; EDPB Secure personal data; GDPR 제25조·제32조.",
+      "sectionIds": [
+        "eu-27-org",
+        "eu-27-tech",
+        "eu-4"
+      ],
+      "coverageNote": "§4의 위험 기반 결과는 별도 소제목이 아니라 해당 절의 글머리 항목입니다."
+    },
+    {
+      "questionId": "EU-14",
+      "sourceNote": "안내서 §2.8 ‘모든 사고의 기록과 위험에 따른 통지’; EDPB Data breaches; GDPR 제4조 제12항·제33–34조.",
+      "sectionIds": [
+        "eu-28-breach"
+      ]
+    },
+    {
+      "questionId": "EU-15",
+      "sourceNote": "안내서 §2.9 ‘이전 판별’·‘적정성 결정’·‘적절한 보호조치’·‘보완조치와 예외’; EDPB International data transfers; GDPR 제44–49조.",
+      "sectionIds": [
+        "eu-29-transfer",
+        "eu-29-adequacy",
+        "eu-29-safeguards",
+        "eu-29-supplementary"
+      ]
+    },
+    {
+      "questionId": "EU-16",
+      "sourceNote": "안내서 §2.4 ‘전적으로 자동화된 결정’; EDPB Respect individuals’ rights; GDPR 제22조·제9조.",
+      "sectionIds": [
+        "eu-24-rights"
+      ],
+      "coverageNote": "전적으로 자동화된 결정은 권리별 적용과 예외 절의 글머리 항목이며 별도 소제목은 없습니다."
+    },
+    {
+      "questionId": "EU-17",
+      "sourceNote": "안내서 §2.3 ‘아동의 온라인 동의’, §4 ‘국가별 보충 규칙은 미포함’, §5 ‘현재 법과 입법 중인 변경안’; GDPR 제8조·제85–91조 및 회원국 보충법.",
+      "sectionIds": [
+        "eu-23-child",
+        "eu-4",
+        "eu-5"
+      ],
+      "coverageNote": "회원국별 보충 규칙은 §4에서 안내서 범위 밖이라고 명시합니다. §5는 EU 차원의 입법 제안 상태를 설명합니다."
+    }
+  ]
+}

@@ -1,0 +1,224 @@
+{
+  "jurisdiction": "UK",
+  "guidePath": "docs/business-advisor/guides/uk-data-protection-guide.md",
+  "mappingBasis": "각 문항의 sourceNote에 적힌 안내서 절·인쇄 쪽수·현행화 자료를 해당 안내서의 실제 제목과 대조했습니다. 여러 출처가 섞인 경우 안내서 안에서 직접 설명하는 관련 절을 연결했습니다.",
+  "sections": [
+    {
+      "id": "uk-sec-1-law",
+      "title": "법령 번역"
+    },
+    {
+      "id": "uk-sec-1-ico-guide",
+      "title": "ICO 기본 안내서(2022 구판)"
+    },
+    {
+      "id": "uk-sec-1-current-ico",
+      "title": "현행화에 사용한 ICO 자료"
+    },
+    {
+      "id": "uk-sec-2",
+      "title": "2. 현재 법체계와 적용 범위"
+    },
+    {
+      "id": "uk-sec-3-1",
+      "title": "3.1 먼저 데이터 흐름을 그립니다"
+    },
+    {
+      "id": "uk-sec-3-2",
+      "title": "3.2 목적과 적법 근거를 처리별로 정합니다"
+    },
+    {
+      "id": "uk-sec-3-3",
+      "title": "3.3 필요한 만큼만 받고 정확하게 유지합니다"
+    },
+    {
+      "id": "uk-sec-3-4",
+      "title": "3.4 개인정보 안내와 변경 통지"
+    },
+    {
+      "id": "uk-sec-3-5",
+      "title": "3.5 위탁·공유·국외 이전"
+    },
+    {
+      "id": "uk-sec-3-6",
+      "title": "3.6 개인의 권리와 조직 내 불만"
+    },
+    {
+      "id": "uk-sec-3-7",
+      "title": "3.7 자동화된 결정과 프로파일링: DUAA로 바뀐 부분"
+    },
+    {
+      "id": "uk-sec-3-8",
+      "title": "3.8 보안과 침해 대응"
+    },
+    {
+      "id": "uk-sec-3-9",
+      "title": "3.9 책임성, 설계, 기록과 영향평가"
+    },
+    {
+      "id": "uk-sec-4",
+      "title": "4. 주요 권리별 운영 요약"
+    },
+    {
+      "id": "uk-sec-5",
+      "title": "5. 소기업용 증빙 묶음"
+    },
+    {
+      "id": "uk-sec-6",
+      "title": "6. 작성·진단에 사용할 때의 원칙"
+    },
+    {
+      "id": "uk-sec-7",
+      "title": "7. 추가로 확보하지 않은 자료와 남은 검증"
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "UK-01",
+      "sourceNote": "안내서 §2 ‘현재 법체계와 적용 범위’; §1 ‘법령 번역’ 및 ‘현행화에 사용한 ICO 자료’",
+      "sectionIds": [
+        "uk-sec-2",
+        "uk-sec-1-law",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-02",
+      "sourceNote": "안내서 §2 ‘현재 법체계와 적용 범위’; PDF 인쇄 쪽 11–14",
+      "sectionIds": [
+        "uk-sec-2"
+      ]
+    },
+    {
+      "questionId": "UK-03",
+      "sourceNote": "안내서 §3.1 ‘먼저 데이터 흐름을 그립니다’; §5 ‘소기업용 증빙 묶음’ 1항",
+      "sectionIds": [
+        "uk-sec-3-1",
+        "uk-sec-5"
+      ]
+    },
+    {
+      "questionId": "UK-04",
+      "sourceNote": "안내서 §3.2 ‘목적과 적법 근거를 처리별로 정합니다’; PDF 인쇄 쪽 45–62, 73–78",
+      "sectionIds": [
+        "uk-sec-3-2"
+      ]
+    },
+    {
+      "questionId": "UK-05",
+      "sourceNote": "안내서 §3.2 및 §3.4; PDF 인쇄 쪽 45–49, 161–168; §1 ‘현행화에 사용한 ICO 자료’의 DUAA·개인정보 원칙 안내",
+      "sectionIds": [
+        "uk-sec-3-2",
+        "uk-sec-3-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-06",
+      "sourceNote": "안내서 §3.1 및 §3.2; PDF 인쇄 쪽 63–72; §1의 ICO 특별 범주 정보 안내",
+      "sectionIds": [
+        "uk-sec-3-1",
+        "uk-sec-3-2",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-07",
+      "sourceNote": "안내서 §2 ‘역할은 실제 의사결정에 따라 정합니다’; §3.5 ‘위탁·공유·국외 이전’; PDF 인쇄 쪽 11–14, 226–228",
+      "sectionIds": [
+        "uk-sec-3-5"
+      ]
+    },
+    {
+      "questionId": "UK-08",
+      "sourceNote": "안내서 §3.3 ‘필요한 만큼만 받고 정확하게 유지합니다’; §4 ‘삭제’; PDF 인쇄 쪽 24–31, 138–146",
+      "sectionIds": [
+        "uk-sec-3-3"
+      ]
+    },
+    {
+      "questionId": "UK-09",
+      "sourceNote": "안내서 §3.4 ‘개인정보 안내와 변경 통지’; §4 ‘정보 제공’; PDF 인쇄 쪽 161–168",
+      "sectionIds": [
+        "uk-sec-3-4",
+        "uk-sec-4"
+      ]
+    },
+    {
+      "questionId": "UK-10",
+      "sourceNote": "안내서 §3.6 ‘개인의 권리와 조직 내 불만’; §4 ‘주요 권리별 운영 요약’; §1의 ICO 불만 안내",
+      "sectionIds": [
+        "uk-sec-3-6",
+        "uk-sec-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-11",
+      "sourceNote": "안내서 §3.6 및 §4 ‘열람(SAR)’; PDF 인쇄 쪽 155–160; §1의 ICO 접근 요청 안내",
+      "sectionIds": [
+        "uk-sec-3-6",
+        "uk-sec-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-12",
+      "sourceNote": "안내서 §3.5 ‘위탁·공유·국외 이전’; PDF 인쇄 쪽 289–306; §1의 ICO 국제 이전·위험 평가 안내",
+      "sectionIds": [
+        "uk-sec-3-5",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-13",
+      "sourceNote": "안내서 §3.7 ‘자동화된 결정과 프로파일링: DUAA로 바뀐 부분’; PDF 인쇄 쪽 100–106; §1의 DUAA 변경 요약",
+      "sectionIds": [
+        "uk-sec-3-7",
+        "uk-sec-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-14",
+      "sourceNote": "안내서 §3.7; §4 ‘자동화 결정’; §1의 DUAA 자동화 결정 안내 상태",
+      "sectionIds": [
+        "uk-sec-3-7",
+        "uk-sec-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-15",
+      "sourceNote": "안내서 §3.8 ‘보안과 침해 대응’; §5 ‘보안·침해 파일’; PDF 인쇄 쪽 229–279",
+      "sectionIds": [
+        "uk-sec-3-8",
+        "uk-sec-5"
+      ]
+    },
+    {
+      "questionId": "UK-16",
+      "sourceNote": "안내서 §3.9 ‘책임성, 설계, 기록과 영향평가’; PDF 인쇄 쪽 201–208",
+      "sectionIds": [
+        "uk-sec-3-9"
+      ]
+    },
+    {
+      "questionId": "UK-17",
+      "sourceNote": "안내서 §3.8 및 §4 ‘개인정보 침해’; PDF 인쇄 쪽 280–288; §1의 최신 ICO 침해 안내",
+      "sectionIds": [
+        "uk-sec-3-8",
+        "uk-sec-4",
+        "uk-sec-1-current-ico"
+      ]
+    },
+    {
+      "questionId": "UK-18",
+      "sourceNote": "UK GDPR 제27조·제37조 및 ICO 사업자 안내서의 UK 대표자·DPO 항목. 적용 조건이 서로 다르므로 각각 확인합니다.",
+      "sectionIds": [
+        "uk-sec-3-9",
+        "uk-sec-2"
+      ]
+    }
+  ]
+}

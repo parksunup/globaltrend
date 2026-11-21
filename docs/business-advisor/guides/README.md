@@ -22,3 +22,5 @@
 - 국제요정 질문은행에 반영할 수 있는 내용과 별도 현행성 확인이 필요한 쟁점
 
 원문 전체를 직역해 재배포하는 대신, 원문 구조를 따라 충분한 범위를 빠짐없이 요약하고 필요한 짧은 용어만 인용합니다. 원문은 각 공식 링크 또는 `sources/` 파일에서 확인합니다.
+
+공개 페이지의 **기업 상담소 → 국가별 안내서 읽기** 메뉴에서 이 여섯 한국어 학습본을 관할별로 열람할 수 있습니다. 자가점검 결과의 근거 펼치기에도 연결된 안내서 본문을 함께 표시합니다. 각 질문과 안내서 절의 대응은 [`ko/question-guide-references/`](ko/question-guide-references/)에 기록하며, 전수 정합성 검사는 `node scripts/validate-business-guide-mappings.mjs`로 실행합니다. 앱 제공용 콘텐츠는 `npm run build:business-guides`로 생성합니다.
