@@ -25,6 +25,10 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         screen=expansion.eu_parliament_topic_screen
         self.assertEqual(screen('AI Act implementation and cybersecurity strategy')['status'],'excluded')
         self.assertEqual(screen('Digital identity and biometric innovation')['status'],'excluded')
+        self.assertEqual(screen('market surveillance authorities for vehicles')['status'],'excluded')
+        targeted=screen('ban exports of surveillance technologies used to monitor and spy on Palestinians')
+        self.assertEqual(targeted['status'],'candidate')
+        self.assertIn('targeted_surveillance_of_people',targeted['matched_terms'])
         candidate=screen('AI surveillance and safeguards for personal data')
         self.assertEqual(candidate['status'],'candidate')
         self.assertIn('personal data',candidate['matched_terms'])

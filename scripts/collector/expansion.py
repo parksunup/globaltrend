@@ -331,8 +331,14 @@ def eu_parliament_topic_screen(text):
     """High precision discovery gate; candidates still need editorial review."""
     normalized=' '.join(str(text or '').casefold().split())
     matched=sorted({term for term in _EU_PARLIAMENT_PRIVACY_TERMS if term in normalized})
+    targeted_surveillance=re.search(
+        r'\b(?:surveillance(?: technologies)?|spyware|spying|monitoring technologies)\b.{0,180}'
+        r'\b(?:people|persons|individuals|citizens|journalists|activists|dissidents|'
+        r'opposition|human rights defenders|palestinians|users)\b',normalized)
+    if targeted_surveillance:
+        matched.append('targeted_surveillance_of_people')
     return {'status':'candidate' if matched else 'excluded',
-            'version':'eu-parliament-privacy-screen-v1',
+            'version':'eu-parliament-privacy-screen-v2',
             'matched_terms':matched,
             'reason':'explicit_privacy_or_personal_data_evidence' if matched else 'no_explicit_privacy_or_personal_data_evidence'}
 
