@@ -52,12 +52,16 @@ jobs:
           $uploadUrl = $release.upload_url -replace '\{\?name,label\}$', ''
           $encodedName = [uri]::EscapeDataString('국제요정 상담소.exe')
           $assetUploadUrl = '{0}?name={1}' -f $uploadUrl, $encodedName
-          $asset = Invoke-RestMethod `
-            -Method Post `
-            -Uri $assetUploadUrl `
-            -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' } `
-            -ContentType 'application/octet-stream' `
-            -InFile $assetPath
+          Write-Host "Uploading $([IO.Path]::GetFileName($assetPath)) to $uploadUrl with the requested release filename."
+          $assetResponse = & curl.exe --silent --show-error --fail-with-body `
+            --request POST `
+            --url $assetUploadUrl `
+            --header "Authorization: Bearer $env:GH_TOKEN" `
+            --header 'Accept: application/vnd.github+json' `
+            --header 'Content-Type: application/octet-stream' `
+            --data-binary "@$assetPath"
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release upload failed (curl exit $LASTEXITCODE)." }
+          $asset = ($assetResponse -join "`n") | ConvertFrom-Json
 
           if ($asset.name -cne '국제요정 상담소.exe') {
             throw "GitHub registered the wrong release filename: $($asset.name)"
