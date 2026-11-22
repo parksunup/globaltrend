@@ -1,0 +1,50 @@
+{
+  "name": "globaltrend-business-advisor-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "국제요정 상담소",
+  "license": "UNLICENSED",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node scripts/copy-renderer.mjs",
+    "start": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win portable --x64"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
+    "typescript": "^5.8.3"
+  },
+  "build": {
+    "appId": "org.globaltrend.business-advisor",
+    "productName": "국제요정 상담소",
+    "protocols": [
+      {
+        "name": "GlobalTrend 자가점검 상담 연결",
+        "schemes": ["globaltrend-advisor"]
+      }
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "package.json",
+      "THIRD-PARTY-NOTICE.md",
+      "third-party/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "executableName": "국제요정 상담소",
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "artifactName": "국제요정 상담소.${ext}"
+    }
+  }
+}

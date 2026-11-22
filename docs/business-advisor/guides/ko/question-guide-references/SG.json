@@ -1,0 +1,315 @@
+{
+  "jurisdiction": "SG",
+  "guidePath": "docs/business-advisor/guides/singapore-pdpa-guide.md",
+  "mappingBasis": "각 질문 JSON의 기존 sourceNote에 기재된 주 안내서 절·연결 PDPC 자료 쪽수만 연결 판단에 사용했습니다. 문항 표현 자체는 안내서 내용의 근거로 쓰지 않았습니다. 범위 밖 내용을 다루는 문항은 안내서의 범위·한계 절에만 연결하고 coverageNote를 표시했습니다.",
+  "sections": [
+    {
+      "id": "sg-sec-1",
+      "title": "1. 확보·열람한 원문과 범위"
+    },
+    {
+      "id": "sg-sec-2",
+      "title": "2. 회사의 개인정보 관리 체계를 먼저 세웁니다"
+    },
+    {
+      "id": "sg-sec-2-1",
+      "title": "2.1 DPMP는 법 준수 업무를 운영하는 틀입니다"
+    },
+    {
+      "id": "sg-sec-2-2",
+      "title": "2.2 경영진·DPO·현장 담당자의 역할"
+    },
+    {
+      "id": "sg-sec-2-3",
+      "title": "2.3 정책은 조직의 실제 데이터 업무를 설명해야 합니다"
+    },
+    {
+      "id": "sg-sec-3",
+      "title": "3. 데이터 흐름과 처리 목적을 기록합니다"
+    },
+    {
+      "id": "sg-sec-3-1",
+      "title": "3.1 데이터 목록 또는 흐름도를 만듭니다"
+    },
+    {
+      "id": "sg-sec-3-2",
+      "title": "3.2 PATO·DPIA를 활용하되 결과를 인증으로 오해하지 않습니다"
+    },
+    {
+      "id": "sg-sec-3-3",
+      "title": "3.3 설계·위탁·유지관리 과정에 보호를 넣습니다"
+    },
+    {
+      "id": "sg-sec-4",
+      "title": "4. 데이터 중개자의 역할과 위탁 처리를 관리합니다"
+    },
+    {
+      "id": "sg-sec-4-steps",
+      "title": "선정·계약·운영·종료의 4단계"
+    },
+    {
+      "id": "sg-sec-5",
+      "title": "5. ICT 시스템 보호 실무"
+    },
+    {
+      "id": "sg-sec-5-assets",
+      "title": "자산·인력·데이터(Assets)"
+    },
+    {
+      "id": "sg-sec-5-protect",
+      "title": "보호·접근·안전 설정(Secure/Protect)"
+    },
+    {
+      "id": "sg-sec-5-incident",
+      "title": "업데이트·백업·사고 대응"
+    },
+    {
+      "id": "sg-sec-6",
+      "title": "6. 침해 평가와 통지"
+    },
+    {
+      "id": "sg-sec-7",
+      "title": "7. 관할 특유의 점검 관점"
+    },
+    {
+      "id": "sg-sec-8",
+      "title": "8. 학습본과 진단에 사용할 때의 경계"
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "SG-01",
+      "sourceNote": "안내서 §1(적용 범위), §3.1; DPMP PDF pp.18–21. 이 질문은 적용 가능성을 가려내는 시작 질문이며, 답변만으로 법 적용을 확정하지 않습니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-3-1"
+      ]
+    },
+    {
+      "questionId": "SG-02",
+      "sourceNote": "안내서 §1, §8. 선정한 PDPC 가이드 4종은 공공부문 규칙을 상세히 다루지 않으므로, 공공기관 여부가 있으면 별도 공공부문 법령·지침 확인이 필요합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ]
+    },
+    {
+      "questionId": "SG-03",
+      "sourceNote": "안내서 §4; Data Intermediaries Guide PDF pp.5–7. 데이터 중개자와 별도 목적을 가진 처리자의 역할은 실제 업무에 따라 구분합니다.",
+      "sectionIds": [
+        "sg-sec-4"
+      ]
+    },
+    {
+      "questionId": "SG-04",
+      "sourceNote": "안내서 §2.2 및 §7; DPMP PDF pp.5–13. 조직의 담당자·연락 경로를 설명합니다.",
+      "sectionIds": [
+        "sg-sec-2-2",
+        "sg-sec-7"
+      ]
+    },
+    {
+      "questionId": "SG-05",
+      "sourceNote": "안내서 §2.2–2.3; DPMP PDF pp.5–13. 안내서가 제시하는 정책·절차는 조직에 맞게 조정할 실무 지침입니다.",
+      "sectionIds": [
+        "sg-sec-2-2",
+        "sg-sec-2-3"
+      ]
+    },
+    {
+      "questionId": "SG-06",
+      "sourceNote": "안내서 §3.1; DPMP PDF pp.18–21. 인벤토리·흐름도는 실무 도구이며, 안내서가 특정 양식의 법적 의무를 정하는 것은 아닙니다.",
+      "sectionIds": [
+        "sg-sec-3-1"
+      ]
+    },
+    {
+      "questionId": "SG-07",
+      "sourceNote": "안내서 §5, ICT Systems Guide PDF pp.16–25. 목적에 맞는 정보와 보유기간을 정하고 불필요한 자료를 관리하는 실무를 다룹니다.",
+      "sectionIds": [
+        "sg-sec-5"
+      ]
+    },
+    {
+      "questionId": "SG-08",
+      "sourceNote": "안내서 §2.3, §3.1; DPMP PDF pp.6–9, 18–21. 변경된 목적의 통지 시점 등 구체 요건은 현행 PDPA 조문과 함께 확인합니다.",
+      "sectionIds": [
+        "sg-sec-2-3",
+        "sg-sec-3-1"
+      ]
+    },
+    {
+      "questionId": "SG-09",
+      "sourceNote": "안내서 §3.1; DPMP PDF pp.18–21. 이 가이드는 동의 기록의 실무를 다루며 모든 처리의 유일한 근거라고 설명하지 않습니다.",
+      "sectionIds": [
+        "sg-sec-3-1"
+      ]
+    },
+    {
+      "questionId": "SG-10",
+      "sourceNote": "안내서 §8. 선정한 PDPC 가이드 4종은 동의 간주 제도의 상세 요건을 다루지 않습니다. 현행 PDPA 및 공식 설명에서 요건을 별도 확인해야 합니다.",
+      "sectionIds": [
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 주 안내서에는 해당 법정 요건의 상세 설명이 없다고 명시합니다. 아래는 안내서가 다루는 범위와 보충 확인 필요성을 보여주는 절이며, 구체 요건의 근거로 대신하지 않습니다."
+    },
+    {
+      "questionId": "SG-11",
+      "sourceNote": "안내서 §3.1; DPMP PDF pp.18–21. 동의 등록부에 동의 시점·철회 상태를 남기는 실무를 설명합니다. 철회 후 처리의 구체 요건은 현행 법령으로 확인합니다.",
+      "sectionIds": [
+        "sg-sec-3-1"
+      ]
+    },
+    {
+      "questionId": "SG-12",
+      "sourceNote": "안내서 §2.3; DPMP PDF pp.6–9. 접수 경로·본인 확인·검색·응답·예외 기록을 실무 항목으로 제시합니다.",
+      "sectionIds": [
+        "sg-sec-2-3"
+      ]
+    },
+    {
+      "questionId": "SG-13",
+      "sourceNote": "안내서 §3.1, §8. 선정한 네 가이드는 이 정확성 요건의 상세 기준을 다루지 않으므로, 현행 PDPA 조문에서 적용 조건을 보충 확인합니다.",
+      "sectionIds": [
+        "sg-sec-3-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 주 안내서에는 해당 법정 요건의 상세 설명이 없다고 명시합니다. 아래는 안내서가 다루는 범위와 보충 확인 필요성을 보여주는 절이며, 구체 요건의 근거로 대신하지 않습니다."
+    },
+    {
+      "questionId": "SG-14",
+      "sourceNote": "안내서 §5; ICT Systems Guide PDF pp.5–8, 26–44. 가이드의 기본·강화 조치는 권고 실무이며, 각 조치의 법적 의무 여부는 관련 법령과 사실관계로 구분합니다.",
+      "sectionIds": [
+        "sg-sec-5"
+      ]
+    },
+    {
+      "questionId": "SG-15",
+      "sourceNote": "안내서 §3.1, §4, §5; DPMP PDF pp.18–21, Data Intermediaries Guide PDF pp.26–31, ICT Systems Guide PDF pp.16–25, 47–48.",
+      "sectionIds": [
+        "sg-sec-3-1",
+        "sg-sec-4",
+        "sg-sec-5"
+      ]
+    },
+    {
+      "questionId": "SG-16",
+      "sourceNote": "안내서 §3.3, §4, §7; DPMP PDF pp.22–29, Data Intermediaries Guide PDF pp.13–19. 해외 이전 경로를 파악하는 업무 흐름에 근거합니다.",
+      "sectionIds": [
+        "sg-sec-3-3",
+        "sg-sec-4",
+        "sg-sec-7"
+      ]
+    },
+    {
+      "questionId": "SG-17",
+      "sourceNote": "안내서 §3.3, §4, §7; Data Intermediaries Guide PDF pp.13–19. 2026년 현행 이전 요건·인증 인정 범위의 상세 내용은 선정한 네 가이드에 모두 수록되어 있지 않으므로 현행 PDPA 규정과 공식 지침을 별도 확인합니다.",
+      "sectionIds": [
+        "sg-sec-3-3",
+        "sg-sec-4",
+        "sg-sec-7"
+      ],
+      "coverageNote": "연결된 안내서 자료의 기준 시점 또는 범위에 한계가 있으므로, 신청·기한·예외 등 현재 법적 요건은 최신 PDPA 및 PDPC 공식 자료로 다시 확인해야 합니다."
+    },
+    {
+      "questionId": "SG-18",
+      "sourceNote": "안내서 §3.3–4; Data Intermediaries Guide PDF pp.9–34. 실사·계약·운영·종료 단계의 PDPC 실무 권고와 법정 중개자 의무를 구별합니다.",
+      "sectionIds": [
+        "sg-sec-4",
+        "sg-sec-4-steps"
+      ]
+    },
+    {
+      "questionId": "SG-19",
+      "sourceNote": "안내서 §5–6; ICT Systems Guide PDF pp.49–54, Data Breaches Guide PDF pp.7–19, 30–37.",
+      "sectionIds": [
+        "sg-sec-5",
+        "sg-sec-6"
+      ]
+    },
+    {
+      "questionId": "SG-20",
+      "sourceNote": "안내서 §6; Data Breaches Guide PDF pp.17, 22–29, 38–39. 피해 가능성·상당한 규모 기준은 2021년 안내 설명이며 현행성 확인이 필요합니다.",
+      "sectionIds": [
+        "sg-sec-6"
+      ],
+      "coverageNote": "연결된 안내서 자료의 기준 시점 또는 범위에 한계가 있으므로, 신청·기한·예외 등 현재 법적 요건은 최신 PDPA 및 PDPC 공식 자료로 다시 확인해야 합니다."
+    },
+    {
+      "questionId": "SG-21",
+      "sourceNote": "안내서 §6; Data Breaches Guide PDF pp.20–29, 38–39. 해당 PDF는 2021년판이므로 현재 PDPA Part 6A와 신고 규정으로 기한·예외를 재확인해야 합니다.",
+      "sectionIds": [
+        "sg-sec-6"
+      ],
+      "coverageNote": "연결된 안내서 자료의 기준 시점 또는 범위에 한계가 있으므로, 신청·기한·예외 등 현재 법적 요건은 최신 PDPA 및 PDPC 공식 자료로 다시 확인해야 합니다."
+    },
+    {
+      "questionId": "SG-22",
+      "sourceNote": "안내서 §1, §8. 선정한 PDPC 가이드 4종은 DNC 규칙을 다루지 않습니다. 기존 관할별 질문 자료가 가리키는 PDPC DNC 지침과 현행 법령을 별도 확인해야 합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 네 개 주 안내서에는 DNC 제도의 세부 규정이 없습니다. 안내서의 범위 고지만 연결했으며, 이 내용만으로 해당 질문의 실체적 요건을 답할 수 없습니다."
+    },
+    {
+      "questionId": "SG-23",
+      "sourceNote": "안내서 §1, §8. 선택한 안내서 범위 밖의 주제입니다. 기존 관할별 질문 자료의 PDPC DNC 자문지침 링크와 최신 요구사항을 대조해야 합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 네 개 주 안내서에는 DNC 제도의 세부 규정이 없습니다. 안내서의 범위 고지만 연결했으며, 이 내용만으로 해당 질문의 실체적 요건을 답할 수 없습니다."
+    },
+    {
+      "questionId": "SG-24",
+      "sourceNote": "안내서 §1, §8. 선정한 PDPC 가이드 4종은 DNC 마케팅 메시지 표시 요건을 설명하지 않습니다. 관할별 질문 자료의 PDPC DNC 지침 및 현행 규정을 별도 확인해야 합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 네 개 주 안내서에는 DNC 제도의 세부 규정이 없습니다. 안내서의 범위 고지만 연결했으며, 이 내용만으로 해당 질문의 실체적 요건을 답할 수 없습니다."
+    },
+    {
+      "questionId": "SG-25",
+      "sourceNote": "안내서 §1, §8. 선택한 가이드 4종의 범위에 포함되지 않습니다. PDPC DNC 자문지침과 관련 법령을 별도로 대조해야 합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 네 개 주 안내서에는 DNC 제도의 세부 규정이 없습니다. 안내서의 범위 고지만 연결했으며, 이 내용만으로 해당 질문의 실체적 요건을 답할 수 없습니다."
+    },
+    {
+      "questionId": "SG-26",
+      "sourceNote": "안내서 §1, §8. 선정한 PDPC 가이드 4종에는 번호 생성·수집 소프트웨어와 DNC 적용의 상세 설명이 없습니다. PDPC DNC 공식 지침으로 확인해야 합니다.",
+      "sectionIds": [
+        "sg-sec-1",
+        "sg-sec-8"
+      ],
+      "coverageNote": "선정한 네 개 주 안내서에는 DNC 제도의 세부 규정이 없습니다. 안내서의 범위 고지만 연결했으며, 이 내용만으로 해당 질문의 실체적 요건을 답할 수 없습니다."
+    },
+    {
+      "questionId": "SG-27",
+      "sourceNote": "안내서 §3.2, §5; DPMP PDF pp.21–22, ICT Systems Guide PDF pp.24–25, 42–44. 법정 의무와 위험에 맞춘 권고 실무를 구분합니다.",
+      "sectionIds": [
+        "sg-sec-3-2",
+        "sg-sec-5"
+      ]
+    },
+    {
+      "questionId": "SG-28",
+      "sourceNote": "안내서 §3.2–3.3, §8; DPMP PDF pp.21–30. PATO·DPMP는 공백을 찾고 개선을 관리하는 도구이며 준수 인증이 아닙니다.",
+      "sectionIds": [
+        "sg-sec-3-2",
+        "sg-sec-3-3",
+        "sg-sec-8"
+      ]
+    },
+    {
+      "questionId": "SG-29",
+      "sourceNote": "PDPC, Advisory Guidelines on the PDPA for Children’s Personal Data in the Digital Environment (2024-03), §§4.1–4.3. 아동을 위한 설명과 동의 판단의 공식 안내입니다.",
+      "sectionIds": [],
+      "unmappedReason": "아동 개인정보에 대한 구체 안내는 이 네 편의 주 안내서 범위 밖이며 sourceNote가 별도 인용한 PDPC 아동 개인정보 안내자료에 있습니다. 주 안내서에 있는 것처럼 연결하지 않습니다."
+    }
+  ]
+}

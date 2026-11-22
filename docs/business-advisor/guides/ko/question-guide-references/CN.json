@@ -1,0 +1,305 @@
+{
+  "jurisdiction": "CN",
+  "guidePath": "docs/business-advisor/guides/china-pipl-guide.md",
+  "mappingBasis": "각 질문 JSON의 기존 sourceNote에 적힌 안내서 제목·절 및 인용 조문·자료만 실제 안내서의 관련 절과 대조했습니다. 질문 문구는 매핑 근거로 사용하지 않았습니다. 안내서 작성에는 질문은행을 사용하지 않았습니다.",
+  "sections": [
+    {
+      "id": "cn-sec-pipl-practice-map",
+      "title": "PIPL 조문을 실무 주제에 연결하기"
+    },
+    {
+      "id": "cn-sec-business-facts",
+      "title": "기업이 먼저 정리할 사실"
+    },
+    {
+      "id": "cn-sec-practical-roles",
+      "title": "4. 역할이 다른 회사와 계약·책임을 나눕니다"
+    },
+    {
+      "id": "cn-sec-audit-cycle-and-scale",
+      "title": "감사 주기와 처리 규모를 혼동하지 마십시오"
+    },
+    {
+      "id": "cn-sec-practical-sensitive",
+      "title": "2. 민감 개인정보는 별도 관리합니다"
+    },
+    {
+      "id": "cn-sec-practical-children",
+      "title": "3. 14세 미만 아동은 전용 규칙과 보호자 절차를 둡니다"
+    },
+    {
+      "id": "cn-sec-cross-border-routes",
+      "title": "2026년 11월 기준 경로표"
+    },
+    {
+      "id": "cn-sec-practical-purpose",
+      "title": "1. 처리 목적과 근거를 정하고, 필요한 범위만 처리합니다"
+    },
+    {
+      "id": "cn-sec-small-processor-simplification",
+      "title": "소형 개인정보 처리자에게 허용되는 간소화"
+    },
+    {
+      "id": "cn-sec-practical-automation-public",
+      "title": "5. 자동화된 의사결정과 공개정보도 별도 검토합니다"
+    },
+    {
+      "id": "cn-sec-official-document-practice-link",
+      "title": "공식 문서와 실무 구현의 연결"
+    },
+    {
+      "id": "cn-sec-official-material-review",
+      "title": "공식 자료 전문 검토 기록"
+    },
+    {
+      "id": "cn-sec-cross-border-basic-principles",
+      "title": "우선 확인할 기본 원칙"
+    },
+    {
+      "id": "cn-sec-certification-impact-assessment",
+      "title": "인증 신청 전 영향평가에서 확인할 것"
+    },
+    {
+      "id": "cn-sec-practical-rights-incidents",
+      "title": "6. 개인의 요청과 사고에 실제로 대응할 수 있게 합니다"
+    },
+    {
+      "id": "cn-sec-practical-management",
+      "title": "7. 규모와 위험에 맞는 관리 체계를 둡니다"
+    },
+    {
+      "id": "cn-sec-audit-evidence",
+      "title": "증거와 기록"
+    },
+    {
+      "id": "cn-sec-audit-statutory-period",
+      "title": "법정 감사 주기와 감독기관의 감사 명령"
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "CN-01",
+      "sourceNote": "중국 안내서 §1 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제3조); ‘공식 문서와 실무 구현의 연결’ 첫째 행",
+      "sectionIds": [
+        "cn-sec-pipl-practice-map",
+        "cn-sec-business-facts"
+      ]
+    },
+    {
+      "questionId": "CN-02",
+      "sourceNote": "중국 안내서 §1 ‘기업이 먼저 정리할 사실’ 1·5번 및 §4 ‘역할이 다른 회사와 계약·책임을 나눕니다’(PIPL 제20–23조; CAC 합규감사 지침 §§5–8; TC260 pp.44–50)",
+      "sectionIds": [
+        "cn-sec-business-facts",
+        "cn-sec-practical-roles"
+      ]
+    },
+    {
+      "questionId": "CN-03",
+      "sourceNote": "중국 안내서 §1 ‘감사 주기와 처리 규모를 혼동하지 마십시오’ 및 ‘기업이 먼저 정리할 사실’ 3번(소형 처리자 기준: CAC 2026 간소화 조치 §§2–3; 대형 처리자 감사: CAC 2025 합규감사 조치 §§5–8)",
+      "sectionIds": [
+        "cn-sec-audit-cycle-and-scale",
+        "cn-sec-business-facts"
+      ]
+    },
+    {
+      "questionId": "CN-04",
+      "sourceNote": "중국 안내서 §1 ‘기업이 먼저 정리할 사실’ 3–4번, 실무 준수 흐름 §2–3·§7 및 ‘중국 밖으로 개인정보를 제공하는 경우’ 경로표(PIPL 제28–32조; TC260 pp.51–70)",
+      "sectionIds": [
+        "cn-sec-business-facts",
+        "cn-sec-practical-sensitive",
+        "cn-sec-practical-children",
+        "cn-sec-cross-border-routes"
+      ]
+    },
+    {
+      "questionId": "CN-05",
+      "sourceNote": "중국 안내서 §1 ‘PIPL 조문을 실무 주제에 연결’(제5–12조) 및 실무 준수 흐름 §1 ‘처리 목적과 근거를 정하고, 필요한 범위만 처리합니다’(TC260 pp.34–43)",
+      "sectionIds": [
+        "cn-sec-pipl-practice-map",
+        "cn-sec-practical-purpose"
+      ]
+    },
+    {
+      "questionId": "CN-06",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §1 및 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제13–19조; CAC 감사지침 §2; TC260 pp.34–43)",
+      "sectionIds": [
+        "cn-sec-practical-purpose",
+        "cn-sec-pipl-practice-map"
+      ]
+    },
+    {
+      "questionId": "CN-07",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §1 및 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제13–19조; TC260 pp.34–43)",
+      "sectionIds": [
+        "cn-sec-practical-purpose"
+      ]
+    },
+    {
+      "questionId": "CN-08",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §1 및 ‘소형 개인정보 처리자에게 허용되는 간소화’ 1–3번(PIPL 제17조; CAC 2026 간소화 조치 §§4–9 및 Q&A 1–9; TC260 pp.34–43)",
+      "sectionIds": [
+        "cn-sec-practical-purpose",
+        "cn-sec-small-processor-simplification"
+      ]
+    },
+    {
+      "questionId": "CN-09",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §5 ‘자동화된 의사결정과 공개정보도 별도 검토합니다’ 및 ‘공식 문서와 실무 구현의 연결’(PIPL 제27조; CAC 감사지침 §13; TC260 pp.51–60)",
+      "sectionIds": [
+        "cn-sec-practical-automation-public",
+        "cn-sec-official-document-practice-link"
+      ]
+    },
+    {
+      "questionId": "CN-10",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §4 및 ‘공식 자료 전문 검토 기록’ CAC 합규감사 지침 §§5–8, TC260 pp.44–50(PIPL 제20조)",
+      "sectionIds": [
+        "cn-sec-practical-roles",
+        "cn-sec-official-material-review"
+      ]
+    },
+    {
+      "questionId": "CN-11",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §3 ‘14세 미만 아동’ 및 §4 ‘역할이 다른 회사와 계약·책임을 나눕니다’, ‘공식 자료 전문 검토 기록’ CAC 감사지침 §§5–8·아동 규정 §§8–23(PIPL 제21조; TC260 pp.44–50, 61–67)",
+      "sectionIds": [
+        "cn-sec-practical-children",
+        "cn-sec-practical-roles",
+        "cn-sec-official-material-review"
+      ]
+    },
+    {
+      "questionId": "CN-12",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §4 및 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제20–23조; CAC 감사지침 §§5–8; TC260 pp.44–50)",
+      "sectionIds": [
+        "cn-sec-practical-roles",
+        "cn-sec-pipl-practice-map"
+      ]
+    },
+    {
+      "questionId": "CN-13",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §2·§4 및 ‘공식 자료 전문 검토 기록’ CAC 감사지침 §§10–13, TC260 pp.51–60(PIPL 제25–26조)",
+      "sectionIds": [
+        "cn-sec-practical-sensitive",
+        "cn-sec-practical-roles",
+        "cn-sec-official-material-review"
+      ]
+    },
+    {
+      "questionId": "CN-14",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §2 및 ‘공식 자료와 실무 구현의 연결’(PIPL 제28–30조; CAC 감사지침 §§10–13; TC260 pp.61–67)",
+      "sectionIds": [
+        "cn-sec-practical-sensitive",
+        "cn-sec-official-document-practice-link"
+      ]
+    },
+    {
+      "questionId": "CN-15",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §3 및 ‘공식 자료와 실무 구현의 연결’(PIPL 제31조; 아동 개인정보 네트워크 보호 규정 §§8–23; CAC 감사지침 §14; TC260 pp.61–67)",
+      "sectionIds": [
+        "cn-sec-practical-children",
+        "cn-sec-official-document-practice-link"
+      ]
+    },
+    {
+      "questionId": "CN-16",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §5 및 ‘공식 자료와 실무 구현의 연결’(PIPL 제24조; CAC 감사지침 §9; TC260 pp.44–58; 소형 처리자 공식 양식 3쪽 항목 8)",
+      "sectionIds": [
+        "cn-sec-practical-automation-public",
+        "cn-sec-official-document-practice-link"
+      ]
+    },
+    {
+      "questionId": "CN-17",
+      "sourceNote": "중국 안내서 ‘중국 밖으로 개인정보를 제공하는 경우’의 ‘우선 확인할 기본 원칙’ 및 ‘기업이 먼저 정리할 사실’ 3·5번(PIPL 제38–43조; 2024 국외이전 규정 §§3–14; TC260 pp.68–70)",
+      "sectionIds": [
+        "cn-sec-cross-border-basic-principles",
+        "cn-sec-business-facts"
+      ]
+    },
+    {
+      "questionId": "CN-18",
+      "sourceNote": "중국 안내서 ‘중국 밖으로 개인정보를 제공하는 경우’의 ‘2026년 11월 기준 경로표’ 및 ‘감사 주기와 처리 규모를 혼동하지 마십시오’(2024 국외이전 규정 §§3–14; 인증방법 §§5–10; 2025·2026 CAC Q&A)",
+      "sectionIds": [
+        "cn-sec-cross-border-routes"
+      ]
+    },
+    {
+      "questionId": "CN-19",
+      "sourceNote": "중국 안내서 ‘중국 밖으로 개인정보를 제공하는 경우’의 기본 원칙 및 ‘인증 신청 전 영향평가에서 확인할 것’(PIPL 제38–43조·제55–56조; 2024 국외이전 규정 §§10–14; 인증방법 §§5–6; TC260 pp.68–70)",
+      "sectionIds": [
+        "cn-sec-cross-border-basic-principles",
+        "cn-sec-certification-impact-assessment"
+      ]
+    },
+    {
+      "questionId": "CN-20",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §6 및 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제44–50조; CAC 감사지침 §§16–18; TC260 pp.71–75)",
+      "sectionIds": [
+        "cn-sec-practical-rights-incidents",
+        "cn-sec-pipl-practice-map"
+      ]
+    },
+    {
+      "questionId": "CN-21",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §1·§3·§6 및 ‘PIPL 조문을 실무 주제에 연결’(PIPL 제19조·제44–50조; TC260 pp.71–75)",
+      "sectionIds": [
+        "cn-sec-practical-purpose",
+        "cn-sec-practical-children",
+        "cn-sec-practical-rights-incidents"
+      ]
+    },
+    {
+      "questionId": "CN-22",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §7 및 ‘합규감사 준비와 증거 보관’(PIPL 제51–54조; CAC 감사지침 §§20–23; TC260 pp.76–85, 89–94)",
+      "sectionIds": [
+        "cn-sec-practical-management",
+        "cn-sec-audit-evidence"
+      ]
+    },
+    {
+      "questionId": "CN-23",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §2·§4–§5 및 ‘공식 문서와 실무 구현의 연결’(PIPL 제55–56조; CAC 감사지침 §23; TC260 pp.86–88; 소형 처리자 양식 PDF 10쪽)",
+      "sectionIds": [
+        "cn-sec-practical-sensitive",
+        "cn-sec-practical-roles",
+        "cn-sec-practical-automation-public",
+        "cn-sec-certification-impact-assessment"
+      ],
+      "coverageNote": "안내서는 영향평가 사례와 주요 검토내용을 연결하지만, 모든 유형에 공통되는 포괄적 평가 절차를 별도 장으로 설명하지 않습니다."
+    },
+    {
+      "questionId": "CN-24",
+      "sourceNote": "중국 안내서 §1 ‘감사 주기와 처리 규모를 혼동하지 마십시오’, 실무 준수 흐름 §7 및 ‘합규감사 준비와 증거 보관’(PIPL 제52조·제54조; CAC 2025 합규감사 조치 §§5–8; CAC 2026 소형 처리자 조치 §§2, 15–17; TC260 감사 빈도 권고)",
+      "sectionIds": [
+        "cn-sec-audit-cycle-and-scale",
+        "cn-sec-audit-statutory-period",
+        "cn-sec-practical-management"
+      ]
+    },
+    {
+      "questionId": "CN-25",
+      "sourceNote": "중국 안내서 §1 ‘PIPL 조문을 실무 주제에 연결’ 및 §7 ‘규모와 위험에 맞는 관리 체계’(PIPL 제3조·제53조; TC260 pp.86–88)",
+      "sectionIds": [
+        "cn-sec-pipl-practice-map",
+        "cn-sec-practical-management"
+      ]
+    },
+    {
+      "questionId": "CN-26",
+      "sourceNote": "중국 안내서 실무 준수 흐름 §6 및 ‘합규감사 준비와 증거 보관’(PIPL 제57조; CAC 감사지침 §§24–25; TC260 pp.89–94; 아동 규정 §§19–23)",
+      "sectionIds": [
+        "cn-sec-practical-rights-incidents",
+        "cn-sec-audit-evidence"
+      ]
+    },
+    {
+      "questionId": "CN-27",
+      "sourceNote": "중국 안내서 §1 ‘PIPL 조문을 실무 주제에 연결’ 및 ‘공식 자료 전문 검토 기록’(PIPL 제58조; 네트워크 데이터 안전관리 조례 §§40–51; CAC 감사지침 §27; TC260 pp.95–98)",
+      "sectionIds": [
+        "cn-sec-pipl-practice-map",
+        "cn-sec-official-material-review",
+        "cn-sec-official-document-practice-link"
+      ]
+    }
+  ]
+}

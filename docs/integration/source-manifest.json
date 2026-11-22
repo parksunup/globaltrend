@@ -338,124 +338,124 @@
     {
       "path": "data/legal/translation-progress.md",
       "pr": 15,
-      "sha256": "2dd035cb930a133313db85fdb3a2383acd5137768b393159d67e8215a61bdf4b",
+      "sha256": "5c192a1ad88fae8ceeae633aa5f59dc64f1abc7b6fca8dcd25435c46a403c6e1",
       "imported_sha256": "7385804bd3a24ff30f0c666ae767ee90116ae641859b3f1edd6daaa5479a3bf7",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi-review-notes.md",
       "pr": 15,
-      "sha256": "798381f4b841696fbd36ca69baa3b367827e2056124b32e454b3238dd00763ea",
+      "sha256": "2c05089ce924c123d0751babc900a92c38871c7669f4436ae3ff6733281d370b",
       "imported_sha256": "c271550956fe36857ccd07be37c2d5713ef41a4f3002ed0609cad12c0499a9b8",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi-status.md",
       "pr": 15,
-      "sha256": "26e25f0d421528150033779f726453e2e52c31c05ab1972d861132c1e1ebc467"
+      "sha256": "f4af93c6792209fd2bd9f27c1ab825895ed8555996053b72b9b2c4d2487bf229"
     },
     {
       "path": "data/legal/translations/appi.json",
       "pr": 15,
-      "sha256": "1606ae58a96792c9df39fc287406aa4cb831032836f0a526db10c98a16db7345",
+      "sha256": "2cfcc5d46d730d6be3123a24c54ca2d414f5b7f513e267e5df1a976cb2d5140d",
       "imported_sha256": "44de5b48da400d797160da9b0686d03075ed9643cd14cb47ae3e54aa71b04fd0",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/appi.md",
       "pr": 15,
-      "sha256": "a827abd261e4cecaf1ecb09594ba0b7f5eea38fefdab30ef6550622a816caf1a",
+      "sha256": "f2a4089da7e63c2bf2cd752cd44c353b32ea808c6fc2b21d577e48b5849eb485",
       "imported_sha256": "2edac6e948000c959ce8f28e276bc802efcada77f5b10c020faca2e2333a4bcf",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa-review-notes.md",
       "pr": 15,
-      "sha256": "85b8ad050c14c35664daa80b6314d720bd48065de86c955e0455f209d31dcdbc",
+      "sha256": "31b727f555d78548e45eccacd5345d49462c63ee2fdcf33cfd746e9098f2dea6",
       "imported_sha256": "91e42087ed2cb8cf8aa8c7b511e3429642632dbd94b764332fa5daf98a4e1262",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa.json",
       "pr": 15,
-      "sha256": "2d19b85d640d1e757e0aac68cebd453c900b584c283a976871746670e4bb7ed0",
+      "sha256": "8ebd1911445c85d681da45cccb7ce32948d96230800dfee0360b077380431827",
       "imported_sha256": "6d94990a5c5eb90d6b867fa462dd7fdbfa403100cb1f278b7cfaabbb8e7fd49b",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/ccpa.md",
       "pr": 15,
-      "sha256": "b7530d2a9cb4b599d1781ddc1510bdc31e03b1ea2ba263a011708d859ac3be1e",
+      "sha256": "fd11454045f6ae2862674519e0a494515d9f433a59bc29598c99849d8a986cf8",
       "imported_sha256": "14c373e8c03020974789296f15e7c4983d2bfc5f9289e950415b7f6d5fbca2bf",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/gdpr-review-notes.md",
       "pr": 15,
-      "sha256": "15628d814a0e35e9171ffe8eeb107011e329175f15a650da9305eb6372c5dd79",
+      "sha256": "1e4de3d1f796448f12b42685ecf1ee53dfa58d66fe32ad797b6ae77d596a4041",
       "imported_sha256": "53b3560fde556298e7aa323ecbda67bf60b47c43b038986bdaf332b7ef1f4f52",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa-review-notes.md",
       "pr": 15,
-      "sha256": "26d740b9e961fcda239b2a834628b2c6448bf25800f6a175b33815740dc64a32",
+      "sha256": "5bb1a29f9bc2ec2be6b2ea266a30e3d59aef5506110b92761d2a35938866b0c5",
       "imported_sha256": "9db303861e3d86ba15128598bbfb25672cdebc6628fcd5c2eb4235f97968858b",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa.json",
       "pr": 15,
-      "sha256": "2a2094469fc0b05917b83c07e1785ccec71c1b11978e6677f1dc9def1150b8a3",
+      "sha256": "6a64e9a0a9fcce615ed6d8a83d8772836fe84b898855beaa0469e9a902589d44",
       "imported_sha256": "98a54c3651a2e9361c1e445dc6d82fc62c05ad55d33686f4efa902c1ad3404e6",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pdpa.md",
       "pr": 15,
-      "sha256": "4700d571c58a3032c1dcbe145640315443deda8201db828292f83b342478c2f7",
+      "sha256": "60b72c4a4db28a89fa55838e9783b2528f93ff6b61754522c412024aad163478",
       "imported_sha256": "48b6685fd521846317a379c50e8ba491ec7442f0a13499c872643441f1d6a1a5",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl-review-notes.md",
       "pr": 15,
-      "sha256": "739e906e06c9be06d70fd46eb17f6f276148c03f0444e10166c0f52c71b120d4",
+      "sha256": "e78567289a305f2e7aaec4ee38ec4bca4cdf7ba10cac7a60c3216ffaeb75b7d2",
       "imported_sha256": "28e2c7efabf3f4d7b27802ab072e199a12762f3c6a602e3880f7886684d10f86",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl.json",
       "pr": 15,
-      "sha256": "ad7b809887229a45850e236046410f344587719c09ddc37258091f705fdd469b",
+      "sha256": "256ef862b30826826eb1de2594fd779da11e5c604f7a37cfa662313af70556dd",
       "imported_sha256": "7e50027532b429072fa9f3e562c10f6aaf6a7928081b8d9332579cfbcdbc7b39",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/pipl.md",
       "pr": 15,
-      "sha256": "7a7df10d1d917c4c14276a2f93e9070a44bb023e6d87ae035cf204a6c6f64397",
+      "sha256": "d3d3e1988d3ba7ddcbf497c70fa75105d64bcde37d09c358c080164be91fca1f",
       "imported_sha256": "cc96951373e5729eae1ebb940b1f544e964ec091b157c2dd586ad27266e6b885",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr-review-notes.md",
       "pr": 15,
-      "sha256": "f3129b71a20e54ca274cc52fa40406461d9eaacf05212076d3871b8d084dd5f9",
+      "sha256": "bf2091a5ef169b59afe823def798849bc9ad6904d4caa0d0f2699408b68d2e1d",
       "imported_sha256": "12fb6eedf70b0118b1856c1c98e2f4723ae52103eb1d7e77d73e972a16a68a65",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr.json",
       "pr": 15,
-      "sha256": "9df93be9f6e50e9c3f2b708dab6b41eaaa7181d4bc4de681de692155b2683023",
+      "sha256": "3ef2c630605c98debe406ad01330cf76b71252549798bae3252fd5ee1af2c54d",
       "imported_sha256": "0b53fbcdafb4cc4f04202834d496b336faa6184afcc92a22a609ee60280e9ab3",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },
     {
       "path": "data/legal/translations/uk-gdpr.md",
       "pr": 15,
-      "sha256": "c5bbf467adc9755941cb39ff8e1407fbe3dcdb3ac31891007e2ce556d46402a3",
+      "sha256": "9c88c9678936bed6f20321da2f8389c0c1b44ea0397532559dc2e2be98e20d8c",
       "imported_sha256": "ec001253df46433eea664949ce06ce37e27b8fd764a0fdf3604dd59f77a24a75",
       "transformation_reason": "2026-11-02: legal terminology alignment and plain comparison explanations; source legal structure/review state retained; original imported digest retained"
     },

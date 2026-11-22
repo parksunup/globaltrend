@@ -1,0 +1,322 @@
+{
+  "jurisdiction": "US-CA",
+  "guidePath": "docs/business-advisor/guides/california-ccpa-guide.md",
+  "mappingBasis": "각 문항의 기존 sourceNote에서 안내서에 명시적으로 연결한 절만 매핑 근거로 사용했습니다. 문항 표현을 보고 새 근거를 만들지 않았으며, 안내서에 실질 내용이 없는 주제는 범위 한계를 표시했습니다.",
+  "sections": [
+    {
+      "id": "ca-sec-1",
+      "title": "1. 어떤 자료를 선택했나"
+    },
+    {
+      "id": "ca-sec-1-sources",
+      "title": "사용한 공식 자료와 완독 범위"
+    },
+    {
+      "id": "ca-sec-2",
+      "title": "2. 먼저 CCPA 적용 가능성을 살핍니다"
+    },
+    {
+      "id": "ca-sec-2-flow",
+      "title": "공식 적용 문답의 흐름"
+    },
+    {
+      "id": "ca-sec-2-threshold",
+      "title": "매출 기준은 안내 PDF의 숫자를 그대로 쓰지 않습니다"
+    },
+    {
+      "id": "ca-sec-2-facts",
+      "title": "자가진단을 위해 먼저 정리할 사실"
+    },
+    {
+      "id": "ca-sec-3",
+      "title": "3. 공통 원칙: 목적에 맞게 최소한으로 처리합니다"
+    },
+    {
+      "id": "ca-sec-4",
+      "title": "4. 소비자에게 보여줄 고지와 선택 화면"
+    },
+    {
+      "id": "ca-sec-4-privacy",
+      "title": "개인정보 처리방침 (§7011, PDF pp.21–24)"
+    },
+    {
+      "id": "ca-sec-4-notice",
+      "title": "수집 시 고지 (§7012, PDF pp.24–27)"
+    },
+    {
+      "id": "ca-sec-4-optout",
+      "title": "판매·공유 거부와 민감정보 사용 제한 (§§7013–7015, PDF pp.27–32)"
+    },
+    {
+      "id": "ca-sec-4-incentives",
+      "title": "금전적 인센티브 (§7016, PDF p.33)"
+    },
+    {
+      "id": "ca-sec-5",
+      "title": "5. 권리 요청을 접수하고 처리합니다"
+    },
+    {
+      "id": "ca-sec-5-intake",
+      "title": "신청 경로와 응답기한 (§§7020–7021, PDF pp.34–35)"
+    },
+    {
+      "id": "ca-sec-5-delete",
+      "title": "삭제 (§7022, PDF pp.35–37)"
+    },
+    {
+      "id": "ca-sec-5-correct",
+      "title": "정정 (§7023, PDF pp.38–41)"
+    },
+    {
+      "id": "ca-sec-5-access",
+      "title": "열람·공개 (§7024, PDF pp.42–44)"
+    },
+    {
+      "id": "ca-sec-5-optout",
+      "title": "판매·공유 거부 및 옵트아웃 신호 (§§7025–7026, PDF pp.44–53)"
+    },
+    {
+      "id": "ca-sec-5-sensitive",
+      "title": "민감정보 제한 (§7027, PDF pp.53–57)"
+    },
+    {
+      "id": "ca-sec-6",
+      "title": "6. 외부 처리업체를 계약과 점검으로 관리합니다"
+    },
+    {
+      "id": "ca-sec-6-service-provider",
+      "title": "서비스 제공자·계약자 (§§7050–7051, PDF pp.58–62)"
+    },
+    {
+      "id": "ca-sec-6-third-party",
+      "title": "제3자 (§§7052–7053, PDF pp.62–64)"
+    },
+    {
+      "id": "ca-sec-7",
+      "title": "7. 본인확인은 위험에 맞게 하고 차별하지 않습니다"
+    },
+    {
+      "id": "ca-sec-7-identity",
+      "title": "본인확인 (§§7060–7063, PDF pp.64–68)"
+    },
+    {
+      "id": "ca-sec-7-discrimination",
+      "title": "차별 금지·인센티브 (§§7080–7081, PDF pp.70–71)"
+    },
+    {
+      "id": "ca-sec-8",
+      "title": "8. 교육·요청 기록·대규모 처리 통계를 관리합니다"
+    },
+    {
+      "id": "ca-sec-9",
+      "title": "9. 일정 규모 또는 고위험 처리에 대한 추가 의무"
+    },
+    {
+      "id": "ca-sec-9-audit",
+      "title": "사이버보안 감사 (§§7120–7124, PDF pp.74–82)"
+    },
+    {
+      "id": "ca-sec-9-risk",
+      "title": "위험평가 (§§7150–7157, PDF pp.83–91)"
+    },
+    {
+      "id": "ca-sec-9-admt",
+      "title": "자동화 의사결정 기술(ADMT) (§§7200, 7220–7222, PDF pp.91–100)"
+    },
+    {
+      "id": "ca-sec-10",
+      "title": "10. 업종별 경계와 집행"
+    },
+    {
+      "id": "ca-sec-10-insurance",
+      "title": "보험회사 (§§7270–7271, PDF pp.100–101)"
+    },
+    {
+      "id": "ca-sec-10-enforcement",
+      "title": "조사·집행 (§§7300–7304, PDF pp.101–103)"
+    },
+    {
+      "id": "ca-sec-11",
+      "title": "11. 2026년 시행 안내의 7개 핵심 변경"
+    },
+    {
+      "id": "ca-sec-12",
+      "title": "12. 기업 자가진단에 반영할 실무 점검 영역"
+    },
+    {
+      "id": "ca-sec-12-a",
+      "title": "A. 적용 대상과 조직 구조"
+    },
+    {
+      "id": "ca-sec-12-b",
+      "title": "B. 처리 목록과 고지"
+    },
+    {
+      "id": "ca-sec-12-c",
+      "title": "C. 권리 요청과 기록"
+    },
+    {
+      "id": "ca-sec-12-d",
+      "title": "D. 외부 업체·민감정보·아동정보"
+    },
+    {
+      "id": "ca-sec-12-e",
+      "title": "E. 보안·위험평가·자동화"
+    },
+    {
+      "id": "ca-sec-13",
+      "title": "13. 해석 시 주의할 점"
+    }
+  ],
+  "questions": [
+    {
+      "questionId": "US-CA-01",
+      "sourceNote": "안내서 §2 ‘먼저 CCPA 적용 가능성을 살핍니다’; 규정 §7001(v), Article 12. 안내서는 적용 문답이 선별 도구이며 매출 기준을 최신 CPPA 기준표와 대조해야 한다고 설명합니다.",
+      "sectionIds": [
+        "ca-sec-2",
+        "ca-sec-2-flow",
+        "ca-sec-2-threshold"
+      ]
+    },
+    {
+      "questionId": "US-CA-02",
+      "sourceNote": "안내서 §6 ‘외부 처리업체를 계약과 점검으로 관리합니다’; 규정 §§7050–7053. 업체의 실제 계약·처리 목적에 따라 서비스 제공자·계약자·제3자를 구분합니다.",
+      "sectionIds": [
+        "ca-sec-6",
+        "ca-sec-6-service-provider",
+        "ca-sec-6-third-party"
+      ]
+    },
+    {
+      "questionId": "US-CA-03",
+      "sourceNote": "안내서 §§2–3 ‘자가진단을 위해 먼저 정리할 사실’, ‘공통 원칙’; 규정 §§7001, 7002, 7011. 정보 범주·출처·목적·수신자·보유기간을 실제 처리와 연결합니다.",
+      "sectionIds": [
+        "ca-sec-2-facts",
+        "ca-sec-3"
+      ]
+    },
+    {
+      "questionId": "US-CA-04",
+      "sourceNote": "안내서 §4 ‘수집 시 고지’; 규정 §7012. 실제 수집 접점에서 고지를 제공하고 새 정보나 목적이 생기면 고지를 다시 대조합니다.",
+      "sectionIds": [
+        "ca-sec-4-notice"
+      ]
+    },
+    {
+      "questionId": "US-CA-05",
+      "sourceNote": "안내서 §6 ‘서비스 제공자·계약자’, ‘제3자’; 규정 §§7050–7053. 계약은 목적 제한·재사용 금지·보안·권리 지원·하위 업체 통제와 점검 권한을 담아야 합니다.",
+      "sectionIds": [
+        "ca-sec-6-service-provider",
+        "ca-sec-6-third-party"
+      ]
+    },
+    {
+      "questionId": "US-CA-06",
+      "sourceNote": "안내서 §§3–4, §6; 규정 §§7001, 7011, 7050–7053. 판매·공유 여부는 실제 데이터 흐름과 외부 업체 역할을 확인해 판단합니다.",
+      "sectionIds": [
+        "ca-sec-3",
+        "ca-sec-4",
+        "ca-sec-6"
+      ]
+    },
+    {
+      "questionId": "US-CA-07",
+      "sourceNote": "안내서 §4 ‘판매·공유 거부와 민감정보 사용 제한’, §5 ‘판매·공유 거부 및 옵트아웃 신호’; 규정 §§7013–7015, 7025–7026.",
+      "sectionIds": [
+        "ca-sec-4-optout",
+        "ca-sec-5-optout"
+      ]
+    },
+    {
+      "questionId": "US-CA-08",
+      "sourceNote": "안내서 §4 ‘개인정보 처리방침’, ‘판매·공유 거부와 민감정보 사용 제한’, §5 ‘민감정보 제한’; 규정 §§7011, 7014–7015, 7027–7028.",
+      "sectionIds": [
+        "ca-sec-4-privacy",
+        "ca-sec-4-optout",
+        "ca-sec-5-sensitive"
+      ]
+    },
+    {
+      "questionId": "US-CA-09",
+      "sourceNote": "안내서 §4 개인정보 처리방침의 16세 미만 고지, §11 ‘2026년 시행 안내의 7개 핵심 변경’ 7번, §12.D 미성년자 점검; 규정 §§7001(bbb)(4), 7027 및 미성년자 판매·공유 동의 조건.",
+      "sectionIds": [
+        "ca-sec-4-privacy",
+        "ca-sec-11",
+        "ca-sec-12-d"
+      ]
+    },
+    {
+      "questionId": "US-CA-10",
+      "sourceNote": "안내서 §5 ‘신청 경로와 응답기한’, ‘삭제’, ‘정정’, ‘열람·공개’, ‘판매·공유 거부’, ‘민감정보 제한’; §7 ‘본인확인’; 규정 §§7020–7027, 7060–7063.",
+      "sectionIds": [
+        "ca-sec-5",
+        "ca-sec-5-intake",
+        "ca-sec-5-delete",
+        "ca-sec-5-correct",
+        "ca-sec-5-access",
+        "ca-sec-5-optout",
+        "ca-sec-5-sensitive",
+        "ca-sec-7-identity"
+      ]
+    },
+    {
+      "questionId": "US-CA-11",
+      "sourceNote": "안내서 §4 ‘개인정보 처리방침’, §7 ‘차별 금지·인센티브’, §8 ‘교육·요청 기록·대규모 처리 통계’; 규정 §§7011, 7016, 7080–7081, 7101–7102.",
+      "sectionIds": [
+        "ca-sec-4-privacy",
+        "ca-sec-7-discrimination",
+        "ca-sec-8"
+      ]
+    },
+    {
+      "questionId": "US-CA-12",
+      "sourceNote": "안내서 §5 정정 설명에서 외부 데이터 중개업체의 정보 갱신을 언급하지만, 데이터 브로커 정의·등록 의무는 직접 설명하지 않습니다. 이 질문은 기존 캘리포니아 초안의 CPPA 데이터 브로커 안내·등록부 출처를 이어받으며, 별도 공식자료 검토가 필요합니다.",
+      "sectionIds": [
+        "ca-sec-5-correct"
+      ],
+      "coverageNote": "안내서 §5는 정정 과정에서 외부 데이터 중개업체가 정보를 갱신하는 사례만 언급합니다. 데이터 브로커 정의·등록 의무의 본문은 없습니다.",
+      "externalNote": "문항의 CPPA 데이터 브로커 안내·등록부 근거는 별도 공식 출처를 확인해야 합니다."
+    },
+    {
+      "questionId": "US-CA-13",
+      "sourceNote": "안내서 §5는 개별 삭제 요청과 업체 통지를 설명하지만 DROP 절차는 설명하지 않습니다. 이 질문은 기존 초안의 CPPA DROP 규칙·데이터 브로커 출처에 근거하며, 안내서 외 공식자료 확인이 남아 있습니다.",
+      "sectionIds": [
+        "ca-sec-5-delete"
+      ],
+      "coverageNote": "안내서 §5는 개별 삭제 요청만 설명하며 DROP 통합 절차는 다루지 않습니다.",
+      "externalNote": "DROP 규칙과 데이터 브로커 등록부의 최신 공식자료가 추가 근거입니다."
+    },
+    {
+      "questionId": "US-CA-14",
+      "sourceNote": "안내서 §9 ‘위험평가’; 규정 §§7150–7157, Article 10. 적용 활동·예외 및 평가 제출 시점은 시행 연도별로 구분합니다.",
+      "sectionIds": [
+        "ca-sec-9-risk"
+      ]
+    },
+    {
+      "questionId": "US-CA-15",
+      "sourceNote": "안내서 §9 ‘사이버보안 감사’; 규정 §§7120–7124. 적용 범위와 최초 제출기한은 매출 구간·연도별로 다릅니다.",
+      "sectionIds": [
+        "ca-sec-9-audit"
+      ]
+    },
+    {
+      "questionId": "US-CA-16",
+      "sourceNote": "안내서 §9 ‘자동화 의사결정 기술(ADMT)’; 규정 §§7200, 7220–7222. 안내서상 관련 ADMT 규정은 2027-01-01 시행 예정입니다.",
+      "sectionIds": [
+        "ca-sec-9-admt"
+      ]
+    },
+    {
+      "questionId": "US-CA-17",
+      "sourceNote": "안내서 §9 사이버보안 감사의 통제 항목, §10 조사·집행, §13 해석 시 주의점. §13은 일반 권리·제한된 사적 소권·별도 침해통지 의무를 구별하며, 세부 통지 기준은 별도 공식자료 대조가 필요합니다.",
+      "sectionIds": [
+        "ca-sec-9-audit",
+        "ca-sec-10",
+        "ca-sec-13"
+      ],
+      "coverageNote": "침해 통지 세부 기준은 §13의 안내서 범위 밖입니다. 여기서는 사고 대응의 구별 원칙만 보여줍니다.",
+      "externalNote": "별도 공식 침해 통지 안내와 현행 법률을 확인해야 합니다."
+    }
+  ]
+}

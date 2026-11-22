@@ -36,15 +36,15 @@ const cell={id:'test-KR',jurisdiction:'KR',criterionId:'test',criterionName:'테
 test('published translation uses current status while preserving original scope as historical details',()=>{
   const Component=loader()('app/components/translation-review.tsx').default;
   const html=renderToStaticMarkup(React.createElement(Component,props));
-  assert.match(html,/법제 전문 · 검수 완료·발행됨/);
-  assert.match(html,/작성 당시 판본·번역 범위 기록/);
-  assert.match(html,/현재 검수·발행 상태를 뜻하지 않습니다/);
+  assert.match(html,/법제 전문 · 사람 검수 완료 · 발행됨/);
+  assert.match(html,/번역 범위와 판본 안내/);
+  assert.doesNotMatch(html,/현재 검수·발행 상태를 뜻하지 않습니다/);
   assert.doesNotMatch(html,/법제 전문 · 사람 검수 전 초안/);
 });
 test('unpublished translation is not marked reviewed by a global label',()=>{
   const Component=loader()('app/components/translation-review.tsx').default;
   const html=renderToStaticMarkup(React.createElement(Component,{...props,reviewStatus:'not_started',scopeNote:'',sections:[{...section,reviewStatus:'not_started'}]}));
-  assert.match(html,/미발행 · 제출 자료/);assert.doesNotMatch(html,/검수 완료·발행됨/);
+  assert.match(html,/법제 전문 · 검토 상태 확인 필요/);assert.doesNotMatch(html,/사람 검수 완료 · 발행됨/);
 });
 test('published comparison preserves old pending notes as historical records',()=>{
   const Component=loader()('app/components/submission-documents.tsx').default;

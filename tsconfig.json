@@ -17,5 +17,5 @@
     "plugins": [{"name": "next"}]
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "supabase/functions"]
+  "exclude": ["node_modules", "supabase/functions", "apps/business-advisor-desktop"]
 }
