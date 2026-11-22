@@ -25,7 +25,7 @@ Windows 64비트 단일 실행 파일:
 npm run dist:win
 ```
 
-출력 파일 이름은 `국제요정 상담소.exe`이며, 요정 캐릭터를 사용한 앱 아이콘을 포함합니다. 압축 해제 없이 실행할 수 있으며, Electron 런타임이 포함되어 파일 크기가 큽니다. 코드 서명은 아직 구성되지 않았으므로 Windows에서 실행 전 경고가 표시될 수 있습니다. GitHub Actions는 `business-advisor-v*` 태그를 push할 때 빌드하고 Release에 게시합니다.
+출력 파일은 `InternationalFairyCounselor.exe`이며, 앱 화면과 Windows 제품 이름은 `국제요정 상담소`로 표시됩니다. GitHub Releases는 한글 파일명을 자동 변경하므로 배포 파일명에는 ASCII 문자만 사용합니다. 요정 캐릭터 아이콘을 포함하며 압축 해제 없이 실행할 수 있습니다. Electron 런타임이 포함되어 파일 크기가 크고, 코드 서명은 구성되지 않아 Windows에서 실행 전 경고가 표시될 수 있습니다. GitHub Actions는 `business-advisor-v*` 태그를 push할 때 빌드하고 Release에 게시합니다.
 
 ## ChatGPT 계정 연결
 
