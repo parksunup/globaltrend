@@ -119,11 +119,21 @@ async function listModels(): Promise<{ id: string; label: string }[]> {
   const accessToken = await connection.accessToken()
   const response = await fetch('https://api.openai.com/v1/models', { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(20_000) })
   if (response.status === 401) { await connection.dropSession(); throw new Error('ChatGPT 연결이 만료됐습니다. 다시 연결해 주세요.') }
-  const body = await response.json().catch(() => ({})) as { data?: Array<{ id?: unknown; display_name?: unknown }>; error?: { message?: string } }
+  const body = await response.json().catch(() => ({})) as {
+    models?: Array<{ slug?: unknown; display_name?: unknown; visibility?: unknown }>
+    data?: Array<{ id?: unknown; display_name?: unknown }>
+    error?: { message?: string }
+  }
   if (!response.ok) throw new Error(body.error?.message || `사용 가능한 모델을 확인하지 못했습니다 (HTTP ${response.status})`)
-  const discovered = (body.data ?? [])
-    .filter(item => typeof item.id === 'string' && isSupportedGeneration(item.id))
-    .map(item => ({ id: item.id as string, label: typeof item.display_name === 'string' ? item.display_name : formatModelLabel(item.id as string) }))
+  // Sign in with ChatGPT's account-specific catalog uses `models[]` with
+  // `slug` and `visibility`, unlike the API-key catalog's `data[]`/`id`.
+  const discovered = Array.isArray(body.models)
+    ? body.models
+      .filter(item => item.visibility === 'list' && typeof item.slug === 'string' && isSupportedGeneration(item.slug))
+      .map(item => ({ id: item.slug as string, label: typeof item.display_name === 'string' ? item.display_name : formatModelLabel(item.slug as string) }))
+    : (body.data ?? [])
+      .filter(item => typeof item.id === 'string' && isSupportedGeneration(item.id))
+      .map(item => ({ id: item.id as string, label: typeof item.display_name === 'string' ? item.display_name : formatModelLabel(item.id as string) }))
   return [...new Map(discovered.map(model => [model.id, model])).values()]
     .sort((a, b) => modelRank(a.id) - modelRank(b.id) || a.id.localeCompare(b.id))
 }

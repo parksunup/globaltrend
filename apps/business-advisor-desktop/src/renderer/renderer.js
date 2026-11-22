@@ -14,6 +14,7 @@ let busy = false
 let failedTurn = null
 let assessmentContext = ''
 let pendingAssessmentContext = ''
+let modelLoadError = ''
 
 function showError(message) {
   error.replaceChildren()
@@ -39,7 +40,7 @@ function addMessage(role, text = '') {
   else {
     avatar.classList.add('fairy-avatar')
     const fairy = document.createElement('img')
-    fairy.src = 'assets/fairy.png'
+    fairy.src = 'assets/fairy-transparent.png'
     fairy.alt = ''
     avatar.append(fairy)
   }
@@ -119,6 +120,7 @@ function appendSources(body, result) {
 }
 
 async function runTurn({ prompt, history, message }) {
+  if (!model.value) throw new Error(modelLoadError || '사용 가능한 답변 모델을 불러오지 못했습니다. 모델 목록을 다시 확인해 주세요.')
   const result = await window.advisor.ask(prompt, history, model.value, assessmentContext)
   message.paragraph.textContent = result.answer
   appendSources(message.body, result)
@@ -154,6 +156,7 @@ async function receiveAssessmentConsult() {
 async function refresh() {
   const state = await window.advisor.status()
   signedIn = Boolean(state.signedIn)
+  modelLoadError = ''
   status.textContent = !state.storageAvailable
     ? '이 기기에서 안전한 OS 보안 저장소를 사용할 수 없습니다.'
     : state.signedIn ? `ChatGPT 계정이 연결되어 있습니다.${state.account ? ` · ${state.account}` : ''}` : 'ChatGPT 계정을 연결하면 대화를 시작할 수 있습니다.'
@@ -182,7 +185,8 @@ async function refresh() {
       else model.value = ''
     } catch (cause) {
       if (cause instanceof Error && cause.message.includes('연결이 만료')) signedIn = false
-      showError(cause instanceof Error ? cause.message : String(cause))
+      modelLoadError = cause instanceof Error ? cause.message : String(cause)
+      showError(`답변 모델 목록을 불러오지 못했습니다. ${modelLoadError}`)
     }
   }
   updateControls()
@@ -218,6 +222,10 @@ form.addEventListener('submit', async event => {
   event.preventDefault()
   const prompt = question.value.trim()
   if (!prompt || !signedIn || busy) return
+  if (!model.value) {
+    showError(`답변 모델을 선택할 수 없습니다. ${modelLoadError || '사용 가능한 모델 목록이 비어 있습니다.'}`)
+    return
+  }
   const history = conversation.slice()
   addMessage('user', prompt)
   const reply = addMessage('assistant', '국제요정 자료를 살펴보고 답변을 준비하고 있습니다…')
