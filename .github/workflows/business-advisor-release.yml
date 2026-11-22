@@ -41,23 +41,44 @@ jobs:
             throw "Built application was not found: $assetPath"
           }
 
-          gh release create $env:TAG_NAME $assetPath `
+          # Keep the upload path ASCII so the Windows native process argument
+          # and GitHub's multipart upload cannot silently replace the Korean
+          # basename with electron-builder's fallback name.
+          $stagedAssetPath = Join-Path $env:RUNNER_TEMP 'international-fairy-advisor.exe'
+          Copy-Item -LiteralPath $assetPath -Destination $stagedAssetPath -Force
+          if ((Get-Item -LiteralPath $stagedAssetPath).Length -ne (Get-Item -LiteralPath $assetPath).Length) {
+            throw 'The staged release executable does not match the build output size.'
+          }
+
+          gh release create $env:TAG_NAME $stagedAssetPath `
             --verify-tag `
             --title "국제요정 상담소 $($env:TAG_NAME -replace '^business-advisor-', '')" `
             --generate-notes
           if ($LASTEXITCODE -ne 0) { throw 'Could not create the GitHub release.' }
 
           $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/tags/$env:TAG_NAME" | ConvertFrom-Json
-          $asset = $release.assets | Select-Object -First 1
+          $asset = $release.assets | Where-Object { $_.name -eq 'international-fairy-advisor.exe' } | Select-Object -First 1
           if (-not $asset) { throw 'GitHub did not return the uploaded executable as a release asset.' }
-          $asset = gh api `
-            --method PATCH `
-            "repos/$env:GITHUB_REPOSITORY/releases/assets/$($asset.id)" `
-            --field 'name=국제요정 상담소.exe' | ConvertFrom-Json
-          if ($LASTEXITCODE -ne 0) { throw "GitHub release asset rename failed (gh api exit $LASTEXITCODE)." }
+
+          # Use an explicit UTF-8 JSON body for the documented asset rename API.
+          # gh api --field had returned HTTP success while leaving `default.exe`.
+          $renameBodyPath = Join-Path $env:RUNNER_TEMP 'release-asset-name.json'
+          $renameBody = ConvertTo-Json -InputObject @{ name = '국제요정 상담소.exe' } -Compress
+          [System.IO.File]::WriteAllText($renameBodyPath, $renameBody, [System.Text.UTF8Encoding]::new($false))
+          $headers = @{
+            Authorization = "Bearer $env:GH_TOKEN"
+            Accept = 'application/vnd.github+json'
+            'X-GitHub-Api-Version' = '2022-11-28'
+          }
+          $assetUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/releases/assets/$($asset.id)"
+          $asset = Invoke-RestMethod -Method Patch -Uri $assetUrl -Headers $headers -ContentType 'application/json' -InFile $renameBodyPath
 
           if ($asset.name -cne '국제요정 상담소.exe') {
-            throw "GitHub registered the wrong release filename: $($asset.name)"
+            throw "GitHub asset rename returned '$($asset.name)' (id $($asset.id), size $($asset.size)); expected '국제요정 상담소.exe'."
           }
-          Write-Host "Published release asset: $($asset.name) ($($asset.size) bytes)"
+          $verifiedAsset = Invoke-RestMethod -Method Get -Uri $assetUrl -Headers $headers
+          if ($verifiedAsset.name -cne '국제요정 상담소.exe' -or $verifiedAsset.size -ne (Get-Item -LiteralPath $assetPath).Length) {
+            throw "GitHub asset verification mismatch: '$($verifiedAsset.name)', $($verifiedAsset.size) bytes."
+          }
+          Write-Host "Published and re-read release asset: $($verifiedAsset.name) ($($verifiedAsset.size) bytes)"
 

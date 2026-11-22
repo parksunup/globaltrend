@@ -170,6 +170,59 @@ function extractWebCitations(output: Array<{ content?: Array<{ annotations?: Arr
   return [...citations.values()]
 }
 
+type StreamResponse = {
+  id?: string
+  status?: string
+  output_text?: unknown
+  output?: Array<{ type?: string; content?: Array<{ type?: string; text?: string; annotations?: Array<Record<string, unknown>> }> }>
+  error?: { message?: string; code?: string; type?: string; param?: string }
+}
+
+async function readResponsesStream(response: Response, model: string): Promise<StreamResponse> {
+  if (!response.body) throw new Error(`ChatGPT 스트리밍 응답 본문이 비어 있습니다. 모델: ${model}`)
+  const reader = response.body.getReader()
+  const decoder = new TextDecoder()
+  let buffer = ''
+  let answer = ''
+  let completed: StreamResponse | undefined
+  let failed: StreamResponse['error'] | undefined
+  let incomplete = false
+
+  const consumeFrame = (frame: string) => {
+    const data = frame.split(/\r?\n/).filter(line => line.startsWith('data:')).map(line => line.slice(5).trimStart()).join('\n')
+    if (!data || data === '[DONE]') return
+    let event: { type?: string; delta?: unknown; response?: StreamResponse; error?: StreamResponse['error'] }
+    try { event = JSON.parse(data) as typeof event } catch { return }
+    if (event.type === 'response.output_text.delta' && typeof event.delta === 'string') answer += event.delta
+    if (event.type === 'response.completed' && event.response) completed = event.response
+    if (event.type === 'response.incomplete') incomplete = true
+    if (event.type === 'response.failed') failed = event.response?.error ?? event.error
+    if (event.type === 'error') failed = event.error
+  }
+
+  try {
+    while (true) {
+      const { value, done } = await reader.read()
+      buffer += decoder.decode(value, { stream: !done })
+      const frames = buffer.split(/\r?\n\r?\n/)
+      buffer = frames.pop() ?? ''
+      for (const frame of frames) consumeFrame(frame)
+      if (done) break
+    }
+  } finally {
+    reader.releaseLock()
+  }
+  if (buffer.trim()) consumeFrame(buffer)
+  if (failed) {
+    const detail = [failed.code, failed.type, failed.param, failed.message].filter(Boolean).join(' · ')
+    throw new Error(`ChatGPT가 답변 생성을 거부했습니다. 모델: ${model}${detail ? `\n오류 상세: ${detail}` : ''}`)
+  }
+  if (incomplete) throw new Error(`ChatGPT 답변이 중간에 끝났습니다. 모델: ${model}${answer ? `\n지금까지 생성한 답변: ${answer.slice(-300)}` : ''}`)
+  if (!completed) throw new Error(`ChatGPT 스트림이 완료 신호 없이 끝났습니다. 모델: ${model}`)
+  if (answer && !completed.output_text) completed.output_text = answer
+  return completed
+}
+
 async function askChatGpt(question: string, history: ChatTurn[], model: string, assessmentContext = '') {
   const trimmed = question.trim()
   if (!trimmed || trimmed.length > 8_000) throw new Error('질문은 1자 이상 8,000자 이하로 입력해 주세요.')
@@ -195,14 +248,13 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
     '\n[대화에 제공된 국제요정 근거]\n' + (evidenceText || '이번 질문과 직접 일치하는 내부 자료를 찾지 못했습니다. 기본 웹 검색을 실행해 신뢰할 수 있는 공식 자료부터 확인하고, 확인한 범위와 남은 불확실성을 말하세요.'),
   ].join('\n\n')
   const input = [...history, { role: 'user' as const, content: trimmed }].map(turn => ({ role: turn.role, content: turn.content }))
-  const payload: Record<string, unknown> = { model, instructions, input, store: false }
+  const payload: Record<string, unknown> = { model, instructions, input, store: false, stream: true }
   payload.tools = [{ type: 'web_search' }]
   const response = await fetch('https://api.openai.com/v1/responses', {
     method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload), signal: AbortSignal.timeout(180_000),
   })
   if (response.status === 401) { await connection.dropSession(); throw new Error('ChatGPT 연결이 만료됐습니다. 다시 연결해 주세요.') }
-  const responseText = await response.text().catch(() => '')
   let body: {
     output_text?: unknown;
     output?: Array<{ type?: string; content?: Array<{ type?: string; text?: string; annotations?: Array<Record<string, unknown>> }> }>;
@@ -212,8 +264,9 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
     code?: string;
     status?: string;
   } = {}
-  try { body = JSON.parse(responseText) as typeof body } catch { /* Keep a bounded plain-text diagnostic below. */ }
   if (!response.ok) {
+    const responseText = await response.text().catch(() => '')
+    try { body = JSON.parse(responseText) as typeof body } catch { /* Keep a bounded plain-text diagnostic below. */ }
     const rawDetail = body.error?.message || body.message || body.detail || responseText
     const detail = rawDetail.replaceAll(accessToken, '[인증 정보 숨김]').replace(trimmed, '[질문 내용 숨김]').trim().slice(0, 1_000)
     const requestId = response.headers.get('x-request-id') || response.headers.get('request-id')
@@ -230,8 +283,8 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
     if (/web_search|tool.*not supported|unsupported.*tool/i.test(reason)) throw new Error(`이 계정 또는 선택한 모델에서 웹 검색 도구를 사용할 수 없다는 응답입니다. 아래 오류 상세를 확인해 주세요.\n\n${diagnostic}`)
     throw new Error(diagnostic)
   }
-  if (!responseText) throw new Error('ChatGPT가 빈 응답을 반환했습니다. 잠시 후 다시 시도해 주세요.')
-  try { body = JSON.parse(responseText) as typeof body } catch { throw new Error(`ChatGPT 응답을 읽지 못했습니다. 요청 ID: ${response.headers.get('x-request-id') || '없음'}`) }
+  const streamed = await readResponsesStream(response, model)
+  body = streamed
   let answer = typeof body.output_text === 'string' ? body.output_text : ''
   if (!answer) answer = (body.output ?? []).flatMap(item => item.content ?? []).filter(part => part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('\n')
   if (!answer) throw new Error(body.status === 'incomplete' ? '답변이 끝까지 생성되지 않았습니다. 질문을 나누어 다시 보내 주세요.' : 'ChatGPT 응답에서 답변 본문을 찾지 못했습니다.')
