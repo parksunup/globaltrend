@@ -36,7 +36,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          gh release create "$TAG_NAME" apps/business-advisor-desktop/release/국제요정-상담소-*.exe \
+          gh release create "$TAG_NAME" "apps/business-advisor-desktop/release/국제요정 상담소.exe" \
             --verify-tag \
             --title "국제요정 상담소 ${TAG_NAME#business-advisor-}" \
             --generate-notes
