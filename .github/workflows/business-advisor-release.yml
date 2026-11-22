@@ -34,7 +34,6 @@ jobs:
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
-          GH_ENTERPRISE_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
           $assetPath = Join-Path $env:GITHUB_WORKSPACE 'apps/business-advisor-desktop/release/국제요정 상담소.exe'
@@ -42,25 +41,20 @@ jobs:
             throw "Built application was not found: $assetPath"
           }
 
-          gh release create $env:TAG_NAME `
+          gh release create $env:TAG_NAME $assetPath `
             --verify-tag `
             --title "국제요정 상담소 $($env:TAG_NAME -replace '^business-advisor-', '')" `
             --generate-notes
           if ($LASTEXITCODE -ne 0) { throw 'Could not create the GitHub release.' }
 
           $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/tags/$env:TAG_NAME" | ConvertFrom-Json
-          if (-not $release.upload_url) { throw 'GitHub did not return a release asset upload URL.' }
-          Write-Host "Uploading $([IO.Path]::GetFileName($assetPath)) with GitHub's binary request body and explicit asset name."
-          $assetResponse = gh api `
-            --hostname uploads.github.com `
-            --method POST `
-            "repos/$env:GITHUB_REPOSITORY/releases/$($release.id)/assets" `
-            --header 'Accept: application/vnd.github+json' `
-            --header 'Content-Type: application/octet-stream' `
-            --field "name=국제요정 상담소.exe" `
-            --input $assetPath
-          if ($LASTEXITCODE -ne 0) { throw "GitHub release upload failed (gh api exit $LASTEXITCODE)." }
-          $asset = $assetResponse | ConvertFrom-Json
+          $asset = $release.assets | Select-Object -First 1
+          if (-not $asset) { throw 'GitHub did not return the uploaded executable as a release asset.' }
+          $asset = gh api `
+            --method PATCH `
+            "repos/$env:GITHUB_REPOSITORY/releases/assets/$($asset.id)" `
+            --field 'name=국제요정 상담소.exe' | ConvertFrom-Json
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release asset rename failed (gh api exit $LASTEXITCODE)." }
 
           if ($asset.name -cne '국제요정 상담소.exe') {
             throw "GitHub registered the wrong release filename: $($asset.name)"
