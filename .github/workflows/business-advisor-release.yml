@@ -34,6 +34,7 @@ jobs:
         uses: actions/github-script@v7
         env:
           TAG_NAME: ${{ github.ref_name }}
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           script: |
             const fs = require('node:fs');
@@ -68,20 +69,32 @@ jobs:
             if (release.assets.length) throw new Error(`Release ${tag} already contains unexpected assets: ${release.assets.map(asset => asset.name).join(', ')}`);
 
             const bytes = fs.readFileSync(assetPath);
-            const uploaded = await github.rest.repos.uploadReleaseAsset({
-              owner,
-              repo,
-              release_id: release.id,
-              name: assetName,
-              data: bytes,
+            const uploadUrl = release.upload_url
+              .replace(/\{\?.*$/, '') + `?name=${encodeURIComponent(assetName)}`;
+            const response = await fetch(uploadUrl, {
+              method: 'POST',
               headers: {
+                authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                accept: 'application/vnd.github+json',
+                'x-github-api-version': '2022-11-28',
                 'content-type': 'application/vnd.microsoft.portable-executable',
                 'content-length': String(stat.size),
               },
+              body: bytes,
             });
-            const verified = await github.rest.repos.getReleaseAsset({ owner, repo, asset_id: uploaded.data.id });
-            if (uploaded.data.name !== assetName || verified.data.name !== assetName || verified.data.size !== stat.size) {
-              throw new Error(`Release asset verification failed: upload=${uploaded.data.name}, read-back=${verified.data.name}, size=${verified.data.size}/${stat.size}.`);
+            const responseBody = await response.text();
+            if (!response.ok) throw new Error(`Release upload failed (${response.status}): ${responseBody}`);
+            const uploaded = JSON.parse(responseBody);
+            const verifiedResponse = await fetch(uploaded.url, {
+              headers: {
+                authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                accept: 'application/vnd.github+json',
+                'x-github-api-version': '2022-11-28',
+              },
+            });
+            const verified = await verifiedResponse.json();
+            if (!verifiedResponse.ok || uploaded.name !== assetName || verified.name !== assetName || verified.size !== stat.size) {
+              throw new Error(`Release asset verification failed: upload=${uploaded.name}, read-back=${verified.name}, size=${verified.size}/${stat.size}.`);
             }
-            core.info(`Published and re-read ${verified.data.name} (${verified.data.size} bytes).`);
+            core.info(`Published and re-read ${verified.name} (${verified.size} bytes).`);
 
