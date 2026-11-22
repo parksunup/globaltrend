@@ -44,7 +44,7 @@
           "arch": ["x64"]
         }
       ],
-      "artifactName": "국제요정 상담소.${ext}"
+      "artifactName": "InternationalFairyCounselor.${ext}"
     }
   }
 }
