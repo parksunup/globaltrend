@@ -20,9 +20,20 @@ function showError(message) {
   error.replaceChildren()
   error.hidden = !message
   if (!message) return
-  const text = document.createElement('div')
-  text.textContent = message
-  error.append(text)
+  const lines = message.split('\n')
+  const summary = document.createElement('p')
+  summary.className = 'error-summary'
+  summary.textContent = lines[0]
+  error.append(summary)
+  if (lines.length > 1) {
+    const details = document.createElement('details')
+    const heading = document.createElement('summary')
+    heading.textContent = '오류 상세 보기'
+    const body = document.createElement('pre')
+    body.textContent = lines.slice(1).join('\n').trim()
+    details.append(heading, body)
+    error.append(details)
+  }
 }
 
 function updateControls() {

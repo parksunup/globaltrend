@@ -31,13 +31,35 @@ jobs:
         run: npm run dist:win
 
       - name: Publish tagged release asset
-        shell: bash
+        shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
         run: |
-          gh release create "$TAG_NAME" "apps/business-advisor-desktop/release/국제요정 상담소.exe" \
-            --verify-tag \
-            --title "국제요정 상담소 ${TAG_NAME#business-advisor-}" \
+          $assetPath = Join-Path $env:GITHUB_WORKSPACE 'apps/business-advisor-desktop/release/국제요정 상담소.exe'
+          if (-not (Test-Path -LiteralPath $assetPath -PathType Leaf)) {
+            throw "Built application was not found: $assetPath"
+          }
+
+          gh release create $env:TAG_NAME `
+            --verify-tag `
+            --title "국제요정 상담소 $($env:TAG_NAME -replace '^business-advisor-', '')" `
             --generate-notes
+          if ($LASTEXITCODE -ne 0) { throw 'Could not create the GitHub release.' }
+
+          $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/tags/$env:TAG_NAME" | ConvertFrom-Json
+          if (-not $release.upload_url) { throw 'GitHub did not return a release asset upload URL.' }
+          $uploadUrl = $release.upload_url -replace '\{\?name,label\}$', ''
+          $encodedName = [uri]::EscapeDataString('국제요정 상담소.exe')
+          $asset = Invoke-RestMethod `
+            -Method Post `
+            -Uri "$uploadUrl?name=$encodedName" `
+            -Headers @{ Authorization = "Bearer $env:GH_TOKEN"; Accept = 'application/vnd.github+json' } `
+            -ContentType 'application/octet-stream' `
+            -InFile $assetPath
+
+          if ($asset.name -cne '국제요정 상담소.exe') {
+            throw "GitHub registered the wrong release filename: $($asset.name)"
+          }
+          Write-Host "Published release asset: $($asset.name) ($($asset.size) bytes)"
 

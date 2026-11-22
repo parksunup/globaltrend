@@ -69,6 +69,10 @@ h1 { margin:0; color:#f0f5f7; font-size:clamp(28px,4vw,38px); letter-spacing:-.0
 .disclaimer-note { margin:8px 4px 0; padding:10px 12px; border-left:2px solid var(--gold); background:rgba(229,183,102,.08); color:#d8c99f; font-size:10px; line-height:1.7; }
 .app-footer { display:flex; justify-content:space-between; gap:10px; margin-top:auto; padding:22px 2px 17px; color:#8295a5; font-size:10px; }
 .error { margin:10px 0 0; padding:12px 14px; border:1px solid #b97668; border-radius:8px; background:#35211f; color:#ffc5b7; font-size:12px; line-height:1.6; }
+.error-summary { margin:0; }
+.error details { margin-top:8px; }
+.error details > summary { cursor:pointer; font-weight:700; }
+.error pre { max-height:220px; margin:6px 0 0; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font:inherit; }
 .error button { display:inline-block; margin:8px 0 0; padding:7px 10px; background:#8c4d3c; color:#fff; font-size:11px; }
 .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
 @media(max-width:720px) { body{min-width:360px}.app-shell{width:calc(100% - 28px)}.topbar{align-items:flex-start;padding:15px 0;flex-direction:column}.account-area{width:100%;justify-content:space-between}.brand{flex-wrap:wrap}.brand-subtitle{font-size:10px}.intro{padding:22px 0 15px}.fairy-hero{width:78px;height:104px}.transcript{padding:18px;max-height:none}.message{max-width:100%}.composer{margin:0 9px 9px}.composer-footer{align-items:flex-start;flex-direction:column}.preferences{flex-wrap:wrap}.send-area{width:100%;justify-content:space-between}.app-footer{font-size:9px} }

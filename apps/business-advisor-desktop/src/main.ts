@@ -202,17 +202,36 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
     body: JSON.stringify(payload), signal: AbortSignal.timeout(180_000),
   })
   if (response.status === 401) { await connection.dropSession(); throw new Error('ChatGPT 연결이 만료됐습니다. 다시 연결해 주세요.') }
-  const body = await response.json().catch(() => ({})) as {
+  const responseText = await response.text().catch(() => '')
+  let body: {
     output_text?: unknown;
     output?: Array<{ type?: string; content?: Array<{ type?: string; text?: string; annotations?: Array<Record<string, unknown>> }> }>;
-    error?: { message?: string; code?: string };
+    error?: { message?: string; code?: string; type?: string; param?: string };
+    message?: string;
+    detail?: string;
+    code?: string;
     status?: string;
-  }
+  } = {}
+  try { body = JSON.parse(responseText) as typeof body } catch { /* Keep a bounded plain-text diagnostic below. */ }
   if (!response.ok) {
-    const reason = body.error?.message || `ChatGPT 요청 실패 (HTTP ${response.status})`
-    if (/web_search|tool.*not supported|unsupported.*tool/i.test(reason)) throw new Error(`웹 검색을 기본으로 사용하도록 요청했지만, 이 ChatGPT 계정 또는 선택한 모델에서 웹 검색 기능을 사용할 수 없습니다. 웹 검색이 가능한 모델·계정으로 연결해 다시 시도해 주세요. (${reason})`)
-    throw new Error(reason)
+    const rawDetail = body.error?.message || body.message || body.detail || responseText
+    const detail = rawDetail.replaceAll(accessToken, '[인증 정보 숨김]').replace(trimmed, '[질문 내용 숨김]').trim().slice(0, 1_000)
+    const requestId = response.headers.get('x-request-id') || response.headers.get('request-id')
+    const diagnostic = [
+      `ChatGPT 요청 실패 (HTTP ${response.status})`,
+      `모델: ${model}`,
+      requestId ? `요청 ID: ${requestId}` : '',
+      body.error?.code || body.code ? `오류 코드: ${body.error?.code || body.code}` : '',
+      body.error?.type ? `오류 유형: ${body.error.type}` : '',
+      body.error?.param ? `요청 항목: ${body.error.param}` : '',
+      detail ? `서버 설명: ${detail}` : '서버가 추가 오류 내용을 반환하지 않았습니다.',
+    ].filter(Boolean).join('\n')
+    const reason = body.error?.message || body.message || body.detail || `ChatGPT 요청 실패 (HTTP ${response.status})`
+    if (/web_search|tool.*not supported|unsupported.*tool/i.test(reason)) throw new Error(`이 계정 또는 선택한 모델에서 웹 검색 도구를 사용할 수 없다는 응답입니다. 아래 오류 상세를 확인해 주세요.\n\n${diagnostic}`)
+    throw new Error(diagnostic)
   }
+  if (!responseText) throw new Error('ChatGPT가 빈 응답을 반환했습니다. 잠시 후 다시 시도해 주세요.')
+  try { body = JSON.parse(responseText) as typeof body } catch { throw new Error(`ChatGPT 응답을 읽지 못했습니다. 요청 ID: ${response.headers.get('x-request-id') || '없음'}`) }
   let answer = typeof body.output_text === 'string' ? body.output_text : ''
   if (!answer) answer = (body.output ?? []).flatMap(item => item.content ?? []).filter(part => part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('\n')
   if (!answer) throw new Error(body.status === 'incomplete' ? '답변이 끝까지 생성되지 않았습니다. 질문을 나누어 다시 보내 주세요.' : 'ChatGPT 응답에서 답변 본문을 찾지 못했습니다.')
