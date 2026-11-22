@@ -15,11 +15,11 @@ async function latestDesktopRelease(): Promise<{ release: GithubRelease | null; 
   try {
     const response = await fetch("https://api.github.com/repos/parksunup/globaltrend/releases?per_page=30", {
       headers: { Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" },
-      next: { revalidate: 300 },
+      cache: "no-store",
     });
     if (!response.ok) return { release: null, unavailable: true };
     const releases = await response.json() as GithubRelease[];
-    const release = releases.find(item => /^business-advisor-v\d+\.\d+\.\d+/.test(item.tag_name) && !item.draft && !item.prerelease && item.assets.some(asset => asset.name.endsWith(".exe")));
+    const release = releases.find(item => /^business-advisor-v\d+\.\d+\.\d+/.test(item.tag_name) && !item.draft && !item.prerelease && item.assets.some(asset => asset.name === "국제요정 상담소.exe"));
     return { release: release ?? null, unavailable: false };
   } catch {
     return { release: null, unavailable: true };
@@ -32,7 +32,7 @@ function formatSize(bytes: number) {
 
 export default async function BusinessAdvisorDownloadPage() {
   const { release, unavailable } = await latestDesktopRelease();
-  const assets = release?.assets.filter(asset => asset.name.endsWith(".exe")) ?? [];
+  const assets = release?.assets.filter(asset => asset.name === "국제요정 상담소.exe") ?? [];
   const version = release?.tag_name.replace(/^business-advisor-v/, "") ?? "";
   return <main className={styles.site}>
     <PublicHeader active="/public/business-advisor-download" />
