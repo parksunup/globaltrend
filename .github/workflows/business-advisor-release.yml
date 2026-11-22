@@ -31,54 +31,58 @@ jobs:
         run: npm run dist:win
 
       - name: Publish tagged release asset
-        shell: pwsh
+        uses: actions/github-script@v7
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG_NAME: ${{ github.ref_name }}
-        run: |
-          $assetPath = Join-Path $env:GITHUB_WORKSPACE 'apps/business-advisor-desktop/release/국제요정 상담소.exe'
-          if (-not (Test-Path -LiteralPath $assetPath -PathType Leaf)) {
-            throw "Built application was not found: $assetPath"
-          }
+        with:
+          script: |
+            const fs = require('node:fs');
+            const path = require('node:path');
+            const core = require('@actions/core');
+            const { owner, repo } = context.repo;
+            const tag = process.env.TAG_NAME;
+            const assetName = '\uAD6D\uC81C\uC694\uC815 \uC0C1\uB2F4\uC18C.exe';
+            const assetPath = path.join(process.env.GITHUB_WORKSPACE, 'apps', 'business-advisor-desktop', 'release', assetName);
+            if (!fs.existsSync(assetPath)) throw new Error(`Built application was not found: ${assetPath}`);
+            const stat = fs.statSync(assetPath);
 
-          # Keep the upload path ASCII so the Windows native process argument
-          # and GitHub's multipart upload cannot silently replace the Korean
-          # basename with electron-builder's fallback name.
-          $stagedAssetPath = Join-Path $env:RUNNER_TEMP 'international-fairy-advisor.exe'
-          Copy-Item -LiteralPath $assetPath -Destination $stagedAssetPath -Force
-          if ((Get-Item -LiteralPath $stagedAssetPath).Length -ne (Get-Item -LiteralPath $assetPath).Length) {
-            throw 'The staged release executable does not match the build output size.'
-          }
+            let release;
+            const releases = await github.paginate(github.rest.repos.listReleases, { owner, repo, per_page: 100 });
+            release = releases.find(item => item.tag_name === tag);
+            if (!release) {
+              const created = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                tag_name: tag,
+                name: `국제요정 상담소 ${tag.replace(/^business-advisor-/, '')}`,
+                generate_release_notes: true,
+              });
+              release = created.data;
+            }
 
-          gh release create $env:TAG_NAME $stagedAssetPath `
-            --verify-tag `
-            --title "국제요정 상담소 $($env:TAG_NAME -replace '^business-advisor-', '')" `
-            --generate-notes
-          if ($LASTEXITCODE -ne 0) { throw 'Could not create the GitHub release.' }
+            const existing = release.assets.find(asset => asset.name === assetName);
+            if (existing) {
+              if (existing.size !== stat.size) throw new Error(`Release already contains ${existing.name} with a different size.`);
+              core.info(`Verified existing release asset ${existing.name} (${existing.size} bytes).`);
+              return;
+            }
+            if (release.assets.length) throw new Error(`Release ${tag} already contains unexpected assets: ${release.assets.map(asset => asset.name).join(', ')}`);
 
-          $release = gh api "repos/$env:GITHUB_REPOSITORY/releases/tags/$env:TAG_NAME" | ConvertFrom-Json
-          $asset = $release.assets | Where-Object { $_.name -eq 'international-fairy-advisor.exe' } | Select-Object -First 1
-          if (-not $asset) { throw 'GitHub did not return the uploaded executable as a release asset.' }
-
-          # Use an explicit UTF-8 JSON body for the documented asset rename API.
-          # gh api --field had returned HTTP success while leaving `default.exe`.
-          $renameBodyPath = Join-Path $env:RUNNER_TEMP 'release-asset-name.json'
-          $renameBody = ConvertTo-Json -InputObject @{ name = '국제요정 상담소.exe' } -Compress
-          [System.IO.File]::WriteAllText($renameBodyPath, $renameBody, [System.Text.UTF8Encoding]::new($false))
-          $headers = @{
-            Authorization = "Bearer $env:GH_TOKEN"
-            Accept = 'application/vnd.github+json'
-            'X-GitHub-Api-Version' = '2022-11-28'
-          }
-          $assetUrl = "https://api.github.com/repos/$env:GITHUB_REPOSITORY/releases/assets/$($asset.id)"
-          $asset = Invoke-RestMethod -Method Patch -Uri $assetUrl -Headers $headers -ContentType 'application/json' -InFile $renameBodyPath
-
-          if ($asset.name -cne '국제요정 상담소.exe') {
-            throw "GitHub asset rename returned '$($asset.name)' (id $($asset.id), size $($asset.size)); expected '국제요정 상담소.exe'."
-          }
-          $verifiedAsset = Invoke-RestMethod -Method Get -Uri $assetUrl -Headers $headers
-          if ($verifiedAsset.name -cne '국제요정 상담소.exe' -or $verifiedAsset.size -ne (Get-Item -LiteralPath $assetPath).Length) {
-            throw "GitHub asset verification mismatch: '$($verifiedAsset.name)', $($verifiedAsset.size) bytes."
-          }
-          Write-Host "Published and re-read release asset: $($verifiedAsset.name) ($($verifiedAsset.size) bytes)"
+            const bytes = fs.readFileSync(assetPath);
+            const uploaded = await github.rest.repos.uploadReleaseAsset({
+              owner,
+              repo,
+              release_id: release.id,
+              name: assetName,
+              data: bytes,
+              headers: {
+                'content-type': 'application/vnd.microsoft.portable-executable',
+                'content-length': String(stat.size),
+              },
+            });
+            const verified = await github.rest.repos.getReleaseAsset({ owner, repo, asset_id: uploaded.data.id });
+            if (uploaded.data.name !== assetName || verified.data.name !== assetName || verified.data.size !== stat.size) {
+              throw new Error(`Release asset verification failed: upload=${uploaded.data.name}, read-back=${verified.data.name}, size=${verified.data.size}/${stat.size}.`);
+            }
+            core.info(`Published and re-read ${verified.data.name} (${verified.data.size} bytes).`);
 
