@@ -38,7 +38,6 @@ jobs:
           script: |
             const fs = require('node:fs');
             const path = require('node:path');
-            const core = require('@actions/core');
             const { owner, repo } = context.repo;
             const tag = process.env.TAG_NAME;
             const assetName = '\uAD6D\uC81C\uC694\uC815 \uC0C1\uB2F4\uC18C.exe';
