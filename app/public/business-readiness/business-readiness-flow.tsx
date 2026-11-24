@@ -123,17 +123,6 @@ export default function BusinessReadinessFlow() {
     });
     const actionCount = results.filter(({ outcome }) => outcome.needsAction).length;
     const answerCounts = answerOptions.map(({ id, label }) => ({ id, label, count: results.filter(({ answer }) => answer === id).length }));
-    const jurisdictionSummaries = selected.map((code) => {
-      const jurisdiction = jurisdictions.find(({ code: candidate }) => candidate === code);
-      const entries = results.filter(({ item }) => item.jurisdiction === code);
-      return {
-        code,
-        label: jurisdiction?.label ?? code,
-        flag: jurisdiction?.flag ?? "",
-        total: entries.length,
-        counts: answerOptions.map(({ id, label }) => ({ id, label, count: entries.filter(({ answer }) => answer === id).length })),
-      };
-    });
     const reportDate = new Intl.DateTimeFormat("sv-SE").format(new Date());
     const jurisdictionLabels = [...new Set(results.map(({ item }) => jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction))];
     const report = {
@@ -175,16 +164,6 @@ export default function BusinessReadinessFlow() {
             {answerCounts.filter(({ count }) => count > 0).map(({ id, count }) => <i data-answer={id} key={id} style={{ width: `${(count / results.length) * 100}%` }} />)}
           </div>
           <div className={styles.answerLegend}>{answerCounts.filter(({ count }) => count > 0).map(({ id, label, count }) => <span data-answer={id} key={id}><i />{label} <b>{count}건</b></span>)}</div>
-        </div>
-        <div className={styles.jurisdictionSummary}>
-          {jurisdictionSummaries.map(({ code, label, flag, total, counts }) => <article key={code}>
-            <h4><span aria-hidden="true">{flag}</span> {label}</h4>
-            <div className={styles.jurisdictionStats}><span>응답 {total}건</span></div>
-            <div className={styles.jurisdictionTrack} role="img" aria-label={`${label} ${counts.filter(({ count }) => count > 0).map(({ label: answerLabel, count }) => `${answerLabel} ${count}건`).join(", ")}`}>
-              {counts.filter(({ count }) => count > 0).map(({ id, count }) => <i data-answer={id} key={id} style={{ width: `${total ? (count / total) * 100 : 0}%` }} />)}
-            </div>
-            <div className={styles.countryAnswerLegend}>{counts.filter(({ count }) => count > 0).map(({ id, label: answerLabel, count }) => <span data-answer={id} key={id}><i />{answerLabel} {count}</span>)}</div>
-          </article>)}
         </div>
         {actionCount > 0 && <div className={styles.priorityActions}><strong>추가로 확인할 항목</strong><ul>{results.filter(({ outcome }) => outcome.needsAction).map(({ item, answer }) => <li key={item.id}><span>{jurisdictions.find(({ code }) => code === item.jurisdiction)?.flag} {jurisdictions.find(({ code }) => code === item.jurisdiction)?.label} · {item.category} · {answerSummary[answer].label}</span><p>{item.helpText}</p></li>)}</ul></div>}
         <p className={styles.dashboardNote}>이 현황은 선택한 답변의 개수를 정리한 것입니다. 법률 준수율이나 법적 적합성을 나타내지 않습니다.</p>
