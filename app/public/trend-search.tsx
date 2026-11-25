@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useOptimistic, useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./public.module.css";
@@ -14,17 +14,18 @@ export default function TrendSearch({ filters, result, loadError }: {
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [pendingFilters, setPendingFilters] = useOptimistic(filters);
   const [query, setQuery] = useState(filters.q ?? "");
   const [filtersExpanded, setFiltersExpanded] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
   const {stories: results, countryOptions, total, page, pageCount, hasCatalog} = result;
-  const mode = filters.mode === "concept" ? "concept" : "keyword";
-  const countries = (filters.country ?? "").split(",").filter(Boolean);
-  const period = allowedPeriods.includes(filters.period ?? "") ? filters.period! : "전체";
-  const customStart = filters.from ?? "";
-  const customEnd = filters.to ?? "";
-  const sort = filters.sort === "최신순" ? "최신순" : "관련도순";
-  const activeTopic = publicTopics.find(topic => topic.id === filters.topic);
+  const mode = pendingFilters.mode === "concept" ? "concept" : "keyword";
+  const countries = (pendingFilters.country ?? "").split(",").filter(Boolean);
+  const period = allowedPeriods.includes(pendingFilters.period ?? "") ? pendingFilters.period! : "전체";
+  const customStart = pendingFilters.from ?? "";
+  const customEnd = pendingFilters.to ?? "";
+  const sort = pendingFilters.sort === "최신순" ? "최신순" : "관련도순";
+  const activeTopic = publicTopics.find(topic => topic.id === pendingFilters.topic);
   const active = results.find(story => story.id === selected) ?? results[0];
   const selectedCountryOptions = countryOptions.filter(option => option.codes.some(code => countries.includes(code)));
   const returnTo = trendSearchHref({...filters, page: String(page), restore: "1"});
@@ -40,7 +41,11 @@ export default function TrendSearch({ filters, result, loadError }: {
 
   function change(changes: TrendSearchFilters) {
     setSelected(null);
-    startTransition(() => router.push(trendSearchHref({...filters, page: undefined, restore: undefined, ...changes}), {scroll: false}));
+    const next = {...pendingFilters, page: undefined, restore: undefined, ...changes};
+    startTransition(() => {
+      setPendingFilters(next);
+      router.push(trendSearchHref(next), {scroll: false});
+    });
   }
 
   function submitQuery(value: string) {

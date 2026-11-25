@@ -52,6 +52,27 @@ test('optional semantic provider is off by default and degrades safely without p
  const oversized=await semanticSearch('질문',[doc()],{url:'http://127.0.0.1:8766/search',fetch:async()=>new Response('x'.repeat(200001))});assert.equal(oversized.state,'unavailable');
 });
 function loader(mocks={}){const cache=new Map();function load(file){file=path.resolve(file);if(cache.has(file))return cache.get(file);const exports={};cache.set(file,exports);const code=ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;vm.runInNewContext(code,{exports,console,URL,URLSearchParams,Map,Set,Date,Intl,process,require(name){if(name in mocks)return mocks[name];if(name==='next/link')return ({children,prefetch,...props})=>React.createElement('a',props,children);if(name.endsWith('.css'))return new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)});if(name.startsWith('.')){const next=path.resolve(path.dirname(file),name);return load([next,next+'.ts',next+'.tsx'].find(existsSync));}return require(name);}});return exports;}return load;}
+test('trend filter changes accumulate while the previous server navigation is pending',()=>{
+ let optimistic;
+ const urls=[];
+ const Component=loader({
+  react:{...React,useState:initial=>[initial,()=>{}],useEffect:()=>{},useTransition:()=>[true,action=>action()],useOptimistic:initial=>[optimistic??initial,value=>{optimistic=value;}]},
+  'next/navigation':{useRouter:()=>({push:url=>urls.push(url)})},
+ })('app/public/trend-search.tsx').default;
+ const props={filters:{page:'3',restore:'1'},loadError:false,result:{stories:[],total:0,hasCatalog:true,page:3,pageCount:3,countryOptions:[{label:'일본',codes:['JP']},{label:'중국',codes:['CN']}]}};
+ function nodes(element){return React.isValidElement(element)?[element,...React.Children.toArray(element.props.children).flatMap(nodes)]:[];}
+ function click(label){const button=nodes(Component(props)).find(element=>element.type==='button'&&nodes(element).some(child=>child.type==='span'&&child.props.children===label));assert.ok(button,label);button.props.onClick();}
+ click('일본');click('중국');
+ let params=new URL(urls.at(-1),'https://example.test').searchParams;
+ assert.equal(params.get('country'),'JP,CN');assert.equal(params.has('page'),false);assert.equal(params.has('restore'),false);
+ click('직접 설정');
+ function date(label,value){const inputLabel=nodes(Component(props)).find(element=>element.type==='label'&&React.Children.toArray(element.props.children)[0]===label);nodes(inputLabel).find(element=>element.type==='input').props.onChange({target:{value}});}
+ date('시작일','2026-01-01');date('종료일','2026-06-30');
+ params=new URL(urls.at(-1),'https://example.test').searchParams;
+ assert.equal(params.get('country'),'JP,CN');assert.equal(params.get('from'),'2026-01-01');assert.equal(params.get('to'),'2026-06-30');
+ click('일본');assert.equal(new URL(urls.at(-1),'https://example.test').searchParams.get('country'),'CN');
+});
+
 test('catalog excludes drafts, pending review notes and unsafe source URLs',()=>{
  const {publicSearchDocuments}=loader({'./published-trends':{},'./public-legal':{}})('lib/unified-search-data.ts');
  const story={id:'one',publicationStatus:'published',title:'동향',summary:'공개 요약',details:'공개 본문',country:'KR',jurisdictions:['KR'],tags:[],originalTitle:'Original',institution:'기관',date:'2026.11.08',officialUrl:'javascript:bad'};
