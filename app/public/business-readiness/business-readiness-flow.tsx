@@ -8,7 +8,7 @@ import uk from "../../../data/business-readiness/questions/UK.json";
 import california from "../../../data/business-readiness/questions/US-CA.json";
 import singapore from "../../../data/business-readiness/questions/SG.json";
 import guideCatalog from "../../../data/business-readiness/guides-content.json";
-import { downloadAssessmentDocx, openAssessmentPdf } from "../../../lib/business-readiness/assessment-report";
+import { downloadAssessmentDocx } from "../../../lib/business-readiness/assessment-report";
 import styles from "./business-readiness.module.css";
 import MarkdownContent from "./markdown-content";
 
@@ -63,7 +63,6 @@ export default function BusinessReadinessFlow() {
   const [showResult, setShowResult] = useState(false);
   const [handoffBusy, setHandoffBusy] = useState(false);
   const [handoffError, setHandoffError] = useState("");
-  const [reportError, setReportError] = useState("");
 
   const questions = useMemo(() => jurisdictions
     .filter(({ code }) => selected.includes(code))
@@ -130,6 +129,7 @@ export default function BusinessReadinessFlow() {
       jurisdictions: jurisdictionLabels,
       questionCount: results.length,
       actionCount,
+      answerCounts,
       entries: results.map(({ item, answer, outcome, reason }) => {
         const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
         const guide = guides[item.jurisdiction];
@@ -150,14 +150,15 @@ export default function BusinessReadinessFlow() {
         };
       }),
     };
-    return <section className={styles.flow} aria-live="polite">
-      <div className={styles.resultHeader}>
+    return <section className={styles.flow} data-assessment-result aria-live="polite">
+      <div className={styles.resultHeader} data-assessment-print>
+        <p className={styles.printDate}>국제요정 · 기업 자가진단 · {reportDate}</p>
         <p className={styles.kicker}>점검 결과</p>
         <h2>점검 결과를 정리했어요</h2>
         <p>선택한 지역 {selected.length}곳 · 응답한 질문 {results.length}개 · 추가로 살펴볼 항목 {actionCount}개</p>
         <p className={styles.caveat}>이 결과는 입력한 답변을 정리한 참고자료이며, 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 답변의 정확성과 최신 법령·공식 지침 확인, 실제 적용 및 후속 조치의 책임은 이용자에게 있습니다.</p>
       </div>
-      {results.length > 0 && <section className={styles.dashboard} aria-label="자가진단 준비 현황">
+      {results.length > 0 && <section className={styles.dashboard} data-assessment-print aria-label="자가진단 준비 현황">
         <div className={styles.dashboardIntro}><div><p className={styles.kicker}>응답으로 보는 준비 현황</p><h3>확인한 답변 {results.length}개</h3></div><span>자가진단 응답 요약</span></div>
         <div className={styles.answerDistribution} aria-label="전체 응답 분포">
           <div className={styles.stackedTrack} role="img" aria-label={answerCounts.filter(({ count }) => count > 0).map(({ label, count }) => `${label} ${count}건`).join(", ")}>
@@ -168,7 +169,7 @@ export default function BusinessReadinessFlow() {
         {actionCount > 0 && <div className={styles.priorityActions}><strong>추가로 확인할 항목</strong><ul>{results.filter(({ outcome }) => outcome.needsAction).map(({ item, answer }) => <li key={item.id}><span>{jurisdictions.find(({ code }) => code === item.jurisdiction)?.flag} {jurisdictions.find(({ code }) => code === item.jurisdiction)?.label} · {item.category} · {answerSummary[answer].label}</span><p>{item.helpText}</p></li>)}</ul></div>}
         <p className={styles.dashboardNote}>이 현황은 선택한 답변의 개수를 정리한 것입니다. 법률 준수율이나 법적 적합성을 나타내지 않습니다.</p>
       </section>}
-      <div className={styles.resultList}>{results.map(({ item, answer, outcome, reason }) => {
+      <div className={styles.resultList} data-assessment-print>{results.map(({ item, answer, outcome, reason }) => {
         const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
         const guide = guides[item.jurisdiction];
         const guideReference = guide?.questions.find(reference => reference.questionId === item.id);
@@ -180,6 +181,12 @@ export default function BusinessReadinessFlow() {
           <p>{outcome.summary}</p>
           {answer === "not_applicable" && <p><strong>해당 없음 사유:</strong> {reason?.trim() || "사유를 입력하지 않았습니다. 업무 범위가 바뀌면 다시 확인해 주세요."}</p>}
           {outcome.needsAction && <div className={styles.nextAction}><strong>확인해 볼 내용</strong><p>{item.helpText}</p></div>}
+          <div className={styles.printSources}>
+            <p><strong>점검 질문</strong> · {item.question}</p>
+            <p><strong>근거 메모</strong> · {item.sourceNote}</p>
+            {guideSections.length > 0 && <p><strong>안내서 항목</strong> · {guideSections.map(section => <a key={section.id} href={`${guide?.guidePath}#${encodeURIComponent(section.id)}`}>{section.title}</a>)}</p>}
+            {jurisdiction && <p><a href={item.sourceUrl || jurisdiction.guideUrl}>공식 안내 보기</a></p>}
+          </div>
           <details>
             <summary>점검 질문과 근거 보기</summary>
             <div className={styles.sources}>
@@ -204,12 +211,11 @@ export default function BusinessReadinessFlow() {
         <button type="button" className={styles.primary} onClick={reset}>새로 점검하기</button>
       </div>
       {results.length > 0 && <div className={styles.reportDownloads}>
-        <div><strong>결과를 문서로 보관하기</strong><p>결과를 국제요정 양식의 Word 문서로 내려받거나 PDF로 저장할 수 있습니다.</p></div>
+        <div><strong>결과를 문서로 보관하기</strong><p>응답 분포 막대와 응답별 결과를 Word로 내려받거나 PDF로 저장할 수 있습니다.</p></div>
         <div className={styles.reportDownloadActions}>
           <button type="button" className={styles.secondary} onClick={() => downloadAssessmentDocx(report, `기업-자가진단-결과-${reportDate}.docx`)}>Word 다운로드 (.docx)</button>
-          <button type="button" className={styles.primary} onClick={() => setReportError(openAssessmentPdf(report) ? "" : "PDF 저장 창이 열리지 않았습니다. 브라우저의 팝업 차단을 해제한 뒤 다시 눌러 주세요.")}>PDF로 저장</button>
+          <button type="button" className={styles.primary} onClick={() => window.print()}>PDF로 저장</button>
         </div>
-        {reportError && <p className={styles.reportError} role="alert">{reportError}</p>}
         <p className={styles.reportHint}>PDF로 저장을 누르면 인쇄 창이 열립니다. 대상 프린터에서 ‘PDF로 저장’을 선택해 주세요. 결과 파일은 이 기기에 저장되며 서버로 전송되지 않습니다.</p>
       </div>}
       <div className={styles.advisorHandoff}>

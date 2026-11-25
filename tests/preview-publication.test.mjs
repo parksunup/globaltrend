@@ -20,7 +20,7 @@ function render(readOnly,productionOrigin) {
   if(name==='react/jsx-runtime')return require(name);
   if(name.endsWith('.css'))return new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)});
   if(name.endsWith('submission-documents'))return ()=>React.createElement('p',null,'읽을 수 있는 비교표');
-  if(name.endsWith('translation-review')||name.endsWith('team-login')||name.endsWith('team-weekly-panel'))return Empty;
+  if(name.endsWith('translation-review')||name.endsWith('team-login')||name.endsWith('team-weekly-panel')||name.endsWith('trend-conflict-editor'))return Empty;
   if(name.endsWith('team-trend-publication')||name.endsWith('team-workspace-prompts')||name.endsWith('supabase/client'))return {};
   throw Error(name);
  }});

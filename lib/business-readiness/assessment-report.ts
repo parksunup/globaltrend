@@ -17,6 +17,7 @@ export type AssessmentReport = {
   jurisdictions: string[];
   questionCount: number;
   actionCount: number;
+  answerCounts: { id: string; label: string; count: number }[];
   entries: AssessmentReportEntry[];
 };
 
@@ -36,17 +37,13 @@ function xml(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
 }
 
-function html(value: string): string {
-  return xml(value).replace(/\n/g, "<br>");
-}
-
 function run(text: string, options: { bold?: boolean; color?: string; size?: number } = {}): string {
   const properties = [
     options.bold ? "<w:b/>" : "",
     options.color ? `<w:color w:val="${options.color}"/>` : "",
     options.size ? `<w:sz w:val="${options.size}"/><w:szCs w:val="${options.size}"/>` : "",
   ].join("");
-  return `<w:r><w:rPr>${properties}<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/></w:rPr><w:t xml:space="preserve">${xml(text)}</w:t></w:r>`;
+  return `<w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/>${properties}</w:rPr><w:t xml:space="preserve">${xml(text)}</w:t></w:r>`;
 }
 
 function paragraph(text: string, options: { style?: string; bold?: boolean; color?: string; size?: number; after?: number } = {}): string {
@@ -68,6 +65,52 @@ function reportTable(report: AssessmentReport): string {
   return `<w:tbl><w:tblPr><w:tblW w:w="9360" w:type="dxa"/><w:tblLayout w:type="fixed"/>${borders}<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:start w:w="80" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:end w:w="80" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>${columns.map(width => `<w:gridCol w:w="${width}"/>`).join("")}</w:tblGrid>${row(["선택한 관할", "응답 문항", "추가 확인 항목"], true)}${row([report.jurisdictions.join(" · ") || "없음", `${report.questionCount}개`, `${report.actionCount}개`], false)}</w:tbl>`;
 }
 
+const distributionColors: Record<string, string> = {
+  ready: "54C995",
+  partial: "E5B34F",
+  not_started: "E87968",
+  unknown: "A99BE8",
+  not_applicable: "788D9E",
+};
+
+function distributionTable(report: AssessmentReport): string[] {
+  const counts = report.answerCounts.filter(({ count }) => count > 0);
+  if (!counts.length) return [];
+  const total = counts.reduce((sum, {count}) => sum + count, 0);
+  const width = 9360;
+  let cumulativeCount = 0;
+  let previousEdge = 0;
+  const segments = counts.map(({ id, count }) => {
+    cumulativeCount += count;
+    const edge = Math.round(width * cumulativeCount / total);
+    const segment = { color: distributionColors[id] ?? COLORS.line, width: edge - previousEdge };
+    previousEdge = edge;
+    return segment;
+  });
+  const grid = (widths: number[]) => `<w:tblGrid>${widths.map(value => `<w:gridCol w:w="${value}"/>`).join("")}</w:tblGrid>`;
+  const tableLayout = `<w:tblPr><w:tblW w:w="${width}" w:type="dxa"/><w:tblLayout w:type="fixed"/></w:tblPr>`;
+  const bar = `<w:tbl>${tableLayout}${grid(segments.map(segment => segment.width))}<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="235" w:hRule="exact"/></w:trPr>${segments.map(segment => `<w:tc><w:tcPr><w:tcW w:w="${segment.width}" w:type="dxa"/><w:shd w:val="clear" w:fill="${segment.color}"/></w:tcPr><w:p/></w:tc>`).join("")}</w:tr></w:tbl>`;
+  const legend = `<w:tbl>${tableLayout}${grid([480, width - 480])}${counts.map(({label, count}, index) => `<w:tr><w:trPr><w:cantSplit/></w:trPr>${cell("", 480, segments[index].color)}${cell(`${label}  ${count}건`, width - 480, COLORS.white, {color: COLORS.ink, size: 18})}</w:tr>`).join("")}</w:tbl>`;
+  return [
+    paragraph(`응답으로 보는 준비 현황 · 확인한 답변 ${total}개`, { style: "Heading1", color: COLORS.green, bold: true, size: 25, after: 100 }),
+    bar,
+    paragraph("", { size: 12, after: 80 }),
+    legend,
+  ];
+}
+
+function priorityActions(report: AssessmentReport): string[] {
+  const entries = report.entries.filter(entry => entry.action);
+  if (!entries.length) return [];
+  return [
+    paragraph("추가로 확인할 항목", { style: "Heading1", color: COLORS.gold, bold: true, size: 25, after: 100 }),
+    ...entries.flatMap(entry => [
+      paragraph(`${entry.jurisdiction} · ${entry.category} · ${entry.answer}`, { style: "Heading2", color: COLORS.gold, bold: true, size: 20, after: 70 }),
+      paragraph(entry.action!, { color: COLORS.body, size: 20, after: 125 }),
+    ]),
+  ];
+}
+
 function documentXml(report: AssessmentReport): string {
   const body = [
     paragraph("GLOBALTREND  ·  기업 자가진단", { color: COLORS.green, bold: true, size: 19, after: 120 }),
@@ -76,6 +119,9 @@ function documentXml(report: AssessmentReport): string {
     reportTable(report),
     paragraph("", { after: 100 }),
     paragraph("이 결과는 이용자가 선택한 답변을 정리한 참고자료입니다. 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아니며, 법률상 준수 여부나 위반 여부를 판정하지 않습니다. 최신 법령·공식 지침과 실제 상황을 확인하고 판단·조치할 책임은 이용자에게 있습니다.", { color: COLORS.muted, size: 18, after: 280 }),
+    ...distributionTable(report),
+    ...priorityActions(report),
+    paragraph("이 현황은 선택한 답변의 개수를 정리한 것입니다. 법률 준수율이나 법적 적합성을 나타내지 않습니다.", { color: COLORS.muted, size: 18, after: 240 }),
     ...report.entries.flatMap(entry => [
       paragraph(`${entry.jurisdiction}  ·  ${entry.category}`, { style: "Heading1", color: COLORS.ink, bold: true, size: 27, after: 80 }),
       paragraph(entry.question, { style: "Heading2", color: COLORS.ink, bold: true, size: 23, after: 100 }),
@@ -149,17 +195,4 @@ export function downloadAssessmentDocx(report: AssessmentReport, filename: strin
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a"); anchor.href = url; anchor.download = filename; document.body.append(anchor); anchor.click(); anchor.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-export function openAssessmentPdf(report: AssessmentReport): boolean {
-  const target = window.open("", "_blank");
-  if (!target) return false;
-  target.opener = null;
-  const sections = report.entries.map(entry => `<article class="entry ${entry.action ? "needs-review" : "ready"}"><p class="eyebrow">${html(entry.jurisdiction)}　·　${html(entry.category)}</p><h2>${html(entry.question)}</h2><p class="answer"><strong>내 답변</strong><span>${html(entry.answer)}</span></p><p>${html(entry.summary)}</p>${entry.reason ? `<p><strong>해당 없음으로 답한 이유</strong>　${html(entry.reason)}</p>` : ""}${entry.action ? `<p><strong>확인해 볼 내용</strong>　${html(entry.action)}</p>` : ""}<p class="source"><strong>근거 메모</strong>　${html(entry.sourceNote)}</p>${entry.guideSections.length ? `<p class="source"><strong>안내서 항목</strong>　${html(entry.guideSections.join(" · "))}${entry.guideUrl ? `<br><a href="${html(entry.guideUrl)}">한국어 안내서 열기</a>` : ""}</p>` : ""}${entry.officialUrl ? `<p class="source"><strong>공식 안내</strong>　<a href="${html(entry.officialUrl)}">${html(entry.officialUrl)}</a></p>` : ""}</article>`).join("");
-  target.document.open();
-  target.document.write(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>기업 개인정보 자가진단 결과</title><style>
-    @page{size:A4;margin:17mm 16mm}*{box-sizing:border-box}body{margin:0;background:#f7f7f3;color:#1d3028;font-family:"Malgun Gothic","Noto Sans KR",sans-serif;font-size:11pt;line-height:1.72}.report{max-width:820px;margin:28px auto;padding:44px 52px;background:#fff;box-shadow:0 8px 36px #203b2814;border:1px solid #d5ddd6}.brand{color:#0f5e55;font-size:9pt;font-weight:700;letter-spacing:.14em}.title{margin:15px 0 4px;font-size:26pt;line-height:1.35;letter-spacing:-.05em}.date{margin:0 0 25px;color:#66756d;font-size:10pt}.summary{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #d5ddd6;margin:0 0 22px}.metric{padding:14px 16px;border-right:1px solid #d5ddd6}.metric:last-child{border:0}.metric span{display:block;color:#66756d;font-size:9pt}.metric strong{display:block;margin-top:3px;color:#0f5e55;font-size:15pt}.disclaimer{margin:0 0 28px;color:#66756d;font-size:9pt;line-height:1.75}.entry{padding:18px 0 20px;border-top:1px solid #d5ddd6;break-inside:avoid}.eyebrow{margin:0 0 5px;color:#0f5e55;font-size:9pt;font-weight:700}.entry h2{margin:0 0 10px;font-size:14pt;line-height:1.55}.answer{display:flex;gap:10px;align-items:center;margin:8px 0;color:#0f5e55}.needs-review .answer{color:#8a5b2c}.answer span{font-weight:700}.entry p{margin:5px 0}.source{color:#66756d;font-size:9pt}.source a{color:#0f5e55;overflow-wrap:anywhere}.endnote{margin-top:25px;padding-top:14px;border-top:2px solid #0f5e55;color:#66756d;font-size:9pt}@media print{body{background:#fff}.report{max-width:none;margin:0;padding:0;border:0;box-shadow:none}.entry{break-inside:avoid}a{color:#0f5e55;text-decoration:none}}
-    </style></head><body><main class="report"><div class="brand">GLOBALTREND　·　기업 자가진단</div><h1 class="title">기업 개인정보 자가진단 결과</h1><p class="date">작성일　${html(report.date)}</p><section class="summary"><div class="metric"><span>선택한 관할</span><strong>${html(report.jurisdictions.join(" · ") || "없음")}</strong></div><div class="metric"><span>응답 문항</span><strong>${report.questionCount}개</strong></div><div class="metric"><span>추가 확인 항목</span><strong>${report.actionCount}개</strong></div></section><p class="disclaimer">이 결과는 이용자가 선택한 답변을 정리한 참고자료입니다. 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아니며, 법률상 준수 여부나 위반 여부를 판정하지 않습니다. 최신 법령·공식 지침과 실제 상황을 확인하고 판단·조치할 책임은 이용자에게 있습니다.</p>${sections}<p class="endnote">응답은 사용자가 직접 선택한 내용이며, 서버에 저장하지 않고 이 문서로만 내려받았습니다.</p></main><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),250))</script></body></html>`);
-  target.document.close();
-  return true;
 }

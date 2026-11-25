@@ -646,3 +646,24 @@
   outline: 2px solid var(--cyan);
   outline-offset: 3px;
 }
+
+.searchPagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.searchPagination button {
+  min-height: 2.5rem;
+  padding-inline: 0.9rem;
+  color: inherit;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+.searchPagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

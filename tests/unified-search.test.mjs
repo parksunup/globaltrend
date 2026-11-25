@@ -52,6 +52,27 @@ test('optional semantic provider is off by default and degrades safely without p
  const oversized=await semanticSearch('질문',[doc()],{url:'http://127.0.0.1:8766/search',fetch:async()=>new Response('x'.repeat(200001))});assert.equal(oversized.state,'unavailable');
 });
 function loader(mocks={}){const cache=new Map();function load(file){file=path.resolve(file);if(cache.has(file))return cache.get(file);const exports={};cache.set(file,exports);const code=ts.transpileModule(readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX,esModuleInterop:true}}).outputText;vm.runInNewContext(code,{exports,console,URL,URLSearchParams,Map,Set,Date,Intl,process,require(name){if(name in mocks)return mocks[name];if(name==='next/link')return ({children,prefetch,...props})=>React.createElement('a',props,children);if(name.endsWith('.css'))return new Proxy({},{get:(_,key)=>key==='__esModule'?false:String(key)});if(name.startsWith('.')){const next=path.resolve(path.dirname(file),name);return load([next,next+'.ts',next+'.tsx'].find(existsSync));}return require(name);}});return exports;}return load;}
+test('trend filter changes accumulate while the previous server navigation is pending',()=>{
+ let optimistic;
+ const urls=[];
+ const Component=loader({
+  react:{...React,useState:initial=>[initial,()=>{}],useEffect:()=>{},useTransition:()=>[true,action=>action()],useOptimistic:initial=>[optimistic??initial,value=>{optimistic=value;}]},
+  'next/navigation':{useRouter:()=>({push:url=>urls.push(url)})},
+ })('app/public/trend-search.tsx').default;
+ const props={filters:{page:'3',restore:'1'},loadError:false,result:{stories:[],total:0,hasCatalog:true,page:3,pageCount:3,countryOptions:[{label:'일본',codes:['JP']},{label:'중국',codes:['CN']}]}};
+ function nodes(element){return React.isValidElement(element)?[element,...React.Children.toArray(element.props.children).flatMap(nodes)]:[];}
+ function click(label){const button=nodes(Component(props)).find(element=>element.type==='button'&&nodes(element).some(child=>child.type==='span'&&child.props.children===label));assert.ok(button,label);button.props.onClick();}
+ click('일본');click('중국');
+ let params=new URL(urls.at(-1),'https://example.test').searchParams;
+ assert.equal(params.get('country'),'JP,CN');assert.equal(params.has('page'),false);assert.equal(params.has('restore'),false);
+ click('직접 설정');
+ function date(label,value){const inputLabel=nodes(Component(props)).find(element=>element.type==='label'&&React.Children.toArray(element.props.children)[0]===label);nodes(inputLabel).find(element=>element.type==='input').props.onChange({target:{value}});}
+ date('시작일','2026-01-01');date('종료일','2026-06-30');
+ params=new URL(urls.at(-1),'https://example.test').searchParams;
+ assert.equal(params.get('country'),'JP,CN');assert.equal(params.get('from'),'2026-01-01');assert.equal(params.get('to'),'2026-06-30');
+ click('일본');assert.equal(new URL(urls.at(-1),'https://example.test').searchParams.get('country'),'CN');
+});
+
 test('catalog excludes drafts, pending review notes and unsafe source URLs',()=>{
  const {publicSearchDocuments}=loader({'./published-trends':{},'./public-legal':{}})('lib/unified-search-data.ts');
  const story={id:'one',publicationStatus:'published',title:'동향',summary:'공개 요약',details:'공개 본문',country:'KR',jurisdictions:['KR'],tags:[],originalTitle:'Original',institution:'기관',date:'2026.11.08',officialUrl:'javascript:bad'};
@@ -94,15 +115,26 @@ test('navigation keeps overseas trends and places separate unified search immedi
  assert.match(nav,/href="\/public\/search"[^>]*>해외동향</);
  assert.match(nav,/href="\/public\/laws"[^>]*>국가별 법제<\/a><a[^>]*href="\/public\/unified-search"[^>]*aria-current="page"[^>]*>통합 검색</);
 });
-test('original trends page still loads the complete published list without requiring a search query',async()=>{
- let calls=0;
- const stories=Array.from({length:149},(_,i)=>({id:String(i)}));
- const Component=loader({'../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../trend-search':{__esModule:true,default:({stories})=>React.createElement('div',{'data-story-count':stories.length})},'../../../lib/published-trends':{loadPublishedStories:async()=>{calls++;return stories;}}})('app/public/search/page.tsx').default;
+test('public trend search sends one page and counts all published matches',async()=>{
+ const stories=Array.from({length:149},(_,i)=>({id:String(i),country:'GB',tags:['AI'],date:'2026.11.01'}));
+ const {searchTrendPage}=loader({
+   './jurisdictions.ts':{jurisdictionFilterName:code=>code},
+   './public-topics.ts':{matchesPublicTopic:tags=>tags.includes('AI')},
+   './public-search-filters.ts':{},
+ })('lib/trend-search-page.ts');
+ const Component=loader({
+   '../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},
+   '../trend-search':{__esModule:true,default:({result})=>React.createElement('div',{'data-page-count':result.stories.length,'data-total':result.total,'data-page':result.page})},
+   '../../../lib/published-trends':{loadPublishedStories:async(id,options)=>{assert.equal(options.includeDetails,false);return stories;}},
+   '../../../lib/trend-search-page':{searchTrendPage},
+ })('app/public/search/page.tsx').default;
  let html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
- assert.match(html,/data-story-count="149"/);
- stories.push({id:'new-trend'});
- html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
- assert.match(html,/data-story-count="150"/);assert.equal(calls,2);
+ assert.match(html,/data-page-count="24" data-total="149" data-page="1"/);
+ stories.push({id:'new-trend',country:'KR',tags:['AI'],date:'2026.11.02'});
+ html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({topic:'ai',country:'GB',page:'7'})}));
+ assert.match(html,/data-page-count="5" data-total="149" data-page="7"/);
+ html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({country:'KR'})}));
+ assert.match(html,/data-page-count="1" data-total="1" data-page="1"/);
 });
 test('newly published trends and a new law join the next corpus without an ID allowlist or index rebuild',async()=>{
  const stories=[];const legal={cells:[],documents:[],instruments:[]};
