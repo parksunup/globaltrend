@@ -2,7 +2,7 @@ import Link from "next/link";
 import styles from "./public.module.css";
 import searchStyles from "./unified-search.module.css";
 
-import { loadPublicStories } from "../../lib/public-content";
+import { loadPublishedStories } from "../../lib/published-trends";
 import { publicSubmissionPreviewEnabled } from "../../lib/public-submission-preview";
 import { matchesPublicTopic, publicTopics } from "../../lib/public-topics";
 import { PublicHeader, PublicFooter } from "./public-navigation";
@@ -11,6 +11,7 @@ import {loadLatestPublicPodcast} from '../../lib/public-podcast';
 import HomePodcastPlayer from './home-podcast-player';
 import HomeVisitorCounts from "./home-visitor-counts";
 import {rankWeeklyCandidates} from '../../lib/weekly-priority';
+import {readAllPages} from "../../lib/read-all-pages";
 import {formatMonthlyWeek} from '../../lib/weekly-label';
 
 function timelineLabel(region: string, title: string) {
@@ -24,37 +25,62 @@ export const dynamic = "force-dynamic";
 
 export default async function PublicHome() {
   const draftMode = publicSubmissionPreviewEnabled();
-  let allStories: Awaited<ReturnType<typeof loadPublicStories>> = [];
-  let loadError = false;
-  try { allStories = await loadPublicStories(); } catch (error) { console.error(error); loadError = true; }
-  const db=await createClient();
-  const {podcast}=await loadLatestPublicPodcast(db);
-  let stories: typeof allStories = [];
-  let weeklyIssueError = false;
-  let weeklyStart = '';
-  let featuredReportId:string|null=null;
-  try {
-    const {data:issue,error:issueError}=await db.from('written_weekly_issues')
-      .select('issue_key,week_start').eq('status','published')
-      .order('week_start',{ascending:false}).order('issue_key',{ascending:false}).limit(1).maybeSingle();
-    if(issueError)throw issueError;
-    if(issue){
-      weeklyStart=issue.week_start;
-      const {data:manualFeature,error:featureError}=await db.from('homepage_featured_weekly_reports').select('report_id').eq('issue_key',issue.issue_key).maybeSingle();
-      if(featureError)throw featureError;
-      featuredReportId=manualFeature?.report_id??null;
-      const {data:links,error:linksError}=await db.from('written_weekly_issue_reports')
-        .select('report_id,sort_order').eq('issue_key',issue.issue_key).order('sort_order',{ascending:true});
-      if(linksError)throw linksError;
-      const byId=new Map(allStories.map(story=>[story.id,story] as const));
-      stories=(links??[]).map(link=>byId.get(link.report_id)).filter((story):story is (typeof allStories)[number]=>Boolean(story))
-        .sort((a,b)=>{
-          const dateA=a.date==='날짜 미상'?'00000000':a.date.replaceAll('.','');
-          const dateB=b.date==='날짜 미상'?'00000000':b.date.replaceAll('.','');
-          return dateB.localeCompare(dateA);
-        });
-    }
-  } catch(error) { console.error('Unable to load the published weekly selection:',error); weeklyIssueError=true; }
+  const db = await createClient();
+
+  async function loadWeeklySelection() {
+    const {data: issue, error: issueError} = await db.from("written_weekly_issues")
+      .select("issue_key,week_start").eq("status", "published")
+      .order("week_start", {ascending: false}).order("issue_key", {ascending: false}).limit(1).maybeSingle();
+    if (issueError) throw issueError;
+    if (!issue) return null;
+    const [feature, links] = await Promise.all([
+      db.from("homepage_featured_weekly_reports").select("report_id").eq("issue_key", issue.issue_key).maybeSingle(),
+      db.from("written_weekly_issue_reports").select("report_id,sort_order").eq("issue_key", issue.issue_key).order("sort_order"),
+    ]);
+    if (feature.error) throw feature.error;
+    if (links.error) throw links.error;
+    const ids = (links.data ?? []).map(link => link.report_id);
+    const byId = new Map((await loadPublishedStories(undefined, {ids})).map(story => [story.id, story]));
+    const stories = ids.flatMap(id => {
+      const story = byId.get(id);
+      return story ? [story] : [];
+    }).sort((a, b) => {
+      const date = (value: string) => value === "날짜 미상" ? "" : value;
+      return date(b.date).localeCompare(date(a.date));
+    });
+    return {stories, weeklyStart: issue.week_start, featuredReportId: feature.data?.report_id ?? null};
+  }
+
+  async function loadTopicCounts(): Promise<Record<string, number>> {
+    const {data, error} = await db.rpc("public_trend_topic_counts", {
+      p_topics: Object.fromEntries(publicTopics.map(topic => [topic.id, topic.terms])),
+    });
+    if (!error) return data ?? {};
+    if (error.code !== "PGRST202") throw error;
+    // Preview databases may not have the migration yet. Fetch tags only.
+    const tags = await readAllPages(async (offset, count) => {
+      const {data, error} = await db.from("reports").select("topics")
+        .eq("status", "published").order("id").range(offset, offset + count - 1);
+      if (error) throw error;
+      return data ?? [];
+    });
+    return Object.fromEntries(publicTopics.map(topic => [
+      topic.id, tags.filter(row => matchesPublicTopic(row.topics ?? [], topic.id)).length,
+    ]));
+  }
+
+  const [weekly, podcastResult, topics] = await Promise.allSettled([
+    loadWeeklySelection(),
+    loadLatestPublicPodcast(db),
+    loadTopicCounts(),
+  ]);
+  const weeklyIssueError = weekly.status === "rejected";
+  if (weeklyIssueError) console.error("Unable to load the published weekly selection:", weekly.reason);
+  const {stories = [], weeklyStart = "", featuredReportId = null} = weekly.status === "fulfilled" ? weekly.value ?? {} : {};
+  const podcast = podcastResult.status === "fulfilled" ? podcastResult.value.podcast : null;
+  const topicError = topics.status === "rejected";
+  const topicCounts = topics.status === "fulfilled" ? topics.value : {};
+  if (topicError) console.error("Unable to load public topic counts:", topics.reason);
   const documentTypes:Record<string,string>={'법령':'legislation','가이드라인':'guidance','판례':'judgment','결정':'decision','의견':'opinion','보고서':'report','기관 발표':'press_release','뉴스':'news'};
   const rankedWeekly=rankWeeklyCandidates(stories.map(story=>({
     ...story,date:story.date==='날짜 미상'?'00000000':story.date,documentType:documentTypes[story.kind]??'',topics:story.tags,jurisdictions:story.jurisdictions??[],story,
@@ -62,7 +88,7 @@ export default async function PublicHome() {
   const featuredEntry=featuredReportId?rankedWeekly.find(candidate=>candidate.id===featuredReportId)??rankedWeekly[0]:rankedWeekly[0];
   const featured=featuredEntry?.story;
   const timelineStories=featured?stories.filter(story=>story.id!==featured.id):stories;
-  const topicCards = publicTopics.map((topic) => ({ ...topic, count: allStories.filter((story) => matchesPublicTopic(story.tags, topic.id)).length })).filter((topic) => topic.count > 0);
+  const topicCards = publicTopics.map((topic) => ({ ...topic, count: Number(topicCounts?.[topic.id] ?? 0) })).filter((topic) => topic.count > 0);
   return <main className={styles.site}>
     <PublicHeader active="/public" />
     {draftMode && <div className={styles.draftNotice}>미리보기 환경 · 조사한 자료와 공식 출처를 살펴보실 수 있습니다.</div>}
@@ -85,7 +111,7 @@ export default async function PublicHome() {
         <div className={styles.panelTitle}><h2>주간 동향</h2><span /><Link href="/public/weekly">전체 보기 →</Link></div>
         {timelineStories.length ? <ol className={styles.timeline}>{timelineStories.map((story, index) => <li key={story.id} className={index === 0 ? styles.timelineActive : ""}>
           <span className={styles.timelineDot} /><time>{story.date}</time><Link href={`/public/trends/${story.id}`}>{timelineLabel(story.region, story.title)}</Link>
-        </li>)}</ol> : <p className={styles.homeEmpty}>{loadError||weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
+        </li>)}</ol> : <p className={styles.homeEmpty}>{weeklyIssueError ? "주간 동향을 불러오지 못했습니다. 잠시 후 다시 확인해 주세요." : "아직 공개된 주간 동향이 없습니다."}</p>}
       </div>
 
       <article className={styles.featured}>
@@ -103,7 +129,7 @@ export default async function PublicHome() {
         <div className={styles.topicCards}>
           {topicCards.length ? topicCards.map((topic) => <Link key={topic.id} href={`/public/search?topic=${topic.id}`}>
             <strong>{topic.label}</strong><span>{topic.count}건 보기 →</span>
-          </Link>) : <p className={styles.homeEmpty}>분류된 동향이 공개되면 주제별로 표시됩니다.</p>}
+          </Link>) : <p className={styles.homeEmpty}>{topicError ? "주제별 건수를 불러오지 못했습니다." : "분류된 동향이 공개되면 주제별로 표시됩니다."}</p>}
         </div>
       </aside>
     </section>

@@ -94,15 +94,26 @@ test('navigation keeps overseas trends and places separate unified search immedi
  assert.match(nav,/href="\/public\/search"[^>]*>해외동향</);
  assert.match(nav,/href="\/public\/laws"[^>]*>국가별 법제<\/a><a[^>]*href="\/public\/unified-search"[^>]*aria-current="page"[^>]*>통합 검색</);
 });
-test('original trends page still loads the complete published list without requiring a search query',async()=>{
- let calls=0;
- const stories=Array.from({length:149},(_,i)=>({id:String(i)}));
- const Component=loader({'../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},'../trend-search':{__esModule:true,default:({stories})=>React.createElement('div',{'data-story-count':stories.length})},'../../../lib/published-trends':{loadPublishedStories:async()=>{calls++;return stories;}}})('app/public/search/page.tsx').default;
+test('public trend search sends one page and counts all published matches',async()=>{
+ const stories=Array.from({length:149},(_,i)=>({id:String(i),country:'GB',tags:['AI'],date:'2026.11.01'}));
+ const {searchTrendPage}=loader({
+   './jurisdictions.ts':{jurisdictionFilterName:code=>code},
+   './public-topics.ts':{matchesPublicTopic:tags=>tags.includes('AI')},
+   './public-search-filters.ts':{},
+ })('lib/trend-search-page.ts');
+ const Component=loader({
+   '../public-navigation':{PublicHeader:()=>null,PublicFooter:()=>null},
+   '../trend-search':{__esModule:true,default:({result})=>React.createElement('div',{'data-page-count':result.stories.length,'data-total':result.total,'data-page':result.page})},
+   '../../../lib/published-trends':{loadPublishedStories:async(id,options)=>{assert.equal(options.includeDetails,false);return stories;}},
+   '../../../lib/trend-search-page':{searchTrendPage},
+ })('app/public/search/page.tsx').default;
  let html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
- assert.match(html,/data-story-count="149"/);
- stories.push({id:'new-trend'});
- html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({})}));
- assert.match(html,/data-story-count="150"/);assert.equal(calls,2);
+ assert.match(html,/data-page-count="24" data-total="149" data-page="1"/);
+ stories.push({id:'new-trend',country:'KR',tags:['AI'],date:'2026.11.02'});
+ html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({topic:'ai',country:'GB',page:'7'})}));
+ assert.match(html,/data-page-count="5" data-total="149" data-page="7"/);
+ html=renderToStaticMarkup(await Component({searchParams:Promise.resolve({country:'KR'})}));
+ assert.match(html,/data-page-count="1" data-total="1" data-page="1"/);
 });
 test('newly published trends and a new law join the next corpus without an ID allowlist or index rebuild',async()=>{
  const stories=[];const legal={cells:[],documents:[],instruments:[]};

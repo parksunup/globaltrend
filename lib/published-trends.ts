@@ -21,7 +21,7 @@ export type PublishedStory = {
 
 type ReportRow = {
   id: string; source_item_id: string; title_ko: string; one_line_summary_ko: string | null;
-  detailed_summary_ko: string | null; jurisdictions: string[] | null; topics: string[] | null;
+  detailed_summary_ko?: string | null; jurisdictions: string[] | null; topics: string[] | null;
   published_at: string | null;
 };
 type SourceItemRow = {
@@ -43,31 +43,37 @@ function batches<T>(rows: T[], size: number): T[][] {
   return result;
 }
 
-export async function loadPublishedStories(id?: string): Promise<PublishedStory[]> {
+export async function loadPublishedStories(
+  id?: string,
+  options: { ids?: string[]; includeDetails?: boolean } = {},
+): Promise<PublishedStory[]> {
+  if (options.ids?.length === 0) return [];
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !key) throw new Error("Supabase public connection is not configured");
   const supabase = createClient(url, key, { auth: { persistSession: false } });
   const readPage = async (offset: number, count: number): Promise<ReportRow[]> => {
     let query = supabase.from("reports")
-      .select("id,source_item_id,title_ko,one_line_summary_ko,detailed_summary_ko,jurisdictions,topics,published_at")
+      .select(options.includeDetails === false
+        ? "id,source_item_id,title_ko,one_line_summary_ko,jurisdictions,topics,published_at"
+        : "id,source_item_id,title_ko,one_line_summary_ko,jurisdictions,topics,published_at,detailed_summary_ko")
       .eq("status", "published");
     if (id) query = query.eq("id", id);
+    if (options.ids) query = query.in("id", options.ids);
     const { data, error } = await query.order("published_at", { ascending: false })
-      .order("id", { ascending: true }).range(offset, offset + count - 1);
+      .order("id", { ascending: true }).range(offset, offset + count - 1).overrideTypes<ReportRow[], { merge: false }>();
     if (error) throw new Error(`Unable to load published reports: ${error.code}`);
-    return (data ?? []) as ReportRow[];
+    return data ?? [];
   };
   const reports = id ? await readPage(0, 1) : await readAllPages(readPage, PAGE_SIZE);
   if (!reports.length) return [];
 
-  const sourceItems: SourceItemRow[] = [];
-  for (const ids of batches([...new Set(reports.map(row => row.source_item_id))], LOOKUP_BATCH_SIZE)) {
+  const sourceItems = (await Promise.all(batches([...new Set(reports.map(row => row.source_item_id))], LOOKUP_BATCH_SIZE).map(async (ids) => {
     const { data, error } = await supabase.from("source_items")
       .select("id,source_id,title_original,canonical_url,published_at,document_type").in("id", ids);
     if (error) throw new Error(`Unable to load published source items: ${error.code}`);
-    sourceItems.push(...(data ?? []) as SourceItemRow[]);
-  }
+    return (data ?? []) as SourceItemRow[];
+  }))).flat();
   const itemById = new Map(sourceItems.map(row => [row.id, row]));
   if (reports.some(report => !itemById.has(report.source_item_id))) {
     throw new Error("Published reports have unreadable source items");
