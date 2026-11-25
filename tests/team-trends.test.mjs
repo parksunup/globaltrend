@@ -12,12 +12,13 @@ test('all DB drafts are reviewable; GitHub edits change only workspace compositi
 });
 test('changed DB revision preserves and displays a conflict instead of silently overwriting newer content',()=>{
   const result=composeTeamTrends([{...row,revision:'b'.repeat(32)}],snapshot,[edit]);
-  assert.equal(result.items[0].title_ko,'원래 제목');assert.equal(result.items[0].proposedEdit.title_ko,'수정 제목');assert.equal(result.warnings.length,1);
+  assert.equal(result.items[0].title_ko,'원래 제목');assert.equal(result.items[0].proposedEdit.title_ko,'수정 제목');assert.equal(result.conflictCount,1);assert.equal(result.warnings.length,0);
 });
 test('publishing may change the revision without creating a false conflict when the edited text is already saved',()=>{
   const published={...row,status:'published',revision:'b'.repeat(32),title_ko:edit.title_ko,summary_ko:edit.summary_ko,details_ko:edit.details_ko};
   const result=composeTeamTrends([published],snapshot,[edit]);
   assert.equal(result.items[0].editState,'synced');
+  assert.equal(result.conflictCount,0);
   assert.equal(result.warnings.length,0);
   assert.equal(canPublishTeamTrend(result.items[0]),false);
 });

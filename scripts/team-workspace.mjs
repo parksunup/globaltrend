@@ -51,6 +51,7 @@ try {
     await fs.mkdir('.team-workspace',{recursive:true});
     await fs.writeFile('.team-workspace/'+role+'.json',JSON.stringify(data,null,2)+'\n');
     console.log('확인 자료: .team-workspace/'+role+'.json · '+data.commitSha);
+    if(data.conflictCount)console.warn('최신 원고와 대조할 Codex 수정본: '+data.conflictCount+'건');
     if(data.warnings?.length)console.warn(data.warnings.join('\n'));
   } else if(command==='prepare') {
     const data=JSON.parse(await fs.readFile('.team-workspace/trends.json','utf8')),row=data.trends.find(row=>row.id===args[0]);

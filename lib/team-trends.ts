@@ -24,6 +24,7 @@ export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:
   const ids=new Set(orderedRows.map(row=>row.id));
   if(new Set(edits.map(edit=>edit.report_id)).size!==edits.length)throw Error('같은 원고의 수정본이 중복되었습니다.');
   const warnings:string[]=[];
+  let conflictCount=0;
   const byId=new Map([...edits,...orderedRows.flatMap(row=>row.workspaceEdit?[row.workspaceEdit]:[])].map(edit=>[edit.report_id,edit]));
   for(const edit of edits)if(!ids.has(edit.report_id))warnings.push(`원고 ${edit.report_id}가 현재 DB 목록에 없습니다. 수정본을 삭제하지 말고 확인해 주세요.`);
   const items=orderedRows.map(row=>{
@@ -33,7 +34,7 @@ export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:
     // Publishing changes the report status and its calculated revision. An edit
     // already present in the working copy is synchronized, not a conflict.
     if(trendEditMatchesRow(edit,row))return {...row,editFile,editState:'synced' as const};
-    if(edit.base_revision!==row.revision){warnings.push(`${row.id}: 기준 원고가 바뀌어 수정본 자동 적용을 보류했습니다.`);return {...row,editFile,editState:'conflict' as const,proposedEdit:edit};}
+    if(edit.base_revision!==row.revision){conflictCount++;return {...row,editFile,editState:'conflict' as const,proposedEdit:edit};}
     return {...row,title_ko:edit.title_ko,summary_ko:edit.summary_ko,details_ko:edit.details_ko,editFile,editState:'applied' as const};
   });
   const urls=new Set(orderedRows.map(row=>row.official_url));
@@ -44,7 +45,7 @@ export function composeTeamTrends(rows:TeamTrend[],snapshot:LiveWorkspace,edits:
     if(url)urls.add(url);
     items.push({id:item.id,revision:snapshot.commitSha,title_ko:item.title,summary_ko:item.summary,details_ko:item.fields.find(field=>field.label==='주요 내용')?.value??'',original_title:item.subtitle,official_url:url,source_name:item.fields.find(field=>field.label==='기관')?.value??'',published_date:item.fields.find(field=>field.label==='게시일')?.value??'',jurisdictions:[],topics:[],status:'repository',editFile:'data/trends/editorial/report-drafts.json'});
   }
-  return {items,warnings,revision:createHash('sha256').update(JSON.stringify(items)).digest('hex')};
+  return {items,warnings,conflictCount,revision:createHash('sha256').update(JSON.stringify(items)).digest('hex')};
 }
 
 export async function loadTeamTrendRows(options:{url?:string;key?:string;fetch?:typeof fetch;readPage?:(offset:number)=>Promise<unknown>}={}):Promise<TeamTrend[]> {
