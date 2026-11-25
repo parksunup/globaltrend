@@ -245,6 +245,7 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
     '답변은 개인정보보호위원회나 해외 감독기구의 공식 유권해석·공식 입장 또는 법률 자문이 아님을 분명히 하세요. 이용자가 최신 법령·공식 지침과 실제 사실관계를 확인해야 하며, 실제 준수 판단과 후속 조치의 책임은 이용자에게 있다는 점을 안내하세요. 다만 매 문장마다 반복하지 말고, 대화 첫 안내와 구체적 법적 판단을 요청받는 경우에 자연스럽게 고지하세요.',
     '매 답변마다 웹 검색을 기본으로 실행해 최신 공식 자료를 확인하고, 국제요정 자료와 함께 종합하세요. 자료에 근거한 핵심 주장은 [자료 1] 같은 표시로 출처를 연결하고 웹 검색에서 얻은 사실은 Responses의 웹 인용을 남기세요. 근거 없는 URL이나 조문·기한을 만들지 마세요. 웹 검색 결과와 국제요정 자료가 다르면 날짜와 권위 차이를 설명하세요.',
     '질문이 구체적이면 필요한 후속 질문만 하고, 먼저 현재 정보로 답할 수 있는 부분을 답하세요. 답변은 일반 정보이며 법률 자문이나 준수 인증이 아닙니다.',
+    '첫 문단에서 질문에 바로 답하고, 내용이 여러 갈래일 때만 짧은 문단과 목록으로 정리하세요. 제목과 굵은 글씨는 읽는 데 도움이 될 때만 쓰세요. 마크다운 기호 앞이나 줄 끝에 불필요한 역슬래시를 넣지 마세요. 내부 자료 번호는 근거가 필요한 문장이나 문단 끝에 붙이고, 같은 문단에서는 같은 출처를 반복하지 마세요. 웹 검색의 공식 인용을 유지하고, 본문에 원문 URL이나 별도의 출처 목록을 반복해서 쓰지 마세요.',
     '\n[대화에 제공된 국제요정 근거]\n' + (evidenceText || '이번 질문과 직접 일치하는 내부 자료를 찾지 못했습니다. 기본 웹 검색을 실행해 신뢰할 수 있는 공식 자료부터 확인하고, 확인한 범위와 남은 불확실성을 말하세요.'),
   ].join('\n\n')
   const input = [...history, { role: 'user' as const, content: trimmed }].map(turn => ({ role: turn.role, content: turn.content }))
@@ -288,7 +289,11 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
   let answer = typeof body.output_text === 'string' ? body.output_text : ''
   if (!answer) answer = (body.output ?? []).flatMap(item => item.content ?? []).filter(part => part.type === 'output_text' && typeof part.text === 'string').map(part => part.text).join('\n')
   if (!answer) throw new Error(body.status === 'incomplete' ? '답변이 끝까지 생성되지 않았습니다. 질문을 나누어 다시 보내 주세요.' : 'ChatGPT 응답에서 답변 본문을 찾지 못했습니다.')
-  return { answer, evidence: found.evidence.map(({ id, title, kind, jurisdiction, url, officialUrl, version, excerpt }) => ({ id, title, kind, jurisdiction, url, officialUrl, version, excerpt })), webCitations: extractWebCitations(body.output), notice: found.notice, model, corpus: found.corpus, webSearchUsed: true }
+  const citedIndexes = new Set([...answer.matchAll(/\[자료\s*(\d+)\\?\]/g)].map(match => Number(match[1])))
+  const evidence = found.evidence.flatMap(({ id, title, kind, jurisdiction, url, officialUrl, version, excerpt }, index) =>
+    citedIndexes.has(index + 1) ? [{ id, title, kind, jurisdiction, url, officialUrl, version, excerpt, citationIndex: index + 1 }] : [],
+  )
+  return { answer, evidence, candidateEvidenceCount: found.evidence.length, webCitations: extractWebCitations(body.output), notice: found.notice, model, corpus: found.corpus, webSearchUsed: true }
 }
 
 app.whenReady().then(() => {

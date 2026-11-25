@@ -36,6 +36,14 @@ h1 { margin:0; color:#f0f5f7; font-size:clamp(28px,4vw,38px); letter-spacing:-.0
 .message-body { min-width:0; }
 .speaker { display:block; margin:2px 0 7px; color:#91a5b5; font-size:11px; font-weight:700; }
 .message-body>p { margin:0; color:#d9e4eb; font-size:14px; line-height:1.85; white-space:pre-wrap; overflow-wrap:anywhere; }
+.formatted-answer { color:#d9e4eb; font-size:14px; line-height:1.8; overflow-wrap:anywhere; }
+.formatted-answer > * { margin:0; }
+.formatted-answer > * + * { margin-top:12px; }
+.formatted-answer ul,.formatted-answer ol { padding-inline-start:1.55em; }
+.formatted-answer li + li { margin-top:6px; }
+.formatted-answer h3 { color:#edf4f8; font-size:15px; }
+.inline-citation { margin-inline:3px; padding:0 4px; border:1px solid var(--line); border-radius:4px; background:#142536; color:var(--cyan); font-size:.78em; cursor:pointer; }
+.source-item:focus { outline:2px solid var(--cyan); outline-offset:2px; }
 .user-message .message-body { max-width:640px; padding:12px 15px; border:1px solid var(--line); border-radius:13px 3px 13px 13px; background:#142536; }
 .user-message .message-body>p { font-size:13px; }
 .user-message .speaker { display:none; }

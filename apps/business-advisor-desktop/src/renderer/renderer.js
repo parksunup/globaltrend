@@ -69,35 +69,138 @@ function addMessage(role, text = '') {
   return { article, body, paragraph }
 }
 
-function appendSources(body, result) {
-  const citations = result.webCitations ?? []
-  if (citations.length) {
-    const row = document.createElement('div')
-    row.className = 'answer-sources'
-    for (const citation of citations) {
-      const button = document.createElement('button')
-      button.type = 'button'
-      button.className = 'citation-pill'
-      button.textContent = `웹 · ${citation.title}`
-      button.title = citation.url
-      button.addEventListener('click', () => void window.advisor.openSource(citation.url))
-      row.append(button)
+function sourceKey(value) {
+  try {
+    const url = new URL(value)
+    if (url.protocol !== 'https:' || url.username || url.password) return null
+    url.hash = ''
+    for (const key of [...url.searchParams.keys()]) {
+      if (key.startsWith('utm_') || key === 'eqid') url.searchParams.delete(key)
     }
-    body.append(row)
+    return url.href
+  } catch {
+    return null
   }
+}
+
+function appendAnswerText(parent, text, references, state = { lastReference: null }) {
+  const inline = /\*\*([^*\n]+)\*\*|\[자료\s*(\d+)\]|\[([^\]\n]+)\]\((https:\/\/[^\s()]+(?:\([^\s()]*\)[^\s()]*)*)\)/g
+  function appendText(value) {
+    if (value.trim()) state.lastReference = null
+    parent.append(document.createTextNode(value))
+  }
+  let offset = 0
+  for (const match of text.matchAll(inline)) {
+    appendText(text.slice(offset, match.index))
+    const [, bold, internal, label, url] = match
+    if (bold) {
+      const strong = document.createElement('strong')
+      appendAnswerText(strong, bold, references, state)
+      parent.append(strong)
+    } else {
+      const reference = internal ? references.internal.get(Number(internal)) : references.urls.get(sourceKey(url))
+      if (!reference) {
+        appendText(label ?? match[0])
+      } else if (state.lastReference !== reference) {
+        const button = document.createElement('button')
+        button.type = 'button'
+        button.className = 'inline-citation'
+        button.textContent = '[' + reference.number + ']'
+        button.setAttribute('aria-label', '참고 출처 ' + reference.number + ' 보기')
+        button.addEventListener('click', reference.open)
+        parent.append(button)
+        state.lastReference = reference
+      }
+    }
+    offset = match.index + match[0].length
+  }
+  appendText(text.slice(offset))
+}
+
+function renderAdvisorAnswer(text, references) {
+  const answer = document.createElement('div')
+  answer.className = 'formatted-answer'
+  const lines = text.replace(/\r\n?/g, '\n')
+    .replace(/\\(?=\n|$)/g, '')
+    .replace(/\\([*\[\]()#\-_.:])/g, '$1')
+    .replace(/\((\[[^\]\n]+\]\(https:\/\/[^\s()]+\))\)/g, '$1')
+    .split('\n')
+  let list = null
+  let paragraph = null
+  for (const line of lines) {
+    const value = line.trim()
+    const bullet = /^(?:([-*+])|(\d+)[.)])\s+(.+)$/.exec(value)
+    const heading = /^#{1,6}\s+(.+)$/.exec(value)
+    if (bullet) {
+      const tag = bullet[2] ? 'ol' : 'ul'
+      if (list?.localName !== tag) {
+        list = document.createElement(tag)
+        if (bullet[2]) list.start = Number(bullet[2])
+        answer.append(list)
+      }
+      const item = document.createElement('li')
+      appendAnswerText(item, bullet[3], references)
+      list.append(item)
+      paragraph = null
+    } else {
+      list = null
+      if (heading) {
+        const title = document.createElement('h3')
+        appendAnswerText(title, heading[1], references)
+        answer.append(title)
+        paragraph = null
+      } else if (value) {
+        if (!paragraph) {
+          paragraph = document.createElement('p')
+          answer.append(paragraph)
+        } else {
+          paragraph.append(document.createElement('br'))
+        }
+        appendAnswerText(paragraph, value, references)
+      } else {
+        paragraph = null
+      }
+    }
+  }
+  return answer
+}
+
+function appendSources(body, result) {
+  const references = { internal: new Map(), urls: new Map() }
+  const details = document.createElement('details')
+  details.className = 'answer-sources'
+  const summary = document.createElement('summary')
+  const list = document.createElement('div')
+  list.className = 'source-list'
+  details.append(summary, list)
+  function register(item, urls) {
+    const reference = { number: list.childElementCount + 1, open: () => {
+      details.open = true
+      item.focus()
+    } }
+    item.tabIndex = -1
+    list.append(item)
+    for (const url of urls) {
+      const key = sourceKey(url)
+      if (key && !references.urls.has(key)) references.urls.set(key, reference)
+    }
+    return reference
+  }
+  const citations = result.webCitations ?? []
   const sources = result.evidence ?? []
   if (sources.length) {
-    const details = document.createElement('details')
-    details.className = 'answer-sources'
-    const summary = document.createElement('summary')
-    summary.textContent = `답변에 참고한 국제요정 자료 ${sources.length}건 보기`
-    const list = document.createElement('div')
-    list.className = 'source-list'
     sources.forEach((source, index) => {
+      const urls = [source.officialUrl, source.url]
+      const existing = urls.map(url => references.urls.get(sourceKey(url))).find(Boolean)
+      const citationIndex = source.citationIndex ?? index + 1
+      if (existing) {
+        references.internal.set(citationIndex, existing)
+        return
+      }
       const item = document.createElement('article')
       item.className = 'source-item'
       const title = document.createElement('strong')
-      title.textContent = `[자료 ${index + 1}] ${source.jurisdiction} · ${source.title}`
+      title.textContent = `[${list.childElementCount + 1}] ${source.jurisdiction} · ${source.title}`
       item.append(title)
       const meta = document.createElement('span')
       meta.textContent = [source.kind === 'trend' ? '공개 동향' : source.kind === 'comparison' ? '법제 비교' : source.kind === 'law' ? '공개 법제 자료' : source.kind === 'casebook' ? '상담사례집' : source.kind === 'assessment' ? '자가점검' : '기업 안내서', source.version].filter(Boolean).join(' · ')
@@ -109,7 +212,7 @@ function appendSources(body, result) {
       excerptText.textContent = source.excerpt
       excerpt.append(excerptLabel, excerptText)
       item.append(excerpt)
-      const url = source.officialUrl || (source.url?.startsWith('https://') ? source.url : '')
+      const url = urls.find(sourceKey)
       if (url) {
         const open = document.createElement('button')
         open.type = 'button'
@@ -117,9 +220,28 @@ function appendSources(body, result) {
         open.addEventListener('click', () => void window.advisor.openSource(url))
         item.append(open)
       }
-      list.append(item)
+      references.internal.set(citationIndex, register(item, urls))
     })
-    details.append(summary, list)
+  } else if ((result.candidateEvidenceCount ?? 0) > 0) {
+    const note = document.createElement('p')
+    note.className = 'corpus-status'
+    note.textContent = `국제요정 자료 후보 ${result.candidateEvidenceCount}건을 확인했지만 답변에서 출처로 인용하지 않았습니다.`
+    body.append(note)
+  }
+  for (const citation of citations) {
+    const key = sourceKey(citation.url)
+    if (!key || references.urls.has(key)) continue
+    const item = document.createElement('article')
+    item.className = 'source-item'
+    const button = document.createElement('button')
+    button.type = 'button'
+    button.textContent = `[${list.childElementCount + 1}] ${citation.title}`
+    button.addEventListener('click', () => void window.advisor.openSource(citation.url))
+    item.append(button)
+    register(item, [citation.url])
+  }
+  if (list.childElementCount) {
+    summary.textContent = `참고 출처 ${list.childElementCount}개 보기`
     body.append(details)
   }
   if (result.corpus && !result.corpus.publicContentAvailable) {
@@ -128,13 +250,16 @@ function appendSources(body, result) {
     status.textContent = `현재 발행 동향·법제 자료 연결을 확인하지 못해 저장된 자가점검·기업 안내서 자료를 사용했습니다. (공개 자료 ${result.corpus.publishedMaterials}건 연결)`
     body.append(status)
   }
+  return references
 }
 
 async function runTurn({ prompt, history, message }) {
   if (!model.value) throw new Error(modelLoadError || '사용 가능한 답변 모델을 불러오지 못했습니다. 모델 목록을 다시 확인해 주세요.')
   const result = await window.advisor.ask(prompt, history, model.value, assessmentContext)
-  message.paragraph.textContent = result.answer
-  appendSources(message.body, result)
+  const references = appendSources(message.body, result)
+  const answer = renderAdvisorAnswer(result.answer, references)
+  message.paragraph.replaceWith(answer)
+  message.paragraph = answer
   conversation = [...history, { role: 'user', content: prompt }, { role: 'assistant', content: result.answer }]
   failedTurn = null
   showError('')
