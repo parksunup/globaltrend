@@ -47,11 +47,11 @@ const answerOptions: { id: Answer; label: string }[] = [
 ];
 
 const answerSummary: Record<Answer, { label: string; summary: string; needsAction: boolean }> = {
-  ready: { label: "준비됨", summary: "준비되어 있다고 답하셨습니다. 실제 업무와 자료에도 그대로 적용되는지 확인해 보세요.", needsAction: false },
-  partial: { label: "일부 보완", summary: "일부만 준비되어 있다고 답하셨습니다. 아래 확인사항을 참고해 빠진 부분을 살펴보세요.", needsAction: true },
-  not_started: { label: "확인할 항목", summary: "아직 준비하지 않았다고 답하셨습니다. 아래 안내에서 시작할 일을 확인해 보세요.", needsAction: true },
-  unknown: { label: "자료 확인 필요", summary: "현재 상태를 잘 모른다고 답하셨습니다. 관련 문서나 담당자와 먼저 확인해 보세요.", needsAction: true },
-  not_applicable: { label: "해당 없음", summary: "회사에 해당하지 않는다고 답하셨습니다. 그렇게 판단한 이유를 기록해 두면 다시 확인할 때 도움이 됩니다.", needsAction: false },
+  ready: { label: "준비되어 있음", summary: "준비해 두었다고 답하셨습니다. 실제 업무에서도 같은 방식으로 적용되는지 확인해 보세요.", needsAction: false },
+  partial: { label: "일부 준비됨", summary: "일부만 준비했다고 답하셨습니다. 아래 내용을 살펴보며 빠진 부분을 확인해 보세요.", needsAction: true },
+  not_started: { label: "추가 준비 필요", summary: "아직 준비하지 못했다고 답하셨습니다. 아래 안내를 참고해 준비를 시작해 보세요.", needsAction: true },
+  unknown: { label: "확인 필요", summary: "현재 상태를 잘 모르겠다고 답하셨습니다. 관련 문서나 담당자에게 확인해 보세요.", needsAction: true },
+  not_applicable: { label: "해당 없음", summary: "이 항목은 회사 업무에 적용되지 않는다고 답하셨습니다. 그렇게 판단한 이유를 기록해 두면 다시 확인할 때 도움이 됩니다.", needsAction: false },
 };
 
 export default function BusinessReadinessFlow() {
@@ -122,6 +122,7 @@ export default function BusinessReadinessFlow() {
       return answer ? [{ item, answer, outcome: answerSummary[answer], reason: naReasons[item.id] }] : [];
     });
     const actionCount = results.filter(({ outcome }) => outcome.needsAction).length;
+    const answerCounts = answerOptions.map(({ id, label }) => ({ id, label, count: results.filter(({ answer }) => answer === id).length }));
     const reportDate = new Intl.DateTimeFormat("sv-SE").format(new Date());
     const jurisdictionLabels = [...new Set(results.map(({ item }) => jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction))];
     const report = {
@@ -152,10 +153,21 @@ export default function BusinessReadinessFlow() {
     return <section className={styles.flow} aria-live="polite">
       <div className={styles.resultHeader}>
         <p className={styles.kicker}>점검 결과</p>
-        <h2>확인할 준비 항목을 모았어요</h2>
-        <p>선택한 관할 {selected.length}곳 · 답변한 질문 {results.length}개 · 추가로 살펴볼 항목 {actionCount}개</p>
+        <h2>점검 결과를 정리했어요</h2>
+        <p>선택한 지역 {selected.length}곳 · 응답한 질문 {results.length}개 · 추가로 살펴볼 항목 {actionCount}개</p>
         <p className={styles.caveat}>이 결과는 입력한 답변을 정리한 참고자료이며, 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 답변의 정확성과 최신 법령·공식 지침 확인, 실제 적용 및 후속 조치의 책임은 이용자에게 있습니다.</p>
       </div>
+      {results.length > 0 && <section className={styles.dashboard} aria-label="자가진단 준비 현황">
+        <div className={styles.dashboardIntro}><div><p className={styles.kicker}>응답으로 보는 준비 현황</p><h3>확인한 답변 {results.length}개</h3></div><span>자가진단 응답 요약</span></div>
+        <div className={styles.answerDistribution} aria-label="전체 응답 분포">
+          <div className={styles.stackedTrack} role="img" aria-label={answerCounts.filter(({ count }) => count > 0).map(({ label, count }) => `${label} ${count}건`).join(", ")}>
+            {answerCounts.filter(({ count }) => count > 0).map(({ id, count }) => <i data-answer={id} key={id} style={{ width: `${(count / results.length) * 100}%` }} />)}
+          </div>
+          <div className={styles.answerLegend}>{answerCounts.filter(({ count }) => count > 0).map(({ id, label, count }) => <span data-answer={id} key={id}><i />{label} <b>{count}건</b></span>)}</div>
+        </div>
+        {actionCount > 0 && <div className={styles.priorityActions}><strong>추가로 확인할 항목</strong><ul>{results.filter(({ outcome }) => outcome.needsAction).map(({ item, answer }) => <li key={item.id}><span>{jurisdictions.find(({ code }) => code === item.jurisdiction)?.flag} {jurisdictions.find(({ code }) => code === item.jurisdiction)?.label} · {item.category} · {answerSummary[answer].label}</span><p>{item.helpText}</p></li>)}</ul></div>}
+        <p className={styles.dashboardNote}>이 현황은 선택한 답변의 개수를 정리한 것입니다. 법률 준수율이나 법적 적합성을 나타내지 않습니다.</p>
+      </section>}
       <div className={styles.resultList}>{results.map(({ item, answer, outcome, reason }) => {
         const jurisdiction = jurisdictions.find(({ code }) => code === item.jurisdiction);
         const guide = guides[item.jurisdiction];
@@ -163,13 +175,15 @@ export default function BusinessReadinessFlow() {
         const guideSections = guideReference?.sectionIds.map(id => guide.sections.find(section => section.id === id)).filter((section): section is GuideSection => Boolean(section)) ?? [];
         return <article className={styles.resultCard} key={item.id}>
           <div className={styles.resultMeta}><span>{jurisdiction?.label} · {item.category}</span><b data-level={answer === "ready" ? "check" : outcome.needsAction ? "attention" : "unknown"}>{outcome.label}</b></div>
-          <h3>{item.question}</h3>
+          <h3>{item.category}</h3>
+          <p className={styles.questionReference}>응답 상태 · {answerSummary[answer].label}</p>
           <p>{outcome.summary}</p>
-          {answer === "not_applicable" && reason && <p><strong>적용하지 않는 이유:</strong> {reason}</p>}
+          {answer === "not_applicable" && <p><strong>해당 없음 사유:</strong> {reason?.trim() || "사유를 입력하지 않았습니다. 업무 범위가 바뀌면 다시 확인해 주세요."}</p>}
           {outcome.needsAction && <div className={styles.nextAction}><strong>확인해 볼 내용</strong><p>{item.helpText}</p></div>}
           <details>
-            <summary>근거와 안내자료 보기</summary>
+            <summary>점검 질문과 근거 보기</summary>
             <div className={styles.sources}>
+              <p><strong>점검 질문</strong><br />{item.question}</p>
               <p>{item.sourceNote}</p>
               {guideSections.map(section => <section className={styles.guideExcerpt} key={section.id}>
                 <strong>{section.title}</strong>
@@ -190,7 +204,7 @@ export default function BusinessReadinessFlow() {
         <button type="button" className={styles.primary} onClick={reset}>새로 점검하기</button>
       </div>
       {results.length > 0 && <div className={styles.reportDownloads}>
-        <div><strong>결과를 문서로 보관하기</strong><p>밝은 국제요정 디자인의 Word 문서를 내려받거나 PDF로 저장할 수 있습니다.</p></div>
+        <div><strong>결과를 문서로 보관하기</strong><p>결과를 국제요정 양식의 Word 문서로 내려받거나 PDF로 저장할 수 있습니다.</p></div>
         <div className={styles.reportDownloadActions}>
           <button type="button" className={styles.secondary} onClick={() => downloadAssessmentDocx(report, `기업-자가진단-결과-${reportDate}.docx`)}>Word 다운로드 (.docx)</button>
           <button type="button" className={styles.primary} onClick={() => setReportError(openAssessmentPdf(report) ? "" : "PDF 저장 창이 열리지 않았습니다. 브라우저의 팝업 차단을 해제한 뒤 다시 눌러 주세요.")}>PDF로 저장</button>
@@ -203,7 +217,7 @@ export default function BusinessReadinessFlow() {
         <button type="button" className={styles.primary} disabled={handoffBusy} onClick={() => void consultWithResult(results)}>{handoffBusy ? "상담 앱을 여는 중…" : "자가점검 결과를 토대로 AI 상담하기"}<span aria-hidden="true"> →</span></button>
         <a className={styles.appDownload} href="/public/business-advisor-download">국제요정 상담소 앱이 아직 없다면 내려받기 ↗</a>
         {handoffError && <p className={styles.handoffError} role="alert">{handoffError} <a href="/public/business-advisor-download">국제요정 상담소 앱 내려받기 ↗</a></p>}
-      <p className={styles.handoffNote}>답변은 이 사이트에 저장하지 않습니다. 버튼을 누르면 선택한 지역과 보완 항목이 상담 앱으로 전달되고, 상담을 시작할 때 사용자의 ChatGPT 연결로 전송됩니다. 해당 없음의 자유 입력 사유와 준비 완료 답변은 전달하지 않습니다. 상담 앱의 답변도 개인정보보호위원회나 해외 감독기구의 공식 유권해석이 아니며, 답변 확인과 실제 조치의 책임은 이용자에게 있습니다.</p>
+      <p className={styles.handoffNote}>답변은 이 사이트에 저장하지 않습니다. 버튼을 누르면 선택한 지역과 보완 항목이 상담 앱으로 전달되고, 상담을 시작할 때 사용자의 ChatGPT 연결로 전송됩니다. ‘해당 없음’이라고 답하며 적은 이유와 ‘준비되어 있음’으로 답한 항목은 앱으로 전달하지 않습니다. 상담 앱의 답변도 개인정보보호위원회나 해외 감독기구의 공식 유권해석이 아니며, 답변 확인과 실제 조치의 책임은 이용자에게 있습니다.</p>
       </div>
       <p className={styles.dataNote}>응답은 이 브라우저 화면에서만 계산하며 서버에 저장하지 않습니다. 내려받은 결과 파일은 사용자의 기기에 저장되며, 직접 보관·관리해 주세요.</p>
     </section>;
@@ -240,7 +254,7 @@ export default function BusinessReadinessFlow() {
     <p className={styles.questionPrompt}>현재 회사에서 어느 정도 준비되어 있나요?</p>
     <p className={styles.helpText}>{question.helpText}</p>
     <fieldset className={styles.options}>
-      <legend>가장 가까운 답을 골라 주세요.</legend>
+      <legend>현재 상황과 가장 가까운 답을 골라 주세요.</legend>
       {answerOptions.map((option) => <label key={option.id} className={value === option.id ? styles.optionSelected : ""}>
         <input type="radio" name={question.id} value={option.id} checked={value === option.id} onChange={() => setAnswers((current) => ({ ...current, [question.id]: option.id }))} />
         <span>{option.label}</span>
