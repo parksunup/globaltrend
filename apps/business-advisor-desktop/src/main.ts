@@ -317,7 +317,15 @@ app.whenReady().then(() => {
       openBrowser: async url => { await shell.openExternal(url); return true },
       pages: { done: { lang: 'ko', title: '연결되었습니다', body: 'GlobalTrend 앱으로 돌아와 주세요.' }, failed: { lang: 'ko', title: '연결에 실패했습니다', body: '앱으로 돌아와 다시 시도해 주세요.' } },
     })
-    if (!result.ok) return { ok: false, message: `로그인 실패: ${result.reason}${result.step ? ` (${result.step})` : ''}` }
+    if (!result.ok) {
+      const detail = [result.step, result.networkCode].filter(Boolean).join(': ')
+      const help = result.networkCode
+        ? '네트워크 오류 코드로 원인을 확인할 수 있습니다. 프록시·보안 프로그램이 auth.openai.com 연결을 막는지 확인해 주세요.'
+        : result.step === 'token-timeout'
+          ? '인증 서버 응답이 20초 안에 오지 않았습니다. 네트워크 연결을 확인하고 다시 시도해 주세요.'
+        : ''
+      return { ok: false, message: [`로그인 실패: ${result.reason}${detail ? ` (${detail})` : ''}`, help].filter(Boolean).join('\n') }
+    }
     return { ok: true }
   })
   ipcMain.handle('chatgpt:disconnect', async event => {
