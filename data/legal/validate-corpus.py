@@ -62,6 +62,18 @@ def validate(source_path=None, pipa_source_path=None, appi_only=False):
     anchors = re.findall(r'<a id="([^"]+)"></a>', markdown)
     expected = [node["markdown_anchor"] for node in nodes if node["markdown_anchor"]]
     check(anchors == expected, "Markdown 앵커 누락·중복·순서 불일치")
+    translation_files = {
+        "CN": ("translations/pipl.md", "translations/pipl.md"),
+        "EU": ("translations/gdpr.md", "gdpr.md"),
+        "GB": ("translations/uk-gdpr.md", "translations/uk-gdpr.md"),
+        "US-CA": ("translations/ccpa.md", "translations/ccpa.md"),
+        "SG": ("translations/pdpa.md", "translations/pdpa.md"),
+    }
+    translation_anchors = {
+        code: set(re.findall(r'<a id="([^"]+)"></a>',
+                             (BASE / filenames[0]).read_text(encoding="utf-8")))
+        for code, filenames in translation_files.items()
+    }
     for node in nodes:
         if node["korean_text"]:
             check(node["korean_text"] in markdown, f"번역 본문 불일치: {node['node_id']}")
@@ -231,16 +243,20 @@ def validate(source_path=None, pipa_source_path=None, appi_only=False):
         check(saved == observed, "한국 실제 선두 표제·번호·삭제 표지·원문 위치·순서 불일치")
     with (BASE / "instruments.csv").open() as stream:
         laws = list(csv.DictReader(stream))
-    seed = (ROOT / "supabase/migrations/20260927140000_p1_seed_sources_criteria.sql").read_text()
+    seed = (ROOT / "supabase/migrations/20260927140000_p1_seed_sources_criteria.sql").read_text(encoding="utf-8")
     criteria = [(key, label, int(order)) for key, label, order in
                 re.findall(r"\('([^']+)', '([^']+)', (\d+)\)", seed)]
-    check(len(criteria) == 17 and len(laws) == 7, "기존 비교 기준·법제 범위 불일치")
+    criteria_v2 = (ROOT / "supabase/migrations/20261103090000_legal_extraterritorial_criteria.sql").read_text(encoding="utf-8")
+    extra = re.search(r"select id,'([^']+)','([^']+)','[^']*',(\d+)", criteria_v2)
+    check(extra is not None, "기준 v2 추가 항목을 찾을 수 없음")
+    criteria.append((extra.group(1), extra.group(2), int(extra.group(3))))
+    check(len(criteria) == 18 and len(laws) == 7, "비교 기준·법제 범위 불일치")
     pairs = [(key, law["jurisdiction_code"]) for key, _, _ in criteria for law in laws]
     check([(cell["criterion_id"], cell["jurisdiction_code"]) for cell in cells] == pairs,
-          "17×7 셀 누락·중복·순서 불일치")
+          "18×7 셀 누락·중복·순서 불일치")
     comparison = (BASE / "criteria-mapping.md").read_text()
     table_rows = [line for line in comparison.splitlines() if re.match(r"\| \d+\. ", line)]
-    check(len(table_rows) == 17, "Markdown 비교 행 누락")
+    check(len(table_rows) == 18, "Markdown 비교 행 누락")
     for (key, label, order), line in zip(criteria, table_rows):
         group = [cell for cell in cells if cell["criterion_id"] == key]
         check(line == "| " + str(order) + ". " + label + " | " + " | ".join(render_cell(c) for c in group) + " |",
@@ -265,22 +281,38 @@ def validate(source_path=None, pipa_source_path=None, appi_only=False):
             check(cell["major_exceptions"] == "미검토" and not cell["article_numbers"]
                   and not cell["translation_links"], "미검토 셀에 확정되지 않은 근거를 입력함")
             continue
-        check(cell["jurisdiction_code"] in {"KR", "JP"}, "후순위 법제의 미완성 번역으로 비교 입력")
         check(cell["major_exceptions"] not in {"", "미검토"} and cell["pending_reason"], "예외·검수 필요 항목 누락")
         references = read_list(cell["article_numbers"])
         links = read_list(cell["translation_links"])
-        check(len(references) == len(links) and bool(links), "복수 조항·링크 대응 누락")
-        if cell["jurisdiction_code"] == "JP":
+        check(len(links) <= len(references) and bool(links), "관련 조항·읽기 링크 범위 불일치")
+        code = cell["jurisdiction_code"]
+        if code not in {"KR", "JP"}:
+            check(code in translation_files and cell["translation_status"] == "full_draft"
+                  and cell["review_status"] == "unreviewed", "후순위 법제의 번역·검수 상태 불일치")
+            local_file = translation_files[code][1]
+            prefixes = (f"./reference/{local_file}#", f"./{local_file}#")
+            check(all(any(link.startswith(prefix) and link.split("#", 1)[1] in translation_anchors[code]
+                          for prefix in prefixes) for link in links),
+                  "후순위 법제 조항 링크가 번역문 앵커를 가리키지 않음")
+            continue
+        if code == "JP":
             check(document["translation"]["complete"] and cell["translation_status"] == "full_draft",
                   "일본 전체 초안 작성 전 분류 입력")
-            prefix, targets = "./translations/appi.md#", anchors
+            prefixes, targets = ("./reference/translations/appi.md#", "./translations/appi.md#"), anchors
         else:
             check(cell["translation_status"] == "official_original_indexed", "한국 공식 원문과 번역 상태 혼동")
             check(pipa_index["official_url"] == cell["official_source_url"], "한국 색인 공식 판본 불일치")
-            prefix, targets = "./sources/pipa-index.md#", pipa_ids
-        check(all(link.startswith(prefix) and link[len(prefix):] in targets for link in links),
-              "분류 조항 링크가 해당 법제 문서의 조항을 가리키지 않음")
+            prefixes, targets = ("./reference/sources/pipa-index.md#", "./sources/pipa-index.md#"), pipa_ids
+        source_links = read_list(cell["source_links"])
+        check(all((any(link.startswith(prefix) and link[len(prefix):] in targets for prefix in prefixes))
+                  or (link.startswith("https://") and link in source_links) for link in links),
+              "분류 조항 링크가 번역 문서나 기록된 공식 근거를 가리키지 않음")
         for label, link in zip(references, links):
+            if link.startswith("https://"):
+                check(cell["jurisdiction_code"] == "KR" and link in source_links,
+                      "외부 조항 링크는 기록된 한국 공식 근거만 허용")
+                continue
+            prefix = next(prefix for prefix in prefixes if link.startswith(prefix))
             target_id = link[len(prefix):]
             if cell["jurisdiction_code"] == "KR":
                 target = next(n for n in pipa_nodes if n["node_id"] == target_id)

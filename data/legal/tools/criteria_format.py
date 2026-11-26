@@ -23,11 +23,14 @@ def render_cell(cell):
                              "**사유·진행:** " + escape(cell["pending_reason"])])
     articles = read_list(cell["article_numbers"])
     links = read_list(cell["translation_links"])
-    if len(articles) != len(links) or not articles:
-        raise ValueError("각 관련 조항에는 하나의 읽기 링크가 필요합니다.")
-    references = ", ".join(f"[{escape(label)}]({url})" for label, url in zip(articles, links))
+    if len(links) > len(articles):
+        raise ValueError("읽기 링크가 관련 조항보다 많습니다.")
+    references = ", ".join(
+        f"[{escape(label)}]({links[index]})" if index < len(links) else escape(label)
+        for index, label in enumerate(articles)
+    )
     return "<br>".join([
-        "**조항·읽기:** " + references,
+        "**관련 조항:** " + references,
         "**요약:** " + escape(cell["korean_summary"]),
         "**예외·범위:** " + escape(cell["major_exceptions"]),
         f"[공식 원문]({cell['official_source_url']})",
