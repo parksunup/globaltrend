@@ -17,7 +17,7 @@ insert into reports(source_item_id,title_ko,one_line_summary_ko,detailed_summary
 select id,'날짜 없는 자료','게시일 미확인 자료의 요약입니다.','주간호 대상에서 제외되어야 하는 초안입니다.','draft',false
 from undated_weekly_fixture;
 select throws_ok($$
- select public.save_written_weekly_draft('2026-W44','Undated exclusion test','2026-10-26','2026-11-01',
+ select public.save_written_weekly_draft('2026-10-W4-1','Undated exclusion test','2026-10-26','2026-11-01',
    (select jsonb_build_array(jsonb_build_object('report_id',id,'reason','fixture')) from reports where source_item_id=(select id from undated_weekly_fixture)))
 $$,'P0001','report unavailable or outside week','weekly issue selection rejects reports whose source date is missing');
 select * from finish();

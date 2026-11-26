@@ -1,4 +1,5 @@
 import Link from "next/link";
+import QuestionStart from "./explore/question-start";
 import styles from "./public.module.css";
 import searchStyles from "./unified-search.module.css";
 
@@ -104,6 +105,7 @@ export default async function PublicHome() {
     </section>
 
     <section className={searchStyles.compact} aria-label="통합 검색 안내"><div><strong>궁금한 개인정보 이슈가 있나요?</strong><p>질문으로 동향과 국가별 법제·근거를 함께 찾아보세요.</p></div><Link href="/public/unified-search">통합 검색 →</Link></section>
+    <QuestionStart/>
     {podcast&&<HomePodcastPlayer podcast={podcast}/>}
 
     <section className={styles.observatoryGrid}>
