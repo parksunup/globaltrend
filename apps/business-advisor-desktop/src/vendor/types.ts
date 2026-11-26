@@ -8,6 +8,8 @@ export type AiSubscriptionLoginFailureStep =
   | 'token-resent'
   | 'token-http'
   | 'token-unreachable'
+  | 'token-network-error'
+  | 'token-timeout'
   | 'token-unreadable'
   | 'id-token-missing'
   | 'signing-keys'

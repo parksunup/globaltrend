@@ -56,6 +56,15 @@ const REQUEST_TIMEOUT_MS = 20_000
 /** an ID token is accepted this long past its expiry, for a PC clock that runs a little behind */
 const CLOCK_SKEW_SECONDS = 300
 
+function safeNetworkCode(error: unknown): string | undefined {
+  if (!error || typeof error !== 'object') return undefined
+  const candidate = error as { code?: unknown; cause?: { code?: unknown; message?: unknown }; message?: unknown }
+  const code = candidate.code ?? candidate.cause?.code
+  if (typeof code === 'string' && /^[A-Z0-9_:-]{2,64}$/i.test(code)) return code
+  const message = [candidate.message, candidate.cause?.message].find((value): value is string => typeof value === 'string')
+  return message?.match(/(?:net::)?ERR_[A-Z_]+/i)?.[0]
+}
+
 /**
  * cancelled: the user pressed cancel, or a newer attempt replaced this one;
  * timeout: the browser never came back in time; denied: the user or OpenAI
@@ -77,6 +86,8 @@ export interface ChatGptSignInFailed {
   httpStatus?: number | undefined
   /** the OAuth `error` code of the token endpoint or the callback, when it has an identifier's shape */
   oauthError?: string | undefined
+  /** safe system network error code, when the token request failed before an HTTP response */
+  networkCode?: string | undefined
 }
 
 export interface ChatGptTokenSet {
@@ -324,6 +335,8 @@ export async function exchangeChatGptCode(
   now: () => number = Date.now,
 ): Promise<{ ok: true; tokens: ChatGptTokenSet } | ChatGptSignInFailed> {
   let reached = false
+  const timeoutSignal = AbortSignal.timeout(REQUEST_TIMEOUT_MS)
+  const requestSignal = signal ? AbortSignal.any([signal, timeoutSignal]) : timeoutSignal
   // a code is good once: sent again after a try that may have arrived, it can only be refused
   let resent = false
   try {
@@ -340,7 +353,7 @@ export async function exchangeChatGptCode(
           redirect_uri: chatGptRedirectUri(request.port, request.callbackPath),
           resource: CHATGPT_RESOURCE,
         }).toString(),
-        signal: withTimeout(signal),
+        signal: requestSignal,
       },
       {
         // a block page is the edge's answer: the token service never saw that try
@@ -376,12 +389,15 @@ export async function exchangeChatGptCode(
     return tokens
       ? { ok: true, tokens }
       : { ok: false, reason: 'network', step: 'token-unreadable' }
-  } catch {
+  } catch (error) {
     if (signal?.aborted) return { ok: false, reason: 'cancelled' }
+    if (timeoutSignal.aborted) return { ok: false, reason: 'network', step: 'token-timeout' }
+    const networkCode = safeNetworkCode(error)
     return {
       ok: false,
       reason: 'network',
-      step: reached ? 'token-unreadable' : 'token-unreachable',
+      step: reached ? 'token-unreadable' : networkCode ? 'token-network-error' : 'token-unreachable',
+      ...(networkCode ? { networkCode } : {}),
     }
   }
 }
