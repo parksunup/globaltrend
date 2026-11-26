@@ -12,14 +12,14 @@ Deno.test("OECD discovers publications and related press releases without invent
   );
   eq(p.rows.length, 2);
 });
-Deno.test("unknown and conflicting dates remain unready", async () => {
+Deno.test("unknown and conflicting dates do not make readable text technically unready", async () => {
   const item = await extract(
     "edpb",
     '<h1 class="node-article-full__title">Notice</h1><time class="node-article-full__date" datetime="2026-10-20">21 October 2026</time><div class="node-article-full__body">A sufficiently long original body.</div>',
     "https://www.edpb.europa.eu/news/x",
   );
   eq(item.published_date, null);
-  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.ai_ready, true);
 });
 Deno.test("empty bodies fail instead of becoming no new materials", async () => {
   let failed = false;
@@ -110,7 +110,7 @@ Deno.test("DPC exact detail date wins over a conflicting listing date with revie
   );
   eq(conflict.published_date, "2026-10-02");
   eq(conflict.metadata.date_conflict, true);
-  eq(conflict.metadata.ai_ready, false);
+  eq(conflict.metadata.ai_ready, true);
   eq(conflict.metadata.date_observations.length, 2);
   const ambiguous = await extract(
     "dpc",
@@ -122,7 +122,7 @@ Deno.test("DPC exact detail date wins over a conflicting listing date with revie
     ] },
   );
   eq(ambiguous.published_date, null);
-  eq(ambiguous.metadata.ai_ready, false);
+  eq(ambiguous.metadata.ai_ready, true);
   eq(ambiguous.metadata.date_observations.length, 2);
 });
 Deno.test("RSS links are XML text nodes rather than HTML void elements", () => {
@@ -188,38 +188,38 @@ Deno.test("malformed source links remain unresolved and never become invented UR
   );
   eq(x.metadata.related_documents.length, 0);
   eq(x.metadata.unresolved_links[0].href, raw);
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
   eq(x.content_text, "Original body with an underlying decision .");
 });
 
 Deno.test("PPC official notice dateline excludes body dates and keeps PDFs unread", async () => {
   const x = await extract("ppc", '<html><head><title>法律の公布について（令和８年７月17日）</title></head><body><h1 class="page-ttl">法律の公布について</h1><main class="l-main"><div class="l-article"><div class="date-box mb-m">令和８年７月17日<br>個人情報保護委員会</div><p>令和８年４月７日に提出、令和８年７月10日に成立。</p><a href="/files/pdf/260717_houritsu.pdf">法律</a></div></main></body></html>', "https://www.ppc.go.jp/news/press/2026/260717/");
   eq(x.published_date, "2026-07-17");
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
   eq(x.metadata.related_documents[0].read, false);
   eq(x.metadata.date_observations[0].meaning, "published_notice_dateline");
 });
 Deno.test("PPC poster contest opening dateline is a publication date", async () => {
   const x = await extract("ppc", '<title>「個人情報に関するポスターコンクール」を開催します</title><h1 class="page-ttl">「個人情報に関するポスターコンクール」を開催します</h1><main class="l-main"><div class="l-article"><p>令和８年6月１日</p><p>個人情報保護委員会</p><p>「個人情報に関するポスターコンクール」を開催します。報道発表資料を掲載します。</p></div></main>', "https://www.ppc.go.jp/news/press/2026/260601");
   eq(x.published_date, "2026-06-01");
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
   eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
 });
 Deno.test("PPC privacy awareness week opening dateline is a publication date", async () => {
   const x = await extract("ppc", '<title>令和８年度「個人情報を考える週間」について</title><h1 class="page-ttl">令和８年度「個人情報を考える週間」について</h1><main class="l-main"><div class="l-article"><p>令和８年６月22日</p><p>個人情報保護委員会</p><p>令和８年度「個人情報を考える週間」について。６月22日に報道発表を行いました。</p><a href="/news/privacy_awareness_week/">週間の案内</a></div></main>', "https://www.ppc.go.jp/news/press/2026/26%20622");
   eq(x.published_date, "2026-06-22");
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
   eq(x.metadata.date_observations.at(-1)?.meaning, "published_opening_dateline");
 });
 Deno.test("PPC conflicting publication title and notice dateline remain unknown", async () => {
   const x = await extract("ppc", '<html><head><title>公表（令和８年７月18日）</title></head><body><h1 class="page-ttl">Notice</h1><main class="l-main"><div class="l-article"><div class="date-box">令和８年７月17日<br>個人情報保護委員会</div><p>Original notice body.</p></div></main></body></html>', "https://www.ppc.go.jp/news/press/a/");
   eq(x.published_date, null);
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
 });
 Deno.test("PPC body revision dates never become publication dates", async () => {
   const x = await extract("ppc", '<h1 class="page-ttl">注意喚起</h1><main class="l-main"><p>令和６年12月11日、令和８年10月７日改訂。令和８年10月９日追加。</p></main>', "https://www.ppc.go.jp/news/careful_information/261007_alert/");
   eq(x.published_date, null);
-  eq(x.metadata.ai_ready, false);
+  eq(x.metadata.ai_ready, true);
 });
 Deno.test("CNIL keeps card-local dates and detail conflicts unresolved", async () => {
   const p = discover(
@@ -327,6 +327,6 @@ Deno.test("PDPC uses rendered main-column article when Flight contains a 404 she
   eq(item.content_text.includes("Related story must not"), false);
   eq(item.content_text.includes("Gallery controls must not"), false);
   eq(item.published_date, null);
-  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.ai_ready, true);
   eq(item.metadata.read_scope, "official_article_html_or_embedded_rsc");
 });

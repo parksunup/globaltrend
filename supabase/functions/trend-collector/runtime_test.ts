@@ -190,7 +190,7 @@ Deno.test("unknown date is stored unready and remains an explicit incomplete ite
       type: "text/html",
     }),
   }, async (item) => {
-    eq(item.metadata.ai_ready, false);
+    eq(item.metadata.ai_ready, true);
     return {};
   });
   eq(result.state.unknown_dates, 1);
@@ -293,7 +293,7 @@ Deno.test("text-only press release PDF preserves unread annotation targets", asy
     },
   );
   eq(item.metadata.read_scope, "press_release_pdf_not_judgment");
-  eq(item.metadata.ai_ready, false);
+  eq(item.metadata.ai_ready, true);
   eq(item.metadata.unread_attachments, [
     "https://example.test/unread-decision",
   ]);
@@ -830,7 +830,7 @@ Deno.test("PDPC official asset PDF is text only and never inherits a CURIA datel
     stored++;
     eq(item.metadata.read_scope, "pdf_text_only");
     eq(item.metadata.requires_review, true);
-    eq(item.metadata.ai_ready, false);
+    eq(item.metadata.ai_ready, true);
     eq(item.published_date, null);
     eq(item.metadata.date_observations[0].meaning, "listing_date_candidate");
     eq(item.metadata.related_documents[0].read, false);

@@ -12,6 +12,7 @@ from pathlib import Path
 from .core import HttpClient, FetchError, canonical_url, collect, fetch_listing
 from . import parsers
 from . import extraction
+from .readiness import mark_ai_readiness
 
 ROOT = Path(__file__).resolve().parents[2]
 def validate_claim(claim):
@@ -92,6 +93,7 @@ class PreparedStore:
     def ingest(self, config, url, item):
         if self.operations:
             raise ValueError('one_document_per_commit_required')
+        item = mark_ai_readiness(item)
         self.operations.append({
             'p_source_id': config['source_id'], 'p_external_id': None,
             'p_canonical_url': url, 'p_title_original': item['title_original'],

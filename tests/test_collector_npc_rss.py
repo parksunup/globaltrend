@@ -63,7 +63,8 @@ class NPCOfficialRSSCloudTests(unittest.TestCase):
         self.assertIn('confirmed access', operation['p_content_text'])
         self.assertEqual(operation['p_metadata']['extraction_method'], 'rss_content_encoded')
         self.assertTrue(operation['p_metadata']['requires_review'])
-        self.assertFalse(operation['p_metadata']['ai_ready'])
+        self.assertTrue(operation['p_metadata']['ai_ready'])
+        self.assertEqual(operation['p_metadata']['draft_readiness_reason'], 'usable_title_and_source_text')
 
     def test_netherlands_ap_route_is_in_the_user_activated_daily_set(self):
         config = next(row for row in json.loads((ROOT / 'config/trend-collector.json').read_text())['sources']

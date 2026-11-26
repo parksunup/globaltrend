@@ -383,7 +383,13 @@ async function extractTextPDF(
         factual_status: source === "curia"
           ? "nonbinding_press_release_not_judgment"
           : "official_pdf_text_not_visual_or_independent_legal_finding",
-        ai_ready: false,
+        ai_ready: Boolean(
+          typeof row.title === "string" && row.title.trim() && body.trim(),
+        ),
+        draft_readiness_reason: typeof row.title === "string" &&
+            row.title.trim() && body.trim()
+          ? "usable_title_and_source_text"
+          : "missing_or_unusable_title_or_source_text",
         pdf_pages: pages,
       } as Item["metadata"],
     };
