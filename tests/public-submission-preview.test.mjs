@@ -27,7 +27,7 @@ test("integration Preview reads legal inventory, comparison and full translation
   assert.equal(cells.length, 126);
   assert.equal(new Set(cells.map((cell) => cell.criterionId)).size, 18);
   assert.equal(translations.find((law) => law.id === "appi")?.jurisdiction, "JP");
-  assert.equal(translations.find((law) => law.id === "appi")?.articleCount, 250);
+  assert.equal(translations.find((law) => law.id === "appi")?.articleCount, 253);
 });
 
 test("unreviewed submissions work on every Preview branch and never on production", () => {

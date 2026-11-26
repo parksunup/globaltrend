@@ -1,0 +1,330 @@
+"""Read-only official law checks. Persist only identifiers, metadata and hashes, never statute bodies."""
+import argparse
+import base64
+from concurrent.futures import ThreadPoolExecutor
+import copy
+from datetime import datetime, timezone
+import hashlib
+from html.parser import HTMLParser
+import json
+import os
+import subprocess
+from pathlib import Path
+import re
+import urllib.error
+import urllib.parse
+import urllib.request
+import xml.etree.ElementTree as ET
+from pdf_sources import pdf_text, singapore, california
+from chinese_source import document_paragraphs, article_bodies
+
+MAX_BYTES = 6_000_000
+PARSER_VERSION = 1
+ROOT = Path(__file__).resolve().parents[2]
+
+def normal(text): return re.sub(r'\s+', ' ', text).strip()
+def digest(value): return hashlib.sha256(json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest()
+def now(): return datetime.now(timezone.utc).isoformat()
+def tag(node): return node.tag.rsplit('}', 1)[-1]
+def contents(node): return normal(' '.join(node.itertext()))
+
+class SourceError(Exception): pass
+class Tree(HTMLParser):
+    def __init__(self, text):
+        super().__init__(convert_charrefs=True)
+        self.root = {'tag': 'root', 'attrs': {}, 'children': [], 'parent': None}
+        self.stack = [self.root]
+        self.feed(text)
+    def handle_starttag(self, name, attrs):
+        node = {'tag': name, 'attrs': dict(attrs), 'children': [], 'parent': self.stack[-1]}
+        self.stack[-1]['children'].append(node)
+        if name not in ('area','base','br','col','embed','hr','img','input','link','meta','param','source','track','wbr'): self.stack.append(node)
+    def handle_startendtag(self, name, attrs):
+        self.handle_starttag(name, attrs)
+        if self.stack[-1]['tag'] == name: self.stack.pop()
+    def handle_endtag(self, name):
+        for i in range(len(self.stack)-1, 0, -1):
+            if self.stack[i]['tag'] == name:
+                del self.stack[i:]
+                break
+    def handle_data(self, text): self.stack[-1]['children'].append(text)
+
+def nodes(node):
+    yield node
+    for child in node['children']:
+        if isinstance(child, dict): yield from nodes(child)
+def html_text(node):
+    if isinstance(node, str): return node
+    if node['tag'] in ('script','style','nav','header','footer'): return ''
+    sep = '\n' if node['tag'] in ('p','div','section','article','br','h1','h2','h3','h4','li') else ' '
+    return sep + sep.join(html_text(c) for c in node['children']) + sep
+
+def chinese_number(value):
+    if value.isdigit(): return value
+    digits = dict(zip('零〇一二三四五六七八九', [0,0,1,2,3,4,5,6,7,8,9]))
+    result = digit = 0
+    for c in value:
+        if c in digits: digit = digits[c]
+        elif c in '十百千': result += (digit or 1) * {'十':10,'百':100,'千':1000}[c]; digit=0
+        else: return value
+    return str(result+digit)
+
+def parse_source(source, raw, historical=False):
+    if source['parser'] in ('singapore-pdf','california-pdf'):
+        try:
+            article_texts,metadata,version=(singapore if source['parser']=='singapore-pdf' else california)(pdf_text(raw))
+        except ValueError as error: raise SourceError(str(error)) from None
+        date_format='%d/%m/%Y' if source['parser']=='singapore-pdf' else '%m/%d/%Y'
+        if not historical and datetime.strptime(version,date_format).date()>datetime.now(timezone.utc).date():raise SourceError('not_currently_enforced')
+        articles={key:{'label':key,'hash':digest(normal(body))} for key,body in article_texts.items()}
+        if len(articles)<source.get('minimumArticles',1): raise SourceError('incomplete_article_structure')
+        return {'articles':articles,'metadata':metadata,'version':version,'coverage':'article_text','digest':digest({'articles':articles,'metadata':metadata})}
+    text = raw.decode('utf-8-sig', errors='strict')
+    if not text.strip(): raise SourceError('empty_response')
+    if not any(identity.lower() in text.lower() for identity in source['identity']): raise SourceError('identity_not_confirmed')
+    articles = {}
+    coverage='article_text'
+    def add(identifier, body, label=None):
+        body=normal(body)
+        if len(body)<8: return
+        if identifier in articles and articles[identifier]['hash'] != digest(body): raise SourceError('duplicate_article_identity')
+        articles[identifier]={'label':label or identifier,'hash':digest(body)}
+    parser=source['parser']; version=''; metadata={}
+    if parser=='egov':
+        data=json.loads(text); info=data.get('revision_info') or {}
+        version=str(info.get('law_revision_id') or '')
+        metadata={k:info.get(k) for k in ['law_revision_id','amendment_enforcement_date','amendment_promulgate_date','current_revision_status']}
+        if not historical and info.get('current_revision_status') not in (None,'CurrentEnforced'): raise SourceError('not_currently_enforced')
+        law=data.get('law_full_text')
+        if isinstance(law,str) and not law.lstrip().startswith('<'):
+            try:law=base64.b64decode(law,validate=True).decode('utf-8')
+            except Exception:raise SourceError('unsupported_egov_body') from None
+        if not isinstance(law,str) or '<!ENTITY' in law.upper() or '<!DOCTYPE' in law.upper(): raise SourceError('unsupported_egov_body')
+        root=ET.fromstring(law)
+        for parent in root.iter():
+            if tag(parent) not in ('MainProvision','SupplProvision'):continue
+            group='main' if tag(parent)=='MainProvision' else 'supplement:'+str(parent.attrib.get('AmendLawNum','original'))
+            for article in parent.iter():
+                if tag(article)=='Article':add(group+':'+article.attrib.get('Num',''),contents(article),'第'+article.attrib.get('Num','')+'条')
+    elif parser=='uk-xml':
+        if '<!ENTITY' in text.upper() or '<!DOCTYPE' in text.upper():raise SourceError('unsafe_xml')
+        root=ET.fromstring(text)
+        for article in root.iter():
+            identifier=article.attrib.get('id','')
+            if tag(article)=='P1' and re.fullmatch(r'article-\d+[A-Za-z]*\.?',identifier):add('main:'+identifier.removeprefix('article-').rstrip('.'),contents(article),identifier)
+        # Primary articles are tracked, not inherited EU recitals or every subordinate instrument.
+        version='UK GDPR current XML'
+    elif parser=='chinese-html':
+        data=json.loads(text).get('data') or {}
+        coverage='index_and_status_only'
+        metadata={k:data.get(k) for k in ['bbbs','gbrq','sxrq','sxx','xfFlag']}
+        version=f"{data.get('gbrq','')} / status {data.get('sxx','')}"
+        def walk(node):
+            title=str(node.get('title',''));m=re.match(r'^第([零〇一二三四五六七八九十百千\d]+)条',title)
+            if m:add('main:'+chinese_number(m[1]),'index-only:'+title,'第'+m[1]+'条')
+            for child in node.get('children') or []:walk(child)
+        walk(data.get('content') or {})
+    else:
+        tree=Tree(text)
+        for node in nodes(tree.root):
+            attrs=node['attrs'];identifier=attrs.get('id','')
+            if parser=='eu-html':
+                m=re.fullmatch(r'art[_-](\d+)',identifier)
+                if m:add('main:'+m[1],html_text(node),'Article '+m[1])
+            elif parser=='singapore-html' and 'prov1' in attrs.get('class','').split():
+                ids=[n['attrs'].get('id','') for n in nodes(node)]
+                id_=next((x for x in ids if re.fullmatch(r'pr[\dA-Za-z.]+-',x)), '')
+                if id_:add('main:'+id_[2:-1].lower(),html_text(node),'section '+id_[2:-1])
+        official_korean=[n for n in nodes(tree.root) if n['tag']=='p' and 'pty1_p4' in n['attrs'].get('class','').split()] if parser=='korean-html' else []
+        if official_korean:
+            if not any(n['tag']=='h2' and normal(html_text(n)) in source['identity'] for n in nodes(tree.root)):raise SourceError('korean_title_not_confirmed')
+            current=None;parts=[];supplement=None;supplement_parts=[]
+            def flush_main():
+                if current:add(current,' '.join(parts))
+            def flush_supplement():
+                if supplement:add(supplement,' '.join(supplement_parts))
+            for node in nodes(tree.root):
+                if node['tag']!='p':continue
+                classes=node['attrs'].get('class','').split();body=normal(html_text(node))
+                if 'pty1_p4' in classes:
+                    flush_main();match=re.match(r'^제\s*(\d+)\s*조(?:의\s*(\d+))?',body)
+                    if not match:raise SourceError('unrecognized_korean_article')
+                    current='main:'+match[1]+('-'+match[2] if match[2] else '');parts=[body]
+                elif any(c.startswith('pty1_') for c in classes) and current:parts.append(body)
+                elif 'pty3' in classes:
+                    flush_main();current=None;parts=[];flush_supplement()
+                    law=re.search(r'제\s*(\d+)\s*호',body)
+                    supplement='supplement:'+(law[1] if law else 'original')+':'+digest(body)[:12];supplement_parts=[body]
+                elif any(c.startswith('pty3_') for c in classes) and supplement:supplement_parts.append(body)
+            flush_main();flush_supplement()
+            editions=re.findall(r'\[시행\s*([^\]]+)\]\s*\[법률\s*제(\d+)호[^\]]*\]',html_text(tree.root))
+            if len(set(editions))!=1:raise SourceError('korean_edition_not_confirmed')
+            metadata={'enforcementLabel':normal(editions[0][0]),'lawNumber':editions[0][1]}
+            version='법률 제'+metadata['lawNumber']+'호 · 시행 '+metadata['enforcementLabel']
+        if parser=='california-html' or (parser=='korean-html' and not official_korean):
+            plain=html_text(tree.root)
+            pattern=r'^\s*(제\s*(\d+)\s*조(?:의\s*(\d+))?)[^\n]*' if parser=='korean-html' else r'^\s*((1798\.\d+(?:\.\d+)?)\.)\s*'
+            matches=list(re.finditer(pattern,plain,re.M))
+            for i,m in enumerate(matches):
+                identifier=m[2]+('-'+m[3] if parser=='korean-html' and m[3] else '');add('main:'+identifier,plain[m.start():matches[i+1].start() if i+1<len(matches) else len(plain)],m[1].strip()[:80])
+    if len(articles)<source.get('minimumArticles',1):raise SourceError('incomplete_article_structure')
+    if sum(key.startswith('main:') for key in articles)<source.get('minimumMainArticles',0):raise SourceError('incomplete_main_articles')
+    return {'articles':articles,'metadata':metadata,'version':version,'coverage':coverage,'digest':digest({'articles':articles,'metadata':metadata})}
+
+class OfficialRedirect(urllib.request.HTTPRedirectHandler):
+    def __init__(self, source): self.hosts=set(source['allowedHosts'])
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        validate_url(newurl,self.hosts)
+        return super().redirect_request(req,fp,code,msg,headers,newurl)
+def validate_url(url,hosts):
+    u=urllib.parse.urlsplit(url)
+    if u.scheme!='https' or u.hostname not in hosts or u.username or u.password or u.port not in (None,443):raise SourceError('unapproved_source_url')
+def fetch_bytes(source,url):
+    validate_url(url,set(source['allowedHosts']))
+    request=urllib.request.Request(urllib.parse.quote(url,safe=':/?=&.%'),headers={'User-Agent':'GlobalTrend-LegalWatch/1.0 (official law change checks)','Accept':'application/json, application/xml, text/html'})
+    try:
+        with urllib.request.build_opener(OfficialRedirect(source)).open(request,timeout=20) as response:
+            if response.status!=200:raise SourceError('http_'+str(response.status))
+            raw=response.read(MAX_BYTES+1)
+            if len(raw)>MAX_BYTES:raise SourceError('source_too_large')
+            return raw
+    except urllib.error.HTTPError as e:raise SourceError('http_'+str(e.code)) from None
+    except (urllib.error.URLError,TimeoutError):raise SourceError('network_unavailable') from None
+
+def read_official(source,url,historical=False,resolve=True):
+    raw=fetch_bytes(source,url);consolidation=None
+    if resolve and source.get('resolver')=='korean-current-body':
+        tree=Tree(raw.decode('utf-8-sig'))
+        if not any(n['tag']=='p' and 'pty1_p4' in n['attrs'].get('class','').split() for n in nodes(tree.root)):
+            sequences={n['attrs'].get('value','') for n in nodes(tree.root) if n['tag']=='input' and n['attrs'].get('id')=='lsiSeq'}
+            if len(sequences)!=1 or not re.fullmatch(r'\d{5,10}',next(iter(sequences))):raise SourceError('current_korean_sequence_not_confirmed')
+            sequence=next(iter(sequences))
+            dates={n['attrs'].get('value','') for n in nodes(tree.root) if n['tag']=='input' and n['attrs'].get('id')=='efYd'}
+            if not dates:dates=set(re.findall(r'\bvar\s+efYd\s*=\s*[\'\"](\d{8})[\'\"]',raw.decode('utf-8-sig')))
+            if len(dates)!=1:raise SourceError('current_korean_date_not_confirmed')
+            date=next(iter(dates))
+            try:enforced=datetime.strptime(date,'%Y%m%d').date()
+            except ValueError:raise SourceError('current_korean_date_not_confirmed') from None
+            if enforced>datetime.now(timezone.utc).date():raise SourceError('not_currently_enforced')
+            url='https://www.law.go.kr/LSW/lsInfoR.do?lsiSeq='+sequence+'&efYd='+date+'&ancYnChk=0&chrClsCd=010202'
+            raw=fetch_bytes(source,url)
+    if source['parser']=='chinese-docx':
+        data=json.loads(raw).get('data') or {}
+        if data.get('title') not in source['identity'] or data.get('bbbs')!=source.get('selectedId'):raise SourceError('chinese_document_identity_mismatch')
+        path=(data.get('ossFile') or {}).get('ossWordPath','')
+        if not re.fullmatch(r'prod/\d{8}/[a-f0-9]{32}\.docx',path):raise SourceError('unapproved_attachment_path')
+        # Stay on the public official endpoint; never request urlIn/private IPs or signed storage URLs.
+        query=urllib.parse.urlencode({'filePath':'/'+path,'fileName':data['title']+'.docx'})
+        body_url='https://flk.npc.gov.cn/law-search/file/download?'+query
+        try:
+            text=document_paragraphs(fetch_bytes(source,body_url))
+            bodies=article_bodies(text,chinese_number)
+        except (ValueError,ET.ParseError) as error:raise SourceError(str(error)) from None
+        if data['title'] not in text:raise SourceError('attachment_identity_not_confirmed')
+        index=set()
+        def walk_index(node):
+            title=str(node.get('title',''));match=re.match(r'^第([零〇一二三四五六七八九十百千\d]+)条',title)
+            if match:index.add('main:'+chinese_number(match[1]))
+            for child in node.get('children') or []:walk_index(child)
+        walk_index(data.get('content') or {})
+        if len(bodies)<source.get('minimumArticles',1) or set(bodies)!=index:raise SourceError('attachment_index_mismatch')
+        metadata={k:data.get(k) for k in ['bbbs','gbrq','sxrq','sxx','xfFlag']}
+        metadata['officialAttachmentPath']=path
+        articles={key:{'label':key,'hash':digest(normal(body))} for key,body in bodies.items()}
+        return {'articles':articles,'metadata':metadata,'version':str(data.get('gbrq',''))+' / status '+str(data.get('sxx','')),'coverage':'article_text','acquiredUrl':body_url,'digest':digest({'articles':articles,'metadata':metadata})}
+    if resolve and source.get('resolver')=='eu-current-consolidation':
+        page=raw.decode('utf-8')
+        dates=set(re.findall(r'CELEX:02016R0679-(\d{8})',page))
+        if 'Current consolidated version' not in page or len(dates)!=1:raise SourceError('current_consolidation_not_confirmed')
+        consolidation=next(iter(dates))
+        url='https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02016R0679-'+consolidation
+        raw=fetch_bytes(source,url)
+    if source['parser']=='california-pdf' and not raw.startswith(b'%PDF-'):
+        tree=Tree(raw.decode('utf-8'));choices=[]
+        for node in nodes(tree.root):
+            href=node['attrs'].get('href','');match=re.fullmatch(r'/pdf/(\d{8})_ccpa_statute\.pdf',href)
+            label=normal(html_text(node))
+            if node['tag']=='a' and match and 'California Consumer Privacy Act' in label and 'Effective' in label:
+                date=datetime.strptime(match[1],'%Y%m%d').date()
+                if date<=datetime.now(timezone.utc).date():choices.append((date,urllib.parse.urljoin(url,href)))
+        if not choices:raise SourceError('official_statute_link_not_found')
+        url=max(choices)[1];raw=fetch_bytes(source,url)
+    result=parse_source(source,raw,historical=historical);result['acquiredUrl']=url
+    if consolidation:
+        result['version']='CELEX:02016R0679-'+consolidation
+        result['metadata']['officialConsolidationDate']=consolidation
+        result['digest']=digest({'articles':result['articles'],'metadata':result['metadata']})
+    return result
+
+def fetch_source(source,url=None):
+    historical=url is not None
+    try:return read_official(source,url or source['url'],historical=historical,resolve=not historical)
+    except SourceError as error:
+        if historical or not source.get('fallbackUrl'):raise
+        result=read_official(source,source['fallbackUrl'],resolve=False)
+        result.update(coverage='fixed_official_edition',primaryError=str(error),version=source.get('fallbackVersion','선정 공식 판본'))
+        return result
+
+def compare(before,after):
+    a=before['articles'];b=after['articles']
+    return {'added':sorted(set(b)-set(a)),'removed':sorted(set(a)-set(b)),'modified':sorted(k for k in set(a)&set(b) if a[k]['hash']!=b[k]['hash']),'metadataChanged':before.get('metadata')!=after.get('metadata')}
+
+def reviewed(event, receipt):
+    try:
+        datetime.fromisoformat(receipt.get('reviewedAt','').replace('Z','+00:00'))
+    except (ValueError,TypeError,AttributeError):return False
+    return receipt.get('eventId')==event['id'] and receipt.get('sourceDigest')==event['afterDigest'] and receipt.get('translationReviewed') is True and receipt.get('comparisonReviewed') is True and bool(re.fullmatch(r'[a-f0-9]{40}',str(receipt.get('translationCommitSha',''))))
+
+def check_one(source, previous, reviews, fetcher=fetch_source):
+    checked_at=now();settings={'url':source['url'],'baselineUrl':source.get('baselineUrl'),'parser':source['parser'],'parserVersion':source.get('parserVersion',PARSER_VERSION)}
+    if source.get('fallbackUrl'):settings['fallbackUrl']=source['fallbackUrl']
+    if source.get('resolver'):settings['resolver']=source['resolver']
+    config=digest(settings)
+    prior=copy.deepcopy(previous) if previous.get('configHash')==config else {'events':copy.deepcopy(previous.get('events',[])),'baselineOrigin':'configuration_changed' if previous else 'first_observation'}
+    result={'id':source['id'],'jurisdiction':source['jurisdiction'],'name':source['name'],'url':source['url'],'scope':source['scope'],'checkedAt':checked_at,'status':'error','error':None,'changes':None,'events':prior.get('events',[]),'baselineOrigin':prior.get('baselineOrigin','first_observation')}
+    try:
+        current=fetcher(source)
+        before=prior.get('snapshot')
+        if source.get('baselineUrl') and (not before or prior.get('baselineOrigin')=='selected_edition_unavailable'):
+            try:before=fetcher(source,source['baselineUrl']);result['baselineOrigin']='selected_edition'
+            except Exception:result['baselineOrigin']='selected_edition_unavailable'
+        if before and len(current['articles']) < .7*len(before['articles']):raise SourceError('unexpected_article_loss')
+        changes=compare(before,current) if before else {'added':[],'removed':[],'modified':[],'metadataChanged':False}
+        has_changes=any(changes[k] for k in ['added','removed','modified','metadataChanged'])
+        event=None
+        if not prior.get('snapshot') or has_changes:
+            kind='source_changed' if has_changes else 'baseline_review'
+            event={'id':digest([source['id'],config,before.get('digest') if before else None,current['digest'],kind]),'kind':kind,'createdAt':checked_at,'beforeDigest':before.get('digest') if before else None,'afterDigest':current['digest'],'changes':changes,'reviewed':False,'sourceUrl':source['url']}
+        events=copy.deepcopy(prior.get('events',[]))
+        if event and not any(e['id']==event['id'] for e in events):events.append(event)
+        if len(events)>1000:raise SourceError('review_queue_limit')
+        for e in events:
+            e['reviewed']=any(reviewed(e,r) for r in reviews)
+        result.update(coverage=current.get('coverage','article_text'),status='partial' if current.get('coverage')!='article_text' else 'changed' if has_changes else 'unchanged' if prior.get('snapshot') else 'baseline',version=current['version'],articleCount=len(current['articles']),digest=current['digest'],changes=changes,events=events,lastSuccessAt=checked_at,acquiredUrl=current.get('acquiredUrl',source['url']),primaryError=current.get('primaryError'))
+        checkpoint={'configHash':config,'snapshot':current,'events':events,'baselineOrigin':result['baselineOrigin'],'lastSuccessAt':checked_at}
+        return result,checkpoint
+    except (SourceError,ValueError,ET.ParseError,UnicodeError,KeyError,TypeError) as error:
+        result['error']=str(error) if isinstance(error,SourceError) else 'unrecognized_source_format'
+    except Exception:result['error']='source_check_failed'
+    result['lastSuccessAt']=prior.get('lastSuccessAt');return result,prior
+
+def run(config, previous, reviews, fetcher=fetch_source):
+    sources=config['sources']
+    if len({s['id'] for s in sources})!=len(sources):raise ValueError('duplicate source ID')
+    def task(s):return check_one(s,previous.get('sources',{}).get(s['id'],{}),reviews.get('reviews',[]),fetcher)
+    with ThreadPoolExecutor(max_workers=4) as pool:results=list(pool.map(task,sources))
+    report={'schemaVersion':1,'generatedAt':now(),'sourceCommit':config.get('sourceCommit',''),'laws':[r for r,_ in results]}
+    checkpoint={'schemaVersion':1,'sources':{s['id']:c for s,(_,c) in zip(sources,results)}}
+    return report,checkpoint
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--previous');p.add_argument('--out',default='.legal-watch');p.add_argument('--config',default='config/legal-watch/sources.json');args=p.parse_args()
+    config=json.loads(Path(args.config).read_text());config['sourceCommit']=os.environ.get('GITHUB_SHA') or subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();previous=json.loads(Path(args.previous).read_text()) if args.previous and Path(args.previous).exists() else {}
+    seed=ROOT/'data/legal-watch/initial-checkpoint.json'
+    if not previous and seed.exists():previous=json.loads(seed.read_text())
+    reviews=json.loads((ROOT/'config/legal-watch/reviews.json').read_text());report,checkpoint=run(config,previous,reviews)
+    out=Path(args.out);out.mkdir(parents=True,exist_ok=True)
+    for name,data in [('report.json',report),('checkpoint.json',checkpoint)]: (out/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
+    counts={k:sum(l['status']==k for l in report['laws']) for k in ['changed','unchanged','baseline','partial','error']};print(json.dumps(counts))
+    # A per-source failure remains visible in a successfully delivered report. It must not discard other findings.
+if __name__=='__main__':main()

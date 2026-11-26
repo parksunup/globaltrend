@@ -17,6 +17,8 @@ const nextConfig = {
     "/work": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/work/new": ["./data/trends/**/*"],
     "/work/new/law": ["./data/legal/**/*", "./data/derived/*.json"],
+    "/api/legal-updates/status": ["./data/legal-watch/*.json", "./config/legal-watch/*.json"],
+    "/work/legal-updates": ["./data/legal/**/*", "./data/legal-watch/*.json", "./config/legal-watch/*.json", "./data/derived/*.json"],
     "/work/legal": ["./data/legal/**/*", "./data/derived/*.json"],
     "/feedback": ["./data/legal/**/*", "./data/trends/**/*", "./data/derived/*.json"],
     "/legal-translation": ["./data/legal/translations/**/*", "./data/derived/*.json"],
