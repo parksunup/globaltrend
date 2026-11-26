@@ -61,9 +61,10 @@ export function learningCountriesFor(values: string[] | undefined, fallback: str
   return valid.length?valid:fallback;
 }
 export function learningHref(topicId: string, countries?: string[]): string {
-  const params=new URLSearchParams({topic:learningTopic(topicId).id});
+  const topic=learningTopic(topicId);
+  const params=new URLSearchParams({q:topic.search});
   for(const code of countries??[])if(learningCountries.includes(code))params.append('country',code);
-  return `/public/explore?${params}`;
+  return `/public/unified-search?${params}`;
 }
 export function learningComparisonHref(topic: LearningTopic, countries=topic.countries): string {
   return `/public/laws?${new URLSearchParams({view:'compare',countries:learningCountriesFor(countries,topic.countries).join(','),criterion:topic.criterion})}`;
