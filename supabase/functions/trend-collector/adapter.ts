@@ -598,8 +598,10 @@ export async function extract(
     source === "ppc" &&
       (related.some((x) => new URL(x.url).pathname.endsWith(".pdf")) ||
         ppcOpeningDateline);
+  const titleOriginal = normalize(title.textContent || "");
+  const aiReady = Boolean(titleOriginal.trim() && body.trim());
   return {
-    title_original: normalize(title.textContent || ""),
+    title_original: titleOriginal,
     content_text: body,
     content_hash: await sha(body),
     published_date: date,
@@ -615,7 +617,10 @@ export async function extract(
       unresolved_links: unresolvedLinks,
       unread_attachments: related.map((x) => x.url),
       factual_status: "original_statement_not_independent_legal_finding",
-      ai_ready: !requiresReview,
+      ai_ready: aiReady,
+      draft_readiness_reason: aiReady
+        ? "usable_title_and_source_text"
+        : "missing_or_unusable_title_or_source_text",
     },
   };
 }
