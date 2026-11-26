@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, shell, safeStorage } from 'electron'
+import { app, BrowserWindow, ipcMain, net, shell, safeStorage } from 'electron'
 import { join } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { gunzipSync } from 'node:zlib'
@@ -97,7 +97,7 @@ function chatContextApiUrl(): URL {
 async function findEvidence(question: string, history: ChatTurn[], assessmentContext: string): Promise<EvidenceResult> {
   let response: Response
   try {
-    response = await fetch(chatContextApiUrl(), {
+    response = await net.fetch(chatContextApiUrl().toString(), {
       method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify({ question, history, assessmentContext }), signal: AbortSignal.timeout(30_000),
     })
@@ -117,7 +117,7 @@ async function findEvidence(question: string, history: ChatTurn[], assessmentCon
 
 async function listModels(): Promise<{ id: string; label: string }[]> {
   const accessToken = await connection.accessToken()
-  const response = await fetch('https://api.openai.com/v1/models', { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(20_000) })
+  const response = await net.fetch('https://api.openai.com/v1/models', { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(20_000) })
   if (response.status === 401) { await connection.dropSession(); throw new Error('ChatGPT 연결이 만료됐습니다. 다시 연결해 주세요.') }
   const body = await response.json().catch(() => ({})) as {
     models?: Array<{ slug?: unknown; display_name?: unknown; visibility?: unknown }>
@@ -251,7 +251,7 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
   const input = [...history, { role: 'user' as const, content: trimmed }].map(turn => ({ role: turn.role, content: turn.content }))
   const payload: Record<string, unknown> = { model, instructions, input, store: false, stream: true }
   payload.tools = [{ type: 'web_search' }]
-  const response = await fetch('https://api.openai.com/v1/responses', {
+  const response = await net.fetch('https://api.openai.com/v1/responses', {
     method: 'POST', headers: { Authorization: `Bearer ${accessToken}`, 'Content-Type': 'application/json' },
     body: JSON.stringify(payload), signal: AbortSignal.timeout(180_000),
   })
@@ -299,7 +299,13 @@ async function askChatGpt(question: string, history: ChatTurn[], model: string, 
 app.whenReady().then(() => {
   if (!singleInstance) return
   app.setAppUserModelId('org.globaltrend.business-advisor')
-  connection = createChatGptConnection({ store: createChatGptConnectionFileStore(app.getPath('userData')), agentName: APP_NAME })
+  connection = createChatGptConnection({
+    store: createChatGptConnectionFileStore(app.getPath('userData')),
+    agentName: APP_NAME,
+    // Use Chromium's network stack so the app honors the same trusted Windows
+    // certificates and proxy settings as the browser used for sign-in.
+    fetch: (url, init) => net.fetch(url, init),
+  })
   ipcMain.handle('chatgpt:status', async event => {
     if (!trustedFrame(event)) throw new Error('요청한 화면을 확인할 수 없습니다.')
     return { ...(await connection.state()), storageAvailable: safeStorage.isEncryptionAvailable() && safeStorage.getSelectedStorageBackend?.() !== 'basic_text' }
