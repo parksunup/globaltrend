@@ -1,5 +1,5 @@
 import type { PublishedStory } from "./published-trends.ts";
-import { jurisdictionFilterName } from "./jurisdictions.ts";
+import { selectedTrendCountries, trendCountryGroup, trendCountryOptions } from "./trend-country-filters.ts";
 import { matchesPublicTopic } from "./public-topics.ts";
 import { inCustomDateRange } from "./public-search-filters.ts";
 
@@ -17,7 +17,7 @@ export const trendPageSize = 24;
 
 export function searchTrendPage(stories: PublishedStory[], filters: TrendSearchFilters) {
   const { q: submittedQuery = "", topic: topicId = "", mode, sort, period, from: customStart = "", to: customEnd = "" } = filters;
-  const countries = (filters.country ?? "").split(",").filter(Boolean);
+  const countries = selectedTrendCountries(filters.country);
   const terms = (() => {
     const normalized = submittedQuery.trim().toLocaleLowerCase();
     if (!normalized) return [];
@@ -32,7 +32,8 @@ export function searchTrendPage(stories: PublishedStory[], filters: TrendSearchF
   const dateCutoff = new Date(now.setMonth(now.getMonth() - ageInMonths));
   const dateOrder = (value: string) => value === "날짜 미상" ? "" : value;
   const filtered = stories.filter((story) => {
-    const countryMatch = countries.length === 0 || countries.some((country) => (story.jurisdictions?.length ? story.jurisdictions : [story.country]).includes(country));
+    const groups = (story.jurisdictions?.length ? story.jurisdictions : [story.country]).map(trendCountryGroup);
+    const countryMatch = countries.length === 0 || countries.some(country => groups.includes(country));
     const topicMatch = !topicId || matchesPublicTopic(story.tags, topicId);
     const searchable = [story.title, story.originalTitle, story.summary, story.institution, ...story.tags].join(" ").toLocaleLowerCase();
     const queryMatch = !terms.length || (mode === "concept" ? terms.some((term) => searchable.includes(term)) : terms.every((term) => searchable.includes(term)));
@@ -46,18 +47,7 @@ export function searchTrendPage(stories: PublishedStory[], filters: TrendSearchF
     const score = (story: PublishedStory) => terms.reduce((total, term) => total + (story.title.toLocaleLowerCase().includes(term) ? 3 : story.tags.join(" ").toLocaleLowerCase().includes(term) ? 2 : story.summary.toLocaleLowerCase().includes(term) ? 1 : 0), 0);
     return score(b) - score(a) || dateOrder(b.date).localeCompare(dateOrder(a.date));
   });
-  const groups = new Map<string, Set<string>>();
-  for (const story of stories) {
-    for (const code of story.jurisdictions?.length ? story.jurisdictions : [story.country]) {
-      if (!code) continue;
-      const label = jurisdictionFilterName(code);
-      const codes = groups.get(label) ?? new Set<string>();
-      codes.add(code);
-      groups.set(label, codes);
-    }
-  }
-  const countryOptions = [...groups].map(([label, codes]) => ({label, codes: [...codes].sort()}))
-    .sort((a, b) => a.label.localeCompare(b.label, "ko"));
+  const countryOptions = trendCountryOptions;
   const pageCount = Math.max(1, Math.ceil(ordered.length / trendPageSize));
   const requestedPage = Number(filters.page);
   const page = Number.isSafeInteger(requestedPage) ? Math.max(1, Math.min(pageCount, requestedPage)) : 1;

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./public.module.css";
 import { publicTopics } from "../../lib/public-topics";
+import { selectedTrendCountries } from "../../lib/trend-country-filters";
 import { allowedPeriods, trendSearchHref, type searchTrendPage, type TrendSearchFilters } from "../../lib/trend-search-page";
 
 export default function TrendSearch({ filters, result, loadError }: {
@@ -20,7 +21,7 @@ export default function TrendSearch({ filters, result, loadError }: {
   const [selected, setSelected] = useState<string | null>(null);
   const {stories: results, countryOptions, total, page, pageCount, hasCatalog} = result;
   const mode = pendingFilters.mode === "concept" ? "concept" : "keyword";
-  const countries = (pendingFilters.country ?? "").split(",").filter(Boolean);
+  const countries = selectedTrendCountries(pendingFilters.country);
   const period = allowedPeriods.includes(pendingFilters.period ?? "") ? pendingFilters.period! : "전체";
   const customStart = pendingFilters.from ?? "";
   const customEnd = pendingFilters.to ?? "";
