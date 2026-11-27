@@ -26,7 +26,7 @@ jobs:
         working-directory: apps/business-advisor-desktop
         run: npm ci
 
-      - name: Build single-file Windows application
+      - name: Build Windows installer
         working-directory: apps/business-advisor-desktop
         run: npm run dist:win
 
@@ -41,7 +41,7 @@ jobs:
             const path = require('node:path');
             const { owner, repo } = context.repo;
             const tag = process.env.TAG_NAME;
-            const assetName = 'InternationalFairyCounselor.exe';
+            const assetName = 'InternationalFairyCounselorSetup.exe';
             const assetPath = path.join(process.env.GITHUB_WORKSPACE, 'apps', 'business-advisor-desktop', 'release', assetName);
             if (!fs.existsSync(assetPath)) throw new Error(`Built application was not found: ${assetPath}`);
             const stat = fs.statSync(assetPath);

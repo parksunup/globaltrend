@@ -92,7 +92,7 @@ export default function BusinessReadinessFlow() {
         jurisdiction: jurisdictions.find(({ code }) => code === item.jurisdiction)?.label ?? item.jurisdiction,
         questionId: item.id,
         question: item.question,
-        status: answerSummary[answer].label,
+        status: answer,
         preparationGuide: item.helpText,
       }));
       const counts = selected.map((code) => {

@@ -19,7 +19,7 @@ async function latestDesktopRelease(): Promise<{ release: GithubRelease | null; 
     });
     if (!response.ok) return { release: null, unavailable: true };
     const releases = await response.json() as GithubRelease[];
-    const release = releases.find(item => /^business-advisor-v\d+\.\d+\.\d+/.test(item.tag_name) && !item.draft && !item.prerelease && item.assets.some(asset => asset.name === "InternationalFairyCounselor.exe"));
+    const release = releases.find(item => /^business-advisor-v\d+\.\d+\.\d+/.test(item.tag_name) && !item.draft && !item.prerelease && item.assets.some(asset => ["InternationalFairyCounselorSetup.exe", "InternationalFairyCounselor.exe"].includes(asset.name)));
     return { release: release ?? null, unavailable: false };
   } catch {
     return { release: null, unavailable: true };
@@ -32,7 +32,8 @@ function formatSize(bytes: number) {
 
 export default async function BusinessAdvisorDownloadPage() {
   const { release, unavailable } = await latestDesktopRelease();
-  const assets = release?.assets.filter(asset => asset.name === "InternationalFairyCounselor.exe") ?? [];
+  const assets = release?.assets.filter(asset => ["InternationalFairyCounselorSetup.exe", "InternationalFairyCounselor.exe"].includes(asset.name)) ?? [];
+  const hasInstaller = assets.some(asset => asset.name === "InternationalFairyCounselorSetup.exe");
   const version = release?.tag_name.replace(/^business-advisor-v/, "") ?? "";
   return <main className={styles.site}>
     <PublicHeader active="/public/business-advisor-download" />
@@ -50,7 +51,7 @@ export default async function BusinessAdvisorDownloadPage() {
       </> : release ? <>
         <p className={styles.status}>최신 공개 버전 · {version}</p>
         <h2>국제요정 상담소 · {version}</h2>
-        <p>Windows 64비트용 단일 실행 파일입니다. 압축을 풀 필요 없이 내려받은 파일을 열어 실행해 주세요. 출시 노트와 변경 사항은 GitHub에서 확인할 수 있습니다.</p>
+        <p>{hasInstaller ? "Windows 64비트용 설치 파일입니다. 설치를 마친 뒤 자가진단 결과의 상담 버튼을 누르면 앱이 열립니다." : "현재 공개된 버전은 단일 실행 파일입니다. 자가진단 결과에서 앱으로 바로 연결하는 기능을 사용하려면 설치 버전이 공개될 때까지 기다려 주세요."} 출시 노트와 변경 사항은 GitHub에서 확인할 수 있습니다.</p>
         <div className={styles.assets}>{assets.map(asset => <a className={styles.download} key={asset.name} href={asset.browser_download_url}>
           <span><strong>국제요정 상담소 다운로드</strong><small>{asset.name} · {formatSize(asset.size)}</small></span><b aria-hidden="true">↓</b>
         </a>)}</div>
@@ -59,14 +60,14 @@ export default async function BusinessAdvisorDownloadPage() {
       </> : <>
         <p className={styles.status}>아직 공개된 설치 파일이 없습니다</p>
         <h2>앱 배포를 준비하고 있습니다</h2>
-        <p>앱은 별도 브랜치에서 개발·검토 중입니다. Windows 단일 실행 파일은 빌드와 검토가 끝난 뒤 GitHub Releases에 게시되며, 이 페이지에 실제 다운로드 링크가 나타납니다.</p>
+        <p>앱은 별도 브랜치에서 개발·검토 중입니다. Windows 설치 파일은 빌드와 검토가 끝난 뒤 GitHub Releases에 게시되며, 이 페이지에 실제 다운로드 링크가 나타납니다.</p>
         <span className={styles.disabled}>공개 버전이 등록되면 다운로드할 수 있습니다</span>
         <a className={styles.releaseLink} href="https://github.com/parksunup/globaltrend/releases" target="_blank" rel="noreferrer">공개 릴리스 목록 보기 ↗</a>
       </>}
     </section>
     <section className={styles.details}>
       <h2>사용 방법</h2>
-      <ol><li>Windows용 단일 실행 파일을 내려받습니다.</li><li>파일을 열어 앱을 실행하고 ChatGPT 계정을 연결합니다. 로그인은 시스템 브라우저에서 진행됩니다.</li><li>궁금한 점과 국가·사업 상황을 편하게 적어 대화를 이어갑니다. 질문마다 국가를 미리 고를 필요는 없습니다.</li></ol>
+      <ol><li>Windows용 상담소 파일을 내려받습니다.</li><li>{hasInstaller ? "설치 파일을 실행해 앱을 설치합니다." : "파일을 열어 앱을 실행합니다. 자가진단 결과 연결에는 설치 버전이 필요합니다."} 앱에서 ChatGPT 계정을 연결할 때 로그인은 시스템 브라우저에서 진행됩니다.</li><li>자가진단 결과의 상담 버튼을 누르거나 앱에 직접 질문을 적어 대화를 이어갑니다.</li></ol>
       <p>ChatGPT 프로그램 설치는 필요하지 않습니다. 앱은 Codex 로그인이나 브라우저 쿠키를 읽지 않습니다. 상담 앱의 답변과 안내자료는 개인정보보호위원회나 해외 감독기구의 공식 유권해석 또는 법률 자문이 아닙니다. 최신 법령·공식 지침과 질문의 실제 상황을 확인하고 이에 따른 판단과 조치를 할 책임은 이용자에게 있습니다.</p>
       <p><Link href="/public/business-readiness">기업 자가진단으로 돌아가기 →</Link></p>
     </section>

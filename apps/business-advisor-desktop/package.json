@@ -8,7 +8,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && node scripts/copy-renderer.mjs",
     "start": "npm run build && electron .",
-    "dist:win": "npm run build && electron-builder --win portable --x64 --publish never"
+    "dist:win": "npm run build && electron-builder --win nsis --x64 --publish never",
+    "test": "npm run build && node --experimental-strip-types --test tests/*.test.cjs"
   },
   "devDependencies": {
     "@types/node": "^22.15.30",
@@ -40,11 +41,17 @@
       "icon": "build/icon.ico",
       "target": [
         {
-          "target": "portable",
+          "target": "nsis",
           "arch": ["x64"]
         }
       ],
-      "artifactName": "InternationalFairyCounselor.${ext}"
+      "artifactName": "InternationalFairyCounselorSetup.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   }
 }
