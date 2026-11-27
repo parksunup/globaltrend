@@ -360,11 +360,11 @@ def extract_eu_parliament_linked_pdf(document_json, api_url, row, client):
             # Keeping each full page text again in metadata can push large EP
             # amendments over the cloud commit limit, so retain only the count.
             'pdf_page_count':len(pdf['pages']),'pdf_ocr_pages':pdf['ocr_pages'],
-            'requires_review':not bool(published) or date_conflict,'related_documents':[{'url':pdf_url,'title':title,'read':True}],
+            'requires_review':True,'related_documents':[{'url':pdf_url,'title':title,'read':True}],
             'unread_attachments':pdf['related_documents'],'factual_status':'official_european_parliament_document_not_independently_reviewed',
             'license':'CC BY 4.0','attribution_required':True,
             'attribution':'European Parliament Open Data',
-            'relevance_reason':'official_open_data_full_text_human_topic_review_pending','ai_ready':bool(published) and not date_conflict,
+            'relevance_reason':'official_open_data_full_text_and_privacy_relevance_require_human_review','ai_ready':False,
             'extraction_method':pdf['extraction_method']}}
 
 

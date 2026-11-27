@@ -21,6 +21,73 @@ class ExpandedCloudResumeTests(unittest.TestCase):
         enabled={source['source'] for source in eligible_sources()}
         self.assertTrue({'ec','ec-news','eu-parliament'}<=enabled)
 
+    def test_parliament_topic_screen_requires_privacy_or_personal_data_evidence(self):
+        screen=expansion.eu_parliament_topic_screen
+        self.assertEqual(screen('AI Act implementation and cybersecurity strategy')['status'],'excluded')
+        self.assertEqual(screen('Digital identity and biometric innovation')['status'],'excluded')
+        self.assertEqual(screen('market surveillance authorities for vehicles')['status'],'excluded')
+        targeted=screen('ban exports of surveillance technologies used to monitor and spy on Palestinians')
+        self.assertEqual(targeted['status'],'candidate')
+        self.assertIn('targeted_surveillance_of_people',targeted['matched_terms'])
+        candidate=screen('AI surveillance and safeguards for personal data')
+        self.assertEqual(candidate['status'],'candidate')
+        self.assertIn('personal data',candidate['matched_terms'])
+        self.assertEqual(screen('Protección de datos personales y privacidad')['status'],'candidate')
+
+    def test_parliament_collector_does_not_ingest_broad_digital_policy_items(self):
+        from scripts.collector import extraction
+        url='https://data.europarl.europa.eu/api/v2/documents/2026-002'
+        row={'url':url,'date_observations':[{'meaning':'listing_updated_not_publication_date',
+              'value':'2026-11-18T10:00:00Z'}]}
+        class Store:
+            def __init__(self):self.cursor=None;self.items=[]
+            def resume(self,*args):return None
+            def progress(self,config,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,*args):pass
+            def ingest(self,config,item_url,item):self.items.append((item_url,item))
+            def discovery_failure(self,*args):raise AssertionError(args)
+        store=Store();config={'source':'eu-parliament','listing':expansion.ROUTES['eu-parliament']['listing']}
+        item={'published_date':'2026-11-18','metadata':{},'title_original':'AI Act implementation',
+              'content_text':'A cybersecurity and digital identity strategy.', 'content_hash':'irrelevant'}
+        with patch('scripts.collector.core.fetch_listing',return_value=([row],None)), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch.object(extraction,'extract_document',return_value=item):
+            result=expansion.collect_frozen(config,
+                type('Client',(),{'get':lambda *_,**__:(b'{}',url,'application/ld+json')})(),
+                store,'2026-11-18','2026-11-20')
+        self.assertEqual(store.items,[])
+        self.assertEqual(result['topic_excluded'],1)
+
+    def test_parliament_collector_records_explicit_privacy_candidate_for_review(self):
+        from scripts.collector import extraction
+        url='https://data.europarl.europa.eu/api/v2/documents/2026-003'
+        row={'url':url,'date_observations':[{'meaning':'listing_updated_not_publication_date',
+              'value':'2026-11-18T10:00:00Z'}]}
+        class Store:
+            def __init__(self):self.cursor=None;self.items=[]
+            def resume(self,*args):return None
+            def progress(self,config,since,until,cursor):self.cursor=cursor
+            def checkpoint(self,*args):pass
+            def ingest(self,config,item_url,item):self.items.append((item_url,item))
+            def discovery_failure(self,*args):raise AssertionError(args)
+        store=Store();config={'source':'eu-parliament','listing':expansion.ROUTES['eu-parliament']['listing']}
+        item={'published_date':'2026-11-18','metadata':{'ai_ready':False},
+              'title_original':'Personal data protection in cross-border services',
+              'content_text':'The amendment adds safeguards for personal data and privacy.',
+              'content_hash':'privacy-candidate'}
+        with patch('scripts.collector.core.fetch_listing',return_value=([row],None)), \
+             patch('scripts.collector.expansion.verify_detail_response'), \
+             patch.object(extraction,'extract_document',return_value=item):
+            result=expansion.collect_frozen(config,
+                type('Client',(),{'get':lambda *_,**__:(b'{}',url,'application/ld+json')})(),
+                store,'2026-11-18','2026-11-20')
+        self.assertEqual(result.get('topic_excluded',0),0)
+        self.assertEqual(len(store.items),1)
+        metadata=store.items[0][1]['metadata']
+        self.assertEqual(metadata['topic_screen']['status'],'candidate')
+        self.assertEqual(metadata['relevance_reason'],
+                         'eu_parliament_privacy_candidate_requires_editorial_review')
+
     def test_parliament_atom_feed_selects_the_api_document_link(self):
         xml='''<?xml version="1.0"?><feed xmlns="http://www.w3.org/2005/Atom">
           <entry><id>https://data.europarl.europa.eu/api/v2/documents/2026-001</id>
@@ -118,7 +185,8 @@ class ExpandedCloudResumeTests(unittest.TestCase):
             'https://data.europarl.europa.eu/api/v2/documents/2026-001')
         self.assertEqual(item['title_original'],'Privacy safeguards')
         self.assertEqual(item['published_date'],'2026-11-12')
-        self.assertTrue(item['metadata']['ai_ready'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertTrue(item['metadata']['requires_review'])
 
     def test_parliament_linked_pdf_resolves_only_declared_official_jsonld_base(self):
         from scripts.collector import extraction
@@ -160,7 +228,8 @@ class ExpandedCloudResumeTests(unittest.TestCase):
             item=extraction.extract_eu_parliament_linked_pdf(json.dumps(data),
                 'https://data.europarl.europa.eu/api/v2/documents/A-10-2026-0278',{},Client())
         self.assertEqual(item['published_date'],'2026-10-21')
-        self.assertTrue(item['metadata']['ai_ready'])
+        self.assertFalse(item['metadata']['ai_ready'])
+        self.assertTrue(item['metadata']['requires_review'])
         self.assertEqual(item['metadata']['pdf_page_count'],1)
         self.assertNotIn('pdf_pages',item['metadata'])
         self.assertEqual(item['metadata']['date_observations'][-2]['locator'],
