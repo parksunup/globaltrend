@@ -26,5 +26,5 @@ export function PublicHeader({ active }: { active: string }) {
   </header>;
 }
 export function PublicFooter() {
-  return <footer className={styles.footer}><Link href="/public">국제요정</Link><p>글로벌 개인정보 보호 동향과 법제</p></footer>;
+  return <footer className={styles.footer}><Link href="/public">국제요정</Link><p>글로벌 개인정보 보호 동향과 법제</p><Link href="/public/report">의견·오류 신고</Link></footer>;
 }
