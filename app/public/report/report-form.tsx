@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./report.module.css";
 
 export default function ReportForm() {
@@ -10,6 +10,14 @@ export default function ReportForm() {
   const [pageUrl, setPageUrl] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    try {
+      const referrer = new URL(document.referrer);
+      if (referrer.origin === window.location.origin && referrer.pathname.startsWith("/public")) {
+        setPageUrl(referrer.origin + referrer.pathname);
+      }
+    } catch { /* Direct visits leave the optional page field empty. */ }
+  }, []);
 
   async function submit(event: React.FormEvent) {
     event.preventDefault();

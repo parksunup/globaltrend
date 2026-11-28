@@ -5,7 +5,9 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   const origin = request.headers.get("origin");
   const host = new URL(request.url).host;
-  if (!origin || new URL(origin).host !== host) return Response.json({ error: "요청 출처를 확인할 수 없습니다." }, { status: 403 });
+  let originHost = "";
+  try { originHost = origin ? new URL(origin).host : ""; } catch { /* Invalid Origin is rejected below. */ }
+  if (originHost !== host) return Response.json({ error: "요청 출처를 확인할 수 없습니다." }, { status: 403 });
   if (!(request.headers.get("content-type") ?? "").includes("application/json")) return Response.json({ error: "요청 형식이 올바르지 않습니다." }, { status: 415 });
   const input = await request.json().catch(() => null);
   if (!input || typeof input !== "object") return Response.json({ error: "요청 내용을 읽을 수 없습니다." }, { status: 400 });
